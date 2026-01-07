@@ -79,7 +79,7 @@ class ModelSubDomain {
     virtual bool      ValidVariable( const char* variableName ) const;
 
     /// support of the Visitor pattern
-    virtual void Accept( Visitor<dim>& );
+    virtual void Accept( Visitor<dim>& ) = 0;
     
     /// modification via Operand-based relations between discretised properties that only modify a single result variable
     void Apply( Interrelation<dim>& );
@@ -129,7 +129,7 @@ class ModelSubDomain {
     int32_t DomainIndex() const noexcept;
 
     /// renumbers nodes in domain 0..n-1
-    size_t  RenumberNodes() const;
+    virtual size_t  RenumberNodes() const;
     
     /// renumbers cells in domain 0..n-1
     size_t  RenumberCells() const;
@@ -173,7 +173,9 @@ class ModelSubDomain {
     /// check whether subdomain conatains any cells
     bool              Empty() const noexcept;
     
+    /// do not call on SplitBoundary because it only stores NodeManifolds, call nodes=RenumberNodes() on these
     size_t            Nodes() const noexcept;
+    
     size_t            InteriorNodes() const noexcept;
     size_t            PerimeterNodes() const noexcept;
     size_t            IntegrationPoints() const noexcept;
@@ -316,6 +318,10 @@ class ModelSubDomain {
     bool   CopyGradientOfProperty_A_To_B( const char* node_prop, const char* cell_prop );
     void   CopyReplace( const char* from, const char* to );
 
+    /// returns the averaged unit normal to a lower-dimensional subdomain
+    Point<dim> AverageUnitNormal() const;
+
+
     // ----------------------------------------
     // output
     // ----------------------------------------
@@ -370,9 +376,351 @@ size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDom
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
                               std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
-
+                              
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
 void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& );
+
+
+
+
+
+
+
+
+
+
+
+
+// INLINE FUNCTIONS NOT COVERED BY EXPLICIT TEMPLATE INSTANTIATIONS
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline void  ModelSubDomain<dim,CELL>::ScheduleForRebuild()
+ {
+    rebuilt_needed_ = true;
+ }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool  ModelSubDomain<dim,CELL>::NeedsRebuild() const
+ {
+    return rebuilt_needed_;
+ }
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline std::string  ModelSubDomain<dim,CELL>::Name() const
+ {
+    return subdomain_name_;
+ }
+
+// watch out! - this name is the same as the key for the subdomain in the region,boundary,splitboundary map
+template<uint32_t dim, template<uint32_t> class CELL>
+inline void  ModelSubDomain<dim,CELL>::Name( const std::string& name )
+ {
+    subdomain_name_ = name;
+ }
+
+
+/**
+    To loop over the faces of the perimeter cells which lie on the subdomain boundary.
+    
+    @param cell_idx marks the location of the cell in  bd_face_vec_  and has to be in the range of InteriorCells() and total number of Cells in the subdomain-1U.
+    
+    To loop over all the boundary faces of a subdomain, use the following code snippet:
+    
+    @code
+    for ( size_t i{ subdomain.InteriorCells() }; i<subdomain.Cells(); i++ )
+      for ( auto j{0U}; j<subdomain.PerimeterFaces(i); j++ ) {
+           auto perim_face = subdomain.PerimeterFace(i,j);
+           // get a normal to the cell face
+           Point<dim> unrml = subdomain.E(i)->FE()->Point<dim> UnitNormalToFace(j);
+           ...
+        }
+    @endcode
+        
+    @return returns how many faces of the target cell lie on the subdomain boundary
+ 
+    @attention the cell index that is supplied as a method argument has to
+    range between e = interior cells and cells-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline  uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
+ {
+    assert( cell_idx >= InteriorCells() );
+    assert( cell_idx < cell_vec_.size() );
+    return static_cast<uint32_t>( bd_face_vec_[cell_idx - InteriorCells()].size() );
+ }
+
+
+/**
+    @return returns cells local cell face number (0..faces-1) for
+    the n'th face that is on the subdomain boundary.
+
+    @attention the cell index that is supplied as a method argument has to
+    range between e = interior cells and cells-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, uint32_t face ) const
+ {
+    assert( e >= InteriorCells() );
+    assert( e < cell_vec_.size() );
+    assert( face < PerimeterFaces(e) );
+    return static_cast<uint32_t>(bd_face_vec_[e-InteriorCells()][face]);
+ }
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const noexcept
+ { assert( nd < node_vec_.size() ); return node_vec_[nd]; }
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const noexcept
+ { assert( e < cell_vec_.size() ); return cell_vec_[e]; }
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const noexcept
+ { return cell_vec_; }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() noexcept
+ { return cell_vec_; }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const noexcept
+  { return node_vec_; }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() noexcept
+  { return node_vec_; }
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const noexcept
+ { return node_vec_.begin(); }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesEnd() const noexcept
+ { return node_vec_.end(); }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const noexcept
+ { return std::next( node_vec_.begin(), static_cast<long>(InteriorNodes()) ); }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsBegin() const noexcept
+ { return cell_vec_.begin(); }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::CellsEnd() const noexcept
+ { return cell_vec_.end(); }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterCellsBegin() const noexcept
+  { return std::next( cell_vec_.begin(), static_cast<long>(InteriorCells()) ); }
+   
+
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::Nodes() const noexcept
+  {
+//     static_assert( !std::is_same_v<CELL<dim>,InterFace<dim>>, "ModelSubDomain<dim,InterFace>::Nodes: not support for SplitBoundary" );
+     return node_vec_.size();
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::InteriorNodes() const noexcept
+  {
+//     static_assert( !std::is_same_v<CELL<dim>,InterFace<dim>>, "ModelSubDomain<dim,InterFace>::InteriorNodes: not support for SplitBoundary" );
+     return first_bd_node_;
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::PerimeterNodes() const noexcept
+  {
+//     static_assert( !std::is_same_v<CELL<dim>,InterFace<dim>>, "ModelSubDomain<dim,InterFace>::PerimeterNodes: not support for SplitBoundary" );
+     return node_vec_.size() - InteriorNodes();
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::Cells() const noexcept
+  {
+     return cell_vec_.size();
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::InteriorCells() const noexcept
+  {
+     return cell_vec_.size() - bd_face_vec_.size();
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::PerimeterCells() const noexcept
+  {
+     return bd_face_vec_.size();
+  }
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool ModelSubDomain<dim,CELL>::Empty() const noexcept
+  {
+     return cell_vec_.empty();
+  }
+
+
+
+// PLACEMENT OF PROPERTY ASSIGNMENT
+
+inline SUBDOMAIN_PART parseSubdomainPart( const char* subdomain )
+{
+    std::string ssubdomain(subdomain);
+
+    std::transform(ssubdomain.begin(),ssubdomain.end(),ssubdomain.begin(),::toupper);
+
+    if (  ssubdomain == "COMPLETE"  )  return COMPLETE;
+    if (  ssubdomain == "INTERIOR"  )  return INTERIOR;
+    if (  ssubdomain == "PERIMETER" )  return PERIMETER;
+    return COMPLETE;
+}
+
+
+inline std::string parseSubdomainPart( SUBDOMAIN_PART ssubdomain )
+ {
+    if (  ssubdomain == COMPLETE  )  return std::string("COMPLETE");
+    if (  ssubdomain == INTERIOR  )  return std::string("INTERIOR");
+    if (  ssubdomain == PERIMETER )  return std::string("PERIMETER");
+    return std::string("COMPLETE");
+}
+
+
+// INTERRELATIONS INTERFACE
+
+
+
+
+// DOMAIN INDEXES
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline int32_t  ModelSubDomain<dim,CELL>::DomainIndex() const noexcept
+{
+  return domain_idx_;
+}
+
+
+/**
+
+Returns a vector<double> with the ID numbers of the Elements which belong
+to the Region.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline std::vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const
+ {
+    std::vector<size_t> ids;
+    ids.reserve( cell_vec_.size() );
+    for ( const auto& it : cell_vec_ ) ids.push_back( it->Idx() );
+    
+    return ids;
+ }
+
+
+
+/** Renumbers nodes from 0 to n-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
+ {
+    size_t  counter(0U);
+
+    for ( auto& it : node_vec_ ) it->Idx( counter++ );
+
+    return counter;
+ }
+
+
+
+/** Renumbers cells from 0 to n-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline size_t ModelSubDomain<dim,CELL>::RenumberCells() const
+ {
+    size_t counter(0U);
+
+    for( auto& it : cell_vec_ ) it->Idx(counter++);
+    cell_vec_[0]->FE()->CurrentID( std::numeric_limits<size_t>::max() );
+
+    return counter;
+    
+ } // end RenumberCells
+
+
+
+/** Renumbers cells and nodes from 0 to n-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
+ {
+    RenumberNodes();
+    RenumberCells();
+   
+ } // end UpdateRegionMemberIndexes
+
+
+/**
+    Uses binary_search on both ranges of the sorted node vector to find the node in question.
+    returns true or false.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const noexcept
+ {
+    assert( nptr != nullptr );
+
+    if ( binary_search( next(node_vec_.begin(), static_cast<long>(InteriorNodes())), node_vec_.end(), nptr ) )
+       return true;
+
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), static_cast<long>(InteriorNodes())), nptr ) )
+       return true;
+
+    return false;
+
+ } // end
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool ModelSubDomain<dim,CELL>::IsPerimeterNode( const csmp::Node<dim>* const nd_ptr ) const noexcept
+ {
+    assert( nd_ptr != nullptr );
+    return std::binary_search( PerimeterNodesBegin(), NodesEnd(), nd_ptr );
+ }
+
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( const CELL<dim>* const e_ptr ) const noexcept
+ {
+    assert( e_ptr != nullptr );
+    return std::binary_search( PerimeterCellsBegin(), CellsEnd(), e_ptr );
+ }
+
+
+// still used by legacy NodeCenteredFiniteVolumeTransport
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool  ModelSubDomain<dim,CELL>::IsPerimeterNode( size_t i ) const
+ {
+    if ( i >= Nodes() ) return false;
+    return ( i >=  first_bd_node_ );
+ }
+
+/**
+    Returns true when the queried cell index (0..n-1)
+    is among those of the cells located on the boundary of the region;
+    else false.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( size_t e ) const
+ {
+    if ( e >= cell_vec_.size() ) return false;
+    return (e < InteriorCells()) ? false : true;
+ }
 
 
 } // end namespace

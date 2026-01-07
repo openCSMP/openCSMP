@@ -1,5 +1,0 @@
-<map id="csmp::FiniteVolumePolicy&lt; 1U, CELL &gt;" name="csmp::FiniteVolumePolicy&lt; 1U, CELL &gt;">
-<area shape="rect" id="Node000001" title="full specialization ( 1D )" alt="" coords="5,158,193,442"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_volume_policy.html" title="Element policy for node&#45;centered finite&#45;volume computations; see full specializations for 1D,..." alt="" coords="18,5,181,87"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="102,102,102,158,97,158,97,102"/>
-</map>

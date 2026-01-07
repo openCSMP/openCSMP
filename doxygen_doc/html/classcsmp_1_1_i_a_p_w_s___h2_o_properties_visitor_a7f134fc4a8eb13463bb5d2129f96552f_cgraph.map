@@ -1,5 +1,0 @@
-<map id="csmp::IAPWS_H2OPropertiesVisitor::Visit" name="csmp::IAPWS_H2OPropertiesVisitor::Visit">
-<area shape="rect" id="Node000001" title="when density and viscosity are calculated at the element integration points" alt="" coords="5,5,204,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="252,5,396,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,23,236,23,236,28,204,28"/>
-</map>

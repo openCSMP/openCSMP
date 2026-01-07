@@ -60,6 +60,12 @@ void UG4_UGX_FileExport_Test::run()
     // 3D Test case using model the ANSYS model 'prism_mesh'
     // -----------------------------------------------------
     ANSYS_Model3D  model3D( "prism_test", "UG4_UGX_FileExport-variables.txt", true /* use binary ansys file */ );
+    // creating "face number"
+    const csmp::Index fkey = model3D.Database().StorageKey("face number");
+    size_t face_counter{0};
+    for ( auto fit=model3D.Mesh().FacesBegin(); fit!=model3D.Mesh().FacesEnd(); ++fit ) {
+      (*fit).Store( fkey, makeScalar( ANY, static_cast<double>(face_counter++)) );
+    }
     printRangeOfVariable( model3D, "element number" );
     printRangeOfVariable( model3D, "face number" );
     printRangeOfVariable( model3D, "node number" );

@@ -1,7 +1,0 @@
-<map id="csmp::Model::MinMaxOf" name="csmp::Model::MinMaxOf">
-<area shape="rect" id="Node000001" title="returns the value range of the target property within the entire model" alt="" coords="5,46,170,72"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_array_variable.html#a9a97e3b3fe53fc22ed4100a11de314c6" title="returns the minimum and maximum of the values stored in the array variable" alt="" coords="241,5,379,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,44,225,36,226,41,170,49"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_flagged_array_variable.html#a49b26572c9ab97b65dde7a7444e1a2bb" title="returns the minimum and maximum of the values stored in the array variable" alt="" coords="218,71,402,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="170,68,202,73,202,78,170,73"/>
-</map>

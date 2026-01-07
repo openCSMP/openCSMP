@@ -886,9 +886,9 @@ pair<pair<Element<dim>*,uint32_t>,pair<Element<dim>*,uint32_t>>  parentElements(
     // 8. Oh dear! - was the wrong face identified?
     // ----------------------------------------------------------------
 #ifndef NDEBUG
-    const auto e_matched      = ( key_cnr_nodes != key_e1_nodes ) ? 0 : 1;
-    const auto e_not_found    = ( key_cnr_nodes != key_e1_nodes ) ? 1 : 0;
-    const auto e_problem_face = ( key_cnr_nodes != key_e1_nodes ) ? shared_faces.second : shared_faces.first;
+    const size_t e_matched      = ( key_cnr_nodes != key_e1_nodes ) ? 0 : 1;
+    const size_t e_not_found    = ( key_cnr_nodes != key_e1_nodes ) ? 1 : 0;
+    const size_t e_problem_face = ( key_cnr_nodes != key_e1_nodes ) ? shared_faces.second : shared_faces.first;
     cout <<"\n"<<"parentElements: only Element "<< shared_parents[e_matched]->Idx() <<" contains the nodes:\n\t\t        ";
     for ( const auto& nit : cnr_node_vec ) cout <<" "<< nit->Idx();
     cout <<"\n\t"<<"Element "<< shared_parents[e_not_found]->Idx() <<": ";

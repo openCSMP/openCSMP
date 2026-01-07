@@ -1,9 +1,0 @@
-<map id="csmp::StressInvariants::MaximumPrincipalStress1" name="csmp::StressInvariants::MaximumPrincipalStress1">
-<area shape="rect" id="Node000001" title="sigma1 = maximum principal stress (Pa)" alt="" coords="5,55,187,96"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a7eb608f94da6c10db811e730fb014d89" title="pi (m) perimeter of circle with a diameter of 1" alt="" coords="253,5,373,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="175,52,246,33,248,38,176,57"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_stress_invariants.html#a5b794e6806aacb2e16f83fd775b40c2f" title="maximum of the deviatoric stresses = nonisostatic stresses" alt="" coords="235,55,391,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,73,219,73,219,78,187,78"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_stress_invariants.html#a2d6612f682bd924d1cfce7b5a6f2cad8" title="mean stress = average of principal stresses" alt="" coords="235,120,391,161"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="166,94,229,113,228,118,165,99"/>
-</map>

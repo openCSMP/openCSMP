@@ -501,11 +501,13 @@ void CompressedRowMatrix::Assign( uint32_t i, uint32_t j, double val )
   }
 
   if(j <= i) {
-    for ( auto index = ia[i]; index < ia[i+1]; index++ )
-      if (ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
+    for ( int32_t index = ia[i]; index < ia[i+1]; ++index )
+      if ( ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
   } else {
-    for ( auto index = ia[i+1]-1; index >= ia[i]; index-- )
-      if (ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
+    for ( int32_t index = ia[i+1]-1; index >= ia[i]; index-- ) {
+         assert( index >= 0 );
+         if (ja[ static_cast<size_t>(index) ] == static_cast<int32_t>(j) ) {a[ static_cast<size_t>(index) ] = val; return;}
+      }
   }
 
   cerr <<"\nCompressedRowMatrix::Assign: Error: Cannot find target element in the compressed row matrix, i ="<<i<<", j = "<<j<<endl;
@@ -1011,9 +1013,10 @@ void CompressedRowMatrix::Out() const
     cout <<"\nmatrix elements 'a' with size = "<<a.size()<<"\n";
 
     for( size_t i{0U};i<ia.size()-1;i++) {
-      for(size_t index=ia[i];index<ia[i+1];index++){
-        if(!SAMG_format) cout<<ja[index]<<":"<<a[index]<<" ";
-        else cout<<ja[index-1]<<":"<<a[index-1]<<" ";
+      for( int32_t index=ia[i]; index<ia[i+1]; ++index ){
+        const auto idx = static_cast<size_t>(index);
+        if(!SAMG_format) cout<<ja[idx]<<":"<<a[idx]<<" ";
+        else cout<<ja[idx-1]<<":"<<a[idx-1]<<" ";
       }
       cout<<endl;
     }

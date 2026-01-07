@@ -1,7 +1,0 @@
-<map id="csmp::TransientDiffusor&lt; dim, CELLTYPE &gt;" name="csmp::TransientDiffusor&lt; dim, CELLTYPE &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="26,1639,216,2061"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_p_d_e___integrator.html" title=" " alt="" coords="5,833,237,1590"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="124,1605,124,1639,119,1639,119,1605"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_p_d_e___integrator.html" title="Accumulator and integrator for FEM or FVM&#45;derived integral forms of PDEs and their solution by solvin..." alt="" coords="18,5,225,762"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="124,777,124,833,119,833,119,777"/>
-</map>

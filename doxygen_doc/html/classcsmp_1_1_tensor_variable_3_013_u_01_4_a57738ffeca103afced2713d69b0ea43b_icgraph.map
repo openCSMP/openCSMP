@@ -1,7 +1,0 @@
-<map id="csmp::TensorVariable&lt; 3U &gt;::Determinant" name="csmp::TensorVariable&lt; 3U &gt;::Determinant">
-<area shape="rect" id="Node000001" title=" " alt="" coords="257,27,403,68"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a02f42d74e82aed43bef68e0bbf9e7fea" title=" " alt="" coords="5,5,209,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,39,209,34,209,29,242,33"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_tensor_variable_3_013_u_01_4.html#ae2dbed54f20a5f66071af484bfe37e03" title="returns a tensor the product of which with the original tensor gives the identity matrix" alt="" coords="34,55,180,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="242,61,181,69,180,64,241,56"/>
-</map>

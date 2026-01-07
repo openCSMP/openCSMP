@@ -1,7 +1,0 @@
-<map id="csmp::ArrayVariable::Out" name="csmp::ArrayVariable::Out">
-<area shape="rect" id="Node000001" title="printing array values to screen" alt="" coords="418,5,585,31"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_operand.html#ab6f1b0fc42a00c4d288a275d7510e0ce" title=" " alt="" coords="193,5,370,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="402,21,370,21,370,16,402,16"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_operand.html#a254847c0ee69f0886faf9e8a61c00702" title=" " alt="" coords="5,5,145,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="177,21,145,21,145,16,177,16"/>
-</map>

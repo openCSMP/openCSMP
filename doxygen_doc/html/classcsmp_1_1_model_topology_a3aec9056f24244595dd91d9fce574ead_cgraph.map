@@ -1,5 +1,0 @@
-<map id="csmp::ModelTopology::EliminateLineCells" name="csmp::ModelTopology::EliminateLineCells">
-<area shape="rect" id="Node000001" title="remove all curves" alt="" coords="5,5,154,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_topology.html#a0f740f541898d12a312e2a8451b7a52b" title=" " alt="" coords="202,5,350,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="154,23,186,23,186,28,154,28"/>
-</map>

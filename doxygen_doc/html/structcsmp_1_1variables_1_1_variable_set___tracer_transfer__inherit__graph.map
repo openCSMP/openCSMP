@@ -1,9 +1,0 @@
-<map id="csmp::variables::VariableSet_TracerTransfer" name="csmp::variables::VariableSet_TracerTransfer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="136,5,326,290"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_integral_equation.html" title=" " alt="" coords="6,338,220,678"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="183,305,171,339,166,337,178,303"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_explicit_transport.html" title="For implicit transport calculations." alt="" coords="244,417,459,600"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="286,303,324,416,319,418,281,305"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_implicit_transport.html" title=" " alt="" coords="5,726,220,1011"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,693,116,727,110,727,110,693"/>
-</map>

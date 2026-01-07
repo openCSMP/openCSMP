@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTriangle" name="csmp::IsoparametricQuadraticTriangle">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,913,218,1197"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="30,5,194,865"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,880,114,913,109,913,109,880"/>
-</map>

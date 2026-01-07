@@ -1,5 +1,0 @@
-<map id="csmp::VData::AngleBetweenSurfaceElements3D" name="csmp::VData::AngleBetweenSurfaceElements3D">
-<area shape="rect" id="Node000001" title="computes the unit normals to the surfaces and then returns the angle between them" alt="" coords="5,5,196,46"/>
-<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga3614044613dd21733f8a9590a9c19c30" title="returns the normal of a triangle" alt="" coords="244,13,404,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,23,228,23,228,28,196,28"/>
-</map>

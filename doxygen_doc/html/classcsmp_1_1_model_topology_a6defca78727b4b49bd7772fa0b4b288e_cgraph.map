@@ -1,5 +1,0 @@
-<map id="csmp::ModelTopology::AssignMaterialProperties" name="csmp::ModelTopology::AssignMaterialProperties">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,180,46"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a98c7d54797ece61b5a9cc1fdb0cd6ccf" title="enlist the boundary names of box&#45;shaped models" alt="" coords="228,5,435,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,23,212,23,212,28,180,28"/>
-</map>

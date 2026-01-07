@@ -1,7 +1,0 @@
-<map id="csmp::Model::MinMaxCoordinates" name="csmp::Model::MinMaxCoordinates">
-<area shape="rect" id="Node000001" title="returns the opposite corners of the bounding box that encloses the model" alt="" coords="219,46,439,72"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html#a69f9911b3ea97c2db09cd990442126f9" title="the supplied 4 scalar node variable values (2 in 2D) are linearly interpolated across the square (lin..." alt="" coords="5,5,171,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="216,46,171,40,171,34,217,41"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_model.html#a67bae937ff0d191ecf5c85d3ede0b3d6" title="the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (lin..." alt="" coords="5,71,171,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="213,77,171,83,171,77,212,72"/>
-</map>

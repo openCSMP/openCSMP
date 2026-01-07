@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricLinearTriangle" name="csmp::IsoparametricLinearTriangle">
-<area shape="rect" id="Node000001" title="3&#45;noded triangle with a choice of Gaussian quadrature points and construction options for 2D and 3D m..." alt="" coords="5,1605,197,1890"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="19,778,183,1556"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,1571,104,1605,99,1605,99,1571"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="35,361,168,646"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,646,104,761,99,761,99,646"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="35,5,168,290"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="104,305,104,361,99,361,99,305"/>
-</map>

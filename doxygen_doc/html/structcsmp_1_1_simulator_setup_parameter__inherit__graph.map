@@ -1,5 +1,0 @@
-<map id="csmp::SimulatorSetupParameter" name="csmp::SimulatorSetupParameter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,567,205,776"/>
-<area shape="rect" id="Node000002" href="$structcsmp_1_1_parameter.html" title="Record that describes the physical variables that are stored on a model:" alt="" coords="40,5,170,519"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="108,534,108,567,102,567,102,534"/>
-</map>

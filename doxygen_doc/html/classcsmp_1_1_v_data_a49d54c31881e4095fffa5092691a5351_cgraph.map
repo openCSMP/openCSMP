@@ -1,7 +1,0 @@
-<map id="csmp::VData::ResizeNodes" name="csmp::VData::ResizeNodes">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,35,191,60"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#aa12cc17feb932518d0dbc2db9d27e3b1" title=" " alt="" coords="239,5,427,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="191,33,223,29,223,35,191,39"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_v_data.html#a47959a5eb202606453adff6041e08c31" title=" " alt="" coords="241,55,425,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,56,225,60,224,65,191,61"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="mjl::Polygon::Ccw" name="mjl::Polygon::Ccw">
-<area shape="rect" id="Node000001" title=" " alt="" coords="238,31,366,56"/>
-<area shape="rect" id="Node000002" href="$classmjl_1_1_polygon.html#a487220e1e6659b5e090ecaf5de2e4bc5" title=" " alt="" coords="8,5,187,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="222,36,187,32,188,27,222,31"/>
-<area shape="rect" id="Node000003" href="$classmjl_1_1_polygon.html#a346b36cfb94c8e6906b74f7f634a57a8" title="uses signed angle &gt; and returns edge midpoint" alt="" coords="5,55,190,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,55,191,59,190,54,222,50"/>
-</map>

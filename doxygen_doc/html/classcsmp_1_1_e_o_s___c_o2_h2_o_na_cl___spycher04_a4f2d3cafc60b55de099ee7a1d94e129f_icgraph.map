@@ -1,7 +1,0 @@
-<map id="csmp::EOS_CO2H2ONaCl_Spycher04::y_Co2" name="csmp::EOS_CO2H2ONaCl_Spycher04::y_Co2">
-<area shape="rect" id="Node000001" title="mole fraction (0..1) of CO2 in carbonic phase (the rest is H2O)" alt="" coords="234,39,414,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a4d69520deb96194b6b144f1eb0536447" title="mass fraction of CO2 in carbonic phase (weight percent)" alt="" coords="5,5,186,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,46,186,41,187,36,219,41"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a25ddf8746c9bbb5c2a236417d8009589" title="mass fraction of H2O in carbonic phase (weight percent)" alt="" coords="5,71,186,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="219,76,186,81,186,76,218,71"/>
-</map>

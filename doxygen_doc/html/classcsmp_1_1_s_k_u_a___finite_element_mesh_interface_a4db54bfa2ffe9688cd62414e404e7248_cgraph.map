@@ -1,5 +1,0 @@
-<map id="csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII" name="csmp::SKUA_FiniteElementMeshInterface::ReadPropertyRecordsASCII">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,283,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_data.html#ab7debc3c38d32ccccd943ca61c42d024" title="&#39;raw&#39; inserter for values (user must ascertain that stride is correct); use pushBack() for objects" alt="" coords="331,5,469,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="283,23,316,23,316,28,283,28"/>
-</map>

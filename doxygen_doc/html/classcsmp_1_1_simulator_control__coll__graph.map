@@ -1,9 +1,0 @@
-<map id="csmp::SimulatorControl&lt; dim &gt;" name="csmp::SimulatorControl&lt; dim &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="24,710,171,1036"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_error_handler.html" title="The singleton ErrorHandler implements an issue reporting scheme to support platform&#45;specific message ..." alt="" coords="5,329,189,639"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="100,639,100,694,95,694,95,639"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_generic_singleton.html" title=" " alt="" coords="22,178,172,280"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="100,295,100,329,95,329,95,295"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_generic_singleton.html" title="references based generic singleton base class template" alt="" coords="22,5,172,107"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="100,122,100,178,95,178,95,122"/>
-</map>

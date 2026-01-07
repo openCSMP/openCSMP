@@ -1,7 +1,0 @@
-<map id="csmp::readRegionPropertyConditions" name="csmp::readRegionPropertyConditions">
-<area shape="rect" id="Node000001" title="read region conditions ( a.k.a block5 )" alt="" coords="5,23,182,64"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="242,5,370,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="182,30,225,25,226,30,182,36"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6c42e9e0529dda9c61a77681f2735608" title="detects lines beginning with #, %, –; char* not constant because first comment char gets replaced by ..." alt="" coords="230,55,382,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,51,215,55,214,60,182,56"/>
-</map>

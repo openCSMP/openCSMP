@@ -1,9 +1,0 @@
-<map id="csmp::Model::InterpolateBoundaryValues" name="csmp::Model::InterpolateBoundaryValues">
-<area shape="rect" id="Node000001" title="the supplied 4 vector node variable values (2 in 2D) are linearly interpolated across the square (lin..." alt="" coords="5,47,171,88"/>
-<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga6b970c9a34abf2a9150140f4fd91e833" title="returns whether flag is a corner" alt="" coords="274,5,384,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,48,258,30,259,35,172,53"/>
-<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#ga1ac914be25ff02b5b8c1d629c7cb191b" title="returns whether flag is a side of the model" alt="" coords="280,55,378,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="171,65,265,65,265,70,171,70"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_model.html#af05be8dbc1bdfd766ae01def456e8314" title="returns the opposite corners of the bounding box that encloses the model" alt="" coords="219,104,439,130"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="172,82,248,98,247,103,171,87"/>
-</map>

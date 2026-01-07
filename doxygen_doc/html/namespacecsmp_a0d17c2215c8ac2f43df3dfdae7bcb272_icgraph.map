@@ -1,5 +1,0 @@
-<map id="csmp::parseElementType" name="csmp::parseElementType">
-<area shape="rect" id="Node000001" title="for the given CSMP element type, finds the matching VTK geometric primitive" alt="" coords="247,13,416,38"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a777a8a78f3d3790d05cfc2a511a942c8" title="output the perimeter surface of a region to VTK file" alt="" coords="5,5,199,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,28,199,28,199,23,231,23"/>
-</map>

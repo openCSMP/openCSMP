@@ -1,7 +1,0 @@
-<map id="csmp::BrooksCorey::dGds" name="csmp::BrooksCorey::dGds">
-<area shape="rect" id="Node000001" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="5,46,182,72"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_brooks_corey.html#a40e50451890b1dc8b3c02fcf36791f3e" title="as in Helmig 97, eqn.2.57, p. 75" alt="" coords="230,5,375,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="178,43,214,37,215,42,179,48"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_brooks_corey.html#a0b82831fcaee9769d27a332cf1f672b3" title="relative permeabilities" alt="" coords="230,71,375,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="182,70,215,75,214,80,181,75"/>
-</map>

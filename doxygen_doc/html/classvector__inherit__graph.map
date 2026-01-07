@@ -1,8 +1,0 @@
-<map id="vector" name="vector">
-<area shape="rect" id="Node000001" title=" " alt="" coords="67,5,113,72"/>
-<area shape="rect" id="Node000002" href="$structcsmp_1_1_inter_face_parent_elements.html" title=" " alt="" coords="5,355,185,517"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,87,97,355,92,355,88,87"/>
-<area shape="rect" id="Node000003" href="$structcsmp_1_1_inter_face_parent_elements.html" title=" " alt="" coords="112,121,311,284"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="124,81,153,120,149,123,120,84"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="167,298,138,356,133,354,162,295"/>
-</map>

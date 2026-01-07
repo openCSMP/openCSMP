@@ -1,7 +1,0 @@
-<map id="csmp::NumIntegral_DNT_v_dV&lt; dim, CELL &gt;" name="csmp::NumIntegral_DNT_v_dV&lt; dim, CELL &gt;">
-<area shape="rect" id="Node000001" title="for instance for calculation of hydrostatic gradient" alt="" coords="13,1102,188,1224"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_math_operator_r_h_s.html" title=" " alt="" coords="5,564,195,1052"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,1067,103,1102,98,1102,98,1067"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_math_operator_r_h_s.html" title="Base class for FE or FV integrals accumulated into righthand vector." alt="" coords="21,5,180,493"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,508,103,565,98,565,98,508"/>
-</map>

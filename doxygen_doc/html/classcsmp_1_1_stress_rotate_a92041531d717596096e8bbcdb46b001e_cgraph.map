@@ -1,7 +1,0 @@
-<map id="csmp::StressRotate::Rotate" name="csmp::StressRotate::Rotate">
-<area shape="rect" id="Node000001" title="counter&#45;clockwise rotation of stress vectors (n1,n3) looking down on the rotation axis (use 180&#45;angle..." alt="" coords="5,39,144,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_tensor_variable_3_013_u_01_4.html#a0ef2812ad966c4856f906196437ddf10" title="(A x) matrix&#45;vector multiplication &#45;&gt; vector (v treated as column vector)" alt="" coords="192,5,338,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="144,44,176,39,177,44,145,49"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_vector_variable_3_013_u_01_4.html#abb402ef20ae54317293a542bfa94b5b0" title="returns csmp::Point initialised with vector values;" alt="" coords="192,71,338,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="145,68,177,74,176,79,144,73"/>
-</map>

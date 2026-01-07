@@ -1,5 +1,0 @@
-<map id="csmp::initializeFiniteVolumeProperties" name="csmp::initializeFiniteVolumeProperties">
-<area shape="rect" id="Node000001" title="identifies &quot;halo&quot; elements/faces/interfaces, i.e. which contribute to domain FVs, but are outside of ..." alt="" coords="5,5,190,46"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="238,13,368,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,23,222,23,222,28,190,28"/>
-</map>

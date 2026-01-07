@@ -1,7 +1,0 @@
-<map id="csmp::ModelTopology::AssignBoxShapedModelFlags" name="csmp::ModelTopology::AssignBoxShapedModelFlags">
-<area shape="rect" id="Node000001" title="recreates the BOX_BOUNDARY node flags if a problem was detected" alt="" coords="5,39,209,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_topology.html#ad2f9ce20850121cfd789e6839e107e51" title="checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it..." alt="" coords="266,5,414,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,42,250,36,251,41,210,47"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_model_topology.html#acfff71858afcf0b4b8eca5fd2fae9ec1" title="checks that 2D model contains the boundaries LEFT, RIGHT, BOTTOM, TOP" alt="" coords="257,71,424,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,70,242,75,241,80,209,76"/>
-</map>

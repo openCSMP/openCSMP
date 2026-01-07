@@ -1,7 +1,0 @@
-<map id="csmp::Face::BaryCenter" name="csmp::Face::BaryCenter">
-<area shape="rect" id="Node000001" title="the centre of gravity of the element" alt="" coords="233,35,397,60"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_face.html#a57277f022d9476217a4cb5351b763037" title="prints state of this object" alt="" coords="35,5,155,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="217,37,155,29,156,23,217,32"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_face.html#aacb7102f0e766287c0886d33ab2c4855" title="not a face&#45;normal vector, but the shortest path between the barycenters of face and element" alt="" coords="5,55,185,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="217,63,186,67,185,61,217,57"/>
-</map>

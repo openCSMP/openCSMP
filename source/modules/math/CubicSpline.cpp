@@ -248,32 +248,38 @@ double splint( const vector<double>& xa,
                const vector<double>& y2a,
                double x )
 {
-  assert( xa.size() >= 3U );
+    const size_t n = xa.size();
+    assert(n >= 3U);
+    assert(ya.size() == n);
+    assert(y2a.size() == n);
 
-	long  klo(0U);
-	long  khi(xa.size()-1U);
-	
-	while ( khi-klo > 1U ) {
-  		long k=(khi+klo) >> 1;
-  		if ( xa[k] > x ) khi=k;
-  		else klo=k;
-  	}
-  	
-	const double h(xa[khi] - xa[klo]);
-	
-	if ( fabs(h) < numeric_limits<double>::epsilon() ) {
-	     string err("\nsplint: Bad xa input to routine splint: ");
-	     cout << err << x <<" ("<< h <<"), xa:"<< endl;
-	     for ( uint32_t i=0U; i<xa.size(); i++ ) cout <<" "<< xa[i];
-	     cout << endl;
-	     throw range_error( err.c_str() );
-	  }
-	  
-	double a((xa[khi]-x) / h);
-	double b((x-xa[klo]) / h);
-	
-  return a*ya[klo]+b*ya[khi]+((a*a*a-a)*y2a[klo]
-	     	 +(b*b*b-b)*y2a[khi])*(h*h)/6.;
+    // Use size_t for array indices to avoid signed/unsigned mismatch
+    size_t klo = 0;
+    size_t khi = n - 1;
+
+    // Binary search for interval containing x
+    while (khi - klo > 1U) {
+        const size_t k = (khi + klo) / 2;
+        if (xa[k] > x)
+            khi = k;
+        else
+            klo = k;
+    }
+
+    const double h = xa[khi] - xa[klo];
+    if (fabs(h) < numeric_limits<double>::epsilon()) {
+        string err = "\nsplint: Bad xa input to routine splint: ";
+        cerr << err << x << " (h=" << h << "), xa:";
+        for (size_t i = 0; i < n; ++i) cerr << " " << xa[i];
+        cerr << endl;
+        throw range_error(err);
+    }
+
+    const double a = (xa[khi] - x) / h;
+    const double b = (x - xa[klo]) / h;
+
+    return a * ya[klo] + b * ya[khi] +
+           ((a * a * a - a) * y2a[klo] + (b * b * b - b) * y2a[khi]) * (h * h) / 6.0;
 		
 } // end splint
 

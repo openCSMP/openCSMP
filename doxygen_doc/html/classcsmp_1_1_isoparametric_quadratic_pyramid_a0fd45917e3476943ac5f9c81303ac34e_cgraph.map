@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricQuadraticPyramid::dN_AtIntegrationPoint" name="csmp::IsoparametricQuadraticPyramid::dN_AtIntegrationPoint">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,39,211,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html#a3639fc962596899333d6a65cb1ef66ce" title="initializes the member matrix JINV" alt="" coords="286,5,428,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,43,270,35,271,40,212,48"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_isoparametric_quadratic_pyramid.html#af644246672cfe7a6ae21001548246b04" title=" " alt="" coords="259,71,455,111"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="212,70,243,74,243,79,211,75"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_finite_element.html#a67341585f83bc9d941c67e7a84801248" title="prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination" alt="" coords="503,5,670,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="428,23,487,23,487,28,428,28"/>
-</map>

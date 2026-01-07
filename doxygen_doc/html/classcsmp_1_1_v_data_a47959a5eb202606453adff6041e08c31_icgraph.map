@@ -1,9 +1,0 @@
-<map id="csmp::VData::ResizeBREP_Flags" name="csmp::VData::ResizeBREP_Flags">
-<area shape="rect" id="Node000001" title=" " alt="" coords="239,63,423,103"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_set.html#a2fd0d4caf092b150c100cbbf744c5ea8" title="adds boundary representation geometry identifiers for the nodes to the VSet" alt="" coords="19,5,177,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,61,177,48,178,43,232,56"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_v_data.html#aa6a7afa105430fb89eee07213c1f0a73" title="resizes for a single&#45;element type mesh" alt="" coords="24,70,172,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="223,86,172,86,172,80,223,80"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_v_data.html#a49d54c31881e4095fffa5092691a5351" title=" " alt="" coords="5,120,191,145"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="225,108,163,122,161,116,223,103"/>
-</map>

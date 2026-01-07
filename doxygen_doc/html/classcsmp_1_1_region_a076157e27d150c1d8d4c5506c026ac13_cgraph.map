@@ -1,5 +1,0 @@
-<map id="csmp::Region::VolumeIntegral_x_Thickness" name="csmp::Region::VolumeIntegral_x_Thickness">
-<area shape="rect" id="Node000001" title="integration over volume and surface elements using thickness attribute (=1 for volume elements)" alt="" coords="5,5,203,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_region.html#a297c899fbbfbd91b24409da7eaa4d9f2" title="returns either the area of a surface region, the length of a line region or the region&#39;s volume" alt="" coords="251,13,405,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,23,236,23,236,28,203,28"/>
-</map>

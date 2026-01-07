@@ -1,7 +1,0 @@
-<map id="csmp::IsoparametricLinearTriangle::dN_AtIntegrationPoint" name="csmp::IsoparametricLinearTriangle::dN_AtIntegrationPoint">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,209,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_linear_triangle.html#a9e6d47dc9de095bcc549c394f809f5a3" title="overwrites the base class method in order to get 2D to 3D mapping functionality" alt="" coords="257,5,432,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="209,23,241,23,241,28,209,28"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_isoparametric_linear_triangle.html#a146ac4ff1201107ca6a5162eb844a1c9" title=" " alt="" coords="480,5,693,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="433,23,464,23,464,28,433,28"/>
-</map>

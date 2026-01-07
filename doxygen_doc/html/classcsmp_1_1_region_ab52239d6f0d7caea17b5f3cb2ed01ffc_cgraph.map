@@ -1,5 +1,0 @@
-<map id="csmp::Region::VolumeIntegral" name="csmp::Region::VolumeIntegral">
-<area shape="rect" id="Node000001" title="integration over volume elements" alt="" coords="5,5,203,31"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_region.html#a297c899fbbfbd91b24409da7eaa4d9f2" title="returns either the area of a surface region, the length of a line region or the region&#39;s volume" alt="" coords="251,5,405,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="203,16,236,16,236,21,203,21"/>
-</map>

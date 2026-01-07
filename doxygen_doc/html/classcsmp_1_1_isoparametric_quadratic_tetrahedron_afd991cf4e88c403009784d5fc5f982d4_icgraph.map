@@ -1,7 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTetrahedron::IsoparametricQuadraticTetrahedron" name="csmp::IsoparametricQuadraticTetrahedron::IsoparametricQuadraticTetrahedron">
-<area shape="rect" id="Node000001" title=" " alt="" coords="262,29,494,85"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="422,17,405,11,378,8,354,10,338,15,331,21,331,29,326,29,326,19,336,10,353,5,378,3,406,5,424,13"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_quadratic_tetrahedron___test.html#a7df8c3ee793f005d484722cef1ea242d" title=" " alt="" coords="5,29,214,85"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="246,60,214,60,214,54,246,54"/>
-<area shape="poly" id="edge3_Node000002_Node000002" title=" " alt="" coords="153,17,137,11,109,8,86,10,70,15,63,21,63,29,57,29,58,19,67,10,85,5,110,3,138,5,155,13"/>
-</map>

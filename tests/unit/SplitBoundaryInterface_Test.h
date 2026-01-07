@@ -58,6 +58,7 @@ class SplitBoundaryInterface_Test : public Test
 
       // CURRENTLY RUNNING:
       void Test_splitboundary_from_lower_dim_region(); //E.P Implemented and Tested - Contains RIGOROUS checking of nodes, elements, and interfaces correctly calibrated
+      void Test_ConversionOfNormalFault( const std::string& model_name="fault_boundary_test" );
 
       //RUNNING, BUT WITH NO DIAGNOSTICS: Just checks methods dont crash - TODO: Add quantitative checks/tests to each of these
       void Test_splitboundary_between_regions( const std::string& model_name );

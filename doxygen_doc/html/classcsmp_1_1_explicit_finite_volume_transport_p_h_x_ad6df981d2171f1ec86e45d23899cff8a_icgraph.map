@@ -1,7 +1,0 @@
-<map id="csmp::ExplicitFiniteVolumeTransportPHX::AdjustFluxOut" name="csmp::ExplicitFiniteVolumeTransportPHX::AdjustFluxOut">
-<area shape="rect" id="Node000001" title=" " alt="" coords="568,13,763,54"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_explicit_finite_volume_transport_p_h_x.html#a1ce227a2061658721bff5fbfc5a44bf7" title=" " alt="" coords="302,5,520,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="552,36,520,36,520,30,552,30"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_explicit_finite_volume_transport_p_h_x.html#a3b1b76a50396069e544d5c949e3adf23" title=" " alt="" coords="5,5,254,61"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="286,36,254,36,254,30,286,30"/>
-</map>

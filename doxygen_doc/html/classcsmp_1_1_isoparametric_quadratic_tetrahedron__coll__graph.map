@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTetrahedron" name="csmp::IsoparametricQuadraticTetrahedron">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,1605,240,1890"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="41,778,205,1556"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,1571,126,1605,120,1605,120,1571"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="56,361,189,646"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="126,646,126,761,120,761,120,646"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="56,5,189,290"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="126,305,126,361,120,361,120,305"/>
-</map>

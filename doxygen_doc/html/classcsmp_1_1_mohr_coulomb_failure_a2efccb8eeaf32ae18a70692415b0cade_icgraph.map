@@ -1,5 +1,0 @@
-<map id="csmp::MohrCoulombFailure::DeviatoricStress" name="csmp::MohrCoulombFailure::DeviatoricStress">
-<area shape="rect" id="Node000001" title="computes the shear&#45;stress related stress invariant, returning into second argument; method difference..." alt="" coords="235,5,416,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_mohr_coulomb_failure.html#a2742855b607aa3cd67a4559a1751368f" title="computes the local value of result property &quot;failure&quot; which gets written back to the model" alt="" coords="5,5,187,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="219,28,187,28,187,23,219,23"/>
-</map>

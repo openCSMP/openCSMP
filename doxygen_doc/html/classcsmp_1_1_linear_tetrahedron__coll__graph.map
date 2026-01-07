@@ -1,9 +1,0 @@
-<map id="csmp::LinearTetrahedron" name="csmp::LinearTetrahedron">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,1605,182,1956"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="12,778,176,1556"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,1571,96,1605,91,1605,91,1571"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="28,361,160,646"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="96,646,96,761,91,761,91,646"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="28,5,160,290"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="96,305,96,361,91,361,91,305"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="csmp::IntrepidInterface::Read" name="csmp::IntrepidInterface::Read">
-<area shape="rect" id="Node000001" title="reads Intrepid meshfile into a VSet, identifying its regions in model topology" alt="" coords="248,5,403,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_intrepid___example.html#a3e919e8cc5499b287ecae4a91e8a1d70" title=" " alt="" coords="5,13,200,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="232,28,200,28,200,23,232,23"/>
-</map>

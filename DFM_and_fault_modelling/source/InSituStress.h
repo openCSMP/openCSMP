@@ -39,7 +39,7 @@ class InSituStress {
       void CartesianStress( TensorVariable<3U>&, double isotatic_stress_offset=0. ) const;
   
       /// output of compact representation of stress state
-      StressRotate const& StressState() const;
+      StressRotate& StressState() const;
       /// confining pressure = overburden stress
       double P_conf() const;
       /// distance from the seafloor / earth surface (that can be different from the y-coordinate)
@@ -50,8 +50,9 @@ class InSituStress {
       double SH() const;
       /// minimum horizontal stress, normalized by overburden stress
       double Sh() const;
-      /// azimuth of sigma1 or SH expressed in degrees (N-S=0o), assuming Andersonian stresses 
+      /// azimuth = XZ-plane counter-clockwise deviation of sigma1 or SH expressed in degrees (N-S=0=180^o), assuming Andersonian stresses 
       double Trend() const;
+      void   Trend( double new_XZ_plane_max_stress_azimuth ) { trend_azimuth_ = new_XZ_plane_max_stress_azimuth; }
       /// density of the rock around the site of stress measurement (kg/m3)
       double Density() const;
       /// the stress regime inferred from the magnitudes of the principal stresses
@@ -70,10 +71,10 @@ class InSituStress {
      /// from the internally stored stresses
      STRESS_REGIME  CalculateStressRegime() const;
      double  subsurface_depth_;
-     double  overburden_pressure_; ///< vertical integral over the grain density
+     double  overburden_pressure_; ///< vertical integral over the dry density of the rock
      double  rock_density_;        ///< density at location of sample, for interpolation in vicinity
      double  Sv_, SH_, Sh_,        ///< vertical and horizontal (Andersonian) stresses; SH_ > Sh_
-             trend_azimuth_;       ///< trend of SHmax recorded from 0..180 (clockwise on geological compass)
+             trend_azimuth_;       ///< trend of sigma1 or SHmax recorded from 0..180 (clockwise on geological compass)
      Point<3U> model_xyz_;
      mutable StressRotate  stress_state_;
      STRESS_REGIME stress_regime_;
@@ -108,7 +109,7 @@ inline double InSituStress::SH() const
 inline double InSituStress::Sh() const
  { return Sh_; }
  
-// azimuth of sigma1 or SH expressed in degrees (N-S=0o), assuming Andersonian stresses 
+// azimuth (horizontal XZ plane) of sigma1 or SH expressed in degrees (N-S=0o), assuming Andersonian stresses
 inline double InSituStress::Trend() const
  { return trend_azimuth_; }
 
@@ -117,7 +118,7 @@ inline double InSituStress::Density() const
  { return rock_density_; }
 
 // output of compact representation of stress state
-inline StressRotate const& InSituStress::StressState() const
+inline StressRotate& InSituStress::StressState() const
  { return stress_state_; }
 
 // the stress regime inferred from the magnitudes of the principal stresses

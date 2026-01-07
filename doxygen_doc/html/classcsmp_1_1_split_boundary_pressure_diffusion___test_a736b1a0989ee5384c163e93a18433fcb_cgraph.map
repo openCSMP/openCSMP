@@ -1,5 +1,0 @@
-<map id="csmp::SplitBoundaryPressureDiffusion_Test::run" name="csmp::SplitBoundaryPressureDiffusion_Test::run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,200,46"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="248,13,378,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="200,23,232,23,232,28,200,28"/>
-</map>

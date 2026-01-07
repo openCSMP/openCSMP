@@ -16,7 +16,7 @@ class StressRotate {
   
     StressRotate( const StressRotate& );
                   
-    ~StressRotate();
+    ~StressRotate() = default;
   
     /// returns the full Cartesian stress tensor rotated to align principal axes according to internally stored trend
     void CartesianStressTensor( TensorVariable<3U>& stress ) const;

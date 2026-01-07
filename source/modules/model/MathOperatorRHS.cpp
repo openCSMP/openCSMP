@@ -1014,62 +1014,19 @@ void transformNodeIndexVector( const csmp::Index& idx, vector<size_t>& N )
     assert(idx.type != SCALAR);
 
     // creating a running index for decrementation
-    const int32_t length    = idx.dataDepth;
-    const int32_t N_size_m1 = static_cast<int32_t>(N.size() - 1);
+    const auto length = idx.dataDepth;
+    const auto N_size = N.size() - 1;
     
     // for all variable types
     N.resize( N.size() * length, 0U ); // new size of N vector ( length of array * number of nodes )
-    for ( int32_t i=N_size_m1, k=static_cast<int32_t>(N.size()-1); i >= 0; i-- )
+    
+    for ( auto i=N_size, k=N.size()-1; i-- > 0; )
       // for current node, cycle through all variable components
-      for ( int32_t j{0U}; j < length; j++ )
+      for ( uint32_t j{0U}; j < length; ++j )
         N[ k-- ] = ((N[i] + 1) * length - j) - 1;
 
   } // end transformNodeIndexVector
 
-
-/* IFFY OLD VERSION
-
-void transformNodeIndexVector( uint32_t dim, const csmp::Index& idx, vector<size_t>& N )
-  {
-    assert(!N.empty());
-    assert(idx.type != SCALAR);
-
-    // creating a running index for decrementation
-    const auto  oldNsize_m1(static_cast<int64_t>(N.size()) - 1);
-
-    // VECTOR variables
-    if (idx.type == VECTOR) {
-      // new elements are set to zero
-      N.resize(N.size() * dim, 0U); // new size of N vector
-      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
-        for ( auto j{0U}; j < dim; j++)
-          N[ k-- ] = ((N[i] + 1) * dim - j) - 1;
-      return;
-    }
-
-    // TENSOR variables
-    if (idx.type == TENSOR) {
-      const uint32_t  dim2(dim*dim);
-      N.resize(N.size() * dim2, 0U);
-      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
-        for ( auto j = 0; j < dim2; j++)
-          N[ k-- ] = ((N[i] + 1) * dim2 - j) - 1;
-    }
-
-    // ARRAY or FLAGGEDARRAY variables
-    if (idx.type == ARRAY || idx.type == FLAGGEDARRAY) {
-      const auto length(idx.dataDepth);
-      // new elements are set to zero
-      N.resize(N.size() * length, 0U); // new size of N vector ( length of array * number of nodes )
-      for ( auto i = oldNsize_m1, k = static_cast<int64_t>(N.size()) - 1; i >= 0; i-- )
-        // cycle for one node through all the array variable components
-        for ( auto j{0U}; j < length; j++)
-          N[ k-- ] = ((N[i] + 1) * length - j) - 1;
-      return;
-    }
-
-  } // end transformNodeIndexVector
-*/
 
 
 template class MathOperatorRHS<1U>;

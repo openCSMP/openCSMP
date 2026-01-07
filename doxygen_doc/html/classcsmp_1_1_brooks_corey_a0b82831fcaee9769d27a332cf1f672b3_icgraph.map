@@ -1,7 +1,0 @@
-<map id="csmp::BrooksCorey::krw_Phase" name="csmp::BrooksCorey::krw_Phase">
-<area shape="rect" id="Node000001" title="relative permeabilities" alt="" coords="230,23,375,64"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_brooks_corey.html#a78020f5366cb40aa725f50ae40bb58a6" title=" " alt="" coords="8,5,179,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,35,179,31,179,26,215,30"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_brooks_corey.html#aeca78297e0a8eb947ad89a072f2d0967" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="5,55,182,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="215,56,183,60,182,55,214,51"/>
-</map>

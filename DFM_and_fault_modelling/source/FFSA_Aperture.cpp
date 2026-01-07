@@ -1,16 +1,18 @@
 #include "FFSA_Aperture.h"
 
+using namespace std;
+
 namespace csmp {
 
 // Define a placeholder for the global variable set in MATLAB's FFSA_Aperture.m for the current fracture iteration
 // Since we are iterating fracture by fracture, these are single values in the C++ implementation.
-// However, the FFSA_JRCmob_calc is designed to handle vectors, but in the context of the main loop, 
+// While, the FFSA_JRCmob calculation is designed to handle vectors, in the main loop,
 // it will be called with a vector of size 1, or a vector of intermediate steps.
 
 // --- Private Helper Functions ---
 
 /**
- * @brief Performs 1D linear interpolation (similar to MATLAB's `interp1`).
+ * @brief Helper performs 1D linear interpolation (similar to MATLAB's `interp1`).
  *
  * @param x Vector of query points.
  * @param x_data Fixed known x-coordinates of data points.
@@ -18,8 +20,8 @@ namespace csmp {
  * @return Eigen::VectorXd Vector of interpolated values at query points x.
  */
 Eigen::VectorXd FFSA_FractureAperture::linear_interp1(const Eigen::VectorXd& x,
-                                              const std::vector<double>& x_data,
-                                              const std::vector<double>& y_data) const {
+                                              const vector<double>& x_data,
+                                              const vector<double>& y_data) const {
     long N = x.size();
     Eigen::VectorXd y_interp(N);
 
@@ -42,14 +44,14 @@ Eigen::VectorXd FFSA_FractureAperture::linear_interp1(const Eigen::VectorXd& x,
         }
 
         // Linear search for interval (x_data is sorted)
-        auto it_upper = std::upper_bound(x_data.begin(), x_data.end(), xi);
+        auto it_upper = upper_bound(x_data.begin(), x_data.end(), xi);
         
         // it_upper points to x_data[k] where x_data[k-1] < xi <= x_data[k]
-        long k = std::distance(x_data.begin(), it_upper);
+        long k = distance(x_data.begin(), it_upper);
         
         // k_lower must be at least 1 (since k starts at 1)
-        long k_upper = k;
-        long k_lower = k - 1;
+        size_t k_upper = static_cast<size_t>(k);
+        size_t k_lower = static_cast<size_t>(k - 1);
 
         // Linear interpolation formula: y = y1 + (x - x1) * (y2 - y1) / (x2 - x1)
         double x1 = x_data[k_lower];
@@ -63,21 +65,24 @@ Eigen::VectorXd FFSA_FractureAperture::linear_interp1(const Eigen::VectorXd& x,
     return y_interp;
 }
 
+
+
+
 /**
  * @brief Calculates the Mobilized Joint Roughness Coefficient (JRC_mob).
  *
  * Implements logic from FFSA_JRCmob.m using linear interpolation.
  *
  * @param d_by_dpeak Ratio shear displacement to peak shear displacement [-].
- * @param sigma_n Normal stress [MPa].
- * @param JRC (Peak) Joint roughness coefficient [-].
- * @param JCS Joint wall compressive strength [MPa].
- * @param phi_r Residual friction angle [°].
+ * @param sigma_n       Joint-surface normal stress [MPa].
+ * @param JRC (Peak)     Joint roughness coefficient [-].
+ * @param JCS                Joint wall compressive strength [MPa].
+ * @param phi_r            Residual friction angle [°].
  * @return Eigen::VectorXd Vector of Mobilized JRC values [-].
  */
-Eigen::VectorXd FFSA_FractureAperture::FFSA_JRCmob_calc(const Eigen::VectorXd& d_by_dpeak, double sigma_n, double JRC, double JCS, double phi_r) const {
+Eigen::VectorXd FFSA_FractureAperture::FFSA_JRCmob(const Eigen::VectorXd& d_by_dpeak, double sigma_n, double JRC, double JCS, double phi_r) const {
     // i = JRC*log10(JCS/sigma_n); % [°]
-    double i_val = JRC * std::log10(JCS / sigma_n);
+    double i_val = JRC * log10(JCS / sigma_n);
     
     // Check for division by zero or log(0) which implies tension or zero JRC
     if (i_val <= 0.0) {
@@ -98,17 +103,17 @@ Eigen::VectorXd FFSA_FractureAperture::FFSA_JRCmob_calc(const Eigen::VectorXd& d
         // we'll enforce a minimal positive value for i_val for the first point calculation, 
         // but otherwise use a standard 0-to-1 ratio lookup table.
         
-        // For C++: Use the values {0, 0.75, 1, 0.85, 0.7, 0.5, 0} for d_by_dpeak >= 0.3
+        // Use the values {0, 0.75, 1, 0.85, 0.7, 0.5, 0} for d_by_dpeak >= 0.3
         // For d_by_dpeak = 0, JRC_mob is generally expected to be low or 0 for the mobilization model.
         // Let's stick to the core interpolation points and handle the edge case.
-    }
+      }
 
-    // Fixed interpolation data points (MATLAB's interp1 requires sorted x_data)
-    std::vector<double> list_d_by_dpeak = {0.0, 0.3, 0.6, 1.0, 2.0, 4.0, 10.0, 100.0};
-    std::vector<double> list_JRCmob_by_JRCpeak = {0.0, 0.0, 0.75, 1.0, 0.85, 0.7, 0.5, 0.0};
+    // Fixed interpolation data points
+    vector<double> list_d_by_dpeak = {0.0, 0.3, 0.6, 1.0, 2.0, 4.0, 10.0, 100.0};
+    vector<double> list_JRCmob_by_JRCpeak = {0.0, 0.0, 0.75, 1.0, 0.85, 0.7, 0.5, 0.0};
     
-    // The MATLAB code includes: list_JRCmob_by_JRCpeak= [-phi_r/i 0 0.75 1 0.85 0.7 0.5 0]
-    // The entry at d_by_dpeak = 0 is non-physical if i_val is non-positive.
+    // Origina MATLAB code includes: list_JRCmob_by_JRCpeak= [-phi_r/i 0 0.75 1 0.85 0.7 0.5 0]
+    // The entry at d_by_dpeak = 0 is non-physical if i_val is not positive.
     // Assuming phi_r is positive, we substitute -phi_r/i_val for the first element:
     if (i_val > 1e-6) { // Avoid division by zero
         list_JRCmob_by_JRCpeak[0] = -phi_r / i_val;
@@ -131,6 +136,9 @@ Eigen::VectorXd FFSA_FractureAperture::FFSA_JRCmob_calc(const Eigen::VectorXd& d
     return JRCmob_by_JRCpeak * JRC;
 }
 
+
+
+
 /**
  * @brief Calculates the shear dilation (delta_d) and mobilized dilation angle.
  *
@@ -144,39 +152,39 @@ Eigen::VectorXd FFSA_FractureAperture::FFSA_JRCmob_calc(const Eigen::VectorXd& d
  * @param phi_r Residual friction angle [°].
  * @param M Damage coefficient [-].
  * @param method Method how to calculate shear dilation ('integrate', 'integrate_pos', 'last').
- * @return std::tuple<double, double, double> A tuple containing:
+ * @return tuple<double, double, double> A tuple containing:
  * - delta_d: Shear dilation [mm].
  * - JRC_mob: Mobilized JRC [-].
  * - phi_d_mob: Mobilized dilation angle [°].
  */
-std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_calc(
+tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation(
                               double delta_s, double delta_peak, double JRC, double JCS, double sigma_eff,
-                              double phi_r, double M, const std::string& method) const
+                              double phi_r, double M, const string& method) const
 {
     // Check if effective normal stress is positive
     if (sigma_eff < 0.0) {
-        throw std::runtime_error("Negative sigma_eff in ShearDilation: Tensile opening is not considered.");
+        throw runtime_error("Negative sigma_eff in ShearDilation: Tensile opening is not considered.");
     }
 
     // Check if shear displacement is zero (or even negative?)
     if (delta_s <= 0.0) {
         // Mobilized JRC (call with d_by_dpeak = 0)
         Eigen::VectorXd d_zero(1); d_zero << 0.0;
-        double JRC_mob = FFSA_JRCmob_calc(d_zero, sigma_eff, JRC, JCS, phi_r)(0);
+        double JRC_mob = FFSA_JRCmob(d_zero, sigma_eff, JRC, JCS, phi_r)(0);
         // Mobilized dilation angle
-        double phi_d_mob = std::numeric_limits<double>::quiet_NaN();
+        double phi_d_mob = numeric_limits<double>::quiet_NaN();
         // Shear dilation
         double delta_d = 0.0;
         return {delta_d, JRC_mob, phi_d_mob};
     }
     
     // Calculation factors
-    const double log_factor = std::log10(JCS / sigma_eff);
+    const double log_factor = log10(JCS / sigma_eff);
 
     if (method == "last") {
         // Mobilized JRC
         Eigen::VectorXd d_by_dpeak_vec(1); d_by_dpeak_vec << delta_s / delta_peak;
-        double JRC_mob = FFSA_JRCmob_calc(d_by_dpeak_vec, sigma_eff, JRC, JCS, phi_r)(0);
+        double JRC_mob = FFSA_JRCmob(d_by_dpeak_vec, sigma_eff, JRC, JCS, phi_r)(0);
 
         // Mobilized dilation angle
         double phi_d_mob = (1.0 / M) * JRC_mob * log_factor;
@@ -199,7 +207,7 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_cal
         if (delta_s >= d_delta_s) {
             // MATLAB: all_delta_s = d_delta_s/2:d_delta_s:delta_s;
             // The MATLAB step size is (delta_s / d_delta_s), but here we use a fixed step.
-            long num_steps = static_cast<long>(std::floor(delta_s / d_delta_s));
+            long num_steps = static_cast<long>(floor(delta_s / d_delta_s));
             integration_step = d_delta_s;
 
             // Generate sequence: [0.05, 0.15, 0.25, ..., num_steps * d_delta_s - 0.05]
@@ -209,7 +217,7 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_cal
             }
             
             // Check if we need to include the final delta_s as the last point if it doesn't align
-            if (std::abs(delta_s - all_delta_s.tail(1)(0) - d_delta_s/2.0) > 1e-9) {
+            if (abs(delta_s - all_delta_s.tail(1)(0) - d_delta_s/2.0) > 1e-9) {
                 // Not exactly matching the MATLAB range behavior, but covering the range
                 // We ensure the last point is less than or equal to delta_s
             }
@@ -223,7 +231,7 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_cal
 
         // Mobilized JRC
         Eigen::VectorXd d_by_dpeak = all_delta_s / delta_peak;
-        Eigen::VectorXd all_JRC_mob = FFSA_JRCmob_calc(d_by_dpeak, sigma_eff, JRC, JCS, phi_r);
+        Eigen::VectorXd all_JRC_mob = FFSA_JRCmob(d_by_dpeak, sigma_eff, JRC, JCS, phi_r);
 
         // Mobilized dilation angle [°]
         // all_phi_d_mob = 1/M*all_JRC_mob*log10(JCS/sigma_eff);
@@ -259,9 +267,13 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_cal
         return {delta_d, JRC_mob, phi_d_mob};
 
     } else {
-        throw std::runtime_error("FFSA_ShearDilation: Unknown method " + method);
+        throw runtime_error("FFSA_ShearDilation: Unknown method " + method);
     }
 }
+
+
+
+
 
 
 /**
@@ -278,14 +290,14 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDilation_cal
  * @param sigma_EFF Effective normal stress (for JRC_mob & phi_s_mob) [MPa].
  * @param phi_r Residual friction angle [°].
  * @param method Method to calculate shear displacement ('mob' or 'old').
- * @return std::tuple<double, double, double> A tuple containing:
+ * @return tuple<double, double, double> A tuple containing:
  * - delta_s: Shear displacement [mm].
  * - JRC_mob: Mobilized joint roughness coefficient [-].
  * - phi_s_mob: Mobilized friction angle [°].
  */
-std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement_calc(
+tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement(
                               double sigma_s, double K_s, double delta_peak, double JRC, double JCS,
-                              double sigma_eff, double sigma_EFF, double phi_r, const std::string& method) const
+                              double sigma_eff, double sigma_EFF, double phi_r, const string& method) const
 {
     double delta_s = 0.0;
     double JRC_mob = 0.0;
@@ -293,16 +305,16 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
     
     // Check for negative effective normal stress
     if (sigma_eff < 0.0 || sigma_EFF < 0.0) {
-        throw std::runtime_error("Negative effective normal stress detected in ShearDisplacement. Tensile opening is not considered.");
+        throw runtime_error("Negative effective normal stress detected in ShearDisplacement. Tensile opening is not considered.");
     }
 
     // --- Legacy Code: option to calculate delta_s as in ECMOR22 paper ---
     if (method == "old") {
         // Excess shear stress [MPa]
-        double delta_tau = std::abs(sigma_s) - sigma_eff * tand(phi_r);
+        double delta_tau = abs(sigma_s) - sigma_eff * tand(phi_r);
         
         // Shear displacement [mm] (must be non-negative)
-        delta_s = std::max(delta_tau / K_s, 0.0);
+        delta_s = max(delta_tau / K_s, 0.0);
         
         // Ratio of shear displacement over peak shear displacement [-]
         double d_by_dpeak = delta_s / delta_peak;
@@ -310,21 +322,21 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
         // Mobilized JRC [-]
         Eigen::VectorXd d_by_dpeak_vec(1);
         d_by_dpeak_vec(0) = d_by_dpeak;
-        JRC_mob = FFSA_JRCmob_calc(d_by_dpeak_vec, sigma_EFF, JRC, JCS, phi_r)(0);
+        JRC_mob = FFSA_JRCmob(d_by_dpeak_vec, sigma_EFF, JRC, JCS, phi_r)(0);
         
         // Mobilized friction angle [°]
-        phi_s_mob = JRC_mob * std::log10(JCS / sigma_EFF) + phi_r;
+        phi_s_mob = JRC_mob * log10(JCS / sigma_EFF) + phi_r;
         
         return {delta_s, JRC_mob, phi_s_mob};
     } 
     
     // --- ITERATIVE SEARCH CODE: method='mob' ---
     else if (method != "mob") {
-        throw std::runtime_error("Unknown method: " + method);
+        throw runtime_error("Unknown method: " + method);
     }
     
     // --- Initial Candidate List Generation ---
-    std::vector<double> temp_delta_s_cand;
+    vector<double> temp_delta_s_cand;
     
     // [0:0.05:1.9]
     for (double d = 0.0; d <= 1.9 + 1e-9; d += 0.05) {
@@ -340,19 +352,19 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
     }
     
     // Convert to Eigen VectorXd (and remove duplicates)
-    std::sort(temp_delta_s_cand.begin(), temp_delta_s_cand.end());
-    temp_delta_s_cand.erase(std::unique(temp_delta_s_cand.begin(), temp_delta_s_cand.end(), [](double a, double b) {
-        return std::abs(a - b) < 1e-9;
+    sort(temp_delta_s_cand.begin(), temp_delta_s_cand.end());
+    temp_delta_s_cand.erase(unique(temp_delta_s_cand.begin(), temp_delta_s_cand.end(), [](double a, double b) {
+        return abs(a - b) < 1e-9;
     }), temp_delta_s_cand.end());
 
-    Eigen::VectorXd delta_s_cand = Eigen::Map<Eigen::VectorXd>(temp_delta_s_cand.data(), temp_delta_s_cand.size());
+    Eigen::VectorXd delta_s_cand = Eigen::Map<Eigen::VectorXd>(temp_delta_s_cand.data(), static_cast<long>(temp_delta_s_cand.size()) );
     
     // Shear displacement for which relaxed shear stress is zero [mm]
-    double delta_s_max = std::abs(sigma_s) / K_s;
+    double delta_s_max = abs(sigma_s) / K_s;
 
     // Limit candidates of delta_s so that only 1 entry is >= delta_s_max
     long count_below_max = (delta_s_cand.array() < delta_s_max).count();
-    long desired_length = std::min(std::max(count_below_max + 1, 2L), (long)delta_s_cand.size());
+    long desired_length = min(max(count_below_max + 1, 2L), (long)delta_s_cand.size());
     
     // Resize the Eigen vector conservatively
     delta_s_cand.conservativeResize(desired_length);
@@ -369,7 +381,7 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
         
         // 1. Calculate relaxed shear stress (sigma_s_rel) [MPa]
         // sigma_s_rel = max( abs(sigma_s) - K_s*delta_s_cand , 0)
-        Eigen::VectorXd sigma_s_rel = (std::abs(sigma_s) - K_s * delta_s_cand.array()).cwiseMax(0.0);
+        Eigen::VectorXd sigma_s_rel = (abs(sigma_s) - K_s * delta_s_cand.array()).cwiseMax(0.0);
         
         // 2. Calculate mobilized shear strength (tau) [MPa]
         
@@ -377,11 +389,11 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
         Eigen::VectorXd d_by_dpeak = delta_s_cand / delta_peak;
         
         // Mobilized JRC [-]
-        JRC_mob_vec_eigen = FFSA_JRCmob_calc(d_by_dpeak, sigma_EFF, JRC, JCS, phi_r);
+        JRC_mob_vec_eigen = FFSA_JRCmob(d_by_dpeak, sigma_EFF, JRC, JCS, phi_r);
         
         // Mobilized friction angle [°]
         // phi_s_mob = JRC_mob * log10(JCS/sigma_EFF) + phi_r
-        double log_factor = std::log10(JCS / sigma_EFF);
+        double log_factor = log10(JCS / sigma_EFF);
         phi_s_mob_vec_eigen = JRC_mob_vec_eigen.array() * log_factor + phi_r;
 
         // Shear strength (tau) [MPa]
@@ -403,8 +415,8 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
         }
         
         // 6. Choose one index lower and higher as bounds for next iteration
-        long idx1 = std::max(idx - 1, 0L);
-        long idx2 = std::min(idx + 1, (long)delta_s_cand.size() - 1);
+        long idx1 = max(idx - 1, 0L);
+        long idx2 = min(idx + 1, (long)delta_s_cand.size() - 1);
         
         // Create new candidate list (Refined grid search)
         double delta_s_lower = delta_s_cand(idx1);
@@ -420,7 +432,7 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
         
         // Limit candidates of delta_s so that only 1 entry is >= delta_s_max
         count_below_max = (new_delta_s_cand.array() < delta_s_max).count();
-        desired_length = std::min(std::max(count_below_max + 1, 2L), (long)new_delta_s_cand.size());
+        desired_length = min(max(count_below_max + 1, 2L), (long)new_delta_s_cand.size());
         
         delta_s_cand = new_delta_s_cand.head(desired_length);
     }
@@ -431,7 +443,11 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
     phi_s_mob = phi_s_mob_vec_eigen(idx);
     
     return {delta_s, JRC_mob, phi_s_mob};
-}
+    
+} // end FFSA_ShearDisplacement
+
+
+
 
 
 
@@ -444,17 +460,23 @@ std::tuple<double, double, double> FFSA_FractureAperture::FFSA_ShearDisplacement
 /**
  * @brief Calculates the shear dilation, displacement, and final aperture for a set of fractures.
  *
- * Implements logic from FFSA_Aperture.m.
+ * Implements logic from M. Liem's FFSA_Aperture.m.
  *
  * @param params Input structure containing all required fracture and method parameters.
- * @return std::pair<Eigen::MatrixXd, FFSA_DebugResults> A pair containing:
+ *
+ * @return pair<Eigen::MatrixXd, FFSA_DebugResults> A pair containing:
  * - Matrix of results [a_0, delta_n, delta_s, delta_d, a] (N_frac x 5) [mm].
  * - Detailed debug structure with all intermediate variables.
+ *
+ * @attention While (by constract with the Cruikshank model) shear dilatation can occur at a positive (compressive) effective stress,
+ * at appreciable burial / hydrostatic reservoir conditions, the effective stress is likely to be so high that Barton's model will predict asperity crushing.
+ * This will manifest as a negative mobilised JRC and zero dilation and normal compression = aperture reduction during shear.
+ *  Is this physically correct? - search the literature!
  */
-std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFromFarFieldStress(const FFSA_InputParameters& params) {
-    long N_frac = params.N_frac;
+pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFromFarFieldStress(const FFSA_InputParameters& params) {
+    long N_frac = params.N_fractures;
     if (N_frac == 0) {
-        throw std::runtime_error("Input vector size (N_frac) is zero.");
+        throw runtime_error("Input vector size (N_frac) is zero.");
     }
 
     // Initialize result matrix and debug structure
@@ -462,18 +484,18 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
     FFSA_DebugResults debug(N_frac);
 
     // Get method strings
-    const std::string method_disp = params.method_displacement;
-    const std::string method_dil = params.method_dilation;
-    const std::string method_peak = params.method_peak_displacement;
-    const std::string method_sigma_eff = params.method_sigma_eff;
+    const string method_disp = params.method_displacement;
+    const string method_dil = params.method_dilation;
+    const string method_peak = params.method_peak_displacement;
+    const string method_sigma_eff = params.method_sigma_eff;
 
     for (long frac = 0; frac < N_frac; ++frac) {
         // --- Extract parameters for current fracture ---
         double L = params.L(frac);
         double alpha = params.alpha(frac);
-        double sigma_H = params.sigma_H(frac);
-        double sigma_h = params.sigma_h(frac);
-        double beta = params.beta(frac);
+        double sigma_H = params.sigma_H;
+        double sigma_h = params.sigma_h;
+        double beta = params.beta;
         double p_f = params.p_f(frac);
         double JRC = params.JRC(frac);
         double JCS = params.JCS(frac);
@@ -485,7 +507,12 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
         double nu = params.nu(frac);
         double C_g = params.C_g(frac);
         
-        // Angle between sigma_H and fracture normal [°]
+        // Angle [°] between sigma_H (beta) and fracture normal (alpha)
+        /*
+            In standard geomechanics, if sigma_H (Maximum Horizontal Stress) is aligned with the x-axis and
+            sigma_h (Minimum Horizontal Stress) with the y-axis, theta represents the angle between the maximum
+            principal stress direction sigma_H and the fracture plane.
+        */
         double theta = 90.0 + alpha - beta;
         
         // ---------------------------------------------------------------------
@@ -495,8 +522,8 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
         double sigma_eff = sigma_n - p_f;
         
         if (sigma_eff < 0.0) {
-            std::string err_msg = "Negative sigma_eff = " + std::to_string(sigma_eff) + " MPa. Tensile opening!";
-            throw std::runtime_error(err_msg);
+            string err_msg = "Negative sigma_eff = " + to_string(sigma_eff) + " MPa. Tensile opening!";
+            throw runtime_error(err_msg);
         }
         
         // ---------------------------------------------------------------------
@@ -529,7 +556,7 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
             sigma_EFF = sigma_n - 0.5 * (sigma_s / tand(phi_r) + p_f);
         } else if (method_sigma_eff == "value") {
             if (params.sigma_EFF.size() != N_frac) {
-                throw std::runtime_error("method.sigma_eff='value' but sigma_EFF vector size is inconsistent.");
+                throw runtime_error("method.sigma_eff='value' but sigma_EFF vector size is inconsistent.");
             }
             sigma_EFF = params.sigma_EFF(frac);
         } else { // 'end' (default) or unknown
@@ -537,24 +564,24 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
         }
 
         if (sigma_EFF < 0.0) {
-            std::string err_msg = "Negative sigma_EFF = " + std::to_string(sigma_EFF) + " MPa. Tensile opening in mobilization calculation!";
-            throw std::runtime_error(err_msg);
+            string err_msg = "Negative sigma_EFF = " + to_string(sigma_EFF) + " MPa. Tensile opening in mobilization calculation!";
+            throw runtime_error(err_msg);
         }
 
         // Peak shear displacement [mm]
         double delta_peak;
         if (method_peak == "Barton") {
-            delta_peak = L / 500.0 * std::pow(JRC / L, 0.33) * 1e3;
+            delta_peak = L / 500.0 * pow(JRC / L, 0.33) * 1e3;
         } else if (method_peak == "Asadollahi") {
-            double angle_term = JRC * std::log10(JCS / sigma_EFF);
-            delta_peak = 0.0077 * std::pow(L, 0.45) * std::pow(sigma_EFF / JCS, 0.34) * cosd(angle_term) * 1e3;
+            double angle_term = JRC * log10(JCS / sigma_EFF);
+            delta_peak = 0.0077 * pow(L, 0.45) * pow(sigma_EFF / JCS, 0.34) * cosd(angle_term) * 1e3;
         } else {
-            throw std::runtime_error("Unknown method for calculating peak shear displacement: " + method_peak);
+            throw runtime_error("Unknown method for calculating peak shear displacement: " + method_peak);
         }
         
         // Shear displacement, Mobilized JRC, Mobilized friction angle
         double delta_s, JRC_mob_disp, phi_s_mob;
-        std::tie(delta_s, JRC_mob_disp, phi_s_mob) = FFSA_ShearDisplacement_calc(
+        tie(delta_s, JRC_mob_disp, phi_s_mob) = FFSA_ShearDisplacement(
             sigma_s, K_s, delta_peak, JRC, JCS, sigma_eff, sigma_EFF, phi_r, method_disp);
         
         // ---------------------------------------------------------------------
@@ -563,15 +590,15 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
         // Damage coefficient [-]
         double M;
         bool M_provided = params.M.size() == N_frac;
-        if (M_provided && !std::isnan(params.M(frac))) {
+        if (M_provided && !isnan(params.M(frac))) {
             M = params.M(frac);
         } else {
-            M = 0.7 + JRC / (12.0 * std::log10(JCS / sigma_EFF));
+            M = 0.7 + JRC / (12.0 * log10(JCS / sigma_EFF));
         }
         
         // Shear dilation, Mobilized JRC (for dilation), Mobilized dilation angle
         double delta_d, JRC_mob_dil, phi_d_mob;
-        std::tie(delta_d, JRC_mob_dil, phi_d_mob) = FFSA_ShearDilation_calc(
+        tie(delta_d, JRC_mob_dil, phi_d_mob) = FFSA_ShearDilation(
             delta_s, delta_peak, JRC, JCS, sigma_EFF, phi_r, M, method_dil);
         
         // We use JRC_mob_dil for debug output as it comes from the dilation calculation
@@ -582,7 +609,7 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
         double a = a_0 - delta_n + delta_d;
         
         // Permeability factor k [m^2]. Aperture 'a' is in [mm], so a/1e3 is in [m].
-        double k = std::pow(a / 1e3, 2) / 12.0;
+        double k = pow(a / 1e3, 2) / 12.0;
         
         // ---------------------------------------------------------------------
         // Collecting results
@@ -612,39 +639,102 @@ std::pair<Eigen::MatrixXd, FFSA_DebugResults> FFSA_FractureAperture::ApertureFro
     return {result, debug};
 }
 
+
+
+
 /**
- * @brief Main function for demonstration and testing.
+ * @brief demo_FFSA:  function for demonstration and testing.
+ *
+ *1. What alpha represents in Barton-style models
+
+    In Barton / Bandis / Choubey–type joint models, alpha (degrees) is used to:
+      •	resolve stresses onto the joint plane
+      •	relate global stresses to joint-normal and joint-shear components
+      •	define directional permeability / stiffness effects
+
+    In 2D, alpha is,  the angle between the joint normal and the global x-axis
+
+    $$\alpha = \angle(\mathbf n, \mathbf e_x)$$
+
+    where:
+      •	\mathbf n = unit normal to the fracture plane
+      •	\mathbf e_x = (1,0)
+
+    2. Why the normal (not the plane or trace)
+
+    Using the normal instead of the plane itself:
+      •	avoids a 90° offset everywhere
+      •	gives a unique orientation (up to sign)
+      •	simplifies stress projection:
+   
+   $$ \sigma_n = \mathbf n \cdot \boldsymbol\sigma \cdot \mathbf n$$
+
+    This is why Barton, Bandis, and later implementations nearly always parameterise orientation via the normal.
+
+    3. Range and symmetry
+
+    Because a fracture plane has no direction:
+      •	\mathbf n and -\mathbf n represent the same plane
+      •	orientations differing by 180° are identical
+
+    Therefore, alpha is usually reduced to:
+
+    \alpha \in [0^\circ, 90^\circ]
+
+    This is exactly the folding step  implemented here.
+
+    4. What Barton does not mean by alpha
+
+    Angle alpha is not:
+      •	the dip angle (as it was originally, when sliding tests were performed rotating the sample)
+      •	the strike angle
+      •	the angle between the fracture trace and x
+      •	a signed rotation angle
+
+    Those are different geological conventions.
+
+    5. Typical use of alpha in equations
+
+    You will see \alpha appear in expressions like:
+      •	directional stiffness:
+    k_n(\alpha),\; k_s(\alpha)
+      •	stress resolution:
+    \sigma_n = \sigma_x \cos^2\alpha + \sigma_y \sin^2\alpha + 2\tau_{xy}\sin\alpha\cos\alpha
+      •	permeability tensors aligned with fracture sets
+
+    All of these assume \alpha is the normal – x-axis angle.
+
  */
-int main() {
+int demo_FFSA() {
     FFSA_FractureAperture calculator;
 
     try {
         // --- Setup Parameters for 2 Fractures ---
         long N_frac = 2;
         FFSA_InputParameters params;
-        params.N_frac = N_frac;
+        params.N_fractures = N_frac;
 
-        // Fracture 1 parameters (strong shear, low normal stress)
-        // Fracture 2 parameters (weak shear, high normal stress)
-
-        params.L.resize(N_frac); params.L << 10.0, 5.0; // [m]
-        params.alpha.resize(N_frac); params.alpha << 45.0, 60.0; // [°]
-        params.sigma_H.resize(N_frac); params.sigma_H << 15.0, 20.0; // [MPa]
-        params.sigma_h.resize(N_frac); params.sigma_h << 5.0, 10.0; // [MPa]
-        params.beta.resize(N_frac); params.beta << 0.0, 0.0; // [°]
-        params.p_f.resize(N_frac); params.p_f << 1.0, 2.0; // [MPa]
-        params.JRC.resize(N_frac); params.JRC << 10.0, 5.0; // [-]
-        params.sigma_c.resize(N_frac); params.sigma_c << 100.0, 150.0; // [MPa]
-        params.JCS.resize(N_frac); params.JCS << 80.0, 120.0; // [MPa]
-        params.K_ni.resize(N_frac); params.K_ni << 1000.0, 2000.0; // [MPa/mm]
-        params.vm_factor.resize(N_frac); params.vm_factor << 0.5, 0.6; // [-]
-        params.phi_r.resize(N_frac); params.phi_r << 30.0, 25.0; // [°]
-        params.E_mod.resize(N_frac); params.E_mod << 30000.0, 45000.0; // [MPa]
-        params.nu.resize(N_frac); params.nu << 0.25, 0.20; // [-]
-        params.C_g.resize(N_frac); params.C_g << 1.0, 1.2; // [-]
+        int frac_number{1};
+        // Fracture 1: (strong shear, low normal effective stress)
+        // Fracture 2: (weak shear, high normal stress)
+        params.sigma_H = (frac_number==1) ? 15.0 : 20.0; // SH max (horizontal XZ plane is assumed) [MPa]
+        params.sigma_h = (frac_number==1) ?  5.0 : 10.0; // Sh min (least principal stress) [MPa]
+        params.beta    = (frac_number==1) ?  0.0 : 30.0; // Orientation of SH max (deviation from Y axis) [°]
+        params.alpha.resize(N_frac); params.alpha <<        45.0,    60.0; // angle of fracture to x-axis [°]
+        params.L.resize(N_frac); params.L                << 10.0,     5.0; // fracture length [m]
+        params.p_f.resize(N_frac); params.p_f         <<     9.0,     2.0; // fluid pressure [MPa]
+        params.JRC.resize(N_frac); params.JRC         <<    10.0,    15.0; // JRC [-] (rough fracture)
+        params.sigma_c.resize(N_frac); params.sigma_c <<   100.0,   150.0; // UCS [MPa]
+        params.JCS.resize(N_frac); params.JCS <<            80.0,   120.0; // [MPa]
+        params.K_ni.resize(N_frac); params.K_ni <<        1000.0,  2000.0; // [MPa/mm]
+        params.vm_factor.resize(N_frac); params.vm_factor << 0.5,     0.6; // maximal joint closure [-]
+        params.phi_r.resize(N_frac); params.phi_r <<        30.0,    25.0; // residual friction angle [°]
+        params.E_mod.resize(N_frac); params.E_mod <<     30000.0, 50000.0; // Young's modulus [MPa] (limestone ~40GPa)
+        params.nu.resize(N_frac); params.nu <<               0.25,    0.2; // Poisson's ratio [-]
+        params.C_g.resize(N_frac); params.C_g <<             1.0,     1.2; // shear vs. dilation proportionality [-]
         
         // Optional M parameter (testing the optional field logic)
-        params.M.resize(N_frac); params.M.fill(std::numeric_limits<double>::quiet_NaN());
+        params.M.resize(N_frac); params.M.fill(numeric_limits<double>::quiet_NaN());
         params.M(0) = 0.8; // Specify M for frac 1
 
         // Method strings
@@ -657,30 +747,30 @@ int main() {
         auto [results_matrix, debug_data] = calculator.ApertureFromFarFieldStress(params);
 
         // --- Print Results ---
-        std::cout << "=================================================================\n";
-        std::cout << "FFSA Aperture Calculation Results (N_frac = " << N_frac << ")\n";
-        std::cout << "=================================================================\n";
-        std::cout << "Units: L [m], Stress [MPa], Displacement [mm]\n\n";
+        cout << "=================================================================\n";
+        cout << "FFSA Aperture Calculation Results (N_frac = " << N_frac << ")\n";
+        cout << "=================================================================\n";
+        cout << "Units: L [m], Stress [MPa], Displacement [mm]\n\n";
 
         for (long i = 0; i < N_frac; ++i) {
-            std::cout << "--- Fracture " << i + 1 << " ---\n";
-            std::cout << "  Calculated Stresses: sigma_n = " << debug_data.sigma_n(i)
+            cout << "--- Test Fracture " << i + 1 << " ---\n";
+            cout << "  Calculated Stresses: sigma_n = " << debug_data.sigma_n(i)
                       << " MPa, sigma_s = " << debug_data.sigma_s(i)
                       << " MPa, sigma_eff = " << debug_data.sigma_eff(i) << " MPa\n";
-            std::cout << "  Initial Aperture (a_0): " << debug_data.a_0(i) << " mm\n";
-            std::cout << "  Normal Closure (delta_n): " << debug_data.delta_n(i) << " mm\n";
-            std::cout << "  Shear Displacement (delta_s): " << debug_data.delta_s(i) << " mm\n";
-            std::cout << "  Shear Dilation (delta_d): " << debug_data.delta_d(i) << " mm\n";
-            std::cout << "  Final Aperture (a): " << debug_data.a(i) << " mm\n";
-            std::cout << "  Mobilized JRC: " << debug_data.JRC_mob(i) << " (-)\n";
-            std::cout << "  Mobilized Dilation Angle: " << debug_data.phi_d_mob(i) << " deg\n";
-            std::cout << "  Permeability Factor (k): " << debug_data.k(i) << " m^2\n\n";
+            cout << "  Initial Aperture (a_0): " << debug_data.a_0(i) << " mm\n";
+            cout << "  Normal Closure (delta_n): " << debug_data.delta_n(i) << " mm\n";
+            cout << "  Shear Displacement (delta_s): " << debug_data.delta_s(i) << " mm\n";
+            cout << "  Shear Dilation (delta_d): " << debug_data.delta_d(i) << " mm\n";
+            cout << "  Final Aperture (a): " << debug_data.a(i) << " mm\n";
+            cout << "  Mobilized JRC: " << debug_data.JRC_mob(i) << " (-)\n";
+            cout << "  Mobilized Dilation Angle: " << debug_data.phi_d_mob(i) << " deg\n";
+            cout << "  Permeability Factor (k): " << debug_data.k(i) << " m^2\n\n";
         }
 
-        std::cout << "Results Matrix [a_0, delta_n, delta_s, delta_d, a]:\n" << results_matrix << "\n";
+        cout << "Results Matrix [a_0, delta_n, delta_s, delta_d, a]:\n" << results_matrix << "\n";
 
-    } catch (const std::exception& e) {
-        std::cerr << "Calculation Error: " << e.what() << "\n";
+    } catch (const exception& e) {
+        cerr << "Calculation Error: " << e.what() << "\n";
         return 1;
     }
 

@@ -1252,7 +1252,7 @@ void  InterFace<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY, INTERFACE_S
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i{0U}; i<n_nodes; ++i )
+  for ( uint32_t i{0U}; i<n_nodes; ++i )
     XY.AssignRow( i, N( i, side )->Coordinate() );
 
 } // end NodeCoordinateMatrix
@@ -1267,7 +1267,7 @@ void  InterFace<dim>::BisectorCoordinateMatrix() const
   const auto n_nodes( this->FE()->Nodes() );
   this->FE()->XY.Resize( n_nodes, dim );
 
-  for ( auto i{0U}; i<n_nodes; ++i ) {
+  for ( uint32_t i{0U}; i<n_nodes; ++i ) {
        const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
        this->FE()->XY.AssignRow( i, mid_point );
     }
@@ -1284,7 +1284,7 @@ void  InterFace<dim>::BisectorCoordinateMatrix(DenseMatrix<DM_MIN>& XY) const
   const auto n_nodes( this->FE()->Nodes() );
   XY.Resize( n_nodes, dim );
 
-  for ( auto i{0U}; i<n_nodes; ++i ) {
+  for ( uint32_t i{0U}; i<n_nodes; ++i ) {
        const Point<dim> mid_point = (this->MatchingN( i, INSIDE )->Coordinate() + this->MatchingN( i, OUTSIDE )->Coordinate()) / 2.;
        XY.AssignRow( i, mid_point );
     }
@@ -1410,8 +1410,8 @@ void  InterFace<dim>::NodePropertyVector( const csmp::Index& idx, vector<Var>& V
   const auto  n_nodes( this->FE()->Nodes() );
   V.resize( n_nodes );
 
-  for ( auto i{0U}; i<n_nodes; i++ )
-    N( i, side )->Read( idx, V[i] );              //OUTSIDE nodes correspond to ordering of face of higher dim parent
+  for ( uint32_t i{0U}; i<n_nodes; i++ )
+    N( i, side )->Read( idx, V[i] ); // OUTSIDE nodes correspond to ordering of face of higher dim parent
 }
 
 
@@ -1459,7 +1459,7 @@ void  InterFace<dim>::MatchingNodePropertyVector( const csmp::Index& idx, vector
   const auto  n_nodes( this->FE()->Nodes() );
   V.resize( n_nodes );
 
-  for ( auto i{0U}; i<n_nodes; i++ )
+  for ( uint32_t i{0U}; i<n_nodes; i++ )
     MatchingN( i, side )->Read( idx, V[i] );              //OUTSIDE nodes correspond to ordering of face of higher dim parent
 }
 

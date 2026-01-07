@@ -1,7 +1,0 @@
-<map id="csmp::PARDISO_Solver" name="csmp::PARDISO_Solver">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,543,159,650"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_solver.html" title="Inverts global solution matrices matrices of the finite&#45;element computations using a variety of solut..." alt="" coords="6,163,158,494"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,509,85,543,80,543,80,509"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_solver_settings.html" title=" " alt="" coords="14,5,150,92"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,91,85,146,80,146,80,91"/>
-</map>

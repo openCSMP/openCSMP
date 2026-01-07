@@ -1305,12 +1305,12 @@ double FaultFlowPropertyCalculator<dim>::IsCriticallyStressed( Model<dim>& model
             far_field_stress.CartesianStress( insitu_stress, dsigma );
             normalAndShearStressOnPlane( insitu_stress, nrml, sigma_n, sigma_s );
          }
-       // if the model lies in the horizontal plane, it is assumed that the stress measurement depth is in that plane
+       // assuming that model lies in the horizontal plane, the stress measurement depth is taken as equivalent to depth
        else if constexpr ( dim == 2 ) {
             // storing the overburden stress
             (*it)->Store( sso_key, makeScalar(PLAIN, far_field_stress.P_conf() * far_field_stress.Sv()) );
-            // computation of depth adjusted full stress tensor
-            far_field_stress.CartesianStress( insitu_stress, 0. );
+            // computation of depth adjusted full stress tensor (no further rotation)
+            far_field_stress.StressState().CartesianStressTensor( insitu_stress, 0. );
 // TODO: provide choice between 2D in XY versus XZ plane
             // 2D model in horizontal plane (in which the normal lies)
             Point<3>  nrmlToXZ_Plane( nrml[0], 0., nrml[1] );

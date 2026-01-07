@@ -1,9 +1,0 @@
-<map id="csmp::NumIntegral_NT_lhsop_N_dV&lt; dim, CELL &gt;" name="csmp::NumIntegral_NT_lhsop_N_dV&lt; dim, CELL &gt;">
-<area shape="rect" id="Node000001" title="Known as: capacitance matrix." alt="" coords="13,1122,187,1259"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_num_integral___n_t__lhsop___n__d_v.html" title=" " alt="" coords="5,1330,195,1467"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="103,1273,103,1330,98,1330,98,1273"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_math_operator_l_h_s.html" title=" " alt="" coords="6,585,195,1073"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,1088,103,1123,98,1123,98,1088"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_math_operator_l_h_s.html" title="Base class for FE or FVM integrals for the lefthandside (matrix)." alt="" coords="22,5,178,514"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="103,528,103,585,98,585,98,528"/>
-</map>

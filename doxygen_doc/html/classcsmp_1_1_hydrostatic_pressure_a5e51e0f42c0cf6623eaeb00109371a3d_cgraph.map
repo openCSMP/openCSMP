@@ -1,5 +1,0 @@
-<map id="csmp::HydrostaticPressure::Calculate" name="csmp::HydrostaticPressure::Calculate">
-<area shape="rect" id="Node000001" title="uses p_h(z) = rho g z + patm for the calculation" alt="" coords="5,5,186,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="234,5,378,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,23,218,23,218,28,186,28"/>
-</map>

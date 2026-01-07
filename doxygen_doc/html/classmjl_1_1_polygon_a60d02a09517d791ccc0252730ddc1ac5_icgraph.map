@@ -1,9 +1,0 @@
-<map id="mjl::Polygon::Cw" name="mjl::Polygon::Cw">
-<area shape="rect" id="Node000001" title=" " alt="" coords="238,55,359,80"/>
-<area shape="rect" id="Node000002" href="$classmjl_1_1_polygon.html#a487220e1e6659b5e090ecaf5de2e4bc5" title=" " alt="" coords="8,5,187,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="227,53,152,34,154,29,229,48"/>
-<area shape="rect" id="Node000003" href="$group___c_s_m_pglobal_functions.html#ga85e8aa8dcc3d8d4c0dd5040561c42762" title="variation of clipPolygonToEdge(), MJL, p. 127" alt="" coords="19,55,176,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="222,70,177,70,177,65,222,65"/>
-<area shape="rect" id="Node000004" href="$classmjl_1_1_polygon.html#a346b36cfb94c8e6906b74f7f634a57a8" title="uses signed angle &gt; and returns edge midpoint" alt="" coords="5,104,190,130"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="229,87,154,106,152,101,227,82"/>
-</map>

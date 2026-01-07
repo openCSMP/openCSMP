@@ -297,7 +297,7 @@ TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f,
                                     double v21, double v22, double v23,
                                     double v31, double v32, double v33 )
   : flag{ { f,f,f } },
-  data{ { v11,v12,v13,v21,v22,v23,v31,v32,v33 } }
+    data{ { {v11,v12,v13},{v21,v22,v23},{v31,v32,v33} } }
 {
 }
 
@@ -308,7 +308,7 @@ TensorVariable<3U>::TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG
                                     const double  v21, const double  v22, const double  v23,
                                     const double  v31, const double  v32, const double  v33 )
   : flag{ { f11,f22,f33 } },
-  data{ { v11,v12,v13,v21,v22,v23,v31,v32,v33 } }
+    data{ { {v11,v12,v13},{v21,v22,v23},{v31,v32,v33} } }
 {
 }
 
@@ -1168,8 +1168,8 @@ bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
   const int n = 3;
   double V[n][n], d[n], e[n];
 
-  for ( int i = 0; i<n; i++ )
-    for ( int j = 0; j<n; j++ )
+  for ( uint32_t i = 0; i<n; i++ )
+    for ( uint32_t j = 0; j<n; j++ )
       V[i][j] = (*this)(i, j);
 
   // Symmetric Householder reduction to tridiagonal form.
@@ -1401,9 +1401,9 @@ bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
     }
   }
 
-  for ( int i = 0; i<n; i++ )
+  for ( uint32_t i = 0; i<n; i++ )
   {
-    for ( int j = 0; j<n; j++ )
+    for ( uint32_t j = 0; j<n; j++ )
       eigenVecs( i, j ) = V[i][j];
     eigenVals( i ) = d[i];
   }

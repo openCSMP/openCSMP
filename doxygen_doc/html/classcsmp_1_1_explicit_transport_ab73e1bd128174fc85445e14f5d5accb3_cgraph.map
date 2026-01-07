@@ -1,7 +1,0 @@
-<map id="csmp::ExplicitTransport::ExplicitTransport" name="csmp::ExplicitTransport::ExplicitTransport">
-<area shape="rect" id="Node000001" title="constructor for target region; by default all driving forces are considered;" alt="" coords="5,27,165,68"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="254,5,384,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="165,35,238,26,238,31,166,40"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_explicit_transport.html#aa08c34e0ead5f3f5999129f092ba22ef" title="initialises transport class for current pressure/velocity/transport variable field" alt="" coords="213,55,425,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="166,54,198,58,197,64,165,60"/>
-</map>

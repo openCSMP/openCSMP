@@ -1,9 +1,0 @@
-<map id="csmp::pc_BC" name="csmp::pc_BC">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,107,56"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a70d7d95e5297538382fe6d8f2a5b8b7d" title="logarithmic extension of PC following Webb (2000); Sw=actual water saturation, Pc0(sw=0)=PC_MAX,..." alt="" coords="155,5,316,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="107,34,139,29,140,34,107,39"/>
-<area shape="rect" id="Node000004" href="$namespacecsmp.html#ad5f148f07d290165871424c6a79b2c1b" title="effective wetting phase saturation" alt="" coords="194,55,277,80"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="107,48,178,57,178,63,107,53"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#afc35954a9ad77ed8d66dc89dd3bcc31a" title="log10 slope for logarithmic extension of pc following Webb (2000), Pc0(sw=0)=PC_MAX,..." alt="" coords="364,5,479,31"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="316,16,348,16,348,21,316,21"/>
-</map>

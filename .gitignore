@@ -46,6 +46,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
+# DOXYGEN
+doxygen_doc/*
+doxygen_objdb_*.tmp
+doxygen_sqlite3.db
+doxygen.log
+searchdata.xml
+search/
+
 # CVS
 /CVS/*
 **/CVS/*

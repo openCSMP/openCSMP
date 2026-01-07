@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTriangle::dN_AtNode" name="csmp::IsoparametricQuadraticTriangle::dN_AtNode">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,202,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_quadratic_triangle.html#aea97a05ab24f6cf8e8a2f95be4008b07" title=" " alt="" coords="250,5,446,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,23,234,23,234,28,202,28"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_isoparametric_quadratic_triangle.html#a7b325571b51e1902063adbc8e6284265" title=" " alt="" coords="494,5,707,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="447,23,478,23,478,28,447,28"/>
-<area shape="rect" id="Node000004" href="$group___c_s_m_p__global__enumerations.html#ga8413f7c3b4f238c5a98a846198d49469" title="some fixed string sizes (max filename length on NTFS partition / arbitrary #&lt;32k)" alt="" coords="755,13,914,38"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="708,23,740,23,740,28,708,28"/>
-</map>

@@ -72,12 +72,17 @@ template<uint32_t> class PropertyDatabase;
       typedef std::vector<double> ArrayContainer;
 
       ArrayVariable();
+
       template<uint32_t dim>
       ArrayVariable( const char* arrayPropertyName,
                      const PropertyDatabase<dim>&,
                      double defaultValue=std::numeric_limits<double>::quiet_NaN(),
                      VARIABLE_FLAG flag = ANY );
       
+      /// // use initializer list to initialize vector and flag: ArrayVariable ary( {1, 2, 3, 4}, ANY );
+      ArrayVariable( std::initializer_list<double> initList, VARIABLE_FLAG flag )
+        : data_(initList), flag_(flag) {}
+
       ArrayVariable( uint32_t arraySize,
                      double defaultValue = 0.,
                      VARIABLE_FLAG flag = ANY );

@@ -1,9 +1,0 @@
-<map id="csmp::Model::Initialize" name="csmp::Model::Initialize">
-<area shape="rect" id="Node000001" title="builds model with regions, boundaries, and splitboundaries as identified by &quot;BOX_BOUNDARY&quot;,..." alt="" coords="5,70,158,96"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model.html#a3beebcda9fd039ea50be5e7b41948bfe" title="Instantiates MODEL LocalVariables." alt="" coords="222,5,406,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="136,67,213,48,215,53,137,72"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_model.html#a1c8cd5a8dabcd4733b9545d813e78559" title="inputs all discretised variables stored in the supplied VSet into the model" alt="" coords="206,70,422,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,80,190,80,190,86,158,86"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_model.html#aa508619f940dab016d03df48e4a2bd7e" title=" " alt="" coords="208,120,420,161"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="137,94,215,113,213,118,136,99"/>
-</map>

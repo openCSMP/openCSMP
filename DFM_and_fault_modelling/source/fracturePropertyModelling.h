@@ -8,9 +8,11 @@
 #ifndef FRACTURE_PROPERTY_MODELLING_H
 #define FRACTURE_PROPERTY_MODELLING_H
 
-#include <iostream>
+#include "CSMP_definitions.h"
 
 namespace csmp {
+
+class InSituStress;
 
 /**  itf - ISF Tools: Flow-based upscaling via DFM models
 
@@ -23,6 +25,11 @@ Calculation of fracture aperture, permeability and porosity from in situ stress 
 template<uint32_t dim>
 void fracturePropertyModelling( const char* model_name );
 
-}
+/**
+  Barton et al's 1985 model that estimates shear-displacement from shear stress and effective normal stress, using the mobilised version of JRC
+*/
+void fractureApertureFromShearAndNormalStress( Model<2>&, const InSituStress& );
+
+} // end csmp
 
 #endif

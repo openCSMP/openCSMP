@@ -1,5 +1,0 @@
-<map id="csmp::TwoPhaseModel::dfds" name="csmp::TwoPhaseModel::dfds">
-<area shape="rect" id="Node000001" title="derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn" alt="" coords="211,5,368,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_two_phase_model.html#a29b1cf1676c8fac2faeea06d341e1e03" title="multiplier for advection viscosity coefficient in the case of non&#45;linear advection" alt="" coords="5,5,163,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="195,28,163,28,163,23,195,23"/>
-</map>

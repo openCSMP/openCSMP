@@ -1,8 +1,0 @@
-<map id="csmp::Interrelation::Calculate" name="csmp::Interrelation::Calculate">
-<area shape="rect" id="Node000001" title=" " alt="" coords="183,63,312,103"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_interrelation.html#a406a9abb7bfe1f137609706b7d284ced" title=" " alt="" coords="5,29,135,70"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,71,135,64,136,59,168,65"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_interrelation.html#aa3ba0fda284bd8e8770a5528c07d78e4" title="a simplex is any geometrical association of points" alt="" coords="5,95,135,135"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="168,100,136,106,135,101,167,95"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="98,16,88,10,70,8,53,10,43,14,40,20,41,28,36,29,34,19,40,10,52,5,70,3,89,5,101,11"/>
-</map>

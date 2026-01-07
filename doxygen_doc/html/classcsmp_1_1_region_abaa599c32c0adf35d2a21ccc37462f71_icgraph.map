@@ -1,6 +1,0 @@
-<map id="csmp::Region::Placement" name="csmp::Region::Placement">
-<area shape="rect" id="Node000001" title="Local variable storage interface." alt="" coords="205,29,377,55"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_region.html#ac9fed9dd917caa6daba74cfa1841ea3c" title="construction of named empty region with appropriately sized property storage" alt="" coords="5,29,157,55"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="189,45,157,45,157,40,189,40"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="117,17,105,10,81,8,59,10,47,15,44,20,50,27,46,31,39,21,43,11,58,5,81,3,107,5,120,12"/>
-</map>

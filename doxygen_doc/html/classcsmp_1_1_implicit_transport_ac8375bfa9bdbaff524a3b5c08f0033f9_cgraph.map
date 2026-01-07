@@ -1,5 +1,0 @@
-<map id="csmp::ImplicitTransport::OutgoingVolumetricFlow" name="csmp::ImplicitTransport::OutgoingVolumetricFlow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,177,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_implicit_transport.html#a225bdd21221f868b8304ff722c927d27" title="true if the computational domain has parts that are removed from the model boundary" alt="" coords="225,5,383,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="177,23,209,23,209,28,177,28"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classcsmp_1_1_local_variable_storage.html" title=" " alt="" coords="5,5,189,46"/>
-<area shape="rect" id="Node000001" href="$classcsmp_1_1_boundary.html" title="A Boundary is lower&#45;dimensional ModelSubDomain, consisting of Face objects. Consisting of Faces endow..." alt="" coords="237,46,398,72"/>
-<area shape="poly" id="edge240_Node000000_Node000001" title=" " alt="" coords="204,39,237,44,236,49,203,44"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_sub_domain.html" title=" " alt="" coords="15,71,179,111"/>
-<area shape="poly" id="edge241_Node000002_Node000001" title=" " alt="" coords="194,74,236,68,237,73,195,80"/>
-</map>

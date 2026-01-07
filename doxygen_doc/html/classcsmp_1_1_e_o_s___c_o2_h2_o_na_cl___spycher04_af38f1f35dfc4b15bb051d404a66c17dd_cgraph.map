@@ -1,7 +1,0 @@
-<map id="csmp::EOS_CO2H2ONaCl_Spycher04::D_Co2" name="csmp::EOS_CO2H2ONaCl_Spycher04::D_Co2">
-<area shape="rect" id="Node000001" title="molecular diffusion coefficient of CO2 in brine" alt="" coords="5,49,186,90"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ae8cd545640cfb3e0dd5805f9c5aa2164" title="Molecular diffusion coeffisient of co2 into brine." alt="" coords="234,5,441,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="186,53,218,48,218,54,187,58"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ab45078ef7a6014b4d83e083ffb60c142" title="Viscosity of aqueos phase." alt="" coords="247,85,428,126"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,80,232,87,231,92,186,85"/>
-</map>

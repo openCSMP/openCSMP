@@ -10,10 +10,10 @@ namespace csmp
 {
 
 /**
-   constructs class from the orientations (vectors) of sigma1 and 3, 
+   Constructs object from the orientations (vectors) of sigma1 and 3,
    and the magnitudes of the principal stresses 1, 2 and 3
    
-   @attention the orientations of sigma1 and sigma must be perpendicular to eachother.
+   @attention the sigma1 and sigma3 vectors must be perpendicular to eachother.
 */
 StressRotate::StressRotate( const Point<3U>& n1, 
                             const Point<3U>& n3, 
@@ -38,7 +38,6 @@ StressRotate::StressRotate( const StressRotate& sr )
 
 
 
-StressRotate::~StressRotate() {}
 
   
 /// converts to state initialized by default constructor
@@ -153,7 +152,8 @@ stress was measured.
   
 /**
     Rotates the internally stored stress state around one of the principal coordinate
-    axes, x, y or z by the parameter angle (in degrees).
+    axes, x, y or z by the parameter angle (in degrees). Thus, for example, when looking top down
+    from +Y to the origin, the rotation by a positive angle is a clockwise rotation.
      
     Method applies the Standard Rotation Matrices to each principal stress vector individually 
     Weisstein, Eric W. "Rotation Matrix." From MathWorld--A Wolfram Web Resource.
@@ -178,6 +178,7 @@ void StressRotate::Rotate( char axis, double angle )
     
     if( axis == 'x' )
     {
+       // clockwise rotation in the y–z plane when viewed from +x
        rotation(0,0)=1.;
        rotation(0,1)=0.;
        rotation(0,2)=0.;
@@ -192,6 +193,7 @@ void StressRotate::Rotate( char axis, double angle )
        
        x_ += angle;
     }
+    // clockwise rotation when looking from +Y to the origin
     else if( axis == 'y' )
     {
        rotation(0,0)=cos(angle_r);
@@ -208,14 +210,15 @@ void StressRotate::Rotate( char axis, double angle )
        
        y_ += angle;
     }
+    // clockwise rotation
     else if( axis == 'z' )
     {
        rotation(0,0)=cos(angle_r);
        rotation(0,1)=sin(angle_r);
        rotation(0,2)=0.;
        
-       rotation(1,0)=-sin(angle_r);;
-       rotation(1,1)=cos(angle_r);;
+       rotation(1,0)=-sin(angle_r);
+       rotation(1,1)=cos(angle_r);
        rotation(1,2)=0.;
        
        rotation(2,0)=0.;

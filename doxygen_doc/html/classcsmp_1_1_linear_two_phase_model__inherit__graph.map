@@ -1,5 +1,0 @@
-<map id="csmp::LinearTwoPhaseModel&lt; dim &gt;" name="csmp::LinearTwoPhaseModel&lt; dim &gt;">
-<area shape="rect" id="Node000001" title="relative permeability and capillary pressure, assuming a linear model" alt="" coords="10,607,191,891"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_two_phase_model.html" title=" " alt="" coords="5,5,195,559"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,574,103,607,98,607,98,574"/>
-</map>

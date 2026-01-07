@@ -1,8 +1,0 @@
-<map id="csmp::VData" name="csmp::VData">
-<area shape="rect" id="Node000001" title="Container for polygonal data implemented on the basis of NCSA (Urbana, Champagne, Illinois,..." alt="" coords="5,5,238,473"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_set.html" title=" " alt="" coords="62,883,193,1173"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="126,488,129,884,124,884,121,488"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_v_set.html" title="Container for polygonal data and associated properties implemented on the basis of NCSA (Urbana,..." alt="" coords="144,522,268,812"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="173,487,180,522,175,523,168,488"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="174,827,161,884,156,883,169,826"/>
-</map>

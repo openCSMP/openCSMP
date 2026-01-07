@@ -1,7 +1,0 @@
-<map id="csmp::TwoPhaseModel_TestSuite" name="csmp::TwoPhaseModel_TestSuite">
-<area shape="rect" id="Node000001" title="PL Nov 2010." alt="" coords="5,425,203,730"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_test.html" title=" " alt="" coords="43,5,165,377"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,392,89,425,84,425,84,392"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="107,392,107,425,102,425,102,392"/>
-<area shape="poly" id="edge3_Node000001_Node000002" title=" " alt="" coords="125,392,125,425,119,425,120,392"/>
-</map>

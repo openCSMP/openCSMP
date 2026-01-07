@@ -1,5 +1,0 @@
-<map id="csmp::LinearTetrahedron::Volume" name="csmp::LinearTetrahedron::Volume">
-<area shape="rect" id="Node000001" title=" " alt="" coords="218,5,382,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_tetrahedron.html#a6ab5250b2358d6a53606e318ca061cf3" title="initialises interpolation function product matrix N^T x N for analytically integrated elements" alt="" coords="5,5,170,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,28,170,28,170,23,202,23"/>
-</map>

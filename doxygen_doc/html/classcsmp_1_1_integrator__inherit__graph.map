@@ -1,7 +1,0 @@
-<map id="csmp::Integrator&lt; dim, USER &gt;" name="csmp::Integrator&lt; dim, USER &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="10,5,216,224"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_integrator.html" title=" " alt="" coords="10,295,216,513"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,238,116,295,110,295,110,238"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_implicit_transport.html" title=" " alt="" coords="5,562,220,847"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,528,116,563,110,563,110,528"/>
-</map>

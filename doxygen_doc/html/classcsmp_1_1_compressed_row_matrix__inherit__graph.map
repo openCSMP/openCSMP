@@ -1,5 +1,0 @@
-<map id="csmp::CompressedRowMatrix" name="csmp::CompressedRowMatrix">
-<area shape="rect" id="Node000001" title="CSMP&#39;s implementation of a compressed&#45;row storage container for sparse matrices." alt="" coords="18,5,205,336"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_compressed_row_matrix_parallel.html" title=" " alt="" coords="5,384,217,465"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="114,351,114,384,109,384,109,351"/>
-</map>

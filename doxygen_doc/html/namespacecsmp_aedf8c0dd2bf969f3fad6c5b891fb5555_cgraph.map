@@ -1,7 +1,0 @@
-<map id="csmp::readEclipseWellCompletionsData" name="csmp::readEclipseWellCompletionsData">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,261,56"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="337,5,465,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="261,29,321,23,322,28,261,34"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#af8c2740a4e6be30bdfb4207bf22e8609" title="Eclipse ends its definitions with a forward slash." alt="" coords="309,55,493,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="261,52,293,55,293,61,261,58"/>
-</map>

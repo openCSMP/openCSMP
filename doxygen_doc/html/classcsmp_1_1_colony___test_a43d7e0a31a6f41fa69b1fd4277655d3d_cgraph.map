@@ -1,7 +1,0 @@
-<map id="csmp::Colony_Test::run" name="csmp::Colony_Test::run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,49,166,74"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_colony___test.html#acbeccf28aeeccf0924f2570972c48d11" title="using a quadrilateral element for testing" alt="" coords="268,5,410,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="166,48,252,35,252,41,167,53"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_colony___test.html#a86c072c2b071662ace0300cf8260630c" title=" " alt="" coords="214,70,464,126"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="167,70,199,75,198,80,166,76"/>
-</map>

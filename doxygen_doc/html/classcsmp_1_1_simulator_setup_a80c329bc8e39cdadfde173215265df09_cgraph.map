@@ -1,7 +1,0 @@
-<map id="csmp::SimulatorSetup::SetupWellRatesBasedOnRateVariables" name="csmp::SimulatorSetup::SetupWellRatesBasedOnRateVariables">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,20,211,75"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="266,5,396,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="211,31,250,26,251,31,211,37"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="259,55,403,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="211,58,244,62,243,67,211,63"/>
-</map>

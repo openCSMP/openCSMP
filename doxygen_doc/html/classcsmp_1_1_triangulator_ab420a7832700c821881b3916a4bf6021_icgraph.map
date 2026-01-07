@@ -1,7 +1,0 @@
-<map id="csmp::Triangulator::TrianglesFromRegularGrid" name="csmp::Triangulator::TrianglesFromRegularGrid">
-<area shape="rect" id="Node000001" title=" " alt="" coords="222,27,403,68"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a9ad6d3d57727857fd0252c87eb1ce766" title="reads pixel&#45;based text input file and use triangulator to generate VSet" alt="" coords="5,5,174,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,36,174,32,175,27,207,31"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_triangulator___example.html#add93822f7629571dbcc04e49c951dc87" title=" " alt="" coords="25,55,154,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,63,155,70,154,65,206,58"/>
-</map>

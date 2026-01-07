@@ -1,7 +1,0 @@
-<map id="csmp::PropertyDatabase::StorageKey" name="csmp::PropertyDatabase::StorageKey">
-<area shape="rect" id="Node000001" title=" " alt="" coords="220,39,386,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_database.html#a50b012fcee349b7668d61132b6ac34ca" title="adding a property at runtime from the command line (NB: you should call method CreateProperty() of mo..." alt="" coords="5,5,172,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,46,172,41,172,36,204,41"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_property_database.html#a95b9df709b7c56bbea66c2ecaec2368a" title=" " alt="" coords="5,71,172,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="204,76,172,81,172,76,204,71"/>
-</map>

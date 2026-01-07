@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricLinearHexahedron" name="csmp::IsoparametricLinearHexahedron">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,1605,221,1890"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="31,778,195,1556"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="116,1571,116,1605,111,1605,111,1571"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="47,361,180,646"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="116,646,116,761,111,761,111,646"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="47,5,180,290"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="116,305,116,361,111,361,111,305"/>
-</map>

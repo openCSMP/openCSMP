@@ -1,9 +1,12 @@
 #include "LocalVariableStorage_Test.h"
 
 #include "LocalVariableStorage.h"
+#include "Model.h"
+#include "Region.h"
 #include "Element.h"
 #include "LinearTriangle.h"
 #include "LinearTetrahedron.h"
+#include "vsetMakers.h"
 
 using namespace std;
 
@@ -586,10 +589,333 @@ void LocalVariableStorage_Test::run3D_with_templatized_INDEX()
 
   } // end run3D_with_templatized_INDEX
   
-  
-  
-  
-  
+
+
+ /// ReadVector, ReadTensor, ReadArray directly returning csmp variables (skm 12/24)
+void LocalVariableStorage_Test::runExtensionsForDeclarativeProgramming()
+ {
+    VSet<3U> vset;
+    create_Pyramid_Hexa_VSet( vset, true ); // skewed model
+    Model<3U>  model( vset, "LocalVariableStorage_Test-variables.txt" );
+    Region<3U> domain = model.Region("Model");
+    
+    // testing read operations on element, node, element integration points and FV integration points
+    // element
+    const csmp::Index ev1 = model.Database().StorageKey("element vector 1");
+    const csmp::Index et1 = model.Database().StorageKey("element tensor 1");
+    const csmp::Index ea1 = model.Database().StorageKey("element array 1");
+    // node
+    const csmp::Index nv1 = model.Database().StorageKey("nodal vector 1");
+    const csmp::Index nt1 = model.Database().StorageKey("nodal tensor 1");
+    const csmp::Index na1 = model.Database().StorageKey("nodal array 1");
+
+    // inputs
+    VectorVariable<3U> vc(ANY,PLAIN,ROBIN,1.,2.,3.);
+    TensorVariable<3U> ts(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9);
+    ArrayVariable ary( 4, 0., ANY ), ary_test;
+    for ( uint32_t i{0u}; i<ary.Size(); ++i ) ary(i) = static_cast<double>(i);
+
+    // element & node
+    model.InputPropertyValue("element vector 1", makeVector(ANY,PLAIN,ROBIN,1.,2.,3.) );
+    model.InputPropertyValue("element tensor 1", makeTensor(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9) );
+    model.InputPropertyValue("element array 1", ary );
+
+    model.InputPropertyValue("nodal vector 1", makeVector(ANY,PLAIN,ROBIN,1.,2.,3.) );
+    model.InputPropertyValue("nodal tensor 1", makeTensor(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9) );
+    model.InputPropertyValue("nodal array 1", ary );
+    
+    // 1. test of functions reading element and node variables
+    for ( const auto& e : domain.CellVector() ) {
+         _test( vc == e->ReadVector(ev1) );
+         _test( ts == e->ReadTensor(et1) );
+         e->Read( ea1, ary_test );
+         _test( ary == ary_test );
+         vector<double> a1_vec1 = e->ReadArray(ea1), a1_vec2(4);
+         // testing return value initialisation
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+              _test( a1_vec1[i] == ary[i] );
+         // testing ReadArrayEntry()
+         for ( uint32_t i{0u}; i<a1_vec1.size(); ++i )
+           a1_vec2[i] = e->ReadArrayEntry( ea1, i );
+         // checking consistency 
+         _test( a1_vec1 == a1_vec2 );
+      }
+    for ( const auto& n : domain.NodeVector() ) {
+         _test( vc == n->ReadVector(nv1) );
+         _test( ts == n->ReadTensor(nt1) );
+         n->Read( na1, ary_test );
+         _test( ary == ary_test );
+         vector<double> a1_vec1 = n->ReadArray(na1), a1_vec2(4);
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+           a1_vec2[i] = n->ReadArrayEntry( na1, i );
+         _test( a1_vec1 == a1_vec2 );
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+              _test( ary[i] == a1_vec1[i] ); 
+      }
+
+    // 2. test of functions reading variables from element integration points
+    // ----------------------------------------------------------------------
+    // initialising different array variables for up to 8 integration points (hexahedron)
+    vector<VectorVariable<3U>> ip_vector_variables  = { {ANY,ANY,ANY,0.,1.,2.}, {PLAIN,PLAIN,PLAIN,3.,4.,5.},
+                                                        {ROBIN,ROBIN,ROBIN,6.,7.,8.}, {DIRICH,DIRICH,DIRICH,9.,10.,11.},
+                                                        {INIT_COND,INIT_COND,INIT_COND,12.,13.,14.}, {INIT_GUESS,INIT_GUESS,INIT_GUESS,15.,16.,17.},
+                                                        {PERIODIC,PERIODIC,PERIODIC,18.,19.,20.}, {FIELD_DATA,FIELD_DATA,FIELD_DATA,21.,22.,23.} };
+
+    vector<TensorVariable<3U>> ip_tensor_variables  = { {ANY,ANY,ANY,0.,1.,2.,3.,4.,5.,6.,7.,8.},
+                                                        {PLAIN,PLAIN,PLAIN,9.,10.,11.,12.,13.,14.,15.,16.,17.},
+                                                        {ROBIN,ROBIN,ROBIN,18.,19.,20.,21.,22.,23.,24.,25.,26.},
+                                                        {DIRICH,DIRICH,DIRICH,27.,28.,29.,30.,31.,32.,33.,34.,35.},
+                                                        {INIT_COND,INIT_COND,INIT_COND,36.,37.,38.,39.,40.,41.,42.,43.,44.},
+                                                        {INIT_GUESS,INIT_GUESS,INIT_GUESS,45.,46.,47.,48.,49.,50.,51.,52.,53.},
+                                                        {PERIODIC,PERIODIC,PERIODIC,54.,55.,56.,57.,58.,59.,60.,61.,62.},
+                                                        {FIELD_DATA,FIELD_DATA,FIELD_DATA,63.,64.,65.,66.,67.,68.,69.,70.,71.} };
+
+    vector<ArrayVariable> ip_array_variables  = { {{0.,1.,2.,3.},ANY}, {{4.,5.,6.,7.},PLAIN},
+                                                  {{8.,9.,10.,11.},ROBIN}, {{12.,13.,14.,15.},DIRICH},
+                                                  {{16.,17.,18.,19.},INIT_COND}, {{20.,21.,22.,23.},INIT_GUESS},
+                                                  {{24.,25.,26.,27.},PERIODIC}, {{28.,29.,30.,31.},FIELD_DATA} };
+
+    // element integration points
+    // --------------------------
+    const csmp::Index eiv1 = model.Database().StorageKey("eip vector 1");
+    const csmp::Index eit1 = model.Database().StorageKey("eip tensor 1");
+    const csmp::Index eia1 = model.Database().StorageKey("eip array 1");
+
+    // assigning the values
+    for ( auto& e : domain.CellVector() )
+      for ( uint32_t i{0u}; i<e->IntegrationPoints(); ++i ) {
+           e->Store( i, eiv1, ip_vector_variables[i] );
+           e->Store( i, eit1, ip_tensor_variables[i] );
+           e->Store( i, eia1, ip_array_variables[i] );
+        }
+    // testing that they are read correctly
+    for ( const auto& e : domain.CellVector() )
+      for ( uint32_t i{0u}; i<e->IntegrationPoints(); ++i ) {
+           auto vc_vec = e->ReadVector( i, eiv1 );
+           _test( vc_vec == ip_vector_variables[i] );
+           auto ts_vec = e->ReadTensor( i, eit1 );
+           _test( ts_vec == ip_tensor_variables[i] );
+           auto ar_vec = e->ReadArray( i, eia1 );
+           for ( uint32_t j{0u}; j<ar_vec.size(); ++j )
+             _test( ar_vec[j] == ip_array_variables[i][j] );
+        }
+
+    // FV facet integration points
+    // ---------------------------
+    // facet integration points
+    const csmp::Index fipv1 = model.Database().StorageKey("fip vector 1");
+    const csmp::Index fipt1 = model.Database().StorageKey("fip tensor 1");
+    const csmp::Index fipa1 = model.Database().StorageKey("fip array 1");
+    
+    // adding the necessary 4 extra values to the variable arrays
+    // vectors
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,24.,25.,26} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,27.,28.,29} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,30.,31.,32.} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,33.,34.,35.} );
+    // tensors
+    ip_tensor_variables.push_back( {ANY,ANY,ANY,72.,73.,74.,75.,76.,77.,78.,79.,80.} );
+    ip_tensor_variables.push_back( {PLAIN,PLAIN,PLAIN,81.,82.,83.,84.,85.,86.,87.,88.,89.} );
+    ip_tensor_variables.push_back( {ROBIN,ROBIN,ROBIN,90.,91.,92.,93.,94.,95.,96.,97.,98.} );
+    ip_tensor_variables.push_back( {DIRICH,DIRICH,DIRICH,99.,100.,101.,102.,103.,104.,105.,106.,107.} );
+    // arrays
+    ip_array_variables.push_back( {{32.,33.,34.,34.},ANY} );
+    ip_array_variables.push_back( {{35.,36.,37.,38.},PLAIN} );
+    ip_array_variables.push_back( {{39.,40.,41.,42.},ROBIN} );
+    ip_array_variables.push_back( {{43.,44.,45.,46.},DIRICH} );
+
+    // assigning values to the <=12 facet integration points
+    for ( auto& e : domain.CellVector() ) {
+          const auto facets(e->Facets());
+          const uint32_t fip{0u};
+          // looping over the FV facets
+          for ( uint32_t i{0u}; i<facets; ++i ) {
+               e->Store( i, fip, fipv1, ip_vector_variables[i] );
+               e->Store( i, fip, fipt1, ip_tensor_variables[i] );
+               e->Store( i, fip, fipa1, ip_array_variables[i] );
+            }
+      }
+    // testing that they are read correctly
+    for ( const auto& e : domain.CellVector() ) {
+          const auto facets(e->Facets());
+          const uint32_t fip{0u};
+          // looping over the FV facets
+          for ( uint32_t i{0u}; i<facets; ++i ) {
+               auto vc_vec = e->ReadVector( i, fip, fipv1 );
+               _test( vc_vec == ip_vector_variables[i] );
+               auto ts_vec = e->ReadTensor( i, fip, fipt1 );
+               _test( ts_vec == ip_tensor_variables[i] );
+               auto ar_vec = e->ReadArray( i, fip, fipa1 );
+               for ( uint32_t j{0u}; j<ar_vec.size(); ++j )
+                 _test( ar_vec[j] == ip_array_variables[i][j] );
+            }
+       }
+
+ } // end runExtensionsForDeclarativeProgramming
+
+
+
+
+void LocalVariableStorage_Test::runExtensionsForDeclarativeProgramming_INDEX()
+ {
+    VSet<3U> vset;
+    create_Pyramid_Hexa_VSet( vset, true ); // skewed model
+    Model<3U>  model( vset, "LocalVariableStorage_Test-variables.txt" );
+    Region<3U> domain = model.Region("Model");
+    
+    // testing read operations on element, node, element integration points and FV integration points
+    // element
+    const csmp::INDEX<VECTOR,ELEMENT> ev1(model.Database().StorageKey("element vector 1"));
+    const csmp::INDEX<TENSOR,ELEMENT> et1(model.Database().StorageKey("element tensor 1"));
+    const csmp::INDEX<ARRAY,ELEMENT>  ea1(model.Database().StorageKey("element array 1"));
+    // node
+    const csmp::INDEX<VECTOR,NODE> nv1(model.Database().StorageKey("nodal vector 1"));
+    const csmp::INDEX<TENSOR,NODE> nt1(model.Database().StorageKey("nodal tensor 1"));
+    const csmp::INDEX<ARRAY,NODE>  na1(model.Database().StorageKey("nodal array 1"));
+
+    // inputs
+    VectorVariable<3U> vc(ANY,PLAIN,ROBIN,1.,2.,3.);
+    TensorVariable<3U> ts(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9);
+    ArrayVariable ary( 4, 0., ANY ), ary_test;
+    for ( uint32_t i{0u}; i<ary.Size(); ++i ) ary(i) = static_cast<double>(i);
+
+    // element & node
+    model.InputPropertyValue("element vector 1", makeVector(ANY,PLAIN,ROBIN,1.,2.,3.) );
+    model.InputPropertyValue("element tensor 1", makeTensor(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9) );
+    model.InputPropertyValue("element array 1", ary );
+
+    model.InputPropertyValue("nodal vector 1", makeVector(ANY,PLAIN,ROBIN,1.,2.,3.) );
+    model.InputPropertyValue("nodal tensor 1", makeTensor(ANY,PLAIN,ROBIN,1.,2.,3.,4.,5.,6.,7.,8.,9) );
+    model.InputPropertyValue("nodal array 1", ary );
+    
+    // 1. test of functions reading element and node variables
+    for ( const auto& e : domain.CellVector() ) {
+         _test( vc == e->ReadVector(ev1) );
+         _test( ts == e->ReadTensor(et1) );
+         e->Read( ea1, ary_test );
+         _test( ary == ary_test );
+         vector<double> a1_vec1 = e->ReadArray(ea1), a1_vec2(4);
+         // testing return value initialisation
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+              _test( a1_vec1[i] == ary[i] );
+         // testing ReadArrayEntry()
+         for ( uint32_t i{0u}; i<a1_vec1.size(); ++i )
+           a1_vec2[i] = e->ReadArrayEntry( ea1, i );
+         // checking consistency 
+         _test( a1_vec1 == a1_vec2 );
+      }
+    for ( const auto& n : domain.NodeVector() ) {
+         _test( vc == n->ReadVector(nv1) );
+         _test( ts == n->ReadTensor(nt1) );
+         n->Read( na1, ary_test );
+         _test( ary == ary_test );
+         vector<double> a1_vec1 = n->ReadArray(na1), a1_vec2(4);
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+           a1_vec2[i] = n->ReadArrayEntry( na1, i );
+         _test( a1_vec1 == a1_vec2 );
+         for ( uint32_t i{0u}; i<ary.Size(); ++i )
+              _test( ary[i] == a1_vec1[i] ); 
+      }
+
+    // 2. test of functions reading variables from element integration points
+    // ----------------------------------------------------------------------
+    // initialising different array variables for up to 8 integration points (hexahedron)
+    vector<VectorVariable<3U>> ip_vector_variables  = { {ANY,ANY,ANY,0.,1.,2.}, {PLAIN,PLAIN,PLAIN,3.,4.,5.},
+                                                        {ROBIN,ROBIN,ROBIN,6.,7.,8.}, {DIRICH,DIRICH,DIRICH,9.,10.,11.},
+                                                        {INIT_COND,INIT_COND,INIT_COND,12.,13.,14.}, {INIT_GUESS,INIT_GUESS,INIT_GUESS,15.,16.,17.},
+                                                        {PERIODIC,PERIODIC,PERIODIC,18.,19.,20.}, {FIELD_DATA,FIELD_DATA,FIELD_DATA,21.,22.,23.} };
+
+    vector<TensorVariable<3U>> ip_tensor_variables  = { {ANY,ANY,ANY,0.,1.,2.,3.,4.,5.,6.,7.,8.},
+                                                        {PLAIN,PLAIN,PLAIN,9.,10.,11.,12.,13.,14.,15.,16.,17.},
+                                                        {ROBIN,ROBIN,ROBIN,18.,19.,20.,21.,22.,23.,24.,25.,26.},
+                                                        {DIRICH,DIRICH,DIRICH,27.,28.,29.,30.,31.,32.,33.,34.,35.},
+                                                        {INIT_COND,INIT_COND,INIT_COND,36.,37.,38.,39.,40.,41.,42.,43.,44.},
+                                                        {INIT_GUESS,INIT_GUESS,INIT_GUESS,45.,46.,47.,48.,49.,50.,51.,52.,53.},
+                                                        {PERIODIC,PERIODIC,PERIODIC,54.,55.,56.,57.,58.,59.,60.,61.,62.},
+                                                        {FIELD_DATA,FIELD_DATA,FIELD_DATA,63.,64.,65.,66.,67.,68.,69.,70.,71.} };
+
+    vector<ArrayVariable> ip_array_variables  = { {{0.,1.,2.,3.},ANY}, {{4.,5.,6.,7.},PLAIN},
+                                                  {{8.,9.,10.,11.},ROBIN}, {{12.,13.,14.,15.},DIRICH},
+                                                  {{16.,17.,18.,19.},INIT_COND}, {{20.,21.,22.,23.},INIT_GUESS},
+                                                  {{24.,25.,26.,27.},PERIODIC}, {{28.,29.,30.,31.},FIELD_DATA} };
+
+    // element integration points
+    // --------------------------
+    const csmp::INDEX<VECTOR,ELEMENT_INTEGRATION_POINT> eiv1(model.Database().StorageKey("eip vector 1"));
+    const csmp::INDEX<TENSOR,ELEMENT_INTEGRATION_POINT> eit1(model.Database().StorageKey("eip tensor 1"));
+    const csmp::INDEX<ARRAY,ELEMENT_INTEGRATION_POINT>  eia1(model.Database().StorageKey("eip array 1"));
+
+    // assigning the values
+    for ( auto& e : domain.CellVector() )
+      for ( uint32_t i{0u}; i<e->IntegrationPoints(); ++i ) {
+           e->Store( i, eiv1, ip_vector_variables[i] );
+           e->Store( i, eit1, ip_tensor_variables[i] );
+           e->Store( i, eia1, ip_array_variables[i] );
+        }
+    // testing that they are read correctly
+    for ( const auto& e : domain.CellVector() )
+      for ( uint32_t i{0u}; i<e->IntegrationPoints(); ++i ) {
+           auto vc_vec = e->ReadVector( i, eiv1 );
+           _test( vc_vec == ip_vector_variables[i] );
+           auto ts_vec = e->ReadTensor( i, eit1 );
+           _test( ts_vec == ip_tensor_variables[i] );
+           auto ar_vec = e->ReadArray( i, eia1 );
+           for ( uint32_t j{0u}; j<ar_vec.size(); ++j )
+             _test( ar_vec[j] == ip_array_variables[i][j] );
+        }
+
+    // FV facet integration points
+    // ---------------------------
+    // facet integration points
+    const csmp::INDEX<VECTOR,FACET_INTEGRATION_POINT> fipv1(model.Database().StorageKey("fip vector 1"));
+    const csmp::INDEX<TENSOR,FACET_INTEGRATION_POINT> fipt1(model.Database().StorageKey("fip tensor 1"));
+    const csmp::INDEX<ARRAY,FACET_INTEGRATION_POINT>  fipa1(model.Database().StorageKey("fip array 1"));
+    
+    // adding the necessary 4 extra values to the variable arrays
+    // vectors
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,24.,25.,26} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,27.,28.,29} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,30.,31.,32.} );
+    ip_vector_variables.push_back( {ROBIN,PLAIN,ANY,33.,34.,35.} );
+    // tensors
+    ip_tensor_variables.push_back( {ANY,ANY,ANY,72.,73.,74.,75.,76.,77.,78.,79.,80.} );
+    ip_tensor_variables.push_back( {PLAIN,PLAIN,PLAIN,81.,82.,83.,84.,85.,86.,87.,88.,89.} );
+    ip_tensor_variables.push_back( {ROBIN,ROBIN,ROBIN,90.,91.,92.,93.,94.,95.,96.,97.,98.} );
+    ip_tensor_variables.push_back( {DIRICH,DIRICH,DIRICH,99.,100.,101.,102.,103.,104.,105.,106.,107.} );
+    // arrays
+    ip_array_variables.push_back( {{32.,33.,34.,34.},ANY} );
+    ip_array_variables.push_back( {{35.,36.,37.,38.},PLAIN} );
+    ip_array_variables.push_back( {{39.,40.,41.,42.},ROBIN} );
+    ip_array_variables.push_back( {{43.,44.,45.,46.},DIRICH} );
+
+    // assigning values to the <=12 facet integration points
+    for ( auto& e : domain.CellVector() ) {
+          const auto facets(e->Facets());
+          const uint32_t fip{0u};
+          // looping over the FV facets
+          for ( uint32_t i{0u}; i<facets; ++i ) {
+               e->Store( i, fip, fipv1, ip_vector_variables[i] );
+               e->Store( i, fip, fipt1, ip_tensor_variables[i] );
+               e->Store( i, fip, fipa1, ip_array_variables[i] );
+            }
+      }
+    // testing that they are read correctly
+    for ( const auto& e : domain.CellVector() ) {
+          const auto facets(e->Facets());
+          const uint32_t fip{0u};
+          // looping over the FV facets
+          for ( uint32_t i{0u}; i<facets; ++i ) {
+               auto vc_vec = e->ReadVector( i, fip, fipv1 );
+               _test( vc_vec == ip_vector_variables[i] );
+               auto ts_vec = e->ReadTensor( i, fip, fipt1 );
+               _test( ts_vec == ip_tensor_variables[i] );
+               auto ar_vec = e->ReadArray( i, fip, fipa1 );
+               for ( uint32_t j{0u}; j<ar_vec.size(); ++j )
+                 _test( ar_vec[j] == ip_array_variables[i][j] );
+            }
+       }
+
+ } // end runExtensionsForDeclarativeProgramming
   
   
 
@@ -600,7 +926,9 @@ void LocalVariableStorage_Test::run()
     runTest<2>();
     runTest<3>();
     run3D();
+    runExtensionsForDeclarativeProgramming();
     run3D_with_templatized_INDEX();
+    runExtensionsForDeclarativeProgramming_INDEX();
 
     //cout << endl << "Size of LocalVariableStorage: " << sizeof(LocalVariableStorage<3,Element<3> >) << endl;
   }

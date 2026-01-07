@@ -1,7 +1,0 @@
-<map id="csmp::PropertyHandle::ZapNAN" name="csmp::PropertyHandle::ZapNAN">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,39,157,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_handle.html#a2eda2263970fa36bcfc1ad6a03949469" title=" " alt="" coords="205,5,356,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,44,189,38,190,44,158,49"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="208,71,352,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="158,69,193,74,192,80,157,74"/>
-</map>

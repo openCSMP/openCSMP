@@ -1004,7 +1004,7 @@ Element<dim>*	const MeshManager<dim>::AddInterveningElement( csmp::InterFace<dim
               csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node vector contains a nullptr");
               break;
            }
-         else if ( nodes[i]->Coordinate() != ifptr->N(i)->Coordinate() ) {
+         else if ( nodes[i]->Coordinate() != ifptr->N(i,INSIDE)->Coordinate() ) {
               cerr <<"\n\tnode "<< i;
               csmp_error.Note( ERROR, "MeshManager<dim>::AddInterveningElement", "node locations do not match");
               break;
@@ -1816,7 +1816,7 @@ InterFace<dim>* const MeshManager<dim>::ReplaceFaceByInterFace( typename vector<
 
 #ifdef DEBUG
    // verifying that the nodes on the inside matching those of the face
-   for ( auto i{0U}; i<(*fptr_it)->Nodes(); ++i ) {
+   for ( uint32_t i{0U}; i<(*fptr_it)->Nodes(); ++i ) {
         assert( (*ifp).N(i) != nullptr );
         assert( (*ifp).N(i,INSIDE) != nullptr );
         assert( (*fptr_it)->N(i) == (*ifp).N(i,INSIDE) );
@@ -5053,7 +5053,7 @@ void MeshManager<dim>::OutputMeshTo( VSet<dim>& vset, bool get_indices_from_stor
       for ( uint32_t j{0U}; j<neighbors; ++j ) {
             const Element<dim>* const ptr = e.Neighbor(j);
             if ( ptr ) {
-                assert( e.FE_Type() == ptr->FE_Type() );
+                assert( e.IsVolume() == ptr->IsVolume() && e.IsSurface() == ptr->IsSurface() && e.IsLine() == ptr->IsLine() );
                 assert( ptr->Idx() < elements_.size() );
                 vset.Pfvert( eidx, j, static_cast<int64_t>(ptr->Idx()) );
               }

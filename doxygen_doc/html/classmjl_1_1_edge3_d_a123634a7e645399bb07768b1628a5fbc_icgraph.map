@@ -1,5 +1,0 @@
-<map id="mjl::Edge3D::Rot" name="mjl::Edge3D::Rot">
-<area shape="rect" id="Node000001" title=" " alt="" coords="222,13,344,38"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_line_element.html#a09d559393f0dd7ff9f7a505ca337167b" title="returns the unit normal computed as the cross&#45;product between the line and the supplied vector vc" alt="" coords="5,5,174,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="206,28,174,28,174,23,206,23"/>
-</map>

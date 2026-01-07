@@ -6,9 +6,13 @@
 //
 
 #include "Model.h"
+#include "Region.h"
+#include "Element.h"
+#include "Node.h"
 #include "ErrorHandler.h"
 #include "MechanicalProperties.h"
 #include "FaultFlowPropertyCalculator.h"
+#include "FFSA_Aperture.h"
 #include "ErrorHandler.h"
 #include "Exception.h"
 #include "ModelTime.h"
@@ -17,6 +21,7 @@
 #include "InputDataManager.h"
 #include "fracturePropertyModelling.h"
 #include "compareFloats.h"
+#include "geometricCalculations.h"
 
 using namespace std;
 
@@ -196,8 +201,8 @@ void fracturePropertyModelling( const char* model_name )
     printRangeOfVariable( model, "joint roughness coefficient", false );
 
 
-    // 2. reading region data, in situ stress state and fluid pressure either from file or from screen
-    // _______________________________________________________________________________________________
+    // 2. reading region data, in situ stress, and fluid pressure either from file or from screen
+    // __________________________________________________________________________________________
 
     double depth, rdensity, overburden, Sv, SH, Sh, trend;
     // 2.1 fracture set and stress state input from file
@@ -248,8 +253,18 @@ void fracturePropertyModelling( const char* model_name )
     outputToFile( std::string( fracture_modeling_data + "-contiguous-regions-revised.txt").c_str(), fractures, depth, rdensity, overburden, Sv, SH, Sh, trend );
 
     // 2.5 in situ stress state initialization and output to file
-    InSituStress stress( depth, rdensity, overburden, Sv, SH, Sh, trend );
-    cout <<"\n\n\nfracturePropertyModelling: stress trend (0-360o): "<< trend << endl;
+    InSituStress stress( depth, rdensity, overburden, Sv, SH, Sh, 0. );
+    const double XZ_plane_max_stress_azimuth{ trend }; // default is N-S=0., trend rotation is clockwise in degrees
+    if constexpr ( dim == 3 ) {
+           stress.StressState().Rotate( 'y', trend );
+           stress.Trend( XZ_plane_max_stress_azimuth );
+      }
+    // in a 2D model, we still want to rotate the azimuth that lies in the XZ plane, but this is achieved by how the 3D stresses are assigned to 2D
+    else if constexpr ( dim == 2 ) {
+           stress.StressState().Rotate( 'y', trend );
+           stress.Trend( XZ_plane_max_stress_azimuth );
+      }
+    cout <<"\n\n\nfracturePropertyModelling: stress trend (0-360o clockwise looking down): "<< trend << endl;
     string  stress_file_name(model_name);
     stress_file_name +="-stress_tensor";
     // setting the tensor location to lower front corner of the model (x-max, y-min, z-max)
@@ -263,7 +278,7 @@ void fracturePropertyModelling( const char* model_name )
       }
     else if constexpr ( dim == 2 ) {
          max_dimension = ( std::max(xyz_max[0U]-xyz_min[0U], xyz_max[1U]-xyz_min[1U]) );
-         stress.SampleLocation( xyz_max[0U], depth, xyz_min[2U] ); // Y set to subsurface depth
+         stress.SampleLocation( (xyz_max[0U]-xyz_min[0U])/2., depth, (xyz_max[1U]-xyz_min[1U])/2. ); // Y set to 0 for model in XZ plane
       }
     stress.OutStressTensorToVTK( stress_file_name, trend, max_dimension/5. );
    
@@ -309,7 +324,7 @@ void fracturePropertyModelling( const char* model_name )
     cout <<"\n\n\nfracturePropertyModelling: Entering fracture-aperture calculation in model '" << model_name;
     cout <<"', input variable ranges:\n";
     printRangeOfVariable( model, "fractures", "fluid pressure" );
-    if ( stdio.YesNo("fracturePropertyModelling: Do you want to replace fluid pressure by a depth-based hydrostatic pressure gradient?") ) {
+    if ( dim == 3 && stdio.YesNo("fracturePropertyModelling: Do you want to replace fluid pressure by a depth-based hydrostatic pressure gradient?") ) {
           cout <<"To compute vertical variation of pressure values; enter fluid pressure at model top (Pa) and average fluid density (kg/m3): ";
           double pf_model_top(100325.), fluid_density(1000.);
           cin >> pf_model_top >> fluid_density;
@@ -366,14 +381,15 @@ void fracturePropertyModelling( const char* model_name )
          model.Region("fractures").MinMaxOf( "failure", param_min, param_max );
          long choice(0);
          while ( (choice=stdio.RecordIntChoice("\tChoose option:\
-                                               \n\t\t(1) Elliptic crack (Cruikshank 91') effective stress- and fracture radius-dependent single-valued maximum aperture\
-                                               \n\t\t(2) Elliptic crack (Cruikshank 91') with aperture variations across fracture plane\
-                                               \n\t\t(3) Rectangular crack (Matthai 06') for elliptic/rectangular fractures open along their side boundaries\
-                                               \n\t\t(4) Lower limit of aperture assigned to fractures undergoing compressional failure\
-                                               \n\t\t(5) Upper limit of aperture assigned to all fractures\
-                                               \n\t\t(6) Fractures treated like faults (use to compute k of sheared fractures)\
-                                               \n\t\t(7) Re-read configuration file (with fracture and matrix data)\
-                                               \n\t\t(8) exit from loop.\n")) < 8 )
+                                               \n\t\t(1) Elliptic fracture (Cruikshank 91') effective stress- and fracture radius-dependent single-valued maximum aperture\
+                                               \n\t\t(2) Elliptic fracture (Cruikshank 91') with aperture variations across fracture plane\
+                                               \n\t\t(3) Rectangular fracture (Matthai 06') for elliptic/rectangular fractures open along their side boundaries\
+                                               \n\t\t(4) Sheared fracture (Barton 85') shear-displacement and dilation from JRC_mobilised\
+                                               \n\t\t(5) Assign lower limit of aperture to fractures undergoing compressional failure\
+                                               \n\t\t(6) Apply upper limit of aperture to all fractures\
+                                               \n\t\t(7) Treat fractures like faults with internal structure (use to compute k of sheared fractures)\
+                                               \n\t\t(8) Re-read configuration file (with fracture and matrix data)\
+                                               \n\t\t(9) exit from loop.\n")) < 8 )
            {
               switch( choice ) {
                  case 1: // CRUIKSHANK CONSTANT APERTURE
@@ -447,8 +463,31 @@ void fracturePropertyModelling( const char* model_name )
                      if ( stdio.YesNo("fracturePropertyModelling: Do you want to output results to VTU?") )
                        vtk_output.OutputDataToVTU( (string(model_name) + "-elongated_fracture_aperture").c_str(), result_vars, "fractures", static_cast<int>(0) );
                    break;
-                  
-                 case 4: // CLOSURE APERTURE TODO: test this compression option
+                 case 4: // DILATION DURING SHEAR using Barton et al. 1985
+                     // --------------------------------------------------
+                     // aperture is uniform across fracture
+                     cout <<"\ncalculating fracture aperture inferring shear displacement from far-field stress...\n";
+                     cout <<"\ninput variables:\n";
+                     printRangeOfVariable( model, "fractures", "failure" );
+                     printRangeOfVariable( model, "shear modulus", false );
+                     printRangeOfVariable( model, "Poissons ratio", false );
+                     printRangeOfVariable( model, "fluid pressure", false );
+                     cout <<"\naperture distribution BEFORE calculation:\n";
+                     max_aperture = printRangeOfVariable( model, "fractures", "thickness" );
+                     
+                     if constexpr ( dim == 2 ) {
+                          // demo_FFSA();
+                          fractureApertureFromShearAndNormalStress( model, stress );
+                          cout <<"\naperture distribution AFTER calculation:\n";
+                          max_aperture = printRangeOfVariable( model, "fractures", "thickness" );
+                       }
+                     else throw csmp::Exception( ERROR, "fracturePropertyModelling", "shear-dilation not implemented in 3D yet" );
+
+                     if ( stdio.YesNo("fracturePropertyModelling: Do you want to output results to VTU?") )
+                       vtk_output.OutputDataToVTU( (string(model_name) + "-elongated_fracture_aperture").c_str(), result_vars, "fractures", static_cast<int>(0) );
+                   break;
+
+                 case 5: // CLOSURE APERTURE TODO: test this compression option
                      // --------------------
                      cout <<"\ncalculating apertures of fracture segments failed under compression (seff >= UCS)...\n";
                      cout <<"\naperture distribution BEFORE calculation:\n";
@@ -465,7 +504,7 @@ void fracturePropertyModelling( const char* model_name )
                       }
                    break;
                   
-                 case 5: // UPPER LIMIT IMPOSED ON FRACTURE APERTURE
+                 case 6: // UPPER LIMIT IMPOSED ON FRACTURE APERTURE
                       {  // ----------------------------------------
                          cout <<"\n\n\nfracturePropertyModelling: current maximum fracture aperture, a = "<< max_aperture;
                          cout <<" m; imposing an upper limit on fracture aperture...\n";
@@ -477,7 +516,7 @@ void fracturePropertyModelling( const char* model_name )
                       }
                    break;
                   
-                 case 6: // FAULTS
+                 case 7: // FAULTS
                       {  // --------------------------------
                          // fractures are treated like faults
                          cout <<"\n\n\nfracturePropertyModelling: treating fractures as dilating faults ";
@@ -541,7 +580,7 @@ void fracturePropertyModelling( const char* model_name )
                       }
                    break;
                   
-                 case 7: // RE-READ CONFIGURATION FILE
+                 case 8: // RE-READ CONFIGURATION FILE
                    // --------------------------------
                      cout <<"\n\nfracturePropertyModelling: If you partitioned fracture sets their new names in config file may no longer be recognized.";
                      if ( stdio.YesNo("\tDo you still want to re-read the configuration file") )
@@ -653,5 +692,149 @@ void parallelPlatePermeabilityFromAperture( Model<dim>& model, const char* fract
 
 template void parallelPlatePermeabilityFromAperture( Model<3>&, const char* );
 template void parallelPlatePermeabilityFromAperture( Model<2>&, const char* );
+
+
+
+
+
+/// helper function: that returns smallest angle of line to X-axis [0,90]
+static double lineAngleToXAxisFromNormal(const Point<2>& n)
+{
+    double alpha = std::abs(std::atan2(n[0], n[1])) * 180. / std::numbers::pi;
+    // range folding
+    if ( alpha > 90. ) alpha = 180. - alpha;
+    
+    return alpha;
+}
+
+/**
+      Fracture-by-fracture calculation of input parameters to FFSA algorithm of M. Liem, based on Barton's model/
+      The computed fracture parameters are collected into FFSA_InputParameters vector.
+*/
+void fractureApertureFromShearAndNormalStress( Model<2>& model, const InSituStress& stress )
+ {
+     // 0. selecting unique fracture regions identified by name-string and numbers attached to them
+     // -------------------------------------------------------------------------------------------
+     set<string> fracture_regions;
+     for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit )
+       // distinguish fracture regions (=1D line element check is omitted)
+       if ( (contains((*rit).first, "frac") ||
+             contains((*rit).first, "FRAC") ||
+             contains((*rit).first, "Frac")) && containsDigit((*rit).first) )
+        {
+           fracture_regions.insert( (*rit).first );
+        }
+
+     // 1. collecting data from unique fracture regions identified by name-string and numbers attached to them
+     // ------------------------------------------------------------------------------------------------------
+     FFSA_InputParameters ffsa_params( fracture_regions.size() );
+
+     long N_fracture{0}; // fracture number
+     for ( const auto& region : fracture_regions ) {
+           Region<2>& frac = model.Region( region );
+
+           // 1. Find unit normal to average fracture plane and calculating angle between
+           //    fracture and x-axis
+           vector<Point<2>> fracture_pts; fracture_pts.reserve( frac.Nodes() );
+           for ( const auto& node : frac.NodeVector() ) fracture_pts.push_back( node->Coordinate() );
+           const Point<2> unrml = normalToAveragePlaneThroughPointCloud( fracture_pts );
+           frac.Store( model.Database().StorageKey("fracture normal"), makeVector(ANY,ANY,unrml[0],unrml[1]) );
+           // angle between fracture plane normal and x-axis
+           ffsa_params.alpha[N_fracture] = lineAngleToXAxisFromNormal( unrml );
+ 
+           // 2. initialising far-field stress analysis parameters
+           ffsa_params.L[N_fracture]         = frac.Volume(); ///< = length of a line element region
+           ffsa_params.p_f[N_fracture]       = frac.Average("fluid pressure") * 1.0e-6; // converting into MPa
+           ffsa_params.JRC[N_fracture]       = frac.Read( model.Database().StorageKey("joint roughness coefficient") );     ///< JRC 0-20 [-]
+           ffsa_params.sigma_c[N_fracture]   = frac.Read( model.Database().StorageKey("unconfined compressive strength") ) * 1.0e-6; ///< UCS [MPa]
+           // NB: Barton and co-workers treat JCS as a degraded or scale-modified UCS to account for:
+           // weathering of joint walls, microcracking, gouge infill, asperity damage scale effects; here I set it to 0.9 UCS
+           ffsa_params.JCS[N_fracture]       = 0.9 * ffsa_params.sigma_c[N_fracture]; ///< Joint wall compressive strength, JCS [MPa]
+           // slope of the stress closure curve at very low stress (~joint compressibility = elastic compliance of asperities)
+           // (TODO: correlate K_ni with asperity height, hr: kn0 proportional to UCS / hr)
+           ffsa_params.K_ni[N_fracture]      = 1000.;  ///< Initial normal stiffness [MPa/mm] guestimate
+           // delta_n,max approx (0.6-1.0) hr ) = closure aperture (converted to mm); substituted by default aperture(=thickness) of line elements
+           ffsa_params.vm_factor[N_fracture] = 0.7 * frac.Average("thickness") * 1.0e3;   ///< Factor for maximum possible joint closure [-]
+           // Residual friction angle (of the fractured rock) should be estimater from from direct shear tests (with roughness removed)
+           // hard crystalline rocks (30-35°), sandstone (28-32°), limestone(25-30°), shale and other weak rocks (20-25°)
+           ffsa_params.phi_r[N_fracture]     = 25.;       ///< Residual friction angle [°]
+           ffsa_params.E_mod[N_fracture]     = frac.Read( model.Database().StorageKey("Youngs modulus") ) * 1.0e-6; ///< E-modulus of fractured rock [MPa]
+           ffsa_params.nu[N_fracture]        = frac.Read( model.Database().StorageKey("Poissons ratio") );          ///< Poisson's ratio of fractured rock [-]
+           // should be proportional to JRC increasing with roughness up to ~4
+           ffsa_params.C_g[N_fracture]       = 1.1; ///< Proportionality between displacement and shear stress [-]
+            
+           N_fracture++;
+        }
+
+     // 2. computing fracture apertures
+     // -------------------------------
+     // 2.1 assigning far-field parameters (stresses in MPa)
+     ffsa_params.sigma_H = stress.SH() * stress.P_conf() * 1.0e-6;
+     ffsa_params.sigma_h = stress.Sh() * stress.P_conf() * 1.0e-6;
+     ffsa_params.beta    = stress.Trend();
+     // 2.2 assigning method qualifiers
+     ffsa_params.method_displacement = "mob"; // Iterative search
+     ffsa_params.method_dilation = "integrate_pos"; // Integration, positive increments only
+     ffsa_params.method_peak_displacement = "Asadollahi";
+     ffsa_params.method_sigma_eff = "end"; // sigma_EFF = sigma_eff
+     // optional M parameter (testing the optional field logic)
+     ffsa_params.M.resize(ffsa_params.N_fractures); ffsa_params.M.fill(numeric_limits<double>::quiet_NaN());
+     ffsa_params.M(0) = 0.8; // Specify M for frac 1
+
+     FFSA_FractureAperture calculator;
+     auto [results_matrix, debug_data] = calculator.ApertureFromFarFieldStress( ffsa_params );
+
+     
+     // 3. writing aperture back to the model using the parameter 'thickness'
+     // ---------------------------------------------------------------------
+     cout << "=================================================================\n";
+     cout << "FFSA Aperture Calculation Results (N_frac = " << fracture_regions.size() << ")\n";
+     cout << "=================================================================\n";
+     cout << "Units: L [m], Stress [MPa], Displacement [mm]\n\n";
+     // (a negative mobilised JRC indicates compaction failure)
+     for ( long i = 0; i < static_cast<long>(fracture_regions.size()); ++i ) {
+           cout << "--- Test Fracture " << i + 1 << " ---\n";
+           cout << "  Calculated Stresses: sigma_n = " << debug_data.sigma_n(i)
+                     << " MPa, sigma_s = " << debug_data.sigma_s(i)
+                     << " MPa, sigma_eff = " << debug_data.sigma_eff(i) << " MPa\n";
+           cout << "  Initial Aperture (a_0): " << debug_data.a_0(i) << " mm\n";
+           cout << "  Normal Closure (delta_n): " << debug_data.delta_n(i) << " mm\n";
+           cout << "  Shear Displacement (delta_s): " << debug_data.delta_s(i) << " mm\n";
+           cout << "  Shear Dilation (delta_d): " << debug_data.delta_d(i) << " mm\n";
+           cout << "  Final Aperture (a): " << debug_data.a(i) << " mm\n";
+           cout << "  Mobilized JRC: " << debug_data.JRC_mob(i) << " (-)\n";
+           cout << "  Mobilized Dilation Angle: " << debug_data.phi_d_mob(i) << " deg\n";
+           cout << "  Permeability Factor (k): " << debug_data.k(i) << " m^2\n\n";
+        }
+        
+     // TODO: (maybe use the deviation of element from mean fracture direction to adjust dilation/opening)
+     N_fracture = 0ul; // fracture number
+     const csmp::Index thi_key  = model.Database().StorageKey("thickness");
+     const csmp::Index fail_key = model.Database().StorageKey("failure");
+     for ( const auto& region : fracture_regions ) {
+           // only if a closure, shear displacement or dilatation occurred, results are written to model
+           if ( debug_data.delta_n(N_fracture) != 0. || debug_data.delta_s(N_fracture) != 0. || debug_data.delta_d(N_fracture) != 0. ) {
+                Region<2>& frac = model.Region( region );
+                // fracture aperture (converting from mm to m)
+                auto aperture = debug_data.a(N_fracture) * 1.0e-3;
+                // assigned to all elements in the region
+                for ( auto& it : frac.CellVector() ) it->Store( thi_key, makeScalar(it->Status(thi_key),aperture) );
+                // recording the failure regime
+                // compression
+                if ( debug_data.delta_n(N_fracture) > 0. && debug_data.phi_d_mob(N_fracture) < 0. )
+                  for ( auto& it : frac.CellVector() ) it->Store( fail_key, makeScalar(it->Status(fail_key),-1.) );
+                // shear reactivitation (frictional sliding)
+                if ( debug_data.delta_s(N_fracture) > 0. && debug_data.delta_d(N_fracture) > 0. )
+                  for ( auto& it : frac.CellVector() ) it->Store( fail_key, makeScalar(it->Status(fail_key),1.) );
+                
+             }
+           N_fracture++;
+        }
+     
+ } // end fractureApertureFromShearAndNormalStress
+
+
+
+
 
 } // end csmp

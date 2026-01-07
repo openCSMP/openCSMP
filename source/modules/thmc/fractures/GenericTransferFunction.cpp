@@ -10,7 +10,6 @@ GenericTransferFunction::GenericTransferFunction( double phim,
    muw_(muw), mun_(mun) 
  {
     assert( phim_ > 0. and phim_ <= 1. );
-    assert( pd > 0. );
     assert( BC_param_ > 0.2 and BC_param_ <= 6. );
     assert( muw_ > 0. );
     assert( mun_ > 0. );

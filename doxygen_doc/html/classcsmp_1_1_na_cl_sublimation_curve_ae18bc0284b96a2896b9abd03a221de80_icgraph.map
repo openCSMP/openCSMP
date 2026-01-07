@@ -1,7 +1,0 @@
-<map id="csmp::NaClSublimationCurve::NaClSublimationCurve" name="csmp::NaClSublimationCurve::NaClSublimationCurve">
-<area shape="rect" id="Node000001" title=" " alt="" coords="435,5,629,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_na_cl_saturated_vapor.html#abd993e8f13b163d4832a507285effdfa" title=" " alt="" coords="207,5,387,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="419,28,387,28,387,23,419,23"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_twophase_vapor.html#a106ce9bbb086b6e21f6bb8056b718fd8" title=" " alt="" coords="5,5,159,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="191,28,159,28,159,23,191,23"/>
-</map>

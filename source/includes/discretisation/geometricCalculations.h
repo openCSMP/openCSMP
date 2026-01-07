@@ -2,6 +2,8 @@
 #define CSMP_GEOMETRIC_CALCULATIONS_UOM_H
 
 #include "CSMP_definitions.h"
+#include <numbers>
+#include "Point.h"
 
 /**
 
@@ -16,8 +18,27 @@ geometric calculations
 
 namespace csmp {
 
-template<uint32_t> class Point;
 template<uint32_t> class Element;
+
+
+Point<2> normalToAveragePlaneThroughPointCloud( const std::vector<Point<2>>& );
+
+/// Calculates the smallest angle (degrees) between 2 vectors described by points (vector origin is 0)
+template<uint32_t dim>
+inline double smallestAngleBetween(const Point<dim>& a, const Point<dim>& b)
+{
+    const double n1 = a.Length();
+    const double n2 = b.Length();
+
+    if ( n1 < std::numeric_limits<double>::epsilon() || n2 < std::numeric_limits<double>::epsilon() )
+      throw std::domain_error("smallestAngleBetween: Angle undefined for zero-length vector");
+
+    double c = dotProduct(a,b) / (n1 * n2);
+    c = std::clamp(c, -1.0, 1.0);
+
+    return std::acos(c) * 180. / std::numbers::pi;
+}
+
 
 // CALCULATIONS ORIGINALLY DEVELOPED TO ASSESS THE DEGENERACY OF CORNER-POINT GRIDS
 // TODO: useful functionality but needs documentation and refactoring.

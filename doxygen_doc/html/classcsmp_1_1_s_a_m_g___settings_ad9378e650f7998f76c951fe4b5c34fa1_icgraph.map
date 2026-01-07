@@ -1,7 +1,0 @@
-<map id="csmp::SAMG_Settings::UsePointBasedApproach" name="csmp::SAMG_Settings::UsePointBasedApproach">
-<area shape="rect" id="Node000001" title=" " alt="" coords="206,39,381,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_s_a_m_g___solver.html#af849b38b8bf9f8500590777e5fd1e7d7" title=" " alt="" coords="5,5,158,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="190,45,157,40,158,35,191,40"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_s_a_m_g___solver.html#a6a4dbbe3dd011d95514026e4bcd52e33" title=" " alt="" coords="5,71,158,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="191,77,158,82,157,77,190,72"/>
-</map>

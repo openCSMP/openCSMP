@@ -1,7 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTetrahedron::UnitNormalAtFaceBarycenter" name="csmp::IsoparametricQuadraticTetrahedron::UnitNormalAtFaceBarycenter">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,274,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html#a3639fc962596899333d6a65cb1ef66ce" title="initializes the member matrix JINV" alt="" coords="322,5,463,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="274,23,306,23,306,28,274,28"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_finite_element.html#a67341585f83bc9d941c67e7a84801248" title="prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination" alt="" coords="511,5,678,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="464,23,495,23,495,28,464,28"/>
-</map>

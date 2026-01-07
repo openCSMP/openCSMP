@@ -4,6 +4,7 @@
 #include "Element.h"
 #include "Exception.h"
 #include "PDE_Integrator.h"
+#include "Visitor.h"
 
 using namespace std;
 
@@ -39,6 +40,28 @@ NimbleRegion<dim>::NimbleRegion( const PropertyDatabase<dim>& p,
 
 
 
+template<uint32_t dim>
+void NimbleRegion<dim>::Accept( csmp::Visitor<dim>& v )
+{
+  if ( v.ApplicationLevel() == MODEL or v.ApplicationLevel() == REGION )
+    throw csmp::Exception( ERROR, "NimbleRegion<dim>::Accept", "Now functionality to apply Visitor" );
+
+  switch ( v.ApplicationTarget() ) {
+      // element, face and interface are treated the same
+    case ELEMENT:
+      for ( auto it = NimbleRegion<dim>::CellsBegin(); it != NimbleRegion<dim>::CellsEnd(); it++ )
+        (*it)->Accept( v );
+      return;
+    case NODE:
+      for ( auto nd_it = NimbleRegion<dim>::NodesBegin(); nd_it != NimbleRegion<dim>::NodesEnd(); nd_it++ )
+        (*nd_it)->Accept( v );
+      return;
+    default:
+      throw csmp::Exception( ERROR, "Region<dim>::Accept",
+                             "ApplicationTarget was not resolved; nothing was done" );
+  }
+
+} // end Accept
 
 
 
@@ -51,7 +74,7 @@ template<uint32_t dim>
 void NimbleRegion<dim>::Update( typename vector<Node<dim>*>::const_iterator first,
                                 typename vector<Node<dim>*>::const_iterator last )
  {
-    const size_t n_target_nodes( distance(first,last));
+    const size_t n_target_nodes( static_cast<size_t>(distance(first,last)) );
     if (  n_target_nodes == 0U )
       throw csmp::Exception( ERROR, "NimbleRegion<dim>::Update", "Supplied node range is empty; nothing was done." );
  

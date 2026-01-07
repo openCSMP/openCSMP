@@ -1,7 +1,0 @@
-<map id="csmp::Standard_IO_Handler::Out" name="csmp::Standard_IO_Handler::Out">
-<area shape="rect" id="Node000001" title="prints all the recorded information to the output text file &#39;doc_file&#39;" alt="" coords="264,46,479,72"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_elasticity___example.html#a39759e281a82b4a30cfb3ee1a74873aa" title=" " alt="" coords="35,5,186,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="250,46,186,38,186,33,251,41"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_mechanics_and_multiphase_flow___example.html#a24a03c910a9880a81cc74082ad1684ea" title=" " alt="" coords="5,71,216,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,77,216,81,216,75,248,71"/>
-</map>

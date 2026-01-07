@@ -1,5 +1,0 @@
-<map id="csmp::NumIntegral_dNT_op_dN_dV_InterFace::ComputeContribution" name="csmp::NumIntegral_dNT_op_dN_dV_InterFace::ComputeContribution">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,170,61"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_num_integral__d_n_t__op__d_n__d_v___inter_face.html#abff081a710954e6a015b19d06220b511" title="separates opposing nodes and writes new coordinates to XY matrix of corresponding finite element type" alt="" coords="218,5,386,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="170,30,202,30,202,36,170,36"/>
-</map>

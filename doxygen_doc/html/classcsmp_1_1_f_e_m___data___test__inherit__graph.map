@@ -1,5 +1,0 @@
-<map id="csmp::FEM_Data_Test" name="csmp::FEM_Data_Test">
-<area shape="rect" id="Node000001" title="PL Nov 2010." alt="" coords="5,425,151,491"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_test.html" title=" " alt="" coords="17,5,139,377"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,392,81,425,76,425,76,392"/>
-</map>

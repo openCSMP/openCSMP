@@ -1,7 +1,0 @@
-<map id="csmp::NumIntegral_DNi_rhsop_dV&lt; dim, CELL &gt;" name="csmp::NumIntegral_DNi_rhsop_dV&lt; dim, CELL &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,1102,208,1285"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_math_operator_r_h_s.html" title=" " alt="" coords="12,564,202,1052"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="110,1068,110,1102,104,1102,104,1068"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_math_operator_r_h_s.html" title="Base class for FE or FV integrals accumulated into righthand vector." alt="" coords="28,5,186,493"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="110,508,110,565,104,565,104,508"/>
-</map>

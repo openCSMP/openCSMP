@@ -1175,24 +1175,21 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     double  old_range = old_max - old_min;
     double  new_range = 255.0; 
     double  out_val; 
-    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
     // ----------------------------------------------------------------------------------
     // creating RGB scanline memory for central grid portion without frame
     JSAMPROW          row_pointer[1];
-    int32_t             image_components = 3;
+    int32_t           image_components = 3;
     if ( greyscale )  image_components = 1;
-    int32_t             row_stride = size_x * image_components;
-    unsigned char*    image_buffer;
-    uint32_t            incr;
+    int32_t           row_stride = size_x * image_components;
   
     // allocating image memory buffer and storing RGB values within it  
-    image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
+    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
 
-      for ( incr=0, i=size_y-1; i>=0; i-- )
-        for ( j=0; j<size_x; j++ ) 
+      for ( int32_t incr{0}, i=size_y-1; i>=0; i-- )
+        for ( int32_t j{0}; j<size_x; j++ )
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) {
@@ -1249,7 +1246,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     jpeg_start_compress( &cinfo, TRUE );
     while ( cinfo.next_scanline < cinfo.image_height )
       {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * row_stride ];
+          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
           jpeg_write_scanlines( &cinfo, row_pointer, 1 );
       }
     jpeg_finish_compress( &cinfo );
@@ -1341,7 +1338,6 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     double  old_range = old_max - old_min;
     double  new_range = 255.0; 
     double  out_val; 
-    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
@@ -1351,14 +1347,12 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     int               image_components = 3;
     if ( greyscale )  image_components = 1;
     int               row_stride = size_x * image_components;
-    unsigned char*    image_buffer;
-    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
-    image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
+    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
 
-      for ( incr=0, i=size_y-1; i>=0; i-- )
-        for ( j=0; j<size_x; j++ ) 
+      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
+        for ( int32_t j=0; j<size_x; j++ )
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) {
@@ -1417,7 +1411,7 @@ void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t ti
     jpeg_start_compress( &cinfo, TRUE );
     while ( cinfo.next_scanline < cinfo.image_height )
       {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * row_stride ];
+          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
           jpeg_write_scanlines( &cinfo, row_pointer, 1 );
       }
     jpeg_finish_compress( &cinfo );
@@ -1494,7 +1488,6 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     double  old_range = old_max - old_min;
     double  new_range = 255.0; 
     double  out_val; 
-    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
@@ -1504,14 +1497,12 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     int32_t             image_components = 3;
     if ( greyscale )  image_components = 1;
     int32_t             row_stride = size_x * image_components;
-    unsigned char*    image_buffer;
-    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
-    image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
+    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
 
-      for ( incr=0, i=size_y-1; i>=0; i-- )
-        for ( j=0; j<size_x; j++ ) 
+      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
+        for ( int32_t j=0; j<size_x; j++ )
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
@@ -1561,7 +1552,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     jpeg_start_compress( &cinfo, TRUE );
     while ( cinfo.next_scanline < cinfo.image_height )
       {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * row_stride ];
+          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
           jpeg_write_scanlines( &cinfo, row_pointer, 1 );
       }
     jpeg_finish_compress( &cinfo );
@@ -1653,7 +1644,6 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     double  old_range = old_max - old_min;
     double  new_range = 255.0; 
     double  out_val; 
-    int32_t    i, j;
 
     // ----------------------------------------------------------------------------------
     // JPG Stuff
@@ -1664,13 +1654,12 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     if ( greyscale )  image_components = 1;
     int               row_stride = size_x * image_components;
     unsigned char*    image_buffer;
-    uint32_t            incr;
   
     // allocating image memory buffer and storing RGB values within it  
-    image_buffer = new unsigned char[ (size_x * size_y * image_components) ];
+    image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
 
-      for ( incr=0, i=size_y-1; i>=0; i-- )
-        for ( j=0; j<size_x; j++ ) 
+      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
+        for ( int32_t j=0; j<size_x; j++ )
           {
              // scaling value to 0-256 scale
              if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
@@ -1720,7 +1709,7 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
     jpeg_start_compress( &cinfo, TRUE );
     while ( cinfo.next_scanline < cinfo.image_height )
       {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * row_stride ];
+          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
           jpeg_write_scanlines( &cinfo, row_pointer, 1 );
       }
     jpeg_finish_compress( &cinfo );
@@ -1792,12 +1781,12 @@ double  FiniteDifferenceGrid::operator()( double x,  double y, bool rounded ) co
   {
       // 1. finding x and y indices of interpolation points
       if ( rounded ) {
-           x1 = rint((x - static_cast<double>(x_min)) / xresolution);
-           y1 = rint((y - static_cast<double>(y_min)) / yresolution);
+           x1 = static_cast<int32_t>(rint( (x - x_min) / xresolution ));
+           y1 = static_cast<int32_t>(rint( (y - y_min) / yresolution ));
         }
       else {
-           x1 = static_cast<int32_t>((x-static_cast<double>(x_min)) / xresolution);
-           y1 = static_cast<int32_t>((y-static_cast<double>(y_min)) / yresolution);
+           x1 = static_cast<int32_t>((x-x_min) / xresolution);
+           y1 = static_cast<int32_t>((y-y_min) / yresolution);
         }
       
       // 2. if one of the points lies outside of the central grid
@@ -1816,8 +1805,8 @@ double  FiniteDifferenceGrid::operator()( double x,  double y, bool rounded ) co
       if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;      
 
       // 5. computing interpolation functions. Num. Recip. p. 105
-      t = ((x-static_cast<double>(x_min)) - x1*xresolution) / xresolution;
-      u = ((y-static_cast<double>(y_min)) - y1*yresolution) / yresolution;
+      t = ((x-x_min) - x1*xresolution) / xresolution;
+      u = ((y-y_min) - y1*yresolution) / yresolution;
          
       // 6. bi-linear interpolation
       return (1.0-t)*(1.0-u)*p1 + t*(1.0-u)*p2 + t*u*p3 + (1.0-t)*u*p4;   

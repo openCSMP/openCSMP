@@ -1,7 +1,0 @@
-<map id="csmp::LinearTwoPhaseModel::krn_Phase" name="csmp::LinearTwoPhaseModel::krn_Phase">
-<area shape="rect" id="Node000001" title="relative permeabilities" alt="" coords="246,39,438,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_two_phase_model.html#a88af23cf46c7a04ce2db8f89cbba7d62" title="derivative of fractional flow (used in advection multiplier); note that fw+fn=1, dfw_dsw=dfn_dsn" alt="" coords="5,5,198,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="230,46,198,42,199,36,231,41"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_linear_two_phase_model.html#ab59ae882d561cafb304e5a34e9e5abd9" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="5,71,198,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,76,199,81,198,76,230,71"/>
-</map>

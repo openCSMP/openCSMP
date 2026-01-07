@@ -1,9 +1,0 @@
-<map id="csmp::TypeMatchesFVM_SIP_Placement&lt; T, IT &gt;" name="csmp::TypeMatchesFVM_SIP_Placement&lt; T, IT &gt;">
-<area shape="rect" id="Node000001" title="For variables placed on finite volume sector integration points." alt="" coords="302,5,460,87"/>
-<area shape="rect" id="Node000002" href="$structcsmp_1_1_type_matches_f_v_m___s_i_p___placement_3_01_element_00_01_s_e_c_t_o_r___i_n_t_e_g_r_a_t_i_o_n___p_o_i_n_t_01_4.html" title=" " alt="" coords="5,206,234,302"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="288,65,203,85,169,98,148,113,134,133,125,157,119,206,114,206,120,156,129,131,144,109,167,93,202,80,286,60"/>
-<area shape="rect" id="Node000003" href="$structcsmp_1_1_type_matches_f_v_m___s_i_p___placement_3_01_face_00_01_f_a_c_e___s_e_c_t_o_r___i_9c0e10ca9e5c28790a4c3da15e3cc28d.html" title=" " alt="" coords="275,198,487,310"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="384,101,384,199,378,199,378,101"/>
-<area shape="rect" id="Node000004" href="$structcsmp_1_1_type_matches_f_v_m___s_i_p___placement_3_01_inter_face_00_01_i_n_t_e_r___f_a_c_e_413101f4a2812a62fb0dc6e099524972.html" title=" " alt="" coords="511,198,771,310"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="475,64,521,82,563,109,582,128,599,151,624,197,619,200,594,154,578,132,559,113,519,87,473,69"/>
-</map>

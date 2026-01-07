@@ -1,8 +1,0 @@
-<map id="csmp::GoCadInterface::OutputVariablesToTSurface" name="csmp::GoCadInterface::OutputVariablesToTSurface">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,63,194,103"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_gocad_header.html#a475e6de85b61d51b52b2b83b5acc066f" title=" " alt="" coords="242,29,391,70"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,66,226,61,227,66,195,71"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="244,95,388,135"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="195,94,229,100,229,105,194,100"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="275,29,273,19,280,10,295,5,316,3,340,5,354,11,352,16,338,10,316,8,296,10,283,15,279,21,281,28"/>
-</map>

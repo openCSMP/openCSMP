@@ -1,6 +1,7 @@
 #ifndef CFL_CALCULATION_VVCASE_H
 #define CFL_CALCULATION_VVCASE_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp{

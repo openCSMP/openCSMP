@@ -30,7 +30,7 @@ class DFM_PermeabilityAndFluxRatioAnalyzer {
     void FullTensorAnalysis( const char* model_name );
   
     /**
-        - group whatever (non-fracture) regions identified as matrix into region "MATRIX"
+        - Groups whatever (non-fracture) regions identified as matrix into region "MATRIX"
         - equivalent permeability analysis
     */
     void MatrixOnlyAnalysis( const char* model_name, bool with_vtk_output );

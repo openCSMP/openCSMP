@@ -1,5 +1,0 @@
-<map id="csmp::StreamFunction_Example::Run" name="csmp::StreamFunction_Example::Run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,159,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_standard___i_o___handler.html#a5526bf3f6d3e2d6aab9b084fc474c334" title="prompts user to make a binary choice which is collected from stdin returned" alt="" coords="207,5,393,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="159,23,191,23,191,28,159,28"/>
-</map>

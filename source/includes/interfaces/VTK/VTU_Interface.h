@@ -263,7 +263,7 @@ class VTU_Interface {
                           const ModelSubDomain<dim,CELL>& subDomain,
                           T timestep = static_cast<T>(0) );
     
-    /// output a set of properties to VTU for given model sub domain (Region, Boundary or SplitBoundary)
+    /// KEY METHOD: output a set of properties to VTU for given model sub domain (Region, Boundary or SplitBoundary)
     template<template <uint32_t> class CELL,class T>
     bool OutputDataToVTU( const std::string& fileName,
                           const std::set<std::string>& propertyNames,
@@ -329,28 +329,34 @@ class VTU_Interface {
     void OutputMultiBlockVTU( const std::string& fileName,
                           const std::vector<std::string>& fileNames,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputFieldNodesAndElementDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fieldDataIndices,
                           const std::list<csmp::Index>& nodeIndices,
                           const std::list<csmp::Index>& elementIndices,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputElementBarycentricDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& elementMatrixIndices,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputRegionDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& regionIndices,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputFiniteElementIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& feipIndices,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputFiniteVolumeSectorIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fvsipIndices,
                           const ModelSubDomain<dim,CELL>& subDomain );
+                          
     template<template <uint32_t> class CELL>
     bool OutputFiniteVolumeFacetIntegrationPointsDataToVTU( const std::string& fileName,
                           const std::list<csmp::Index>& fvfipIndices,
@@ -467,9 +473,9 @@ class VTU_Interface {
 
     /// Quadratic Elements connectivity
     template<template <uint32_t> class CELL>
-    void QuadraticWedgeConnectivity( const CELL<dim>* const, std::vector<long>& data ) const;
+    void QuadraticWedgeConnectivity( const CELL<dim>* const, std::vector<size_t>& data ) const;
     template<template <uint32_t> class CELL>
-    void QuadraticHexahedronConnectivity( const CELL<dim>* const, std::vector<long>& data ) const;
+    void QuadraticHexahedronConnectivity( const CELL<dim>* const, std::vector<size_t>& data ) const;
 
     template<template <uint32_t> class CELL>
     VTK_TYPE ElementType( const CELL<dim>* const elmt ) const;

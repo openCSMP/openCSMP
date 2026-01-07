@@ -1,9 +1,0 @@
-<map id="csmp::Element_Test::run" name="csmp::Element_Test::run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,46,173,72"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_element___test.html#aa374fbf9d96440ee6fa99d9e32cbe82d" title="using a quadrilateral element for testing" alt="" coords="237,5,395,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,44,221,37,221,42,174,49"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_element___test.html#a94508f02ce29177b079bed091c271a0e" title=" " alt="" coords="221,71,411,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="174,68,206,73,205,78,173,73"/>
-<area shape="rect" id="Node000004" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="459,78,589,104"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="412,88,443,88,443,94,412,94"/>
-</map>

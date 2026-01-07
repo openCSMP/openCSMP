@@ -1,7 +1,0 @@
-<map id="csmp::AndersonianBoundaryStressVisitor" name="csmp::AndersonianBoundaryStressVisitor">
-<area shape="rect" id="Node000001" title="Apply stresses to the boundaries of a three&#45;dimensional geomechanic model." alt="" coords="5,624,202,797"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_visitor.html" title=" " alt="" coords="33,366,175,575"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,590,106,624,101,624,101,590"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_visitor.html" title=" " alt="" coords="33,5,175,295"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="106,310,106,366,101,366,101,310"/>
-</map>

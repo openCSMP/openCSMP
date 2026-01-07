@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricLinearPyramid::OutputNodeDataToVTK" name="csmp::IsoparametricLinearPyramid::OutputNodeDataToVTK">
-<area shape="rect" id="Node000001" title="prints the current finite element into a visualisation toolkit (VTK) textfile for visual examination" alt="" coords="303,13,518,54"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_linear_pyramid___test.html#abc57714be14e02c99206ac6d94c81cb3" title=" " alt="" coords="5,5,255,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="287,36,255,36,255,30,287,30"/>
-</map>

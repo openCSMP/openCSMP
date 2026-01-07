@@ -70,11 +70,6 @@ Region<dim>&  Region<dim>::operator=( const Region& g )
 
 
 
-template<uint32_t dim>
-Region<dim>::~Region()
-{
-}
-
 
 
 
@@ -114,11 +109,11 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // pushing back the pointers to the interior elements
   for ( size_t i : info.interior_elmts )
-    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
+    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),static_cast<long>(i))) );
 
   // assigning pointers to the perimeter elements
   for ( size_t i : info.perimeter_elmts )
-    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),i)) );
+    this->cell_vec_.push_back( &(*next(mesh.ElementsBegin(),static_cast<long>(i))) );
 
   // building the node vector
   // ------------------------
@@ -127,17 +122,17 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // assigning pointers to the interior nodes
   for ( size_t i : info.interior_nodes )
-    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),static_cast<long>(i))) );
 
   // assigning pointers to the perimeter nodes
   for ( size_t i : info.perimeter_nodes )
-    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),i)) );
+    this->node_vec_.push_back( &(*next(mesh.NodesBegin(),static_cast<long>(i))) );
 
   this->SortVectors( info.interior_elmts.size(), info.interior_nodes.size() );
 
   // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
   // -------------------------------------------------------------------------------------------------
-  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( static_cast<long>(info.interior_elmts.size()) );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------
@@ -190,7 +185,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
   // building the vector of vectors of those faces of the elements that lie on the subdomain perimeter
   // -------------------------------------------------------------------------------------------------
-  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( static_cast<long>(info.interior_elmts.size()) );
 
   // allocating the storage for boundary properties
   // ----------------------------------------------

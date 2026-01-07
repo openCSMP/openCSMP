@@ -1,5 +1,0 @@
-<map id="csmp::VData::CreateConsistentLineElementOrientations2D" name="csmp::VData::CreateConsistentLineElementOrientations2D">
-<area shape="rect" id="Node000001" title="aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the ..." alt="" coords="5,5,214,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#aeefbee5ba35b5eff9ab7c17751404c08" title="get type; a mesh is of hybrid&#45;element type if it contains multiple element types" alt="" coords="262,5,454,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,23,246,23,246,28,214,28"/>
-</map>

@@ -1,9 +1,0 @@
-<map id="csmp::Brine::Brine" name="csmp::Brine::Brine">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,78,135,104"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_critical_curve.html#a701178f62bd4859b617a62863dca9c0b" title=" " alt="" coords="191,5,328,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,75,183,49,185,54,111,80"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_threephase_h_l_v.html#a423662bc313dbfac0fcf4e5edd3ea0de" title="Pressure&#45;temperature coordinates of threephase Halite+Liquid+Vapor coexistence." alt="" coords="183,71,337,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="135,88,167,88,167,94,135,94"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_water.html#a25dbcb3664c0123565b84e01ce080b14" title=" " alt="" coords="191,136,328,161"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="116,102,201,128,200,133,114,107"/>
-</map>

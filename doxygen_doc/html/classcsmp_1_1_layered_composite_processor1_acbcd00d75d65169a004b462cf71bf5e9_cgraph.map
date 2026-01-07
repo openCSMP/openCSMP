@@ -1,7 +1,0 @@
-<map id="csmp::LayeredCompositeProcessor1::LayeredCompositeProcessor1" name="csmp::LayeredCompositeProcessor1::LayeredCompositeProcessor1">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,242,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_layered_composite_processor1.html#aad29df6350147e36d610ee3f22eb8424" title=" " alt="" coords="290,5,526,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="242,23,274,23,274,28,242,28"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6c42e9e0529dda9c61a77681f2735608" title="detects lines beginning with #, %, –; char* not constant because first comment char gets replaced by ..." alt="" coords="574,13,726,38"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="527,23,559,23,559,28,527,28"/>
-</map>

@@ -105,9 +105,9 @@ class FiniteDifferenceGrid {
 #endif
   
   private:
-    double*    grid;
-    double     xresolution, yresolution;
-    double     x_min, y_min, x_max, y_max, z_min, z_max;
+    double*  grid = nullptr;
+    double   xresolution, yresolution;
+    double   x_min, y_min, x_max, y_max, z_min, z_max;
     int32_t  size_x, size_y, size_z;
     int32_t  xfr, yfr, zfr, rowlength;
 

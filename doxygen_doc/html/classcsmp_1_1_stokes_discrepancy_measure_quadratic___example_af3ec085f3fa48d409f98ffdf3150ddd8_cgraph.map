@@ -1,7 +1,0 @@
-<map id="csmp::StokesDiscrepancyMeasureQuadratic_Example::Run" name="csmp::StokesDiscrepancyMeasureQuadratic_Example::Run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,27,231,68"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="286,5,416,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="231,31,270,26,270,31,231,36"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="279,55,423,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="231,58,263,62,263,68,231,64"/>
-</map>

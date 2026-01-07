@@ -1,6 +1,0 @@
-<map id="csmp::Boundary::Boundary" name="csmp::Boundary::Boundary">
-<area shape="rect" id="Node000001" title="create empty boundary with appropriately resized property storage" alt="" coords="5,29,185,55"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="57,31,49,21,54,11,69,5,95,3,123,5,138,12,135,17,122,10,95,8,71,10,57,15,54,20,61,27"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_boundary.html#aaaaaee85f55950c3c6564dd098ecf1da" title="methods required for the LocalVariableStorage" alt="" coords="233,29,419,55"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="185,40,217,40,217,45,185,45"/>
-</map>

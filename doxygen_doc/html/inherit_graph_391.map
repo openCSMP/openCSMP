@@ -1,7 +1,0 @@
-<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$classcsmp_1_1_vector_operator.html" title="Vector operator." alt="" coords="5,39,155,79"/>
-<area shape="rect" id="Node000001" href="$classcsmp_1_1_pore_volume_r_h_s.html" title="Accumulates the pore&#45;volume &#45; advected variable product into the right&#45;hand vector as divided by the ..." alt="" coords="203,5,364,46"/>
-<area shape="poly" id="edge521_Node000000_Node000001" title=" " alt="" coords="169,42,202,36,202,42,170,47"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_source_term_r_h_s.html" title=" " alt="" coords="203,71,364,111"/>
-<area shape="poly" id="edge522_Node000000_Node000002" title=" " alt="" coords="170,70,203,76,202,81,169,76"/>
-</map>

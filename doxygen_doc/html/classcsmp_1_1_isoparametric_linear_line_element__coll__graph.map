@@ -1,9 +1,0 @@
-<map id="csmp::IsoparametricLinearLineElement" name="csmp::IsoparametricLinearLineElement">
-<area shape="rect" id="Node000001" title="line element with linear interpolation functions for 1D, 2D and 3D models and variable number of inte..." alt="" coords="5,1605,223,1890"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="32,778,196,1556"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="117,1571,117,1605,112,1605,112,1571"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="48,361,181,646"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="117,646,117,761,112,761,112,646"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_dense_matrix.html" title=" " alt="" coords="48,5,181,290"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="117,305,117,361,112,361,112,305"/>
-</map>

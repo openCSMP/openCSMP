@@ -1,5 +1,0 @@
-<map id="csmp::LinearTriangle::dN" name="csmp::LinearTriangle::dN">
-<area shape="rect" id="Node000001" title="first derivatives of element interpolation functions" alt="" coords="5,13,173,38"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_triangle.html#ab4468ebd9e3ff009a19b27543bfeff0f" title="computes and returns the volume of the element which is an area for a surface&#45; and a length for a lin..." alt="" coords="221,5,363,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,23,205,23,205,28,173,28"/>
-</map>

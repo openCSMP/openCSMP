@@ -1,7 +1,0 @@
-<map id="csmp::CornerPointCell" name="csmp::CornerPointCell">
-<area shape="rect" id="Node000001" title="CornerPointCell provides the necessary functionality to construct valid Finite Elements out of distor..." alt="" coords="5,1107,229,1615"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_polygon_cell.html" title=" " alt="" coords="24,346,211,1058"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,1073,120,1107,115,1107,115,1073"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_polygon_grid_manager.html" title=" " alt="" coords="32,5,203,275"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="120,275,120,329,115,329,115,275"/>
-</map>

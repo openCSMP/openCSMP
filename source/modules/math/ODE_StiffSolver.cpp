@@ -318,7 +318,7 @@ in the diagonalization process.
 */
 void ODE_StiffSolver::LU_Decomposition( double **a, size_t n, int32_t *indx, double& d )
 {
-	int32_t i,imax = std::numeric_limits<double>::quiet_NaN(),j,k;
+	int32_t i,imax = numeric_limits<double>::quiet_NaN(),j,k;
 	double big,dum,sum,temp;
 	double *vv;
 
@@ -757,10 +757,10 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
                                           double& xx, double htry, double input_eps,
 	                                        double yscal[], double& hdid, double& hnext )
 {
-	int32_t i,iq,k,kk,km= std::numeric_limits<double>::quiet_NaN();
+	int32_t i,iq,k,kk,km= numeric_limits<double>::quiet_NaN();
 	static int32_t first=1,kmax1,kopt,nvold = -1;
 	static double epsold = -1.0,xnew;
-	double eps1,errmax= std::numeric_limits<double>::quiet_NaN(),fact,h,red,scale=std::numeric_limits<double>::quiet_NaN(),work,wrkmin,xest;
+	double eps1,errmax= numeric_limits<double>::quiet_NaN(),fact,h,red,scale=numeric_limits<double>::quiet_NaN(),work,wrkmin,xest;
 	static double a[9];                            // 9=IMAXX+1
 	static double alf[8][8];                       // 8=KMAXX+1
 	static int32_t nseq[9]={0,2,6,10,14,22,34,50,70};  // 8=IMAXX+1
@@ -805,7 +805,7 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
 			pzextr(k,xest,stifbs_yseq,y,stifbs_yerr,nv);
 			if (k != 1) {
 				errmax=TINY;
-                                for (i=1;i<=nv;i++) errmax=std::max(errmax,fabs(stifbs_yerr[i]/yscal[i]));
+                                for (i=1;i<=nv;i++) errmax=max(errmax,fabs(stifbs_yerr[i]/yscal[i]));
 				errmax /= input_eps;
 				km=k-1;
 				stifbs_err[km]=pow(errmax/SAFE1,1.0/(2*km+1));
@@ -834,8 +834,8 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
 			}
 		}
 		if (exitflag) break;
-                red=std::min(red,REDMIN);
-                red=std::max(red,REDMAX);
+                red=min(red,REDMIN);
+                red=max(red,REDMAX);
 		h *= red;
 		reduct=1;
 	}
@@ -844,7 +844,7 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
 	first=0;
 	wrkmin=1.0e35;
 	for (kk=1;kk<=km;kk++) {
-            fact=std::max(stifbs_err[kk],SCALMX);
+            fact=max(stifbs_err[kk],SCALMX);
 		work=fact*a[kk+1];
 		if (work < wrkmin) {
 			scale=fact;
@@ -854,7 +854,7 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
 	}
 	hnext=h/scale;
 	if (kopt >= k && kopt != kmax1 && !reduct) {
-            fact=std::max(scale/alf[kopt-1][kopt],SCALMX);
+            fact=max(scale/alf[kopt-1][kopt],SCALMX);
 		if (a[kopt+1]*fact <= wrkmin) {
 			hnext=h/fact;
 			kopt++;
@@ -1089,26 +1089,25 @@ of equations has been correctly parsed from the input file.
 */
 void ODE_StiffSolver::Out() const
  {
-    int32_t n;
-    cout <<"\nODE_StiffSolver::Out:"<< endl;
-    cout <<"\nrighthand sides of ODEs: "<< endl;
-    vector<SumOfProductsWithExponents>::const_iterator  it;
-    vector<SumOfProducts>::const_iterator               ait;
-    for ( n=0, it=odes.begin(); it!=odes.end(); it++, n++ ) 
-      {
-         cout <<"\nEquation: "<< n; 
-         (*it).Out();
-      }
+    cout << "\nODE_StiffSolver::Out:\n";
+    cout << "\nRighthand sides of ODEs:\n";
+
+    for (size_t n = 0; n < odes.size(); ++n) {
+        cout << "\nEquation: " << n;
+        odes[n].Out();
+    }
+
     cout << endl;
-    if ( !eqns.empty() )
-      {
-          cout <<"\nAdditional algebraic equations: "<< endl;
-          for ( n=-1, ait=eqns.begin(); ait!=eqns.end(); ait++, n-- )
-            {
-               cout << n <<" ";
-               (*ait).Out();
-            }
-      }
+
+    if (!eqns.empty()) {
+        cout << "\nAdditional algebraic equations:\n";
+        // Negative numbering, decrementing from -1
+        for (size_t i = 0; i < eqns.size(); ++i) {
+            int n = -static_cast<int>(i + 1);  // -1, -2, -3, ...
+            cout << n << " ";
+            eqns[i].Out();
+        }
+    }
  }                  
 
 
@@ -1239,7 +1238,7 @@ dependent variables.
 void ODE_StiffSolver::ReadODEsFrom( const char* file )
  {
     char    c, text_line[3000];
-    double  exp, K= std::numeric_limits<double>::quiet_NaN();
+    double  exp, K= numeric_limits<double>::quiet_NaN();
     int32_t coeff_idx(0), idx, i, eq_counter = 0;
     char    *token, *sub1, *sub2, 
             temp[3000], temp1[3000], temp2[3000];
@@ -1526,7 +1525,7 @@ void ODE_StiffSolver::ReadODEsFrom( const char* file,
                                     vector<pair<int32_t,string> >& independent_comps )
  {
     char    c, text_line[5000];
-    double  exp, K=std::numeric_limits<double>::quiet_NaN();
+    double  exp, K=numeric_limits<double>::quiet_NaN();
     int32_t coeff_idx{UNSPECIFIED}, idx, i, n, eq_counter = 0;
     char    *token, *sub1, 
             temp[5000], temp1[5000], temp2[5000];

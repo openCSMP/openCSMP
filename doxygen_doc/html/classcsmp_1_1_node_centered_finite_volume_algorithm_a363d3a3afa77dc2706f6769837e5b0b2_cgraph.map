@@ -1,5 +1,0 @@
-<map id="csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults_NonlinearNewtonRaphson" name="csmp::NodeCenteredFiniteVolumeAlgorithm::OutputResults_NonlinearNewtonRaphson">
-<area shape="rect" id="Node000001" title="multiphase version for range 0..1 (adv1=wetting phase=1)" alt="" coords="5,5,218,61"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="266,13,410,54"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,30,250,30,250,36,218,36"/>
-</map>

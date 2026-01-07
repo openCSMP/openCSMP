@@ -2832,12 +2832,53 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
   }
 
 
-  // standard properties present everywhere in the model
+  // regions - just looking at model
   if ( prop_key.place == NODE || prop_key.place == ELEMENT || prop_key.place == ELEMENT_INTEGRATION_POINT ||
        prop_key.place == FACET_INTEGRATION_POINT || prop_key.place == SECTOR_INTEGRATION_POINT ) {
     this->Region( "Model" ).MinMaxOf( prop_key, vmin, vmax );
     return;
   }
+  
+  // boundaries
+  if ( prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
+       prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
+       // are there any?
+       if ( this->Boundaries() == 0U ) {
+            vmin = vmax = numeric_limits<double>::quiet_NaN();
+            csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any boundaries; nothing could be done" );
+            return;
+         }
+       else {
+          vmin = 1.0e+30; vmax = -1.0e+30;
+          double bmin, bmax;
+          for ( auto bit=this->BoundariesBegin(); bit!=this->BoundariesEnd(); ++bit ) {
+                (*bit).second.MinMaxOf( prop_key, bmin, bmax );
+                vmin = min( vmin, bmin );
+                vmax = max( vmax, bmax );
+            }
+         }
+       return;
+    }
+
+  // split boundaries
+  if ( prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
+       prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
+       if ( this->SplitBoundaries() == 0U ) {
+            vmin = vmax = numeric_limits<double>::quiet_NaN();
+            csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any split boundaries; nothing could be done" );
+            return;
+         }
+       else {
+          vmin = 1.0e+30; vmax = -1.0e+30;
+          double bmin(vmin), bmax(vmax);
+          for ( auto bit=this->SplitBoundariesBegin(); bit!=this->SplitBoundariesEnd(); ++bit ) {
+                (*bit).second.MinMaxOf( prop_key, bmin, bmax );
+                vmin = min( vmin, bmin );
+                vmax = max( vmax, bmax );
+            }
+         }
+       return;
+    }
 
 
   // not distinguishing between unique and non-unique regions
@@ -2901,102 +2942,91 @@ void Model<dim>::MinMaxOf( const char* prop, double& vmin, double& vmax ) const
 
 
   // boundaries
-  if ( prop_key.place == BOUNDARY || prop_key.place == FACE || prop_key.place == FACE_INTEGRATION_POINT ||
-       prop_key.place == FACE_FACET_INTEGRATION_POINT || prop_key.place == FACE_SECTOR_INTEGRATION_POINT ) {
-    if ( this->Boundaries() == 0U ) {
-         vmin = vmax = numeric_limits<double>::quiet_NaN();
-         csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any boundaries; nothing could be done" );
-         return;
-      }
-    VectorVariable<dim> vc;
-    TensorVariable<dim> ts;
-    typename map<string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
-    switch( prop_key.type ) {
-         case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
-           return;
-         case VECTOR:
-              (*git).second.Read( prop_key, vc );
-              vmin = vmax = vc.Length();
-           return;
-         case TENSOR:
-              minMaxEigenValues( ts, vmin, vmax );
-           return;
-         default:
-           csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
-      }
-    double  gmin( vmin ), gmax( vmax );
-    while ( git != this->BoundariesEnd() ) {
-        switch( prop_key.type ) {
-             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
-               return;
-             case VECTOR:
-                  (*git).second.Read( prop_key, vc );
-                  vmin = vmax = vc.Length();
-               return;
-             case TENSOR:
-                  minMaxEigenValues( ts, vmin, vmax );
-               return;
-             default:
-               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
-          }
-        gmin = min( gmin, vmin );
-        gmax = max( gmax, vmax );
-        git++;
-      }
-    vmin = gmin;
-    vmax = gmax;
-    return;
-  }
+  if ( prop_key.place == BOUNDARY ) {
+      VectorVariable<dim> vc;
+      TensorVariable<dim> ts;
+      typename map<string, csmp::Boundary<dim> >::const_iterator  git( this->BoundariesBegin() );
+      switch( prop_key.type ) {
+           case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+             return;
+           case VECTOR:
+                (*git).second.Read( prop_key, vc );
+                vmin = vmax = vc.Length();
+             return;
+           case TENSOR:
+                minMaxEigenValues( ts, vmin, vmax );
+             return;
+           default:
+             csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+        }
+      double  gmin( vmin ), gmax( vmax );
+      while ( git != this->BoundariesEnd() ) {
+          switch( prop_key.type ) {
+               case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+                 return;
+               case VECTOR:
+                    (*git).second.Read( prop_key, vc );
+                    vmin = vmax = vc.Length();
+                 return;
+               case TENSOR:
+                    minMaxEigenValues( ts, vmin, vmax );
+                 return;
+               default:
+                 csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "Boundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+            }
+          gmin = min( gmin, vmin );
+          gmax = max( gmax, vmax );
+          git++;
+        }
+      vmin = gmin;
+      vmax = gmax;
+      return;
 
-
+  } // end prop placement::Boundary
+  
   // split boundaries
-  if ( prop_key.place == SPLIT_BOUNDARY || prop_key.place == INTER_FACE || prop_key.place == INTER_FACE_INTEGRATION_POINT ||
-       prop_key.place == INTER_FACE_FACET_INTEGRATION_POINT || prop_key.place == INTER_FACE_SECTOR_INTEGRATION_POINT ) {
-    if ( this->SplitBoundaries() == 0U ) {
-         vmin = vmax = numeric_limits<double>::quiet_NaN();
-         csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "model does not contain any split boundaries; nothing could be done" );
-         return;
-      }
-    typename map<string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
-    VectorVariable<dim> vc;
-    TensorVariable<dim> ts;
-    switch( prop_key.type ) {
-         case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
-           return;
-         case VECTOR:
-              (*git).second.Read( prop_key, vc );
-              vmin = vmax = vc.Length();
-           return;
-         case TENSOR:
-              minMaxEigenValues( ts, vmin, vmax );
-           return;
-         default:
-           csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
-      }
-    double  gmin( vmin ), gmax( vmax );
-    while ( git != this->SplitBoundariesEnd() ) {
-        switch( prop_key.type ) {
-             case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
-               return;
-             case VECTOR:
-                  (*git).second.Read( prop_key, vc );
-                  vmin = vmax = vc.Length();
-               return;
-             case TENSOR:
-                  minMaxEigenValues( ts, vmin, vmax );
-               return;
-             default:
-               csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
-          }
-        gmin = min( gmin, vmin );
-        gmax = max( gmax, vmax );
-        git++;
-      }
-    vmin = gmin;
-    vmax = gmax;
-  }
+  if ( prop_key.place == SPLIT_BOUNDARY ) {
+      VectorVariable<dim> vc;
+      TensorVariable<dim> ts;
+      typename map<string, csmp::SplitBoundary<dim> >::const_iterator  git( this->SplitBoundariesBegin() );
+      switch( prop_key.type ) {
+           case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+             return;
+           case VECTOR:
+                (*git).second.Read( prop_key, vc );
+                vmin = vmax = vc.Length();
+             return;
+           case TENSOR:
+                minMaxEigenValues( ts, vmin, vmax );
+             return;
+           default:
+             csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+        }
+      double  gmin( vmin ), gmax( vmax );
+      while ( git != this->SplitBoundariesEnd() ) {
+          switch( prop_key.type ) {
+               case SCALAR: vmin = vmax = (*git).second.Read( prop_key );
+                 return;
+               case VECTOR:
+                    (*git).second.Read( prop_key, vc );
+                    vmin = vmax = vc.Length();
+                 return;
+               case TENSOR:
+                    minMaxEigenValues( ts, vmin, vmax );
+                 return;
+               default:
+                 csmp_error.Note( ERROR, "Model<dim>::MinMaxOf", prop, "SplitBoundary property placements ARRAY/FLAGGEDARRAY not handled yet" );
+            }
+          gmin = min( gmin, vmin );
+          gmax = max( gmax, vmax );
+          git++;
+        }
+      vmin = gmin;
+      vmax = gmax;
+   }
 
 } // end MinMaxOf
+
 
 
 

@@ -1,9 +1,0 @@
-<map id="csmp::Standard_IO_Handler::RecordLogicalChoice" name="csmp::Standard_IO_Handler::RecordLogicalChoice">
-<area shape="rect" id="Node000001" title="prompts user to make a binary choice which is collected from stdin returned" alt="" coords="264,71,450,111"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_elasticity___example.html#a39759e281a82b4a30cfb3ee1a74873aa" title=" " alt="" coords="35,5,186,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="262,69,185,48,187,43,263,64"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_mechanics_and_multiphase_flow___example.html#a24a03c910a9880a81cc74082ad1684ea" title=" " alt="" coords="5,71,216,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="248,94,216,94,216,88,248,88"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_stream_function___example.html#a484aa34e6b4ca259ce948451e9407fb6" title=" " alt="" coords="34,136,187,177"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="263,118,189,139,187,133,262,113"/>
-</map>

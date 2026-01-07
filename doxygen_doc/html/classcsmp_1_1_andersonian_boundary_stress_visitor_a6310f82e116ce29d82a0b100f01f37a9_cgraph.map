@@ -1,5 +1,0 @@
-<map id="csmp::AndersonianBoundaryStressVisitor::Visit" name="csmp::AndersonianBoundaryStressVisitor::Visit">
-<area shape="rect" id="Node000001" title="computes nodal forces ensuing from stress and weighted by number of nodes of the boundary face" alt="" coords="5,5,194,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="242,5,386,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="194,23,226,23,226,28,194,28"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="csmp::NodeCenteredFiniteVolumeTransport::BoundaryFluxes" name="csmp::NodeCenteredFiniteVolumeTransport::BoundaryFluxes">
-<area shape="rect" id="Node000001" title="returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged wi..." alt="" coords="262,39,484,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_node_centered_finite_volume_transport.html#a156e8e8b10ce7924ebb70181515f4999" title=" " alt="" coords="10,5,209,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="246,46,209,41,209,36,247,40"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_node_centered_finite_volume_transport.html#ac00d03a879b6c065102c63dc1192c8c9" title=" " alt="" coords="5,71,214,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="246,77,214,81,214,76,246,72"/>
-</map>

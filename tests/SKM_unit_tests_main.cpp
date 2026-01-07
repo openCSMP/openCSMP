@@ -155,6 +155,7 @@ using namespace std;
 using namespace csmp;
 
 
+
 /**  Unit Test Development
  
 @todo ModelSubDomain_Test   extend to cover extensive functionality
@@ -186,11 +187,8 @@ int main()
 
 // REFACTORING
 /*
-  const bool test_fundamentals(false),
-             test_interdependent1(false),
-             test_interdependent2(false),
-             test_interfaces(false),
-             test_composite(false),
+  const bool test_fundamentals(false), test_interdependent1(false), test_interdependent2(false),
+             test_interfaces(false), test_composite(false),
              test_refactoring(true), // <-------------
              test_new_developments(false);
 */
@@ -213,8 +211,21 @@ int main()
     if ( test_refactoring ) {
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+        
+        refactored.addTest( new LocalVariableStorage_Test() );
+        
+        /*
+            Compares physical space with parametric space computations
+            Not using test framework yet but printing everything to std::cerr
+        */
+//        refactored.addTest( new GenericFiniteVolumeTransport_Test() );  // TODO: understand why test is failing
 
-    refactored.addTest( new ModelComparator_Test() );
+// tested: 6/1/26: no speed-up from extra inlining, complications when attempting to remove macros in LocalVariableStorageArithmetic
+// added new method to read vecs, tensors and arrays using declarative programming
+//        refactored.addTest( new VariableStorageSpeed_Test() );
+                
+        
+//        refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
 
 // Prism-Hexa testing (6/12/25). fixed neighbor connectivity in Prism_Hexa vset.
 //    refactored.addTest( new VData_Test() );
@@ -234,9 +245,10 @@ int main()
         // actually running the test
         refactored.run();
         long nFail = refactored.report();
+        total_failures += nFail;
         refactored.free();
         cerr << "\nunit_tests_main: 5. CSMP refactored and new functionality: Total unit test failures: " << nFail << endl;
-        
+
     } // end refactoring
 
 

@@ -59,7 +59,7 @@ class SplitBoundaryInterface {
     std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region, bool retain_elmts_as_intervening_elements );
 
     /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
-    std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1, const char* region2 );
+    std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1_name, const char* region2_name );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
     std::pair<std::string,bool>  InsertRegionIntoSplitBoundary( const char* split_boundary, int32_t material_id_for_new_elements );
@@ -76,7 +76,12 @@ class SplitBoundaryInterface {
     /// Removes splitboundary including interfaces, but does not fuse the mesh back together again
     void RemoveSplitBoundary( csmp::SplitBoundary<dim>&, bool erase_interfaces );
 
-    std::string MergeSplitBoundaries( const char* new_sb_name, const std::set<std::string> &splitboundaries);
+    /// Merges supplied range od SplitBoundaries into consistently named new SB, original SBs are removed
+    std::string MergeSplitBoundaries( const char* new_sb_name, const std::set<std::string>& splitboundaries );
+
+    /// combines the input SBs into a single SplitBoundary with the exact new name; by contrast with Merge.. method the input SplitBoudaries are retained
+    void CreateNonUniqueSplitBoundaryGroup( const std::set<std::string>& input_split_boundaries, const char* exact_new_split_boundary_name );
+    
 
     // -----------------------------------------------------------
     // Input/output
@@ -106,6 +111,7 @@ class SplitBoundaryInterface {
     bool AddSplitBoundary( const char* name,
                            typename std::vector<InterFace<dim>*>::iterator first,
                            typename std::vector<InterFace<dim>*>::iterator last );
+                   
  protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };

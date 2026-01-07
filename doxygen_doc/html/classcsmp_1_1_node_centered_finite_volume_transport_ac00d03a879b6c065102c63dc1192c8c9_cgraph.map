@@ -1,7 +1,0 @@
-<map id="csmp::NodeCenteredFiniteVolumeTransport::ModelOutflow" name="csmp::NodeCenteredFiniteVolumeTransport::ModelOutflow">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,214,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_node_centered_finite_volume_transport.html#a2801b5865f9c527e3560b2b9b1e5d911" title="returns inflow, outflow, and mismatch between these; calculation can FVs where variable is flagged wi..." alt="" coords="262,5,484,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="214,23,246,23,246,28,214,28"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="532,5,676,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="484,23,516,23,516,28,484,28"/>
-</map>

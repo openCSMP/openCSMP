@@ -1,7 +1,0 @@
-<map id="csmp::Element::BaryCenter" name="csmp::Element::BaryCenter">
-<area shape="rect" id="Node000001" title="the centre of gravity of the elemt" alt="" coords="204,35,387,60"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_element.html#ac5f6bea5ff639c59450f7ce825fbec8a" title="prints Element internal data and those of connected objects." alt="" coords="11,5,150,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="188,36,150,30,151,25,189,30"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_element.html#a7f2868b4e551a799340eb1b11d397216" title=" " alt="" coords="5,55,156,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="189,64,156,68,156,63,188,59"/>
-</map>

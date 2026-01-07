@@ -75,7 +75,7 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
     void Shrink( std::vector<Node<dim>*>& );
 */
     /// Local variable storage interface
-    virtual PLACEMENT Placement() const { return REGION; }
+    PLACEMENT Placement() const noexcept override final { return REGION; }
 
     // retrieving information
   
@@ -83,10 +83,12 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
     size_t InteriorNodes() const;
     size_t PerimeterNodes() const;
     size_t Cells() const;
-    size_t RenumberNodes() const;
+    size_t RenumberNodes() const override final;
 
 
     // accessors
+    
+    virtual void Accept( Visitor<dim>& ) override;
   
     Element<dim>* const E(size_t);
     Node<dim>* const N(size_t);

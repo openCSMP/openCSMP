@@ -1,5 +1,0 @@
-<map id="csmp::FiniteElement::dN_AtBarycenter" name="csmp::FiniteElement::dN_AtBarycenter">
-<area shape="rect" id="Node000001" title="returns first derivative of interpolaton functions at center of gravity; determinant of the Jacobian ..." alt="" coords="195,5,336,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element___test.html#a558d6c0823507f1e7faae23a3e49d74f" title="tests fem operations against provided data in text file" alt="" coords="5,5,147,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,28,147,28,147,23,179,23"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="csmp::HeterogeneityAndRateAwareModel::Initialize" name="csmp::HeterogeneityAndRateAwareModel::Initialize">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,35,199,75"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_heterogeneity_and_rate_aware_model.html#a8e7dbbfaae8bc5027704b7b0c8eed009" title="reads vt and makes some initiaisations" alt="" coords="247,5,443,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="199,41,231,37,231,42,200,46"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#a6a579a443121e2f7b2b150c2e8f15edc" title="Brooks&#45;Corey lambda parameter from VG m parameter, Lenhard et al. (1989)" alt="" coords="265,70,424,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,64,250,69,249,75,199,69"/>
-</map>

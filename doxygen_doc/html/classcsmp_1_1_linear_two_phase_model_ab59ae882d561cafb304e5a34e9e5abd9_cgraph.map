@@ -1,7 +1,0 @@
-<map id="csmp::LinearTwoPhaseModel::dGds" name="csmp::LinearTwoPhaseModel::dGds">
-<area shape="rect" id="Node000001" title="derivatives of gravitational flow (advection multipliers)" alt="" coords="5,39,198,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_two_phase_model.html#aa74ed58d643df6c15f2c52d35f4fbc9f" title="relative permeabilities" alt="" coords="246,5,438,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,43,230,39,231,44,199,48"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_linear_two_phase_model.html#a47e268be79c0ac2dbd3cd7da573844fc" title="relative permeabilities" alt="" coords="246,71,438,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="198,69,231,73,230,79,198,74"/>
-</map>

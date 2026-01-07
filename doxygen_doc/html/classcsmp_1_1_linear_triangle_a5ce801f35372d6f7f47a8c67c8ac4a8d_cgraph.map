@@ -1,7 +1,0 @@
-<map id="csmp::LinearTriangle::dN_At" name="csmp::LinearTriangle::dN_At">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,148,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_triangle.html#ada3239ff54f9a99ad4436a21534587bf" title=" " alt="" coords="196,5,338,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,23,180,23,180,28,148,28"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_linear_triangle.html#ab4468ebd9e3ff009a19b27543bfeff0f" title="computes and returns the volume of the element which is an area for a surface&#45; and a length for a lin..." alt="" coords="386,5,528,46"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="339,23,371,23,371,28,339,28"/>
-</map>

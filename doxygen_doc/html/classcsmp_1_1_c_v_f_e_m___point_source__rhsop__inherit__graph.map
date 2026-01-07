@@ -1,9 +1,0 @@
-<map id="csmp::CVFEM_PointSource_rhsop&lt; dim, CELL &gt;" name="csmp::CVFEM_PointSource_rhsop&lt; dim, CELL &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="8,1354,204,1552"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_c_v_f_e_m___math_operator_r_h_s.html" title=" " alt="" coords="5,1102,207,1305"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="109,1320,109,1354,104,1354,104,1320"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_math_operator_r_h_s.html" title=" " alt="" coords="11,564,201,1052"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="109,1067,109,1102,104,1102,104,1067"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_math_operator_r_h_s.html" title="Base class for FE or FV integrals accumulated into righthand vector." alt="" coords="27,5,186,493"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="109,508,109,565,104,565,104,508"/>
-</map>

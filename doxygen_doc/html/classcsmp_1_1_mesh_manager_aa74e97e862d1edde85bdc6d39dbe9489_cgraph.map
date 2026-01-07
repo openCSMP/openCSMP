@@ -1,5 +1,0 @@
-<map id="csmp::MeshManager::Initialize" name="csmp::MeshManager::Initialize">
-<area shape="rect" id="Node000001" title="sets up distributed storage for variables, finite elements, and mesh connectivity,..." alt="" coords="5,5,157,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_mesh_manager.html#ac603384f53e7404f73c8a3469c6c92a6" title="assigns the finite volume stencils to the finite volume policies of the element, face,..." alt="" coords="205,5,397,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,23,189,23,189,28,157,28"/>
-</map>

@@ -1,5 +1,0 @@
-<map id="csmp::EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase" name="csmp::EOS_CO2H2ONaCl_Spycher04::viscosityCarbonicPhase">
-<area shape="rect" id="Node000001" title="Viscosity of carbon dioxide." alt="" coords="5,5,208,61"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ab11a48c2adf63bb2f4536a3cd737684e" title="Density of carbonic phase." alt="" coords="256,5,448,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="208,30,240,30,240,36,208,36"/>
-</map>

@@ -1,8 +1,0 @@
-<map id="csmp::IndexTracker::Attach" name="csmp::IndexTracker::Attach">
-<area shape="rect" id="Node000001" title="Called when a new Index is copied using an existing Index." alt="" coords="5,29,143,70"/>
-<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="36,29,34,19,40,10,54,5,74,3,96,5,109,11,106,16,94,10,74,8,55,10,44,15,39,20,41,28"/>
-<area shape="rect" id="Node000002" href="$structcsmp_1_1_index.html#a459d7e434854a790a303dcc20cc47949" title=" " alt="" coords="213,12,335,37"/>
-<area shape="poly" id="edge2_Node000001_Node000002" title=" " alt="" coords="143,38,197,31,198,37,144,44"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_index_tracker.html#aab0c0d4cbc7ccf5495c08f87e1909aeb" title="print all currently registered Index objects" alt="" coords="191,61,357,86"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="144,55,175,59,175,64,143,61"/>
-</map>

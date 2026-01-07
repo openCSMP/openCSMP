@@ -1,5 +1,0 @@
-<map id="csmp::BoundaryStressVisitor::Visit" name="csmp::BoundaryStressVisitor::Visit">
-<area shape="rect" id="Node000001" title="computes nodal forces weighted by node" alt="" coords="5,5,197,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#ad41aa96d231c5754a999f38a5bc012a9" title="assigment: status of variable which determines how it is used in computations" alt="" coords="245,5,389,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="197,23,229,23,229,28,197,28"/>
-</map>

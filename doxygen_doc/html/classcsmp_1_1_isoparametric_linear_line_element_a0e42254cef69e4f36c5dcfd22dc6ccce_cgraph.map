@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricLinearLineElement::InnerRadius" name="csmp::IsoparametricLinearLineElement::InnerRadius">
-<area shape="rect" id="Node000001" title="returns the radius of the largest sphere that could be inscribed in the element" alt="" coords="5,5,181,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_isoparametric_linear_line_element.html#a0573db7ee73d6a73e8b6e510f148ad8c" title=" " alt="" coords="229,5,404,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,23,213,23,213,28,181,28"/>
-</map>

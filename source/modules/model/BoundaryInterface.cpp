@@ -1644,13 +1644,13 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishEdgeBoundariesOfBoxShaped
     returns index of first and last element of the checked region
 */
 template<uint32_t dim>
-static pair<size_t,size_t>  collectLowerDimensionalElementsFrom( Model<dim>& model, const char* region_name,
-                                                                 vector<Element<dim>*>& elements )
+static pair<long,long>  collectLowerDimensionalElementsFrom( Model<dim>& model, const char* region_name,
+                                                             vector<Element<dim>*>& elements )
  {
     ErrorHandler& csmp_error(ErrorHandler::Instance());
     
-    const size_t first_index{ elements.size() };
-    size_t       last_index{ first_index };
+    const long first_index = static_cast<long>(elements.size());
+    long       last_index{ first_index };
     
     if ( !model.ContainsRegion( region_name ) ) {
          csmp_error.Note( WARNING, "collectLowerDimensionalElementsFrom", region_name,
@@ -1729,7 +1729,7 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::EstablishBoxBoundaries()
                              "model is not box-shaped, nothing was done");
            return false;
         }
-      pair<size_t,size_t> top{0,0}, irregular{0,0}, front{0,0}, back{0,0};
+      pair<long,long> top{0,0}, irregular{0,0}, front{0,0}, back{0,0};
       
       if ( model->ContainsRegion("TOP") )
         top = collectLowerDimensionalElementsFrom( *model, "TOP", elmts_to_become_faces );
@@ -1915,8 +1915,8 @@ pair<string,bool>  BoundaryInterface<dim, BOUNDARY_COMPLEX>::CreateExternalBound
     // 1. compiling the unique regions that will be used as input for boundary creation
     //    and making a map of their elements that will be converted to faces
     // ---------------------------------------------------------------------
-	  map<string,pair<size_t,size_t>>  eligibleRegions; // first and last element idx for input region
-    vector<Element<dim>*>            elmts_to_become_faces;
+	  map<string,pair<long,long>>  eligibleRegions; // first and last element idx for input region
+    vector<Element<dim>*>        elmts_to_become_faces;
     elmts_to_become_faces.reserve( model->Mesh().Elements() );
  
 	  for ( auto it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )

@@ -1,7 +1,0 @@
-<map id="mjl::Vertex" name="mjl::Vertex">
-<area shape="rect" id="Node000001" title=" " alt="" coords="60,323,148,593"/>
-<area shape="rect" id="Node000002" href="$classmjl_1_1_node.html" title=" " alt="" coords="5,36,86,244"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,259,82,323,77,324,65,260"/>
-<area shape="rect" id="Node000003" href="$classmjl_1_1_point.html" title=" " alt="" coords="110,5,218,275"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="139,290,132,324,127,323,134,289"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="csmp::ExplicitMassBasedTransport&lt; dim, STP &gt;" name="csmp::ExplicitMassBasedTransport&lt; dim, STP &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,1328,227,1587"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_explicit_node_centered_finite_volume_transport.html" title=" " alt="" coords="5,900,227,1280"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,1295,119,1328,114,1328,114,1295"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_node_centered_finite_volume_transport.html" title="base class for node&#45;centered generic finite volume calculations on an entire Model object" alt="" coords="16,5,217,852"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="119,867,119,900,114,900,114,867"/>
-</map>

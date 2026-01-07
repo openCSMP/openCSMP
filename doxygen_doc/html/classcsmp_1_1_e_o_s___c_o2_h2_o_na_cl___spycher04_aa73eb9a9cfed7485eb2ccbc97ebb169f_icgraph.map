@@ -1,5 +1,0 @@
-<map id="csmp::EOS_CO2H2ONaCl_Spycher04::C_brine" name="csmp::EOS_CO2H2ONaCl_Spycher04::C_brine">
-<area shape="rect" id="Node000001" title="compressibility of brine" alt="" coords="257,5,437,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#af2894f36e375258ef96e9a96eb2cd08e" title="compressibility of aqueous phase with dissolved CO2" alt="" coords="5,5,209,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,28,209,28,209,23,241,23"/>
-</map>

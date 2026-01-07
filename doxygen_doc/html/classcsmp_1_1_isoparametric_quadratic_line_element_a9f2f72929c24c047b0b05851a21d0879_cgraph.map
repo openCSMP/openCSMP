@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricQuadraticLineElement::UnitNormal" name="csmp::IsoparametricQuadraticLineElement::UnitNormal">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,202,46"/>
-<area shape="rect" id="Node000002" href="$classmjl_1_1_edge.html#aa096f2213bacb2ee22c408a94a0f19ff" title="pivots an edge 90o clockwise around it&#39;s midpoint" alt="" coords="250,13,355,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="202,23,234,23,234,28,202,28"/>
-</map>

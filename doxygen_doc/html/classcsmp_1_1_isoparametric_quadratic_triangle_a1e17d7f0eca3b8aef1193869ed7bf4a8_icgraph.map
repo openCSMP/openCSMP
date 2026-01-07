@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricQuadraticTriangle::GaussPointsNearCorners" name="csmp::IsoparametricQuadraticTriangle::GaussPointsNearCorners">
-<area shape="rect" id="Node000001" title="sets the integration points in the inside of the triangle near the nodes (default is midside node int..." alt="" coords="264,5,488,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_mechanics_and_multiphase_flow___example.html#a24a03c910a9880a81cc74082ad1684ea" title=" " alt="" coords="5,5,216,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="248,28,216,28,216,23,248,23"/>
-</map>

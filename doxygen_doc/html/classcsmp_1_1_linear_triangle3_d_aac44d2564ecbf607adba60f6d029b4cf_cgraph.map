@@ -1,7 +1,0 @@
-<map id="csmp::LinearTriangle3D::OutputToVTK" name="csmp::LinearTriangle3D::OutputToVTK">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,23,165,64"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_triangle3_d.html#a4a3028362fc43fbdefc57a1892391f28" title="first derivatives of element interpolation functions" alt="" coords="213,5,397,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,32,197,28,198,33,165,37"/>
-<area shape="rect" id="Node000003" href="$group___c_s_m_p__global__enumerations.html#ga8413f7c3b4f238c5a98a846198d49469" title="some fixed string sizes (max filename length on NTFS partition / arbitrary #&lt;32k)" alt="" coords="226,55,384,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="165,50,211,55,210,60,164,55"/>
-</map>

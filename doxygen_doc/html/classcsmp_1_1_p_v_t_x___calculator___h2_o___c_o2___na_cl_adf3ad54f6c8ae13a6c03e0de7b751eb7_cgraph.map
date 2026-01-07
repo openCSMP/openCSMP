@@ -1,7 +1,0 @@
-<map id="csmp::PVTX_Calculator_H2O_CO2_NaCl::Equilibrate" name="csmp::PVTX_Calculator_H2O_CO2_NaCl::Equilibrate">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,49,201,90"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_p_v_t_x___calculator___h2_o___c_o2___na_cl.html#a19f85e768254008feb1e4f54b548763b" title="saturation of halite in the presence of water and carbonic phase else NaN is returned" alt="" coords="256,5,468,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="201,53,240,47,241,53,201,58"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_p_v_t_x___calculator___h2_o___c_o2___na_cl.html#a99ff05064bf5f16a529340d3afad6686" title="computes water saturation from the mass balance;" alt="" coords="249,85,476,126"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="201,80,233,85,233,90,201,85"/>
-</map>

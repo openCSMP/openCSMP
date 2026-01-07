@@ -1,5 +1,0 @@
-<map id="csmp::LinearElasticityC_VVCase" name="csmp::LinearElasticityC_VVCase">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,425,155,506"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_test.html" title=" " alt="" coords="19,5,141,377"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="83,392,83,425,78,425,78,392"/>
-</map>

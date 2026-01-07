@@ -1,5 +1,0 @@
-<map id="csmp::Parameter::DefineFromStdin" name="csmp::Parameter::DefineFromStdin">
-<area shape="rect" id="Node000001" title="define a physical variable at runtime, using console input (stdin)" alt="" coords="220,5,417,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_property_database.html#a50b012fcee349b7668d61132b6ac34ca" title="adding a property at runtime from the command line (NB: you should call method CreateProperty() of mo..." alt="" coords="5,5,172,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,28,172,28,172,23,204,23"/>
-</map>

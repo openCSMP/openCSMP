@@ -1,5 +1,0 @@
-<map id="csmp::GroundwaterDarcyVelocity::Calculate" name="csmp::GroundwaterDarcyVelocity::Calculate">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,5,223,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="271,5,415,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="223,23,255,23,255,28,223,28"/>
-</map>

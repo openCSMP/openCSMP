@@ -18,7 +18,7 @@ namespace csmp {
      
     @todo introduce option to choose XML type:
     
-    currently:  "<VTKFile type="UnstructuredGrid" version="0.9" byte_order="LittleEndian">"
+    currently:  "<VTKFile type="UnstructuredGrid" version="1.0" byte_order="LittleEndian">"
     
     but one should be able to switch to 1.0 etc., however this is currently not possible because the XML
     version is not a state variable of the VTU interface.
@@ -727,9 +727,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& initial_file_name,
                                           T timestep )
 {
     // avoid using duplicated properties
-    set<string> propertyNames;
-    for( typename list<string>::const_iterator it = propertyNamesList.begin(); it != propertyNamesList.end(); ++it)
-        propertyNames.insert(*it);
+    set<string> propertyNames( propertyNamesList.begin(), propertyNamesList.end() );
     return OutputDataToVTU( initial_file_name, propertyNames, subDomain, timestep );
 }
 
@@ -870,7 +868,7 @@ bool VTU_Interface<dim>::OutputDataToVTU( const string& initial_file_name,
     list<Index> fvsipIndices;
     list<Index> fvfipIndices;
     
-    for( set<string>::const_iterator it = propertyNames.begin(); it != propertyNames.end(); ++it )
+    for( auto it = propertyNames.begin(); it != propertyNames.end(); ++it )
     {
         const PLACEMENT variablePlacement( model_.Database().Placement( it->c_str() ) );
         // the right part of this if statement was added to be able to output variables placed on the MODEL
@@ -1104,7 +1102,7 @@ void VTU_Interface<dim>
                = GetConnectivityMapMultiBlock( subDomain );
     outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
-    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"1.0\" byte_order=\"LittleEndian\"" );
     /// Open multiblock section
     outputFile.OpenNode( "vtkMultiBlockDataSet");
     outputFile.OpenNode( "Block index=\"0\" name=\"Blocks\"" );
@@ -1152,10 +1150,10 @@ template<uint32_t dim>
 template<template <uint32_t> class CELL>
 bool VTU_Interface<dim>
 ::OutputFieldNodesAndElementDataToVTU( const string& fileName,
-                   const list<Index>& fieldDataIndices,
-                   const list<Index>& nodeIndices,
-                   const list<Index>& elementIndices,
-                   const ModelSubDomain<dim,CELL>& subDomain )
+                                       const list<Index>& fieldDataIndices,
+                                       const list<Index>& nodeIndices,
+                                       const list<Index>& elementIndices,
+                                       const ModelSubDomain<dim,CELL>& subDomain )
 {
   /// initialize file
   XML_Document outputFile;
@@ -1163,7 +1161,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
 
@@ -1172,7 +1170,6 @@ bool VTU_Interface<dim>
       OutputFieldDataToVTU<CELL>(outputFile, subDomain, fieldDataIndices );
 
   /// 2. Nodes and Element's data
-
   if( !nodeIndices.empty() || !elementIndices.empty() )
   {
       /// 2.1 create connectivity, open Piece section
@@ -1216,10 +1213,9 @@ template<uint32_t dim>
 template<template <uint32_t> class CELL>
 bool VTU_Interface<dim>
 ::OutputElementBarycentricDataToVTU( const string& fileName,
-                   const list<Index>& elementMatrixIndices,
-                   const ModelSubDomain<dim,CELL>& subDomain )
+                                     const list<Index>& elementMatrixIndices,
+                                     const ModelSubDomain<dim,CELL>& subDomain )
 {
-
   /// initialize file
   XML_Document outputFile;
   map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
@@ -1227,7 +1223,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1282,7 +1278,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1338,7 +1334,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1393,7 +1389,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1448,7 +1444,7 @@ bool VTU_Interface<dim>
   outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
 
   /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\"" );
+  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
 
   /// Open UnstructuredGrid section
   outputFile.OpenNode( "UnstructuredGrid" );
@@ -1489,10 +1485,12 @@ template bool VTU_Interface<2U>::OutputFiniteVolumeFacetIntegrationPointsDataToV
 template bool VTU_Interface<3U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
 void VTU_Interface<dim>::OutputFieldDataToVTU( XML_Document& outputFile,
-                                               const ModelSubDomain<dim,CELL>& subDomain,
+                                               const ModelSubDomain<dim,CELL>&,
                                                const list<Index>& indices )
 {
     outputFile.OpenNode( "FieldData");
@@ -1525,6 +1523,9 @@ template void VTU_Interface<3U>::OutputFieldDataToVTU(XML_Document&,const ModelS
 template void VTU_Interface<1U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<1U,InterFace>&,const list<Index>&);
 template void VTU_Interface<2U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<2U,InterFace>&,const list<Index>&);
 template void VTU_Interface<3U>::OutputFieldDataToVTU(XML_Document&,const ModelSubDomain<3U,InterFace>&,const list<Index>&);
+
+
+
 
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -1582,6 +1583,9 @@ template void VTU_Interface<3U>::OutputPointDataToVTU(XML_Document&,const ModelS
 template void VTU_Interface<1U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<1U,InterFace>&,const list<Index>&);
 template void VTU_Interface<2U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<2U,InterFace>&,const list<Index>&);
 template void VTU_Interface<3U>::OutputPointDataToVTU(XML_Document&,const ModelSubDomain<3U,InterFace>&,const list<Index>&);
+
+
+
 
 
 template<uint32_t dim>
@@ -1659,11 +1663,11 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const string& fileName,
   ofstream file( fullFileName.data(), ios::out );
 
   // header
-  file << "<?xml version=\"0.9\"?>" << endl << endl;
+  file << "<?xml version=\"1.0\"?>" << endl << endl;
   file << "<!--\n" << fileName << "\n-->" << endl << endl;
 
   // body - connectivity
-  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << endl;
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\">" << endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << endl;
   file << "\t\t\t<Points>" << endl << "\t\t\t\t<DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << endl << "\t\t\t\t</DataArray>" << endl << "\t\t\t</Points>" << endl;
@@ -1683,7 +1687,7 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const string& fileName,
   {
     file << "\t\t\t\t<DataArray type=\"Float64\" Name=\"" << propertyCaption << " " << i << "\" NumberOfComponents=\"3\" format=\"ascii\">" << endl;
     file << "\t\t\t\t\t";
-    for( int ii = 0; ii < 3; ++ii )
+    for( size_t ii = 0; ii < 3; ++ii )
       file << vectors.at( i ).at( ii ) << " ";
     file << endl;
     file << "\t\t\t\t</DataArray>" << endl;
@@ -1695,6 +1699,8 @@ bool VTU_Interface<dim>::OutputVectorsToVTU( const string& fileName,
   file.close();
   return true;
 }
+
+
 
 
 template<uint32_t dim>
@@ -1714,6 +1720,8 @@ bool VTU_Interface<dim>::OutputPrincipalVectorsToVTU( const string& fileName, co
 }
 
 
+
+
 /// user interface to output a tensor @todo (3) Check inner vector sizes
 template<uint32_t dim>
 bool VTU_Interface<dim>::OutputTensorToVTU( const string& fileName, const string& propertyCaption,
@@ -1727,11 +1735,11 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const string& fileName, const string
   ofstream file( fullFileName.data(), ios::out );
 
   // header
-  file << "<?xml version=\"0.9\"?>" << endl << endl;
+  file << "<?xml version=\"1.0\"?>" << endl << endl;
   file << "<!--\n" << fileName << "\n-->" << endl << endl;
 
   // body - connectivity
-  file << "<VTKFile type=\"UnstructuredGrid\" version=\"0.9\" byte_order=\"LittleEndian\">" << endl;
+  file << "<VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\">" << endl;
   file << "\t<UnstructuredGrid>\n\t\t<Piece NumberOfPoints=\"1\" NumberOfCells=\"1\">" << endl;
   file << "\t\t\t<Points>" << endl << "\t\t\t\t<DataArray type=\"Float64\" Name=\"Position\" NumberOfComponents=\"3\" format=\"ascii\">" << endl;
   file << "\t\t\t\t\t0.0 0.0 0.0" << endl << "\t\t\t\t</DataArray>" << endl << "\t\t\t</Points>" << endl;
@@ -1749,8 +1757,8 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const string& fileName, const string
   file << "\t\t\t<PointData Tensors=\"" << propertyCaption << "\">" << endl;
   file << "\t\t\t\t<DataArray type=\"Float64\" Name=\"" << propertyCaption << "\" NumberOfComponents=\"9\" format=\"ascii\">" << endl;
   file << "\t\t\t\t\t";
-  for( int i = 0; i < 3; ++i )
-    for( int ii = 0; ii < 3; ++ii )
+  for( size_t i = 0; i < 3; ++i )
+    for( size_t ii = 0; ii < 3; ++ii )
       file << tensor.at( i ).at( ii ) << " ";
 
   file << endl;
@@ -1761,6 +1769,8 @@ bool VTU_Interface<dim>::OutputTensorToVTU( const string& fileName, const string
   file.close();
   return true;
 }
+
+
 
 
 // WRITE VARIABLES
@@ -1833,9 +1843,9 @@ void VTU_Interface<dim>::WriteTensor( XML_Document& vtu, const size_t& MAX_ENTRI
     uint32_t rows( 3U );
     uint32_t cols( 3U );
     // inserting vector data
-    for( int column = 0; column < cols; ++column )
+    for( uint32_t column = 0; column < cols; ++column )
     {
-      for( int row = 0; row < rows; ++row )
+      for( uint32_t row = 0; row < rows; ++row )
       {
         val = ( ( row < dim ) && ( column < dim ) ? tensorVariable( row, column ) : 0.0 );
         stringNumber = numberToString( val );
@@ -1949,26 +1959,35 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   arrayTitle += "\" NumberOfComponents=\"1\" format=\"ascii\"";
   vtu.OpenNode( arrayTitle.c_str() );
   vtu.BringToLevel();
-  ScalarVariable scalarVariable;
   bool newLine( false );
   if( key.place == NODE )
   {
-      // looping over regions nodes
-      const auto domainNodesEnd( subDomain.NodesEnd() );
-      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
-      {
-          // inserting scalar data
-          (*it)->Read( key, scalarVariable );
-          WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
-      }
+      if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+          const auto domainNodesEnd( subDomain.NodesEnd() );
+          // looping over nodes of Region or Boundary
+          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+            // inserting scalar data
+            WriteScalar( vtu, MAX_ENTRIES_PER_LINE, (*it)->Read(key), entriesOfLine, newLine );
+     }
+     else { // SPLITBOUNDARY
+         // inside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first )
+           // inserting scalar data
+           WriteScalar(vtu,MAX_ENTRIES_PER_LINE,nit->Read(key),entriesOfLine,newLine);
+         // outside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first )
+           // inserting scalar data
+           WriteScalar(vtu,MAX_ENTRIES_PER_LINE,nit->Read(key),entriesOfLine,newLine);
+
+       }
   }
   else if( key.place == MODEL )
   {
-      model_.Read( key, scalarVariable );
-      WriteScalar(vtu,MAX_ENTRIES_PER_LINE,scalarVariable(),entriesOfLine,newLine);
+      WriteScalar( vtu, MAX_ENTRIES_PER_LINE, model_.Read(key), entriesOfLine, newLine );
   }
   else if( key.place == REGION || key.place == BOUNDARY || key.place == SPLIT_BOUNDARY )
   {
+      ScalarVariable scalarVariable;
       if ( key.place == REGION ) dynamic_cast<const Region<dim>&>(subDomain).Read( key, scalarVariable );
       else if ( key.place == BOUNDARY ) dynamic_cast<const Boundary<dim>&>(subDomain).Read( key, scalarVariable );
       else if ( key.place == SPLIT_BOUNDARY ) dynamic_cast<const SplitBoundary<dim>&>(subDomain).Read( key, scalarVariable );
@@ -1977,6 +1996,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if( key.place == ELEMENT_INTEGRATION_POINT  || key.place == FACE_INTEGRATION_POINT  || key.place == INTER_FACE_INTEGRATION_POINT )
   {
+      ScalarVariable scalarVariable;
       const auto domainElementsEnd( subDomain.CellsEnd() );
       for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
@@ -1991,6 +2011,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if( key.place == SECTOR_INTEGRATION_POINT  || key.place == FACE_SECTOR_INTEGRATION_POINT  || key.place == INTER_FACE_SECTOR_INTEGRATION_POINT )
   {
+      ScalarVariable scalarVariable;
       const auto domainElementsEnd( subDomain.CellsEnd() );
       for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
@@ -2009,6 +2030,7 @@ void VTU_Interface<dim>::WritePointDataArrayScalar( const Index& key, XML_Docume
   }
   else if(  key.place == FACET_INTEGRATION_POINT  || key.place == FACE_FACET_INTEGRATION_POINT  || key.place == INTER_FACE_FACET_INTEGRATION_POINT )
   {
+      ScalarVariable scalarVariable;
       const auto domainElementsEnd( subDomain.CellsEnd() );
       for( auto it = subDomain.CellsBegin(); it != domainElementsEnd; ++it )
       {
@@ -2060,14 +2082,28 @@ void VTU_Interface<dim>::WritePointDataArrayVector( const Index& key, XML_Docume
   bool newLine( false );
   if( key.place == NODE )
   {
-      // looping over regions nodes
-      const auto domainNodesEnd( subDomain.NodesEnd() );
-      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
-      {
-        // acquiring vector data
-        (*it)->Read( key, vectorVariable );
-        WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
-      }
+      if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+          // looping over nodes of Region or Boundary
+          const auto domainNodesEnd( subDomain.NodesEnd() );
+          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+          {
+            // acquiring vector data
+            (*it)->Read( key, vectorVariable );
+            WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+          }
+     }
+     else { // SPLITBOUNDARY
+         // inside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first ) {
+              nit->Read( key, vectorVariable );
+              WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+           }
+         // outside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first ) {
+              nit->Read( key, vectorVariable );
+              WriteVector(vtu,MAX_ENTRIES_PER_LINE,vectorVariable,entriesOfLine,newLine);
+           }
+       }
   }
   else if( key.place == MODEL )
   {
@@ -2154,6 +2190,10 @@ template void VTU_Interface<2U>::WritePointDataArrayVector(const Index&,XML_Docu
 template void VTU_Interface<3U>::WritePointDataArrayVector(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
 
+
+
+
+
 /// writes tensor point data array to xml document
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -2173,14 +2213,28 @@ void VTU_Interface<dim>::WritePointDataArrayTensor( const Index& key, XML_Docume
   TensorVariable<dim> tensorVariable;
   if( key.place == NODE )
   {
-      // looping over regions nodes
-      const auto domainNodesEnd( subDomain.NodesEnd() );
-      for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
-      {
-        // acquiring vector data
-        (*it)->Read( key, tensorVariable );
-        WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
-    }
+      if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+          // looping over nodes of Region or Boundary
+          const auto domainNodesEnd( subDomain.NodesEnd() );
+          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+            {
+              // acquiring vector data
+              (*it)->Read( key, tensorVariable );
+              WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+            }
+         }
+      else { // SPLITBOUNDARY
+         // inside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first ) {
+              nit->Read( key, tensorVariable );
+              WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+           }
+         // outside nodes
+         for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first ) {
+              nit->Read( key, tensorVariable );
+              WriteTensor(vtu,MAX_ENTRIES_PER_LINE,tensorVariable,entriesOfLine,newLine);
+           }
+       }
   }
   else if( key.place == MODEL )
   {
@@ -2267,6 +2321,9 @@ template void VTU_Interface<2U>::WritePointDataArrayTensor(const Index&,XML_Docu
 template void VTU_Interface<3U>::WritePointDataArrayTensor(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
 
+
+
+
 /// writes point data array ( array of scalars ) to xml document
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -2298,14 +2355,28 @@ void VTU_Interface<dim>::WritePointDataArrayScalarArray( const Index& key, XML_D
       bool newLine( false );
       if( key.place == NODE )
       {
-          // looping over regions nodes
-          const auto domainNodesEnd( subDomain.NodesEnd() );
-          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
-          {
-              // inserting scalar array data
-              (*it)->Read( key, arrayVariable );
-              WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
-          }
+        if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+            // looping over nodes of Region or Boundary
+            const auto domainNodesEnd( subDomain.NodesEnd() );
+            for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+              {
+                  // inserting scalar array data
+                  (*it)->Read( key, arrayVariable );
+                  WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+              }
+         }
+        else { // SPLITBOUNDARY
+           // inside nodes
+           for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first ) {
+                nit->Read( key, arrayVariable );
+                WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+             }
+           // outside nodes
+           for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first ) {
+                nit->Read( key, arrayVariable );
+                WriteScalar(vtu,MAX_ENTRIES_PER_LINE,arrayVariable[component],entriesOfLine,newLine);
+             }
+         }
       }
       else if( key.place == MODEL )
       {
@@ -2392,6 +2463,9 @@ template void VTU_Interface<1U>::WritePointDataArrayScalarArray(const Index&,XML
 template void VTU_Interface<2U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<2U,InterFace>&) const;
 template void VTU_Interface<3U>::WritePointDataArrayScalarArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
+
+
+
 /// writes point data array ( flagged array of scalars ) to xml document
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
@@ -2423,14 +2497,28 @@ void VTU_Interface<dim>::WritePointDataArrayScalarFlaggedArray( const Index& key
       bool newLine( false );
       if( key.place == NODE )
       {
-          // looping over regions nodes
-          const auto domainNodesEnd( subDomain.NodesEnd() );
-          for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
-          {
-            // inserting scalar flagged array data
-            (*it)->Read( key, flaggedArrayVariable );
-            WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
-          }
+        if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+            // looping over nodes of Region or Boundary
+            const auto domainNodesEnd( subDomain.NodesEnd() );
+            for( auto it = subDomain.NodesBegin(); it != domainNodesEnd; ++it )
+              {
+                // inserting scalar flagged array data
+                (*it)->Read( key, flaggedArrayVariable );
+                WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+              }
+         }
+        else { // SPLITBOUNDARY
+           // inside nodes
+           for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first ) {
+                nit->Read( key, flaggedArrayVariable );
+                WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+             }
+           // outside nodes
+           for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first ) {
+                nit->Read( key, flaggedArrayVariable );
+                WriteScalar(vtu,MAX_ENTRIES_PER_LINE,flaggedArrayVariable[component],entriesOfLine,newLine);
+             }
+         }
       }
       else if( key.place == MODEL )
       {
@@ -2518,9 +2606,11 @@ template void VTU_Interface<2U>::WritePointDataArrayScalarFlaggedArray(const Ind
 template void VTU_Interface<3U>::WritePointDataArrayScalarFlaggedArray(const Index&,XML_Document&,const ModelSubDomain<3U,InterFace>&) const;
 
 
-// WRITE ELEMENT DATA
-// --------------------
 
+
+
+// WRITE ELEMENT DATA
+// ------------------
 
 /// writes cell data array to xml document
 template<uint32_t dim>
@@ -2786,7 +2876,8 @@ template XML_Document* VTU_Interface<3U>::findConnectivityFile<InterFace>(map<co
 
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>::insertConnectivityFile( map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, XML_Document* newConnectivityFile, const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::insertConnectivityFile( map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap,
+                                                 XML_Document* newConnectivityFile, const ModelSubDomain<dim,CELL>& subDomain )
 {
   connectivityMap.insert( make_pair( &subDomain, newConnectivityFile ) );
   return true;
@@ -2842,6 +2933,8 @@ template XML_Document* VTU_Interface<2U>::ConnectivityFile(map<const ModelSubDom
 template XML_Document* VTU_Interface<3U>::ConnectivityFile(map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
 /// @todo (2-F) This should return filename up to user call
 template<uint32_t dim>
 bool VTU_Interface<dim>::CloseFile( const string& fileName, const string& extension, XML_Document& outputFile )
@@ -2858,14 +2951,18 @@ bool VTU_Interface<dim>::CloseFile( const string& fileName, const string& extens
   return true;
 }
 
+
+
 /// writes common header unstructured grids
 template<uint32_t dim>
 void VTU_Interface<dim>::EstablishConnectivityFileHeader( XML_Document& connectivityFile ) const
   {
     // writing problem header
-    connectivityFile.AddInfo( "xml version=\"0.9\"" );
+    connectivityFile.AddInfo( "xml version=\"1.0\"" );
     connectivityFile.AddComment( problemTitle_.c_str() );
   }
+
+
 
 // TODO: broken for splitboundary output
 /// establishes the connectivity file for given region
@@ -2879,14 +2976,12 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   if ( csmp_error.Verbose() )
       cout << "\nVTU_Interface<dim>::EstablishConnectivityFile: 'Writing connectivity file for sub domain " << DomainName( subDomain ) << " ...";
 
-  // reference to the domain of concern and renumbering its node indices
-  subDomain.RenumberNodes();
-
   // getting node and element count, creating working strings
   string stringNumber, stringCache;
 
   // opening piece node
-  const size_t DOMAIN_NODES( subDomain.Nodes() ), DOMAIN_ELEMENTS( subDomain.Cells() );
+  const size_t DOMAIN_NODES( subDomain.RenumberNodes() ), DOMAIN_ELEMENTS( subDomain.Cells() );
+  assert ( DOMAIN_NODES > 0 );
   stringNumber = to_string( DOMAIN_NODES );
   stringCache = "Piece NumberOfPoints=\""; stringCache += stringNumber;
   stringNumber = to_string( DOMAIN_ELEMENTS );
@@ -2900,167 +2995,342 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   size_t entriesOfLine( 2 ); const size_t MAX_COORDINATE_ENTRIES_PER_LINE( 5 );
   bool newLine( false );
   connectivityFile.BringToLevel();
-  // looping over all the region's nodes
-  const auto domainVerticesEnd( subDomain.NodesEnd() );
-// TODO: for a SplitBoundary, only the inside nodes will be captured here
-  for( auto it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
-  {
-    // writing x,y and z coordinates(tab seperated)
-    stringNumber = numberToString( (*it)->x() );
-    connectivityFile.InsertData( stringNumber.c_str() );
-    connectivityFile.Tab();
-    stringNumber = numberToString( yCoordinate( (*it)->Coordinate() ) );
-    connectivityFile.InsertData( stringNumber.c_str() );
-    connectivityFile.Tab();
-    stringNumber = numberToString( zCoordinate( (*it)->Coordinate() ) );
-    connectivityFile.InsertData( stringNumber.c_str() );
-    // if maximum of entris per line is reached, start new one, else tab
-    if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE )
-    {
-      entriesOfLine = 1;
-      connectivityFile.LineBreak();
-      connectivityFile.BringToLevel();
-      newLine = true;
+
+
+  // =====================================================================
+  //  POINTS: Writing Node coordinates triples
+  // =====================================================================
+  // REGION and BOUNDARY domains
+  if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> ) {
+      const auto domainVerticesEnd( subDomain.NodesEnd() );
+      for( auto it = subDomain.NodesBegin(); it != domainVerticesEnd; ++it, ++entriesOfLine )
+        {
+          // writing x, y and z coordinates(tab seperated)
+          stringNumber = numberToString( (*it)->x() );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( yCoordinate( (*it)->Coordinate() ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( zCoordinate( (*it)->Coordinate() ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          // if maximum of entris per line is reached, start new one, else tab
+          if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE ) {
+              entriesOfLine = 1;
+              connectivityFile.LineBreak();
+              connectivityFile.BringToLevel();
+              newLine = true;
+            }
+          else {
+              connectivityFile.Tab();
+              newLine = false;
+            }
+        } // looping nodes
     }
-    else
-    {
-      connectivityFile.Tab();
-      newLine = false;
-    }
-  } // looping regions nodes
+  // SPLITBOUNDARY domains
+  else {
+     // finding unit normal to lower-dimensional subdomain
+     auto unrml = subDomain.AverageUnitNormal();
+     // approximating the dimensions of the SplitBoundary
+     Point<dim> pmin, pmax; pmin = 1.0e30; pmax = -1.0e30;
+     for ( auto it=subDomain.PerimeterCellsBegin(); it!=subDomain.CellsEnd(); ++it ) {
+          pmin = min( pmin, (*it)->BaryCenter() );
+          pmax = max( pmax, (*it)->BaryCenter() );
+       }
+     const double node_offset = distance( pmin, pmax ) * 1.0e-3; // 0.1%
+     // inside nodes
+     for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).InsideNodes().first ) {
+          // writing x, y and z coordinates(tab separated)
+          stringNumber = numberToString( nit->x() + unrml[0] * node_offset );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( yCoordinate( nit->Coordinate() + unrml * node_offset ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( zCoordinate( nit->Coordinate() + unrml * node_offset ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          // if maximum of entris per line is reached, start new one, else tab
+          if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE ) {
+              entriesOfLine = 1;
+              connectivityFile.LineBreak();
+              connectivityFile.BringToLevel();
+              newLine = true;
+            }
+          else {
+              connectivityFile.Tab();
+              newLine = false;
+            }
+          ++entriesOfLine;
+       }
+     // outside nodes
+     for ( const auto& nit : dynamic_cast<const SplitBoundary<dim>&>(subDomain).OutsideNodes().first ) {
+          // writing x, y and z coordinates(tab separated)
+          stringNumber = numberToString( nit->x() );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( yCoordinate( nit->Coordinate() ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          connectivityFile.Tab();
+          stringNumber = numberToString( zCoordinate( nit->Coordinate() ) );
+          connectivityFile.InsertData( stringNumber.c_str() );
+          // if maximum of entris per line is reached, start new one, else tab
+          if( entriesOfLine == MAX_COORDINATE_ENTRIES_PER_LINE ) {
+              entriesOfLine = 1;
+              connectivityFile.LineBreak();
+              connectivityFile.BringToLevel();
+              newLine = true;
+            }
+          else {
+              connectivityFile.Tab();
+              newLine = false;
+            }
+          ++entriesOfLine;
+       }
+    } // end SplitBoundary subdomains
+    
   // closing points node
-  if( !newLine )
-    connectivityFile.LineBreak();
+  if( !newLine ) connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
   connectivityFile.CloseNode( "Points" );
 
-  // cells node
+
+  // =====================================================================
+  //    CELLS: CONNECTIVITY (nodes per element like in plist)
+  // =====================================================================
   connectivityFile.OpenNode( "Cells" );
   // cell connectivity
   connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"connectivity\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
   // establish a vector with vtk element types
   vector<VTK_TYPE> elementTypesVTK;
-  VTK_TYPE elementTypeVTK;
-  vector<long> vtkNodeNumbering;
-  // looping region's elements
+  vector<size_t>   vtkNodeNumbering;
   const size_t MAX_CONNECTIVITY_ENTRIES_PER_LINE( 20 ); entriesOfLine = 2;
   const auto domainSimplicesEnd( subDomain.CellsEnd() );
-  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
-  {
-    // storing elements VTK type
-    elementTypeVTK = ElementType( *it );
-    elementTypesVTK.push_back( elementTypeVTK );
-    // Quadratic Hexahedron and Quadratic Wedge differ in node numbering(CSMP vs VTK)
-    if( elementTypeVTK == VTK_QUADRATIC_HEXAHEDRON )
+
+  // ------------------------------------
+  // Nodes of REGION and BOUNDARY objects
+  // ------------------------------------
+  if constexpr ( !std::is_same_v<CELL<dim>,InterFace<dim>> )
     {
-      vtkNodeNumbering.clear();
-      QuadraticHexahedronConnectivity( *it, vtkNodeNumbering );
-      assert( vtkNodeNumbering.size() == (*it)->Nodes() );
-      for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
-      {
-         // writing node id to vtu document
-        stringNumber = to_string( vtkNodeNumbering[i] );
-        connectivityFile.InsertData( stringNumber.c_str() );
-        // line break if limeit entries reached, else tab
-        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
+      for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it )
         {
-          entriesOfLine = 1;
-          connectivityFile.LineBreak();
-          connectivityFile.BringToLevel();
-          newLine = true;
-        }
-        else
+          // CSMP_FINITE_ELEMENT_TYPE
+          // storing elements VTK type
+          VTK_TYPE elementTypeVTK = ElementType( *it );
+          elementTypesVTK.push_back( elementTypeVTK );
+          // Quadratic Hexahedron and Quadratic Wedge differ in node numbering(CSMP vs VTK)
+          if ( elementTypeVTK == VTK_QUADRATIC_HEXAHEDRON ) {
+              vtkNodeNumbering.clear();
+              QuadraticHexahedronConnectivity( *it, vtkNodeNumbering );
+              assert( vtkNodeNumbering.size() == (*it)->Nodes() );
+              for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine ) {
+                   // writing node id to vtu document
+                  stringNumber = to_string( vtkNodeNumbering[i] );
+                  connectivityFile.InsertData( stringNumber.c_str() );
+                  // line break if limeit entries reached, else tab
+                  if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                      entriesOfLine = 1;
+                      connectivityFile.LineBreak();
+                      connectivityFile.BringToLevel();
+                      newLine = true;
+                    }
+                  else {
+                      connectivityFile.Tab();
+                      newLine = false;
+                    }
+                }
+              // proceed to next elementactiveProperty += "\"";
+              continue;
+            }
+          if( elementTypeVTK == VTK_QUADRATIC_WEDGE ) {
+              vtkNodeNumbering.clear();
+              QuadraticWedgeConnectivity( *it, vtkNodeNumbering );
+              assert( vtkNodeNumbering.size() == (*it)->Nodes() );
+              for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine ) {
+                   // writing node id to vtu document
+                  stringNumber = to_string( vtkNodeNumbering[i] );
+                  connectivityFile.InsertData( stringNumber.c_str() );
+                  // line break if limeit entries reached, else tab
+                  if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                      entriesOfLine = 1;
+                      connectivityFile.LineBreak();
+                      connectivityFile.BringToLevel();
+                      newLine = true;
+                    }
+                  else {
+                      connectivityFile.Tab();
+                      newLine = false;
+                    }
+                }
+              // proceed to next element
+              continue;
+            }
+          // for all other element types: looping element's nodes
+          for( uint32_t iit = 0u; iit < (*it)->FE()->Nodes(); ++iit, ++entriesOfLine ) {
+              // writing node id to vtu document
+              stringNumber = to_string( (*it)->N(iit)->Idx() );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              // line break if limeit entries reached, else tab
+              if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                  entriesOfLine = 1;
+                  connectivityFile.LineBreak();
+                  connectivityFile.BringToLevel();
+                  newLine = true;
+                }
+              else {
+                  connectivityFile.Tab();
+                  newLine = false;
+                }
+            } // end for nodes
+        } // end for elements
+    } // end REGION and BOUNDARY subdomains
+    
+  // ---------------------
+  // SPLITBOUNDARY objects
+  // ---------------------
+  else {
+      for( const auto& iface : subDomain.CellVector() )
         {
-          connectivityFile.Tab();
-          newLine = false;
-        }
-      }
-      // proceed to next elementactiveProperty += "\"";
-      continue;
-    }
-    if( elementTypeVTK == VTK_QUADRATIC_WEDGE )
-    {
-      vtkNodeNumbering.clear();
-      QuadraticWedgeConnectivity( *it, vtkNodeNumbering );
-      assert( vtkNodeNumbering.size() == (*it)->Nodes() );
-      for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine )
-      {
-         // writing node id to vtu document
-        stringNumber = to_string( vtkNodeNumbering[i] );
-        connectivityFile.InsertData( stringNumber.c_str() );
-        // line break if limeit entries reached, else tab
-        if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
-        {
-          entriesOfLine = 1;
-          connectivityFile.LineBreak();
-          connectivityFile.BringToLevel();
-          newLine = true;
-        }
-        else
-        {
-          connectivityFile.Tab();
-          newLine = false;
-        }
-      }
-      // proceed to next element
-      continue;
-    }
-    // for all another element types: looping element's nodes
-    for( uint32_t iit = 0u; iit < (*it)->FE()->Nodes(); ++iit, ++entriesOfLine )
-    {
-      // writing node id to vtu document
-      stringNumber = to_string( (*it)->N(iit)->Idx() );
-      connectivityFile.InsertData( stringNumber.c_str() );
-      // line break if limeit entries reached, else tab
-      if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
-      {
-        entriesOfLine = 1;
-        connectivityFile.LineBreak();
-        connectivityFile.BringToLevel();
-        newLine = true;
-      }
-      else
-      {
-        connectivityFile.Tab();
-        newLine = false;
-      }
-    } // element's nodes
-  } // region's elements
+          // CSMP_FINITE_ELEMENT_TYPE
+          VTK_TYPE elementTypeVTK = ElementType( iface );
+          // translating InterFace objects into element types: line->quad, tria->prism, quad->hex
+          switch( elementTypeVTK ) {
+               // linear FEM
+               case VTK_LINE: elementTypeVTK = VTK_QUAD;
+                 break;
+               case VTK_TRIANGLE: elementTypeVTK = VTK_WEDGE;
+                 break;
+               case VTK_QUAD: elementTypeVTK = VTK_HEXAHEDRON;
+                 break;
+               // quadratic FEM
+               case VTK_QUADRATIC_EDGE: elementTypeVTK = VTK_QUADRATIC_QUAD;
+                 break;
+               case VTK_QUADRATIC_TRIANGLE: elementTypeVTK = VTK_QUADRATIC_WEDGE;
+                 break;
+               case VTK_QUADRATIC_QUAD: elementTypeVTK = VTK_QUADRATIC_HEXAHEDRON;
+                 break;
+             default:
+               throw csmp::Exception( ERROR, "EstablishConnectivityFile", "InterFace FE-type not recognised");
+          }
+          elementTypesVTK.push_back( elementTypeVTK );
+          // Quadratic Hexahedron and Quadratic Wedge differ in node numbering(CSMP vs VTK)
+          // (for InterFace, the inside nodes become the back plane and the outside nodes the front
+          if ( elementTypeVTK == VTK_QUADRATIC_HEXAHEDRON ) {
+              vtkNodeNumbering.clear();
+              QuadraticHexahedronConnectivity( iface, vtkNodeNumbering );
+              assert( vtkNodeNumbering.size() == iface->Nodes() );
+              for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine ) {
+                   // writing node id to vtu document
+                  stringNumber = to_string( vtkNodeNumbering[i] );
+                  connectivityFile.InsertData( stringNumber.c_str() );
+                  // line break if limeit entries reached, else tab
+                  if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                      entriesOfLine = 1;
+                      connectivityFile.LineBreak();
+                      connectivityFile.BringToLevel();
+                      newLine = true;
+                    }
+                  else {
+                      connectivityFile.Tab();
+                      newLine = false;
+                    }
+                }
+              // proceed to next elementactiveProperty += "\"";
+              continue;
+            }
+          if( elementTypeVTK == VTK_QUADRATIC_WEDGE ) {
+              vtkNodeNumbering.clear();
+              QuadraticWedgeConnectivity( iface, vtkNodeNumbering );
+              assert( vtkNodeNumbering.size() == iface->Nodes() );
+              for( size_t i{0u}; i < vtkNodeNumbering.size(); ++i, ++entriesOfLine ) {
+                   // writing node id to vtu document
+                  stringNumber = to_string( vtkNodeNumbering[i] );
+                  connectivityFile.InsertData( stringNumber.c_str() );
+                  // line break if limeit entries reached, else tab
+                  if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                      entriesOfLine = 1;
+                      connectivityFile.LineBreak();
+                      connectivityFile.BringToLevel();
+                      newLine = true;
+                    }
+                  else {
+                      connectivityFile.Tab();
+                      newLine = false;
+                    }
+                }
+              // proceed to next element
+              continue;
+            }
+          // for all other element types: looping element's nodes (InterFace case considered)
+          uint32_t node{0};
+          for( uint32_t iit = 0u; iit < iface->Nodes(); ++iit, ++entriesOfLine ) {
+              // reading the nodes on the inside of the interface first
+              if ( iit < iface->FE()->Nodes() )  {
+                   iface->CurrentSide( INSIDE );
+                   node = iit;
+                }
+              else {
+                   iface->CurrentSide( OUTSIDE );
+                   node = iit - iface->FE()->Nodes();
+                }
+              // writing node id to vtu document
+              stringNumber = to_string( iface->N(node)->Idx() );
+              connectivityFile.InsertData( stringNumber.c_str() );
+              // line break if limeit entries reached, else tab
+              if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+                  entriesOfLine = 1;
+                  connectivityFile.LineBreak();
+                  connectivityFile.BringToLevel();
+                  newLine = true;
+                }
+              else {
+                  connectivityFile.Tab();
+                  newLine = false;
+                }
+            } // end nodes
+        } // end InterFace objects
+  
+   } // end SPLITBOUNDARY
+    
   // close cell connectivity
-  if( !newLine )
-    connectivityFile.LineBreak();
+  if( !newLine ) connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
-  // cell offsets
+  
+  
+  // =====================================================================
+  //    CELLS: OFFSETS (nodes per element matching type specs below)
+  // =====================================================================
+  // (works for all types of subdomains)
   connectivityFile.OpenNode( "DataArray type=\"Int32\" Name=\"offsets\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
-  // looping region's elements
+  // looping subdomains's elements
   size_t offset( 0 ); entriesOfLine = 2;
-  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine )
-  {
-    // imcrementing offset by node count and writing to data
-    offset += (*it)->Nodes();
-    stringNumber = to_string( offset );
-    connectivityFile.InsertData( stringNumber.c_str() );
-    // line break if limeit entries reached, else tab
-    if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
-    {
-      entriesOfLine = 1;
-      connectivityFile.LineBreak();
-      connectivityFile.BringToLevel();
-      newLine = true;
-    }
-    else
-    {
-      connectivityFile.Tab();
-      newLine = false;
-    }
-  } // region's elements
+  for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine ) {
+      // imcrementing offset by node count and writing to data
+      offset += (*it)->Nodes(); // NB: this gives correct number for INTERFACE
+      stringNumber = to_string( offset );
+      connectivityFile.InsertData( stringNumber.c_str() );
+      // line break if limeit entries reached, else tab
+      if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+          entriesOfLine = 1;
+          connectivityFile.LineBreak();
+          connectivityFile.BringToLevel();
+          newLine = true;
+        }
+      else {
+          connectivityFile.Tab();
+          newLine = false;
+        }
+    } // region's elements
   // close offsets
-  if( !newLine )
-    connectivityFile.LineBreak();
+  if( !newLine ) connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
-  // cell types
+  
+
+  // =====================================================================
+  //    CELL_TYPES: VTK_ FE types
+  // =====================================================================
+  // (InterFace objects are treated as Quads, Prisms or Hexahedra, see above)
   assert( elementTypesVTK.size() == subDomain.Cells() );
   connectivityFile.OpenNode( "DataArray type=\"UInt8\" Name=\"types\" NumberOfComponents=\"1\" format=\"ascii\"");
   connectivityFile.BringToLevel();
@@ -3068,27 +3338,25 @@ void VTU_Interface<dim>::EstablishConnectivityFile( XML_Document& connectivityFi
   entriesOfLine = 2;
   size_t elementCount{0ul};
   for( auto it = subDomain.CellsBegin(); it != domainSimplicesEnd; ++it, ++entriesOfLine, ++elementCount )
-  {
-    // imcrementing offset by node count and writing to data
-    stringNumber = to_string( elementTypesVTK[elementCount] );
-    connectivityFile.InsertData( stringNumber.c_str() );
-    // line break if limeit entries reached, else tab
-    if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE )
     {
-      entriesOfLine = 1;
-      connectivityFile.LineBreak();
-      connectivityFile.BringToLevel();
-      newLine = true;
-    }
-    else
-    {
-      connectivityFile.Tab();
-      newLine = false;
-    }
-  } // region's elements
+      // imcrementing offset by node count and writing to data
+      stringNumber = to_string( elementTypesVTK[elementCount] );
+      connectivityFile.InsertData( stringNumber.c_str() );
+      // line break if limeit entries reached, else tab
+      if( entriesOfLine == MAX_CONNECTIVITY_ENTRIES_PER_LINE ) {
+          entriesOfLine = 1;
+          connectivityFile.LineBreak();
+          connectivityFile.BringToLevel();
+          newLine = true;
+        }
+      else {
+          connectivityFile.Tab();
+          newLine = false;
+        }
+    } // subdomain elements
+    
   // close offsets
-  if( !newLine )
-    connectivityFile.LineBreak();
+  if( !newLine ) connectivityFile.LineBreak();
   connectivityFile.CloseNode( "DataArray" );
   // closing cells node
   connectivityFile.CloseNode( "Cells" );
@@ -3788,43 +4056,47 @@ template void VTU_Interface<3U>::EstablishConnectivityFileFVFIP(XML_Document&,co
 /// converts csmp to vtk node numbering
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-void VTU_Interface<dim>::QuadraticHexahedronConnectivity( const CELL<dim>* const element, vector<long>& data ) const
+void VTU_Interface<dim>::QuadraticHexahedronConnectivity( const CELL<dim>* const element, vector<size_t>& data ) const
 {
+  if ( !data.empty() ) data.clear();
   data.reserve(20);
   // first 12 nodes are the same
-  for( int i{0}; i < 12; ++i )
+  for( uint32_t i{0u}; i < 12; ++i )
     data.push_back( element->N( i )->Idx() );
   // now the node convention differs
-  data.push_back( element->N( static_cast<uint32_t>(16) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(17) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(18) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(19) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(12) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(13) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(14) )->Idx() );
-  data.push_back( element->N( static_cast<uint32_t>(15) )->Idx() );
+  data.push_back( element->N( 16 )->Idx() );
+  data.push_back( element->N( 17 )->Idx() );
+  data.push_back( element->N( 18 )->Idx() );
+  data.push_back( element->N( 19 )->Idx() );
+  data.push_back( element->N( 12 )->Idx() );
+  data.push_back( element->N( 13 )->Idx() );
+  data.push_back( element->N( 14 )->Idx() );
+  data.push_back( element->N( 15 )->Idx() );
 }
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Element<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Element<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Element<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Element<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Element<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Element<3U>* const,vector<size_t>&) const;
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Face<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Face<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Face<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const Face<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const Face<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const Face<3U>* const,vector<size_t>&) const;
 
-template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const InterFace<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const InterFace<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const InterFace<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticHexahedronConnectivity(const InterFace<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticHexahedronConnectivity(const InterFace<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticHexahedronConnectivity(const InterFace<3U>* const,vector<size_t>&) const;
+
+
+
 
 /// converts csmp to vtk node numbering
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-void VTU_Interface<dim>::QuadraticWedgeConnectivity( const CELL<dim>* const element, vector<long>& data ) const
+void VTU_Interface<dim>::QuadraticWedgeConnectivity( const CELL<dim>* const element, vector<size_t>& data ) const
 {
   data.reserve(15);
   // first 8 nodes are the same
-  for( int i{0}; i < 9; ++i )
+  for( uint32_t i{0}; i < 9; ++i )
     data.push_back( element->N( i )->Idx() );
   // now the node convention differs
   data.push_back( element->N( static_cast<uint32_t>(12) )->Idx() );
@@ -3835,17 +4107,20 @@ void VTU_Interface<dim>::QuadraticWedgeConnectivity( const CELL<dim>* const elem
   data.push_back( element->N( static_cast<uint32_t>(11) )->Idx() );
 }
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Element<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Element<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Element<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Element<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Element<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Element<3U>* const,vector<size_t>&) const;
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Face<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Face<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Face<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const Face<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const Face<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const Face<3U>* const,vector<size_t>&) const;
 
-template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const InterFace<1U>* const,vector<long>&) const;
-template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const InterFace<2U>* const,vector<long>&) const;
-template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const InterFace<3U>* const,vector<long>&) const;
+template void VTU_Interface<1U>::QuadraticWedgeConnectivity(const InterFace<1U>* const,vector<size_t>&) const;
+template void VTU_Interface<2U>::QuadraticWedgeConnectivity(const InterFace<2U>* const,vector<size_t>&) const;
+template void VTU_Interface<3U>::QuadraticWedgeConnectivity(const InterFace<3U>* const,vector<size_t>&) const;
+
+
+
 
 
 /// finds the corresponding VTK Element type for given csmp::Element
@@ -3925,34 +4200,19 @@ template VTK_TYPE VTU_Interface<3U>::ElementType(const InterFace<3U>* const) con
 template<uint32_t dim>
 string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,Element>& subDomain ) const
 {
-  for( auto it = model_.UniqueRegionsBegin(); it != model_.UniqueRegionsEnd(); ++it )
-    if( &it->second == &subDomain )
-      return string( it->first + " (unique REGION)" );
-  for( auto it = model_.RegionsBegin(); it != model_.RegionsEnd(); ++it )
-    if( &it->second == &subDomain )
-      return string( it->first + " (REGION)" );
-
-   return "UndefinedRegion";
+   return subDomain.Name() + "_(REGION)";
  }
 
 template<uint32_t dim>
 string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,Face>& subDomain ) const
 {
-  for( auto it = model_.BoundariesBegin(); it != model_.BoundariesEnd(); ++it )
-    if( &it->second == &subDomain )
-      return string( it->first + " (BOUNDARY)" );
-
-   return "UndefinedBoundary";
+   return subDomain.Name() + "_(BOUNDARY)";
  }
 
 template<uint32_t dim>
 string VTU_Interface<dim>::DomainName( const ModelSubDomain<dim,InterFace>& subDomain ) const
 {
-  for( auto it = model_.SplitBoundariesBegin(); it != model_.SplitBoundariesEnd(); ++it )
-    if( &it->second == &subDomain )
-      return string( it->first + " (SPLITBOUNDARY)" );
-
-   return "UndefinedSplitBoundary";
+   return subDomain.Name() + "_(SPLITBOUNDARY)";
  }
 
 // VTU always uses 3 dimensional output

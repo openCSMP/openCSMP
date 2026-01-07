@@ -1,6 +1,0 @@
-<map id="csmp::StressRotate::StressRotate" name="csmp::StressRotate::StressRotate">
-<area shape="rect" id="Node000001" title=" " alt="" coords="285,37,423,78"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_andersonian_boundary_stress_visitor.html#a072d3f2d03698fbb5164c370b5877a68" title="by default, any entries into the RHS force vectors will get overwritten" alt="" coords="5,29,237,85"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="269,60,237,60,237,54,269,54"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="158,17,144,10,121,8,100,10,87,15,81,21,81,29,75,29,76,19,84,10,99,5,121,3,145,5,160,12"/>
-</map>

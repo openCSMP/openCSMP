@@ -1,7 +1,0 @@
-<map id="csmp::readEclipseGridSpecs" name="csmp::readEclipseGridSpecs">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,31,196,56"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a34701d1c9fda79fddb23382772ee2859" title=" " alt="" coords="272,5,400,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="196,31,256,24,256,29,196,36"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#af8c2740a4e6be30bdfb4207bf22e8609" title="Eclipse ends its definitions with a forward slash." alt="" coords="244,55,428,80"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,51,228,54,228,59,196,56"/>
-</map>

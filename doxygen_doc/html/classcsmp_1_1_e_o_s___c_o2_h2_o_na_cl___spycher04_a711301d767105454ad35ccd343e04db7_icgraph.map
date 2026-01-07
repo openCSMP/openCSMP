@@ -1,7 +1,0 @@
-<map id="csmp::EOS_CO2H2ONaCl_Spycher04::Rho_CarbonicPhase" name="csmp::EOS_CO2H2ONaCl_Spycher04::Rho_CarbonicPhase">
-<area shape="rect" id="Node000001" title="density of the carbonic phase" alt="" coords="476,13,694,54"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#ad27d7f23cc337badee730400a574677b" title=" " alt="" coords="234,5,428,61"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="460,36,428,36,428,30,460,30"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_e_o_s___c_o2_h2_o_na_cl___spycher04.html#a5589546dfe45b9651f6997362d279c81" title="reservoir solution water&#45;CO2 ratio" alt="" coords="5,13,186,54"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="218,36,186,36,186,30,218,30"/>
-</map>

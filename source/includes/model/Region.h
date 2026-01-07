@@ -92,7 +92,7 @@ class Region : public ModelSubDomain<dim, Element>,
     Region( Region&& );
     Region& operator=( const Region& );
 
-    virtual ~Region();
+    virtual ~Region() = default;
 
     // ---------------------------------------------
     // reconstruction of regions that existed before

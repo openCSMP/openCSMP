@@ -1,5 +1,0 @@
-<map id="csmp::VData::ReduceTo" name="csmp::VData::ReduceTo">
-<area shape="rect" id="Node000001" title="eliminates the elements that are not contained in &#39;old_and_new_elmt_ids&#39; from the VSet,..." alt="" coords="5,13,171,38"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_v_data.html#aeefbee5ba35b5eff9ab7c17751404c08" title="get type; a mesh is of hybrid&#45;element type if it contains multiple element types" alt="" coords="219,5,411,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="171,23,203,23,203,28,171,28"/>
-</map>

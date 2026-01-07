@@ -1,5 +1,0 @@
-<map id="csmp::boundaryMinMaxCoordinates" name="csmp::boundaryMinMaxCoordinates">
-<area shape="rect" id="Node000001" title="gives the extreme coordinates of the bounding box of the BOUNDARY (not the model!) &#45; 1D model" alt="" coords="5,5,236,31"/>
-<area shape="rect" id="Node000002" href="$group___c_s_m_pglobal_functions.html#ga6b970c9a34abf2a9150140f4fd91e833" title="returns whether flag is a corner" alt="" coords="284,5,394,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="236,16,268,16,268,21,236,21"/>
-</map>

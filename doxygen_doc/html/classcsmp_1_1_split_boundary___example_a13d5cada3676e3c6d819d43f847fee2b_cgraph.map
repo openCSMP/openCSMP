@@ -1,8 +1,0 @@
-<map id="csmp::SplitBoundary_Example::Run" name="csmp::SplitBoundary_Example::Run">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,59,148,99"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___model2_d.html#a18e1ccd2dcf0b41fbbefca5e0e64809b" title="input from ANSYS *.asc, *.dat, and *&#45;variable.txt files, see source for more extensive documentation" alt="" coords="196,29,362,70"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,66,180,61,180,67,149,71"/>
-<area shape="rect" id="Node000003" href="$namespacecsmp.html#a045796fbaba7d5053c66ae8e794e5f9b" title="creates scalar and returns; use for inserting scalars into functions" alt="" coords="214,94,344,120"/>
-<area shape="poly" id="edge3_Node000001_Node000003" title=" " alt="" coords="149,86,199,93,198,99,148,92"/>
-<area shape="poly" id="edge2_Node000002_Node000002" title=" " alt="" coords="240,29,238,19,245,10,258,5,279,3,301,5,314,11,312,16,299,10,279,8,260,10,248,15,244,20,246,28"/>
-</map>

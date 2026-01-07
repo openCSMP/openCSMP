@@ -1,5 +1,0 @@
-<map id="csmp::SplitBoundary::Area" name="csmp::SplitBoundary::Area">
-<area shape="rect" id="Node000001" title="output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisect..." alt="" coords="196,5,338,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_split_boundary.html#aa557ba090e826707c511de813cd07bc1" title="integrates the property over the boundary line or surface" alt="" coords="5,5,148,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="180,28,148,28,148,23,180,23"/>
-</map>

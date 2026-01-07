@@ -1,5 +1,0 @@
-<map id="csmp::LinearLineElement::IntegralNN" name="csmp::LinearLineElement::IntegralNN">
-<area shape="rect" id="Node000001" title="initialises interpolation function product matrix N^T x N for analytically integrated elements" alt="" coords="5,5,174,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_line_element.html#a1047e6fc3cdc0df73a6eed7a31a57c5c" title=" " alt="" coords="222,5,390,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="174,23,206,23,206,28,174,28"/>
-</map>

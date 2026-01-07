@@ -115,11 +115,6 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( int_type newDataCo
 
 
 
-
-
-
-
-
 #ifndef NDEBUG
 /// We check in debug only
 template<uint32_t dim, template<uint32_t> class STOREE>
@@ -230,30 +225,33 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     flagBounds[nipCycles1-1][nipCycles2].first  = flagSize;
     flagBounds[nipCycles1-1][nipCycles2].second = flagSize;
 
-    // Moving data (same for all types)
-    for (int cycle1=nipCycles1-1; cycle1>=0; --cycle1  ){
-        for (int cycle2=nipCycles2-1; cycle2>=0; --cycle2  ){
-            const int dataStart = dataBounds[ cycle1 ][ cycle2     ].second - 1;
-            const int dataEnd   = dataBounds[ cycle1 ][ cycle2 + 1 ].second - 1;
-            for ( int i=dataEnd; i>dataStart; --i )
-              data_.data[i] = data_.data[i-(cycle1+1)*(cycle2+1)*dataDepth];
+    // Moving data (same for all types) note: decrementing unsigned int avoiding comparison with zero
+    for ( auto cycle1=nipCycles1; cycle1-- > 0; ){
+        for ( auto cycle2=nipCycles2; cycle2-- > 0; ){
+            const auto dataStart = dataBounds[ cycle1 ][ cycle2     ].second;
+            const auto dataEnd   = dataBounds[ cycle1 ][ cycle2 + 1 ].second;
+            const int_type stride = (cycle1 + 1) * (cycle2 + 1) * dataDepth;
+            for ( int_type i=dataEnd; i-- > dataStart; )
+              data_.data[i] = data_.data[i-stride];
         }
     }
     // Moving flags (same for all types)
-    for (int cycle1=nipCycles1-1; cycle1>=0; --cycle1  ){
-        for (int cycle2=nipCycles2-1; cycle2>=0; --cycle2  ){
-            const int flagsStart = flagBounds[ cycle1 ][ cycle2     ].second - 1;
-            const int flagsEnd   = flagBounds[ cycle1 ][ cycle2 + 1 ].second - 1;
-            for ( int i=flagsEnd; i>flagsStart; --i )
-                data_.flags[i] = data_.flags[i-(cycle1+1)*(cycle2+1)*flagDepth];
+    for ( auto cycle1 = nipCycles1; cycle1-- > 0; ){
+        for ( auto cycle2 = nipCycles2; cycle2-- > 0; ){
+            const auto flagsStart = flagBounds[ cycle1 ][ cycle2     ].second;
+            const auto flagsEnd   = flagBounds[ cycle1 ][ cycle2 + 1 ].second;
+            const int_type stride = (cycle1 + 1) * (cycle2 + 1) * flagDepth;
+            for ( int_type i = flagsEnd; i-- > flagsStart; )
+                data_.flags[i] = data_.flags[i - stride];
         }
     }
-
+    
     // Adding non-initialized data of new variable
-    for (int cycle1=0; cycle1<nipCycles1; ++cycle1  )
+    for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
             for ( int_type i=dataBounds[cycle1][cycle2].first; i<dataBounds[cycle1][cycle2].second; ++i )
                 data_.data[i] = numeric_limits<double>::quiet_NaN();
+                
     // Adding non-initialized flags of new variable
     for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
@@ -472,32 +470,13 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ===============
 // LOCAL VARIABLES
 // ===============
 
 /// Scalar variable value
 template<uint32_t dim, template<uint32_t> class STOREE>
-double LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const  
+double LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx ) const
  {
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
@@ -761,47 +740,6 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArra
   }
 
 
-/**
-    @todo replace this super wasteful method
-*/
-template<uint32_t dim, template<uint32_t> class STOREE>
-bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx, 
-                                                      double vmin, double vmax ) const
-  {
-#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
- AssertPlacement(idx);
-#endif
-    if ( idx.type == SCALAR ) {
-      const double val = Read( idx );
-      return ( val >= vmin and val <= vmax ) ? true : false;
-      }
-    if ( idx.type == VECTOR ) {
-      VectorVariable<dim>  vc;
-      Read( idx, vc );
-      return vc.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == TENSOR ) {
-      TensorVariable<dim>  ts;
-      Read( idx, ts );
-      return ts.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == ARRAY ) {
-      ArrayVariable  av;
-      Read( idx, av );
-      return av.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == FLAGGEDARRAY ) {
-      FlaggedArrayVariable  fa;
-      Read( idx, fa );
-      return fa.IsWithinRange( vmin, vmax );
-      }
-
-    cerr <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
-    return false;
-  }
-
-
-
 
 
 // ===================================
@@ -1062,6 +1000,7 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
     av.Flag( data_.flags[flagOffset] );
   }
 
+
 /// FlaggedArray variable at integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& idx, const FlaggedArrayVariable& av )
@@ -1110,6 +1049,117 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
   }
 
 
+
+/**
+    @todo replace this super wasteful method
+*/
+template<uint32_t dim, template<uint32_t> class STOREE>
+bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
+                                                      double vmin, double vmax ) const
+  {
+#if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+ AssertPlacement(idx);
+#endif
+    if ( idx.type == SCALAR ) {
+      const double val = Read( idx );
+      return ( val >= vmin and val <= vmax ) ? true : false;
+      }
+    if ( idx.type == VECTOR ) {
+      VectorVariable<dim> vc = ReadVector( idx );
+      return vc.IsWithinRange( vmin, vmax );
+      }
+    if ( idx.type == TENSOR ) {
+      TensorVariable<dim>  ts = ReadTensor( idx );
+      return ts.IsWithinRange( vmin, vmax );
+      }
+    if ( idx.type == ARRAY ) {
+      vector<double> av = ReadArray( idx );
+      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
+      return *min_it >= vmin && *max_it <= vmax;
+      }
+    if ( idx.type == FLAGGEDARRAY ) {
+      FlaggedArrayVariable  fa;
+      Read( idx, fa );
+      return fa.IsWithinRange( vmin, vmax );
+      }
+
+    std::cerr <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
+    return false;
+  }
+
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t ip, const csmp::Index& idx ) const
+ {
+    const int_type dataOffset(DATA_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
+
+#if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+  AssertIntegrationPointPlacement(idx);
+#endif
+  assert( idx.type == VECTOR );
+  assert( dataOffset+dim-1 < data_.data.size() );
+  assert( flagOffset+dim-1 < data_.flags.size() );
+
+    if constexpr( dim == 3U )
+      return VectorVariable<3U>( data_.flags[ flagOffset ], data_.flags[ flagOffset+1 ], data_.flags[ flagOffset+2 ],
+                                 data_.data[ dataOffset ], data_.data[ dataOffset+1 ], data_.data[ dataOffset+2 ] );
+
+    else if constexpr( dim == 2U )
+      return VectorVariable<2U>( data_.flags[ flagOffset ], data_.flags[ flagOffset+1 ],
+                                 data_.data[ dataOffset ], data_.data[ dataOffset+1 ] );
+
+    else if constexpr( dim == 1U )
+      return VectorVariable<1U>( data_.flags[ flagOffset ], data_.data[ dataOffset ] );
+ }
+
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t ip, const csmp::Index& idx ) const
+ {
+    const int_type dataOffset(DATA_OFFSET_IP);
+    const int_type flagOffset(FLAG_OFFSET_IP);
+
+#if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+  AssertIntegrationPointPlacement(idx);
+#endif
+  assert( idx.type == TENSOR );
+  assert( dataOffset+dim*dim-1 < data_.data.size() );
+  assert( flagOffset+dim-1 < data_.flags.size() );
+
+    if constexpr ( dim == 3U )
+      return TensorVariable<3U>( data_.flags[ flagOffset ], data_.flags[ flagOffset+1 ], data_.flags[ flagOffset+2 ],
+                                 data_.data[ dataOffset ], data_.data[ dataOffset+1 ], data_.data[ dataOffset+2 ],
+                                 data_.data[ dataOffset+dim ], data_.data[ dataOffset+dim+1 ], data_.data[ dataOffset+dim+2 ],
+                                 data_.data[ dataOffset+2*dim ], data_.data[ dataOffset+2*dim+1 ], data_.data[ dataOffset+2*dim+2 ] );
+
+    else if constexpr ( dim == 2U )
+      return TensorVariable<2U>( data_.flags[ flagOffset ], data_.flags[ flagOffset+1 ],
+                                 data_.data[ dataOffset ], data_.data[ dataOffset+1 ],
+                                 data_.data[ dataOffset+dim ], data_.data[ dataOffset+dim+1 ] );
+
+    else if constexpr ( dim == 1U )
+      return TensorVariable<1U>( data_.flags[ flagOffset ], data_.data[ dataOffset ] );
+ }
+
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t ip, const csmp::Index& idx ) const
+ {
+    const int_type dataOffset(DATA_OFFSET_IP);
+    const int_type arraySize( idx.dataDepth );
+
+#if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
+  AssertIntegrationPointPlacement(idx);
+#endif
+  assert( idx.type == ARRAY );
+  assert( dataOffset+arraySize <= data_.data.size() );
+
+    return std::vector<double>( next(data_.data.begin(),dataOffset), next(data_.data.begin(),dataOffset+arraySize) );
+ }
+
+
+
 template<uint32_t dim, template<uint32_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::Index& idx,
                                                       double vmin, double vmax ) const
@@ -1117,49 +1167,31 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::I
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
 #endif
-
     if ( idx.type == SCALAR ) {
       const double val = Read( ip, idx );
       return ( val >= vmin and val <= vmax ) ? true : false;
       }
     if ( idx.type == VECTOR ) {
-      VectorVariable<dim>  vc;
-      Read( ip, idx, vc );
+      VectorVariable<dim> vc = ReadVector( ip, idx );
       return vc.IsWithinRange( vmin, vmax );
       }
     if ( idx.type == TENSOR ) {
-      TensorVariable<dim>  ts;
-      Read( ip, idx, ts );
+      TensorVariable<dim>  ts = ReadTensor( ip, idx );
       return ts.IsWithinRange( vmin, vmax );
       }
     if ( idx.type == ARRAY ) {
-      ArrayVariable  av;
-      Read( ip, idx, av );
-      return av.IsWithinRange( vmin, vmax );
+      vector<double> av = ReadArray( ip, idx );
+      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
+      return *min_it >= vmin && *max_it <= vmax;
       }
     if ( idx.type == FLAGGEDARRAY ) {
       FlaggedArrayVariable  fa;
       Read( ip, idx, fa );
       return fa.IsWithinRange( vmin, vmax );
       }
-    cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
+    std::cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
     return false;
   }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1627,6 +1659,103 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t 
   }
 
 
+template<uint32_t dim, template<uint32_t> class STOREE>
+VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
+ {
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type dataOffset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  assert( idx.type == VECTOR );
+  assert( dataOffset+dim-1 < data_.data.size() );
+  assert( flagOffset+dim-1 < data_.flags.size() );
+#endif
+    const int_type ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
+                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
+
+    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    if constexpr( dim == 3U )
+      return VectorVariable<3U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ], data_.flags[ flagOffset+ip_flag_offset+2 ],
+                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ], data_.data[ dataOffset+ip_data_offset+2 ] );
+
+    else if constexpr( dim == 2U )
+      return VectorVariable<2U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ],
+                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ] );
+
+    else if constexpr( dim == 1U )
+      return VectorVariable<1U>( data_.flags[ flagOffset+ip_flag_offset ], data_.data[ dataOffset+ip_data_offset ] );
+ }
+
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
+ {
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type dataOffset(offsetData.first);
+    const int_type flagOffset(offsetData.second);
+
+#ifndef NDEBUG
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  assert( idx.type == TENSOR );
+  assert( dataOffset+dim*dim-1 < data_.data.size() );
+  assert( flagOffset+dim-1 < data_.flags.size() );
+#endif
+    const int_type ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
+                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
+
+    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    if constexpr ( dim == 3U )
+      return TensorVariable<3U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ], data_.flags[ flagOffset+ip_flag_offset+2 ],
+                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ], data_.data[ dataOffset+ip_data_offset+2 ],
+                                 data_.data[ dataOffset+ip_data_offset+dim ], data_.data[ dataOffset+ip_data_offset+dim+1 ], data_.data[ dataOffset+ip_data_offset+dim+2 ],
+                                 data_.data[ dataOffset+ip_data_offset+2*dim ], data_.data[ dataOffset+ip_data_offset+2*dim+1 ], data_.data[ dataOffset+ip_data_offset+2*dim+2 ] );
+
+    else if constexpr ( dim == 2U )
+      return TensorVariable<2U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ],
+                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ],
+                                 data_.data[ dataOffset+ip_data_offset+dim ], data_.data[ dataOffset+ip_data_offset+dim+1 ] );
+
+    else if constexpr ( dim == 1U )
+      return TensorVariable<1U>( data_.flags[ flagOffset+ip_flag_offset ], data_.data[ dataOffset+ip_data_offset ] );
+}
+
+
+template<uint32_t dim, template<uint32_t> class STOREE>
+vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
+ {
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
+    const int_type dataOffset(offsetData.first);
+    const int_type arraySize( idx.dataDepth );
+
+#ifndef NDEBUG
+  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+  AssertFiniteVolumeIntegrationPointPlacement(idx);
+  assert( idx.type == ARRAY );
+  assert( dataOffset+arraySize <= data_.data.size() );
+#endif
+    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
+                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+
+    return std::vector<double>( next(data_.data.begin(),dataOffset+ip_data_offset), next(data_.data.begin(),dataOffset+ip_data_offset+arraySize) );
+ }
+
+
+
+
 /**
     checks whether any value of the target variable is within the range supplied via the arguments vmin and vmax.
     
@@ -1644,30 +1773,27 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, 
    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
    AssertFiniteVolumeIntegrationPointPlacement(idx);
 #endif
-
     if ( idx.type == SCALAR ) {
-         const double val = Read( sector_or_facet, ip, idx );
-         return ( val >= vmin and val <= vmax ) ? true : false;
+      const double val = Read( sector_or_facet, ip, idx );
+      return ( val >= vmin and val <= vmax ) ? true : false;
       }
     if ( idx.type == VECTOR ) {
-         VectorVariable<dim>  vc;
-         Read( sector_or_facet, ip, idx, vc );
-         return vc.IsWithinRange( vmin, vmax );
+      VectorVariable<dim> vc = ReadVector( sector_or_facet, ip, idx );
+      return vc.IsWithinRange( vmin, vmax );
       }
     if ( idx.type == TENSOR ) {
-         TensorVariable<dim>  ts;
-         Read( sector_or_facet, ip, idx, ts );
-         return ts.IsWithinRange( vmin, vmax );
+      TensorVariable<dim>  ts = ReadTensor( sector_or_facet, ip, idx );
+      return ts.IsWithinRange( vmin, vmax );
       }
     if ( idx.type == ARRAY ) {
-         ArrayVariable  av;
-         Read( sector_or_facet, ip, idx, av );
-         return av.IsWithinRange( vmin, vmax );
+      vector<double> av = ReadArray( sector_or_facet, ip, idx );
+      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
+      return *min_it >= vmin && *max_it <= vmax;
       }
     if ( idx.type == FLAGGEDARRAY ) {
-         FlaggedArrayVariable  fa;
-         Read( sector_or_facet, ip, idx, fa );
-         return fa.IsWithinRange( vmin, vmax );
+      FlaggedArrayVariable  fa;
+      Read( sector_or_facet, ip, idx, fa );
+      return fa.IsWithinRange( vmin, vmax );
       }
 
     cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;

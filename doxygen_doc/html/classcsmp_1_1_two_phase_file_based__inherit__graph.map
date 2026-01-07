@@ -1,5 +1,0 @@
-<map id="csmp::TwoPhaseFileBased&lt; dim &gt;" name="csmp::TwoPhaseFileBased&lt; dim &gt;">
-<area shape="rect" id="Node000001" title="Relative Permeability model based on text file input of Kr and Pc vs. Seff." alt="" coords="16,607,185,891"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_two_phase_model.html" title=" " alt="" coords="5,5,195,559"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="103,574,103,607,98,607,98,574"/>
-</map>

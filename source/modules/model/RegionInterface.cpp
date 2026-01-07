@@ -2614,15 +2614,16 @@ bool RegionInterface<dim, REGION_COMPLEX>::MoveToUniqueRegions( const char* non_
 
 
 
+
+
 /**
-Numbers the unique regions of the models, labeling their elements with the region number
-as "region identifier". If the supplied variable does not exist, it is created by this method.
+    Numbers the unique regions of the models, labeling their elements with the region number
+    as "region identifier". If the supplied variable does not exist, it is created by this method.
 
-@param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
-@param region_names vector of region names to retrieve them from the integer keys
+    @param region_identifier scalar element property the unique value of which shall be used to distinguish the unique regions
+    @param region_names vector of region names to retrieve them from the integer keys
 
-@attention this functionality is superseded by the unique RegionID stored on each element of each unique region
-
+    @attention this functionality is superseded by the unique RegionID stored on each element of each unique region
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::CountAndLabelUniqueRegions( const char* region_identifier, vector<string>& region_names )
@@ -2854,7 +2855,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
        }
      cout << endl << endl;
      
-     return distance( RegionsBegin(), RegionsEnd() );
+     return static_cast<size_t>(distance( RegionsBegin(), RegionsEnd() ));
  }
 
 

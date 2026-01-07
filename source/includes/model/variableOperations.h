@@ -31,9 +31,6 @@ double dotProduct( const VectorVariable<dim>&, const csmp::Point<dim>& );
 template<uint32_t dim>
 double dotProduct( const VectorVariable<dim>&, const VectorVariable<dim>& );
 
-/// this function treats the dot product of two scalars as if they were 1D vectors, hence the formula below.
-//double DotProduct( const ScalarVariable& s1, const ScalarVariable& s2) {return (s1.Data()*s2.Data())*s2.Data()/(s2.Data()*s2.Data());}
-
 VectorVariable<1U> crossProduct( const VectorVariable<1U>&, const csmp::Point<1U>& );
 VectorVariable<2U> crossProduct( const VectorVariable<2U>&, const csmp::Point<2U>& );
 VectorVariable<3U> crossProduct( const VectorVariable<3U>&, const csmp::Point<3U>& );
@@ -59,11 +56,6 @@ void minMaxEigenValues( const TensorVariable<dim>& ts, double& tmin, double& tma
 
 template<uint32_t dim>
 double  angleBetween( const VectorVariable<dim>&, const VectorVariable<dim>& );
-
-/// applies any of the standard math library functions to each element of the variable
-template<size_t, template<uint32_t> class Var>
-void applyFunction();
-
 
 } // end namespace csmp
 

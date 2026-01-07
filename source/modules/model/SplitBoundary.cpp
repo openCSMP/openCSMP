@@ -82,22 +82,22 @@ SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
   // building the interface vector (for this particular region)
   // ----------------------------------------------------------
   this->cell_vec_.reserve( info.interior_elmts.size() + info.perimeter_elmts.size() );
-  const size_t n_elements_plus_faces{ mesh.Elements() + mesh.Faces() };
-  for ( auto& i : info.interior_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),i-n_elements_plus_faces)) );
-  for ( auto& i : info.perimeter_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),i-n_elements_plus_faces)) );
+  const long n_elements_plus_faces = static_cast<long>(mesh.Elements() + mesh.Faces());
+  for ( auto& i : info.interior_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),static_cast<long>(i)-n_elements_plus_faces)) );
+  for ( auto& i : info.perimeter_elmts ) this->cell_vec_.push_back( &(*next(mesh.InterfacesBegin(),static_cast<long>(i)-n_elements_plus_faces)) );
 
   // sorting of the pointers is necessary because the memory addresses of the new pointers will be different than in the last model
   if ( info.interior_elmts.size() == 0 ) {
        sort( this->cell_vec_.begin(), this->cell_vec_.end() );
     }
   else {
-       sort( this->cell_vec_.begin(), next(this->cell_vec_.begin(),info.interior_elmts.size()) );
-       sort( next(this->cell_vec_.begin(),info.interior_elmts.size()), this->cell_vec_.end() );
+       sort( this->cell_vec_.begin(), next(this->cell_vec_.begin(),static_cast<long>(info.interior_elmts.size())) );
+       sort( next(this->cell_vec_.begin(),static_cast<long>(info.interior_elmts.size())), this->cell_vec_.end() );
     }
 
   // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
   // ---------------------------------------------------------------------------------------------------
-  this->BuildPerimeterFaceVector( info.interior_elmts.size() );
+  this->BuildPerimeterFaceVector( static_cast<long>(info.interior_elmts.size()) );
 
   // allocating the storage for subdomain properties
   // -----------------------------------------------
@@ -485,7 +485,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
      sort( inside_nodes.begin(), inside_nodes.end() );
      inside_nodes.erase( unique( inside_nodes.begin(), inside_nodes.end() ), inside_nodes.end() );
      inside_nodes.shrink_to_fit();
-     
+
      // partitioning vector into interior and perimeter nodes
      vector<Node<dim>*> interior_nodes, perimeter_nodes;
      interior_nodes.reserve( inside_nodes.size() );
@@ -506,6 +506,16 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
  } // end InsideNodes
 
 
+// TESTING OK
+// moving all inside nodes Z-coordinate by 300-m towards +Z
+//for ( auto& nit : inside_nodes ) {
+//   auto node_point = nit->Coordinate();
+//   node_point[2]  += 2.;
+//   nit->Coordinate( node_point );
+//}
+
+
+
 
 
 template<uint32_t dim>
@@ -522,7 +532,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
     for ( auto& it : this->cell_vec_ ) {
          const auto n_nodes{ it->FE()->Nodes() };
          for ( uint32_t i{0U}; i<n_nodes; i++ )
-           outside_nodes.push_back( it->N( i, INSIDE ) );
+           outside_nodes.push_back( it->N( i, OUTSIDE ) );
       }
 
      //  making the vector unique and trimming of excess memory
@@ -547,6 +557,35 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
      return make_pair( outside_nodes, interior_nodes.size() );
      
  } // end OutsideNodes
+
+
+
+
+    /// renumbers nodes in SplitBoundary domain 0..n-1 starting with the inside
+template<uint32_t dim>
+size_t SplitBoundary<dim>::RenumberNodes() const
+  {
+     auto inside_node_ptrs  = this->InsideNodes();
+     auto outside_node_ptrs = this->OutsideNodes();
+     
+     // remove the inside nodes from the outside node vector
+     unordered_set<Node<dim>*> remove_set( inside_node_ptrs.first.begin(), inside_node_ptrs.first.end());
+
+     outside_node_ptrs.first.erase( remove_if( outside_node_ptrs.first.begin(), outside_node_ptrs.first.end(),
+                                               [&](Node<dim>* n ) { return remove_set.contains(n); // C++20
+                                                                  }), outside_node_ptrs.first.end() );
+
+     cout <<"\n"<<"SplitBoundary<"<< dim <<">::RenumberNodes: ";
+     cout <<"removed "<< outside_node_ptrs.second - outside_node_ptrs.first.size() <<" outside-node pointers";
+     cout <<" shared with the inside."<< endl;
+     size_t n_node{0};
+     for ( const auto& nit : inside_node_ptrs.first ) nit->Idx(n_node++);
+     for ( const auto& nit : outside_node_ptrs.first ) nit->Idx(n_node++);
+     
+     return inside_node_ptrs.first.size() + outside_node_ptrs.first.size();
+  }
+
+
 
 
 

@@ -9,6 +9,48 @@
 
 namespace csmp {
 
+Point<2> normalToAveragePlaneThroughPointCloud( const std::vector<Point<2>>& points )
+{
+    assert(points.size() >= 2);
+
+    // 1. Compute centroid
+    Point<2> mean{0.0, 0.0};
+    for (const auto& p : points)
+        mean += p;
+    mean *= 1.0 / points.size();
+
+    // 2. Covariance components
+    double Cxx = 0.0;
+    double Cxy = 0.0;
+    double Cyy = 0.0;
+
+    for (const auto& p : points)
+    {
+        Point<2> d = p - mean;
+        Cxx += d[0] * d[0];
+        Cxy += d[0] * d[1];
+        Cyy += d[1] * d[1];
+    }
+
+    const double invN = 1.0 / points.size();
+    Cxx *= invN;
+    Cxy *= invN;
+    Cyy *= invN;
+
+    // 3. Smallest-eigenvalue eigenvector (normal)
+    const double delta = std::sqrt((Cxx - Cyy) * (Cxx - Cyy) + 4.0 * Cxy * Cxy);
+
+    Point<2> unrml { // unit normal
+        2.0 * Cxy,
+        Cyy - Cxx - delta
+    };
+
+    // 4. Normalise
+    unrml.NormalizeLengthTo(1.);
+
+    return unrml;
+}
+
 // AXES
 /// axes ( 1D )
 

@@ -81,11 +81,14 @@ SteadyStateDiffusor<dim, CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
 
 	} // end constructor
 
+
+
+
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
-                                                                  const char* diffusivity,
-                                                                  const char* diffusing_variable,
-                                                                  const char* spatial_source_variable )
+                                                        const char* diffusivity,
+                                                        const char* diffusing_variable,
+                                                        const char* spatial_source_variable )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
@@ -225,10 +228,10 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
 
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
-                                                                                const char* diffusivity,
-                                                                                const char* diffusing_variable,
-                                                                                const char* gradient_variable, 
-                                                                                double gradient_multiplier )
+                                                        const char* diffusivity,
+                                                        const char* diffusing_variable,
+                                                        const char* gradient_variable,
+                                                        double gradient_multiplier )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),
@@ -289,11 +292,11 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
 
 template<uint32_t dim,template<uint32_t> class CELLTYPE>
 SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
-                                                                                const char* diffusivity,
-                                                                                const char* diffusing_variable,
-                                                                                const char* spatial_source_variable,                    
-                                                                                const char* gradient_variable, 
-                                                                                double gradient_multiplier )
+                                                        const char* diffusivity,
+                                                        const char* diffusing_variable,
+                                                        const char* spatial_source_variable,                    
+                                                        const char* gradient_variable, 
+                                                        double gradient_multiplier )
  :
 #ifdef CSMP_WITH_SAMG_SOLVER
    solver_(&settings_),

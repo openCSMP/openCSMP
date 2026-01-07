@@ -1,5 +1,0 @@
-<map id="csmp::IsoparametricLinearTetrahedron" name="csmp::IsoparametricLinearTetrahedron">
-<area shape="rect" id="Node000001" title="4&#45;noded tetrahedron with a choice of Gaussian quadrature points" alt="" coords="5,913,219,1197"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_element.html" title="CSMP&#39;s base class of all finite elements whose functionality is provided through polymorphism." alt="" coords="30,5,194,865"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,880,115,913,110,913,110,880"/>
-</map>

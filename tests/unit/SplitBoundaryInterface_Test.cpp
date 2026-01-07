@@ -8,6 +8,7 @@
 #include "EclipseModel.h"
 #include "VTK_Interface.h"
 #include "compareFloats.h"
+#include "SteadyStateDiffusor.h"
 
 using namespace std;
 
@@ -25,6 +26,9 @@ void SplitBoundaryInterface_Test<dim>::Test_splitboundary_from_lower_dim_region(
     if constexpr (dim == 2){
         Test_NodeCorrespondance_2D("InternalBoundary_test");
     } else if constexpr (dim == 3){
+        // SKM model (normal fault in layered rock sequence
+        Test_ConversionOfNormalFault("fault_boundary_test");
+        // Eddy's test models
         Test_NodeAndElementsCorrespondance_3D("InternalBoundary3D_test");
         Test_NodeAndElementsCorrespondance_3D_X_Intersection("InternalBoundary3D_Intersect_Test");
         Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse("InternalBoundary3D_Intersect_Test");
@@ -280,7 +284,218 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
 
   return true;
 
-}
+} // end Test_NodeAndElementsCorrespondance_3D
+
+
+
+
+/*
+     Turns fault plane of lower-dim elements into SplitBoundaries representing the juxtaposition relationships between fault segments
+     SKM test with normal fault model
+*/
+template<uint32_t dim>
+void SplitBoundaryInterface_Test<dim>::Test_ConversionOfNormalFault( const string& model_name )
+ {
+  const uint32_t DIM{3U};       //we do not use template parameter - thats stupid in a test...
+  int32_t material_id = 1;
+  //model construction
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file(model_name.c_str());
+
+  bool reduce_to_regions = true;
+
+  ANSYS_Model3D model( model_name.c_str(), regions_file, variables_file, reduce_to_regions);
+
+  //Getting perimeter nodes of region, before splitboundary is created and information is lost
+  set<Node<DIM>*> perim_nodes1, perim_nodes2;
+  Region<DIM>& frac_region1 = model.Region( "NORMAL_FAULT" );
+  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++)
+    perim_nodes1.insert(*nit);
+  
+  // checking node count
+  _test( perim_nodes1.size() == frac_region1.PerimeterNodes() );
+
+
+  // ==================================================================
+  //    1. Testing splitboundary creation
+  // ==================================================================
+  const bool retain_elmts_as_intervening_elmts{ false };
+  const auto split_boundaries  = model.CreateSplitBoundaryFrom( "NORMAL_FAULT", retain_elmts_as_intervening_elmts );
+  // was the creation successful
+  _test( split_boundaries.second == true );
+  VTU_Interface<DIM> vtu( model );
+  vtu.OmitZeroInFileName(true);
+  // labelling the nodes of the volumetric regions so that the sides of each SB can be checked
+  model.InputPropertyValue("nodal id", ScalarVariable(PLAIN,0.0));
+  const csmp::Index nkey = model.Database().StorageKey("nodal id");
+  ScalarVariable number(ANY,1.);
+  for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit ) {
+        for ( auto& nit : (*rit).second.NodeVector() ) nit->Store( nkey, number );
+        number += 1.;
+      }
+  // solve a pressure equation to see whether the SplitBoundary is isolating its sides (without coupling term)
+  model.InputPropertyValue( "element vector",   makeVector(ANY,ANY,ANY,1.0e-12,1e-13,1.0e-12) );
+  model.InputPropertyValue( "element variable", makeScalar(ANY,0.0) );
+  model.Boundary("BACK").InputPropertyValue( "nodal variable", makeScalar(DIRICH,2e7) );
+  model.Boundary("FRONT").InputPropertyValue( "nodal variable", makeScalar(DIRICH,1e7) );
+  //                                                diffusivity      diffusing variable  source
+  SteadyStateDiffusor<DIM> static_pressure( model, "element vector", "nodal variable", "element variable" );
+  static_pressure.ComputeSteadyState( model.Region("Model"), false );
+  printRangeOfVariable( model, "nodal variable", true );
+  
+  // merging all splitboundaries into fault
+  size_t n_interfaces{0};
+  set<string> input_split_boundaries;
+  for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+       input_split_boundaries.insert( (*split).first );
+       n_interfaces           += (*split).second.Cells();
+    }
+  _test( input_split_boundaries.size() == split_boundaries.first.size() );
+  _test( n_interfaces == model.Mesh().Interfaces() );
+  model.CreateNonUniqueSplitBoundaryGroup( input_split_boundaries, "SPLIT_FAULT" );
+  
+  if ( verbose_ ) {
+       // moving the inside nodes towards front (which should expand the fault thickness)
+       list<string> outputProps{ "nodal id", "nodal variable" };
+       // entire model
+       vtu.OutputDataToVTU( model_name, outputProps, "Model", static_cast<int>(0) );
+       // Getting splitboundaries
+       // pair<set<string>,bool>
+       for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+            SplitBoundary<3> sb_patch = model.SplitBoundary( (*split).first );
+            vtu.OutputDataToVTU( model_name, outputProps, sb_patch, static_cast<int>(0) );
+         }
+    }
+
+  // local mesh connectivity update version of biggest SplitBoundary patch
+  _test( split_boundaries.first.size()+1 == model.SplitBoundaries() );
+  map<size_t,string> sbpatches;
+  for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+       _test( (*split).first == (*split).second.Name() );
+       sbpatches.insert( make_pair( (*split).second.Cells(), (*split).first ) );
+    }
+  SplitBoundary<3>& biggest_patch = model.SplitBoundary( (*sbpatches.rbegin()).second );
+  
+  auto t0 = chrono::high_resolution_clock::now();
+  model.Mesh().UpdateConnectivity( biggest_patch.CellsBegin(), biggest_patch.CellsEnd() );
+  auto t1 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed LOCAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t1-t0).count();
+  cout <<" milliseconds."<< endl;
+
+  // global version
+  auto t2 = chrono::high_resolution_clock::now();
+  model.Mesh().UpdateConnectivity();
+  auto t3 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed GLOBAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t3-t2).count();
+  cout <<" milliseconds."<< endl;
+
+
+  // ==================================================================
+  //   2. Back inserting lower-dimensional region in each patch
+  // ==================================================================
+  model.RemoveSplitBoundary( "SPLIT_FAULT", false /* erase_interfaces */ ); // removing overlapping composite SplitBounday
+  model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+  // checking the remaining split boundaries
+  set<int32_t> vol_region_domain_IDs{ model.Region("LAYER_BOTTOM").DomainIndex(),
+                                      model.Region("LAYER_RESERVOIR").DomainIndex(),
+                                      model.Region("LAYER_TOP").DomainIndex() };
+  const double relaxation_factor{10.};
+  for ( auto sb=model.SplitBoundariesBegin(); sb!=model.SplitBoundariesEnd(); ++sb ) {
+        if ( verbose_ ) cout <<"\n\t"<< (*sb).first <<": consistency checks..."<< endl;
+        for ( auto& ifp : (*sb).second.CellVector() )
+          {
+              //Check unit normals are 0 1 0 on INSIDE and MIDDLE and the opposite on OUTSIDE
+              Point<DIM> nrml_in  = ifp->UnitNormal(INSIDE);
+              Point<DIM> nrml_out = ifp->UnitNormal(OUTSIDE);
+              Point<DIM> nrml_mid = ifp->UnitNormal(MIDDLE);
+              //Inside opposite to outside
+              _equal( nrml_in[0] , -nrml_out[0] , numeric_limits<double>::epsilon() * relaxation_factor );
+              _equal( nrml_in[1] , -nrml_out[1] , numeric_limits<double>::epsilon() * relaxation_factor );
+              _equal( nrml_in[2] , -nrml_out[2] , numeric_limits<double>::epsilon() * relaxation_factor );
+              // Middle vs Inside (should be same)
+              _equal( nrml_in[0] , nrml_mid[0] , numeric_limits<double>::epsilon() * relaxation_factor );
+              _equal( nrml_in[1] , nrml_mid[1] , numeric_limits<double>::epsilon() * relaxation_factor );
+              _equal( nrml_in[2] , nrml_mid[2] , numeric_limits<double>::epsilon() * relaxation_factor );
+
+              //Retrieve the nodes of face that match with INSIDE OUTSIDE
+              vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
+                               nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
+
+              set<Node<DIM>*> outside_nds_interface;
+              set<Node<DIM>*> outside_nds_face;
+              const uint32_t n_nodes = ifp->FE()->Nodes();
+              
+              //Nodes should match that of INSIDE face
+              for ( uint32_t n{0U}; n<n_nodes;++n )
+                {
+                  _test( ifp->N(n,INSIDE)  == ifp->InnerParent()->N(nids_in[n] ));
+
+                  //Nodes should contain same nodes of OUTSIDE face, but may be rotated, so may not match
+                  outside_nds_interface.insert( ifp->N(n,OUTSIDE));
+                  outside_nds_face.insert( ifp->OuterParent()->N(nids_out[n]));
+
+                  //Testing matching assignment
+                  //inside remains unchanged
+                  _test( ifp->MatchingN(n,INSIDE) == ifp->N(n,INSIDE) );
+                  //Outside coordinates must match with Inside and middle
+                  _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,OUTSIDE)->Coordinate() );
+                  _test( ifp->MatchingN(n,INSIDE)->Coordinate() == ifp->MatchingN(n,MIDDLE)->Coordinate() );
+
+                  //Testing nodes are duplicated in interior and the same on perimeter
+                  //if node is not on perimeter
+                  if ( perim_nodes1.find( ifp->N(n,INSIDE) ) == perim_nodes1.end() )
+                    //test node is duplicated
+                    _test( ifp->MatchingN(n,INSIDE) != ifp->MatchingN(n,OUTSIDE) );
+               }
+              // Region IDs on the inside and outside
+              // do the region IDs of the connected parent elements match ModelSubdomain IDs?
+              _test( vol_region_domain_IDs.find( ifp->InnerParent()->Region_ID() ) != vol_region_domain_IDs.end() );
+              _test( vol_region_domain_IDs.find( ifp->OuterParent()->Region_ID() ) != vol_region_domain_IDs.end() );
+
+              // Testing node-parent elements on inside to confirm that they are indeed inside the BottomUnit region
+              // TODO: adapt this test to normal fault model, using SB names to deduce juxtaposed regions
+              /*
+              for ( uint32_t n{0U}; n<n_nodes;++n ) {
+                  for ( uint32_t p{0U}; p < ifp->N(n,INSIDE)->Parents(); ++p )
+                    if ( ifp->N(n,INSIDE)->IsManifold() )
+                      {
+                        _test( (*rit).second.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
+                        _test( !(*rit).second.Contains( ifp->N(n,INSIDE)->Parent(p))); //top unit doenst have parent of inside node
+                      }
+                  for ( uint32_t p{0U}; p < ifp->MatchingN(n,OUTSIDE)->Parents(); ++p ) {
+                        if ( ifp->N(n,OUTSIDE)->IsManifold() )
+                          {
+                            _test( !(*rit).second.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit must not contain parent of outside node
+                            _test(  (*rit).second.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //top unit must contain parent of matching outside node
+                          }
+                        else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ); //test nodes match if on perimeter
+                    }
+                }
+              */
+           }
+    }
+
+  // ========================================================================
+  //    3. Testing whether a computation can be done on interconnected inserted lower-dim region
+  // ========================================================================
+  // TODO: write computation with Dirichlet conditions on perimeter nodes and source term to inflate regions
+
+    
+  // ========================================================================
+  //    4. Testing the same SplitBoundary creation after all unique volumetric
+  //       regions are separated by SplitBoundaries
+  // ========================================================================
+  // TODO: write code to do this only for the volumetric regions
+  // Test 1: what will this method do with lower-dim unique regions
+   const size_t n_split_boundaries_created = model.SeparateUniqueRegionsBySplitBoundaries();
+   
+   
+} // end Test_ConversionOfNormalFault
+
+
 
 
 
@@ -332,7 +547,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
 
 
   Node<DIM>* split_perimter_node = nullptr;
-  for ( auto n : perim_nodes_planar ){
+  for ( const auto& n : perim_nodes_planar ){
     if ( approximatelyEqual(n->Coordinate()[0] , 2.5, 0.01) &&
          approximatelyEqual(n->Coordinate()[1] , 5.0, 0.01) &&
          approximatelyEqual(n->Coordinate()[2] , 7.5, 0.01)  ){
@@ -375,7 +590,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
 
     //Retrieve the nodes of face that match with INSIDE OUTSIDE
     vector<uint32_t> nids_in  = ifp->InnerParent()->FE()->NodesOfFace( ifp->InnerParentFaceID()),
-                          nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
+                     nids_out = ifp->OuterParent()->FE()->NodesOfFace( ifp->OuterParentFaceID());
 
 
     set<Node<DIM>*> outside_nds_interface;
@@ -532,7 +747,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
 
   return true;
 
-}
+} // end Test_NodeAndElementCorrespondance_3D_X_Intersection
 
 
 
@@ -842,7 +1057,7 @@ void SplitBoundaryInterface_Test<dim>::VisualiseSplitBoundaries( Model<dim>& mod
       interfaceValueWrite = -1;
       (*ifit)->Parent( OUTSIDE )->Store( element_prop_idx, interfaceValueWrite );
 
-      for ( auto i = 0; i<(*ifit)->FE()->Nodes(); ++i )
+      for ( uint32_t i{0}; i<(*ifit)->FE()->Nodes(); ++i )
       {
         if ( (*ifit)->N( i, OUTSIDE )->Idx() != (*ifit)->N( i, INSIDE )->Idx() )
         {
@@ -870,19 +1085,16 @@ void SplitBoundaryInterface_Test<dim>::VisualiseSplitBoundaries( Model<dim>& mod
 
 
 
-
+static string getDimensionStandard(uint32_t dim) {
+    return to_string(dim) + "D";
+}
 
 /// TESTS
 /// SPLITBOUNDARY BETWEEN REGIONS - NOT FINISHED .. TODO
 template<uint32_t dim>
 void SplitBoundaryInterface_Test<dim>::Test_splitboundary_between_regions( const string& model_name )
 {
-  ostringstream ostr;
-  string dimension( "" );
-  ostr << dim;
-  dimension += ostr.str();
-  dimension += "D";
-
+  string dimension = getDimensionStandard(dim);
   if ( verbose_ ) cerr << "\nStart " << dimension << " SplitBoundary Test: SplitBoundary between Regions\n";
 
   string test_name( "SPLITBOUNDARY_TEST_BETWEEN_REGIONS_" );

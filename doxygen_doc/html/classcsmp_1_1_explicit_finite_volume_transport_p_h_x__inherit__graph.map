@@ -1,5 +1,0 @@
-<map id="csmp::ExplicitFiniteVolumeTransportPHX&lt; dim &gt;" name="csmp::ExplicitFiniteVolumeTransportPHX&lt; dim &gt;">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,900,228,1641"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_node_centered_finite_volume_transport.html" title="base class for node&#45;centered generic finite volume calculations on an entire Model object" alt="" coords="16,5,217,852"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="120,867,120,900,114,900,114,867"/>
-</map>

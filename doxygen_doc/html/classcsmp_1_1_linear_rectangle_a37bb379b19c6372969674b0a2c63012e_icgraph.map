@@ -1,5 +1,0 @@
-<map id="csmp::LinearRectangle::Volume" name="csmp::LinearRectangle::Volume">
-<area shape="rect" id="Node000001" title="computes and returns the volume of the element which is an area for a surface&#45; and a length for a lin..." alt="" coords="209,5,364,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_linear_rectangle.html#a7e3b697c937138ea5aa2755a608c63df" title="initialises interpolation function product matrix N^T x N for analytically integrated elements" alt="" coords="5,5,161,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="193,28,161,28,161,23,193,23"/>
-</map>

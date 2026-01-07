@@ -1,9 +1,0 @@
-<map id="csmp::VTU_Interface::EstablishConnectivityFileBCPC" name="csmp::VTU_Interface::EstablishConnectivityFileBCPC">
-<area shape="rect" id="Node000001" title="Cell centers." alt="" coords="5,71,221,111"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_x_m_l___document.html#abd3d10c80f0fc0eb484f792da9e1a5ca" title="closes given node" alt="" coords="269,5,424,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,68,256,48,257,53,189,73"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_x_m_l___document.html#a4dba5b7c51f6c921606bb5eec440228e" title="inserts data at current position(not responsible for line breaks/levels!!)" alt="" coords="269,71,424,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,88,253,88,253,94,221,94"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_x_m_l___document.html#a905e5705752a4c7d4c3b99551dd36d14" title="opens a new xml node with name and label/settings" alt="" coords="269,136,424,177"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="189,109,257,129,256,134,187,114"/>
-</map>

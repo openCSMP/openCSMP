@@ -69,7 +69,7 @@ class RegionInterface {
   public:
     RegionInterface() {}
     RegionInterface( const RegionInterface& ) = delete;
-    ~RegionInterface() {}
+    ~RegionInterface() = default;
 
     /// checks whether region exists considering both unique and non-unique regions
     bool ContainsRegion( const std::string& regionname ) const;

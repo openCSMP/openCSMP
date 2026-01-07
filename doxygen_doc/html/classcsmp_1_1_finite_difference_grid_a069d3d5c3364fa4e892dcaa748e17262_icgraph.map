@@ -1,8 +1,0 @@
-<map id="csmp::FiniteDifferenceGrid::ExtrapolateTo" name="csmp::FiniteDifferenceGrid::ExtrapolateTo">
-<area shape="rect" id="Node000001" title=" " alt="" coords="456,5,633,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_finite_difference_grid.html#a3cebb2ae952823bddf1c08be7e67eee2" title=" " alt="" coords="231,5,408,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="441,37,408,37,409,32,441,32"/>
-<area shape="poly" id="edge2_Node000002_Node000001" title=" " alt="" coords="424,14,456,14,456,20,424,19"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_finite_difference_grid.html#abba1f256dbf0f0c4327cc16acfa03acf" title=" " alt="" coords="5,5,183,46"/>
-<area shape="poly" id="edge3_Node000002_Node000003" title=" " alt="" coords="215,28,183,28,183,23,215,23"/>
-</map>

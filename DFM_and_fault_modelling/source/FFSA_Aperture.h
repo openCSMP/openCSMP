@@ -2,7 +2,6 @@
 #define CSMP_FAR_FIELD_STRESS_APERTURE_APPROXIMATION_H
 
 #include "CSMP_definitions.h"
-
 #include <Eigen/Dense> // Eigen library for vectorized math
 
 namespace csmp {
@@ -17,17 +16,25 @@ namespace csmp {
     For example application see    'Implementation Barton&Bandis-Liem.pdf'
  */
 struct FFSA_InputParameters {
-    // Physical Parameters (must be of size N_frac)
+    explicit FFSA_InputParameters( size_t n_fracs ) : L(n_fracs), alpha(n_fracs), JRC(n_fracs), sigma_c(n_fracs),
+                                                      JCS(n_fracs), K_ni(n_fracs), vm_factor(n_fracs), phi_r(n_fracs),
+                                                      p_f(n_fracs), E_mod(n_fracs), nu(n_fracs),C_g(n_fracs),
+                                                      N_fractures( static_cast<long>(n_fracs) ) {}
+    FFSA_InputParameters() = default;
+    
+    // Far-field parameters
+    double sigma_H;              ///< Max. principal far field stress, SHmax [MPa]
+    double sigma_h;              ///< Min. principal far field stress, Shmin [MPa]
+    double beta;                 ///< Orientation of sigma_H [°]
+
+   // Physical Parameters (must be of size N_frac)
     Eigen::VectorXd L;           ///< Fracture length [m]
-    Eigen::VectorXd alpha;       ///< Fracture angle (between fracture and x-axis) [°]
-    Eigen::VectorXd sigma_H;     ///< Max. principal far field stress, SHmax [MPa]
-    Eigen::VectorXd sigma_h;     ///< Min. principal far field stress, Shmin [MPa]
-    Eigen::VectorXd beta;        ///< Orientation of sigma_H [°]
+    Eigen::VectorXd alpha;       ///< Originally, the fracture dip angle (but used here to denote angle between normal to fracture plane and x-axis) [°]
     Eigen::VectorXd p_f;         ///< Ambient fluid pressure [MPa]
     Eigen::VectorXd JRC;         ///< Joint roughness coefficient, JRC 0-20 [-]
     Eigen::VectorXd sigma_c;     ///< Unconfined compression strength, UCS [MPa]
     Eigen::VectorXd JCS;         ///< Joint wall compressive strength, JCS [MPa]
-    Eigen::VectorXd K_ni;        ///< Initial normal stiffness [MPa/mm]
+    Eigen::VectorXd K_ni;        ///< Initial normal stiffness [MPa/mm], related to asperity height, hr (kn0 = (C_g * JCS) / hr)
     Eigen::VectorXd vm_factor;   ///< Factor for maximum possible joint closure [-]
     Eigen::VectorXd phi_r;       ///< Residual friction angle [°]
     Eigen::VectorXd E_mod;       ///< E-modulus of fractured rock [MPa]
@@ -44,7 +51,7 @@ struct FFSA_InputParameters {
     std::string method_peak_displacement; ///< Method for peak displacement ('Barton', 'Asadollahi')
     std::string method_sigma_eff;       ///< Method for sigma_EFF calculation ('end', 'onset', 'mean', 'value')
 
-    long N_frac = 0; ///< Number of fractures (derived from vector size)
+    long N_fractures = 0; ///< Number of fractures (derived from vector size)
 };
 
 
@@ -188,7 +195,7 @@ private:
      * @param phi_r Residual friction angle [°].
      * @return Eigen::VectorXd Vector of Mobilized JRC values [-].
      */
-    Eigen::VectorXd FFSA_JRCmob_calc(const Eigen::VectorXd& d_by_dpeak, double sigma_n, double JRC, double JCS, double phi_r) const;
+    Eigen::VectorXd FFSA_JRCmob(const Eigen::VectorXd& d_by_dpeak, double sigma_n, double JRC, double JCS, double phi_r) const;
 
 
     /**
@@ -210,7 +217,7 @@ private:
      * - JRC_mob: Mobilized joint roughness coefficient [-].
      * - phi_s_mob: Mobilized friction angle [°].
      */
-    std::tuple<double, double, double> FFSA_ShearDisplacement_calc(
+    std::tuple<double, double, double> FFSA_ShearDisplacement(
               double sigma_s, double K_s, double delta_peak, double JRC, double JCS,
               double sigma_eff, double sigma_EFF, double phi_r, const std::string& method) const;
 
@@ -233,11 +240,15 @@ private:
      * - JRC_mob: Mobilized JRC [-].
      * - phi_d_mob: Mobilized dilation angle [°].
      */
-    std::tuple<double, double, double> FFSA_ShearDilation_calc(
+    std::tuple<double, double, double> FFSA_ShearDilation(
               double delta_s, double delta_peak, double JRC, double JCS, double sigma_eff,
               double phi_r, double M, const std::string& method) const;
 };
 
-}
+
+/// FFSA calculation demonstrated on two synthetic datasets
+int demo_FFSA();
+
+} // csmp
 
 #endif // CSMP_FAR_FIELD_STRESS_APERTURE_APPROXIMATION_H

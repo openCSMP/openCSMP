@@ -1,9 +1,0 @@
-<map id="csmp::VTU_Interface::WriteFieldDataArray" name="csmp::VTU_Interface::WriteFieldDataArray">
-<area shape="rect" id="Node000001" title="write field data" alt="" coords="5,71,152,111"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_x_m_l___document.html#abd3d10c80f0fc0eb484f792da9e1a5ca" title="closes given node" alt="" coords="200,5,355,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="142,68,198,49,200,54,143,73"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_x_m_l___document.html#a4dba5b7c51f6c921606bb5eec440228e" title="inserts data at current position(not responsible for line breaks/levels!!)" alt="" coords="200,71,355,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="152,88,184,88,184,94,152,94"/>
-<area shape="rect" id="Node000004" href="$classcsmp_1_1_x_m_l___document.html#a905e5705752a4c7d4c3b99551dd36d14" title="opens a new xml node with name and label/settings" alt="" coords="200,136,355,177"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="143,109,200,128,198,133,142,114"/>
-</map>

@@ -1,7 +1,0 @@
-<map id="csmp::Fracture::AveragePropertyToMiddle" name="csmp::Fracture::AveragePropertyToMiddle">
-<area shape="rect" id="Node000001" title="General method to split tip nodes along a predefined path specified by the boundary object." alt="" coords="5,39,220,79"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_scalar_variable.html#ad41aa96d231c5754a999f38a5bc012a9" title="assigment: status of variable which determines how it is used in computations" alt="" coords="268,5,412,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="220,41,252,36,252,41,221,46"/>
-<area shape="rect" id="Node000003" href="$classcsmp_1_1_scalar_variable.html#a7f0ab5431406d975d6e1de988f369176" title="assignment as an lvalue" alt="" coords="268,71,412,111"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="221,72,252,76,252,81,220,77"/>
-</map>

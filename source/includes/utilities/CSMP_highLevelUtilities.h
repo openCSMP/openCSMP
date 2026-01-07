@@ -120,6 +120,15 @@ char * strptime( const char *s, const char *format, struct tm *tm );
 
 
 
+/**
+  Does the supplied string contain a number.
+*/
+inline bool containsDigit(const std::string& s)
+{
+    return std::any_of(s.begin(), s.end(),
+                       [](unsigned char c){ return std::isdigit(c); });
+}
+
 
 /** Check if a string or string_view contains a substring
  

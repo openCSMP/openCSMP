@@ -1,5 +1,0 @@
-<map id="csmp::ModelTopology::BoxShapedModel" name="csmp::ModelTopology::BoxShapedModel">
-<area shape="rect" id="Node000001" title="checks that 3D model contains the boundaries LEFT, RIGHT, BOTTOM, FRONT, BACK; TOP omitted because it..." alt="" coords="257,5,405,46"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_model_topology.html#a4d577fdafb7d7f9e492ad90161dd93a2" title="recreates the BOX_BOUNDARY node flags if a problem was detected" alt="" coords="5,5,209,46"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="241,28,209,28,209,23,241,23"/>
-</map>

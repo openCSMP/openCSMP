@@ -1,5 +1,0 @@
-<map id="csmp::HeterogeneityAndRateAwareModel::EffectiveSaturation" name="csmp::HeterogeneityAndRateAwareModel::EffectiveSaturation">
-<area shape="rect" id="Node000001" title="average effective saturation as required by 2&#45;phase model" alt="" coords="5,5,218,46"/>
-<area shape="rect" id="Node000002" href="$namespacecsmp.html#a7347d94ec898ee4f764f3755a297e749" title="effective wetting phase saturation, limited to range 0..1" alt="" coords="266,13,356,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="218,23,250,23,250,28,218,28"/>
-</map>

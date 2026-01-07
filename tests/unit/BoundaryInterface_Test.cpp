@@ -362,7 +362,7 @@ static bool checkNeighborNormalsForConsistentOrientation( const Region<3U>&  sub
       if ( (*it)->IsSurface() ) {
            (*it)->UnitNormal( normal );
            const size_t neighbors((*it)->Neighbors());
-           for ( auto i{0}; i<neighbors; ++i )
+           for ( uint32_t i{0}; i<neighbors; ++i )
              // only valid neighbor elements are considered
              if ( (*it)->Neighbor(i) != nullptr ) {
                   (*it)->Neighbor(i)->UnitNormal( nbor_normal );
@@ -499,11 +499,13 @@ size_t  labelRegionPatches( Model<3U>& model, const char* dim_1_region, const ch
     size_t boundary_elements(0);
     for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )
       {
-         if ( atBoundary(*eit) ) {
-              cerr <<"\nElement is a boundary element:";
-              (*eit)->Out();
-              boundary_elements++;
-           }
+         for ( uint32_t i{0}; i<(*eit)->Nodes(); ++i )
+           if ( (*eit)->N(i)->AtBoundary() != NOT && (*eit)->N(i)->AtBoundary() != INTERNAL ) {
+                cerr <<"\nElement is a boundary element:";
+                (*eit)->Out();
+                boundary_elements++;
+                break;
+             }
       }
     if ( boundary_elements > 0 ) {
          ErrorHandler::Instance().Note( ERROR, "labelRegionPatches:", dim_1_region, "region appears to lie at the model boundary; nothing was done." );

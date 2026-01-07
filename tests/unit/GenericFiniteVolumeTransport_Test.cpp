@@ -12,6 +12,7 @@
 #include "FluxEvaluator.h"
 #include "TimeStepEvaluator.h"
 #include "ExplicitTransport.h"
+#include "compareFloats.h"
 
 // model
 #include "Model.h"
@@ -46,7 +47,6 @@
 
 using namespace std;
 
-
 namespace csmp {
 
     namespace {
@@ -54,23 +54,21 @@ namespace csmp {
         const double s_flux_balance_thresh = 1.0e-13;
 
 
-        double rel_error(double x, double y)
-        {
-            auto mag = std::max(std::abs(x),std::abs(y));
-            return std::abs(x - y) / mag;
+        double rel_error(double x, double y) {
+            auto mag = max(abs(x),abs(y));
+            return abs(x - y) / mag;
         }
         
-        double max_abs(double x, double y)
-        {
-            return std::max(std::abs(x),std::abs(y));
+        
+        double max_abs(double x, double y) {
+            return max(abs(x),abs(y));
         }
 
         
         template<typename It, typename P>
-        void
-        jacobian_at_point(It& it, const P& p)
+        void jacobian_at_point(It& it, const P& p)
         {
-            std::vector<double> DNR, DNS, DNT;
+            vector<double> DNR, DNS, DNT;
             (*it)->FE()->dNr( p[0], p[1], p[2], DNR );
             (*it)->FE()->dNs( p[0], p[1], p[2], DNS );
             (*it)->FE()->dNt( p[0], p[1], p[2], DNT );
@@ -95,7 +93,10 @@ namespace csmp {
 */
 void GenericFiniteVolumeTransport_Test::run()
  {
+    // compares accuracy of parametric with physical space integrations
     TestBasics();
+    
+    // compares speed of parametric with physical space facet integrations
     BenchmarkGlobalVersusParametricIntegration();
    
  } // end run
@@ -126,10 +127,6 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
      // 1. building model from ANSYS data files
      // ------------------------------------------------------------
      string  model_name("prism_test");
-     // string  model_name("fracs4");
-
-//      ANSYS_Model3D  model( model_name.c_str(), "CSMP-2phase-variables.txt");
-//      ANSYS_Model3D  model( model_name.c_str(), "ExplicitTransport_Test-variables.txt");
       ANSYS_Model3D  model( model_name.c_str(), "VariableSet_TracerTransfer-variables.txt");
       printModelDimensions( model, true );
 
@@ -205,7 +202,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
                        K_key(model.Database().StorageKey("conductivity")),
                        v_key(model.Database().StorageKey("velocity"));
    
-     std::vector<double> DNR, DNS, DNT;
+     vector<double> DNR, DNS, DNT;
      for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
        {
           const size_t nodes((*it)->Nodes());
@@ -236,7 +233,8 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
           // 2. facet projections
           // --------------------
           const uint32_t facets=(*it)->Facets();
-          for ( uint32_t i{0u}; i<facets; ++i ) {
+          for ( uint32_t i{0u}; i<facets; ++i )
+            {
               assert( (*it)->IsVolume() );
               
                // 2.1 classic way of calculating facet fluxes in physical space
@@ -273,36 +271,36 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
               double flux_parametric = projected_velocity_parametric * (*it)->FacetAreaMapped(i);
               
               total_flux_parametric += flux_parametric;
-              
+ 
+              const double tolerance{1.0e-10};
+              double relative_error = rel_error(flux_physical, flux_parametric);
+              _test( approximatelyEqual( flux_physical, flux_parametric, tolerance ) );
+
               // 3. testing that the fluxes are the same
               // ---------------------------------------
+              if constexpr ( verbose_ ) {
+                  cout << setprecision(5);
+                  cout << "velo physical   " << projected_velocity_physical << '\n';
+                  cout << "velo parametric " << projected_velocity_parametric << '\n';
+                  cout << "flux physical   " << flux_physical << '\n';
+                  cout << "flux parametric " << flux_parametric << '\n';
 
-              
-              std::cerr << std::setprecision(15);
-              std::cerr << "p.v. physical   " << projected_velocity_physical << '\n';
-              std::cerr << "p.v. parametric " << projected_velocity_parametric << '\n';
-              std::cerr << "flux physical   " << flux_physical << '\n';
-              std::cerr << "flux parametric " << flux_parametric << '\n';
-              
-              double relative_error = rel_error(flux_physical, flux_parametric);
-              if (relative_error > 1e-10) {
-#if 0
-                  std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
-                  std::cerr << "Facet: " << i << ' ' << parseFacetType(((*it)->FV()->FacetType(i))) << '\n';
-                  std::cerr << "Flux physical: " << flux_physical << '\n';
-                  std::cerr << "Flux from parametric: " << flux_parametric << '\n';
-                  std::cerr << "Rel error: 10^" << std::log(relative_error) << '\n';
-#endif
+                  if ( relative_error > tolerance ) {
+                       cout << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+                       cout << "Facet: " << i << ' ' << parseFacetType(((*it)->FV()->FacetType(i))) << '\n';
+                       cout << "Flux physical: " << flux_physical << '\n';
+                       cout << "Flux from parametric: " << flux_parametric << '\n';
+                       cout << "Rel error: 10^" << log(relative_error) << '\n';
+                    }
+
+                  cout << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+                  cout << "Total flux physical: " << total_flux_physical << '\n';
+                  cout << "Total flux parametric: " << total_flux_parametric << '\n';
+                  cout << "Total facets: " << (*it)->Facets() << '\n';
               }
-              else {
-                  _equal( flux_physical, flux_parametric, 1e-10 );
-              }
-          }
-           std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
-           std::cerr << "Total flux physical: " << total_flux_physical << '\n';
-           std::cerr << "Total flux parametric: " << total_flux_parametric << '\n';
-           std::cerr << "Total facets: " << (*it)->Facets() << '\n';
-       }
+              
+          } // end facet projections
+       } // end cells
 
  } // end TestBasics
 
@@ -401,12 +399,13 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                         K_key(model.Database().StorageKey("conductivity")),
                         v_key(model.Database().StorageKey("velocity"));
    
-      std::vector<double> DNR, DNS, DNT;
-      std::vector<double> cross_section(model_domain.Nodes());
-      std::vector<double> velocity_magnitude(model_domain.Nodes());
+      vector<double> DNR, DNS, DNT;
+      vector<double> cross_section(model_domain.Nodes());
+      vector<double> velocity_magnitude(model_domain.Nodes());
+
 
      // -----------------------------------------------------------------------
-     // 4. stepping over the model comparing facet by facet flux calculations
+     // 5. stepping over the model comparing facet by facet flux calculations
      // -----------------------------------------------------------------------
      for (auto it = model_domain.NodesBegin(); it != model_domain.NodesEnd(); ++it) {
          double csa = 0.0;
@@ -433,9 +432,9 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
              
              for ( uint32_t k{0u}; k < e->FV()->FacetsPerSector(child); ++k) {
                  const auto facet = e->FV()->FacetSurroundingSector(child, k);
-                 double costheta = std::abs(dotProduct(e->FacetNormal(facet), vDavg));
+                 double costheta = abs(dotProduct(e->FacetNormal(facet), vDavg));
                  csa += costheta * e->FacetArea(facet);
-                 surface_area += std::abs(e->FacetArea(facet));
+                 surface_area += abs(e->FacetArea(facet));
              }
 
          }
@@ -449,21 +448,21 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          velocity_magnitude[(*pit)->Idx()] = 0.;
      }
 
-     std::vector<double> flux_balance_parametric(model_domain.Nodes());
-     std::vector<double> flux_balance_physical(model_domain.Nodes());
-     std::vector<Point<3u>> directed_area_para(model_domain.Nodes());
-     std::vector<Point<3u>> directed_area_phys(model_domain.Nodes());
+     vector<double> flux_balance_parametric(model_domain.Nodes());
+     vector<double> flux_balance_physical(model_domain.Nodes());
+     vector<Point<3u>> directed_area_para(model_domain.Nodes());
+     vector<Point<3u>> directed_area_phys(model_domain.Nodes());
 
-     std::vector<std::pair<std::set<Point<3u>>,Element<3u>*> > elements;
+     vector<pair<set<Point<3u>>,Element<3u>*> > elements;
      elements.reserve(model_domain.Cells());
      for (auto it = model_domain.CellsBegin(); it != model_domain.CellsEnd(); ++it) {
-         std::set<Point<3u>> nodes;
+         set<Point<3u>> nodes;
          for (auto itn = (*it)->NodesBegin(); itn != (*it)->NodesEnd(); ++itn) {
              nodes.insert((*itn)->Coordinate());
          }
          elements.push_back(make_pair(nodes, *it));
      }
-     std::sort(elements.begin(), elements.end());
+     sort(elements.begin(), elements.end());
      double maxtheta = 0;
      
 
@@ -472,7 +471,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            auto iti = element_key.second;
            auto it = &iti;
        
-           // std::cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
+           // cerr << "Element type: " << parseFiniteElementType((*it)->FE_Type()) << '\n';
            assert( (*it)->IsVolume() );
 
 
@@ -552,19 +551,19 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
                _test( (*it)->N(inside_node)->Idx() < model_domain.Nodes() );
                _test( (*it)->N(outside_node)->Idx() < model_domain.Nodes() );
 
-               const double scale = std::max(cross_section[inside_node], cross_section[outside_node])
-                   * std::max(velocity_magnitude[inside_node], velocity_magnitude[outside_node]);
+               const double scale = max(cross_section[inside_node], cross_section[outside_node])
+                   * max(velocity_magnitude[inside_node], velocity_magnitude[outside_node]);
 
-               const double abserr = std::abs(flux_parametric - flux_physical);
+               const double abserr = abs(flux_parametric - flux_physical);
                const double relerr = rel_error(flux_parametric, flux_physical);
-               std::cerr << "scale = " << scale << "\n";
-               std::cerr << "abserr = " << abserr << "\n";
-               std::cerr << "relerr = " << relerr << "\n";
-               std::cerr << "abserr = 10^" << std::log10(abserr) << "\n";
+               cerr << "scale = " << scale << "\n";
+               cerr << "abserr = " << abserr << "\n";
+               cerr << "relerr = " << relerr << "\n";
+               cerr << "abserr = 10^" << log10(abserr) << "\n";
 
                // Any discrepancy should be explainable by plain old numerical error,
                // or by integration error.
-               // _test(abserr < std::max(1.0e-10, scale * 1.0e-10));
+               // _test(abserr < max(1.0e-10, scale * 1.0e-10));
                
                flux_balance_parametric[(*it)->N(inside_node)->Idx()] += flux_parametric;
                flux_balance_parametric[(*it)->N(outside_node)->Idx()] -= flux_parametric;
@@ -583,7 +582,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
            }
        }
      
-     std::cerr << "maxtheta = " << maxtheta << '\n';
+     cerr << "maxtheta = " << maxtheta << '\n';
      
      for ( auto pit = model_domain.PerimeterNodesBegin(); pit != model_domain.NodesEnd(); ++pit )
      {
@@ -594,10 +593,10 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          directed_area_para[(*pit)->Idx()] = 0.;
      }
      
-     double fmin_phys = +std::numeric_limits<double>::max();
-     double fmax_phys = -std::numeric_limits<double>::max();
-     double fmin_para = +std::numeric_limits<double>::max();
-     double fmax_para = -std::numeric_limits<double>::max();
+     double fmin_phys = +numeric_limits<double>::max();
+     double fmax_phys = -numeric_limits<double>::max();
+     double fmin_para = +numeric_limits<double>::max();
+     double fmax_para = -numeric_limits<double>::max();
 
      size_t weird_nodes = 0;
      double maxdelta = 0;
@@ -609,30 +608,30 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
          double phys = flux_balance_physical[i];
          double para = flux_balance_parametric[i];
 
-         fmin_phys = std::min(fmin_phys, phys);
-         fmax_phys = std::max(fmin_phys, phys);
-         fmin_para = std::min(fmin_para, para);
-         fmax_para = std::max(fmin_para, para);
-         double delta = std::abs(phys - para);
-         std::cerr << "scale[" << i << "] = " << scale << '\n';
-         std::cerr << "flux_balance_phys[" << i << "] = " << phys << '\n';
-         std::cerr << "flux_balance_para[" << i << "] = " << para << '\n';
-         std::cerr << "flux_balance_delta[" << i << "] = " << delta << '\n';
-         maxdelta = std::max(maxdelta, delta);
+         fmin_phys = min(fmin_phys, phys);
+         fmax_phys = max(fmin_phys, phys);
+         fmin_para = min(fmin_para, para);
+         fmax_para = max(fmin_para, para);
+         double delta = abs(phys - para);
+         cerr << "scale[" << i << "] = " << scale << '\n';
+         cerr << "flux_balance_phys[" << i << "] = " << phys << '\n';
+         cerr << "flux_balance_para[" << i << "] = " << para << '\n';
+         cerr << "flux_balance_delta[" << i << "] = " << delta << '\n';
+         maxdelta = max(maxdelta, delta);
          if (delta > s_flux_balance_thresh) {
              ++weird_nodes;
-             std::cerr << "For node " << i << "\n";
-             std::cerr << "Flux balance phys " << phys << "\n";
-             std::cerr << "Flux balance para " << para << "\n";
-             std::cerr << "delta " << delta << " = 10^" << std::log10(delta) << "\n";
+             cerr << "For node " << i << "\n";
+             cerr << "Flux balance phys " << phys << "\n";
+             cerr << "Flux balance para " << para << "\n";
+             cerr << "delta " << delta << " = 10^" << log10(delta) << "\n";
          }
-         // _test(std::abs(flux_balance_physical[i] - flux_balance_parametric[i]) < s_flux_balance_thresh);
+         // _test(abs(flux_balance_physical[i] - flux_balance_parametric[i]) < s_flux_balance_thresh);
      }
-     std::cerr << "Flux balance phys: (" << fmin_phys << ", "  << fmax_phys << ")\n";
-     std::cerr << "Flux balance para: (" << fmin_para << ", " << fmax_para << ")\n";
-     std::cerr << "maxdelta: " << maxdelta << '\n';
+     cerr << "Flux balance phys: (" << fmin_phys << ", "  << fmax_phys << ")\n";
+     cerr << "Flux balance para: (" << fmin_para << ", " << fmax_para << ")\n";
+     cerr << "maxdelta: " << maxdelta << '\n';
 
-     std::cerr << "Weird nodes: " << weird_nodes << " / " << model_domain.Nodes() << '\n';
+     cerr << "Weird nodes: " << weird_nodes << " / " << model_domain.Nodes() << '\n';
  } // end
 
 
@@ -944,7 +943,7 @@ static double  testNodeCenteredFiniteVolumeTransport_PrescribedVelocity( Model<3
   for ( auto it=gref.NodesBegin(); it!=gref.PerimeterNodesBegin(); it++ ) {
        sc = fabs((*it)->Read( prop_key ) / (*it)->Read( fv_key ));
        (*it)->Store( prop_key, sc );
-       emax = std::max( emax, fabs(sc()) );
+       emax = max( emax, fabs(sc()) );
     }
 
   // for all boundary nodes we set the balance to zero because we cannot evaluate it
@@ -1196,7 +1195,7 @@ static void testNodeCenteredFiniteVolumeTransport( Model<3U>& sg )
          (*it)->Store( prop_key, sc=0. );
        else
          (*it)->Store( prop_key, sc );
-       emax = std::max( emax, sc() );
+       emax = max( emax, sc() );
     }
 
   // finding the worst finite volume and analyzing it

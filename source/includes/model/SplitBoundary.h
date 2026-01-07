@@ -132,6 +132,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // ----------------------------------------
     // user interface
     // ----------------------------------------
+    
+    /// renumbers nodes in SplitBoundary domain 0..n-1 starting with the inside
+    size_t  RenumberNodes() const override final;
 
     /// generates a vector of NodeManifold pointers that can be iterated over
     std::vector<NodeManifold<dim>*>  NodeManifolds() const;
@@ -203,6 +206,9 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     typename std::vector<csmp::Node<dim>*>::const_iterator  PerimeterNodesBegin() const = delete;
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesEnd() const = delete;
 
+    // Caution: these methods will not compile only if one attempts to use them on a SplitBoundary
+    
+    /// all these methods create issues if called on SplitBoundary
     size_t            Nodes() const = delete;
     size_t            InteriorNodes() const = delete;
     size_t            PerimeterNodes() const = delete;

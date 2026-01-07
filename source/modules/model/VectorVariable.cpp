@@ -425,7 +425,6 @@ Point<3U>  VectorVariable<3U>::P() const
 }
 
 
-
 bool  VectorVariable<3U>::IsWithinRange( double vmin, double vmax ) const
 {
   if ( data[0] < vmin || data[0] > vmax ) return false;

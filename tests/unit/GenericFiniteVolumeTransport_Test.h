@@ -19,6 +19,9 @@ class GenericFiniteVolumeTransport_Test : public Test {
   
     void TestBasics();
     void BenchmarkGlobalVersusParametricIntegration();
+  
+  private:
+    constexpr static bool verbose_ = false;
 };
 
 

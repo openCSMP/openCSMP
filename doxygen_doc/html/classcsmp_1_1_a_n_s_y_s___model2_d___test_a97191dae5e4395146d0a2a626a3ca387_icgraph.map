@@ -1,5 +1,0 @@
-<map id="csmp::ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions" name="csmp::ANSYS_Model2D_Test::Test_CreateSplitBoundariesBetweenUniqueRegions">
-<area shape="rect" id="Node000001" title="tests creation of SplitBoundaries between all regions of a model (&#39;Fluid_Flower&#39;)" alt="" coords="220,5,443,61"/>
-<area shape="rect" id="Node000002" href="$classcsmp_1_1_a_n_s_y_s___model2_d___test.html#a0166c3db667a0bf477f9429c2b91ebe3" title=" " alt="" coords="5,13,172,54"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,36,172,36,172,30,204,30"/>
-</map>
