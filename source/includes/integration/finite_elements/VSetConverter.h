@@ -63,7 +63,7 @@ class VSetConverter {
     double BoundaryValue( const std::map<size_t,double>& bvals, 
                             size_t nID1, size_t nID2 ) const;
   
-    // from linear to quadratic mesh
+    // TODO: from linear to quadratic mesh; perhaps via Visitor inside of CSMP?
     //void InterpolateNodeProperties( size_t nodes, int32_t enodes, VSet<dim>& ) const;
     
     void OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& ) const;

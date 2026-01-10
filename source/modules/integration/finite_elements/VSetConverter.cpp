@@ -1556,14 +1556,8 @@ long convergence times. In this case, an algorithm like the Cuthill-McKhee
 node-numbering graph-tree traversal should be used to improve the matrix 
 occupancy and to reduce the number of nodes which are far off the 
 diagonal.  
-
-\n \b Application 
-
-
-\n \b Messages 
-
  
-tested: */
+*/
 template<uint32_t dim>
 void VSetConverter<dim>::ConvertLinearToBarycentricTetrahedra( VSet<dim>& vset ) 
   {

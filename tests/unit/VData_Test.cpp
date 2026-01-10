@@ -328,6 +328,10 @@ void VData_Test::run()
 
 // extra tests (stand-alone functions etc.)
   Test_InitialiseNodeTopologyIdentifiers();
+  
+  // global functions that modify VData
+  // ==================================
+  Test_refineSimplexMesh();
 
 } // run
   
@@ -643,6 +647,39 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
  } // end Test_InitialiseNodeTopologyIdentifiers
 
 
+
+/*
+    Refines Simplex (line,triangle,tetrahera) mesh by introducing midside side nodes
+    Checks: that new number of elements is correct
+*/
+void VData_Test::Test_refineSimplexMesh()
+ {
+    VSet<3> vset;
+    ModelTopology topo = create_FracBox( vset );
+    
+    // counting line, triangle and tetra element to check whether new numbers are correct
+    size_t n_lines{0}, n_tria{0}, n_tets{0};
+    for ( const auto& pit : vset.plist )
+      switch( pit.size() ) {
+        case 2: n_lines++; break;
+        case 3: n_tria++;  break;
+        case 4: n_tets++;
+      }
+    size_t n_nodes_before{ vset.Vertices() };
+    
+    // caculating new numbers
+    size_t n_elmts_new = n_lines * 2 + n_tria * 4 + n_tets * 8;
+    
+    // refining mesh
+    refineSimplexMesh( vset );
+    
+    size_t n_nodes_after{ vset.Vertices() };
+    size_t n_elmts_after{ vset.Elements() };
+    
+    // test
+    _test ( n_nodes_after > n_nodes_before );
+    _test ( n_elmts_after == n_elmts_new );
+ }
 
 
 

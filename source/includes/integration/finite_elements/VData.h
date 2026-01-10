@@ -392,7 +392,7 @@ class VData {
 
 // RELATED FUNCTIONS
 
-/// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
+/// TODO: fails: converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
 void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
 
 /// returns the 3D bounding box of the element
@@ -406,6 +406,15 @@ void printCell( const VData&, size_t cell_id );
 
 /// returns the barycentre of the celll which always has three dimensions but the higher ones will be zero in 2 and 1D models
 std::array<double,3> cellBaryCenter( const VData&, size_t cell_id );
+
+/// refines a simplex mesh (Line, Triangle, Tet) by introducing midside nodes
+void refineSimplexMesh( VData& );
+
+/// modifies mesh in situ and should therefore be applied to a copy of the VData
+void convertLinearToQuadraticSimplexElementMesh( VData& mesh );
+
+/// for meshes also containing quads, prism, pyramid and hexahedral elements
+void convertLinearToQuadraticPolyElementTypeMesh( VData& mesh );
 
 } // csmp
 

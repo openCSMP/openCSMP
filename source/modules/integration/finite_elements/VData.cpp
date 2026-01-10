@@ -917,11 +917,11 @@ void VData::ResizePlist( size_t elements, uint32_t nperelmt )
 
 
 /**
-    For mono element-type mesh change number of nodes per element.
+    Change number of nodes for the indicated element.
 */
 void VData::ResizeElementNodes( size_t eid, uint32_t nperelmt )
 {
-    assert( !hybrid_mesh_ );
+    assert( eid < Elements() );
     plist[eid].resize( nperelmt, 0 );
 }
 
@@ -4845,6 +4845,393 @@ array<double,3> cellBaryCenter( const VData& vdata, size_t cell_id )
  }
 
 
+
+
+/**
+ * @brief Helper to create a unique key for an edge between two nodes.
+ */
+struct EdgeKey {
+    size_t n1, n2;
+    EdgeKey(size_t a, size_t b) {
+        n1 = std::min(a, b);
+        n2 = std::max(a, b);
+    }
+    bool operator<(const EdgeKey& other) const {
+        if (n1 != other.n1) return n1 < other.n1;
+        return n2 < other.n2;
+    }
+};
+
+/**
+ * @brief Refines a simplex mesh (Line, Triangle, Tet) by introducing midside nodes.
+ * * This function handles:
+ * 1. Line (2 nodes) -> 2 Lines
+ * 2. Triangle (3 nodes) -> 4 Triangles
+ * 3. Tetrahedra (4 nodes) -> 8 Tetrahedra
+ *
+ * Thus, for the tetrahedron, the 4 corner nodes give 4 tets and then there is an octahedron in the center
+ * that gets further subdivided into 4 tetrahedra.
+ *
+ * TODO: integrate into a VSet mesh method that also handles material properties
+ */
+void refineSimplexMesh( VData& mesh )
+ {
+    size_t old_node_count = mesh.Vertices();
+    size_t old_elmt_count = mesh.Elements();
+    
+    // 1. Identify all unique edges and map them to a new node ID
+    std::map<EdgeKey, size_t> edge_to_midside;
+    
+    for (size_t eid = 0; eid < old_elmt_count; ++eid) {
+        uint32_t npe = mesh.PlistSize(eid);
+        // We only refine simplex elements: 2 (line), 3 (tri), 4 (tet)
+        for (uint32_t i = 0; i < npe; ++i) {
+            for (uint32_t j = i + 1; j < npe; ++j) {
+                EdgeKey edge(mesh.Plist(eid, i), mesh.Plist(eid, j));
+                if (edge_to_midside.find(edge) == edge_to_midside.end()) {
+                    size_t new_id = old_node_count + edge_to_midside.size();
+                    edge_to_midside[edge] = new_id;
+                }
+            }
+        }
+    }
+
+    // 2. Create coordinates for new midside nodes
+    size_t total_nodes = old_node_count + edge_to_midside.size();
+    mesh.ResizeNodes(total_nodes);
+    
+    for (auto const& [edge, mid_id] : edge_to_midside) {
+        mesh.Px(mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5);
+        mesh.Py(mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5);
+        mesh.Pz(mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5);
+        
+        // Inherit Boundary Flags if both parents are on the same boundary
+        int8_t b1 = mesh.BFlag(edge.n1);
+        int8_t b2 = mesh.BFlag(edge.n2);
+        if (b1 < 0 && b1 == b2) {
+            mesh.BFlag(mid_id, b1);
+        }
+    }
+
+    // 3. Build new element connectivity
+    // We store new elements in a temporary container then update the mesh
+    struct NewElement {
+        int8_t type;
+        std::vector<size_t> nodes;
+    };
+    std::vector<NewElement> new_elements;
+
+    auto get_mid = [&](size_t a, size_t b) {
+        return edge_to_midside[EdgeKey(a, b)];
+    };
+
+    for (size_t eid = 0; eid < old_elmt_count; ++eid) {
+        int8_t type = mesh.ElementType(eid);
+        uint32_t npe = mesh.PlistSize(eid);
+
+        if (npe == 2) { // Line -> 2 Lines
+            size_t n0 = mesh.Plist(eid, 0);
+            size_t n1 = mesh.Plist(eid, 1);
+            size_t m01 = get_mid(n0, n1);
+            new_elements.push_back({type, {n0, m01}});
+            new_elements.push_back({type, {m01, n1}});
+        }
+        else if (npe == 3) { // Triangle -> 4 Triangles
+            size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2);
+            size_t m01 = get_mid(n0, n1), m12 = get_mid(n1, n2), m20 = get_mid(n2, n0);
+            
+            new_elements.push_back({type, {n0, m01, m20}});
+            new_elements.push_back({type, {n1, m12, m01}});
+            new_elements.push_back({type, {n2, m20, m12}});
+            new_elements.push_back({type, {m01, m12, m20}}); // Central
+        }
+        else if (npe == 4) { // Tetrahedra -> 8 Tetrahedra
+            size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2), n3 = mesh.Plist(eid, 3);
+            size_t m01 = get_mid(n0, n1), m02 = get_mid(n0, n2), m03 = get_mid(n0, n3);
+            size_t m12 = get_mid(n1, n2), m13 = get_mid(n1, n3), m23 = get_mid(n2, n3);
+
+            // 4 corner tets
+            new_elements.push_back({type, {n0, m01, m02, m03}});
+            new_elements.push_back({type, {n1, m01, m12, m13}});
+            new_elements.push_back({type, {n2, m02, m12, m23}});
+            new_elements.push_back({type, {n3, m03, m13, m23}});
+            
+            // 4 interior tets (octahedron split into 4 tets)
+            // One common edge is chosen for the split (m01-m23)
+            new_elements.push_back({type, {m01, m23, m12, m02}});
+            new_elements.push_back({type, {m01, m23, m02, m03}});
+            new_elements.push_back({type, {m01, m23, m03, m13}});
+            new_elements.push_back({type, {m01, m23, m13, m12}});
+        }
+    }
+
+    // 4. Update the VData object with the new refined lists
+    mesh.ResizePlist(new_elements.size());
+    mesh.ResizeElementTypes(new_elements.size());
+    
+    for (size_t i = 0; i < new_elements.size(); ++i) {
+        mesh.ElementType(i, new_elements[i].type);
+        mesh.ResizeElementNodes(i, static_cast<uint32_t>(new_elements[i].nodes.size()) );
+        for (uint32_t n = 0; n < new_elements[i].nodes.size(); ++n) {
+            mesh.Plist(i, n, new_elements[i].nodes[n]);
+        }
+    }
+
+    // Since connectivity (pfverts) is now invalid, we clear it
+    mesh.RemovePfverts();
+}
+
+
+
+
+
+/**
+ * @brief Determines the corresponding quadratic CSMP_FEM_TYPE for a given linear type.
+ * @param mesh The VData mesh to inspect.
+ * @return The quadratic counterpart if found, otherwise UNKNOWN.
+ */
+static CSMP_FEM_TYPE getQuadraticType( const VData& mesh, int8_t etype )
+  {
+    CSMP_FEM_TYPE qetype = UNKNOWN;
+
+    if (mesh.IsoparametricElementMesh()) {
+        switch (etype) {
+            case ISOPARAMETRIC_LINEAR_BAR:         qetype = ISOPARAMETRIC_QUADRATIC_BAR;          break;
+            case ISOPARAMETRIC_LINEAR_TRIANGLE:    qetype = ISOPARAMETRIC_QUADRATIC_TRIANGLE;     break;
+            case ISOPARAMETRIC_LINEAR_TETRAHEDRON: qetype = ISOPARAMETRIC_QUADRATIC_TETRAHEDRON;  break;
+            case ISOPARAMETRIC_LINEAR_HEXAHEDRON:  qetype = ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20; break;
+            case ISOPARAMETRIC_LINEAR_PRISM:       qetype = ISOPARAMETRIC_QUADRATIC_PRISM15;      break;
+            case ISOPARAMETRIC_LINEAR_PYRAMID:     qetype = ISOPARAMETRIC_QUADRATIC_PYRAMID13;    break;
+            default:
+                std::cerr << "\nGetQuadraticType: Unsupported Isoparametric element '" 
+                          << parseFiniteElementType(etype) << "'" << std::endl;
+        }
+    } else {
+        // Analytically integrated elements
+        switch (etype) {
+            case LINEAR_BAR:                       qetype = QUADRATIC_BAR;           break;
+            case LINEAR_TRIANGLE:
+            case LINEAR_TRIANGLE3D:                qetype = QUADRATIC_TRIANGLE;      break;
+            case LINEAR_TETRAHEDRON:               qetype = QUADRATIC_TETRAHEDRON;   break;
+            default:
+                std::cerr << "\nGetQuadraticType: Unsupported Analytic element '" 
+                          << parseFiniteElementType(etype) << "'" << std::endl;
+        }
+    }
+
+    return qetype;
+}
+
+
+/**
+ * @brief Converts a linear simplex mesh into a quadratic mesh.
+ * * Nodes are appended to the plist according to standard conventions:
+ * - Line (2->3 nodes): [0, 1, m01]
+ * - Triangle (3->6 nodes): [0, 1, 2, m01, m12, m20]
+ * - Tetrahedron (4->10 nodes): [0, 1, 2, 3, m01, m12, m20, m03, m13, m23]
+ */
+void convertLinearToQuadraticSimplexElementMesh( VData& mesh )
+ {
+    size_t old_node_count = mesh.Vertices();
+    size_t elmt_count = mesh.Elements();
+    
+    // 1. Identify unique edges and assign new node IDs
+    std::map<EdgeKey, size_t> edge_to_midside;
+    
+    // We iterate through elements to find all edges requiring a midside node
+    for (size_t eid = 0; eid < elmt_count; ++eid) {
+        uint32_t npe = mesh.PlistSize(eid);
+        // Standard simplex edges: all pairs of the first 'npe' vertices
+        for (uint32_t i = 0; i < npe; ++i) {
+            for (uint32_t j = i + 1; j < npe; ++j) {
+                EdgeKey edge(mesh.Plist(eid, i), mesh.Plist(eid, j));
+                if (edge_to_midside.find(edge) == edge_to_midside.end()) {
+                    size_t new_id = old_node_count + edge_to_midside.size();
+                    edge_to_midside[edge] = new_id;
+                }
+            }
+        }
+    }
+
+    // 2. Expand Node storage and calculate coordinates
+    size_t total_nodes = old_node_count + edge_to_midside.size();
+    mesh.ResizeNodes(total_nodes);
+    
+    for (auto const& [edge, mid_id] : edge_to_midside) {
+        mesh.Px(mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5);
+        mesh.Py(mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5);
+        mesh.Pz(mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5);
+        
+        // Inherit boundary flags
+        int8_t b1 = mesh.BFlag(edge.n1);
+        int8_t b2 = mesh.BFlag(edge.n2);
+        if (b1 < 0 && b1 == b2) {
+            mesh.BFlag(mid_id, b1);
+        }
+    }
+
+    // 3. Update element connectivity (plist) to include midside nodes
+    // Using your requested order: 
+    // Tri: 0-1 (3), 1-2 (4), 2-0 (5)
+    // Tet: 0-1 (4), 1-2 (5), 2-0 (6), 0-3 (7), 1-3 (8), 2-3 (9)
+    auto get_mid = [&](size_t a, size_t b) {
+        return edge_to_midside[EdgeKey(a, b)];
+    };
+
+    for (size_t eid = 0; eid < elmt_count; ++eid) {
+        uint32_t npe_linear = mesh.PlistSize(eid);
+        
+        if (npe_linear == 2) { // Line -> Quadratic Line (3 nodes)
+            size_t n0 = mesh.Plist(eid, 0);
+            size_t n1 = mesh.Plist(eid, 1);
+            mesh.ResizeElementNodes(eid, 3);
+            mesh.Plist(eid, 2, get_mid(n0, n1));
+        }
+        else if (npe_linear == 3) { // Triangle -> Quadratic Triangle (6 nodes)
+            size_t n0 = mesh.Plist(eid, 0);
+            size_t n1 = mesh.Plist(eid, 1);
+            size_t n2 = mesh.Plist(eid, 2);
+            
+            mesh.ResizeElementNodes(eid, 6);
+            mesh.Plist(eid, 3, get_mid(n0, n1)); // Edge 0-1
+            mesh.Plist(eid, 4, get_mid(n1, n2)); // Edge 1-2
+            mesh.Plist(eid, 5, get_mid(n2, n0)); // Edge 2-0
+        }
+        else if (npe_linear == 4) { // Tetrahedra -> Quadratic Tet (10 nodes)
+            size_t n0 = mesh.Plist(eid, 0);
+            size_t n1 = mesh.Plist(eid, 1);
+            size_t n2 = mesh.Plist(eid, 2);
+            size_t n3 = mesh.Plist(eid, 3);
+            
+            mesh.ResizeElementNodes(eid, 10);
+            mesh.Plist(eid, 4, get_mid(n0, n1)); // Edge 0-1
+            mesh.Plist(eid, 5, get_mid(n1, n2)); // Edge 1-2
+            mesh.Plist(eid, 6, get_mid(n2, n0)); // Edge 2-0
+            mesh.Plist(eid, 7, get_mid(n0, n3)); // Edge 0-3
+            mesh.Plist(eid, 8, get_mid(n1, n3)); // Edge 1-3
+            mesh.Plist(eid, 9, get_mid(n2, n3)); // Edge 2-3
+        }
+    }
+    
+    // Update linear -> quadratic FEM types
+    if ( mesh.ElementTypes() == 1 ) {
+         const auto qetype = getQuadraticType( mesh, mesh.ElementType(0) );
+         mesh.SingleElementType( qetype );
+      }
+    else { // poly-type mesh
+        size_t counter{ 0 };
+         for ( auto et=mesh.PelmtBegin(); et!=mesh.PelmtEnd(); ++et ) {
+              mesh.ElementType( counter, getQuadraticType( mesh, (*et) ) );
+              counter++;
+           }
+      }
+      
+} // end convertLinearToQuadraticSimplexElementMesh
+
+
+
+/**
+ * @brief Definition of edges for standard 3D elements.
+ * Returns pairs of local indices that form the physical edges.
+ *
+ *  TODO: check whether this complies with CSMP conventions
+ */
+static vector<pair<uint32_t, uint32_t>> getElementEdges( uint32_t npe )
+ {
+    switch (npe) {
+        case 2: return {{0, 1}}; // Line
+        case 3: return {{0, 1}, {1, 2}, {2, 0}}; // Tri
+        case 4: return {{0, 1}, {1, 2}, {2, 0}, {0, 3}, {1, 3}, {2, 3}}; // Tet
+        case 5: // Pyramid
+            return {{0, 1}, {1, 2}, {2, 3}, {3, 0}, // Base
+                    {0, 4}, {1, 4}, {2, 4}, {3, 4}}; // To Apex
+        case 6: // Prism
+            return {{0, 1}, {1, 2}, {2, 0}, // Bottom Tri
+                    {3, 4}, {4, 5}, {5, 3}, // Top Tri
+                    {0, 3}, {1, 4}, {2, 5}}; // Vertical edges
+        case 8: // Hexahedron
+            return {{0, 1}, {1, 2}, {2, 3}, {3, 0}, // Bottom
+                    {4, 5}, {5, 6}, {6, 7}, {7, 4}, // Top
+                    {0, 4}, {1, 5}, {2, 6}, {3, 7}}; // Verticals
+        default: return {};
+    }
+}
+
+/**
+ * @brief Converts any linear VData mesh to a quadratic (edge-based) mesh.
+ * Note: This implements Serendipity-style (edge nodes only) for Hex/Prism/Pyramid.
+ */
+void convertLinearToQuadraticPolyElementTypeMesh( VData& mesh )
+ {
+    size_t old_node_count = mesh.Vertices();
+    size_t elmt_count = mesh.Elements();
+    
+    struct EdgeKey {
+        size_t n1, n2;
+        EdgeKey(size_t a, size_t b) : n1(std::min(a, b)), n2(std::max(a, b)) {}
+        bool operator<(const EdgeKey& other) const { return std::tie(n1, n2) < std::tie(other.n1, other.n2); }
+    };
+
+    std::map<EdgeKey, size_t> edge_to_midside;
+
+    // 1. Identify Edges based on Element Type
+    for (size_t eid = 0; eid < elmt_count; ++eid) {
+        uint32_t npe = mesh.PlistSize(eid);
+        auto edges = getElementEdges(npe);
+        
+        for (auto& edge_idx : edges) {
+            EdgeKey key(mesh.Plist(eid, edge_idx.first), mesh.Plist(eid, edge_idx.second));
+            if (edge_to_midside.find(key) == edge_to_midside.end()) {
+                size_t new_id = old_node_count + edge_to_midside.size();
+                edge_to_midside[key] = new_id;
+            }
+        }
+    }
+
+    // 2. Resize and Interpolate Coordinates
+    mesh.ResizeNodes(old_node_count + edge_to_midside.size());
+    for (auto const& [edge, mid_id] : edge_to_midside) {
+        mesh.Px(mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5);
+        mesh.Py(mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5);
+        mesh.Pz(mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5);
+        // Inherit boundary flags
+        if (mesh.BFlag(edge.n1) < 0 && mesh.BFlag(edge.n1) == mesh.BFlag(edge.n2))
+            mesh.BFlag(mid_id, mesh.BFlag(edge.n1));
+    }
+
+    // 3. Rebuild Element Connectivity
+    for (size_t eid = 0; eid < elmt_count; ++eid) {
+        uint32_t npe = mesh.PlistSize(eid);
+        auto edges = getElementEdges(npe);
+        
+        uint32_t new_npe = npe + (uint32_t)edges.size();
+        std::vector<size_t> original_nodes(npe);
+        for(uint32_t i=0; i<npe; ++i) original_nodes[i] = mesh.Plist(eid, i);
+
+        mesh.ResizeElementNodes(eid, new_npe);
+        
+        // Midside nodes are appended after the vertex nodes
+        for (uint32_t i = 0; i < edges.size(); ++i) {
+            size_t n1 = original_nodes[edges[i].first];
+            size_t n2 = original_nodes[edges[i].second];
+            mesh.Plist(eid, npe + i, edge_to_midside[EdgeKey(n1, n2)]);
+        }
+    }
+    
+    // Update linear -> quadratic FEM types
+    if ( mesh.ElementTypes() == 1 ) {
+         const auto qetype = getQuadraticType( mesh, mesh.ElementType(0) );
+         mesh.SingleElementType( qetype );
+      }
+    else { // poly-type mesh
+        size_t counter{ 0 };
+         for ( auto et=mesh.PelmtBegin(); et!=mesh.PelmtEnd(); ++et ) {
+              mesh.ElementType( counter, getQuadraticType( mesh, (*et) ) );
+              counter++;
+           }
+      }
+
+} // end convertLinearToQuadraticPolyElementTypeMesh
  
 } // end namespace csmp
  

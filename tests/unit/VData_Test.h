@@ -52,6 +52,9 @@ class VData_Test : public Test {
 
     void Test_InitialiseNodeTopologyIdentifiers();
     
+    // mesh refinement and transformation
+    void Test_refineSimplexMesh();
+    
   private:
     const static bool verbose_ = true;  
 };

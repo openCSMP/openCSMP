@@ -177,6 +177,7 @@ int main()
   const bool verbose(false);
 
 // COMPREHENSIVE TESTING
+/*
   const bool test_fundamentals(true),    // OK
              test_interdependent1(true), // OK
              test_interdependent2(true), // OK
@@ -184,14 +185,13 @@ int main()
              test_composite(true),       // fails Generic_FV-Transport_Test, line 581 because of tolerance issue
              test_refactoring(false),
              test_new_developments(false); // contains no tests at the moment
-
+*/
 // REFACTORING
-/*
   const bool test_fundamentals(false), test_interdependent1(false), test_interdependent2(false),
              test_interfaces(false), test_composite(false),
              test_refactoring(true), // <-------------
              test_new_developments(false);
-*/
+
   long    fails_fundamentals(0),
           fails_interdependent1(0),
           fails_interdependent2(0),
@@ -212,7 +212,7 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-        refactored.addTest( new LocalVariableStorage_Test() );
+        refactored.addTest( new VData_Test() );
         
         /*
             Compares physical space with parametric space computations
@@ -220,21 +220,16 @@ int main()
         */
 //        refactored.addTest( new GenericFiniteVolumeTransport_Test() );  // TODO: understand why test is failing
 
+//        refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
+
+
+
+// TODO: no satisfactorily fast access yet; compare with access of a fictious rock-type to determine whether improvement would pay off
 // tested: 6/1/26: no speed-up from extra inlining, complications when attempting to remove macros in LocalVariableStorageArithmetic
 // added new method to read vecs, tensors and arrays using declarative programming
 //        refactored.addTest( new VariableStorageSpeed_Test() );
                 
         
-//        refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
-
-// Prism-Hexa testing (6/12/25). fixed neighbor connectivity in Prism_Hexa vset.
-//    refactored.addTest( new VData_Test() );
-//    refactored.addTest( new Box_Test() );
-//    refactored.addTest( new VSet_Test1() );
-//    refactored.addTest( new VSet_Test2() );
-
-//  refactored.addTest( new vsetMakers_Test() ); // TODO: breaks for Prism_vset; pfverts contains numbers > n_eelements
-
    // TODO: uncomment and fix failing tests listed below
 //   refactored.addTest( new GenericFiniteVolumeTransport_Test() ); // TODO: 'prism_test'fails for parametric space computations by Andrew
    // refactored.addTest( new SplitBoundaryInterface_Test<3U>() ); // FAILED ASSERTION ON COLLOCATED NODES
