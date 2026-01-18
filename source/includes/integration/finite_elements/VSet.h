@@ -105,7 +105,7 @@ class VSet : public VData {
     std::map<std::string,PropertyData>::const_iterator PropertyValuesBegin() const;
     std::map<std::string,PropertyData>::const_iterator PropertyValuesEnd() const;
 
-    auto RemoveData( const char* s ) -> std::map<std::string,PropertyData>::iterator;
+    auto RemoveData( const char* var_name ) -> std::map<std::string,PropertyData>::iterator;
 
     /// writes complete VSet to binary file with the given time stamp
     bool  OutputTo( const char* bin_file, double time ) const;
@@ -125,6 +125,9 @@ class VSet : public VData {
 
     /// selects specific elements from the VSet that shall be retained while all others are deleted (including nodes), returns new range
     void  ReduceTo( const std::map<size_t,size_t>& old_and_new_consecutive_element_ids );
+    
+    /// converts linear simplex element mesh by spliting simplices at newly introduced midside nodes;  properties are mapped to new cells; cell idx prior to splitting returned for each new cell
+    std::vector<size_t>  Refine();
     
     /// updates pmtrl and property storage to size changes in VData
     void UpdatePropertyStorage();
@@ -150,12 +153,11 @@ class VSet : public VData {
     friend class VSet_Test;
 };
 
-/// extrapolates element property values stored in VSet to its vertices
+/// extrapolates element property values stored in VSet to its vertices (this can also be done with csmp::ModelSubDomain)
 template<uint32_t dim, class VarType>
 void extrapolateElementToNodeProperty( VSet<dim>&,
                                        const std::vector<VarType>&  elmnt_values,
                                        std::vector<VarType>&        nodal_values );
-
 
 } // csmp
 

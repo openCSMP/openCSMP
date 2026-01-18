@@ -19,6 +19,7 @@ ModelTopology::ModelTopology( bool isoparametric_element_mesh )
  {
  }
 
+
 ModelTopology::ModelTopology( const char* model_name,
                               bool isoparametric_element_mesh )
  : model_name_(model_name),
@@ -26,25 +27,8 @@ ModelTopology::ModelTopology( const char* model_name,
  {
  }
 
-ModelTopology& ModelTopology::operator=( const ModelTopology& mt )
- {
-    if ( &mt != this ) {
-         model_name_         = mt.model_name_;
-         model_domains_       = mt.model_domains_;
-         isoparametric_mesh_ = mt.isoparametric_mesh_;
-      }
-    return *this;
- }
 
 
-ModelTopology::ModelTopology( const ModelTopology& mt )
- {
-    *this = mt;
- }
-
-ModelTopology::~ModelTopology()
- {
- }
 
 
 /** Writes all the currently stored topological information to standard output, i.e. the screen.

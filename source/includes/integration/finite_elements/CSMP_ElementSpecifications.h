@@ -21,6 +21,8 @@ declared in file "FiniteElment.h"
 
 Used to deduce element characteristics prior to the construction of CSMP Element classes.
 
+@todo needs modern refactoring, to remove branching etc. from methods, see comments in .cpp file.
+
 */
 class CSMP_ElementSpecifications {
   public:

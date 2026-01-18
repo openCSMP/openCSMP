@@ -111,6 +111,9 @@ const char*     parseFacetType( int8_t ftype );
 /// returns UNKNOWN if more information is required
 CSMP_FEM_TYPE   finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
 
+/// returns corresponding quadratic element type for supplied simplex element 
+CSMP_FEM_TYPE getQuadraticType( bool isoparametric, int8_t etype );
+
 
 /**
 

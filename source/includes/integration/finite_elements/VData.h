@@ -407,8 +407,8 @@ void printCell( const VData&, size_t cell_id );
 /// returns the barycentre of the celll which always has three dimensions but the higher ones will be zero in 2 and 1D models
 std::array<double,3> cellBaryCenter( const VData&, size_t cell_id );
 
-/// refines a simplex mesh (Line, Triangle, Tet) by introducing midside nodes
-void refineSimplexMesh( VData& );
+/// refines a simplex mesh (Line, Triangle, Tet) by introducing midside nodes; returns a vector with the ID of the element from which the new element was created
+std::vector<size_t> refineSimplexMesh( VData& );
 
 /// modifies mesh in situ and should therefore be applied to a copy of the VData
 void convertLinearToQuadraticSimplexElementMesh( VData& mesh );

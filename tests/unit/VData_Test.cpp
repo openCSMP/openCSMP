@@ -16,8 +16,10 @@
 #include "Model.h"
 #include "Region.h"
 #include "Element.h"
+#include "ANSYS_Interface.h"
 #include "VTK_Interface.h"
 #include "vsetMakers.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -326,12 +328,14 @@ void VData_Test::run()
   // SKM tests of VData mesh-fix functions
   // TODO: does not work yet:  TestReplacementOfCornerTetrahedra();
 
-// extra tests (stand-alone functions etc.)
+  // extra tests (stand-alone functions etc.)
   Test_InitialiseNodeTopologyIdentifiers();
   
   // global functions that modify VData
   // ==================================
   Test_refineSimplexMesh();
+
+  Test_linearToQuadraticMeshConversion();
 
 } // run
   
@@ -668,10 +672,10 @@ void VData_Test::Test_refineSimplexMesh()
     size_t n_nodes_before{ vset.Vertices() };
     
     // caculating new numbers
-    size_t n_elmts_new = n_lines * 2 + n_tria * 4 + n_tets * 8;
+    const size_t n_elmts_new = n_lines * 2 + n_tria * 4 + n_tets * 8;
     
     // refining mesh
-    refineSimplexMesh( vset );
+    vector<size_t> old_to_new_idx = refineSimplexMesh( vset );
     
     size_t n_nodes_after{ vset.Vertices() };
     size_t n_elmts_after{ vset.Elements() };
@@ -679,7 +683,130 @@ void VData_Test::Test_refineSimplexMesh()
     // test
     _test ( n_nodes_after > n_nodes_before );
     _test ( n_elmts_after == n_elmts_new );
+    _test ( old_to_new_idx.size() == n_elmts_new );
+    
+    // consistency check
+    vset.EstablishElementConnectivity3D();
  }
+
+
+
+
+
+// helper that finds midsize nodes by averaging corner node coordinates
+static uint32_t midSideNode( const VSet<3>& vs, size_t elmt, uint32_t n1, uint32_t n2 ) {
+   Point<3> nd1pt( vs.Px(vs.Plist(elmt,n1)), vs.Py(vs.Plist(elmt,n1)), vs.Pz(vs.Plist(elmt,n1)) ),
+            nd2pt( vs.Px(vs.Plist(elmt,n2)), vs.Py(vs.Plist(elmt,n2)), vs.Pz(vs.Plist(elmt,n2)) );
+   Point<3> midpt = (nd1pt + nd2pt) / 2.;
+   // loop over the nodes of the element until the midpoint is found
+   uint32_t n_midside_node{0};
+   for ( uint32_t i{0}; i<vs.PlistSize(elmt); ++ i ) {
+         Point<3> ndpt( vs.Px(vs.Plist(elmt,i)), vs.Py(vs.Plist(elmt,i)), vs.Pz(vs.Plist(elmt,i)) );
+         if ( ndpt == midpt ) {
+              n_midside_node = i;
+              break;
+           }
+     }
+   return n_midside_node;
+}
+
+
+void VData_Test::Test_linearToQuadraticMeshConversion()
+ {
+    // testing a simplex mesh
+    // ----------------------
+    {
+      VSet<3> vset;
+      create_FracBox( vset );
+      convertLinearToQuadraticSimplexElementMesh( vset );
+      
+      _test( vset.Vertices() == 2233 ); // as we know from refinement test
+      
+      // element types
+      for ( auto cit=vset.PelmtBegin(); cit!=vset.PelmtEnd(); ++cit ) {
+            // _test( fe.IsSimplex(*cit) == true );
+            const auto et = static_cast<CSMP_FEM_TYPE>(*cit);
+            _test( isLineElement(et) || isTriangular(et) || isTetrahedral(et) );
+        }
+    }
+    // testing polyhedral prism mesh
+    {
+      const bool          isoparametric(true);
+      ANSYS_Interface     mesh_interface(isoparametric);
+      VSet<3>             vset;
+      ModelTopology       mesh_topology(isoparametric);
+      const bool binary_file( true );
+      mesh_interface.Read_ANSYS_Mesh( "prism_test", vset, mesh_topology, binary_file, true );
+      // TODO: replace ANSYS mesh; it has no hexa and is too big for a unit test
+      
+      convertLinearToQuadraticPolyElementTypeMesh( vset );
+ 
+      // checking that the nodes are assigned to the elements in the expected way
+      size_t elmt{0};
+      auto it=vset.PlistBegin(), itend=vset.PlistEnd();
+      for ( auto et=vset.PelmtBegin(); it!=itend && et!=vset.PelmtEnd(); ++it, ++et ) {
+            const auto etype = static_cast<CSMP_FEM_TYPE>(*et);
+           switch( etype ) {
+              case ISOPARAMETRIC_QUADRATIC_BAR:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 2 ); // testing midSideNode()
+                break;
+              case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 3 );
+                   _test( midSideNode( vset, elmt, 1, 2 ) == 4 );
+                   _test( midSideNode( vset, elmt, 2, 0 ) == 5 );
+                break;
+             case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 4 );
+                   _test( midSideNode( vset, elmt, 1, 2 ) == 5 );
+                   _test( midSideNode( vset, elmt, 2, 0 ) == 6 );
+                   _test( midSideNode( vset, elmt, 3, 0 ) == 7 );
+                   _test( midSideNode( vset, elmt, 3, 1 ) == 8 );
+                   _test( midSideNode( vset, elmt, 3, 2 ) == 9 );
+                break;
+              case ISOPARAMETRIC_QUADRATIC_PRISM15:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 6 );
+                   _test( midSideNode( vset, elmt, 1, 2 ) == 7 );
+                   _test( midSideNode( vset, elmt, 2, 0 ) == 8 );
+                   _test( midSideNode( vset, elmt, 3, 0 ) == 9 );
+                   _test( midSideNode( vset, elmt, 4, 1 ) == 10 );
+                   _test( midSideNode( vset, elmt, 5, 2 ) == 11 );
+                   _test( midSideNode( vset, elmt, 3, 4 ) == 12 );
+                   _test( midSideNode( vset, elmt, 4, 5 ) == 13 );
+                   _test( midSideNode( vset, elmt, 5, 3 ) == 14 );
+                break;
+              case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 5 );
+                   _test( midSideNode( vset, elmt, 1, 2 ) == 6 );
+                   _test( midSideNode( vset, elmt, 2, 3 ) == 7 );
+                   _test( midSideNode( vset, elmt, 3, 0 ) == 8 );
+                   _test( midSideNode( vset, elmt, 4, 0 ) == 9 );
+                   _test( midSideNode( vset, elmt, 4, 1 ) == 10 );
+                   _test( midSideNode( vset, elmt, 4, 2 ) == 11 );
+                   _test( midSideNode( vset, elmt, 4, 3 ) == 12 );
+                break;
+              case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
+                   _test( midSideNode( vset, elmt, 0, 1 ) == 8 );
+                   _test( midSideNode( vset, elmt, 1, 2 ) == 9 );
+                   _test( midSideNode( vset, elmt, 2, 3 ) == 10 );
+                   _test( midSideNode( vset, elmt, 3, 0 ) == 11 );
+                   _test( midSideNode( vset, elmt, 4, 0 ) == 12 );
+                   _test( midSideNode( vset, elmt, 5, 1 ) == 13 );
+                   _test( midSideNode( vset, elmt, 6, 2 ) == 14 );
+                   _test( midSideNode( vset, elmt, 7, 3 ) == 15 );
+                   _test( midSideNode( vset, elmt, 4, 5 ) == 16 );
+                   _test( midSideNode( vset, elmt, 5, 6 ) == 17 );
+                   _test( midSideNode( vset, elmt, 6, 7 ) == 18 );
+                   _test( midSideNode( vset, elmt, 7, 4 ) == 19 );
+                break;
+              default:
+                throw csmp::Exception( ERROR, "VData_Test::Test_linearToQuadraticMeshConversion",
+                                       parseFiniteElementType(etype), "Element type not handled." );
+           }
+          elmt++;
+        }
+    }
+
+ } // end Test_linearToQuadraticMeshConversion
 
 
 

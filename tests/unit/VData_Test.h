@@ -55,6 +55,8 @@ class VData_Test : public Test {
     // mesh refinement and transformation
     void Test_refineSimplexMesh();
     
+    void Test_linearToQuadraticMeshConversion();
+    
   private:
     const static bool verbose_ = true;  
 };

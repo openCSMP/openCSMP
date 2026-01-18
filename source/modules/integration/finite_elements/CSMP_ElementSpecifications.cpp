@@ -6,6 +6,83 @@
 
 using namespace std;
 
+/* REFACTORING GUIDELINES
+
+Key Improvements:
+
+Lookup Table: Use static constexpr std::array approach to evaluate 'ifs' at compile-time. When you call such functions,
+the CPU simply looks at one specific index in memory.
+
+Inlining: By moving the logic to the header (using inline), you eliminate the overhead of jumping to a different part of the binary.
+
+Branchless: In the hot path of your code, there are no "if" jumps to mispredict (other than the optional safety bounds check).
+
+While  original code isn't "slow" for a single call, it is very inefficient for simulation kernels.
+The lookup table approach is significantly faster.
+
+Example:
+
+class CSMP_ElementSpecifications {
+public:
+
+     * @brief Optimized check for local coordinate usage.
+     * * By using a static constexpr lookup table, we eliminate branching.
+     * The compiler will likely inline this, reducing the check to a 
+     * single memory offset look-up.
+
+    static inline bool UsesLocalCoordinates(int8_t etype) {
+        // Ensure we don't access out-of-bounds if etype is negative or too large
+        if (etype < 0 || etype >= 128) return false;
+        return LOCAL_COORD_LOOKUP[static_cast<size_t>(etype)];
+    }
+
+private:
+    // This table is generated at compile time. It adds 128 bytes to the binary,
+    // but 0 bytes to the class instances.
+    static constexpr std::array<bool, 128> LOCAL_COORD_LOOKUP = [] {
+        std::array<bool, 128> table{}; // Initialize all to false
+        
+        // Linear
+        table[ISOPARAMETRIC_LINEAR_TETRAHEDRON] = true;
+        table[ISOPARAMETRIC_LINEAR_HEXAHEDRON] = true;
+        table[ISOPARAMETRIC_LINEAR_TRIANGLE] = true;
+        table[ISOPARAMETRIC_LINEAR_PRISM] = true;
+        table[ISOPARAMETRIC_LINEAR_PYRAMID] = true;
+        table[ISOPARAMETRIC_LINEAR_QUADRILATERAL] = true;
+        table[ISOPARAMETRIC_LINEAR_BAR] = true;
+        table[ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE] = true;
+        table[ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL] = true;
+
+        // Quadratic
+        table[ISOPARAMETRIC_QUADRATIC_BAR] = true;
+        table[ISOPARAMETRIC_QUADRATIC_TETRAHEDRON] = true;
+        table[ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20] = true;
+        table[ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27] = true;
+        table[ISOPARAMETRIC_QUADRATIC_TRIANGLE] = true;
+        table[ISOPARAMETRIC_QUADRATIC_QUADRILATERAL] = true;
+        table[ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9] = true;
+        table[ISOPARAMETRIC_QUADRATIC_PYRAMID13] = true;
+        table[ISOPARAMETRIC_QUADRATIC_PYRAMID14] = true;
+        table[ISOPARAMETRIC_QUADRATIC_PRISM15] = true;
+        table[ISOPARAMETRIC_QUADRATIC_PRISM18] = true;
+        table[ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON] = true;
+        table[ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE] = true;
+        table[ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL] = true;
+
+        // Cubic
+        table[ISOPARAMETRIC_CUBIC_TETRAHEDRON] = true;
+        table[ISOPARAMETRIC_CUBIC_HEXAHEDRON] = true;
+        table[ISOPARAMETRIC_CUBIC_PRISM] = true;
+        table[ISOPARAMETRIC_CUBIC_PYRAMID] = true;
+        table[ISOPARAMETRIC_CUBIC_TRIANGLE] = true;
+        table[ISOPARAMETRIC_CUBIC_QUADRILATERAL] = true;
+
+        return table;
+    }();
+};
+
+ */
+
 namespace csmp {
 
 /**
@@ -418,6 +495,9 @@ Returns a list of the CSMP surface element type names:
 "ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL"
 "ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9"
 "ISOPARAMETRIC_CUBIC_QUADRILATERAL"
+
+@todo Make this and the following compile-time lists with no runtime and storage overhead.
+@todo a reference to the static list rather than filling the supplied argument.
 */
 void  CSMP_ElementSpecifications::SurfaceElements( std::list<std::string>& surf_elements )
  {
@@ -856,6 +936,8 @@ uint32_t CSMP_ElementSpecifications::NeighborsPerElementOfType( int8_t etype )
     Use this method to retrieve this information before any finite elements have been built.
 
     @attention 17/12/2015 SKM fixed method for quadratic elements
+    
+    @todo replace 'if' using switch statement or table!
 */
 uint32_t CSMP_ElementSpecifications::NodesPerFaceForElementOfType( int8_t etype,
                                                                    uint32_t face )

@@ -3049,9 +3049,9 @@ static void create_CornerPointGrid_6i_8j_4k( VSet<3U>&  )
 */
 ModelTopology create_FracBox( VSet<3U>& vset )
  {
-    set<string> femTypes_matrix{"ISOSPARAMETRIC_LINEAR_TETRAHEDRON"},
-                femTypes_surfaces{"ISOSPARAMETRIC_LINEAR_TRIANGLE"},
-                femTypes_lines{"ISOSPARAMETRIC_LINEAR_BAR"};
+    set<string> femTypes_matrix{"ISOPARAMETRIC_LINEAR_TETRAHEDRON"},
+                femTypes_surfaces{"ISOPARAMETRIC_LINEAR_TRIANGLE"},
+                femTypes_lines{"ISOPARAMETRIC_LINEAR_BAR"};
 
     // MODEL TOPOLOGY
     const bool isoparametric = true;

@@ -195,7 +195,7 @@ public:
   // class Model is not copy constructable
 
   /// constructs model with subdomains (Region, Boundary, SplitBoundary), variables file name with extension "*-variables.txt" where * is the name of the model
-  Model( ModelTopology&, VSet<dim>&, const char* var_file, bool treat_domains_as_regions_and_use_regions_file_if_any );
+  Model( ModelTopology&, VSet<dim>&, const char* var_file, bool use_regions_file_if_any_to_select_domains_to_keep );
 
   /// Reconstructor:  reads model from set of CSMP's native binary files
   explicit Model( const std::string& binaryFiles );

@@ -54,6 +54,7 @@
 #include "Face_Test.h"
 #include "InterFace_Test.h"
 #include "MeshManager_Test.h"
+#include "MeshManagementUtilities_Test.h"
 #include "NodeManifoldManager_Test.h"
 #include "ModelBasics_Test.h"
 #include "parentElementStorageOptions_Test.h"
@@ -73,7 +74,6 @@
 // finite elements
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTriangle.h"
-// testing
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test2.h" // misc. tests
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -212,7 +212,7 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-        refactored.addTest( new VData_Test() );
+        refactored.addTest( new MeshManagementUtilities_Test() );
         
         /*
             Compares physical space with parametric space computations

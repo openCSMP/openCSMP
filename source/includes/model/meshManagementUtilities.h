@@ -14,12 +14,13 @@
 
 namespace csmp {
 
+class ModelTopology;
 template<uint32_t> class Point;
 template<uint32_t> class Node;
 template<uint32_t> class Element;
 template<uint32_t> class Face;
 template<uint32_t> class InterFace;
-
+template<uint32_t> class VSet;
 template<uint32_t> class Model;
 template<uint32_t> class MeshManager;
 template<uint32_t> class MeshPatch;
@@ -54,10 +55,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 size_t  findPointersToStandAloneMeshPatches( typename std::vector<CELL<dim>*>::const_iterator begin,
                                              typename std::vector<CELL<dim>*>::const_iterator end,
                                              std::map<CELL<dim>*,MeshPatch<dim>>& );
-
-/// determines whether the surface normals at the mesh vertices and those of the elements in the supplied surface region point to the same side of the surface
-// TODO: fix: method currently fails if the underlying method Node::VertexNormal() encounters the wrong neighbor-node ordering
-//bool doNormalsInContiguousSurfacePatchPointToSameSide( const Region<3U>& );
+                                             
+/// transforms the supplied linear-FEM simplex mesh (VSet) attached properties and region-partitioning (ModelTopology) into a collocated quadratic-coarse and linear-refined mesh pair as required for Stokes equation or other
+void transformMeshIntoRefinedLinearAndQuadraticMeshes( const VSet<3>& linear_mesh, const ModelTopology& linear_topo,
+                                                       VSet<3>& refined_lin_mesh, ModelTopology& refined_linear_topo,
+                                                       VSet<3>& quadratic_mesh, ModelTopology& quadratic_topo );
 
 
 // MESH DIAGNOSTICS TODO: move some to analysis/MeshDiagnostics

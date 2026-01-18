@@ -962,6 +962,67 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
 
 
 
+/**
+    Converts a linear simplex element mesh (straight lines, straight-edged triangles, and straight-sided tetrahedra),
+    refining it by spliting its elements at newly introduced midside nodes. Thus, each line element becomes,
+    each triangle 4 and each tetrahedron 8 new elements.
+    
+    The material identifiers and properties from the original mesh are transferred onto the new one.
+ */
+template<uint32_t dim>
+vector<size_t> VSet<dim>::Refine()
+ {
+    // refining the mesh
+    vector<size_t> parent_idx = refineSimplexMesh( *this );
+    
+    // creating new neighbor connectivity
+    if constexpr ( dim == 3 ) EstablishElementConnectivity3D();
+    else if constexpr ( dim == 2 ) EstablishElementConnectivity2D();
+    else cerr <<"\nERROR: VSet<"<< dim <<">::Refine: nbor connectivity could be rebuild in 1D\n";
+    
+    // updating the material identifies
+    vector<int32_t> pmtrl_new; pmtrl_new.reserve( parent_idx.size() );
+    for ( const auto& cell : parent_idx )
+      pmtrl_new.push_back( pmtrl_[cell] );
+    pmtrl_ = std::move( pmtrl_new );
+    
+    // assigning property values to the new elements if there were any
+    if ( !property_map_.empty() ) {
+        for ( auto& property : property_map_ )
+          {
+            auto& oldprop = property.second;
+            // handling properties with different placements
+            if ( oldprop.Placement() == ELEMENT || oldprop.Placement() == FACE ) {
+                PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+                new_data.Reserve(parent_idx.size());
+                for ( const auto& id : parent_idx )
+                  new_data.PushBackFrom(oldprop, id);
+                // reassigning reduced set
+                property.second = std::move(new_data);
+             }
+            /* TODO: implement transfer of node properties
+            else if ( oldprop.Placement() == NODE ) {
+                PropertyData new_data( oldprop.Placement(), oldprop.Type(), dim );
+                new_data.Reserve(n_o_node_ids.size());
+                for ( const auto& id : n_o_node_ids )
+                  new_data.PushBackFrom(oldprop, id);
+                // reassigning reduced set
+                property.second = std::move(new_data);
+             }
+            */
+            else {
+                cerr <<"\nERROR: VSet<"<< dim <<">::Refine: placement of property '"<< property.first <<"' not handled. yet.\n";
+                cerr <<"\n\tProperties with the placement "<< parsePlacement(oldprop.Placement()) <<" were not transferred correctly\n";
+                throw logic_error("VSet<dim>::Refine");
+             }
+          }
+      }
+      
+    return parent_idx;
+ }
+ 
+
+
 
 /** Frees up all the storage in the VSet<dim>; all contained data are deleted.
 

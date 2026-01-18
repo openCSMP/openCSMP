@@ -8,6 +8,8 @@
 
 #include <unordered_set>
 #include "meshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
+#include "ModelTopology.h"
 #include "MeshManager.h"
 #include "MeshPatch.h"
 #include "Model.h"
@@ -3118,6 +3120,87 @@ void nodeNeighbors( const Region<dim>& subdomain, vector<set<size_t>>& node_neig
 
 template void nodeNeighbors( const Region<3>&, vector<set<size_t>>&, bool );
 template void nodeNeighbors( const Region<2>&, vector<set<size_t>>&, bool );
+
+
+
+
+/**
+    Transforms  supplied linear-FEM simplex mesh (VSet) attached properties and region-partitioning (ModelTopology) into a collocated quadratic-coarse and linear-refined mesh pair as required for Stokes equation or other
+    
+    @attention Method does not support overlapping regions
+*/
+void transformMeshIntoRefinedLinearAndQuadraticMeshes( const VSet<3>& linear_mesh, const ModelTopology& linear_topo,
+                                                       VSet<3>& refined_lin_mesh, ModelTopology& refined_linear_topo,
+                                                       VSet<3>& quadratic_mesh, ModelTopology& quadratic_topo )
+ {
+    // 0. check that topo matches VSet etc.
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( linear_mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
+      csmp_error.Note( ERROR, "transformMeshIntoRefinedLinearAndQuadraticMeshes", "input mesh must be LFEM" );
+    if ( linear_mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
+      csmp_error.Note( ERROR, "transformMeshIntoRefinedLinearAndQuadraticMeshes", "input mesh must be LFEM" );
+      
+    set<string> fem_types;
+    if ( linear_topo.FiniteElementTypes( fem_types ) > 3 )
+      csmp_error.Note( ERROR, "transformMeshIntoRefinedLinearAndQuadraticMeshes", "input mesh does not only contain Simplex elements" );
+    for ( const auto& str : fem_types )
+      if ( !contains( str, "LINE") && !contains( str, "TRIANGLE") && !contains( str, "TETRAHEDRON") )
+        csmp_error.Note( ERROR, "transformMeshIntoRefinedLinearAndQuadraticMeshes", "input mesh must only consist of line, triangle and tetrahedral elements" );
+    
+        
+    // 1. transforming linear finite-element mesh into quadratic mesh by adding mid-side nodes and changing element types
+    // --------------------------------------------------------------
+    // (properties that are piece-wise constant on the elements will not change)
+    const bool isoparametric = linear_topo.IsoparametricFiniteElements();
+    quadratic_mesh = linear_mesh;
+    convertLinearToQuadraticSimplexElementMesh( quadratic_mesh );
+    // transfrom linear_topo into quadratic_topo by changing the element types
+    quadratic_topo = linear_topo;
+    for ( auto it=quadratic_topo.DomainsBegin(); it!=quadratic_topo.DomainsEnd(); ++it ) {
+          // map<string,pair<set<string>,vector<size_t> > >
+          //   reg.name,         etypes, cell indices
+          assert( (*it).second.first.size() == 1 ); // only one element type per region
+          string etype = (*(*it).second.first.begin());
+          const auto qetype = getQuadraticType( isoparametric, static_cast<int8_t>(parseFiniteElementType(etype)) );
+          (*it).second.first = set<string>{ parseFiniteElementType(qetype) };
+      }
+    if ( !quadratic_topo.QuadraticElementMesh() )
+      csmp_error.Note( ERROR, "transformMeshIntoRefinedLinearAndQuadraticMeshes", "the transformed quadratic mesh is not recognised as such; check" );
+
+
+    // 2. subdiving linear mesh into refined mesh
+    // ------------------------------------------
+    refined_lin_mesh = linear_mesh;
+    // since new elements are created material indices and properties need to be mapped over to them
+    vector<size_t> parent_cell_indices = refined_lin_mesh.Refine();
+    
+    // 3. rebuilding the cells-per-region information for this mesh
+    // ------------------------------------------------------------
+    refined_linear_topo.Erase();
+    refined_linear_topo.ModelName( linear_topo.ModelName().c_str() );
+    
+    for ( auto sdom=linear_topo.DomainsBegin(); sdom!=linear_topo.DomainsEnd(); ++sdom ) {
+          // map<string,pair<set<string>,vector<size_t> > >
+          //   reg.name,         etypes, cell indices
+          // 3.1 mapping the cells
+          vector<size_t> new_cell_ids; new_cell_ids.reserve( (*sdom).second.second.size() * 2 );
+          for ( const auto& cid : (*sdom).second.second )
+            for ( size_t i{0}; i<parent_cell_indices.size(); ++i )
+              if ( parent_cell_indices[i] == cid ) new_cell_ids.push_back( i );
+          // only a single element type is allowed per domain
+          assert( (*sdom).second.first.size() == 1 );
+          // assigning model subdomain to topology
+          refined_linear_topo.AddDomain( (*sdom).first.c_str(), (*sdom).second.first, new_cell_ids );
+      }
+      
+    // TODO: if this is necessary
+    //EstablishTopology( VSet<dim>& vset, bool require_unique_names_for_vol_surf_lines, bool correct_orientation_of_surface_elements,
+    //                                   bool reassign_boundary_flags )
+ 
+    refined_linear_topo.CheckCellNumbering();
+ 
+ } // transformMeshIntoRefinedLinearAndQuadraticMeshes
+
 
 
 

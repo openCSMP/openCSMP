@@ -69,10 +69,7 @@ class ModelTopology {
   public:
     explicit ModelTopology( bool isoparametric_element_mesh=false );
     ModelTopology( const char* model_name, bool isoparametric_element_mesh );
-    ModelTopology( const ModelTopology& mt );
-    ModelTopology& operator=( const ModelTopology& mt );
-    ~ModelTopology();
-
+ 
     /// general model info
     void        ModelName( const char* name );
     std::string ModelName() const;
@@ -177,6 +174,13 @@ class ModelTopology {
    
     /// changes the name of a domain in the most efficient way; reports whether operation was successful
     bool        ChangeDomainName( const std::string& old_name, const std::string& new_name );
+    
+    /// iterate and modify regions
+    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::iterator DomainsBegin() { return model_domains_.begin(); }
+    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::iterator DomainsEnd() { return model_domains_.end(); }
+
+    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator DomainsBegin() const { return model_domains_.begin(); }
+    std::map<std::string,std::pair<std::set<std::string>,std::vector<size_t> > >::const_iterator DomainsEnd() const { return model_domains_.end(); }
 
     /// properties of regions
     void        PropertiesOfDomains( const char* regions_file,

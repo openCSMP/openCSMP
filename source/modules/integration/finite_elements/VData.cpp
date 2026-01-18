@@ -4872,10 +4872,12 @@ struct EdgeKey {
  * Thus, for the tetrahedron, the 4 corner nodes give 4 tets and then there is an octahedron in the center
  * that gets further subdivided into 4 tetrahedra.
  *
- * TODO: integrate into a VSet mesh method that also handles material properties
  */
-void refineSimplexMesh( VData& mesh )
+vector<size_t>  refineSimplexMesh( VData& mesh )
  {
+    if ( mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
+     throw std::logic_error( "refineSimplexMesh(VData&): requires input mesh to be LFEM" );
+ 
     size_t old_node_count = mesh.Vertices();
     size_t old_elmt_count = mesh.Elements();
     
@@ -4908,18 +4910,19 @@ void refineSimplexMesh( VData& mesh )
         // Inherit Boundary Flags if both parents are on the same boundary
         int8_t b1 = mesh.BFlag(edge.n1);
         int8_t b2 = mesh.BFlag(edge.n2);
-        if (b1 < 0 && b1 == b2) {
-            mesh.BFlag(mid_id, b1);
-        }
+        if ( b1 < 0 || b2 < 0 )
+          mesh.BFlag( mid_id, whichBoundary( intToBOX_BOUNDARY(b1), intToBOX_BOUNDARY(b2) ) );
     }
 
     // 3. Build new element connectivity
     // We store new elements in a temporary container then update the mesh
     struct NewElement {
         int8_t type;
-        std::vector<size_t> nodes;
+        vector<size_t> nodes;
     };
-    std::vector<NewElement> new_elements;
+    vector<NewElement> new_elements; new_elements.reserve( mesh.Cells() * 2 );
+    vector<size_t>     parent_map; // the idx of the elementfrom which the new elements
+    parent_map.reserve( mesh.Cells() * 2 );
 
     auto get_mid = [&](size_t a, size_t b) {
         return edge_to_midside[EdgeKey(a, b)];
@@ -4935,33 +4938,48 @@ void refineSimplexMesh( VData& mesh )
             size_t m01 = get_mid(n0, n1);
             new_elements.push_back({type, {n0, m01}});
             new_elements.push_back({type, {m01, n1}});
+            for ( uint32_t i{0}; i<2; ++i ) parent_map.push_back( eid );
         }
         else if (npe == 3) { // Triangle -> 4 Triangles
             size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2);
             size_t m01 = get_mid(n0, n1), m12 = get_mid(n1, n2), m20 = get_mid(n2, n0);
-            
+            // from 3 corner nodes
             new_elements.push_back({type, {n0, m01, m20}});
             new_elements.push_back({type, {n1, m12, m01}});
             new_elements.push_back({type, {n2, m20, m12}});
             new_elements.push_back({type, {m01, m12, m20}}); // Central
+            for ( uint32_t i{0}; i<4; ++i ) parent_map.push_back( eid );
         }
         else if (npe == 4) { // Tetrahedra -> 8 Tetrahedra
             size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2), n3 = mesh.Plist(eid, 3);
-            size_t m01 = get_mid(n0, n1), m02 = get_mid(n0, n2), m03 = get_mid(n0, n3);
-            size_t m12 = get_mid(n1, n2), m13 = get_mid(n1, n3), m23 = get_mid(n2, n3);
+            size_t m01 = get_mid(n0, n1), m12 = get_mid(n1, n2), m02 = get_mid(n0, n2), m03 = get_mid(n0, n3),
+                   m13 = get_mid(n1, n3), m23 = get_mid(n2, n3);
+                   
+            // --- 4 CORNER TETRAHEDRA --- checked: OK
+            // Rule: (Base CCW, Apex)
+            new_elements.push_back({type, {n0,  m01, m02, m03}}); // Corner at n0
+            new_elements.push_back({type, {m01, n1,  m12, m13}}); // Corner at n1
+            new_elements.push_back({type, {m02, m12, n2,  m23}}); // Corner at n2
+            new_elements.push_back({type, {m03, m13, m23, n3 }}); // Corner at n3
 
-            // 4 corner tets
-            new_elements.push_back({type, {n0, m01, m02, m03}});
-            new_elements.push_back({type, {n1, m01, m12, m13}});
-            new_elements.push_back({type, {n2, m02, m12, m23}});
-            new_elements.push_back({type, {n3, m03, m13, m23}});
-            
-            // 4 interior tets (octahedron split into 4 tets)
-            // One common edge is chosen for the split (m01-m23)
-            new_elements.push_back({type, {m01, m23, m12, m02}});
-            new_elements.push_back({type, {m01, m23, m02, m03}});
-            new_elements.push_back({type, {m01, m23, m03, m13}});
-            new_elements.push_back({type, {m01, m23, m13, m12}});
+            // --- 4 INTERIOR TETRAHEDRA ---
+            // We split the interior octahedron into 4 tets using the diagonal spine: m01 -> m23
+            // We must ensure the volume (V = (v1-v0) dot ((v2-v0) x (v3-v0))) is positive for all.
+
+            // Tet 5: Base (m01, m12, m02), Apex m23
+            // m01-m12-m02 is the mid-plane triangle. Looking from m23, this is CCW.
+            new_elements.push_back({type, {m01, m12, m02, m23}});
+
+            // Tet 6: Base (m01, m02, m03), Apex m23
+            new_elements.push_back({type, {m01, m02, m03, m23}});
+
+            // Tet 7: Base (m01, m03, m13), Apex m23
+            new_elements.push_back({type, {m01, m03, m13, m23}});
+
+            // Tet 8: Base (m01, m13, m12), Apex m23
+            new_elements.push_back({type, {m01, m13, m12, m23}});
+
+            for ( uint32_t i{0}; i<8; ++i ) parent_map.push_back( eid );
         }
     }
 
@@ -4979,48 +4997,16 @@ void refineSimplexMesh( VData& mesh )
 
     // Since connectivity (pfverts) is now invalid, we clear it
     mesh.RemovePfverts();
-}
+    
+    return parent_map;
+    
+} // end refineSimplexMesh
 
 
 
 
 
-/**
- * @brief Determines the corresponding quadratic CSMP_FEM_TYPE for a given linear type.
- * @param mesh The VData mesh to inspect.
- * @return The quadratic counterpart if found, otherwise UNKNOWN.
- */
-static CSMP_FEM_TYPE getQuadraticType( const VData& mesh, int8_t etype )
-  {
-    CSMP_FEM_TYPE qetype = UNKNOWN;
 
-    if (mesh.IsoparametricElementMesh()) {
-        switch (etype) {
-            case ISOPARAMETRIC_LINEAR_BAR:         qetype = ISOPARAMETRIC_QUADRATIC_BAR;          break;
-            case ISOPARAMETRIC_LINEAR_TRIANGLE:    qetype = ISOPARAMETRIC_QUADRATIC_TRIANGLE;     break;
-            case ISOPARAMETRIC_LINEAR_TETRAHEDRON: qetype = ISOPARAMETRIC_QUADRATIC_TETRAHEDRON;  break;
-            case ISOPARAMETRIC_LINEAR_HEXAHEDRON:  qetype = ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20; break;
-            case ISOPARAMETRIC_LINEAR_PRISM:       qetype = ISOPARAMETRIC_QUADRATIC_PRISM15;      break;
-            case ISOPARAMETRIC_LINEAR_PYRAMID:     qetype = ISOPARAMETRIC_QUADRATIC_PYRAMID13;    break;
-            default:
-                std::cerr << "\nGetQuadraticType: Unsupported Isoparametric element '" 
-                          << parseFiniteElementType(etype) << "'" << std::endl;
-        }
-    } else {
-        // Analytically integrated elements
-        switch (etype) {
-            case LINEAR_BAR:                       qetype = QUADRATIC_BAR;           break;
-            case LINEAR_TRIANGLE:
-            case LINEAR_TRIANGLE3D:                qetype = QUADRATIC_TRIANGLE;      break;
-            case LINEAR_TETRAHEDRON:               qetype = QUADRATIC_TETRAHEDRON;   break;
-            default:
-                std::cerr << "\nGetQuadraticType: Unsupported Analytic element '" 
-                          << parseFiniteElementType(etype) << "'" << std::endl;
-        }
-    }
-
-    return qetype;
-}
 
 
 /**
@@ -5032,8 +5018,12 @@ static CSMP_FEM_TYPE getQuadraticType( const VData& mesh, int8_t etype )
  */
 void convertLinearToQuadraticSimplexElementMesh( VData& mesh )
  {
+    if ( mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
+     throw std::logic_error( "convertLinearToQuadraticSimplexElementMesh(VData&): requires input mesh to be LFEM" );
+
     size_t old_node_count = mesh.Vertices();
     size_t elmt_count = mesh.Elements();
+    const bool isoparametric = mesh.IsoparametricElementMesh();
     
     // 1. Identify unique edges and assign new node IDs
     std::map<EdgeKey, size_t> edge_to_midside;
@@ -5115,18 +5105,20 @@ void convertLinearToQuadraticSimplexElementMesh( VData& mesh )
     
     // Update linear -> quadratic FEM types
     if ( mesh.ElementTypes() == 1 ) {
-         const auto qetype = getQuadraticType( mesh, mesh.ElementType(0) );
+         const auto qetype = getQuadraticType( isoparametric, mesh.ElementType(0) );
          mesh.SingleElementType( qetype );
       }
     else { // poly-type mesh
         size_t counter{ 0 };
          for ( auto et=mesh.PelmtBegin(); et!=mesh.PelmtEnd(); ++et ) {
-              mesh.ElementType( counter, getQuadraticType( mesh, (*et) ) );
+              mesh.ElementType( counter, getQuadraticType( isoparametric, (*et) ) );
               counter++;
            }
       }
       
 } // end convertLinearToQuadraticSimplexElementMesh
+
+
 
 
 
@@ -5147,12 +5139,12 @@ static vector<pair<uint32_t, uint32_t>> getElementEdges( uint32_t npe )
                     {0, 4}, {1, 4}, {2, 4}, {3, 4}}; // To Apex
         case 6: // Prism
             return {{0, 1}, {1, 2}, {2, 0}, // Bottom Tri
-                    {3, 4}, {4, 5}, {5, 3}, // Top Tri
-                    {0, 3}, {1, 4}, {2, 5}}; // Vertical edges
+                    {0, 3}, {1, 4}, {2, 5}, // Vertical edges
+                    {3, 4}, {4, 5}, {5, 3} }; // Top Tri
         case 8: // Hexahedron
             return {{0, 1}, {1, 2}, {2, 3}, {3, 0}, // Bottom
-                    {4, 5}, {5, 6}, {6, 7}, {7, 4}, // Top
-                    {0, 4}, {1, 5}, {2, 6}, {3, 7}}; // Verticals
+                    {0, 4}, {1, 5}, {2, 6}, {3, 7}, // Verticals
+                    {4, 5}, {5, 6}, {6, 7}, {7, 4}}; // Top
         default: return {};
     }
 }
@@ -5160,11 +5152,20 @@ static vector<pair<uint32_t, uint32_t>> getElementEdges( uint32_t npe )
 /**
  * @brief Converts any linear VData mesh to a quadratic (edge-based) mesh.
  * Note: This implements Serendipity-style (edge nodes only) for Hex/Prism/Pyramid.
+ *
+ * Updated to handle specific node-ordering conventions (e.g., ANSYS).
+ * Note: getElementEdges(npe) MUST return edges in the specific order 
+ * that the quadratic element format expects them.
+
  */
 void convertLinearToQuadraticPolyElementTypeMesh( VData& mesh )
  {
+    if ( mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
+     throw std::logic_error( "convertLinearToQuadraticPolyElementTypeMesh(VData&): requires input mesh to be LFEM" );
+
     size_t old_node_count = mesh.Vertices();
     size_t elmt_count = mesh.Elements();
+    const bool isoparametric = mesh.IsoparametricElementMesh();
     
     struct EdgeKey {
         size_t n1, n2;
@@ -5204,7 +5205,7 @@ void convertLinearToQuadraticPolyElementTypeMesh( VData& mesh )
         uint32_t npe = mesh.PlistSize(eid);
         auto edges = getElementEdges(npe);
         
-        uint32_t new_npe = npe + (uint32_t)edges.size();
+        uint32_t new_npe = npe + static_cast<uint32_t>(edges.size());
         std::vector<size_t> original_nodes(npe);
         for(uint32_t i=0; i<npe; ++i) original_nodes[i] = mesh.Plist(eid, i);
 
@@ -5220,18 +5221,19 @@ void convertLinearToQuadraticPolyElementTypeMesh( VData& mesh )
     
     // Update linear -> quadratic FEM types
     if ( mesh.ElementTypes() == 1 ) {
-         const auto qetype = getQuadraticType( mesh, mesh.ElementType(0) );
+         const auto qetype = getQuadraticType( isoparametric, mesh.ElementType(0) );
          mesh.SingleElementType( qetype );
       }
     else { // poly-type mesh
         size_t counter{ 0 };
          for ( auto et=mesh.PelmtBegin(); et!=mesh.PelmtEnd(); ++et ) {
-              mesh.ElementType( counter, getQuadraticType( mesh, (*et) ) );
+              mesh.ElementType( counter, getQuadraticType( isoparametric, (*et) ) );
               counter++;
            }
       }
 
 } // end convertLinearToQuadraticPolyElementTypeMesh
+ 
  
 } // end namespace csmp
  

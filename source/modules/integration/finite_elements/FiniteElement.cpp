@@ -69,6 +69,7 @@ bool isTriangularElement( CSMP_FEM_TYPE etype )
     return false;
  }
  
+ 
 bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
  {
     if ( etype == ISOPARAMETRIC_LINEAR_QUADRILATERAL ) return true;
@@ -78,6 +79,7 @@ bool isQuadrilateralElement( CSMP_FEM_TYPE etype )
     if ( etype == ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9 ) return true;
     return false;
  }
+ 
  
 bool isLineElement( CSMP_FEM_TYPE etype )
  {
@@ -89,7 +91,6 @@ bool isLineElement( CSMP_FEM_TYPE etype )
     if ( etype == CUBIC_BAR ) return true;
     return false;
  }
-
 
 
 bool isTriangular( CSMP_FEM_TYPE etype )
@@ -145,7 +146,6 @@ bool isTetrahedral( CSMP_FEM_TYPE etype )
 
     return false;
  }
-
 
 
 bool isHexahedral( CSMP_FEM_TYPE etype )
@@ -1415,6 +1415,42 @@ CSMP_FEM_TYPE  finiteElementTypeOfSharedFace( CSMP_FEM_TYPE etype1, CSMP_FEM_TYP
   }
 
 
+/**
+ * @brief Determines (for a Simplex element mesh consisting of straight line, triangle, and tetrahedral elements) the corresponding quadratic CSMP_FEM_TYPE for any given linear type.
+ * @param isoparametric The VData mesh to inspect.
+ * @return The quadratic counterpart if found, otherwise UNKNOWN.
+ */
+CSMP_FEM_TYPE getQuadraticType( bool isoparametric, int8_t etype )
+  {
+    CSMP_FEM_TYPE qetype = UNKNOWN;
+
+    if (isoparametric) {
+        switch (etype) {
+            case ISOPARAMETRIC_LINEAR_BAR:         qetype = ISOPARAMETRIC_QUADRATIC_BAR;          break;
+            case ISOPARAMETRIC_LINEAR_TRIANGLE:    qetype = ISOPARAMETRIC_QUADRATIC_TRIANGLE;     break;
+            case ISOPARAMETRIC_LINEAR_TETRAHEDRON: qetype = ISOPARAMETRIC_QUADRATIC_TETRAHEDRON;  break;
+            case ISOPARAMETRIC_LINEAR_HEXAHEDRON:  qetype = ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20; break;
+            case ISOPARAMETRIC_LINEAR_PRISM:       qetype = ISOPARAMETRIC_QUADRATIC_PRISM15;      break;
+            case ISOPARAMETRIC_LINEAR_PYRAMID:     qetype = ISOPARAMETRIC_QUADRATIC_PYRAMID13;    break;
+            default:
+                std::cerr << "\nGetQuadraticType: Unsupported Isoparametric element '" 
+                          << parseFiniteElementType(etype) << "' probably not a simplex element." << std::endl;
+        }
+    } else {
+        // Analytically integrated elements
+        switch (etype) {
+            case LINEAR_BAR:                       qetype = QUADRATIC_BAR;           break;
+            case LINEAR_TRIANGLE:
+            case LINEAR_TRIANGLE3D:                qetype = QUADRATIC_TRIANGLE;      break;
+            case LINEAR_TETRAHEDRON:               qetype = QUADRATIC_TETRAHEDRON;   break;
+            default:
+                std::cerr << "\nGetQuadraticType: Unsupported Analytic element '" 
+                          << parseFiniteElementType(etype) << "' probably not a simplex element." << std::endl;
+        }
+    }
+
+    return qetype;
+}
 
  
  } // end namespace csmp
