@@ -26,6 +26,17 @@ namespace csmp {
 
 
 /**
+    Counts total number of cells in model and then - per cell type - whether these are volume, surface or line cells.
+    Most commonly, etype will be element when this method is called.
+
+    @param mesh stored in the MeshManager
+    @param etype indicated by placement variable, e.g., ELEMENT, FACE or INTERFACE
+    @param volume_cells is returned
+    @param surface_cells is returned
+    @param line_cells is returned.
+
+     @return the total number of cells in the queried  model.
+     
      @note Model is used for convenience here. MeshManager would be mode appropriate.
 */
 template<uint32_t dim>
@@ -33,6 +44,11 @@ size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& 
  {
     size_t n_cells_model{ mesh.Elements() + mesh.Faces() + mesh.Interfaces() };
     volume_cells = surface_cells = line_cells = 0U;
+    
+    if constexpr ( dim == 1U ) {
+         line_cells = mesh.Elements();
+         return n_cells_model;
+      }
     
     // elements
     if ( etype == ELEMENT ) {
@@ -54,13 +70,23 @@ size_t currentCellTypes( const MeshManager<dim>& mesh, PLACEMENT etype, size_t& 
       }
     // faces
     else if ( etype == FACE ) {
-         surface_cells = count_if( mesh.FacesBegin(), mesh.FacesEnd(), []( const Face<dim>& e ){ return e.IsSurface(); } );
-         line_cells = mesh.Faces() - surface_cells;
+         if constexpr ( dim == 3U ) {
+             surface_cells = static_cast<size_t>(count_if( mesh.FacesBegin(), mesh.FacesEnd(), []( const Face<dim>& e ){ return e.IsSurface(); } ));
+             line_cells = mesh.Faces() - surface_cells;
+           }
+         else if constexpr ( dim == 2U ) {
+             line_cells = mesh.Faces();
+           }
       }
     // interfaces
     else if ( etype == INTER_FACE ) {
-         surface_cells = count_if( mesh.InterfacesBegin(), mesh.InterfacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } );
-         line_cells = mesh.Interfaces() - surface_cells;
+         if constexpr ( dim == 3U ) {
+             surface_cells = static_cast<size_t>(count_if( mesh.InterfacesBegin(), mesh.InterfacesEnd(), []( const InterFace<dim>& e ){ return e.IsSurface(); } ));
+             line_cells = mesh.Interfaces() - surface_cells;
+          }
+         else if constexpr ( dim == 2U ) {
+             line_cells = mesh.Interfaces();
+           }
       }
     else cerr <<"\n\n"<< "currentCellTypes: invalid celltype: "<< parsePlacement(etype) << endl;
  
@@ -112,17 +138,18 @@ size_t detectElementsWithAllNodesOnBoundary( const MeshManager<dim>& mmgr, set<s
   assert( mmgr.Elements() > 0 );
   if ( mmgr.Elements() == 0 ) return 0U;
 
-  // traversal of the existing mesh nodes to find all its elements
   size_t boundary_only_elements( 0U );
-  for ( typename plf::colony<Element<dim>>::const_iterator
-        it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it ) {
-      const auto nodes((*it).Nodes());
+  for ( auto it=mmgr.ElementsBegin(); it!=mmgr.ElementsEnd(); ++it )
+    {
       uint32_t   counter{0};
-      for ( auto i{0U}; i<nodes; ++i )
-        if ( (*it).N(i)->AtBoundary() != NOT ) counter++;
+      const auto nodes((*it).Nodes());
+      
+      for ( uint32_t i{0U}; i<nodes; ++i )
+        if ( (*it).N(i)->AtBoundary() != NOT && (*it).N(i)->AtBoundary() != INTERNAL ) counter++;
+        
       if ( counter == nodes ) {
-            belmts.insert( (*it).Idx() );
-            boundary_only_elements++;
+           belmts.insert( (*it).Idx() );
+           boundary_only_elements++;
         }
     }
   return boundary_only_elements;
@@ -1241,7 +1268,7 @@ void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begi
                           typename vector<Node<dim>*>::const_iterator nodes_end,
                           vector<vector<double> >& distances_and_weights )
  {
-     distances_and_weights.resize(distance(nodes_begin,nodes_end));
+     distances_and_weights.resize( static_cast<size_t>(distance(nodes_begin,nodes_end)) );
      size_t  node_index(0U);
    
      while( nodes_begin != nodes_end )
@@ -1251,13 +1278,13 @@ void distancesAndWeights( typename vector<Node<dim>*>::const_iterator nodes_begi
           const size_t parents((*nodes_begin)->Parents());
           distances_and_weights[node_index].reserve(parents+1U);
          
-          for ( auto i{0U}; i<parents; i++ ) {
+          for ( uint32_t i{0U}; i<parents; i++ ) {
                // recording the node-to-barycentre distances
                distances_and_weights[node_index].push_back( npt.DistanceTo( (*nodes_begin)->Parent(i)->BaryCenter() ) );
                weight += distances_and_weights[node_index][i];
             }
-          // storing the weights (=sum of the distances) in the last element of the vector
-          distances_and_weights[node_index][parents] = weight;
+          // storing the weights (=sum of the distances) in the last element of the vector, i.e., distances_and_weights[node_index][parents]
+          distances_and_weights[node_index].push_back( weight );
           nodes_begin++;
           node_index++;
        }

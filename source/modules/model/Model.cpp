@@ -202,17 +202,19 @@ Constructor is similar to previous one, but only a subset of the model
 geometry stored in the vset will be used according to the specifications
 given by the data of the model topology object.
 
-@param vset A VSet is supplied as constructor argument and should contain a
-finite-element mesh and associated properties with names which must correspond
-to the properties specified in the Property input file
-(default: CSMP_variables.txt).
-
-@param mesh_topology a ModelTopology object which should be initialized
+@param mesh_topology reference which should be initialized
 as is done for instance by methods of the ANSYS_Interface. The
 model topology object has a rich interface which allows the user to
 select sub portions of the model stored in the vset.
 
-@param treat_domains_as_regions_and_use_regions_file  when there is a "-regions.txt"  file,
+@param mesh  supplied as constructor argument and should contain a
+finite-element mesh and associated properties with names which must correspond
+to the properties specified in the Property input file
+(default: CSMP_variables.txt).
+
+@param var_file CSMP variables text file, see User Guide for functionality of sections
+
+@param use_regions_file_if_any_to_select_domains_to_keep  when there is a "-regions.txt"  file,
 any elements of regions that are not mentioned in there will be eliminated from the mesh when the CSMP models gets build.
 This is important because meshing tools like ANSYS mesh every part of the BREP using lines, surfaces and volumes.
 However intervening lines or surfaces are normally not desired because element integral contributions would be duplicated for elements which share the same nodes.
@@ -244,22 +246,22 @@ by default.
 
 */
 template<uint32_t dim>
-Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& vset,
+Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& mesh,
                    const char* var_file,
-                   bool treat_domains_as_regions_and_use_regions_file )
+                   bool use_regions_file_if_any_to_select_domains_to_keep )
   : model_name_( mesh_topology.ModelName() ),
     database_( var_file ),
     verbose_( true )
 {
-   if ( treat_domains_as_regions_and_use_regions_file ) {
+   if ( use_regions_file_if_any_to_select_domains_to_keep ) {
         const string regions_file_prefix(mesh_topology.ModelName());
         // selects domains via regions file and converts lower-dimensional regions into Boundary objects
         // (use if there are no Face or InterFace objects stored in VSet)
-        Initialize( regions_file_prefix.c_str(), mesh_topology, vset );
+        Initialize( regions_file_prefix.c_str(), mesh_topology, mesh );
      }
    // identifies Region, Boundary, and SplitBoundary objects by their names, expecting that corresponding
    // Element, Face and or Interface objects exist in VSet
-   else Initialize( mesh_topology, vset );
+   else Initialize( mesh_topology, mesh );
 
 } // end VSet/ModelTopology constructor
 

@@ -128,7 +128,7 @@ template<uint32_t dim>
 size_t findInterconnectedNodeCluster( Node<dim>* const, std::set<Node<dim>*>& contiguous_set_of_nodes );
 
 // TODO: put into MM
-/// Relying on the node-to-node connectivity, uses a recursive depth first traversal to discover the interconnected nodes in the supplied range; set of node pairs defining the cel segments must be input
+/// Relying on the node-to-node connectivity, uses a recursive depth first traversal to discover the interconnected nodes in the supplied range; set of node pairs defining the cell segments must be input
 template<uint32_t dim>
 size_t findInterconnectedNodes( const plf::colony<Node<dim>>& nodes, std::set<std::pair<const Node<dim>*,const Node<dim>*>>& validEdges );
 

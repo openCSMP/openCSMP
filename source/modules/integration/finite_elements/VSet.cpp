@@ -978,7 +978,7 @@ vector<size_t> VSet<dim>::Refine()
     // creating new neighbor connectivity
     if constexpr ( dim == 3 ) EstablishElementConnectivity3D();
     else if constexpr ( dim == 2 ) EstablishElementConnectivity2D();
-    else cerr <<"\nERROR: VSet<"<< dim <<">::Refine: nbor connectivity could be rebuild in 1D\n";
+    else cerr <<"\nERROR: VSet<"<< dim <<">::Refine: neighbor connectivity could be rebuild in 1D\n";
     
     // updating the material identifies
     vector<int32_t> pmtrl_new; pmtrl_new.reserve( parent_idx.size() );
@@ -1018,6 +1018,10 @@ vector<size_t> VSet<dim>::Refine()
           }
       }
       
+    // since the mesh now has far too many boundary flags, these are set to NOT (for later recreation using ModelTopology)
+    for ( size_t i{0}; i<Vertices(); ++i )
+      BFlag( i, static_cast<int8_t>(NOT) );
+     
     return parent_idx;
  }
  
