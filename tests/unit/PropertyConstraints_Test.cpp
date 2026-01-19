@@ -59,7 +59,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
      VSet<3U>      vset;
      topology = create_FracBox( vset );
 
-     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", false );
+     Model<3U>  model( topology, vset, "CSMP-1phase-variables.txt", true /* use regions file if any */ );
      
      // assigning some dummy values to verify functionality
      Region<3U>& model_domain = model.Region("Model");

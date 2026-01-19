@@ -1,13 +1,13 @@
 //
-//  GenericFiniteVolumeTransport_Test.cpp
+//  GFVT_ParametricSpaceComputation_Test.cpp
 //  CSMP_GitHub_UnitTests
 //
-//  Created by Stephan Matthai on 23/01/2017.
+//  Created by Andrew Bromage & Stephan Matthai on 23/01/2017.
 //  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 
 // generic transport scheme
-#include "GenericFiniteVolumeTransport_Test.h"
+#include "GFVT_ParametricSpaceComputation_Test.h"
 #include "finiteVolumeAuxiliaryFunctions.h"
 #include "FluxEvaluator.h"
 #include "TimeStepEvaluator.h"
@@ -91,7 +91,7 @@ namespace csmp {
     Speed comparison between projections made in parametric versus physical space while checking accuracy
     at same time.
 */
-void GenericFiniteVolumeTransport_Test::run()
+void GFVT_ParametricSpaceComputation_Test::run()
  {
     // compares accuracy of parametric with physical space integrations
     TestBasics();
@@ -121,7 +121,7 @@ void GenericFiniteVolumeTransport_Test::run()
     6. compare computation times for flux balances
  
 */
-void GenericFiniteVolumeTransport_Test::TestBasics()
+void GFVT_ParametricSpaceComputation_Test::TestBasics()
  {
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
@@ -325,7 +325,7 @@ void GenericFiniteVolumeTransport_Test::TestBasics()
     6. compare computation times for flux balances
  
 */
-void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegration()
+void GFVT_ParametricSpaceComputation_Test::BenchmarkGlobalVersusParametricIntegration()
  {
      // ------------------------------------------------------------
      // 1. building model from ANSYS data files
@@ -556,14 +556,13 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
 
                const double abserr = abs(flux_parametric - flux_physical);
                const double relerr = rel_error(flux_parametric, flux_physical);
-               cerr << "scale = " << scale << "\n";
-               cerr << "abserr = " << abserr << "\n";
-               cerr << "relerr = " << relerr << "\n";
-               cerr << "abserr = 10^" << log10(abserr) << "\n";
-
-               // Any discrepancy should be explainable by plain old numerical error,
-               // or by integration error.
-               // _test(abserr < max(1.0e-10, scale * 1.0e-10));
+               if ( verbose_ ) {
+                   cerr << "scale = " << scale << "\n";
+                   cerr << "abserr = " << abserr << "\n";
+                   cerr << "relerr = " << relerr << "\n";
+                   cerr << "abserr = 10^" << log10(abserr) << "\n";
+                 }
+               // _test( abserr < max( 1.0e-10, scale * 1.0e-10) );
                
                flux_balance_parametric[(*it)->N(inside_node)->Idx()] += flux_parametric;
                flux_balance_parametric[(*it)->N(outside_node)->Idx()] -= flux_parametric;
@@ -631,7 +630,7 @@ void GenericFiniteVolumeTransport_Test::BenchmarkGlobalVersusParametricIntegrati
      cerr << "Flux balance para: (" << fmin_para << ", " << fmax_para << ")\n";
      cerr << "maxdelta: " << maxdelta << '\n';
 
-     cerr << "Weird nodes: " << weird_nodes << " / " << model_domain.Nodes() << '\n';
+     cerr << "Failed finite-volumes vs. total FVs: " << weird_nodes << " / " << model_domain.Nodes() << '\n';
  } // end
 
 

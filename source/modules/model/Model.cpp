@@ -260,7 +260,7 @@ Model<dim>::Model( ModelTopology& mesh_topology, VSet<dim>& mesh,
         Initialize( regions_file_prefix.c_str(), mesh_topology, mesh );
      }
    // identifies Region, Boundary, and SplitBoundary objects by their names, expecting that corresponding
-   // Element, Face and or Interface objects exist in VSet
+   // Element, Face and or Interface objects exist in VSet (will fail without standard boundaries)
    else Initialize( mesh_topology, mesh );
 
 } // end VSet/ModelTopology constructor

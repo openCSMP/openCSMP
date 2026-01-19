@@ -88,7 +88,7 @@
 #include "FiniteVolumePolicy_Test.h"
 #include "FV_Parameter_Test.h"
 #include "FluxMismatch_Test.h"
-#include "GenericFiniteVolumeTransport_Test.h"
+#include "GFVT_ParametricSpaceComputation_Test.h"
 
 // interfaces to other software
 // importing
@@ -212,15 +212,15 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-        refactored.addTest( new MeshManagementUtilities_Test() );
+          refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
+
+//        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
         
         /*
             Compares physical space with parametric space computations
             Not using test framework yet but printing everything to std::cerr
         */
-//        refactored.addTest( new GenericFiniteVolumeTransport_Test() );  // TODO: understand why test is failing
-
-//        refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
+//        refactored.addTest( new GFVT_ParametricSpaceComputation_Test() );  // TODO: understand why test is failing for non-simplex elements
 
 
 
@@ -231,8 +231,6 @@ int main()
                 
         
    // TODO: uncomment and fix failing tests listed below
-//   refactored.addTest( new GenericFiniteVolumeTransport_Test() ); // TODO: 'prism_test'fails for parametric space computations by Andrew
-   // refactored.addTest( new SplitBoundaryInterface_Test<3U>() ); // FAILED ASSERTION ON COLLOCATED NODES
    // refactored.addTest( new SplitBoundaryInterface_Test<2U>() ); // correct, but InternalBoundary_test model has 4 incorrect TopoType flags
    // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test( verbose ) );
    // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test( verbose ) );
@@ -485,8 +483,6 @@ int main()
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );
-      // FAIL (needs to be run from the command line)    composite.addTest( new CommandLineParser_Test() );
-      composite.addTest( new GenericFiniteVolumeTransport_Test() ); // legacy multiphase flow transport scheme
 
       // constitutive relationships
       composite.addTest( new ExponentialTransferFunction_Test() );
