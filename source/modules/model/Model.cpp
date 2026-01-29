@@ -4614,13 +4614,6 @@ tuple<size_t,size_t,size_t>  initialise_BREP_TopologyFlags( Model<3>& model )
                              if ( new_entry.second == false ) (*new_entry.first).second++;
                           }
                         break;
-/* FAIL! - creates INTERIOR_LINEs everywhere
-                     case INTERIOR_SURFACE: { // for volumetric entities
-                             auto new_entry = edges.insert( make_pair(nit,1) );
-                             if ( new_entry.second == false ) (*new_entry.first).second++;
-                          }
-                        break;
-*/
                      case PERIMETER_LINE: { // where they touch, this is considered an INTERIOR_LINE, not an intersection point
                              auto new_entry = edges.insert( make_pair(nit,1) );
                              if ( new_entry.second == false ) (*new_entry.first).second++;
@@ -4709,11 +4702,6 @@ tuple<size_t,size_t,size_t>  initialise_BREP_TopologyFlags( Model<3>& model )
                   }
              }
         }
-
-// TESTING (OK)
-//const Region<3>& fault = model.Region("NORMAL_FAULT");
-//set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
-//cerr <<".";
 
       // 3. counting intersections and reporting
       // ---------------------------------------
