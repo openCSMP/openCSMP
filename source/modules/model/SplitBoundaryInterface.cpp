@@ -127,7 +127,7 @@ void SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::RemoveSplitBoundary( co
     SPLITBOUNDARY_COMPLEX<dim>&  splitBoundaryComplex( static_cast<SPLITBOUNDARY_COMPLEX<dim>& >(*this) );
     csmp::SplitBoundary<dim>&    split_boundary = splitBoundaryComplex.SplitBoundary( splitboundary );
 
-     // erasing the faces
+     // erasing the Interfaces
      if ( erase_interfaces ) {
          // finding the region(s) on the outside of the split boundary which will need to be updated after split boundary removal
          set<int32_t> domain_indices_of_outside_regions;
@@ -904,6 +904,273 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
   return new_split_boundaries;
 
 } // end FormSplitBoundariesFrom
+
+
+
+
+
+/**
+        Eddy Pezulli's method for postprocessing SplitBoundary intersections.
+        
+        In essence, his code performs a topological disambiguation.
+        When a new SplitBoundary (a 2D surface in 3D, or line in  1D in 2D) intersects an existing one,
+        the nodes at the intersection are already "split" into a NodeManifold.
+        This code's job is to look at each lower-dimensional element in the new boundary and ensure it points to the specific node in the manifold
+        that "belongs" to the same mesh patch.
+        
+        To achieve this goal, the method goes over all manifolds in the model,
+        checks them, adding Nodes / NodeManifolds, trying to rectify them in the Face of the newly emerging Topology.
+
+        @attention ASSUMPTION: each split boundaries terminates at the intersection with another.
+    
+        Algorithm: If we detect a FE-node manifold along the surface mesh that shall become the splitboundary, the surface
+        is intersecting a pre-existing splitboundary.
+       
+        If so, we need to determine whether the lower dimensional element is attached on the inside or outside of this interface.
+        Once determined, the lower dimensional element can be replaced by an InterFace element with correct OUTSIDE or INSIDE node.
+        Now splitting can proceed like before (the lack of neighbor connectivity of the higher dimensional elements on either side of
+        the InterFace (contributing to the SplitBoundary) will ensure that outside neighbor searches will not reach INSIDE elements
+        and parent element searches for the nodes on the inside will not find elements on the outside.
+       
+        The algorithmic approach taken is not to view the intersection as two interfaces which cut through a splitboundary,
+        but to view an intersection on the scale of a single interface which touches the node of a pre-existing interface.
+        This is important because it allows T intersections and X intersections to be handled with the same logic.
+       
+        Algorithm
+
+        1) Identify all split-boundary nodes on the surface (lower-dim mesh to be converted into SplitBoundary)
+       
+        2) For each Element node pair, disambiguate which node the lower dim InterFace should be assigned assigned
+          (relying on the nodes dim-dimensional parent having the correct node).
+          
+        3) assign the correct node to the lower-dim element, etc., before continueing with the splitting process.
+        
+        @param subdomain must be the model region unless SplitBoundary objects only exist in a subregion of Model
+*/
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+void SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::ResolveInconsistentNodeManifolds( Region<dim>& subdomain )
+ {
+    // 1. Loop over all elements of the lower-dimensional finite-element input region (mesh)
+    // 1.1 For all nodes, if they have been duplicated (=split) indicated by IsManifold()==true
+    //     store in map<Element, ( vec<Manifold Node>, vec<node ids> ) > .
+    //     note: this handles the case where the perimeter has been split by another splitboundary (adjacent mesh patch with collocated nodes)
+    map<Element<dim>*, pair<vector<Node<dim>*>, vector<uint32_t> > > elements_with_manifold_nodes;
+    set<Node<dim>*>                                                  manifold_on_perimeter;
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit ) {
+      const uint32_t     nodes = (*eit)->Nodes();
+      vector<Node<dim>*> manifold_nodes;
+      vector<uint32_t>   node_ids;
+      for (uint32_t i{0U}; i<nodes; ++i){         //loop over number of nodes of element
+        if ( (*eit)->N(i)->IsManifold() ){
+          manifold_nodes.push_back( (*eit)->N(i) );  //insert manifold node
+          node_ids.push_back(i);
+          if (subdomain.IsPerimeterNode((*eit)->N(i))){
+              manifold_on_perimeter.insert((*eit)->N(i));
+          }
+        }
+      } //end of node loop
+      if (!manifold_nodes.empty()){      //if found manifolds
+        //add element to map if manifold nodes were found.
+        elements_with_manifold_nodes.insert(make_pair(*eit, make_pair( manifold_nodes, node_ids )) );
+      }
+    }//end of element loop
+
+    // 2. Loop over element map
+    for (auto& it : elements_with_manifold_nodes) {
+        Element<dim>* lower_dim_elem = it.first;
+        auto& man_nodes_info = it.second;
+
+        Node<dim>* reference_node = nullptr;
+        // Attempt to find a "stable" node (not manifold, not perimeter)
+        for (auto nit = lower_dim_elem->NodesBegin(); nit != lower_dim_elem->NodesEnd(); ++nit) {
+            if (!(*nit)->IsManifold()) {
+                if ((*nit)->Attribute() != PERIMETER_POINT && (*nit)->Attribute() != PERIMETER_LINE) {
+                    reference_node = *nit;
+                    break;
+                }
+                reference_node = *nit; // Weak fallback
+            }
+        }
+
+        set<Element<dim>*> candidate_parents;
+
+        if (reference_node != nullptr) {
+            // CASE A: Standard logic using a stable reference node
+            for (uint32_t p = 0; p < reference_node->Parents(); ++p) {
+                Element<dim>* parent = reference_node->Parent(p);
+                if (parent->IsEquidimensional()) {
+                    candidate_parents.insert(parent);
+                }
+            }
+        } else {
+            /* CASE B: All-Manifold Element Fallback
+               We find the higher-dimensional parent by intersecting the parent sets
+               of all nodes in the lower-dim element. Only the correct mesh patch
+               volume cell will contain all (the correct branches of) these nodes. */
+            
+            bool first_node = true;
+            for (auto nit = lower_dim_elem->NodesBegin(); nit != lower_dim_elem->NodesEnd(); ++nit) {
+                set<Element<dim>*> current_node_parents;
+                for (uint32_t p = 0; p < (*nit)->Parents(); ++p) {
+                    Element<dim>* parent = (*nit)->Parent(p);
+                    if (parent->IsEquidimensional()) {
+                        current_node_parents.insert(parent);
+                    }
+                }
+
+                if (first_node) {
+                    candidate_parents = current_node_parents;
+                    first_node = false;
+                } else {
+                    // Intersection: candidate_parents = candidate_parents ∩ current_node_parents
+                    for (auto it_p = candidate_parents.begin(); it_p != candidate_parents.end(); ) {
+                        if (current_node_parents.find(*it_p) == current_node_parents.end()) {
+                            it_p = candidate_parents.erase(it_p);
+                        } else {
+                            ++it_p;
+                        }
+                    }
+                }
+            }
+        }
+
+    if (candidate_parents.empty()) {
+        throw csmp::Exception(ERROR, "ManifoldResolution", "No common higher-dim parent found for element " + to_string(lower_dim_elem->Idx()));
+    }
+
+    // Now resolve each split node using the identified candidate parents
+    for (size_t m = 0; m < man_nodes_info.first.size(); ++m) {
+        Node<dim>* current_man_node = man_nodes_info.first[m];
+        uint32_t local_idx = man_nodes_info.second[m];
+        NodeManifold<dim>* manifold = current_man_node->Manifold();
+        
+        set<Node<dim>*> nodes_to_assign;
+
+        // For each potential volume cell parent
+        for (auto* vol_parent : candidate_parents) {
+            for (uint32_t b = 0; b < manifold->Branches(); ++b) {
+                // Check if this specific node branch is part of this volume cell
+                if (manifold->N(b)->IsParent(vol_parent)) {
+                    nodes_to_assign.insert(manifold->N(b));
+                }
+            }
+        }
+
+        if (nodes_to_assign.size() != 1) {
+             // If size > 1, the lower-dim element might be an interface between 
+             // two patches that haven't been fully separated yet.
+             // If size == 0, the topology is disconnected.
+             throw csmp::Exception(ERROR, "ManifoldResolution", "Ambiguity in node assignment at element " + to_string(lower_dim_elem->Idx()));
+        }
+
+        lower_dim_elem->Assign(local_idx, *nodes_to_assign.begin());
+        
+        if (candidate_parents.empty()) {
+            throw csmp::Exception(ERROR, "ManifoldResolution", "No common higher-dim parent found for element " + to_string(lower_dim_elem->Idx()));
+        }
+    }
+  }
+ 
+ } // end checkFixSplitBoundaryInterSections
+
+
+/* EDDY'S ORIGINAL CODE
+
+    // 1. Loop over all elements of the lower-dimensional finite-element input region (mesh)
+    // 1.1 For all nodes, if they have been duplicated (=split) indicated by IsManifold()==true
+    //     store in map<Element, ( vec<Manifold Node>, vec<node ids> ) > .
+    //     note: this handles the case where the perimeter has been split by another splitboundary (adjacent mesh patch with collocated nodes)
+    map<Element<dim>*, pair<vector<Node<dim>*>, vector<uint32_t> > > elements_with_manifold_nodes;
+    set<Node<dim>*>                                                  manifold_on_perimeter;
+    for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit ) {
+      const uint32_t     nodes = (*eit)->Nodes();
+      vector<Node<dim>*> manifold_nodes;
+      vector<uint32_t>   node_ids;
+      for (uint32_t i{0U}; i<nodes; ++i){         //loop over number of nodes of element
+        if ( (*eit)->N(i)->IsManifold() ){
+          manifold_nodes.push_back( (*eit)->N(i) );  //insert manifold node
+          node_ids.push_back(i);
+          if (subdomain.IsPerimeterNode((*eit)->N(i))){
+              manifold_on_perimeter.insert((*eit)->N(i));
+          }
+        }
+      } //end of node loop
+      if (!manifold_nodes.empty()){      //if found manifolds
+        //add element to map if manifold nodes were found.
+        elements_with_manifold_nodes.insert(make_pair(*eit, make_pair( manifold_nodes, node_ids )) );
+        assert(manifold_nodes.size() != nodes );
+      }
+    }//end of element loop
+
+
+    // 2. Loop over element map
+    // ------------------------
+    //  2.1 Find non-manifold node of element (must exist, otherwise we have split an existing splitboundary...)
+    //      Loop over higher dimensional parents of non-manifold node
+    //        2.2 Ask each node node in the node manifold, if they have the higher dim element as a parent
+    //        2.3 insert node with matching parent into map of nodes to assign. assert(set.size() = number_manifold_nodes of lower_dim_elmt).
+    //        2.4 IMPORTANT -> If manifold node is also a perimeter node, we must add it to perimeter nodes of model subdomain
+    set<Node<dim>*> extra_perimeter_nodes;  //nodes that were on perimeter but split by another splitboundary
+    for ( auto& it : elements_with_manifold_nodes )
+      {
+        // 2.1 find non-manifold node (Not manifold, and not perimeter either).  (Has Manifold()==nullptr : not even perimeter)
+        //     This non-manifold node will have higher dim parents with correct nodes assigned
+        Node<dim>* non_manifold_node = nullptr;
+        for (auto nit=it.first->NodesBegin(); nit != it.first->NodesEnd(); ++nit ){
+            if ( (*nit)->IsManifold() == false && ( (*nit)->Attribute() != PERIMETER_POINT && (*nit)->Attribute() != PERIMETER_LINE ) ) { //Should not be on perimeter (since this means node shares parents with both inside and out)
+                non_manifold_node = *nit; //we found non-manifold node
+                break;
+              }
+          }//end of search
+        assert( non_manifold_node != nullptr );
+
+        // 2.2 For each manifold node, start search for correct manifold node to assign to lower dim element
+        const uint32_t parents = non_manifold_node->Parents();
+        uint32_t m{0U};
+        for ( auto& man_node : it.second.first ) {
+              set<Node<dim>*> node_to_assign;
+              NodeManifold<dim>* manifold = man_node->Manifold();
+              const uint32_t branches = manifold->Branches();
+
+              //Check if manifold node was also on perimeter
+              bool add_to_perimeter_node = false;
+              if (manifold_on_perimeter.find(man_node) != manifold_on_perimeter.end())
+                add_to_perimeter_node = true;
+
+              //2.3 Search over all parents of non-manifold node to see if the manifold node also shares the parent
+              for (uint32_t j{0U}; j<parents;++j){ //loop over all higher dim parents
+                if ( non_manifold_node->Parent(j)->IsEquidimensional() ){
+                  //Find which branch of manifold shares parent
+                  for (uint32_t i{0U}; i<branches; ++i){
+                    if ( manifold->N(i)->IsParent( non_manifold_node->Parent(j) ) ){
+                      node_to_assign.insert(manifold->N(i));            //this manifold node is on correct side of lower dim region
+                      if (add_to_perimeter_node)
+                        extra_perimeter_nodes.insert(manifold->N(i)); //This manifold node is also on perimeter of lower dim region
+                    }
+                  }//end of branch search
+                }
+              }//end of parent search
+
+              // DEBUGGING: parent elements are not shared across SplitBoundaries, i.e.,
+              // different manifold nodes cannot share element parents
+              if ( node_to_assign.size() != 1 ) {
+                   for ( const auto& node : node_to_assign ) {
+                        cout <<"\n"<<"Node "<< node->Idx() <<": "<< node->Coordinate();
+                        node->Manifold()->Out();
+                        cout <<"\n"<<"Element to which node should be assigned "<< (*it.first).Idx() << endl;;
+                     }
+                   throw csmp::Exception( ERROR, "::CreateSplitBoundaryFrom:", "when searching outside Node to be assigned to dim-1 element");
+                }
+              // We have now found the node which should be on the lower dim element
+              // 2.4 Assign node to the lower-dim element
+              it.first->Assign( it.second.second[m], *node_to_assign.begin() );
+              m++; //increment manifold index (allows to get correct node id information)
+           }
+
+    }//end of elements_with_manifold_nodes loop
+
+
+*/
 
 
 

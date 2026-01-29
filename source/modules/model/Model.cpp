@@ -334,7 +334,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
             old_and_new_elmtids.clear();
           }
       }
-      
+
     // 2. building the finite element mesh and property storage
     // potential extra variables in VSet
     const bool verbose{true};
@@ -342,6 +342,7 @@ void Model<dim>::Initialize( const char* regions_file_prefix, ///< normally this
     // finite volume variables
     const bool with_FV_variables = (finiteVolumeVariables(Database()) > 0 ) ? true : false;
     mesh_manager_.Initialize( Database(), vset, with_FV_variables );
+
     if ( !vset_contains_neighbor_connectivity )
       mesh_manager_.UpdateConnectivity();
     const bool contiguous_model( mesh_manager_.IsContiguous() );
@@ -447,6 +448,14 @@ if ( mesh_manager_.Interfaces() > 0 ) {
 
 } // end Initialize (regionfile,ModelTopology,VSet)
 
+
+// TESTING
+//{
+//  set<TOPOTYPE> topology_flags;
+//  for ( auto nit=Mesh().NodesBegin(); nit!=Mesh().NodesEnd(); ++nit )
+//    topology_flags.insert( (*nit).Attribute() );
+//  cerr <<"done";
+//}
 
 
 
@@ -4045,6 +4054,32 @@ template void flagToNumber( Model<3U>&, const char*, const char* );
 
 
 
+/// converts the model topology flags of the nodes (TopoType) into node variable values that can be visualised
+template<uint32_t dim>
+void topoTypeToNumber( Model<dim>& model, const char* TopoType_variable )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  prop_key = model.Database().StorageKey(TopoType_variable); // output
+ 
+    if ( prop_key.place != NODE )
+      throw csmp::Exception( ERROR, "topoTypeToNumber:", "like TopoType, its visualisation variable must be placed on the Node." );
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "topoTypeToNumber:", "the visualisation variable must be a SCALAR" );
+  
+    for ( auto nit=mref.NodesBegin(); nit!=mref.NodesEnd(); ++nit )
+      {
+         // retrieves status of the flag variable
+         double value = static_cast<double>( (*nit)->Attribute() );
+         // overwrites value of value variable with integer value of its flag enum
+         (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+      }
+   
+ } // end topoTypeToNumber
+
+template void topoTypeToNumber( Model<1>&, const char* );
+template void topoTypeToNumber( Model<2>&, const char* );
+template void topoTypeToNumber( Model<3>&, const char* );
+
 
 
 
@@ -4409,6 +4444,426 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
 template void imposeLimitOn( Model<1U>&, const char*, const char*, bool, double );
 template void imposeLimitOn( Model<2U>&, const char*, const char*, bool, double );
 template void imposeLimitOn( Model<3U>&, const char*, const char*, bool, double );
+
+
+
+/**
+      Based on the unique Regions, Boundaries and SplitBoundaries in the Model,
+      this method initialises the nodal TOPOTYPE flags, discerning region intersections, perimeter lines and intersection points.
+      The assigned flags discern:
+  
+| Value | Name               | Description                                                             | Remeshing Constraint                                                             |
+|-------|--------------------|-------------------------------------------------------------------------|----------------------------------------------------------------------------------|
+| 0     | MESH_VERTEX        | Standard vertex inside a volume or surface.                             | Fully mobile; can be deleted or moved to optimize mesh quality.                  |
+| 1     | INTERIOR_POINT | Where multiple lines touch or cross or surfaces meet at a single point.          | Fixed; cannot be removed or moved. Defines the B-Rep skeleton.                   |
+| 2     | PERIMETER_POINT    | A point at the end of a line (0D boundary of a 1D line).                 | Fixed; defines the termination of a geometric feature.                           |
+| 3     | EXTERIOR_POINT     | A point on the outside surface of the model.                            | Usually redundant if surface/line flags exist; marks hull corners.               |
+| 4     | INTERIOR_LINE      | A vertex on a line located entirely inside a volume.                    | Can slide along the line; cannot be moved off the line.                          |
+| 5     | PERIMETER_LINE     | A surface edge that exists inside the model (e.g. a hole’s rim).        | Can slide along the perimeter; preserves the cutout shape.                       |
+| 6     | EXTERIOR_LINE      | An edge belonging to the outer hull of the model.                       | Can slide along the edge; preserves the visual boundary.                         |
+| 7     | INTERIOR_SURFACE   | A vertex on a surface separating two volumes (subdomains).              | Can move within the surface plane; preserves the material interface.             |
+| 8     | PERIMETER_SURFACE  | A surface forming an internal island or hull.                           | Can move within the surface; preserves internal cavity shapes.                   |
+| 9    | EXTERIOR_SURFACE   | A vertex on the outermost shell of the model.                           | Can move within the surface; preserves the total model volume.                  |
+
+  It is assumed that regions only consist out of Volume, Surface or Line elements.
+
+  @attention only the unique regions are considered as part of the model topology.
+
+   @attention  Method assumes that there are no duplicated surfaces,
+   and that all surfaces and lines were already intersected so that there must be perimeter or intersection lines already.
+   
+   @todo should CSMP strictly follow the rule of CAD kernels? - If a property is not invariant under Boolean, fillet, trim, offset, and heal operations, it cannot be fundamental topology.
+
+ */
+template<>
+tuple<size_t,size_t,size_t>  initialise_BREP_TopologyFlags( Model<3>& model )
+ {
+    // 0. zapping any previous topologic information
+    // ---------------------------------------------
+    for ( auto nit=model.Mesh().NodesBegin(); nit!=model.Mesh().NodesEnd(); ++nit )
+      (*nit).Attribute( MESH_VERTEX );
+    
+    
+    // 1. using Regions, Boundaries and SplitBoundaries to assigning interior and perimeter flags
+    // ------------------------------------------------------------------------------------------
+    for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it )
+      {
+         const uint32_t cell_dim = ((*it).second.E(0)->IsVolume()) ? 3 : ((*it).second.E(0)->IsSurface()) ? 2 : 1;
+         // volumetric regions (perimeter only), else default
+         if ( cell_dim == 3 ) {
+              for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute(PERIMETER_SURFACE);
+           }
+         // surfaces
+         else if ( cell_dim == 2 ) {
+              // perimeter
+              for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_LINE );
+              // interior
+              for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_SURFACE );
+           }
+         // lines
+         else {
+              // perimeter
+              for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_POINT );
+              // interior
+              for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+           }
+      }
+      
+    // Boundaries (lines)
+    for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); ++it ) {
+          const uint32_t cell_dim = ((*it).second.E(0)->IsSurface()) ? 2 : 1;
+          // surfaces
+          if ( cell_dim == 2 ) {
+               // perimeter
+               for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_LINE );
+               // interior
+               for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_SURFACE );
+            }
+          // line Boundary objects
+          else {
+               // perimeter
+               for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_POINT );
+               // interior
+               for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+            }
+      }
+
+    // SplitBoundaries (lines)
+    for ( auto it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); ++it ) {
+          const uint32_t cell_dim = ((*it).second.E(0)->IsSurface()) ? 2 : 1;
+          // node pointers, n-interior nodes
+          pair<vector<Node<3>*>,size_t> inside_nodes = (*it).second.InsideNodes();
+          pair<vector<Node<3>*>,size_t> outside_nodes = (*it).second.OutsideNodes();
+          // surfaces
+          if ( cell_dim == 2 ) {
+               // perimeter
+               for ( size_t n=inside_nodes.second; n<inside_nodes.first.size(); ++n )
+                 inside_nodes.first[n]->Attribute( PERIMETER_LINE );
+               // interior
+               for ( size_t n{0}; n<inside_nodes.second; ++n ) inside_nodes.first[n]->Attribute( INTERIOR_SURFACE );
+               for ( size_t n{0}; n<outside_nodes.second; ++n ) outside_nodes.first[n]->Attribute( INTERIOR_SURFACE );
+            }
+          // line SplitBounday objects
+          else {
+               // perimeter
+               for ( size_t n=inside_nodes.second; n<inside_nodes.first.size(); ++n )
+                 inside_nodes.first[n]->Attribute( PERIMETER_POINT );
+               // interior
+               for ( size_t n{0}; n<inside_nodes.second; ++n ) inside_nodes.first[n]->Attribute( INTERIOR_LINE );
+               for ( size_t n{0}; n<outside_nodes.second; ++n ) outside_nodes.first[n]->Attribute( INTERIOR_LINE );
+             }
+      }
+      
+      
+    // 2. Finding nodes that mark intersections / manifolds, classifying them as INTERSECTION_LINE or INTERSECTION_POINT
+    // -----------------------------------------------------------------------------------------------------------------
+    // NOTE: thus far, there are no INTERSECTION_ topotypes
+    /*
+         Definitions
+         - contact: touching (sharing a point, edge or a face); not a geometric primitive
+         - coincident = perimeter is the same but topo descriptors are not shared
+         - manifold: contact of lower-dim entities
+         - interface: shared topology
+         
+         Processing logic that gets applied here:
+         
+         INTERIOR_SURFACE
+           >=2 coincident (touching) PERIMETER_SURFACES     -> INTERIOR_SURFACE
+           coincident PERIMETER_SURFACE + INTERIOR_SURFACES -> INTERIOR_SURFACE
+           
+        INTERSECTION_LINE
+          >=2 different intersecting INTERIOR_SURFACES (dim1-regions, boundaries or split boundaries) -> INTERSECTION_LINE
+        
+        INTERIOR_LINE
+           >=2 coincident PERIMETER_LINES -> INTERIOR_LINE
+           
+        INTERSECTION_POINT
+           >=2 different INTERIOR_LINES
+           >=2 different INTERSECTION_LINES
+           
+        PERIMETER_POINT
+          >=2 different perimeter curves
+            
+           - an interior surface is always a CONTACT
+           
+        Questions
+           - should one distinguish contact- from intersection lines?
+           - do surfaces need edges where there are kinks? - in NURBS they do
+     */
+    // topologic classifiers
+    size_t nodes_on_faces{0}, nodes_on_edges{0}, nodes_on_vertices{0};
+    {
+      unordered_map<Node<3>*,size_t> faces, edges, vertices; // will become INTERIOR_SURFACE, INTERIOR_LINE and INTERIOR_POINT, respectively
+      // regions
+      for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it )
+        {
+           // interior surfaces are left alone, perimeter surfaces are merged into interior surfaces
+           for ( auto& nit : (*it).second.NodeVector() ) {
+                switch( nit->Attribute() ) {
+                     case PERIMETER_SURFACE: { // for volumetric entities
+                             auto new_entry = faces.insert( make_pair(nit,1) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+/* FAIL! - creates INTERIOR_LINEs everywhere
+                     case INTERIOR_SURFACE: { // for volumetric entities
+                             auto new_entry = edges.insert( make_pair(nit,1) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+*/
+                     case PERIMETER_LINE: { // where they touch, this is considered an INTERIOR_LINE, not an intersection point
+                             auto new_entry = edges.insert( make_pair(nit,1) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+                     case INTERIOR_LINE: {
+                             auto new_entry = vertices.insert( make_pair(nit,1) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+                     default: break;
+                  }
+             }
+        }
+
+      // boundaries
+      for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); ++it )
+        {
+           for ( auto& nit : (*it).second.NodeVector() ) {
+                switch( nit->Attribute() ) {
+                     case INTERIOR_SURFACE: {
+                          auto new_entry = edges.insert( make_pair(nit,1) );
+                          if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     case PERIMETER_LINE: { // where they touch, this is considered an INTERIOR_LINE, not an intersection point
+                             auto new_entry = edges.insert( make_pair(nit,1) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     case INTERIOR_LINE: {
+                          auto new_entry = vertices.insert( make_pair(nit,1) );
+                          if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     default: break;
+                  }
+             }
+        }
+        
+      // split boundaries
+      for ( auto it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); ++it )
+        {
+          // inside
+          pair<vector<Node<3>*>,size_t> inside_nodes = (*it).second.InsideNodes();
+          for ( size_t n{0}; n<inside_nodes.first.size(); ++n ) {
+                switch( inside_nodes.first[n]->Attribute() ) {
+                     case INTERIOR_SURFACE: {
+                             auto new_entry = edges.insert( make_pair( inside_nodes.first[n], 1 ) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+                     case PERIMETER_LINE: {
+                             auto new_entry = edges.insert( make_pair( inside_nodes.first[n], 1 ) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+                     case INTERIOR_LINE: {
+                          auto new_entry = vertices.insert( make_pair( inside_nodes.first[n], 1 ) );
+                          if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     default: break;
+                  }
+             }
+          // outside
+          pair<vector<Node<3>*>,size_t> outside_nodes = (*it).second.OutsideNodes();
+          for ( size_t n{0}; n<outside_nodes.second; ++n ) {
+                switch( outside_nodes.first[n]->Attribute() ) {
+                     case INTERIOR_SURFACE: {
+                          auto new_entry = edges.insert( make_pair( outside_nodes.first[n], 1 ) );
+                          if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     case PERIMETER_LINE: {
+                             auto new_entry = edges.insert( make_pair( outside_nodes.first[n], 1 ) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                        break;
+                     case INTERIOR_LINE: {
+                             auto new_entry = vertices.insert( make_pair( outside_nodes.first[n], 1 ) );
+                             if ( new_entry.second == false ) (*new_entry.first).second++;
+                          }
+                       break;
+                     default: break;
+                  }
+             }
+        }
+
+// TESTING (OK)
+//const Region<3>& fault = model.Region("NORMAL_FAULT");
+//set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
+//cerr <<".";
+
+      // 3. counting intersections and reporting
+      // ---------------------------------------
+      for ( auto& [node,count] : faces )
+        if ( count >= 2 ) {
+             node->Attribute( INTERIOR_SURFACE );
+             nodes_on_faces++;
+          }
+
+      for ( auto& [node,count] : edges )
+        if ( count >= 2 ) {
+             node->Attribute( INTERIOR_LINE );
+             nodes_on_edges++;
+          }
+ 
+      for ( auto& [node,count] : vertices )
+        if ( count >= 2 ) {
+             node->Attribute( INTERIOR_POINT );
+             nodes_on_vertices++;
+          }
+    }
+    
+    // converting Flags if the nodes lie on the model Boundary
+    // (assuming that boundary interformation has already been correctly applied)
+    //
+    for ( auto nit=model.Mesh().NodesBegin(); nit!=model.Mesh().NodesEnd(); ++nit )
+      switch ( (*nit).AtBoundary() ) {
+        case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+             (*nit).Attribute(EXTERIOR_SURFACE);
+             break;
+        case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+        case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+        case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+             (*nit).Attribute(EXTERIOR_LINE);
+             break;
+        case CNR1: case CNR2: case CNR3: case CNR4: case CNR5: case CNR6: case CNR7: case CNR8:
+             (*nit).Attribute(EXTERIOR_POINT);
+             break;
+         case INTERNAL: // only if no determination was made previously
+             if ( (*nit).Attribute() == MESH_VERTEX )
+               (*nit).Attribute(INTERIOR_SURFACE);
+             break;
+         default:
+             break;
+        }
+            
+    return make_tuple( nodes_on_faces, nodes_on_edges, nodes_on_vertices );
+    
+ } // end initialise_BREP_TopologyFlags
+
+
+
+
+// 2D SPECIALISATION
+template<>
+tuple<size_t,size_t,size_t>  initialise_BREP_TopologyFlags( Model<2>& model ) // 2D specialisation
+ {
+    // zapping any topologic information
+    for ( auto nit=model.Mesh().NodesBegin(); nit!=model.Mesh().NodesEnd(); ++nit )
+      (*nit).Attribute( MESH_VERTEX );
+    
+    // Regions: assigning interior vs. perimeter flags
+    for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it ) {
+         const uint32_t cell_dim = ((*it).second.E(0)->IsSurface()) ? 2 : 1;
+         if ( cell_dim == 2 ) {
+              // perimeter
+              for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_LINE );
+           }
+         else { // line cells
+              // perimeter
+              for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_POINT );
+              // interior
+              for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+           }
+      }
+    // Boundaries (lines)
+    for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); ++it ) {
+           // perimeter
+          for ( auto nit=(*it).second.PerimeterNodesBegin(); nit!=(*it).second.NodesEnd(); ++nit )
+            (*nit)->Attribute( PERIMETER_LINE );
+          // interior
+          for ( auto nit=(*it).second.NodesBegin(); nit!=(*it).second.PerimeterNodesBegin(); ++nit )
+            (*nit)->Attribute( INTERIOR_LINE );
+      }
+
+    // SplitBoundaries (lines)
+    for ( auto it=model.SplitBoundariesBegin(); it!=model.SplitBoundariesEnd(); ++it ) {
+          // node pointers, n-interior nodes
+          pair<vector<Node<2>*>,size_t> inside_nodes = (*it).second.InsideNodes();
+          pair<vector<Node<2>*>,size_t> outside_nodes = (*it).second.OutsideNodes();
+           // perimeter
+          for ( size_t n=inside_nodes.second; n<inside_nodes.first.size(); ++n ) inside_nodes.first[n]->Attribute( PERIMETER_LINE );
+          // interior
+          for ( size_t n{0}; n<inside_nodes.second; ++n ) inside_nodes.first[n]->Attribute( INTERIOR_LINE );
+          for ( size_t n{0}; n<outside_nodes.second; ++n ) outside_nodes.first[n]->Attribute( INTERIOR_LINE );
+      }
+      
+    // collecting nodes that lie on intersections and classifying them as INTERSECTION_POINT
+    size_t nodes_on_edges{0}, nodes_on_vertices{0};
+    {
+      unordered_map<Node<2>*,size_t> edges, vertices;
+      for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it ) {
+            for ( auto& nit : (*it).second.NodeVector() ) {
+                  if ( nit->Attribute() == PERIMETER_LINE || nit->Attribute() == INTERIOR_LINE ) {
+                       auto new_entry = edges.insert( make_pair(nit,1) );
+                       if ( new_entry.second == false ) (*new_entry.first).second++;
+                    }
+              }
+        }
+      for ( auto& nit : edges )
+        if ( nit.second >= 2 ) {
+             nit.first->Attribute( INTERIOR_LINE );
+             nodes_on_edges++;
+          }
+      for ( auto& nit : vertices )
+        if ( nit.second >= 2 ) {
+             nit.first->Attribute( INTERIOR_POINT );
+             nodes_on_vertices++;
+          }
+    }
+    
+    // converting Flags if the nodes lie on the model Boundary
+    // (assuming that boundary interformation has already been correctly applied)
+    //
+    size_t nodes_on_faces{0};
+    for ( auto nit=model.Mesh().NodesBegin(); nit!=model.Mesh().NodesEnd(); ++nit ) {
+          switch ( (*nit).AtBoundary() ) {
+             case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+             case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                 (*nit).Attribute(EXTERIOR_LINE);
+                 break;
+             case CNR1: case CNR2: case CNR3: case CNR4:
+                 (*nit).Attribute(EXTERIOR_POINT);
+                 break;
+             case INTERNAL:
+                 (*nit).Attribute(INTERIOR_LINE);
+                 break;
+             default:
+                 break;
+            }
+           if ( (*nit).Attribute() == MESH_VERTEX )
+             nodes_on_faces++;
+        }
+      
+    return make_tuple( nodes_on_faces, nodes_on_edges, nodes_on_vertices );
+    
+ } // end initialise_BREP_TopologyFlags
 
 
 

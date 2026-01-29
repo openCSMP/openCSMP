@@ -297,10 +297,10 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
       vector<double> coord( dim );
       const LocalVariables nvars( phys_vars.LocalVariablesAt( NODE ) );
       for ( size_t idx = 0U; idx < vset.Vertices(); ++idx ) {
-           for ( uint32_t j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
-           nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars,
-                                      static_cast<BOX_BOUNDARY>(vset.BFlag(idx)),
-                                      static_cast<TOPOTYPE>(vset.BREP_Flag(idx)) ) );
+            for ( uint32_t j{0U}; j<dim; ++j ) coord[j] = vset.P( j, idx );
+            nodes_.emplace( Node<dim>( idx, Point<dim>( coord ), nvars,
+                                       static_cast<BOX_BOUNDARY>(vset.BFlag(idx)),
+                                       static_cast<TOPOTYPE>(vset.BREP_Flag(idx)) ) );
         }
     }
 
@@ -650,7 +650,7 @@ bool  MeshManager<dim>::Initialize( const PropertyDatabase<dim>& phys_vars, cons
   // ---------------------------------------------------------------------
   // 5. Flagging nodes at model boundary with BOX_BOUNDARY flags
   // ---------------------------------------------------------------------
-  // NB: the node flags were already assigned further above where the nodes were created!
+  // NB: the node flags were already assigned further above where the nodes were constructed!
     
     
   // ------------------------------------------------------------------------------

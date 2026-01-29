@@ -572,7 +572,7 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
   	px[6]=4.;    py[6]=3.5;   bflags[6] = INTERNAL;   gflags[6] = INTERIOR_LINE;
   	px[7]=6.;    py[7]=3.;    bflags[7] = RIGHT;      gflags[7] = EXTERIOR_LINE;
   	px[8]=1.8;   py[8]=3.2;   bflags[8] = INTERNAL;   gflags[8] = PERIMETER_POINT;
-  	px[9]=2.8;   py[9]=3.;    bflags[9] = INTERNAL;   gflags[9] = INTERSECTION_POINT;
+  	px[9]=2.8;   py[9]=3.;    bflags[9] = INTERNAL;   gflags[9] = INTERIOR_POINT;
   	px[10]=3.5;  py[10]=2.5;  bflags[10] = INTERNAL;  gflags[10] = INTERIOR_LINE;
   	px[11]=4.7;  py[11]=2.5;  bflags[11] = INTERNAL;  gflags[11] = PERIMETER_POINT;
   	px[12]=6.;   py[12]=2.;   bflags[12] = RIGHT;     gflags[12] = EXTERIOR_LINE;
@@ -1040,7 +1040,7 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     
     
     //--------------------------TOPOTYPE NODE FLAGS (35)
-    const TOPOTYPE v{MESH_VERTEX}, i{INTERSECTION_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
+    const TOPOTYPE v{MESH_VERTEX}, i{INTERIOR_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
     //                        0 1 2 3  4 5 6 7  8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
     vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, l, l, v, x, x, l, i, i, l, x, x, l, i, i, l, x, x, v, p, x, e, x, x, e };
     assert( gflags.size() == n_nodes );

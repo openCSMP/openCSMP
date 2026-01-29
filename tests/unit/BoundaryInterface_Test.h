@@ -31,6 +31,15 @@ class BoundaryInterface_Test : public Test {
   private:
     /// checks whether the contact surface of 2 contacting regions is recovered correctly
     bool TestRegionContactDetection( const Model<3U>& );
+    
+    /// visualises topotypes by converting them to nodel scalar variables output to VTU file
+    void TopoTypeToVTU( Model<3U>&, const char* region );
+    
+    /// VTU output if topotypes for lower-dim regions
+    void TestTopoTypeIdentifiers( Model<3U>& );
+    
+    /// checks whether TOPOTYPE  node information is correct after the new boundaries have been inserted
+    void TestBoundaryAndTopoTypeIdentifiers( Model<3U>& );
 
   private:
     const static bool verbose_ = false; ///< turn off to supress output of files etc.

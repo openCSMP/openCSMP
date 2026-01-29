@@ -39,9 +39,10 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
-ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const PropertyDatabase<dim>& pref )
+ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const PropertyDatabase<dim>& pref, bool unique )
 	: pref_(pref),
 	  subdomain_name_(subdomain_name),
+    is_unique_(unique),
 // default set in class declaration:    rebuilt_needed_
     domain_idx_(++domain_count_)
  {
@@ -58,7 +59,8 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
     bd_face_vec_(ed.bd_face_vec_),
     subdomain_name_(ed.subdomain_name_),
     rebuilt_needed_(ed.rebuilt_needed_),
-    domain_idx_(++domain_count_)
+    domain_idx_(++domain_count_),
+    is_unique_(ed.is_unique_)
  {
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called copy constructor.\n";
  }
@@ -74,7 +76,8 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
    bd_face_vec_( std::move(ed.bd_face_vec_) ),
    subdomain_name_( std::move(ed.subdomain_name_) ),
    rebuilt_needed_(std::move(ed.rebuilt_needed_) ),
-   domain_idx_( std::move(ed.domain_idx_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
+   domain_idx_( std::move(ed.domain_idx_) ), // since argument object gets destroyed there is no incrementation of domain_idx_
+   is_unique_(std::move(ed.is_unique_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
     domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
@@ -408,7 +411,7 @@ pair<CELL_SHAPE,bool>  ModelSubDomain<dim,CELL>::SingleCellShapeDomain() const
    It follows that all lower-dimensional mesh that 'sticks out' of a higher
    dimensional region has cells and nodes flagged as PERIMETER.
    
-   TODO: make IdentifyPerimeter a virtual function and move respective code Region, Boundary and SplitBoundary!
+   TODO: make IdentifyPerimeter a virtual function and move respective code segments into Region, Boundary and SplitBoundary!
 
 */
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -1181,14 +1184,379 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForSplitBoundary()
 
 
 
+/**
+    Updates Node TopoType flags (see below), relying on 1) the dimensionality of the region 2) the distinction between interior and perimeter nodes,
+    3) their BOX_BOUNDARY flags, and 4) the previous values of the TOPO_TYPE flag.
+    
+    MESH_VERTEX               0
+    INTERIOR_POINT            1 a point where lines cross or multiple surfaces intersect
+    PERIMETER_POINT        2  point at the end of a line inside a 2D model
+    EXTERIOR_POINT           3   on an outside surface of the model
+    INTERIOR_LINE               4  a line on the interior of the model
+    PERIMETER_LINE            5 a surface edge inside of the model
+    EXTERIOR_LINE              6  an edge of the model
+    INTERIOR_SURFACE       7  a surface within a 3D model
+    PERIMETER_SURFACE    8  a surface forming the hull of an object inside of a 3D model
+    EXTERIOR_SURFACE      9  a surface delimiting a 3D model
+
+    These are detected on the basis of ModelSubDomain perimiter or interior information, boundary flags and dimensionality of region.
+    Cell type is considered as well.
+    
+    @attention this method expects that the BOX_BOUNDARY flags are set correctly
+    
+    @attention this method IS NOT EXACT! - and will only detect part of the topologic configurations that may arise from complex intersections of surfaces, i.e.,
+    intersections of Regions, Boundaries and SplitBoundaries with different dimensions.
+    This can only done by methods that simultaneously consider all these entities.
+    
+    @test 27/1/2026 - fault_boundary_test model only
+    @author SKM
+ */
+template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
+ {
+    // making sure that the domain only contains elements of the same dimensionality
+    assert( SingleCellShapeDomain().second == true ); // only in debug mode
+    
+    // inferring dimensions of cells from the first one
+    const uint32_t cell_dim = (cell_vec_[0]->IsVolume()) ? 3 : (cell_vec_[0]->IsSurface()) ? 2 : 1;
+
+    // =====================================
+    // Region and Boundary model sub-domains
+    // =====================================
+    // (in these subdomains we have nodes)
+    if constexpr ( is_same<CELL<dim>,Element<dim> >::value || is_same<CELL<dim>,Face<dim> >::value )
+      {
+        if constexpr ( dim == 3 )
+          {
+             // volumetric domains: only perimeter surface needs updating
+             // ---------------------------------------------------------
+             // (their intersection with other volumes will be a surface)
+             if ( cell_dim == 3 )
+               for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                  switch ((*nit)->AtBoundary()) {
+                      case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                          (*nit)->Attribute(EXTERIOR_SURFACE);
+                          break;
+                      case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                      case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                      case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                          (*nit)->Attribute(EXTERIOR_LINE);
+                          break;
+                      case CNR1: case CNR2: case CNR3: case CNR4:
+                      case CNR5: case CNR6: case CNR7: case CNR8:
+                          (*nit)->Attribute(EXTERIOR_POINT);
+                          break;
+                      case INTERNAL: // if there is a pre-existing Boundary or SplitBoundary
+                      case NOT:
+                      default:
+                          (*nit)->Attribute(INTERIOR_SURFACE);
+                          break;
+                  }
+                  
+             // surface domains: updating perimeter lines and interior surfaces
+             // ---------------------------------------------------------------
+             // their intersection with volumes will be a surface, line or a point)
+             else if ( cell_dim == 2 ) {
+                 for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                    switch ((*nit)->AtBoundary()) {
+                        case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                        case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                        case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                        case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                            (*nit)->Attribute(EXTERIOR_LINE);
+                            break;
+                        case CNR1: case CNR2: case CNR3: case CNR4:
+                        case CNR5: case CNR6: case CNR7: case CNR8:
+                            (*nit)->Attribute(EXTERIOR_POINT);
+                            break;
+                        case INTERNAL:
+                        case NOT:
+                        default:
+                             (*nit)->Attribute(PERIMETER_LINE);
+                           break;
+                    }
+                  // interior surfaces
+                  for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
+                    if ( (*nit)->AtBoundary() == NOT || (*nit)->AtBoundary() == INTERNAL )
+                      (*nit)->Attribute(INTERIOR_SURFACE);
+                }
+                
+             // line domains: we are dealing with end points
+             // --------------------------------------------
+             // (their intersection with volumes will be line or a point)
+             else if ( cell_dim == 1 ) {
+                   for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                      switch ((*nit)->AtBoundary()) {
+                          case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                          case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                          case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                          case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                          case CNR1: case CNR2: case CNR3: case CNR4:
+                          case CNR5: case CNR6: case CNR7: case CNR8:
+                               (*nit)->Attribute(EXTERIOR_POINT);
+                            break;
+                          case INTERNAL:
+                          case NOT:
+                          default:
+                              (*nit)->Attribute(PERIMETER_POINT);
+                            break;
+                      }
+                  // end the lines themselves watching for intersection points
+                  for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
+                    switch ((*nit)->Attribute()) {
+                        case INTERIOR_SURFACE:
+                        case INTERIOR_LINE:
+                            (*nit)->Attribute(INTERIOR_POINT);
+                            break;
+                        default:
+                            (*nit)->Attribute(INTERIOR_LINE);
+                            break;
+                    }
+              }
+          }
+        // 2D models
+        else if constexpr (dim == 2 ) {
+             // equidimensional (surface) regions
+             if ( cell_dim == 2 ) {
+                 for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                    switch ((*nit)->AtBoundary()) {
+                        case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+                        case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                            (*nit)->Attribute(EXTERIOR_LINE);
+                            break;
+                        case CNR1: case CNR2: case CNR3: case CNR4:
+                            (*nit)->Attribute(EXTERIOR_POINT);
+                            break;
+                        case INTERNAL:
+                            (*nit)->Attribute(INTERIOR_LINE);
+                            break;
+                        default: // leaves perimeter lines intact
+                             break;
+                    }
+                  // region interiors
+                }
+                
+              // line domains
+              // ------------
+             else if ( cell_dim == 1 ) {
+                   // end points
+                   for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+                      switch ((*nit)->AtBoundary()) {
+                          case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+                          case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                          case CNR1: case CNR2: case CNR3: case CNR4:
+                              (*nit)->Attribute(EXTERIOR_POINT);
+                              break;
+                          case INTERNAL:
+                          default: // case NOT
+                              (*nit)->Attribute(PERIMETER_POINT);
+                              break;
+                      }
+                  // lines themselves detecting potential intersection points
+                  for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
+                    switch ((*nit)->Attribute()) {
+                        case INTERIOR_LINE:
+                            (*nit)->Attribute(INTERIOR_POINT);
+                            break;
+                        default:
+                            (*nit)->Attribute(INTERIOR_LINE);
+                            break;
+                    }
+                  // interior lines
+                  for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
+                    if ( (*nit)->AtBoundary() == NOT || (*nit)->AtBoundary() == INTERNAL )
+                      (*nit)->Attribute(INTERIOR_LINE);
+                }
+          }
+        // 1D models
+        else {
+           for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
+              switch ((*nit)->AtBoundary()) {
+                  case INTERNAL:
+                      (*nit)->Attribute(INTERIOR_POINT);
+                      break;
+                  default: // covers corners
+                      (*nit)->Attribute(PERIMETER_POINT);
+                      break;
+              }
+            // nothing is done to interior nodes
+          }
+
+
+       // Boundaries:
+       // NOTE: everything is already handled above; nothing extra needs to be done
+       
+       
+    // =====================================
+    // SplitBoundary model sub-domains
+    // =====================================
+    // (yet we not that SplitBoundaries only exist on the inside of the model;
+    //  where they reach an outside Boundary the SplitBoundary persists)
+    // 3D case
+    if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value && dim == 3 )
+      {
+        // here we deal with interior and perimeter nodes
+        pair<vector<Node<dim>*>,size_t> inner_nodes = static_cast<ModelSubDomain<dim,InterFace>>(this)->InsideNodes();
+        pair<vector<Node<dim>*>,size_t> outer_nodes = static_cast<ModelSubDomain<dim,InterFace>>(this)->OutsideNodes();
+     
+        if ( cell_dim == 2 ) {
+           // perimeter nodes first
+           for ( size_t n=inner_nodes.second; n<inner_nodes.first.end(); ++n )
+              switch ( inner_nodes.first[n]->AtBoundary()) {
+                  case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                      inner_nodes.first[n]->Attribute(EXTERIOR_SURFACE);
+                      break;
+                  case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                  case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                  case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                      inner_nodes.first[n]->Attribute(EXTERIOR_LINE);
+                      break;
+                  case CNR1: case CNR2: case CNR3: case CNR4:
+                  case CNR5: case CNR6: case CNR7: case CNR8:
+                      inner_nodes.first[n]->Attribute(EXTERIOR_POINT);
+                      break;
+                  case INTERNAL:
+                  case NOT:
+                  default:
+                      inner_nodes.first[n]->Attribute(PERIMETER_LINE);
+                      break;
+              }
+            // interior of SplitBoundary surface (inside)
+            for ( size_t n{0}; n < inner_nodes.first[inner_nodes.second]; ++n )
+              inner_nodes.first[n]->Attribute(INTERIOR_SURFACE);
+
+            // interior of SplitBoundary surface (outside)
+            for ( size_t n{0}; n < outer_nodes.first[outer_nodes.second]; ++n )
+              outer_nodes.first[n]->Attribute(INTERIOR_SURFACE);
+         }
+          
+        // line SplitBoundary domains: end points and along the lines
+        // ----------------------------------------------------------
+       else if ( cell_dim == 1 ) {
+              for ( size_t n=inner_nodes.second; n<inner_nodes.first.end(); ++n )
+                switch (inner_nodes.first[n]->AtBoundary()) {
+                    case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                    case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                    case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                    case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                    case CNR1: case CNR2: case CNR3: case CNR4:
+                    case CNR5: case CNR6: case CNR7: case CNR8:
+                        inner_nodes.first[n]->Attribute(EXTERIOR_POINT);
+                        break;
+                    case INTERNAL: case NOT:
+                    default:
+                        inner_nodes.first[n]->Attribute(PERIMETER_POINT);
+                        break;
+                }
+            // interior of line-shaped SplitBoundary, detecting intersection points
+            for ( size_t n{0}; n < inner_nodes.first[inner_nodes.second]; ++n )
+              switch (inner_nodes.first[n]->Attribute()) {
+                  case MESH_VERTEX:
+                      inner_nodes.first[n]->Attribute(INTERIOR_LINE);
+                      break;
+                  case INTERIOR_SURFACE:
+                      inner_nodes.first[n]->Attribute(INTERIOR_POINT);
+                      break;
+                  case INTERIOR_LINE:
+                      inner_nodes.first[n]->Attribute(INTERIOR_POINT);
+                      break;
+                  case PERIMETER_LINE:
+                      inner_nodes.first[n]->Attribute(PERIMETER_POINT);
+                      break;
+                  default:
+                      break; // no change
+              }
+
+            // finally marking the outside nodes in the interior of the SplitBoundary
+            for ( size_t n{0}; n < outer_nodes.first[outer_nodes.second]; ++n )
+              switch (outer_nodes.first[n]->Attribute()) {
+                  case MESH_VERTEX:
+                      outer_nodes.first[n]->Attribute(INTERIOR_LINE);
+                      break;
+                  case INTERIOR_SURFACE:
+                      outer_nodes.first[n]->Attribute(INTERIOR_LINE);
+                      break;
+                  case INTERIOR_LINE:
+                      outer_nodes.first[n]->Attribute(INTERIOR_POINT);
+                      break;
+                  case PERIMETER_LINE:
+                      outer_nodes.first[n]->Attribute(PERIMETER_POINT);
+                      break;
+                  default:
+                      break; // no change
+              }
+           }
+      }
+
+       // 2D models with SplitBoundaries
+       if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value && dim == 2 )
+         {
+           // the SplitBoundary must be a line element region
+           if ( cell_dim != 1 ) throw logic_error("UpdateTopoTypeNodeFlags (In 2D model SplitBoundary must be a line");
+
+           // here we deal with interior and perimeter nodes
+           pair<vector<Node<dim>*>,size_t> inner_nodes = static_cast<ModelSubDomain<dim,InterFace>>(this)->InsideNodes();
+
+           // perimeter first
+           for ( size_t n=inner_nodes.second; n<inner_nodes.first.end(); ++n )
+             switch (inner_nodes.first[n]->AtBoundary()) {
+                 case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+                 case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                 case CNR1: case CNR2: case CNR3: case CNR4:
+                     inner_nodes.first[n]->Attribute(EXTERIOR_POINT);
+                     break;
+                 case INTERNAL: case NOT:
+                 default:
+                     inner_nodes.first[n]->Attribute(PERIMETER_POINT);
+                     break;
+               }
+          // interior of line SplitBoundary, detecting intersection points
+          for ( size_t n{0}; n < inner_nodes.first[inner_nodes.second]; ++n )
+            switch (inner_nodes.first[n]->Attribute()) {
+                case MESH_VERTEX:
+                    inner_nodes.first[n]->Attribute(INTERIOR_LINE);
+                    break;
+                case INTERIOR_LINE:
+                    inner_nodes.first[n]->Attribute(INTERIOR_POINT);
+                    break;
+                case PERIMETER_LINE:
+                    inner_nodes.first[n]->Attribute(PERIMETER_POINT);
+                    break;
+                default:
+                    break; // no change
+            }
+          
+          // finally marking the outside nodes on the interior of the SplitBoundary
+          pair<vector<Node<dim>*>,size_t> outer_nodes = static_cast<ModelSubDomain<dim,InterFace>>(this)->OutsideNodes();
+          for ( size_t n{0}; n < outer_nodes.first[outer_nodes.second]; ++n )
+            switch (outer_nodes.first[n]->Attribute()) {
+                case MESH_VERTEX:
+                    outer_nodes.first[n]->Attribute(INTERIOR_LINE);
+                    break;
+                case INTERIOR_LINE:
+                    outer_nodes.first[n]->Attribute(INTERIOR_POINT);
+                    break;
+                case PERIMETER_LINE:
+                    outer_nodes.first[n]->Attribute(PERIMETER_POINT);
+                    break;
+                default:
+                    break; // no change
+            }
+
+        } // end SplitBoundaries
+    }
+    
+ } // end UpdateTopoTypeNodeFlags
+
+
+
+
 
 
 
 /**
     Uses vector to create unique node vector by pushing back all node of the elements including duplicates,
     then sorting it and eliminating the duplicates.
-    
-    TODO: speed critical function. Perhaps refactor with unordered set as intermediate container for unique nodes because there will be so many duplicates.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
@@ -1208,7 +1576,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
   node_vec_.reserve( cell_vec_.size() * 4 );
   for ( auto& it : cell_vec_ ) {
        const auto nodes{ it->Nodes() };
-       for ( auto i{0U}; i<nodes; i++ ) {
+       for ( uint32_t i{0U}; i<nodes; i++ ) {
             assert( it->N( i ) != nullptr );
             node_vec_.push_back( it->N( i ) );
          }
@@ -5184,9 +5552,14 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
     // BuildPerimeterFaceVector( InteriorCells() );
     
+    // only if this is a non-overlapping subdomain
+    if ( IsUnique() ) UpdateTopoTypeNodeFlags();
+
     rebuilt_needed_ = false;
     
  } // end RebuildSubDomainAfterChangeOfCellVector
+
+
 
 
 
@@ -5201,7 +5574,10 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfNodeVector()
     IdentifyPerimeter();
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
     // BuildPerimeterFaceVector( InteriorCells() );
-    
+
+    // only if this is a non-overlapping subdomain
+    if ( IsUnique() ) UpdateTopoTypeNodeFlags();
+
     rebuilt_needed_ = false;
     
  } // end RebuildSubDomainAfterChangeOfNodeVector
@@ -5232,7 +5608,10 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
     IdentifyPerimeter();
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
     // BuildPerimeterFaceVector( InteriorCells() );
-    
+
+    // only if this is a non-overlapping subdomain
+    if ( IsUnique() ) UpdateTopoTypeNodeFlags();
+
     rebuilt_needed_ = false;
 
  } // end UpdateCellMembershipApplyingConstraints
@@ -5636,6 +6015,56 @@ template size_t sharedPerimeterCells( const ModelSubDomain<1U,InterFace>&, const
 template size_t sharedPerimeterCells( const ModelSubDomain<2U,InterFace>&, const ModelSubDomain<2U,InterFace>&, vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > >& );
 template size_t sharedPerimeterCells( const ModelSubDomain<3U,InterFace>&, const ModelSubDomain<3U,InterFace>&, vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > >& );
 */
+
+
+
+/// collects the TOPOTYPEs of the nodes in the subdomain into the (unique) set that is returned
+template<uint32_t dim, template<uint32_t> class CELL>
+set<TOPOTYPE> nodeTopologyFlags( typename vector<Node<dim>*>::const_iterator first,
+                                 typename vector<Node<dim>*>::const_iterator last )
+ {
+    set<TOPOTYPE> topology_flags;
+    while ( first != last ) {
+       topology_flags.insert( (*first)->Attribute() );
+       first++;
+    }
+    return topology_flags;
+ }
+
+template set<TOPOTYPE> nodeTopologyFlags<3,Element>( typename vector<Node<3>*>::const_iterator, typename vector<Node<3>*>::const_iterator );
+template set<TOPOTYPE> nodeTopologyFlags<2,Element>( typename vector<Node<2>*>::const_iterator, typename vector<Node<2>*>::const_iterator );
+template set<TOPOTYPE> nodeTopologyFlags<1,Element>( typename vector<Node<1>*>::const_iterator, typename vector<Node<1>*>::const_iterator );
+
+template set<TOPOTYPE> nodeTopologyFlags<3,Face>( typename vector<Node<3>*>::const_iterator, typename vector<Node<3>*>::const_iterator );
+template set<TOPOTYPE> nodeTopologyFlags<2,Face>( typename vector<Node<2>*>::const_iterator, typename vector<Node<2>*>::const_iterator );
+template set<TOPOTYPE> nodeTopologyFlags<1,Face>( typename vector<Node<1>*>::const_iterator, typename vector<Node<1>*>::const_iterator );
+
+
+
+template<uint32_t dim>
+set<TOPOTYPE> nodeTopologyFlags( const SplitBoundary<dim>& sb )
+ {
+    set<TOPOTYPE> topology_flags;
+
+    // node pointers, n-interior nodes
+    pair<vector<Node<dim>*>,size_t> inside_nodes = sb.InsideNodes();
+    pair<vector<Node<dim>*>,size_t> outside_nodes = sb.OutsideNodes();
+
+    // inside: perimeter and interior
+    for ( size_t n{0}; n<inside_nodes.first.size(); ++n )
+      topology_flags.insert( inside_nodes.first[n]->Attribute() );
+         
+    // outside: interior only
+    for ( size_t n{0}; n<outside_nodes.second; ++n )
+      topology_flags.insert( outside_nodes.first[n]->Attribute() );
+
+    return topology_flags;
+ }
+
+template set<TOPOTYPE> nodeTopologyFlags<3>( const SplitBoundary<3>& );
+template set<TOPOTYPE> nodeTopologyFlags<2>( const SplitBoundary<2>& );
+template set<TOPOTYPE> nodeTopologyFlags<1>( const SplitBoundary<1>& );
+
 
 
 

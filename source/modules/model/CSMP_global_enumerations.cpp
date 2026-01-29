@@ -557,18 +557,18 @@ string parse( ManifoldType topology )
       INTERIOR_SURFACE,    - a surface withing the model
       PERIMETER_SURFACE,    - a surface forming the hull of an object inside of the model
       EXTERIOR_SURFACE       - a surface delimiting the model
+      
 */
 std::string parseTopology( TOPOTYPE topology )
  {
    switch( topology ) {
         case MESH_VERTEX: return "MESH_VERTEX";
-        case INTERSECTION_POINT: return "INTERSECTION_POINT";
+        case INTERIOR_POINT: return "INTERIOR_POINT";
         case PERIMETER_POINT: return "PERIMETER_POINT";
         case EXTERIOR_POINT: return "EXTERIOR_POINT";
         case INTERIOR_LINE: return "INTERIOR_LINE";
         case PERIMETER_LINE: return "PERIMETER_LINE";
         case EXTERIOR_LINE:  return "EXTERIOR_LINE";
-        case INTERSECTION_LINE: return "INTERSECTION_LINE";
         case INTERIOR_SURFACE: return "INTERIOR_SURFACE";
         case PERIMETER_SURFACE: return "PERIMETER_SURFACE";
         case EXTERIOR_SURFACE: return "EXTERIOR_SURFACE";

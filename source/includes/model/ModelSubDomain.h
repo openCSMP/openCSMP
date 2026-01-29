@@ -62,7 +62,7 @@ template<uint32_t dim,template<uint32_t> class CELL>
 class ModelSubDomain {
   public:    
     /// constructs incomplete subdomain for later initialisation with suitable methods in subclasses
-    ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>& );
+    ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>&, bool unique );
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
   
@@ -84,19 +84,11 @@ class ModelSubDomain {
     /// modification via Operand-based relations between discretised properties that only modify a single result variable
     void Apply( Interrelation<dim>& );
     
-    /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
-    void RebuildSubDomainAfterChangeOfCellVector();
-    
-    /// rebuilds node vector, sorts everything and re-establishes interior and perimeter
-    void RebuildSubDomainAfterChangeOfNodeVector();
-    
-    /// rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints
-    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
-                                                  typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
-                                                  const PropertyConstraints& );
-
     /// distinguishes PERIMETER simplices that have at least one face on domain boundary from INTERIOR ones; calls PartitionElementVector()
     void IdentifyPerimeter();
+    
+    /// stores topological  information on the mesh that is associated with PERIMETER, boundary and split boundary information
+    void UpdateTopoTypeNodeFlags();
     
     /// creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
     void CreateNodePointerVector();
@@ -114,6 +106,17 @@ class ModelSubDomain {
     void ScheduleForRebuild();
     bool NeedsRebuild() const;
     
+    /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
+    void RebuildSubDomainAfterChangeOfCellVector();
+    
+    /// rebuilds node vector, sorts everything and re-establishes interior and perimeter
+    void RebuildSubDomainAfterChangeOfNodeVector();
+    
+    /// rebuilds subdomain on the basis of the cells that will be selected according to the supplied property constraints
+    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
+                                                  typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
+                                                  const PropertyConstraints& );
+
     /// deletes 'nullptr' cells from cell vector, retaining the sorting into interior and perimeter elements, and rebuilding perimeter faces as necessary
     size_t RebuildCellAndPerimeterFaceVector();
 
@@ -209,6 +212,10 @@ class ModelSubDomain {
     // ----------------------------------------
     // geometry
     // ----------------------------------------
+    
+    /// unique versus overlapping domains
+    bool IsUnique() const { return is_unique_; }
+    void IsUnique( bool unique_domain ) { is_unique_ = unique_domain; }
     
     /// checks whether all cells within the subdomain are interconnected (if the domain has multi-dimensional cells this is never the case)
     bool IsContiguous() const;
@@ -342,15 +349,16 @@ class ModelSubDomain {
     size_t  PartitionCellVectorForBoundary();
     size_t  PartitionCellVectorForSplitBoundary();
 
-    const PropertyDatabase<dim>&        pref_;
+    const PropertyDatabase<dim>&        pref_; // TODO: should not be member parameter
     std::string                         subdomain_name_="none";  ///< passed down when domain is created so that it can be referred to
     std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
     std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< matching second sorted range of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
     size_t                              first_bd_node_  = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
-    inline static int32_t               domain_count_   = 0;     ///<  reference-counting to get unique identifier for subdomains
+    inline static int32_t               domain_count_   = 0;     ///< reference-counting to get unique identifier for subdomains
     int32_t                             domain_idx_     = 0;     ///< created during construction from domain_count_
     bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
+    bool                                is_unique_      = false; ///< distinguishes space-exclusive from potentially overlapping subdomains
     static constexpr bool               verbose_ = false;
 
   private:
@@ -377,6 +385,15 @@ template<uint32_t dim, template<uint32_t> class CELL>
 size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
                               std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
                               
+/// collects the TOPOTYPEs of the nodes in the subdomain into the (unique) set that is returned
+template<uint32_t dim, template<uint32_t> class CELL>
+std::set<TOPOTYPE> nodeTopologyFlags( typename std::vector<Node<dim>*>::const_iterator first,
+                                      typename std::vector<Node<dim>*>::const_iterator last );
+                              
+/// collects the TOPOTYPEs of the nodes in the SplitBoundary into the (unique) set that is returned (different method since  SplitBoundary does not store nodes)
+template<uint32_t dim>
+std::set<TOPOTYPE> nodeTopologyFlags( const SplitBoundary<dim>& );
+
 /// reads ModelSubDomain data block written by writeDomainIndexesToBinaryFile() into the domain info structure
 void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& );
 

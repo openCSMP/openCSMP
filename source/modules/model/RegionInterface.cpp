@@ -277,13 +277,13 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormModelRegion( bool is_unique )
   pair<typename map<string,csmp::Region<dim> >::iterator, bool>
     newRegion = (is_unique) ?
     uniqueRegionMap_.insert( make_pair( regionname, csmp::Region<dim>( regionname,
-                            static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
+                            static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) )
     :
     regionMap_.insert( make_pair( regionname, csmp::Region<dim>( regionname,
-                      static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+                      static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
 
   // if region was inserted successfully
-  if ( newRegion.second ) {
+  if ( newRegion.second ) { // NOTE: AccumulateAll() does not touch the node topology flags
        size_t elmts = (*newRegion.first).second.AccumulateAll( static_cast<REGION_COMPLEX<dim>*>(this)->Mesh() );
        if ( elmts == 0 ) //                     ^^^^^^^^^^^^^
          csmp_error.Note( ERROR, "RegionInterface<dim,REGION_COMPLEX>::FormModelRegion:",
@@ -359,7 +359,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFromMaterialIDs()
       {
          region_name = "MATERIAL" + to_string( mit.first );
          pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-           it = uniqueRegionMap_.insert( make_pair( region_name, csmp::Region<dim>( region_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+           it = uniqueRegionMap_.insert( make_pair( region_name, csmp::Region<dim>( region_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
          // if the region was successfully inserted
          if ( it.second )
            {
@@ -656,7 +656,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
               readDomainIndexesFromBinaryFile( fp, info );
               // reconstruct the region
               pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-                it = uniqueRegionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info ) ) );
+                it = uniqueRegionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info, true ) ) );
 
               if ( !it.second )
                 throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
@@ -694,7 +694,7 @@ void RegionInterface<dim, REGION_COMPLEX>::InputRegionsFromBinary( const char* f
             readDomainIndexesFromBinaryFile( fp, info );
             // if the region info record is not empty the region is reconstructed
             pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-              it = regionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info ) ) );
+              it = regionMap_.insert( make_pair( info.name, csmp::Region<dim>( database, mesh, info, false ) ) );
 
             if ( !it.second )
               throw csmp::Exception( FATAL_ERROR, "RegionInterface<dim,REGION_COMPLEX>::InputRegionsFromBinary:",
@@ -892,7 +892,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
   
   pair<typename map<string, csmp::Region<dim> >::iterator, bool> it;
   if ( unique ) {
-        it = this->uniqueRegionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+        it = this->uniqueRegionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
         if ( it.second )
           (*it.first).second.AccumulateByNumber( model_domain.CellsBegin(), model_domain.CellsEnd(), elmt_ids );
 
@@ -900,7 +900,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionN
         (*it.first).second.SetRegion_ID();
     }
   else {
-        it = this->regionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+        it = this->regionMap_.insert( make_pair( regionName, csmp::Region<dim>( regionName, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
         if ( it.second )
           (*it.first).second.AccumulateByNumber( model_domain.CellsBegin(), model_domain.CellsEnd(), elmt_ids );
     }
@@ -1036,9 +1036,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* regionn
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>  it;
     if ( unique )
-      it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
     else
-      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
 
     if ( it.second ) {
         (*it.first).second.Accumulate( first, last );
@@ -1109,9 +1109,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
   // the 'bool' member of pair indicates whether insertion into map worked or not
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>  it;
   if ( unique_region )
-    it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
   else
-    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
 
   if ( it.second )
     {
@@ -1214,9 +1214,9 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* region_
   // the 'bool' member of pair indicates whether insertion into map worked or not
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>  it;
   if ( unique_region )
-    it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    it = uniqueRegionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
   else
-    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
 
   if ( it.second )
     {
@@ -1365,7 +1365,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
     {
       string region_name( *lit );
       pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-        it = uniqueRegionMap_.insert( make_pair( region_name, csmp::Region<dim>( region_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+        it = uniqueRegionMap_.insert( make_pair( region_name, csmp::Region<dim>( region_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), true ) ) );
       // if the region was successfully inserted
       if ( it.second )
         {
@@ -1389,7 +1389,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
           else {
                // assigning unique material IDs and region identifiers to the element members of the region
                for ( auto eit=(*it.first).second.CellsBegin(); eit!=(*it.first).second.CellsEnd(); ++eit ) {
-                    (*eit)->Material_ID( new_regions );
+                    (*eit)->Material_ID( static_cast<int32_t>(new_regions) );
                     (*eit)->Region_ID( (*it.first).second.DomainIndex() );
                  }
                // reporting the name of the newly generated region
@@ -1502,8 +1502,8 @@ size_t  RegionInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubReg
          
            // creating either a unique or non-unique region depending on uniqueness of original region
            pair<typename map<string,csmp::Region<dim> >::iterator,bool>
-             it = ( unique_region ) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) )
-                                   : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database()) ) );
+             it = ( unique_region ) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(),true) ) )
+                                   : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(),false) ) );
            if ( !it.second )
              throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions",
                                     subregion_name.c_str(), "region could not be formed (name is probably not unique)" );
@@ -1646,8 +1646,8 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
     cout << " (" << subgroupSize << " elmts)" << endl;
 
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-      it = (unique_region) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) )
-      : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = (unique_region) ? uniqueRegionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(),true ) ) )
+      : regionMap_.insert( make_pair( subregion_name, csmp::Region<dim>( subregion_name, static_cast<REGION_COMPLEX<dim>*>(this)->Database(),false ) ) );
     if ( !it.second )
       throw csmp::Exception( ERROR, "RegionsInterface<dim,REGION_COMPLEX>::PartitionRegionIntoContiguousSubRegions_Bromage",
                              subregion_name.c_str(), "region could not be formed (name is probably not unique)" );
@@ -1863,7 +1863,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRectangularRegion( const char* 
   REGION_COMPLEX<dim>* regionComplex( static_cast<REGION_COMPLEX<dim>* >(this) );
   // the 'bool' member of pair indicates whether insertion into map worked or not
   pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, regionComplex->Database() ) ) );
+    it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, regionComplex->Database(),false ) ) );
   if ( it.second )
     {
        (*it.first).second.AccumulateRectangularRegion( regionComplex->Mesh(), min_xyz, max_xyz );
@@ -2046,7 +2046,7 @@ void RegionInterface<dim, REGION_COMPLEX>::MergeRegions( const set<string>& inpu
       // making a non-unique new region
       pair<typename map<string, csmp::Region<dim> >::iterator, bool>
         it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region,
-                               static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+                               static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
       if ( !it.second )
         throw csmp::Exception( WARNING, "RegionsInterface<dim,REGION_COMPLEX>::MergeRegions:",
                                output_region.c_str(), "region could not be formed." );
@@ -2175,7 +2175,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionUnion( const char* groupa, cons
     // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
     if ( it.second )
     {
       groupUnion( itera, iterb, (*it.first).second );
@@ -2265,7 +2265,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionIntersection( const char* group
     // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
     if ( it.second ) {
       intersection( itera, iterb, (*it.first).second );
       // removing the region if it contains no elements (extra error message is generated in function)
@@ -2342,7 +2342,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionDifference( const char* groupa,
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
       it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region,
-                             static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+                             static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
     if ( it.second )
     {
       size_t elements_of_new_region = difference( itera, iterb, (*it.first).second );
@@ -2421,7 +2421,7 @@ bool RegionInterface<dim, REGION_COMPLEX>::RegionSymmetricDifference( const char
     // adding new region
     // the 'bool' member of pair indicates whether insertion into map worked or not
     pair<typename map<string, csmp::Region<dim> >::iterator, bool>
-      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database() ) ) );
+      it = regionMap_.insert( make_pair( output_region, csmp::Region<dim>( output_region, static_cast<REGION_COMPLEX<dim>*>(this)->Database(), false ) ) );
     if ( it.second )
     {
       symmetricDifference( itera, iterb, (*it.first).second );

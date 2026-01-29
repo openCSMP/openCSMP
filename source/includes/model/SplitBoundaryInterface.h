@@ -11,6 +11,7 @@ template<uint32_t> class FaceConstructionData;
 template<uint32_t> class InterFace;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
+template<uint32_t> class Region;
 
 /**
     Creation, management and deletion of SplitBoundary objects.
@@ -79,10 +80,12 @@ class SplitBoundaryInterface {
     /// Merges supplied range od SplitBoundaries into consistently named new SB, original SBs are removed
     std::string MergeSplitBoundaries( const char* new_sb_name, const std::set<std::string>& splitboundaries );
 
-    /// combines the input SBs into a single SplitBoundary with the exact new name; by contrast with Merge.. method the input SplitBoudaries are retained
+    /// combines the input SBs into a single SplitBoundary with the exact new name; by contrast with Merge.. , the input SplitBoudaries are retained
     void CreateNonUniqueSplitBoundaryGroup( const std::set<std::string>& input_split_boundaries, const char* exact_new_split_boundary_name );
     
-
+    /// Eddy's NodeManifold repair algorithm for use when SplitBoundary objects are created sequentially
+    void ResolveInconsistentNodeManifolds( Region<dim>& subdomain );
+                   
     // -----------------------------------------------------------
     // Input/output
     // The properties can also be read from a subset of variables
@@ -111,7 +114,7 @@ class SplitBoundaryInterface {
     bool AddSplitBoundary( const char* name,
                            typename std::vector<InterFace<dim>*>::iterator first,
                            typename std::vector<InterFace<dim>*>::iterator last );
-                   
+   
  protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };

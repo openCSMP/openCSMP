@@ -28,11 +28,11 @@ using namespace std;
 namespace csmp {
 
 /**
-Constructor for an empty boundary (no faces yet).
+Constructor for an empty boundary (no faces yet). All Boundaries are unique subdomains!
 */
 template<uint32_t dim>
 Boundary<dim>::Boundary( std::string boundaryname, const PropertyDatabase<dim>& pref, BOX_BOUNDARY flag )
-  : ModelSubDomain<dim, Face>( boundaryname, pref ),
+  : ModelSubDomain<dim, Face>( boundaryname, pref, true ),
     boundaryFlag_( flag )
 {
   if constexpr ( dim == 1 )
@@ -73,6 +73,8 @@ are numbered consecutivly.
 
 @attention assumes that the index for the first Face is equivalent to the number of elements in the model.
 
+@attention no Topotype information is assigned here because it was already transferred to the Nodes via VData
+
 @test nodes are assigned correctly, Face objects are not
 */
 template<uint32_t dim>
@@ -80,7 +82,7 @@ Boundary<dim>::Boundary( const PropertyDatabase<dim>& pref,
                          MeshManager<dim>& mesh,
                          const SubDomainInfo& info,
                          BOX_BOUNDARY bflag )
-  : ModelSubDomain<dim, Face>( info.name, pref ),
+  : ModelSubDomain<dim, Face>( info.name, pref, true ),
     boundaryFlag_( bflag )
 {
   // building the face vector
@@ -156,7 +158,7 @@ Boundary<dim>::Boundary( const string& boundary_name,
                          typename std::vector<Face<dim>*>::iterator facesBegin,
                          typename std::vector<Face<dim>*>::iterator facesEnd,
                          BOX_BOUNDARY boxBoundary )
-  : ModelSubDomain<dim, Face>( boundary_name, dbase_ref ),
+  : ModelSubDomain<dim, Face>( boundary_name, dbase_ref, true ),
     boundaryFlag_( boxBoundary )
 {
   // moving the supplied Face pointers into the element storage
@@ -173,6 +175,9 @@ Boundary<dim>::Boundary( const string& boundary_name,
   // initialize BOX_BOUNDARY of nodes
   // (but only for interior nodes as these are never shared with other boundaries)
   InitializeBoundaryFlags( boxBoundary );
+  
+  // initialise TopoType information
+  this->UpdateTopoTypeNodeFlags();
   
   // trimming off extra capacity
   this->cell_vec_.shrink_to_fit();
@@ -202,6 +207,8 @@ Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
   return *this;
 }
 
+
+
 // LOCAL VARIABLE STORAGE INTERFACE
 
 template<uint32_t dim>
@@ -212,6 +219,7 @@ bool Boundary<dim>::ValidVariable( const char* variableName ) const
       return true;
     return false;
   }
+
 
 
 // VISITORS INTERFACE
@@ -569,9 +577,7 @@ void Boundary<dim>::InputVariableFrom( const char* property,
         (*eit)->Store( idx, vdata[(*eit)->Idx()] );
       break;
     case NODE:
-      //assert( this->Nodes() == vdata.Size() );
-      for ( typename vector<csmp::Node<dim>*>::const_iterator
-            nit = this->node_vec_.begin(); nit != this->node_vec_.end(); nit++ ) {
+      for ( auto nit = this->node_vec_.begin(); nit != this->node_vec_.end(); nit++ ) {
         (*nit)->Store( idx, vdata[(*nit)->Idx()] );
       }
       break;
@@ -649,10 +655,8 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
 
 
 /**
-    Dispatched initialize method to establish node vector, perimeter entities,
-    bflags and entity sorting.
-    
-    @attention Only assigns boundary flags if they have not already been set.
+    Assigns boundary flags to nodes on INTERIOR of Boundary
+    (The exterior must be handled separately because its nodes are shared with other regions)
 */
 template<uint32_t dim>
 void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )
@@ -660,7 +664,7 @@ void Boundary<dim>::InitializeBoundaryFlags( BOX_BOUNDARY boxBoundary )
   // assigns BOX_BOUNDARY flag to Boundary
   AtBoundary( boxBoundary );
 
-  // assigning the same box boundary flag to all nodes
+  // assigning the same box boundary flag to all interior nodes
   // (later on, these flags can be refined)
   for ( auto nit=this->NodesBegin(); nit!=this->PerimeterNodesBegin(); ++nit )
     (*nit)->AtBoundary( boxBoundary );
@@ -814,6 +818,9 @@ throw csmp::Exception( ERROR, "Boundary<dim>::CreateFrom", "BROKEN: fix before u
   //  initialises boundary face vector bd_face_vec_)
   this->IdentifyPerimeter();
   
+  // initialise TopoType information
+  if ( this->IsUnique() ) this->UpdateTopoTypeNodeFlags();
+  
   // since the Element objects in the input region have been deleted, this Region must be deleted as well
   region.ScheduleForRebuild();
   
@@ -925,6 +932,12 @@ size_t Boundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
 
   this->IdentifyPerimeter();
   
+  // initialize BOX_BOUNDARY of nodes
+  InitializeBoundaryFlags( boundaryFlag_ );
+  
+  // initialise TopoType information
+  this->UpdateTopoTypeNodeFlags();
+
   return this->cell_vec_.size();
 
 } // end AccumulateByNumber
@@ -955,13 +968,16 @@ bool Boundary<dim>::CreateFrom( const typename vector<Face<dim>*>::const_iterato
     
   this->cell_vec_.assign( facesBegin, facesEnd );
 
-  // initialize BOX_BOUNDARY of nodes
-  InitializeBoundaryFlags( boundaryFlag_ );
-  
   // distinguishing interior from perimeter cells
   // (sorts node and cell vectors into interior and exterior ranges;
   //  initialises boundary face vector bd_face_vec_)
   this->IdentifyPerimeter();
+
+  // initialize BOX_BOUNDARY of nodes
+  InitializeBoundaryFlags( boundaryFlag_ );
+  
+  // initialise TopoType information
+  this->UpdateTopoTypeNodeFlags();
 
   return true;
 }

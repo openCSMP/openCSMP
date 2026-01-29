@@ -25,10 +25,12 @@ using namespace std;
 
 namespace csmp {
 
-
+/**
+    All split boundary objects are unique.
+ */
 template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname, const PropertyDatabase<dim>& pref )
-  : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
+  : ModelSubDomain<dim, InterFace>( splitboundaryname, pref, true )
 {
   this->ResizePropertyStorage( this->pref_.LocalVariablesAt( Placement() ) );
 }
@@ -74,7 +76,7 @@ template<uint32_t dim>
 SplitBoundary<dim>::SplitBoundary( const PropertyDatabase<dim>& pref,
                                    MeshManager<dim>& mesh,
                                    const SubDomainInfo& info )
-  : ModelSubDomain<dim, InterFace>( info.name, pref )
+  : ModelSubDomain<dim, InterFace>( info.name, pref, true )
 {
   assert( info.interior_nodes.empty() );
   assert( info.perimeter_nodes.empty() );
@@ -129,7 +131,7 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
                                    const PropertyDatabase<dim>& pref,
                                    MeshManager<dim>& mesh,
                                    const InterFaceParentElements<dim>& ifset )
-  : ModelSubDomain<dim, InterFace>( splitboundaryname, pref )
+  : ModelSubDomain<dim, InterFace>( splitboundaryname, pref, true )
 {
   const LocalVariables&             ifvars( pref.LocalVariablesAt( INTER_FACE ) );
   const IntegrationPointVariables&  if_ip_vars( pref.IntegrationPointVariablesAt( INTER_FACE_INTEGRATION_POINT ) );
@@ -153,42 +155,19 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // ---------------------------------------------------------------------------------------------------
   mesh.BuildInterFaceConnectivity( this->cell_vec_.begin(), this->cell_vec_.end() );
 
-  // 3. building the interface node vector
-  // ---------------------------------------------------------------------------------------------------
-  this->node_vec_.reserve( this->cell_vec_.size() );
-  for ( auto& it : this->cell_vec_ )
-    for ( auto i{0U}; i<it->Nodes(); ++i ) this->node_vec_.push_back( it->N( i ) );
-  // sorting node vector and making it unique
-  sort( this->node_vec_.begin(), this->node_vec_.end() );
-  this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-  
-  // assigning the INTERNAL box boundary flag to nodes where they do not already have another flag (like EDGE etc)
-  for ( auto& nit : this->node_vec_ )
-    if ( nit->AtBoundary() == NOT )
-      nit->AtBoundary( INTERNAL );
-  
-
-  // 4. sorting interfaces and nodes and building the boundary interface vector
+  // 3. sorting interfaces and nodes and building the boundary interface vector
   // ---------------------------------------------------------------------------------------------------
   this->IdentifyPerimeter();
   this->cell_vec_.shrink_to_fit();
 
+  // initialise TopoType information
+  this->UpdateTopoTypeNodeFlags();
 
   // 5. allocating the storage for subdomain properties
   // --------------------------------------------------
   this->ResizePropertyStorage( pref.LocalVariablesAt( SPLIT_BOUNDARY ) );
 
 } // end constructor
-
-
-
-
-
-/// Does not delet interfaces, Delete() has to be called for this
-template<uint32_t dim>
-SplitBoundary<dim>::~SplitBoundary()
-{
-}
 
 
 

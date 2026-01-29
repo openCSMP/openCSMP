@@ -29,8 +29,8 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim>
-Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p )
-  : ModelSubDomain<dim, Element>( regionname, p )
+Region<dim>::Region( std::string regionname, const PropertyDatabase<dim>& p, bool is_unique )
+  : ModelSubDomain<dim, Element>( regionname, p, is_unique )
 {
   this->ResizePropertyStorage( this->pref_.LocalVariablesAt( Placement() ) );
 }
@@ -97,8 +97,9 @@ faces or interfaces.
 template<uint32_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      MeshManager<dim>& mesh, ///< not constant because region shall later be able to modify elements and nodes
-                     const SubDomainInfo& info )   ///< information on how to connect pointers to mesh stored in MeshManager 
-  : ModelSubDomain<dim, Element>( info.name, pref )
+                     const SubDomainInfo& info,
+                     bool is_unique )   ///< information on how to connect pointers to mesh stored in MeshManager
+  : ModelSubDomain<dim, Element>( info.name, pref, is_unique )
 {
   // building the element vector
   // ---------------------------
@@ -153,8 +154,9 @@ template<uint32_t dim>
 Region<dim>::Region( const PropertyDatabase<dim>& pref,
                      const deque<Node<dim>*>& nodes,
                      const deque<Element<dim>*>& elmts,
-                     const SubDomainInfo& info )  ///< contains correctly partitioned vectors and boundary faces
-  : ModelSubDomain<dim, Element>( info.name, pref )
+                     const SubDomainInfo& info, ///< contains correctly partitioned vectors and boundary faces
+                     bool is_unique )
+  : ModelSubDomain<dim, Element>( info.name, pref, is_unique )
 {
   // building the element vector
   // ---------------------------
@@ -2126,7 +2128,7 @@ bool  formsPartOfExternalBoundary( const Region<dim>& region, bool check_topo_as
              if ( nit->AtBoundary() == NOT )
                all_nodes_are_at_boundary = false;
              if ( nit->Attribute() == MESH_VERTEX ||
-                  nit->Attribute() == INTERSECTION_POINT ||
+                  nit->Attribute() == INTERIOR_POINT ||
                   nit->Attribute() == INTERIOR_LINE ||
                   nit->Attribute() == INTERIOR_SURFACE ) {
                   all_nodes_are_at_boundary = false;

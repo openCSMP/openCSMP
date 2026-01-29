@@ -46,6 +46,31 @@ void BoundaryInterface_Test::run()
 
       ANSYS_Model3D  model( input_file.c_str(), "CSMP-variables.txt", binary_file );
       printModelDimensions(model, true);
+      if ( verbose_ ) model.RegionsOut();
+
+      const Region<3>& model_domain = model.Region("Model");
+      set<TOPOTYPE> B_flags_model_before = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      _test( B_flags_model_before.size() == 6 ); // mesh vertex, exterior points, lines & surfaces and interior lines and surfaces
+      const Region<3>& fault = model.Region("NORMAL_FAULT");
+      set<TOPOTYPE> B_flags_before = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
+      _test( B_flags_before.size() == 2 ); // INTERIOR_SURFACE and INTERIOR_LINE
+
+      // testing VData::InitialiseTopoTypes()
+      if ( verbose_ ) {
+          TopoTypeToVTU( model, "LAYER_RESERVOIR" );
+          TopoTypeToVTU( model, "NORMAL_FAULT" );
+        }
+
+      initialise_BREP_TopologyFlags( model ); // defined in Model
+
+      set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
+      set<TOPOTYPE> B_flags_model_after = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+
+     // testing initialise_BREP_TopologyFlags()
+      if ( verbose_ ) {
+          TopoTypeToVTU( model, "LAYER_RESERVOIR" );
+          TopoTypeToVTU( model, "NORMAL_FAULT" );
+        }
 
       /// assuming a dim-1 region, label and count material juxtaposition relationships
       const string    region_tag("region identifier");
@@ -180,7 +205,7 @@ void BoundaryInterface_Test::run()
         if ( verbose_ ) model.BoundariesOut();
       }
 
-	  
+	   if ( verbose_ ) TestTopoTypeIdentifiers( model );
 
       /// discerning patches by values for the region in terms of the diagnostic element variable
       // -------------------------------------------------------------
@@ -195,6 +220,7 @@ void BoundaryInterface_Test::run()
       // will remove the original region
       const size_t model_faces_before(model.Mesh().Faces());
       std::pair<std::set<std::string>,bool> boundaries = model.CreateInternalBoundaryFrom( "NORMAL_FAULT" );
+      //                                                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
       _test( boundaries.first.size() == subregions );
       _test( model.ContainsRegion("NORMAL_FAULT") == false );
       const size_t model_faces_after(model.Mesh().Faces());
@@ -207,6 +233,9 @@ void BoundaryInterface_Test::run()
              cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Cells() <<" faces)";
         }
       _test( model.Boundaries() == 12 );
+      B_flags_model_after = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+
+      if ( verbose_ ) TestBoundaryAndTopoTypeIdentifiers( model );
 
       // creating property values on the boundaries and outputting these to VTU
       model.InputPropertyValue("nodal variable", makeScalar(PLAIN, 0.) );
@@ -256,11 +285,19 @@ void BoundaryInterface_Test::TestBoxShapedModel()
       // ----------------------------------------------------
       // 1. Building a CSMP Model from an ANSYS input dataset
       // ----------------------------------------------------
+      // box with a single volumetric region 'PORES' and all box boundaries and edges
       string  input_file("cube_flag");
    
       const bool binary_file(true);
 
       ANSYS_Model3D model( input_file.c_str(), "CSMP-variables.txt", binary_file );
+      if ( verbose_ ) model.RegionsOut();
+      
+      const Region<3>& model_domain = model.Region("Model");
+      set<TOPOTYPE> B_flags_model = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      _test( B_flags_model.size() == 4 );
+      
+      if ( verbose_ ) cout <<"\nBoundaryInterface_Test::TestBoxShapedModel: done."<< endl;
 
  } // end TestBoxShapedModel
 
@@ -295,6 +332,89 @@ bool BoundaryInterface_Test::TestRegionContactDetection( const Model<3U>& model 
     return all_tests_passed;
    
  } // end TestRegionContactDetection
+
+
+
+
+void BoundaryInterface_Test::TestTopoTypeIdentifiers( Model<3U>& model )
+ {
+    model.CreateProperty( "topo type", "TT", "none");
+    model.CreateProperty( "node BOX_BOUNDARY flag", "BBF", "none");
+    model.CreateProperty( "element BOX_BOUNDARY flag", "EBF", "none", SCALAR, ELEMENT );
+    
+    // 0. getting diagnostics
+    boxFlagsToVariable( model, "node BOX_BOUNDARY flag", "element BOX_BOUNDARY flag" );
+    topoTypeToNumber( model, "topo type" );
+ 
+    if ( verbose_ ) {
+         VTU_Interface<3>  vtu(model);
+         list<string> outvars{ "topo type", "node BOX_BOUNDARY flag","element BOX_BOUNDARY flag" };
+         // the model as a whole
+         vtu.OutputDataToVTU( "TestTopoTypeIdentifiers_regions_", outvars, model.Region("Model"), 0 );
+         // all unique boundaries
+         for ( auto it=model.UniqueRegionsBegin(); it!=model.UniqueRegionsEnd(); ++it )
+           if ( !isDiagnosticBoxBoundaryClassifier( (*it).first ) )
+             vtu.OutputDataToVTU( "TestTopoTypeIdentifiers_regions_", outvars, (*it).first, 0 );
+      }
+    
+    model.DeleteProperty( "topo type" );
+    model.DeleteProperty( "node BOX_BOUNDARY flag" );
+    model.DeleteProperty( "element BOX_BOUNDARY flag" );
+ }
+
+
+
+/**
+  Prints VTU file where topotype identifiers have been converted to number.
+ */
+void BoundaryInterface_Test::TopoTypeToVTU( Model<3U>& model, const char* region )
+ {
+    model.CreateProperty( "topo type", "TT", "none");
+    
+    // 0. getting diagnostics
+    topoTypeToNumber( model, "topo type" );
+ 
+    if ( verbose_ ) {
+         VTU_Interface<3>  vtu(model);
+         list<string> outvars{ "topo type" };
+         vtu.OutputDataToVTU( "TestTopoTypes_of_region", outvars, model.Region(region), 0 );
+      }
+    
+    model.DeleteProperty( "topo type" );
+ }
+
+
+
+/**
+    Checks whether TOPOTYPE  node information is correct after the new boundaries have been inserted
+    
+    Step 1 - visualise the TOPOTYPE values using VTU
+ */
+void BoundaryInterface_Test::TestBoundaryAndTopoTypeIdentifiers( Model<3U>& model )
+ {
+    model.CreateProperty( "topo type", "TT", "none");
+    model.CreateProperty( "node BOX_BOUNDARY flag", "BBF", "none");
+    model.CreateProperty( "element BOX_BOUNDARY flag", "EBF", "none", SCALAR, ELEMENT );
+    
+    // 0. getting diagnostics
+    boxFlagsToVariable( model, "node BOX_BOUNDARY flag", "element BOX_BOUNDARY flag" );
+    topoTypeToNumber( model, "topo type" );
+ 
+    if ( verbose_ ) {
+         VTU_Interface<3>  vtu(model);
+         // form a region of all boundaries
+         list<string> outvars{ "topo type", "node BOX_BOUNDARY flag","element BOX_BOUNDARY flag" };
+         for ( auto it=model.BoundariesBegin(); it!=model.BoundariesEnd(); ++it )
+           if ( !isDiagnosticBoxBoundaryClassifier( (*it).first ) )
+             vtu.OutputDataToVTU( "TestTopoTypeIdentifiers_boundaries_", outvars, (*it).second, 0 );
+      }
+    
+    model.DeleteProperty( "topo type" );
+    model.DeleteProperty( "node BOX_BOUNDARY flag" );
+    model.DeleteProperty( "element BOX_BOUNDARY flag" );
+ }
+
+
 
 
 
@@ -611,6 +731,7 @@ for ( auto it=patch_simplexes.begin(); it!=patch_simplexes.end(); ++it) {
     return patches.size();
    
  } // end labelRegionPatches
+
 
 
 

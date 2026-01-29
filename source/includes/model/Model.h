@@ -471,13 +471,13 @@ void flagToNumber( Model<dim>&, const char* variable );
 template<uint32_t dim>
 void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_variable );
 
+/// converts the model topology flags of the nodes (TopoType) into node variable values that can be visualised
+template<uint32_t dim>
+void topoTypeToNumber( Model<dim>&, const char* TopoType_variable );
+
 /// using random number generator, adds percentage of Gaussian noise to variable values
 template<uint32_t dim>
 void randomPerturb( Model<dim>&, const char* prop, double by_percent_of_max_value );
-
-/// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
-template<uint32_t dim>
-bool compareConnectivity( const Model<dim>&, const VSet<dim>& );
 
 /// in target region, element variable is extrapolated to node and back as many times as indicated by n_smoothing_cycles
 template<uint32_t dim>
@@ -497,6 +497,19 @@ void assignNodeCoordinatesTo( Model<dim>& sg, const char coordinate, const char*
 
 /// for Triangulator meshes: for meshes created from pixels, finds outlier triangles (3 nodes at region boundaries) and flips their property values
 void stripDomainEdgesFor( Model<2U>&, const char* el_prop );
+
+
+// MESH MANAGEMENT UTILITIES
+
+/// initialise TOPOTYPE flags and returns # nodes on faces, edges, and vertices (primitive types of a B-REP)
+template<uint32_t dim>
+tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags( Model<dim>& );
+
+/// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
+template<uint32_t dim>
+bool compareConnectivity( const Model<dim>&, const VSet<dim>& );
+
+
 
 } // end namespace csmp
 

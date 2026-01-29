@@ -497,7 +497,7 @@ void IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id, std::vector<uint
 */
 
 
-uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const
+uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return 3U;

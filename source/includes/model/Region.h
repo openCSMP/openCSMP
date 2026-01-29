@@ -86,7 +86,7 @@ class Region : public ModelSubDomain<dim, Element>,
   public:
 
     /// construction of named empty region with appropriately sized property storage
-    Region( std::string regionname, const PropertyDatabase<dim>& );
+    Region( std::string regionname, const PropertyDatabase<dim>&, bool is_unique );
 
     Region( const Region& );
     Region( Region&& );
@@ -101,13 +101,13 @@ class Region : public ModelSubDomain<dim, Element>,
     /// RECONSTRUCTOR for regions via the MeshManager (call only prior to deleting anythin from colonies)
     Region( const PropertyDatabase<dim>&,
             MeshManager<dim>&,
-            const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
+            const SubDomainInfo&, bool is_unique );  ///< contains correctly partitioned vectors and boundary faces
 
     /// RECONSTRUCTOR for regions via the nodes and elements which are explored by the MeshManager
     Region( const PropertyDatabase<dim>&,
             const std::deque<Node<dim>*>&,
             const std::deque<Element<dim>*>&,
-            const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
+            const SubDomainInfo&, bool is_unique );  ///< contains correctly partitioned vectors and boundary faces
 
 
    // --------------------------------------------

@@ -212,7 +212,8 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-          refactored.addTest( new SplitBoundaryInterface_Test<3u>() );
+          refactored.addTest( new BoundaryInterface_Test() );
+//          refactored.addTest( new SplitBoundaryInterface_Test() );
 
 //        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
         
@@ -396,8 +397,7 @@ int main()
       interdependent2.addTest( new Region_Test() );
       interdependent2.addTest( new BoundaryInterface_Test() );
       interdependent2.addTest( new Boundary_Test() );
-      interdependent2.addTest( new SplitBoundaryInterface_Test<2u>() );
-//      interdependent2.addTest( new SplitBoundaryInterface_Test<3u>() ); // TODO: RESOLVE EDDI ASSERT
+      interdependent2.addTest( new SplitBoundaryInterface_Test() );
       interdependent2.addTest( new SplitBoundary_Test() );
       interdependent2.addTest( new ANSYS_SplitBoundaryMatch_Test() );
       interdependent2.addTest( new PropertyHandle_Test() );    // TODO: refactor without ANSYS model

@@ -482,7 +482,7 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                        }
                     }
                   break;
-                case INTERSECTION_POINT: {
+                case INTERIOR_POINT: {
                      if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
                           cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
                           csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
@@ -520,13 +520,6 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                 case EXTERIOR_LINE: {
                      if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_END ) {
                           cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
-                case INTERSECTION_LINE: {
-                     if ( nmf.GeometricClassifier() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
-                          cerr <<"\n\t"<< parse(nmf.GeometricClassifier()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
                           csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
                        }
                     }

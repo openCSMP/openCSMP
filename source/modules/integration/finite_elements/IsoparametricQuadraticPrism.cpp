@@ -275,7 +275,7 @@ IsoparametricQuadraticPrism::NodesOfFace( uint32_t face_id, std::vector<uint32_t
 */
 
 
-uint32_t IsoparametricQuadraticPrism::NodesPerFace( uint32_t face_id ) const
+uint32_t IsoparametricQuadraticPrism::NodesPerFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return 6U;

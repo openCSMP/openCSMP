@@ -251,7 +251,7 @@ void IsoparametricQuadraticPyramid::NodesOfFace( uint32_t face_id, vector<uint32
 */
 
 
-uint32_t IsoparametricQuadraticPyramid::NodesPerFace( uint32_t face_id ) const
+uint32_t IsoparametricQuadraticPyramid::NodesPerFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return 6U;

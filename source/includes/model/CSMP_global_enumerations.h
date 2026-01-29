@@ -124,31 +124,67 @@ std::string parse( ManifoldType );
 
 
 /**
-       Geometric classification of nodes / points, BREP stands for boundary representation.
+      Geometric classification of nodes / points, BREP stands for boundary representation.
        @author SKM
        @date 9/07/2022
        
-       @attention Help! - current scheme still contains apparent ambiguities of features difficult to resolve:
-       What is an interior surface in 3D (is it the inside of a lower-dim fracture?)?
-       PERIMETER_SURFACE in 3D refers to the perimeter of a volumetric region...
-       
-       @todo some flags do not exist in certain dimensions: in 1D PERIMETER_POINT is the same as INTERSECTION_POINT
+      In detail
+
+      Value     Name   Description    Remeshing Constraint
+
+      0 MESH_VERTEX Standard vertex inside a volume/surface. Fully mobile; can be deleted or moved to optimize quality.
+
+      1 INTERIOR_POINT Where multiple lines cross or surfaces meet at a single point. Fixed. Cannot be removed or moved; defines the B-Rep skeleton.
+
+      2 PERIMETER_POINT A point at the end of a line (0D boundary of a 1D line). Fixed. Defines the termination of a geometric feature.
+
+      3 EXTERIOR_POINT  A point on the outside surface of the model. Usually redundant if Surface/Line flags exist, but marks "Hull" corners.
+
+      4 INTERIOR_LINE  A vertex on a line located entirely inside a volume. Can slide along the line; cannot be moved off the line.
+
+      5 PERIMETER_LINE A surface edge that exists inside the model (e.g., a hole's rim). Can slide along the perimeter; preserves the "cutout" shape.
+
+      6 EXTERIOR_LINE An edge belonging to the outer hull of the model. Can slide along the edge; preserves the visual boundary.
+
+      7 INTERIOR_SURFACE A vertex on a surface separating two volumes (Subdomain). Can move within the surface plane; preserves material interface.
+
+      8 PERIMETER_SURFACE A surface forming an internal "island" or hull. Can move within the surface; preserves internal cavity shapes.
+
+      9 EXTERIOR_SURFACE  A vertex on the outermost shell of the model. Can move within the surface; preserves the total model volume.
+
 */
 enum TOPOTYPE : std::int8_t {
                                 MESH_VERTEX,       ///< a point within the model volume
-                                INTERSECTION_POINT,///< a point where lines cross or multiple surfaces intersect
+                                INTERIOR_POINT,    ///< a point where lines or surfaces touch or cross
                                 PERIMETER_POINT,   ///< point at the end of a line inside a 2D model
                                 EXTERIOR_POINT,    ///< on an outside surface of the model
                                 INTERIOR_LINE,     ///< a line on the interior of the model
                                 PERIMETER_LINE,    ///< a surface edge inside of the model
                                 EXTERIOR_LINE,     ///< an edge of the model
-                                INTERSECTION_LINE, ///<  belonging to multiple surfaces in a 3D model
                                 INTERIOR_SURFACE,  ///< a surface within a 3D model
                                 PERIMETER_SURFACE, ///< a surface forming the hull of an object inside of a 3D model
                                 EXTERIOR_SURFACE   ///< a surface delimiting a 3D model
                             };
 
-// TODO: add T_INTERSECTION_POINT ?
+/// for testing  int8_t values prior to type-casting to TOPOTYPE
+constexpr bool isValidTopotype(std::int8_t v) {
+    switch (static_cast<TOPOTYPE>(v)) {
+        case TOPOTYPE::MESH_VERTEX:
+        case TOPOTYPE::INTERIOR_POINT:
+        case TOPOTYPE::PERIMETER_POINT:
+        case TOPOTYPE::EXTERIOR_POINT:
+        case TOPOTYPE::INTERIOR_LINE:
+        case TOPOTYPE::PERIMETER_LINE:
+        case TOPOTYPE::EXTERIOR_LINE:
+        case TOPOTYPE::INTERIOR_SURFACE:
+        case TOPOTYPE::PERIMETER_SURFACE:
+        case TOPOTYPE::EXTERIOR_SURFACE:
+            return true;
+        default:
+            return false;
+    }
+}
+
 
 /// converts classifiers to strings so that they can be printed
 std::string parseTopology( TOPOTYPE );

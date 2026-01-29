@@ -454,7 +454,7 @@ void IsoparametricLinearPrism::NodesOfFace( uint32_t face_id, std::vector<uint32
  }
 */
 
-uint32_t IsoparametricLinearPrism::NodesPerFace( uint32_t face_id ) const
+uint32_t IsoparametricLinearPrism::NodesPerFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return 3U;

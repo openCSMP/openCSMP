@@ -1204,7 +1204,7 @@ TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const node )
         // if the point serves the sole purpose of discretisation, away from any BREP entities
         case MESH_VERTEX: if ( !BREP_defining_node ) return MESH_VERTEX;
         // essential point of the input geometry such as a line intersection, two surfaces touching etc.
-        case INTERSECTION_POINT: if ( BREP_defining_node && part_of_line > 2U ) return INTERSECTION_POINT;
+        case INTERIOR_POINT: if ( BREP_defining_node && part_of_line > 2 ) return INTERIOR_POINT;
         // includes end points of lines
         case PERIMETER_POINT:
                if constexpr ( dim == 2U ) if ( BREP_defining_node && part_of_line == 1U )
@@ -1214,19 +1214,15 @@ TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const node )
         // point where a line touches the outside boundary of a model
         case EXTERIOR_POINT: if ( at_external_boundary && part_of_line == 0U ) return EXTERIOR_POINT;
         case INTERIOR_LINE:
-               if constexpr ( dim == 2U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 1U )
+               if constexpr ( dim == 2U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 1 )
                  return INTERIOR_LINE;
-               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2 )
                  return INTERIOR_LINE;
         case PERIMETER_LINE:
-               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2U )
+               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary && part_of_line >= 2 )
                  return INTERIOR_LINE;
         case EXTERIOR_LINE:
-               if ( BREP_defining_node && at_external_boundary && part_of_line >= 1U ) return EXTERIOR_LINE;
-        case INTERSECTION_LINE:
-               if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
-                                               part_of_line >= 1U && part_of_surface >= 2U )
-                 return INTERSECTION_LINE;
+               if ( BREP_defining_node && at_external_boundary && part_of_line >= 1 ) return EXTERIOR_LINE;
         case INTERIOR_SURFACE:
                if constexpr ( dim == 3U ) if ( BREP_defining_node && !at_external_boundary &&
                                                part_of_line == 0U && part_of_surface == 1U )

@@ -695,7 +695,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
       }
     subdomain.ScheduleForRebuild();
     
-    // establishes Face connectivity between patches
+    // establish connectivity between new Face objects
     model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
     
 #ifdef DEBUG

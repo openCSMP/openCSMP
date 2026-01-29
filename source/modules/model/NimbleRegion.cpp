@@ -27,7 +27,7 @@ template<uint32_t dim>
 NimbleRegion<dim>::NimbleRegion( const PropertyDatabase<dim>& p,
                                  typename vector<Node<dim>*>::const_iterator first,
                                  typename vector<Node<dim>*>::const_iterator last )
- : ModelSubDomain<dim,Element>( "NimbleRegion", p )
+ : ModelSubDomain<dim,Element>( "NimbleRegion", p, false )
  {
     this->first_bd_node_ = 0U;
     //cout <<"\nNimbleRegion<"<< dim <<">(constructor): building region from ";

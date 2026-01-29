@@ -26,7 +26,7 @@ class IsoparametricLinearPrism : public FiniteElement {
     virtual void      MidSideNodes( std::vector<uint32_t>& ids ) const;
     virtual void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t  MidSideNodes() const { return 0; }
-    virtual uint32_t  NodesPerFace( uint32_t face ) const;
+    virtual uint32_t  NodesPerFace( uint32_t face ) const noexcept;
 
     virtual CSMP_FEM_TYPE  ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_LINEAR_BAR; };

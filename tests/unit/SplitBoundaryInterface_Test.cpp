@@ -12,28 +12,24 @@
 
 using namespace std;
 
-namespace csmp
-{
+namespace csmp {
 
+/*
+    E.P Rigorously checks whether nodes, elements and interfaces have been correctly split and updated on inside and outside of the splitboundary.
+*/
+void SplitBoundaryInterface_Test::Test_CreateSplitBoundaryFromLowerDimRegion()
+ {
+    Test_NodeCorrespondance_2D("InternalBoundary_test");
 
+    // SKM 3D model (normal fault in layered rock sequence
+    Test_ConversionOfNormalFault("fault_boundary_test");
+    Test_ConversionOfNormalFaultInSplitModel("fault_boundary_test");
 
-
-
-//E.P Added tests which rigorously check the nodes, elements and interfaces have been correctly split and updated on inside and outside of the splitboundary.
-template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::Test_splitboundary_from_lower_dim_region() {
-
-    if constexpr (dim == 2){
-        Test_NodeCorrespondance_2D("InternalBoundary_test");
-    } else if constexpr (dim == 3){
-        // SKM model (normal fault in layered rock sequence
-        Test_ConversionOfNormalFault("fault_boundary_test");
-        // Eddy's test models
-        Test_NodeAndElementsCorrespondance_3D("InternalBoundary3D_test");
-        Test_NodeAndElementsCorrespondance_3D_X_Intersection("InternalBoundary3D_Intersect_Test");
-        Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse("InternalBoundary3D_Intersect_Test");
-    }
-}
+    // Eddy's test models TODO: discuss whether assumptions these models rest on still hold?
+//    Test_NodeAndElementsCorrespondance_3D("InternalBoundary3D_test");
+//    Test_NodeAndElementsCorrespondance_3D_X_Intersection("InternalBoundary3D_Intersect_Test");
+//    Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse("InternalBoundary3D_Intersect_Test");
+ }
 
 
 
@@ -44,9 +40,8 @@ void SplitBoundaryInterface_Test<dim>::Test_splitboundary_from_lower_dim_region(
  * 0) Tests nodes are matching when using Interface::MatchingN(i,side)
  * 1) Test Unit Normal
 **/
-template<uint32_t dim>
-bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* mesh_file ) {
-
+bool SplitBoundaryInterface_Test::Test_NodeCorrespondance_2D( const char* mesh_file )
+ {
   const uint32_t DIM{2U};
   int32_t material_id = 1;
   //model construction
@@ -105,7 +100,6 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* m
   */
 
   return true;
-
 }
 
 
@@ -122,9 +116,8 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeCorrespondance_2D( const char* m
  * 3) Tests all OUTSIDE elements parents have the CORRECT new nodes on OUTSIDE, including elements that do not share a face with the interface
  *
 */
-template<uint32_t dim>
-bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( const char* mesh_file){
-
+bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D( const char* mesh_file)
+{
   const uint32_t DIM{3U};       //we do not use template parameter - thats stupid in a test...
   int32_t material_id = 1;
   //model construction
@@ -293,8 +286,7 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D( co
      Turns fault plane of lower-dim elements into SplitBoundaries representing the juxtaposition relationships between fault segments
      SKM test with normal fault model
 */
-template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::Test_ConversionOfNormalFault( const string& model_name )
+void SplitBoundaryInterface_Test::Test_ConversionOfNormalFault( const string& model_name )
  {
   const uint32_t DIM{3U};       //we do not use template parameter - thats stupid in a test...
   int32_t material_id = 1;
@@ -454,27 +446,6 @@ void SplitBoundaryInterface_Test<dim>::Test_ConversionOfNormalFault( const strin
               // do the region IDs of the connected parent elements match ModelSubdomain IDs?
               _test( vol_region_domain_IDs.find( ifp->InnerParent()->Region_ID() ) != vol_region_domain_IDs.end() );
               _test( vol_region_domain_IDs.find( ifp->OuterParent()->Region_ID() ) != vol_region_domain_IDs.end() );
-
-              // Testing node-parent elements on inside to confirm that they are indeed inside the BottomUnit region
-              // TODO: adapt this test to normal fault model, using SB names to deduce juxtaposed regions
-              /*
-              for ( uint32_t n{0U}; n<n_nodes;++n ) {
-                  for ( uint32_t p{0U}; p < ifp->N(n,INSIDE)->Parents(); ++p )
-                    if ( ifp->N(n,INSIDE)->IsManifold() )
-                      {
-                        _test( (*rit).second.Contains( ifp->N(n,INSIDE)->Parent(p) )); //bottom unit has parent of inside node
-                        _test( !(*rit).second.Contains( ifp->N(n,INSIDE)->Parent(p))); //top unit doenst have parent of inside node
-                      }
-                  for ( uint32_t p{0U}; p < ifp->MatchingN(n,OUTSIDE)->Parents(); ++p ) {
-                        if ( ifp->N(n,OUTSIDE)->IsManifold() )
-                          {
-                            _test( !(*rit).second.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //bottom unit must not contain parent of outside node
-                            _test(  (*rit).second.Contains( ifp->MatchingN(n,OUTSIDE)->Parent(p) )); //top unit must contain parent of matching outside node
-                          }
-                        else _test( ifp->MatchingN(n,INSIDE) == ifp->MatchingN(n,OUTSIDE) ); //test nodes match if on perimeter
-                    }
-                }
-              */
            }
     }
 
@@ -482,20 +453,144 @@ void SplitBoundaryInterface_Test<dim>::Test_ConversionOfNormalFault( const strin
   //    3. Testing whether a computation can be done on interconnected inserted lower-dim region
   // ========================================================================
   // TODO: write computation with Dirichlet conditions on perimeter nodes and source term to inflate regions
-
-    
-  // ========================================================================
-  //    4. Testing the same SplitBoundary creation after all unique volumetric
-  //       regions are separated by SplitBoundaries
-  // ========================================================================
-  // TODO: write code to do this only for the volumetric regions
-  // Test 1: what will this method do with lower-dim unique regions
-   const size_t n_split_boundaries_created = model.SeparateUniqueRegionsBySplitBoundaries();
-   
    
 } // end Test_ConversionOfNormalFault
 
 
+
+
+
+/*
+    Similar to previous test but now the sedimentary layers are separated from one another by SplitBoundary objects
+    before the normal fault is introduced.
+    
+    This tests the creation of an SB across previous SBs.
+*/
+void SplitBoundaryInterface_Test::Test_ConversionOfNormalFaultInSplitModel( const string& model_name )
+ {
+  const uint32_t DIM{3U};       //we do not use template parameter - thats stupid in a test...
+  int32_t material_id = 1;
+  //model construction
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file(model_name.c_str());
+
+  bool reduce_to_regions = true;
+
+  ANSYS_Model3D model( model_name.c_str(), regions_file, variables_file, reduce_to_regions);
+
+  //Getting perimeter nodes of region, before splitboundary is created and information is lost
+  set<Node<DIM>*> perim_nodes1, perim_nodes2;
+  Region<DIM>& frac_region1 = model.Region( "NORMAL_FAULT" );
+  for ( auto nit = frac_region1.PerimeterNodesBegin(); nit !=frac_region1.NodesEnd(); nit++)
+    perim_nodes1.insert(*nit);
+  
+  // checking node count
+  _test( perim_nodes1.size() == frac_region1.PerimeterNodes() );
+
+
+  // ==================================================================
+  //    0. Testing splitboundary creation
+  // ==================================================================
+  // CREATE OTHER SPLIT BOUNDARIES AFTER CONVERTING THE COMPLEX FAULT!
+  // (here this also fails about the layer juxtaposition relationships across the fault)
+  //  model.CreateSplitBoundaryBetween( "LAYER_BOTTOM", "LAYER_RESERVOIR");
+  //  model.CreateSplitBoundaryBetween( "LAYER_RESERVOIR", "LAYER_TOP");
+
+
+  // ==================================================================
+  //    1. Testing splitboundary creation from fault
+  // ==================================================================
+  const bool retain_elmts_as_intervening_elmts{ false };
+  const auto split_boundaries  = model.CreateSplitBoundaryFrom( "NORMAL_FAULT", retain_elmts_as_intervening_elmts );
+  // was the creation successful
+  _test( split_boundaries.second == true );
+  // labelling the nodes of the volumetric regions so that the sides of each SB can be checked
+  model.InputPropertyValue("nodal id", ScalarVariable(PLAIN,0.0));
+  const csmp::Index nkey = model.Database().StorageKey("nodal id");
+  ScalarVariable number(ANY,1.);
+  for ( auto rit=model.UniqueRegionsBegin(); rit!=model.UniqueRegionsEnd(); ++rit ) {
+        for ( auto& nit : (*rit).second.NodeVector() ) nit->Store( nkey, number );
+        number += 1.;
+      }
+  // solve a pressure equation to see whether the SplitBoundary is isolating its sides (without coupling term)
+  model.InputPropertyValue( "element vector",   makeVector(ANY,ANY,ANY,1.0e-12,1e-13,1.0e-12) );
+  model.InputPropertyValue( "element variable", makeScalar(ANY,0.0) );
+  model.Boundary("BACK").InputPropertyValue( "nodal variable", makeScalar(DIRICH,2e7) );
+  model.Boundary("FRONT").InputPropertyValue( "nodal variable", makeScalar(DIRICH,1e7) );
+  //                                                diffusivity      diffusing variable  source
+  SteadyStateDiffusor<DIM> static_pressure( model, "element vector", "nodal variable", "element variable" );
+  static_pressure.ComputeSteadyState( model.Region("Model"), false );
+  printRangeOfVariable( model, "nodal variable", true );
+  
+  // merging all splitboundaries into fault
+  size_t n_interfaces{0};
+  set<string> input_split_boundaries;
+  for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+       input_split_boundaries.insert( (*split).first );
+       n_interfaces           += (*split).second.Cells();
+    }
+  _test( input_split_boundaries.size() == split_boundaries.first.size() );
+  _test( n_interfaces == model.Mesh().Interfaces() );
+  model.CreateNonUniqueSplitBoundaryGroup( input_split_boundaries, "SPLIT_FAULT" );
+  
+  VTU_Interface<DIM> vtu( model );
+  vtu.OmitZeroInFileName(true);
+  if ( verbose_ ) {
+       // moving the inside nodes towards front (which should expand the fault thickness)
+       list<string> outputProps{ "nodal id", "nodal variable" };
+       // entire model
+       vtu.OutputDataToVTU( model_name, outputProps, "Model", static_cast<int>(1) );
+       // Getting splitboundaries
+       // pair<set<string>,bool>
+       for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+            SplitBoundary<3> sb_patch = model.SplitBoundary( (*split).first );
+            vtu.OutputDataToVTU( model_name, outputProps, sb_patch, static_cast<int>(1) );
+         }
+    }
+
+  // local mesh connectivity update version of biggest SplitBoundary patch
+  _test( split_boundaries.first.size()+1 == model.SplitBoundaries() );
+  map<size_t,string> sbpatches;
+  for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+       _test( (*split).first == (*split).second.Name() );
+       sbpatches.insert( make_pair( (*split).second.Cells(), (*split).first ) );
+    }
+  SplitBoundary<3>& biggest_patch = model.SplitBoundary( (*sbpatches.rbegin()).second );
+  
+  auto t0 = chrono::high_resolution_clock::now();
+  model.Mesh().UpdateConnectivity( biggest_patch.CellsBegin(), biggest_patch.CellsEnd() );
+  auto t1 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed LOCAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t1-t0).count();
+  cout <<" milliseconds."<< endl;
+
+  // global version
+  auto t2 = chrono::high_resolution_clock::now();
+  model.Mesh().UpdateConnectivity();
+  auto t3 = chrono::high_resolution_clock::now();
+  cout <<"\n\n"<<"Test_NodeAndElementsCorrespondance_3D: Completed GLOBAL mesh connectivity update in ";
+  cout << chrono::duration_cast<chrono::milliseconds>(t3-t2).count();
+  cout <<" milliseconds."<< endl;
+ 
+  model.ResolveInconsistentNodeManifolds( model.Region("Model") );
+  model.CreateSplitBoundaryBetween( "LAYER_BOTTOM", "LAYER_RESERVOIR");
+  model.CreateSplitBoundaryBetween( "LAYER_RESERVOIR", "LAYER_TOP");
+
+  if ( verbose_ ) {
+       // moving the inside nodes towards front (which should expand the fault thickness)
+       list<string> outputProps{ "nodal id", "nodal variable" };
+       // entire model
+       vtu.OutputDataToVTU( model_name, outputProps, "Model", static_cast<int>(2) );
+       // Getting splitboundaries
+       // pair<set<string>,bool>
+       for ( auto split=model.SplitBoundariesBegin(); split!=model.SplitBoundariesEnd(); ++split ) {
+            SplitBoundary<3> sb_patch = model.SplitBoundary( (*split).first );
+            vtu.OutputDataToVTU( model_name, outputProps, sb_patch, static_cast<int>(2) );
+         }
+    }
+
+   
+} // end Test_ConversionOfNormalFaultInSplitModel
 
 
 
@@ -513,8 +608,7 @@ void SplitBoundaryInterface_Test<dim>::Test_ConversionOfNormalFault( const strin
  * 3) Tests all OUTSIDE elements parents have the CORRECT new nodes on OUTSIDE, including elements that do not share a face with the interface
  *
 */
-template<uint32_t dim>
-bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_Intersection( const char* mesh_file){
+bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Intersection( const char* mesh_file){
 
   const uint32_t DIM{3U};
   //model construction
@@ -754,24 +848,12 @@ bool SplitBoundaryInterface_Test<dim>::Test_NodeAndElementsCorrespondance_3D_X_I
 
 
 
-
-
-
-
-
-
-
-
-
 /**
- * Very Rigorous Test:
  *
- * Duplicate of previous test Test_NodeCorrespondance_Intersection_3D but with splitboundary creation in reverse order
+ * Duplicates previous test Test_NodeCorrespondance_Intersection_3D but with splitboundary creation in reverse order
  *
 */
-
-template<uint32_t DIM>
-bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse( const char* mesh_file){
+bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Intersection_Reverse( const char* mesh_file){
 
   const uint32_t dim{3U};
   //model construction
@@ -1003,7 +1085,7 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
 
   return true;
 
-}
+} // end NodeAndElementCorrespondance_3D in reverse order
 
 
 
@@ -1015,7 +1097,7 @@ bool SplitBoundaryInterface_Test<DIM>::Test_NodeAndElementsCorrespondance_3D_X_I
 
 
 template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::VisualiseSplitBoundaries( Model<dim>& model, const string& test_name )
+void SplitBoundaryInterface_Test::VisualiseSplitBoundaries( Model<dim>& model, const string& test_name )
 {
   // visualization
   VTU_Interface<dim> vtu( model );
@@ -1092,7 +1174,7 @@ static string getDimensionStandard(uint32_t dim) {
 /// TESTS
 /// SPLITBOUNDARY BETWEEN REGIONS - NOT FINISHED .. TODO
 template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::Test_splitboundary_between_regions( const string& model_name )
+void SplitBoundaryInterface_Test::Test_CreateSplitBoundaryBetween( const string& model_name )
 {
   string dimension = getDimensionStandard(dim);
   if ( verbose_ ) cerr << "\nStart " << dimension << " SplitBoundary Test: SplitBoundary between Regions\n";
@@ -1138,7 +1220,7 @@ void SplitBoundaryInterface_Test<dim>::Test_splitboundary_between_regions( const
   set<pair<string, string>>	discovered;
   deque<string>	current_regions;
   vector<pair<string, string>>  region_final_pairs;
-  for ( auto i = 0U; i < regions.size(); i++ ) {
+  for ( size_t i = 0U; i < regions.size(); i++ ) {
     string root = regions[i];
     // starting at the first region
     current_regions.push_back( root );
@@ -1197,113 +1279,19 @@ void SplitBoundaryInterface_Test<dim>::Test_splitboundary_between_regions( const
 
 
 
-/// TODO: NOT FINISHED
-template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries( const string& model_name )
-{
-  const string variables_file( "SplitBoundary_Test-variables.txt" );
-
-  // 1. convert ansys model into CSMP model
-  Model<dim>* model = NULL;
-  if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
-  else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
-
-  // 2. build CSMP SplitBoundary
-  // ---------------------------------------------------------------------------------------
-  model->DetectAndCreateSplitBoundaries();
-
-  // 3. see whether the split boundary survives being writting to and recovered from file
-  // ------------------------------------------------------------------------------------------
-  model->OutputToBinaryFile( model_name.c_str() );
-
-  csmp::Model<dim> model_out( model_name );
-  cout << "\nNodes: " << model_out.Mesh().Nodes() << "\n";
-  cout << "\nElements: " << model_out.Mesh().Elements() << "\n";
-  cout << "\nFaces: " << model_out.Mesh().Faces() << "\n";
-  cout << "\nInterfaces: " << model_out.Mesh().Interfaces() << "\n";
-
-  // 4. visualising
-  string test_name( "DETECTED_SPLITBOUNDARY_TEST_FROM_" );
-  test_name += model_name;
-  VisualiseSplitBoundaries( model_out, test_name );
-
-  return;
-}
 
 
-
-template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::Detect_and_create_splitboundaries_from_constructor( const string& model_name )
-{
-  const string variables_file( "SplitBoundary_Test-variables.txt" );
-  
-  // 1. convert ansys model into CSMP model
-  Model<dim>* model = NULL;
-  if constexpr ( dim == 2U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
-  else if constexpr ( dim == 3U )
-    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
-  
-  // 2. create lower - dimensional stand - alone meshes from SplitBoundary objects, and
-  //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
-  int32_t material_id{1};
-  auto new_regions = model->InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
-
-  // 3. see whether the split boundary survives being writting to and recovered from file
-  // ------------------------------------------------------------------------------------------
-  model->OutputToBinaryFile( model_name.c_str() );
-
-  csmp::Model<dim> model_out( model_name );
-  cout << "\nNodes: " << model_out.Mesh().Nodes() << "\n";
-  cout << "\nElements: " << model_out.Mesh().Elements() << "\n";
-  cout << "\nFaces: " << model_out.Mesh().Faces() << "\n";
-  cout << "\nInterfaces: " << model_out.Mesh().Interfaces() << "\n";
-
-} // endf Detect_and_create_splitboundaries_from_constructor
-
-
-
-
-template<uint32_t dim>
-void SplitBoundaryInterface_Test<dim>::run()
+void SplitBoundaryInterface_Test::run()
 {
   //THE ONLY RIGOROUS TEST
-  Test_splitboundary_from_lower_dim_region();
+  Test_CreateSplitBoundaryFromLowerDimRegion();
 
-  //TESTS WHICH RUN BUT HAVE NO DIAGNOSTICS
-  if constexpr( dim == 2U ) {
-      Test_splitboundary_between_regions( "BoxHalfs2D" );
-      Test_splitboundary_between_regions( "ThreeZones2D" );
-
-      ///E.P These remaining tests are not working yet
-      /* JC: working on the QC process which is requried for the following models
-      Test_splitboundary_between_regions( "kueper_one_interface" );
-      Test_splitboundary_between_regions( "lens2D" ); //added
-      */
- }
-    
-  // test splitboundary between 3D regions
-  if constexpr( dim == 3U ) {
-      Test_splitboundary_between_regions( "BoxHalfs3D" );
-
-      ///E.P These remaining tests are not working yet
-      /*
-      Test_splitboundary_between_regions( "ThreeZones3D" );
-      // test splitboundary from constructor of ansys model
-      // JC: working on the QC process which is requried for the following models
-      //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
-      Detect_and_create_splitboundaries_from_constructor( "DykePartiallySplit" );
-      // test splitboundary for complex ansys models
-      Test_splitboundary_between_regions( "lamination" ); VERY SLOWWWW and negative jacobians warning ...
-      */
-    }
-
+  // IS  "CreateSplitBoundaryBetween" correctly running for a choice of test models?
+  Test_CreateSplitBoundaryBetween<2>( "BoxHalfs2D" );
+  Test_CreateSplitBoundaryBetween<2>( "ThreeZones2D" );
+  Test_CreateSplitBoundaryBetween<2>( "Jura-slope1" );
+  Test_CreateSplitBoundaryBetween<3>( "BoxHalfs3D" );
 }
-
-template class SplitBoundaryInterface_Test<2U>;
-template class SplitBoundaryInterface_Test<3U>;
 
 
 } // csmp

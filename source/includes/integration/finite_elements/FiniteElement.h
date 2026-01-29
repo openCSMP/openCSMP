@@ -88,31 +88,31 @@ enum FV_FACET_TYPE : std::int8_t {
 @}
 */
 
-bool isTriangularElement( CSMP_FEM_TYPE );
-bool isQuadrilateralElement( CSMP_FEM_TYPE );
-bool isLineElement( CSMP_FEM_TYPE );
-bool isTriangular( CSMP_FEM_TYPE );
-bool isQuadrilateral( CSMP_FEM_TYPE );
-bool isSurfaceElement( CSMP_FEM_TYPE );
-bool isTetrahedral( CSMP_FEM_TYPE );
-bool isHexahedral( CSMP_FEM_TYPE );
-bool isPrism( CSMP_FEM_TYPE );
-bool isPyramid( CSMP_FEM_TYPE );
-bool isVolumeElement( CSMP_FEM_TYPE );
+constexpr bool isTriangularElement( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isQuadrilateralElement( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isLineElement( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isTriangular( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isQuadrilateral( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isSurfaceElement( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isTetrahedral( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isHexahedral( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isPrism( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isPyramid( CSMP_FEM_TYPE ) noexcept;
+constexpr bool isVolumeElement( CSMP_FEM_TYPE ) noexcept;
 
-CELL_SHAPE      parseFiniteElementDimension( CSMP_FEM_TYPE );
-CSMP_FEM_TYPE   parseFiniteElementTypeEnum( int8_t csp_etype );
-CSMP_FEM_TYPE   parseFiniteElementType( const std::string& etype );
-const char*     parseFiniteElementType( int8_t etype );
-const char*     parseAbbreviated_FE_Type( int8_t etype );
-FV_FACET_TYPE   parseFacetType( const std::string& ftype );
-const char*     parseFacetType( int8_t ftype );
+CELL_SHAPE      parseFiniteElementDimension( CSMP_FEM_TYPE ) noexcept;
+CSMP_FEM_TYPE   parseFiniteElementTypeEnum( int8_t csp_etype ) noexcept;
+CSMP_FEM_TYPE   parseFiniteElementType( const std::string& etype ) noexcept;
+const char*     parseFiniteElementType( int8_t etype ) noexcept;
+const char*     parseAbbreviated_FE_Type( int8_t etype ) noexcept;
+FV_FACET_TYPE   parseFacetType( const std::string& ftype ) noexcept;
+const char*     parseFacetType( int8_t ftype ) noexcept;
 
 /// returns UNKNOWN if more information is required
-CSMP_FEM_TYPE   finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true );
+CSMP_FEM_TYPE   finiteElementTypeOfSharedFace( CSMP_FEM_TYPE csp_etype1, CSMP_FEM_TYPE csp_etype2, bool isoparametric = true ) noexcept;
 
 /// returns corresponding quadratic element type for supplied simplex element 
-CSMP_FEM_TYPE getQuadraticType( bool isoparametric, int8_t etype );
+CSMP_FEM_TYPE getQuadraticType( bool isoparametric, int8_t etype ) noexcept;
 
 
 /**
@@ -155,54 +155,54 @@ class FiniteElement {
     virtual ~FiniteElement() = default;
 
    /// assigns integer value used to avoid repeating the same operation
-    void           CurrentID( size_t id );
+    void           CurrentID( size_t id ) noexcept;
   
     /// returns integer value for comparison to avoid repeating the same operation
-    size_t         CurrentID() const;
+    size_t         CurrentID() const noexcept;
   
     /// returns ID value set to FEM during construction
-    static size_t  InitialID();
+    static size_t  InitialID() noexcept;
   
     /// return minimum spatial dimension in which this element can exist
-    uint32_t       Dim() const;
+    uint32_t       Dim() const noexcept;
   
-    uint32_t       Nodes() const;
+    uint32_t       Nodes() const noexcept;
   
     /// returns the number of edges of the FE, i.e. the number of connections between nodes
-    uint32_t       Segments() const;
+    uint32_t       Segments() const noexcept;
   
     /// returns the number of sides the finite element has
-    uint32_t       Faces() const;
+    uint32_t       Faces() const noexcept;
   
     /// neighbor elements that may be connected to this FE in its characteristic space
-    uint32_t       Neighbors() const;
+    uint32_t       Neighbors() const noexcept;
   
     /// returns how many nodes make up a particular face; some elements have different numbers
-    virtual uint32_t NodesPerFace( uint32_t face ) const;
+    virtual uint32_t NodesPerFace( uint32_t face ) const noexcept;
   
     /// returns number of quadrature points used by current integration scheme
-    uint32_t       IntegrationPoints() const;
+    uint32_t       IntegrationPoints() const noexcept;
   
     /// returns order of interpolation scheme: linear=1, quadratic=2, cubic=3
-    uint32_t       Interpolation() const;
+    uint32_t       Interpolation() const noexcept;
   
     /// for numerically integrated elements, reports whether the order of the interpolation functions is the same as that of the shape functions
-    bool           Isoparametric() const;
+    bool           Isoparametric() const noexcept;
   
     /// reports whether element is defined in a local (r,s,t) coordinate system; analytically integrated elements are not
-    bool           UsesLocalCoordinates() const;
+    bool           UsesLocalCoordinates() const noexcept;
   
     /// returns the interpolation order of the shape functions as opposed to the interpolation (basis) functions
-    uint32_t       OrderOfShapeFunctions() const;
+    uint32_t       OrderOfShapeFunctions() const noexcept;
   
-    bool           IsLine() const;
-    bool           IsSurface() const;
-    bool           IsVolume() const;
+    bool           IsLine() const noexcept;
+    bool           IsSurface() const noexcept;
+    bool           IsVolume() const noexcept;
   
     /// true for linear line-, triangle- or tetrahedral elements for which the Jacobian matrix is constant throughout
-    bool           IsSimplex() const;
+    constexpr bool IsSimplex() const noexcept;
   
-    CSMP_FEM_TYPE  ElementType() const;
+    CSMP_FEM_TYPE  ElementType() const noexcept;
   
     /// computes and returns the volume of the element which is an area for a surface- and a length for a line element
     virtual double Volume();
@@ -389,7 +389,7 @@ class FiniteElement {
     void           LineElement();
     void           SurfaceElement();
     void           VolumeElement();
-    void           ElementType( CSMP_FEM_TYPE etype );
+    void           ElementType( CSMP_FEM_TYPE etype ) noexcept;
 
     uint32_t dim,       /**< spatial dimension of element */
              itp,       /**< degree of interpolation */
@@ -429,6 +429,200 @@ class FiniteElement {
     /// stub for all virtual functions, providing feedback to users if member functions are not defined for particular element type
     void InstructUser( const char* method ) const;
 };
+
+
+// INLINE FUNCTIONS
+
+inline constexpr bool isTriangularElement( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype) {
+        case ISOPARAMETRIC_LINEAR_TRIANGLE:
+        case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+        case ISOPARAMETRIC_CUBIC_TRIANGLE:
+        case LINEAR_TRIANGLE:
+        case LINEAR_TRIANGLE3D:
+        case QUADRATIC_TRIANGLE:
+        case CUBIC_TRIANGLE:
+        case BARYCENTRIC_LINEAR_TRIANGLE:
+        case BARYCENTRIC_QUADRATIC_TRIANGLE:
+            return true;
+        default:
+            return false;
+    }
+ }
+ 
+ 
+inline constexpr bool isQuadrilateralElement( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype) {
+        case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+        case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+        case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9:
+        case ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL:
+        case LINEAR_RECTANGLE:
+            return true;
+        default:
+            return false;
+    }
+ }
+ 
+ 
+inline constexpr bool isLineElement( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype) {
+        case ISOPARAMETRIC_LINEAR_BAR:
+        case ISOPARAMETRIC_QUADRATIC_BAR:
+        case ISOPARAMETRIC_CUBIC_BAR:
+        case LINEAR_BAR:
+        case QUADRATIC_BAR:
+        case CUBIC_BAR:
+            return true;
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isTriangular( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype) {
+        case ISOPARAMETRIC_LINEAR_TRIANGLE:
+        case ISOPARAMETRIC_QUADRATIC_TRIANGLE:
+        case ISOPARAMETRIC_CUBIC_TRIANGLE:
+
+        case LINEAR_TRIANGLE:
+        case LINEAR_TRIANGLE3D:
+        case QUADRATIC_TRIANGLE:
+        case CUBIC_TRIANGLE:
+
+        case BARYCENTRIC_LINEAR_TRIANGLE:
+        case BARYCENTRIC_QUADRATIC_TRIANGLE:
+        case ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE:
+        case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE:
+            return true;
+
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isQuadrilateral( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype) {
+        case ISOPARAMETRIC_LINEAR_QUADRILATERAL:
+        case LINEAR_QUADRILATERAL:
+        case ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL:
+
+        case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL:
+        case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL:
+        case ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9:
+
+        case ISOPARAMETRIC_CUBIC_QUADRILATERAL:
+            return true;
+
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isSurfaceElement( CSMP_FEM_TYPE etype ) noexcept
+ {
+    if ( isTriangular(etype) ) return true;
+    else if ( isQuadrilateral(etype) ) return true;
+    return false;
+ }
+
+
+inline constexpr bool isTetrahedral( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype)
+    {
+        case ISOPARAMETRIC_LINEAR_TETRAHEDRON:
+        case LINEAR_TETRAHEDRON:
+        case ISOPARAMETRIC_QUADRATIC_TETRAHEDRON:
+        case ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON:
+        case ISOPARAMETRIC_CUBIC_TETRAHEDRON:
+            return true;
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isHexahedral( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype)
+    {
+        case ISOPARAMETRIC_LINEAR_HEXAHEDRON:
+        case LINEAR_QUADRILATERAL:              // (assuming intentional)
+        case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20:
+        case ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27:
+        case ISOPARAMETRIC_CUBIC_HEXAHEDRON:
+        case LINEAR_CUBOID:
+            return true;
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isPrism( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype)
+    {
+        case ISOPARAMETRIC_LINEAR_PRISM:
+        case ISOPARAMETRIC_QUADRATIC_PRISM15:
+        case ISOPARAMETRIC_QUADRATIC_PRISM18:
+        case ISOPARAMETRIC_CUBIC_PRISM:
+        case ISOPARAMETRIC_CUBIC_HEXAHEDRON: // assuming intentional
+            return true;
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isPyramid( CSMP_FEM_TYPE etype ) noexcept
+ {
+    switch (etype)
+    {
+        case ISOPARAMETRIC_LINEAR_PYRAMID:
+        case ISOPARAMETRIC_QUADRATIC_PYRAMID13:
+        case ISOPARAMETRIC_QUADRATIC_PYRAMID14:
+        case ISOPARAMETRIC_CUBIC_PYRAMID:
+            return true;
+        default:
+            return false;
+    }
+ }
+
+
+inline constexpr bool isVolumeElement(CSMP_FEM_TYPE etype) noexcept
+{
+    return isTetrahedral(etype) ||
+           isHexahedral(etype) ||
+           isPrism(etype) ||
+           isPyramid(etype);
+}
+
+
+inline constexpr bool FiniteElement::IsSimplex() const noexcept
+{
+    switch (csp_fem_type) {
+        case ISOPARAMETRIC_LINEAR_TETRAHEDRON:
+        case ISOPARAMETRIC_LINEAR_TRIANGLE:
+        case ISOPARAMETRIC_LINEAR_BAR:
+        case LINEAR_TETRAHEDRON:
+        case LINEAR_TRIANGLE3D:
+        case LINEAR_TRIANGLE:
+        case LINEAR_BAR:
+            return true;
+        default:
+            return false;
+    }
+}
 
 
 } // csmp

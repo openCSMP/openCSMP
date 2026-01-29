@@ -4156,88 +4156,139 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
 
 
  /**
-     Initialises the TOPOTYPE flags, indicating the role that the nodes play in defining the Boundary Representation (BREP) of the model,
-     i.e., whether they represent essential crossing or corner points,
+     Initialises the TOPOTYPE flags, indicating the role that the nodes play in defining the Boundary Representation (BREP) of the model.
+     (Because the VSet has not got any topologic information, this is just an initial guess that gets refined when Region, Boundary and SplitBoundary objects are created)
+     
+     TOPOTYPE flags denote vertices(node points), edges(lines) and faces(surfaces). These may represent essential touching, crossing or corner points,
      define lines or surfaces on the inside or the outer model boundaries,
-     or whether they are just mesh vertices that can be changed during remeshing.
+     or just mesh vertices that can be changed during remeshing.
      
      Depending on whether the VSet contains only 'Element' objects and 'Faces' or whether it already contains split mesh patches
      joint by 'InterFace' objects and therefore NodeManifolds, the geometry flags are initialised differently.
      
      All previous flags are overwritten.
      
-     @attention this must done before line and surface elements dividing the volume mesh into different regions are removed but AFTER the BOX_BOUNDARY flags have been assigned.
+     @attention this method must be applied before line and surface elements dividing the volume mesh into different regions are removed but AFTER the BOX_BOUNDARY flags have been assigned.
      
      @attention successful applicaton of the method requires and intact element connectivity with disambiguated manifolds of lower dimensional elements.
      
-     TODO: not tested yet, use Anne-Laure's VSets to perform testing
+     @attention when the topology of the model is changed due to the creation of Boundary or SplitBoundary objects the TOPOTYPES must be updated as well.
 */
 void VData::InitialiseNodeTopologyIdentifiers()
  {
     const uint32_t dim = SpatialDimension();
+    if ( WithNeighbourConnectivity() == false )
+      throw csmp::Exception( ERROR, "VData::InitialiseNodeTopologyIdentifiers", "cannot initialise TOPOTYPES with element connectivity information");
     
     // 1. resetting all TOPOTYPE flags of the nodes in the mesh to a default chosen as MESH_VERTEX
     // -------------------------------------------------------------------------------------------
     for ( auto nit=BREP_FlagsBegin(); nit!=BREP_FlagsEnd(); ++nit )
-      (*nit) = MESH_VERTEX; // default
-      
-    // 2. processing nodes on the basis of BOX_BOUNDARY information
-    // ------------------------------------------------------------
-    for ( size_t i{0U}; i<Vertices(); ++i ) {
-         const BOX_BOUNDARY flag{ BFlag(i) };
-         // nodes on the exterior of the model
-         if ( flag != NOT ) {
-              if ( dim == 1U ) {
-                   // opposite boundaries depending whether 1D model is horizontal or vertical
-                   if ( (!belongsToSide(LEFT,flag) || !belongsToSide(RIGHT,flag)) ||
-                        (!belongsToSide(BOTTOM,flag) || !belongsToSide(TOP,flag)) )
-                     BREP_Flag( i, INTERSECTION_POINT );
-                   else if ( isCorner( flag ) )
-                     BREP_Flag( i, EXTERIOR_POINT );
-                }
-              else if ( dim == 2U ) {
-                   if ( isCorner( flag ) ) BREP_Flag( i, EXTERIOR_POINT );
-                   else if ( isSide( flag ) )
-                     BREP_Flag( i, EXTERIOR_LINE );
-                }
-              else if ( dim == 3U ) {
-                   if ( isCorner( flag ) ) BREP_Flag( i, EXTERIOR_POINT );
-                   else if ( isEdge( flag ) )
-                     BREP_Flag( i, EXTERIOR_LINE );
-                   else if ( isSide( flag ) )
-                     BREP_Flag( i, EXTERIOR_SURFACE );
-                }
-              // internal boundaries (defaults; perimeter points/lines/surfaces are considered later)
-              if ( flag == INTERNAL ) {
-                   if      ( dim == 1U ) BREP_Flag( i, PERIMETER_POINT );
-                   else if ( dim == 2U ) BREP_Flag( i, INTERIOR_LINE );
-                   else if ( dim == 3U ) BREP_Flag( i, INTERIOR_SURFACE );
-                }
-              // else MESH_VERTEX flagging remains
+      (*nit) = static_cast<int8_t>(MESH_VERTEX); // default
+
+    // 2. Processing Elements or Elements + Faces
+    //    the lower-dimensional finite elements that the nodes form part of are recorded in maps
+    // ------------------------------------------------------------------------------------------
+    CSMP_FEM_TYPE         elmt_type = ( HybridElementTypeMesh() ) ? UNKNOWN : static_cast<CSMP_FEM_TYPE>(ElementType(0U));
+    unordered_set<size_t> line_elmts, surf_elmts;
+    
+    size_t e_number{0};
+    if ( HybridElementTypeMesh() ) {
+        for ( const auto& etype : pelmt ) {
+             if ( isLineElement( static_cast<CSMP_FEM_TYPE>(etype)) ) line_elmts.insert( e_number );
+             else if ( isSurfaceElement( static_cast<CSMP_FEM_TYPE>(etype)) ) surf_elmts.insert( e_number );
+             e_number++;
+          }
+      }
+    // MONO-ELEMENT DIMENSION MESHES
+    // =============================
+    else {
+         // only line elements (edges)
+         if ( isLineElement( static_cast<CSMP_FEM_TYPE>(elmt_type)) ) {
+              for ( auto& topoflag : gflags_ ) topoflag = static_cast<int8_t>(EXTERIOR_LINE);
+           }
+         
+         // only surface elements (faces)
+         if ( isSurfaceElement( static_cast<CSMP_FEM_TYPE>(elmt_type)) ) {
+              for ( auto& topoflag : gflags_ ) topoflag = static_cast<int8_t>(EXTERIOR_SURFACE);
            }
       }
+      
+      
+    // HYBRID ELEMENT-TYPE MESHES
+    // ==========================
 
-    // 3. If InterFace objects are already present the stored node manifold information in the model is used
-    // -----------------------------------------------------------------------------------------------------
+    // LINE ELEMENTS
+    // -------------
+    if ( dim >= 2 )
+      // all line elements are flagged INTERIOR_LINE
+      for ( const auto& elmt : line_elmts )
+        for ( const auto nit : plist[elmt] )
+          BREP_Flag( nit, static_cast<int8_t>(INTERIOR_LINE) );
+
+    // end-point nodes are flagged PERIMETER_POINT
+    for ( const auto& elmt : line_elmts ) {
+        uint32_t face{0};
+        for ( const auto& nbor : pfverts[elmt] ) {
+              // if the face has no neighbor we check whether the node is a corner node of it
+              if ( nbor < 0 ) {
+                   // local node id (0..nodes-1) in the element that corresponds to face
+                   uint32_t fn = CSMP_ElementSpecifications::FaceNodeForElementOfType( pelmt[elmt], face, 0 );
+                   BREP_Flag( plist[elmt][fn], static_cast<int8_t>(PERIMETER_POINT) );
+                }
+              face++;
+          }
+      }
+
+    // SURFACE ELEMENTS
+    // ----------------
+    if ( dim == 3 )
+      // all surface element nodes are flagged INTERIOR_SURFACE
+      for ( const auto& elmt : surf_elmts )
+        for ( const auto nit : plist[elmt] )
+          BREP_Flag( nit, static_cast<int8_t>(INTERIOR_SURFACE) );
+
+    // perimeter nodes are flagged PERIMETER_POINT
+    for ( const auto& elmt : surf_elmts ) {
+          uint32_t face{0};
+          for ( const auto& nbor : pfverts[elmt] ) {
+                // if the face has no neighbor we check whether the node is a corner node of it
+                if ( nbor < 0 ) {
+                    // local ids of the corner nodes of the face in the element
+                    uint32_t fn0 = CSMP_ElementSpecifications::FaceNodeForElementOfType( pelmt[elmt], face, 0 );
+                    uint32_t fn1 = CSMP_ElementSpecifications::FaceNodeForElementOfType( pelmt[elmt], face, 1 );
+                    BREP_Flag( plist[elmt][fn0], static_cast<int8_t>(PERIMETER_LINE) );
+                    BREP_Flag( plist[elmt][fn1], static_cast<int8_t>(PERIMETER_LINE) );
+                  }
+               face++;
+            }
+      }
+    
+
+    // 3. If InterFace objects are present the stored node manifold information in the model is used to classify their nodes
+    // ---------------------------------------------------------------------------------------------------------------------
+    // Note:  if manifolds are located at the model boundary, they will be dealt with in Step 4
     if ( Interfaces() > 0 ) {
-         assert( NodeManifolds() > 0 );
+         if ( NodeManifolds() == 0 )
+           throw csmp::Exception( ERROR, "VData::InitialiseNodeTopologyIdentifiers",
+                                 "VData contains InterFace objects but no NodeManifold information" );
+           
          // 3.1 looping over the node manifolds to identify crossing points
          for ( auto nit=PmanifoldsBegin(); nit!=PmanifoldsEnd(); ++nit  ) {
-              // if the manifolds are located at the model boundary, they have already been dealt with
-              bool at_outer_boundary{false};
-              for ( const auto& n : (*nit).first )
-                if ( BFlag(n) != NOT && BFlag(n) != INTERNAL ) {
-                     at_outer_boundary = true;
-                     break;
-                  }
-              // processing the manifolds on the inside of the model
-              if ( !at_outer_boundary ) {
+               bool at_outer_boundary{false};
+               for ( const auto& n : (*nit).first )
+                 if ( static_cast<BOX_BOUNDARY>(BFlag(n)) != NOT &&
+                      static_cast<BOX_BOUNDARY>(BFlag(n)) != INTERNAL ) {
+                      at_outer_boundary = true;
+                      break;
+                   }
+               // processing the manifolds on the inside of the model
+               if ( !at_outer_boundary ) {
                    // crossings
                    if ( (*nit).second == ManifoldType::SPLIT_BOUNDARY_CROSSING ||
                         (*nit).second == ManifoldType::MULTI_SB_CROSSING ||
                         (*nit).second == ManifoldType::SPLIT_BOUNDARY_TERMINATION ) // T-intersection
                      for ( const auto& n : (*nit).first )
-                       BREP_Flag( n, INTERSECTION_POINT );
+                       BREP_Flag( n, static_cast<int8_t>(INTERIOR_POINT) );
                    // intersection lines (interior lines) already handled
                 }
            }
@@ -4245,220 +4296,65 @@ void VData::InitialiseNodeTopologyIdentifiers()
          for ( auto it=PlistInterFacesBegin(); it!=PlistInterFacesEnd(); ++it ) {
                // flagging those nodes which are shared between the inside and the outside of the interfaces
                const auto n_inside_nodes{ (*it).size() / 2 };
-               for ( auto i{0U}; i<n_inside_nodes; ++i )
-                 // node that outside nodes are in reverse order!
+               for ( uint32_t i{0U}; i<n_inside_nodes; ++i )
+                 // note that outside nodes are in reverse order!
                  if ( (*it)[i] == (*it)[(*it).size()-1-i] ) {
-                      if     ( dim == 2U ) BREP_Flag( (*it)[i], PERIMETER_POINT );
-                      else if( dim == 3U ) BREP_Flag( (*it)[i], PERIMETER_LINE );
+                      if     ( dim == 2U ) BREP_Flag( (*it)[i], static_cast<int8_t>(PERIMETER_POINT) );
+                      else if( dim == 3U ) BREP_Flag( (*it)[i], static_cast<int8_t>(PERIMETER_LINE) );
                    }
            }
-         return;
       }
       
 
-    // 4. If there are only Elements or Elements + Faces, meaning that the nodes are not duplicated,
-    //    the lower-dimensional finite elements that the node forms part of are recorded in maps
-    // ------------------------------------------------------------------------------------------
-    CSMP_FEM_TYPE   elmt_type = ( HybridElementTypeMesh() ) ? UNKNOWN : static_cast<CSMP_FEM_TYPE>(ElementType(0U));
-    //  node       elmt or face
-    map<size_t,set<size_t> > node_parent_line_elmts;
-    map<size_t,set<size_t> > node_parent_surf_elmts;
-    
-    for ( size_t i{0U}; i<Cells(); i++ )
-      {
-         // getting the element type
-         if ( HybridElementTypeMesh() ) elmt_type = static_cast<CSMP_FEM_TYPE>(ElementType(i));
-         // line elements
-         if ( isLineElement( elmt_type ) ) {
-              // finding end-points and points somewhere on a polyline
-              // -----------------------------------------------------
-              // getting the indices of the corner nodes
-              const uint32_t n0 = static_cast<uint32_t>(Plist( i, 0 ));
-              const uint32_t n1 = static_cast<uint32_t>(Plist( i, 1 ));
-              // recording parent elements of nodes on INTERNAL boundaries
-              auto nit0 = node_parent_line_elmts.insert( make_pair( n0, set<size_t>{i} ) );
-              if ( nit0.second == false ) (*nit0.first).second.insert( i );
-              auto nit1 = node_parent_line_elmts.insert( make_pair( n1, set<size_t>{i} ) );
-              if ( nit1.second == false ) (*nit1.first).second.insert( i );
+    // 4. Qualify node gflags on the basis of BOX_BOUNDARY information
+    // ---------------------------------------------------------------
+    // last step: applying INTERIOR_POINT, EXTERIOR_POINT, EXTERIOR_LINE, and EXTERIOR_SURFACE flags
+    for ( size_t i{0U}; i<Vertices(); ++i ) {
+         const BOX_BOUNDARY flag{ static_cast<BOX_BOUNDARY>(BFlag(i)) };
+         // nodes on the exterior of the model
+         if ( flag != NOT ) {
+              if ( dim == 1U ) {
+                   // opposite boundaries depending whether 1D model is horizontal or vertical
+                   if ( (!belongsToSide(LEFT,flag) || !belongsToSide(RIGHT,flag)) ||
+                        (!belongsToSide(BOTTOM,flag) || !belongsToSide(TOP,flag)) )
+                     BREP_Flag( i, static_cast<int8_t>(INTERIOR_POINT) );
+                   else if ( isCorner( flag ) )
+                     BREP_Flag( i, static_cast<int8_t>(EXTERIOR_POINT) );
+                }
+              else if ( dim == 2U ) {
+                   if ( isCorner( flag ) ) BREP_Flag( i, static_cast<int8_t>(EXTERIOR_POINT) );
+                   else if ( isSide( flag ) )
+                     BREP_Flag( i, static_cast<int8_t>(EXTERIOR_LINE) );
+                }
+              else if ( dim == 3U ) {
+                   if ( isCorner( flag ) ) BREP_Flag( i, static_cast<int8_t>(EXTERIOR_POINT) );
+                   else if ( isEdge( flag ) )
+                     BREP_Flag( i, static_cast<int8_t>(EXTERIOR_LINE) );
+                   else if ( isSide( flag ) )
+                     BREP_Flag( i, static_cast<int8_t>(EXTERIOR_SURFACE) );
+                }
+              // internal boundaries (defaults; perimeter points/lines/surfaces are considered later)
+              if ( flag == INTERNAL ) {
+                   if      ( dim == 1U ) BREP_Flag( i, static_cast<int8_t>(PERIMETER_POINT) );
+                   else if ( dim == 2U ) BREP_Flag( i, static_cast<int8_t>(INTERIOR_LINE) );
+                   else if ( dim == 3U ) BREP_Flag( i, static_cast<int8_t>(INTERIOR_SURFACE) );
+                }
+              // else MESH_VERTEX flagging remains
            }
-         // surface elements
-         else if ( dim == 3U && isSurfaceElement( elmt_type ) ) {
-             // creating the map
-             for ( uint32_t j{0U}; j<PlistSize(i); j++ ) {
-                  const size_t node{ Plist( i, j ) };
-                  auto nit = node_parent_surf_elmts.insert( make_pair( node, set<size_t>{i} ) );
-                  if ( nit.second == false ) (*nit.first).second.insert( (i) );
-               }
-          }
       }
-    
-    
-    // 4. classification of BREP type based on the line elements discovered
-    // --------------------------------------------------------------------
-   //     finding crossing points of two or multiple polylines
-   // (assuming that these are flagged INTERNAL
-   for ( const auto& nit : node_parent_line_elmts )
-     {
-        // processing the nodes of the lower dimensional elements to discern intersection and perimeter points
-        for ( auto& ne : nit.second ) {
-              // getting the node Idx of the corner nodes of the line element
-              const size_t n0 = static_cast<size_t>(Plist( ne, 0 ));
-              const size_t n1 = static_cast<size_t>(Plist( ne, 1 ));
-              // if the line element has no neighbor opposite the key node, the node is located on the perimeter point of an internal boundary
-              if ( nit.first == n0 && BFlag(n0) == INTERNAL ) {
-                   // if there is no neighbor line element
-                   if ( Pfvert( ne, 1 ) < 0 )
-                     BREP_Flag( nit.first, PERIMETER_POINT );
-                }
-              if ( nit.first == n1 && BFlag(n1) == INTERNAL ) {
-                   if ( Pfvert( ne, 0 ) < 0 )
-                     BREP_Flag( nit.first, PERIMETER_POINT );
-                }
-              // intersections of internal line elements with the model boundary
-              // need to be flagged EXTERIOR_POINT
-              if ( nit.first == n0 && BFlag(n0) != INTERNAL && BFlag(n0) != NOT ) {
-                   // if there is no neighbor line element
-                   if ( Pfvert( ne, 1 ) < 0 )
-                     BREP_Flag( nit.first, EXTERIOR_POINT );
-                }
-              if ( nit.first == n1 && BFlag(n1) != INTERNAL && BFlag(n0) != NOT ) {
-                   if ( Pfvert( ne, 0 ) < 0 )
-                     BREP_Flag( nit.first, EXTERIOR_POINT );
-                }
-          }
 
-         // T-intersections are treated the same as crossing lines
-         size_t n_connected_lines{ nit.second.size() };
-         //    T-intersection             lines crossing
-         if (  n_connected_lines == 3U || n_connected_lines >= 4U ) {
-              if ( BFlag(nit.first) == INTERNAL )
-                BREP_Flag( nit.first, INTERSECTION_POINT );
-           }
-         // MULTIPLE_INTERSECTIONS else if ( nit.second.size() >= 5U )
-     }
-       
-       
-   // 5. processing surface-related topology in three-dimensional models:
-   //    - perimeter lines of internal surfaces
-   //    - intersection lines of internal surfaces
-   //    - touching points of internal surfaces
-   //    - intersection points of surface and curves made of line elements
-   //      (not for lines that terminate at surfaces because their end-points are already flagged)
-   // --------------------------------------------------------------------------------------------
-   // TODO: test with a predefined 3D model (SKUA?)
-   if ( dim == 3U ) {
-       for ( const auto& nit : node_parent_surf_elmts )
-         // internal surfaces
-         if ( BFlag(nit.first) == INTERNAL || BFlag(nit.first) == NOT )
-           {
-              // recording the lower-dimensional parent elements of the node
-              set<CSMP_FEM_TYPE> etypes;
-              for ( const auto& eit : nit.second ) {
-                   const CSMP_FEM_TYPE etype = static_cast<CSMP_FEM_TYPE>(ElementType(eit));
-                   if ( !isVolumeElement(etype) )
-                     etypes.insert( etype );
-                }
-              // if there are only surface elements
-              if ( etypes.size() == 1U  ) {
-                  assert( isSurfaceElement(*etypes.begin()) );
-                  // 0. case INTERIOR_SURFACE where node lies in the middle of an interior surface was already covered above
-                  
-                  // 1. case PERIMETER_LINE defined by nodes on the perimeter curve of an internal surface
-                  // -------------------------------------------------------------------------------------
-                  // (criterion: >2 of the surface-elmt edges that the node is part of, must have no neighbor)
-                  int edge_elmt_count{0};
-                  // 1.1 finding the (neighbor-free) edges of the parent surface elements that the node is part of
-                  for ( const auto& eit : nit.second ) {
-                       // looping over each elements pfverts
-                       for ( auto face{0U}; face<pfverts[eit].size(); face++ )
-                         // if the face has no neighbor we check whether the node is a corner node of it
-                         if ( pfverts[eit][face] < 0 ) {
-                             uint32_t fn0 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 0U );
-                             uint32_t fn1 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 1U );
-                             if ( fn0 == nit.first || fn1 == nit.first )
-                               edge_elmt_count++;
-                           }
-                    }
-                  if ( edge_elmt_count >= 2 )
-                    BREP_Flag( nit.first, PERIMETER_LINE );
-                    
-                  // 2. case INTERSECTION_LINE along which multiple surfaces intersect
-                  // -----------------------------------------------------------------
-                  // (an internal node on a quad-only surface has 4-quad parents)
-                  if ( isQuadrilateral(*etypes.begin()) && nit.second.size() > 4U )
-                    BREP_Flag( nit.first, INTERSECTION_LINE );
-                  // for triangular elements this criterion does not work
-                  // so that element orientations must be considered
-                  else if ( nit.second.size() > 3U ) {
-                       // finding all possible combinations of surface elements
-                       deque<vector<size_t> > combinations;
-                       const size_t           n_elmts_to_combine{2};
-                       vector<size_t>         surf_elmts( nit.second.begin(), nit.second.end() );
-                       createUniqueCombinations( surf_elmts, n_elmts_to_combine, combinations );
-                       // measuring the angles
-                       set<double> angle_between_surf_elmts;
-                       for ( const auto& it : combinations ) {
-                       angle_between_surf_elmts.insert( AngleBetweenSurfaceElements3D( it[0], it[1] ) );
-                       // ideally, a bi-modal distribution would indicate an intersection line
-                       // TODO: how can this be detected?
-                       // here we use the criterion that 2 element interangles must be greater than 45o
-                       int angles_greater45deg{0};
-                       for ( const auto& ia : angle_between_surf_elmts )
-                         if ( ia > 45. ) angles_greater45deg++;
-                       if ( angles_greater45deg >= 2 )
-                         BREP_Flag( nit.first, INTERSECTION_LINE );
-                    }
-                }
-           } // end etypes == 1
-         
-         // 3. case INTERSECTION_POINT between internal curves and surfaces
-         //----------------------------------------------------------------
-         if ( etypes.size() == 2U ) {
-              // nodes that are FLAGGED INTERNAL but not PERIMETER_POINT will become INTERSECTION_POINT
-              if ( BREP_Flag( nit.first) != PERIMETER_POINT )
-                BREP_Flag( nit.first, INTERSECTION_POINT );
-           }
-              
-       } // end nodes on internal boundaries
-
-     // 4. case EXTERIOR_LINE or EXTERIOR_POINT where internal surfaces touch model boundary
-     //-------------------------------------------------------------------------------------
-     for ( const auto& nit : node_parent_surf_elmts )
-       // for nodes on the model exterior that are connected to internal surfaces
-       if ( BFlag(nit.first) != INTERNAL && BFlag(nit.first) != NOT )
-         {
-            int BREP_flags_assignments_made{0};
-            // criteria: only surface elements with nodes on model interior are considered
-            // - these are perimeter points if only this node of the parent surface is located on the model boundary
-            // - and perimeter lines if two nodes located on the p
-            for ( const auto& eit : nit.second ) {
-                 // does the element have interior nodes?
-                 int elmt_interior_nodes{false};
-                 for ( const auto& n : plist[eit] )
-                   if ( bflags[n] == NOT || bflags[n] == INTERNAL )
-                     elmt_interior_nodes++;
-                 // if so, the element gets considered
-                 if ( elmt_interior_nodes > 0 ) {
-                     for ( auto face{0U}; face<pfverts[eit].size(); face++ )
-                       // if the face has no neighbor we check whether the node is a corner node of it
-                       if ( pfverts[eit][face] < 0 ) {
-                           uint32_t fn0 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 0U );
-                           uint32_t fn1 = CSMP_ElementSpecifications::FaceNodeForElementOfType( ElementType(eit), face, 1U );
-                           if ( fn0 == nit.first || fn1 == nit.first ) {
-                                BREP_Flag( nit.first, EXTERIOR_LINE );
-                                BREP_flags_assignments_made++;
-                             }
-                         }
-                   }
-              }
-           // if none of the surface elements that the node is part of has an edge on the model boundary,
-           // this must be a touching point
-           if ( BREP_flags_assignments_made == 0 )
-             BREP_Flag( nit.first, EXTERIOR_POINT );
-        }
-    } // if dim == 3
-    
  } // end InitialiseNodeTopologyIdentifiers
+
+// TESTING (up to here all external flags are correctly initialised)
+//{
+//  set<TOPOTYPE> topology_flags;
+//  for ( auto b=BREP_FlagsBegin(); b!=BREP_FlagsEnd(); ++b )
+//    topology_flags.insert( static_cast<TOPOTYPE>(*b) );
+//  cerr <<"done";
+//}
+
+
+
 
 
 
