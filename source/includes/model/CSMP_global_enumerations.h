@@ -189,6 +189,53 @@ constexpr bool isValidTopotype(std::int8_t v) {
 /// converts classifiers to strings so that they can be printed
 std::string parseTopology( TOPOTYPE );
 
+/**
+      Detects any Node that could be on the perimeter of a ModelSubDomain.
+*/
+template<uint32_t dim>
+inline constexpr bool isPerimeterNode( TOPOTYPE gflag ) noexcept {
+   if constexpr( dim == 3 ) {
+        switch( gflag ) {
+          case PERIMETER_SURFACE:
+          case EXTERIOR_SURFACE:
+//          case INTERIOR_SURFACE: false because this should not prompt the generation of a manifold
+          case PERIMETER_LINE:
+          case PERIMETER_POINT:
+          case EXTERIOR_LINE:
+          case EXTERIOR_POINT:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+     }
+   else if constexpr( dim == 2 ) {
+        switch( gflag ) {
+          case PERIMETER_LINE:
+          case PERIMETER_POINT:
+          case EXTERIOR_LINE:
+          case EXTERIOR_POINT:
+          case INTERIOR_LINE:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+     }
+   else {
+         switch( gflag ) {
+          case PERIMETER_POINT:
+          case EXTERIOR_POINT:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+   }
+} // end isPotentialPerimeterNode
+
+
+
 
 
 /// variable flag indicating treatment in computations

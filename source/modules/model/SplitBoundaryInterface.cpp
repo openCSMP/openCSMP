@@ -950,6 +950,10 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 void SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::ResolveInconsistentNodeManifolds( Region<dim>& subdomain )
  {
+    csmp::ErrorHandler& csmp_error( ErrorHandler::Instance() );
+    
+    SPLITBOUNDARY_COMPLEX<dim>& model( static_cast<SPLITBOUNDARY_COMPLEX<dim>&>(*this) );
+
     // 1. Loop over all elements of the lower-dimensional finite-element input region (mesh)
     // 1.1 For all nodes, if they have been duplicated (=split) indicated by IsManifold()==true
     //     store in map<Element, ( vec<Manifold Node>, vec<node ids> ) > .
@@ -975,6 +979,7 @@ void SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::ResolveInconsistentNodeM
       }
     }//end of element loop
 
+
     // 2. Loop over element map
     for (auto& it : elements_with_manifold_nodes) {
         Element<dim>* lower_dim_elem = it.first;
@@ -984,7 +989,7 @@ void SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::ResolveInconsistentNodeM
         // Attempt to find a "stable" node (not manifold, not perimeter)
         for (auto nit = lower_dim_elem->NodesBegin(); nit != lower_dim_elem->NodesEnd(); ++nit) {
             if (!(*nit)->IsManifold()) {
-                if ((*nit)->Attribute() != PERIMETER_POINT && (*nit)->Attribute() != PERIMETER_LINE) {
+                if ( isPerimeterNode<dim>((*nit)->Attribute()) == false ) {
                     reference_node = *nit;
                     break;
                 }
@@ -1034,44 +1039,108 @@ void SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::ResolveInconsistentNodeM
             }
         }
 
-    if (candidate_parents.empty()) {
-        throw csmp::Exception(ERROR, "ManifoldResolution", "No common higher-dim parent found for element " + to_string(lower_dim_elem->Idx()));
+    if ( candidate_parents.empty() ) {
+        csmp_error.Note(ERROR, "ManifoldResolution", "No common higher-dim parent found for element " + to_string(lower_dim_elem->Idx()));
+        return;
     }
 
-    // Now resolve each split node using the identified candidate parents
-    for (size_t m = 0; m < man_nodes_info.first.size(); ++m) {
-        Node<dim>* current_man_node = man_nodes_info.first[m];
-        uint32_t local_idx = man_nodes_info.second[m];
-        NodeManifold<dim>* manifold = current_man_node->Manifold();
-        
-        set<Node<dim>*> nodes_to_assign;
+    // 3. Checking the node manifolds (split nodes) to make sure that their parent elements belong to different regions
+    //    (the check uses the Region IDs of each nodes parents )
+    //    - if not, the duplicated node (and if necessary the manifold) is removed
+    for (size_t m = 0; m < man_nodes_info.first.size(); ++m )
+      {
+          Node<dim>* current_man_node = man_nodes_info.first[m];
+          uint32_t          local_idx = man_nodes_info.second[m];
+          NodeManifold<dim>* manifold = current_man_node->Manifold();
+          
+          set<Node<dim>*> nodes_to_assign;
 
-        // For each potential volume cell parent
-        for (auto* vol_parent : candidate_parents) {
-            for (uint32_t b = 0; b < manifold->Branches(); ++b) {
-                // Check if this specific node branch is part of this volume cell
-                if (manifold->N(b)->IsParent(vol_parent)) {
-                    nodes_to_assign.insert(manifold->N(b));
+          // For each potential volume cell parents (candidate_parents)
+          for ( auto* vol_parent : candidate_parents ) {
+                for ( uint32_t b{0}; b < manifold->Branches(); ++b ) {
+                    // Check if this specific node branch is part of this volume cell
+                    if (manifold->N(b)->IsParent(vol_parent)) {
+                        nodes_to_assign.insert(manifold->N(b));
+                    }
                 }
             }
-        }
 
-        if (nodes_to_assign.size() != 1) {
-             // If size > 1, the lower-dim element might be an interface between 
-             // two patches that haven't been fully separated yet.
-             // If size == 0, the topology is disconnected.
-             throw csmp::Exception(ERROR, "ManifoldResolution", "Ambiguity in node assignment at element " + to_string(lower_dim_elem->Idx()));
-        }
-
-        lower_dim_elem->Assign(local_idx, *nodes_to_assign.begin());
-        
-        if (candidate_parents.empty()) {
-            throw csmp::Exception(ERROR, "ManifoldResolution", "No common higher-dim parent found for element " + to_string(lower_dim_elem->Idx()));
-        }
-    }
+          // If nodes_to_assign > 1, the lower-dim element might be an interface between
+          // two patches that haven't been fully separated yet.
+          // If size == 0, the topology is disconnected; nothing needs to be done.
+          if ( nodes_to_assign.empty() )
+            ;
+          // If nodes_to_assign = 1, the lower-dim element sits at an interface between
+          // two modelsubdomains that haven't been fully separated yet.
+          else if ( nodes_to_assign.size() == 1 ) {
+               // disambiguating manifold node
+               lower_dim_elem->Assign(local_idx, *nodes_to_assign.begin());
+            }
+          // If nodes_to_assign > 1 more diagnostics are needed
+          else
+            {
+               // Verifying that the Nodes in the Manifold belong to different ModelSubDomains
+               set<int32_t> subdomains_in_manifold;
+               // rebuiding the nodes parent element vectors
+               for ( auto* nptr : nodes_to_assign )
+                 {
+                    // find current parents
+                    set<Element<dim>*> actual_parents;
+                    for ( uint32_t i{0}; i<nptr->Parents(); ++i )
+                      if ( nptr->Parent(i) && nptr->Parent(i)->IsEquidimensional() )
+                        for ( uint32_t j{0}; j<nptr->Parent(i)->Nodes(); ++j )
+                          if ( nptr->Parent(i)->N(j) == nptr ) {
+                               actual_parents.insert( nptr->Parent(i) );
+                               break;
+                            }
+                    // are there any?
+                    if ( actual_parents.empty() ) {
+                         csmp_error.Note( ERROR, "SplitBoundaryInterface::ResolveInconsistentNodeManifolds",
+                                         "Parent element reassignment failed for " + to_string(lower_dim_elem->Idx()));
+                         continue;
+                      }
+                    // updating the parent elements
+                    nptr->EraseParents();
+                    for ( auto* parent_ptr : actual_parents )
+                      for ( uint32_t i{0}; i<parent_ptr->Nodes(); ++i )
+                        if ( parent_ptr->N(i) == nptr ) {
+                             nptr->Assign( i, parent_ptr );
+                             break;
+                          }
+                    // verifying that the parents only belong to a single modelsubdomain
+                    set<int32_t> parentRegion_IDs;
+                    for ( uint32_t i{0}; i<nptr->Parents(); ++i )
+                      parentRegion_IDs.insert( nptr->Parent(i)->Region_ID() );
+                    // the nodes parents must only belong to a single region
+                    if ( parentRegion_IDs.size() > 1 ) {
+                         cout <<"\n"<<"Node "<< nptr->Idx() <<": "<< parseBoundary(nptr->AtBoundary()) <<": "<< parseTopology(nptr->Attribute());
+                         cout <<": parents belong to multiple subdomains: ";
+                         for ( const auto& region : parentRegion_IDs ) cout << model.RegionByDomainIndex(region).Name() <<" ("<< region <<") ";
+                         cout << endl << endl;
+                         csmp_error.Note( WARNING, "SplitBoundaryInterface::ResolveInconsistentNodeManifolds",
+                                         "parent elements of Manifold Node belong to different modelsubdomains" );
+                         //TODO: this node must be split
+                      }
+                    // recording regions avoiding duplicates
+                    subdomains_in_manifold.insert( parentRegion_IDs.begin(), parentRegion_IDs.end() );
+                    
+                 }
+                 
+               if ( subdomains_in_manifold.size() != nodes_to_assign.size() ) {
+                    // TODO: if the extra node cannot be separated, it must be deleted
+                    // TODO: if there are more domains than nodes extra entries must be created for manifold
+                    throw csmp::Exception(ERROR, "SplitBoundaryInterface::ResolveInconsistentNodeManifolds",
+                                    "Ambiguity in node assignment at element " + to_string(lower_dim_elem->Idx()));
+                
+                 }
+          } // else
+      } // for
   }
  
- } // end checkFixSplitBoundaryInterSections
+ } // end SplitBoundaryInterface::ResolveInconsistentNodeManifolds
+
+
+
 
 
 /* EDDY'S ORIGINAL CODE
@@ -1305,7 +1374,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     map<pair<long,long>,uint32_t>      patches;
     map<long,string>                   patch_names;
     string                             patch_name;
-    uint32_t                           n_juxtapositions(0);
+    uint32_t                           n_juxtapositions{0}; // among regions
 
     // 2.2 Preprocessing the entire lower dimensional region collecting the Data needed for InterFace construction
     for ( auto eit=subdomain.CellsBegin(); eit!=subdomain.CellsEnd(); ++eit )

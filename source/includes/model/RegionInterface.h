@@ -83,9 +83,6 @@ class RegionInterface {
     /// checks whether the region is space exclusive, i.e. does not contain any other regions
     bool IsUnique( const std::string& regionname ) const;
 
-    /// checks whether all elements within the region are interconnected (if the region has multi-dimensional elements this is never the case)
-    // see model subdomain: bool IsContiguous( const std::string& regionname ) const;
- 
      /// using the unique region ID (=domain idx) assigned to any ModelSubDomain upon creation, this method searches for the corresponding unique region
     csmp::Region<dim>&  RegionByDomainIndex( int32_t domain_index );
 

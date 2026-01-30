@@ -15,7 +15,6 @@ template<uint32_t> class Node;
 
 template<uint32_t> class InterFace;
 
-// TODO: shall we include specific InterFace parent connectivity to NodeManifolds?
 // TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
   
 /**
@@ -34,15 +33,13 @@ class NodeManifold {
       using manifoldConstIterator = typename std::vector<Node<dim>*>::const_iterator;
 
       /// main constructor in NodeManifoldManager: sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
-      NodeManifold( plf::colony<Node<dim> >& nodes,
-                    const std::vector<size_t>& manifold_nodes,
-                    ManifoldType );
+      NodeManifold( plf::colony<Node<dim> >& nodes, const std::vector<size_t>& manifold_nodes );
       
       /// constructs new Manifold from two nodes on the inside and outside of it; @attention nodes must be assigned to this manifold once it has been constructed
-      NodeManifold( Node<dim>& node1, Node<dim>& node2, ManifoldType );
+      NodeManifold( Node<dim>& node1, Node<dim>& node2 );
 
       /// constructs manifold from vector pointer and qualifier pairs
-      NodeManifold( const manifold&, ManifoldType );
+      NodeManifold( const manifold& );
 
       /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for Manifold geometry to be addressed later
       bool Add( Node<dim>* );
@@ -54,51 +51,49 @@ class NodeManifold {
       void SortByVariableValue( const Index& scalar_node_variable );
 
       ///Assign ------------------------------------------------------
-      void Assign(Node<dim>*, std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes);
+      void Assign( Node<dim>*,
+                   std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes );
 
 
       ///Access -------------------------------------------------------
 
       /// number of entries
-      uint32_t Branches() const;
+      uint32_t Branches() const noexcept;
 
       /// access to node
-      Node<dim>* const N( size_t branch ) const;
+      Node<dim>* const N( size_t branch ) const  noexcept;
 
       /// Gives size of node interface parent map - should correspond with number of nodes(branches) when configured correctly
       uint32_t NodeMapSize() const;
       
       ///number of interfaces connected to a node
-      uint32_t InterFaces( Node<dim>* const ) const;
+      uint32_t InterFaces( Node<dim>* const ) const noexcept;
 
       ///Access of single interface of node
       InterFace<dim>* I( Node<dim>* const, uint32_t i );
 
       ///Pair with interface, and corresponding position of node in nodeconnector of interface.
-      std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex( Node<dim>* const n, uint32_t i);
+      std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex( Node<dim>* const n, uint32_t i );
 
       /// InterFace vector of node
       std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector( Node<dim>* const n );
 
-      /// reports manifold classifier that indicates the topologic position of the manifold
-      ManifoldType GeometricClassifier() const;
+     ///Query -----------------------------------------------------------
 
-      ///Query -----------------------------------------------------------
-
-      void GeometricClassifier( ManifoldType );
+      /// reports geometric role of the manifold inferred from the TOPOTYPEs of the nodes that care contained in the
+      ManifoldType Classify() const noexcept;
       
       /// checks whether all nodes in the  manifold have the same location using operator< of point
-      bool AreNodesCollocated() const;
+      bool AreNodesCollocated() const noexcept;
       
       /// outputs manifold state to data structure used to initialise VData
-      std::pair<std::vector<size_t>,ManifoldType> Data() const;
+      std::pair<std::vector<size_t>,ManifoldType> Data() const noexcept;
 
       /// prints out state of the manifold
       void Out() const;
 
     private:
-      manifold     branches_;                        ///< vector of Node - classifier pairs
-      ManifoldType parent_geometry_;                 ///< classifier for the manifold as a whole
+      manifold branches_;  ///< vector of Node pointers
 
       std::map< Node<dim>*,std::vector<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE> >> >   node_parent_interface_map_;     ///interfaces and index for each node on manifold
 };

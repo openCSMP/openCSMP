@@ -43,12 +43,18 @@ NodeManifoldManager<dim>::NodeManifoldManager( plf::colony<Node<dim>>& mesh_node
         // checking the manifold construction data
         const size_t  n_manifold_nodes((*first).first.size());
         // a manifold requires at least two nodes
-        assert( n_manifold_nodes >= 2U );
-        if ( n_manifold_nodes >= 2U ) {  
+        assert( n_manifold_nodes >= 2 );
+        if ( n_manifold_nodes >= 2 ) {
             typename plf::colony<NodeManifold<dim>>::iterator mit =
-              node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, (*first).first, (*first).second ) );
+              node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, (*first).first ) );
+            // applying a consistency check
+            if ( (*first).second != (*mit).Classify() ) {
+                 cout <<"\n\t"<< parse((*first).second) <<" vs "<< parse((*mit).Classify()) << endl;
+                 csmp_error.Note( WARNING, "NodeManifoldManager::constructor:",
+                                 "manifold classification stored in input VSet does not match the new manifolds own diagnostic" );
+              }
             // assigning the new NodeManifold to the nodes it points to
-            for ( auto i{0U}; i<(*mit).Branches(); i++ )
+            for ( uint32_t i{0U}; i<(*mit).Branches(); i++ )
               (*mit).N(i)->Assign( (*mit) );
           }
          first++;
@@ -95,7 +101,6 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
     @param nodes reference to the primary storage of the nodes in the MeshManager
     @param inside pointer to the node that will assumed to be on the INSIDE of the interface that that manifold is part of
     @param outside opposing yet collocated node in the manifold
-    @param manifold_type geometric classifier of the new manifold, default is INTERFACE but may need to be revised if the node is at a model boudary or other.
     @return an iterator to the new manifold stored in a colony in the NodeManifoldManager.
     
     @attention this method does not assign the nodes to the new manifold.; this must be done by calling  Node::Assign( manifold ) after its successful creation
@@ -104,8 +109,7 @@ size_t  NodeManifoldManager<dim>::Manifolds() const
 template<uint32_t dim>
 typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::AddManifold( plf::colony<Node<dim> >& nodes,
                                                                                           Node<dim>* const inside,
-                                                                                          Node<dim>* const outside,
-                                                                                          ManifoldType manifold_type )
+                                                                                          Node<dim>* const outside )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
@@ -121,7 +125,7 @@ typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::Add
     auto outside_it = nodes.get_iterator( outside );
     
     // return node_manifolds_.insert( NodeManifold( (*inside_it), (*outside_it), manifold_type ) );
-    return node_manifolds_.insert( NodeManifold( (*inside_it), (*outside_it), manifold_type ) );
+    return node_manifolds_.insert( NodeManifold( (*inside_it), (*outside_it) ) );
 
  } // end AddManifold
 
@@ -133,9 +137,11 @@ typename plf::colony<NodeManifold<dim> >::iterator NodeManifoldManager<dim>::Add
     succeeds if the two share nodes. Will return true in this case;
     Fixes all node connections.
     
-    @return true if it was possible to merge the manifolds because they did share nodes.
-    
     @param nmf1  if the operation is successful, the enlarged manifold is returned into the first manifold pointer, else both manifolds remain untouched.
+    @param nmf2  if the operation is successful, the enlarged manifold is returned into the first manifold pointer, else both manifolds remain untouched.
+
+   @return true if it was possible to merge the manifolds because they did share nodes.
+    
 */
 template<uint32_t dim>
 bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeManifold<dim>* nmf2 )
@@ -154,12 +160,12 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     // (the set of their node pointers must be smaller than the sum of their branches)
     set<const Node<dim>*>  connected_nodes;
     const auto n_nodes_nmf1{ nmf1->Branches() };
-    for ( auto i{0U}; i<n_nodes_nmf1; ++i ) {
+    for ( uint32_t i{0U}; i<n_nodes_nmf1; ++i ) {
          assert( nmf1->N(i) != nullptr );
          connected_nodes.insert( nmf1->N(i) );
       }
     const auto n_nodes_nmf2{ nmf2->Branches() };
-    for ( auto i{0U}; i<n_nodes_nmf2; ++i ) {
+    for ( uint32_t i{0U}; i<n_nodes_nmf2; ++i ) {
          assert( nmf2->N(i) != nullptr );
          connected_nodes.insert( nmf2->N(i) );
       }
@@ -171,15 +177,15 @@ bool NodeManifoldManager<dim>::MergeManifolds( NodeManifold<dim>* nmf1, NodeMani
     for ( auto i{0U}; i<n_nodes_nmf2; ++i )
       nmf1->Add( nmf2->N(i) );
      
-     // 3. reclassifying the manifold geometry
-     // --------------------------------------
-     nmf1->GeometricClassifier( consistencyCheck( *nmf1, verbose_ ) );
-     
-     // 4. deleting the merged manifold 2
-     // ---------------------------------
-     node_manifolds_.erase( node_manifolds_.get_iterator(nmf2) );
- 
-     return true;
+    // 3. reclassifying the manifold geometry
+    // --------------------------------------
+    // (this gets done when that classification is needed)
+   
+    // 4. deleting the merged manifold 2
+    // ---------------------------------
+    node_manifolds_.erase( node_manifolds_.get_iterator(nmf2) );
+
+    return true;
      
  } // end MergeManifolds
 
@@ -294,7 +300,7 @@ void NodeManifoldManager<dim>::OutputNodeManifoldsToBinary( const char* file_nam
         vector<int8_t>  topo_classifiers;
         topo_classifiers.reserve( records );
         for ( auto& nmf : node_manifolds_ )
-          topo_classifiers.push_back( static_cast<int8_t>(nmf.GeometricClassifier()) );
+          topo_classifiers.push_back( static_cast<int8_t>(nmf.Classify()) );
         binaryFileWrite( fp, topo_classifiers );
       }
 
@@ -395,10 +401,10 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
     // ------------------------------------
     vector<size_t>  manifold_nodes;
     size_t          counter(0U);
-    for ( auto i{0}; i<manifolds; ++i ) {
-         const auto n_branches( nodes_per_manifold[i] );
+    for ( uint32_t i{0}; i<manifolds; ++i ) {
+         const size_t n_branches = nodes_per_manifold[i];
          manifold_nodes.reserve( n_branches );
-         for ( auto j{0U}; j<n_branches; ++j ) {
+         for ( uint32_t j{0U}; j<n_branches; ++j ) {
               assert( nodes_of_manifolds[counter] < mesh_nodes.size() );
               manifold_nodes.push_back( nodes_of_manifolds[counter] );
               counter++;
@@ -406,7 +412,7 @@ string NodeManifoldManager<dim>::InputNodeManifoldsFromBinary( plf::colony<Node<
          sort( manifold_nodes.begin(), manifold_nodes.end() );
          manifold_nodes.erase( unique( manifold_nodes.begin(), manifold_nodes.end() ), manifold_nodes.end() );
          assert( manifold_topology[i] < ManifoldType::SPLIT_BOUNDARY_END );
-         node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, manifold_nodes, manifold_topology[i] ) );
+         node_manifolds_.emplace( NodeManifold<dim>( mesh_nodes, manifold_nodes ) );
       }
     
     return current_sort_variable_;

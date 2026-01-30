@@ -716,7 +716,7 @@ if ( !interfaces_.empty() ) {
    cerr <<"\n\n"<<"\nMeshManager::Initialise: node manifolds initialised in NodeManifoldManager:\n";
    size_t counter{0U};
    for ( auto nit=node_manifold_manager_->ManifoldsBegin(); nit!=node_manifold_manager_->ManifoldsEnd(); ++nit ) {
-        cerr <<"\n\t\t"<< counter++ <<": "<< parse( (*nit).GeometricClassifier() ) <<" ";
+        cerr <<"\n\t\t"<< counter++ <<": "<< parse( (*nit).Classify() ) <<" ";
         for ( auto z{0U}; z<(*nit).Branches(); z++ )
           cerr << (*nit).N(z)->Idx() <<" ";
      }
@@ -1852,8 +1852,11 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
     if ( nptr_inside == nullptr )
       throw csmp::Exception( ERROR, "MeshManager<dim>::Duplicate", "Node pointer is a 'nullptr'.");
 
-    // copying the inside node to create a new node
-    auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary() );
+    // copying the inside node to create a new node turning them both into SplitBoundary nodes
+    if constexpr ( dim == 3 )      nptr_inside->Attribute(INTERIOR_SURFACE);
+    else if constexpr ( dim == 2 ) nptr_inside->Attribute(INTERIOR_LINE);
+    else if constexpr ( dim == 1 ) nptr_inside->Attribute(INTERIOR_POINT);
+    auto nit = AddNodeAt( nptr_inside->Coordinate(), lvars, nptr_inside->AtBoundary(), nptr_inside->Attribute() );
     
     // copying the properties over
     (*nit).CopyPropertyValuesFrom( *nptr_inside );
@@ -1869,12 +1872,13 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
         if ( !node_manifold_manager_ )
            node_manifold_manager_ = new NodeManifoldManager<dim>();
            
-         // a new manifold from the old and the new node using the provided default geometric classifier
-         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit), ManifoldType::SPLIT_BOUNDARY );
+         // create new manifold from the old and the new node using the provided default geometric classifier
+         auto nmf = node_manifold_manager_->AddManifold( nodes_, nptr_inside, &(*nit) );
          // and its nodes are connected to it
          nptr_inside->Assign( (*nmf) );
          (*nit).Assign( (*nmf) );
-      }
+         assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY );
+       }
 
     // working out whether the original classification as an interface was correct
 #ifdef DEBUG
@@ -2167,12 +2171,9 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
 
 
 
-
-
 /**
-   Replaces supplied dim-1 Element objects with InterFace objects, adding the necessary multiplicated nodes, identifying outside elements and flagging regions
-   for rebuild
-   and establishing their connectivity. Since the Face objects are deleted the supplied pointer ranges to them (interior and perimeter) are invalidated
+   Replaces supplied dim-1 Element objects with InterFace objects, adding the necessary multiplicated nodes, identifying outside elements, flagging regions
+   for rebuild,  and establishing their connectivity. Since the Face objects are deleted the supplied pointer ranges to them (interior and perimeter) are invalidated
    by this method.
 
    @param first iterator to the first FaceConstructionData of the supplied dim-1 region
@@ -2192,7 +2193,7 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
    @attention: This method sets TOPO flags PERIMETER_LINE and PERIMETER_POINT
 
 
-   Steps - Creation of interfaces from FaceConstructionData:
+   @section Steps - Creation of interfaces from FaceConstructionData:
 
    1. Loops over FaceConstructionData and duplicates nodes of InnerParent if they are found to Not be within the Perimeter Nodes supplied.
       If nodes are at a perimeter, no duplication occurs. If nodes are already a manifold (intersection), then duplication occurs (even at perimeter).
@@ -2213,13 +2214,13 @@ vector<Face<dim>*>  MeshManager<dim>::ReplaceBoundaryElementsByFaces( const Prop
    7. Finally the node-to-parent element connectivity for the whole mesh is rebuilt.
    8. Likewise, the node-to-parent interface connectivity is also rebuilt, since all interfaces (new and old), now have correct nodes within them.
 
-   Cases:
+   @section Cases
+   
    3D: An X intersection, where the perimeter of split boundary 1 (not split), should be split in the dimension of splitboundary 2.
    Therefore, splitboundary node on INSIDE,OUTSIDE of SB1 is not split, and not manifold.
    However, same node, is classified a manifold by SB2, and is split, with different nodes on INSIDE OUTSIDE of SB2. How to disambiguate?
 
    If split if manifold --> error when we split SB1.
-
 
    @author E.P
    @date 18/8/22
@@ -2294,12 +2295,14 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          // creating the node vector and reverting its order so that it matches the face of the higher dimensional outside element
          for ( const auto& i : inside_elmt->FE()->NodesOfFace( first_copy->InnerElementFace() ) ) {
            Node<dim>* inside_node = inside_elmt->N(i);
-           //If we are at not at perimeter, or if we are at intersection (manifold)
+           //If we are not a at perimeter or if we are at an intersection (manifold)
            bool inside_was_manifold  = inside_node->IsManifold();
-           bool inside_was_perimeter = (inside_node->Attribute() == PERIMETER_LINE ||
-                                        inside_node->Attribute() == PERIMETER_POINT );  //if we hit another regions perimeter (not the region we are splitting)
-           if ( find( perim_first, perim_last, inside_node ) == perim_last && split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ){
-             if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {                // if a matching outside node has not been created yet
+           bool inside_was_perimeter = isPerimeterNode<dim>(inside_node->Attribute());
+           //if we hit another region's perimeter (not the region we are splitting)
+           if ( find( perim_first, perim_last, inside_node ) == perim_last &&
+                split_perimeter_nodes.find(inside_node) == split_perimeter_nodes.end() ) {
+             // if a matching outside node has not been created yet
+             if ( (nit=new_nodes.find( inside_node )) == new_nodes.end() ) {
                   //duplicating outside node if not already duplicated
                   Node<dim>* out_node = Duplicate( inside_node, lvsNode );
                   in_out_nodes.insert( make_pair( inside_node, out_node ));
@@ -2418,7 +2421,7 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
      }
 
 
-     //3.2 For each duplicated node that was on a splitboundaries perimeter (which is not a manifold)
+     //3.2 For each duplicated node that was on a splitboundarie's perimeter (and therefore is not a manifold)
      for (auto& nit : new_perimeter_nodes_without_manifold){
        Node<dim>* perimeter_node = nit.first;
 
@@ -2431,16 +2434,15 @@ vector<InterFace<dim>*>  MeshManager<dim>::ReplaceElementsByInterFaces( const Pr
          //We need a manifold object that has been configured (that hasnt just been created above)
          if (neighbor_node->IsManifold() && neighbor_node->Manifold()->NodeMapSize() != 0 ){
            const uint32_t interfaces = neighbor_node->Manifold()->InterFaces(neighbor_node);
-           assert(interfaces > 0);
+           assert(interfaces != 0);
            for ( uint32_t i{0U}; i<interfaces; ++i ){
              potential_interfaces.insert(neighbor_node->Manifold()->I(neighbor_node, i)); //inserting interface as potentially having perimeter node
            }
          }//found potential interface
        }//end interface search
-       assert(!potential_interfaces.empty()); //This can be the case if all nodes on interface are on the perimeter!! (I.e they are not split)
+       // NOTE: potential_interfaces can be empty if all nodes on interface are on the perimeter!! (I.e they are not split)
 
        //ii) Search all interfaces for perimeter node
-//       bool found_perimter_interface = false;
        for ( auto& ifit : potential_interfaces){
          //search for perimeter node (inside outside nodes match)
          for ( uint32_t n{0U}; n<ifit->FE()->Nodes(); ++n ){
@@ -3102,10 +3104,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
              nit.second->Manifold()->Add( nit.first );
           else {
                // a new manifold is created using the provided default geometric classifier
-               auto nmf = node_manifold_manager_->AddManifold( nodes_,
-                                                               nit.first,
-                                                               nit.second,
-                                                               ManifoldType::SPLIT_BOUNDARY );
+               auto nmf = node_manifold_manager_->AddManifold( nodes_, nit.first, nit.second );
+               assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY );
                // and its nodes are connected to it
                nit.first->Assign( (*nmf) );
                nit.second->Assign( (*nmf) );

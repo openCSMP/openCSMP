@@ -246,10 +246,6 @@ template<uint32_t dim> // input corner nodes only
 std::pair<Element<dim>*,uint32_t>  parentElement( typename std::vector<Node<dim>*>::const_iterator first,
                                                   typename std::vector<Node<dim>*>::const_iterator last );
 
-/// for Node in manifold finds which TOPOTYPE node has, also using the node's  BOX flag and parent element connectivity
-template<uint32_t dim>
-TOPOTYPE checkModelPartThatNodeBelongsTo( const Node<dim>* const );
-
 /// prints Idx of node and boundary flag values of the nodes that this node is connected with
 template<uint32_t dim>
 void printNeighbors( const Node<dim>* const );
