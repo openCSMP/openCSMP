@@ -100,22 +100,37 @@ enum INTERFACE_SIDE : std::int32_t
     MIDDLE  =  0
 };
 
+
+
 /**
-  @note This classification is for NodeManifolds (topologically collocated Nodes) only)!
-  @note Not all of these classifiers apply to manifolds, like endpoint
+    Classification of ManifoldType is about:
+      •	how many independent regions meet at the Manifold
+      •	and whether that meeting is symmetric or partial
+      •	this classification applies to all nodes within Manifold simultaneously (including intervening ones)
+      
+    Since NodeManifolds also support node-centered finite volumes, even a STANDALONE NodeManifold is  physically meaningful.
+    Even if:
+      •	there is no InterFace
+      •	there is no lower-dimensional FE entity
+      •	there is only one branch
+
+This is crucial.
+
+  @note SplitBoundary objects exist only on the inside of models
   @note NodeManifolds exist only at SplitBoundary objects
-  @note SplitBoundary objects exist only inside of models
-  @note since SplitBoundaries are surfaces, this is the highest dimension
-  @note Classification applies to all nodes within Manifold simultaneously (including intervening ones)
+  @attention the perimeter nodes of a SplitBoundary are not necessarily Manifolds; only if they contain lower-dim Region objects or SplitBoundaries cross
+  @note The ManifoldType classification is for topologically collocated Nodes only!
+  @note since SplitBoundaries are surfaces in 3D, surface is their highest dimension
+
 */
 enum class ManifoldType : int8_t {
-                                    STAND_ALONE,                ///< multiplicated point
+                                    STAND_ALONE,                ///<  collocated node set whose parent elements belong to exactly one subdomain each
                                     SPLIT_BOUNDARY,             ///<  2-node manifold along a SplitBoundary (most common)
                                     SPLIT_BOUNDARY_WITH_INTERNAL_MESH,
                                     SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
                                     MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
-                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs or termination of SB against Boundary
-                                    SPLIT_BOUNDARY_END,         ///<  termination against model boundary
+//                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs or termination of SB against Boundary
+                                    SPLIT_BOUNDARY_END,         ///<  termination against model boundary or another SplitBoundary ( T-intersection)
                                 };
 
 /// converts classifiers to strings so that they can be printed

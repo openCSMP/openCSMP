@@ -64,18 +64,23 @@ class NodeManifold {
       Node<dim>* const N( size_t branch ) const  noexcept;
 
       /// Gives size of node interface parent map - should correspond with number of nodes(branches) when configured correctly
+      //   MeshManager::ReplaceElementsByInterFaces
       uint32_t NodeMapSize() const;
       
       ///number of interfaces connected to a node
+      //   MeshManager::ReplaceElementsByInterFaces
       uint32_t InterFaces( Node<dim>* const ) const noexcept;
 
       ///Access of single interface of node
+      //   MeshManager::ReplaceElementsByInterFaces
       InterFace<dim>* I( Node<dim>* const, uint32_t i );
 
-      ///Pair with interface, and corresponding position of node in nodeconnector of interface.
+      ///Pair with interface, and corresponding position of node in nodeconnector of interface
+      // MeshManager::ReplaceElementsByInterFaces
       std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE> >  InterFaceIndex( Node<dim>* const n, uint32_t i );
 
       /// InterFace vector of node
+      // REMOVE-not used
       std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector( Node<dim>* const n );
 
      ///Query -----------------------------------------------------------
@@ -95,6 +100,8 @@ class NodeManifold {
     private:
       manifold branches_;  ///< vector of Node pointers
 
+      // IDEA: Nodes know their parent elements; NodeManifolds know their parent InterFaces
+      // TODO: remove this huge-overhead structure (if needs be, put it as an auxiliary vector inside of MeshManager::ReplaceElementsByInterFaces()
       std::map< Node<dim>*,std::vector<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE> >> >   node_parent_interface_map_;     ///interfaces and index for each node on manifold
 };
 

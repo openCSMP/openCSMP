@@ -4286,7 +4286,7 @@ void VData::InitialiseNodeTopologyIdentifiers()
                    // crossings
                    if ( (*nit).second == ManifoldType::SPLIT_BOUNDARY_CROSSING ||
                         (*nit).second == ManifoldType::MULTI_SB_CROSSING ||
-                        (*nit).second == ManifoldType::SPLIT_BOUNDARY_TERMINATION ) // T-intersection
+                        (*nit).second == ManifoldType::SPLIT_BOUNDARY_END ) // model boundary or T-intersection
                      for ( const auto& n : (*nit).first )
                        BREP_Flag( n, static_cast<int8_t>(INTERIOR_POINT) );
                    // intersection lines (interior lines) already handled

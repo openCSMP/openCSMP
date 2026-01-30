@@ -535,7 +535,7 @@ string parse( ManifoldType topology )
         case ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH: return "SPLIT_BOUNDARY_WITH_INTERNAL_MESH";
         case ManifoldType::SPLIT_BOUNDARY_CROSSING: return "SPLIT_BOUNDARY_CROSSING";
         case ManifoldType::MULTI_SB_CROSSING: return "MULTI_SB_CROSSING";
-        case ManifoldType::SPLIT_BOUNDARY_TERMINATION: return "SPLIT_BOUNDARY_TERMINATION";
+//        case ManifoldType::SPLIT_BOUNDARY_TERMINATION: return "SPLIT_BOUNDARY_TERMINATION";
         case ManifoldType::SPLIT_BOUNDARY_END:  return "SPLIT_BOUNDARY_END";
         //default: return "NOT_CLASSIFIED";
       }

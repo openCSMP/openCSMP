@@ -159,16 +159,8 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
 
         if (c.interior_surface >= 2 &&
             (c.perimeter_line > 0 || c.perimeter_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_TERMINATION;
-
-        /* ------------------------------------------------------------
-           6. Split-boundary end at model boundary
-           ------------------------------------------------------------ */
-
-        if (c.interior_surface >= 1 &&
-            (c.exterior_line > 0 || c.exterior_point > 0 || c.exterior_surface > 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
-
+            
         /* ------------------------------------------------------------
            Fallback
            ------------------------------------------------------------ */
@@ -243,14 +235,6 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
 
         if (c.interior_line >= 2 &&
             (c.perimeter_line > 0 || c.perimeter_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_TERMINATION;
-
-        /* ------------------------------------------------------------
-           6. Split-boundary end at model boundary
-           ------------------------------------------------------------ */
-
-        if (c.interior_line >= 1 &&
-            (c.exterior_line > 0 || c.exterior_point > 0 || c.exterior_surface > 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
 
         /* ------------------------------------------------------------
@@ -596,10 +580,6 @@ template class NodeManifold<3U>;
    
    @test refactored 9/07/2022 after removal of the side information
    
-      @todo use diagnostics like, element types (line, surface, volume)
-      @todo use the material IDs of adjacent elements that share a node manifold
-      @todo use initialiser_list<>  or something to create little comparitor functions that make the comparisons more readable
-      @todo consider the special case of a multiplicated point in 2D which cannot be a splitboundary
 */
 template<uint32_t dim>
 ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
@@ -631,13 +611,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                        }
                     }
                   break;
-                case PERIMETER_POINT: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
+                case EXTERIOR_LINE:
+                case PERIMETER_POINT:
                 case EXTERIOR_POINT: {
                      if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
                           cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
@@ -645,6 +620,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                        }
                     }
                   break;
+                case INTERIOR_SURFACE:
+                case PERIMETER_SURFACE:
                 case INTERIOR_LINE: {
                      if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY ) {
                           cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY'";
@@ -652,45 +629,14 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                        }
                     }
                   break;
-                case PERIMETER_LINE: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_TERMINATION ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_TERMINATION'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
-                case EXTERIOR_LINE: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
-                case INTERIOR_SURFACE: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
-                case PERIMETER_SURFACE: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
-                // a node manifold should not exist here
-                case EXTERIOR_SURFACE: {
-                      csmp_error.Note( ERROR, "consistencyCheck", "there should be no node manifold ton model boundary, resetting." );
-                    }
+                case EXTERIOR_SURFACE:
+                     csmp_error.Note( ERROR, "consistencyCheck", "NodeManifolds cannot contain Nodes classified as EXTERIOR_SURFACE." );
                   break;
                 default:
                   cerr <<"\nconsistencyCheck(NodeManifold): Node TOPOTYPE not resolved."<< endl;
-              }
+                  return nmf.Classify();
+             }
            }
-         // fixing the ManifoldType if necessary
-         return nmf.Classify();
       }
 
     
