@@ -87,7 +87,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-ModelSubDomain<dim,CELL>::~ModelSubDomain()
+ModelSubDomain<dim,CELL>::~ModelSubDomain() noexcept
  {
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called destructor.\n";
     domain_count_--;
@@ -115,7 +115,7 @@ PLACEMENT ModelSubDomain<dim,CELL>::Placement() const
  }
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const
+bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const noexcept
   {
     const PLACEMENT p( pref_.Placement( variableName ) );
     if ( p == NODE || p == ELEMENT )
@@ -128,7 +128,7 @@ bool ModelSubDomain<dim,CELL>::ValidVariable( const char* variableName ) const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDomain& ed )
+ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDomain& ed ) noexcept
  {
      if ( &ed != this ) {
           cell_vec_       = ed.cell_vec_;
@@ -145,7 +145,7 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed )
+ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed ) noexcept
  {
      if ( &ed != this ) {
          cell_vec_       = std::move( ed.cell_vec_ );
@@ -1565,7 +1565,7 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 
   if ( cell_vec_.empty() ) {
         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::CreateNodePointerVector",
-                                  "cannot create 'node_vec_', current cell vector is empty");
+                                "cannot create 'node_vec_', current cell vector is empty");
         return;
      }
 
@@ -5742,7 +5742,7 @@ double ComputeVolume(const csmp::ModelSubDomain<dim, CELL>& subdomain) {
 
 
 /// distinguishes between Region, Boundary and SplitBoundary on the basis of the name string
-PLACEMENT modelSubdomainType( const std::string& subdomain_name )
+PLACEMENT modelSubdomainType( const std::string& subdomain_name ) noexcept
   {
      // 1. method isDiag.. needs upper case
      if ( isDiagnosticBoxBoundaryClassifier(subdomain_name) ) return BOUNDARY;

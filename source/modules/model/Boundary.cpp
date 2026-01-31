@@ -187,14 +187,6 @@ Boundary<dim>::Boundary( const string& boundary_name,
 
 
 
-/**
-Default dtor does not delete faces, even though constructed by Boundary. Need to call DeleteFaces explicitly!
-@todo FIX THIS CONCEPTUAL MISUNDERSTANDING ALL THE WAY THROUGH:  the faces are managed by the MeshManager
-*/
-template<uint32_t dim>
-Boundary<dim>::~Boundary()
-{
-}
 
 template<uint32_t dim>
 Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
@@ -212,7 +204,7 @@ Boundary<dim>& Boundary<dim>::operator=( const Boundary<dim>& ed )
 // LOCAL VARIABLE STORAGE INTERFACE
 
 template<uint32_t dim>
-bool Boundary<dim>::ValidVariable( const char* variableName ) const
+bool Boundary<dim>::ValidVariable( const char* variableName ) const noexcept
   {
     const PLACEMENT p( this->pref_.Placement( variableName ) );
     if ( p == NODE || p == FACE || p == BOUNDARY )

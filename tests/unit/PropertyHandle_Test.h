@@ -16,6 +16,8 @@ class PropertyHandle_Test : public Test {
   
       // difference that may be resolved given that tes numbers range between -3000 and 3000
       explicit PropertyHandle_Test( double tolerance=5.0e-11, bool verbose=false );
+      
+      // delete dynamically allocated model
       ~PropertyHandle_Test();
       
       void run();

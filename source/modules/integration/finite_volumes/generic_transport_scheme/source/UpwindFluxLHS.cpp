@@ -21,7 +21,7 @@ template<uint32_t dim>
 void UpwindFluxLHS<dim>::AccumulateStencil( const Element<dim>& fe, SparseMatrix& mat ) const
 {
     const auto facets(fe.Facets());
-    for (auto i(0); i < facets; ++i)
+    for (uint32_t i(0); i < facets; ++i)
       {
          const auto inside_node(fe.FV()->InsideNode(i));
          const auto outside_node(fe.FV()->OutsideNode(i));

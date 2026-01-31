@@ -11,6 +11,9 @@ using namespace std;
 
 namespace csmp {
 
+/**
+        TODO: add additional test where PropertyHandle operations are restricted to specific ModelSubDomain objects
+ */
 PropertyHandle_Test::PropertyHandle_Test( double tolerance, bool verbose )
     : model( new ANSYS_Model3D("BoxHalfs3D", "PropertyHandle_Test-variables.txt") ),
       TOLERANCE(tolerance),

@@ -66,17 +66,17 @@ class ModelSubDomain {
     ModelSubDomain( const ModelSubDomain& );
     ModelSubDomain( ModelSubDomain&& );
   
-    virtual ~ModelSubDomain();
+    virtual ~ModelSubDomain() noexcept;
     
-    ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& );
-    ModelSubDomain<dim,CELL>&  operator=( ModelSubDomain&& );
+    ModelSubDomain<dim,CELL>&  operator=( const ModelSubDomain& ) noexcept;
+    ModelSubDomain<dim,CELL>&  operator=( ModelSubDomain&& ) noexcept;
 
-    std::string Name() const;
-    void Name( const std::string& );
+    std::string Name() const noexcept;
+    void Name( const std::string& ) noexcept;
 
     /// local variable storage interface
     virtual PLACEMENT Placement() const = 0;
-    virtual bool      ValidVariable( const char* variableName ) const;
+    virtual bool      ValidVariable( const char* variableName ) const noexcept;
 
     /// support of the Visitor pattern
     virtual void Accept( Visitor<dim>& ) = 0;
@@ -103,8 +103,8 @@ class ModelSubDomain {
     void BuildPerimeterFaceVector( int64_t interior_cells );
     
     /// for rebuilding subdomains when nodes or cells changed:  flag up for a rebuild using RebuildSubDomainAfterChangeOfCellVector
-    void ScheduleForRebuild();
-    bool NeedsRebuild() const;
+    void ScheduleForRebuild() noexcept;
+    bool NeedsRebuild() const noexcept;
     
     /// deletes nullptr cells, rebuilds node vector, sorts everything and re-establishes the perimeter face vectors after modifications of cells
     void RebuildSubDomainAfterChangeOfCellVector();
@@ -132,16 +132,16 @@ class ModelSubDomain {
     int32_t DomainIndex() const noexcept;
 
     /// renumbers nodes in domain 0..n-1
-    virtual size_t  RenumberNodes() const;
+    virtual size_t  RenumberNodes() const noexcept;
     
     /// renumbers cells in domain 0..n-1
-    size_t  RenumberCells() const;
+    size_t  RenumberCells() const noexcept;
     
     /// renumber cells and nodes consecutively from 0..n-1
-    void    UpdateMemberIndexes() const;
+    void    UpdateMemberIndexes() const noexcept;
     
     /// output current indices to vector
-    std::vector<size_t>  MemberCellIndexes() const;
+    std::vector<size_t>  MemberCellIndexes() const noexcept;
 
     // ----------------------------------------
     // access
@@ -365,8 +365,11 @@ class ModelSubDomain {
     ModelSubDomain();
 };
 
+
+// NON-MEMBER FUNCTIONS
+
 /// uses subdomain name to distinguish between Region, Boundary and SplitBoundary
-PLACEMENT modelSubdomainType( const std::string& subdomain_name );
+PLACEMENT modelSubdomainType( const std::string& subdomain_name ) noexcept;
 
 /// returns number of nodes that are shared by the two subdomains (matches by pointers)
 template<uint32_t dim,template<uint32_t> class CELL>
@@ -411,27 +414,27 @@ void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& );
 // INLINE FUNCTIONS NOT COVERED BY EXPLICIT TEMPLATE INSTANTIATIONS
 
 template<uint32_t dim, template<uint32_t> class CELL>
-inline void  ModelSubDomain<dim,CELL>::ScheduleForRebuild()
+inline void  ModelSubDomain<dim,CELL>::ScheduleForRebuild() noexcept
  {
     rebuilt_needed_ = true;
  }
 
 template<uint32_t dim, template<uint32_t> class CELL>
-inline bool  ModelSubDomain<dim,CELL>::NeedsRebuild() const
+inline bool  ModelSubDomain<dim,CELL>::NeedsRebuild() const noexcept
  {
     return rebuilt_needed_;
  }
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-inline std::string  ModelSubDomain<dim,CELL>::Name() const
+inline std::string  ModelSubDomain<dim,CELL>::Name() const noexcept
  {
     return subdomain_name_;
  }
 
 // watch out! - this name is the same as the key for the subdomain in the region,boundary,splitboundary map
 template<uint32_t dim, template<uint32_t> class CELL>
-inline void  ModelSubDomain<dim,CELL>::Name( const std::string& name )
+inline void  ModelSubDomain<dim,CELL>::Name( const std::string& name ) noexcept
  {
     subdomain_name_ = name;
  }
@@ -631,7 +634,7 @@ Returns a vector<double> with the ID numbers of the Elements which belong
 to the Region.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-inline std::vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const
+inline std::vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const noexcept
  {
     std::vector<size_t> ids;
     ids.reserve( cell_vec_.size() );
@@ -645,7 +648,7 @@ inline std::vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const
 /** Renumbers nodes from 0 to n-1.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-inline size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
+inline size_t ModelSubDomain<dim,CELL>::RenumberNodes() const noexcept
  {
     size_t  counter(0U);
 
@@ -659,7 +662,7 @@ inline size_t ModelSubDomain<dim,CELL>::RenumberNodes() const
 /** Renumbers cells from 0 to n-1.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-inline size_t ModelSubDomain<dim,CELL>::RenumberCells() const
+inline size_t ModelSubDomain<dim,CELL>::RenumberCells() const noexcept
  {
     size_t counter(0U);
 
@@ -675,7 +678,7 @@ inline size_t ModelSubDomain<dim,CELL>::RenumberCells() const
 /** Renumbers cells and nodes from 0 to n-1.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-inline void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const
+inline void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const noexcept
  {
     RenumberNodes();
     RenumberCells();

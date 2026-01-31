@@ -184,7 +184,7 @@ LocalVariables  SplitBoundary<dim>::InterFaceVariables() const
 
 // LOCAL VARIABLE STORAGE INTERFACE
 template<uint32_t dim>
-bool SplitBoundary<dim>::ValidVariable( const char* variableName ) const
+bool SplitBoundary<dim>::ValidVariable( const char* variableName ) const noexcept
 {
   const PLACEMENT p( this->pref_.Placement( variableName ) );
   if ( p == NODE || p == INTER_FACE || p == SPLIT_BOUNDARY )
@@ -540,9 +540,12 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
 
 
 
-    /// renumbers nodes in SplitBoundary domain 0..n-1 starting with the inside
+/**
+    Renumbers nodes in SplitBoundary domain 0..n-1 consecutively starting with the inside including perimeter.
+    Then the outside nodes are renumbered
+ */
 template<uint32_t dim>
-size_t SplitBoundary<dim>::RenumberNodes() const
+size_t SplitBoundary<dim>::RenumberNodes() const noexcept
   {
      auto inside_node_ptrs  = this->InsideNodes();
      auto outside_node_ptrs = this->OutsideNodes();

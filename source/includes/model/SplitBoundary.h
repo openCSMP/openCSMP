@@ -113,8 +113,8 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     virtual void Accept( Visitor<dim>& ) override;
     
     /// methods required for the LocalVariableStorage
-    virtual PLACEMENT Placement() const override { return SPLIT_BOUNDARY; }
-    virtual bool ValidVariable( const char* variableName ) const override;
+    virtual PLACEMENT Placement() const noexcept override final { return SPLIT_BOUNDARY; }
+    virtual bool ValidVariable( const char* variableName ) const noexcept override final;
 
 
     // --------------------------------------------------
@@ -134,7 +134,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     // ----------------------------------------
     
     /// renumbers nodes in SplitBoundary domain 0..n-1 starting with the inside
-    size_t  RenumberNodes() const override final;
+    size_t RenumberNodes() const noexcept override final;
 
     /// generates a vector of NodeManifold pointers that can be iterated over
     std::vector<NodeManifold<dim>*>  NodeManifolds() const;

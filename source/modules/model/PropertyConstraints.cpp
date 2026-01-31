@@ -163,7 +163,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
               case NODE:
                    if ( (*it).first.type == SCALAR ) {
                         ScalarVariable sc;
-                        for ( auto i{0U}; i<e->Nodes(); i++ ) {
+                        for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
                             e->N(i)->Read( (*it).first, sc );
                             if ( (*it).second.first  > sc() ||
                                  (*it).second.second < sc() ) {
@@ -174,7 +174,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                      }
                    else if ( (*it).first.type == VECTOR ) {
                         VectorVariable<dim> vc;
-                        for ( auto i{0U}; i<e->Nodes(); i++ ) {
+                        for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
                             e->N(i)->Read( (*it).first, vc );
                             if ( vector_length_check ) {
                               if ( (*it).second.first  > vc.Length() ||
@@ -184,7 +184,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                                  }
                               }
                             else
-                            for ( auto j{0U}; j<dim; j++ )
+                            for ( uint32_t j{0U}; j<dim; j++ )
                               if ( (*it).second.first  > vc(j) ||
                                    (*it).second.second < vc(j) ) {
                                     failed_upon = (*it).first;
@@ -196,8 +196,8 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                         TensorVariable<dim> ts;
                         for ( auto i{0U}; i<e->Nodes(); i++ ) {
                             e->N(i)->Read( (*it).first, ts );
-                            for ( auto j{0U}; j<dim; j++ )
-                              for ( auto k=0; k<dim; k++ )
+                            for ( uint32_t j{0U}; j<dim; j++ )
+                              for ( uint32_t k=0; k<dim; k++ )
                                 if ( (*it).second.first  > ts(j,k) ||
                                      (*it).second.second < ts(j,k) ) {
                                     failed_upon = (*it).first;
@@ -209,7 +209,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
               case ELEMENT_INTEGRATION_POINT:
                    if ( (*it).first.type == SCALAR ) {
                         ScalarVariable sc;
-                        for ( auto i{0U}; i<e->IntegrationPoints(); i++ ) {
+                        for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ ) {
                             e->Read( i, (*it).first, sc );
                             if ( (*it).second.first  > sc() ||
                                  (*it).second.second < sc() ) {
@@ -220,7 +220,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                      }
                    else if ( (*it).first.type == VECTOR ) {
                         VectorVariable<dim> vc;
-                        for ( auto i{0U}; i<e->IntegrationPoints(); i++ ) {
+                        for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ ) {
                             e->Read( i, (*it).first, vc );
                             if ( vector_length_check ) {
                               if ( (*it).second.first  > vc.Length() ||
@@ -230,7 +230,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                                  }
                               }
                             else
-                            for ( auto j{0U}; j<dim; j++ )
+                            for ( uint32_t j{0U}; j<dim; j++ )
                               if ( (*it).second.first  > vc(j) ||
                                    (*it).second.second < vc(j) ) {
                                     failed_upon = (*it).first;
@@ -242,8 +242,8 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                         TensorVariable<dim> ts;
                         for ( auto i{0U}; i<e->IntegrationPoints(); i++ ) {
                             e->Read( i, (*it).first, ts );
-                            for ( auto j{0U}; j<dim; j++ )
-                              for ( auto k=0; k<dim; k++ )
+                            for ( uint32_t j{0U}; j<dim; j++ )
+                              for ( uint32_t k=0; k<dim; k++ )
                                 if ( (*it).second.first  > ts(j,k) ||
                                      (*it).second.second < ts(j,k) ) {
                                     failed_upon = (*it).first;
@@ -273,7 +273,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                              }
                           }
                         else
-                        for ( auto j{0U}; j<dim; j++ )
+                        for ( uint32_t j{0U}; j<dim; j++ )
                           if ( (*it).second.first  > vc(j) ||
                                (*it).second.second < vc(j) ) {
                                 failed_upon = (*it).first;
@@ -283,8 +283,8 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                    else if ( (*it).first.type == TENSOR ) {
                         TensorVariable<dim> ts;
                         e->Read( (*it).first, ts );
-                        for ( auto j{0U}; j<dim; j++ )
-                          for ( auto k=0; k<dim; k++ )
+                        for ( uint32_t j{0U}; j<dim; j++ )
+                          for ( uint32_t k=0; k<dim; k++ )
                             if ( (*it).second.first  > ts(j,k) ||
                                  (*it).second.second < ts(j,k) ) {
                                  failed_upon = (*it).first;

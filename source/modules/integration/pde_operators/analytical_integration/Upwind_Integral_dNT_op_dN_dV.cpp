@@ -108,8 +108,8 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim
     DNT *= DN;
     
     // calculate upwinding coefficients and multiply them with operand matrix   
-    for (auto i = 0; i < e.Nodes(); ++i) {
-    	for (auto j = 0; j < e.Nodes(); ++j) {
+    for (uint32_t i = 0; i < e.Nodes(); ++i) {
+    	for (uint32_t j = 0; j < e.Nodes(); ++j) {
     		if (i != j) {
     			const double decision = DNT(i, j)*(el_tvar[j]() - el_tvar[i]());
     			if      (decision > 0) DNT(i, j) *= el_uvar[i]();
@@ -120,7 +120,7 @@ void Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim
     	}
     }
     
-    for (auto i = 0; i < e.Nodes(); ++i) {
+    for (uint32_t i = 0; i < e.Nodes(); ++i) {
     	DNT(i, i) = -DNT.RowSum(i);
     }
     

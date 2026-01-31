@@ -791,12 +791,12 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyInc
          // 1. the advected property value at the current node is assigned to min-max pair
          (*sit).first = (*sit).second = (*nit)->Read( this->adv1_key_ );
 
-         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  uint32_t p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i{0U};i<current_el->Nodes();i++){
+               for(uint32_t i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -823,12 +823,12 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::MinMaxAdvectedPropertyExc
          (*sit).first =std::numeric_limits<double>::max();
          (*sit).second = std::numeric_limits<double>::min();
 
-         for(  auto p = 0; p< (*nit)->Parents() ; p++ ){
+         for(  uint32_t p = 0; p< (*nit)->Parents() ; p++ ){
                // get the global parent id:
                global_neighb_el_id = (*nit)->Parent( p)->Idx();
                // get the corresponding element:
                Element<dim>* current_el = this->gref_.E( global_neighb_el_id );
-               for(auto i{0U};i<current_el->Nodes();i++){
+               for(uint32_t i{0U};i<current_el->Nodes();i++){
                    //ids[i]=current_el.N(i)->Idx();
                    if(current_n_id!=current_el->N(i)->Idx()){
                        const double adv_var(current_el->N(i)->Read( this->adv1_key_ ));
@@ -1243,7 +1243,7 @@ void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation1st
 
 
 template<uint32_t dim, template<uint32_t> class STP>
-void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>& sg,
+void TwoPhaseImplicitNodeCenteredFVTransport<dim,STP>::SolveTransportEquation2ndOrderInSpace_NonlinearNewtonRaphson( Model<dim>&,
                                                                                                                      TwoPhaseModel<dim>& relperm,
                                                                                                                      double time_increment )
  {

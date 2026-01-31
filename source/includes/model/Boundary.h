@@ -81,13 +81,13 @@ class Boundary : public ModelSubDomain<dim, Face>,
     Boundary( Boundary&& );
 
     /// gets MeshManager to delete the boundary including Faces
-    virtual ~Boundary();
+    ~Boundary() override final = default;
 
     Boundary<dim>&  operator=( const Boundary& );
 
     /// methods required for the LocalVariableStorage
-    virtual PLACEMENT Placement() const override { return BOUNDARY; }
-    virtual bool      ValidVariable( const char* variableName ) const override;
+    PLACEMENT Placement() const noexcept override final { return BOUNDARY; }
+    bool      ValidVariable( const char* variableName ) const noexcept override final;
 
     /// RECONSTRUCTOR of boundary from index data stored in SubDomainInfo (call only prior to deleting anythin from colonies)
     Boundary( const PropertyDatabase<dim>&,

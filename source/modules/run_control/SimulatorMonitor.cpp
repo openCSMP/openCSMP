@@ -245,7 +245,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
         }
 
         if (found){ // found model time data.
-            size_t mtime_pos = mt - columnheaders.begin();
+            size_t mtime_pos = static_cast<size_t>(mt - columnheaders.begin());
             std::getline( ifs, text_line  );
             // now read the data associated to each column header
             while (!ifs.eof() && (text_line[0] != '#')){
@@ -283,7 +283,7 @@ void SimulatorMonitor<dim>::ReadOldMonitoringData(string file_name ){
 
             if (first_call){
                 values_.resize(data.size());
-                for (auto i = 0 ; i < values_.size();i++){
+                for ( size_t i = 0; i < values_.size(); i++){
                     values_[i].resize(values_column_headers_.size());
                     fill(values_[i].begin(), values_[i].end(),0.0);
                 }
@@ -319,7 +319,7 @@ template<uint32_t dim>
 string SimulatorMonitor<dim>::UScoreForSpace(string text)
 {
     string property_column_header_entry=text;
-    for(int i = 0; i < property_column_header_entry.length(); i++)
+    for( size_t i = 0; i < property_column_header_entry.length(); i++)
     {
         if( isspace(property_column_header_entry[i]) )
             property_column_header_entry[i] = '_';
@@ -334,7 +334,7 @@ void SimulatorMonitor<dim>::InsertValueHeader(string property_regionname, vector
 
     vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),property_column_header_entry);
     if (ith==values_column_headers_.end() || property_column_header_entry=="model_time"){
-        size_t j = ith-values_column_headers_.begin();
+        size_t j = static_cast<size_t>(ith-values_column_headers_.begin());
         indexes.push_back(j);
         values_column_headers_.push_back(property_column_header_entry);
         if (this->Verbose()) cout<<" inserting value header : "<<property_column_header_entry<<endl;
@@ -356,13 +356,11 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
     double  integral;
     
     // for all properties which shall be integrated over the groups
-    for ( typename list<string>::const_iterator
-          lit=integrated_property_names_.begin(); lit!=integrated_property_names_.end(); lit++ )
+    for ( auto lit=integrated_property_names_.begin(); lit!=integrated_property_names_.end(); lit++ )
     {
         string read_value_key;
         // for all unique regions in the model
-        for ( typename map<string,Region<dim> >::const_iterator
-              git=mref_.UniqueRegionsBegin(); git!=mref_.UniqueRegionsEnd(); git++ )
+        for ( auto git=mref_.UniqueRegionsBegin(); git!=mref_.UniqueRegionsEnd(); git++ )
         {
             string regionname=(*git).first;
             if ( include_thickness_attribute_ ) {
@@ -383,7 +381,7 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
                 read_value_key=UScoreForSpace(regionname+"_BULK_DIM");
                 vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
                 if (ith!=values_column_headers_.end()){
-                    size_t j = ith - values_column_headers_.begin();
+                    size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                     integral /= rowdata[j];
                 }
                 else { // slower, but gets the job done
@@ -394,7 +392,7 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_INT");
             vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j]=integral;
             }
         }
@@ -423,7 +421,7 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
                 read_value_key=UScoreForSpace(regionname+"_BULK_DIM");
                 vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
                 if (ith!=values_column_headers_.end()){
-                    size_t j = ith - values_column_headers_.begin();
+                    size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                     integral /= rowdata[j];
                 }
                 else { // slower, but gets the job done
@@ -434,7 +432,7 @@ void SimulatorMonitor<dim>::ScalarPropertyIntegrals(vector<double>& rowdata)
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_INT");
             vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j]=integral;
             }
         }
@@ -459,13 +457,13 @@ void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_RMIN");
             vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = rmin;
             }
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_RMAX");
             ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = rmax;
             }
         }
@@ -478,13 +476,13 @@ void SimulatorMonitor<dim>::ScalarPropertyRanges( vector<double>& rowdata)
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_RMIN");
             vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = rmin;
             }
             read_value_key=UScoreForSpace((*lit)+"_"+regionname+"_RMAX");
             ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = rmax;
             }
         }
@@ -503,7 +501,7 @@ void SimulatorMonitor<dim>::ScalarPropertyValues(vector<double>& rowdata)
 
         vector<string>::iterator ith=find(values_column_headers_.begin(),values_column_headers_.end(),read_value_key);
         if (ith!=values_column_headers_.end()){
-            size_t j = ith - values_column_headers_.begin();
+            size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
             double value=mref_.Read(mref_.Database().StorageKey((*lit).c_str()));
             rowdata[j]=value;
         }
@@ -539,7 +537,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& row
         for (auto vit = read_value_keys.begin() ; vit != read_value_keys.end() ; vit++){
             auto ith=find(values_column_headers_.begin(),values_column_headers_.end(),vit->first);
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = vit->second;
             }
         }
@@ -570,7 +568,7 @@ void SimulatorMonitor<dim>::CalculateDimensionsAndPerimeters(vector<double>& row
             auto ith=find(values_column_headers_.begin(),values_column_headers_.end(),vit->first);
 
             if (ith!=values_column_headers_.end()){
-                size_t j = ith - values_column_headers_.begin();
+                size_t j = static_cast<size_t>(ith - values_column_headers_.begin());
                 rowdata[j] = vit->second;
             }
         }
@@ -583,7 +581,7 @@ void SimulatorMonitor<dim>::Monitor()
 {
     if (first_monitor_call_){
         rowdata_.resize(values_column_headers_.size());
-        for (auto i = 0 ; i< rowdata_.size();i++)
+        for (size_t i = 0 ; i< rowdata_.size();i++)
             rowdata_[i]=0.0;
         this->CalculateDimensionsAndPerimeters(rowdata_); // for now, volumes and areas are calculated only once.
     }
@@ -605,7 +603,7 @@ void SimulatorMonitor<dim>::ReadModelTime(vector<double>& rowdata)
     double time = mref_.Read(mref_.Database().StorageKey("model time"));
 
     current_requested_monitor_time_=time;
-    for (auto i = 0 ; i < model_time_indexes_.size();i++) {
+    for (size_t i = 0 ; i < model_time_indexes_.size();i++) {
         rowdata[model_time_indexes_[i]]=time;
     }
     if (first_monitor_call_) last_requested_monitor_time_=time;
@@ -652,7 +650,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_integrals<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (auto i = 0 ; i < values_.size();i++){
+            for  (size_t i = 0 ; i < values_.size();i++){
                 for (auto hit = int_header_indexes_.begin();hit != int_header_indexes_.end();hit++)
                     ofs_integrals<<values_[i][*hit]<<"\t";
                 ofs_integrals<<endl;
@@ -668,7 +666,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_ranges<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (auto i = 0 ; i < values_.size();i++){
+            for  (size_t i = 0 ; i < values_.size();i++){
                 for (auto hit = range_header_indexes_.begin();hit != range_header_indexes_.end();hit++)
                     ofs_ranges<<values_[i][*hit]<<"\t";
                 ofs_ranges<<endl;
@@ -685,7 +683,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_single_value<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (auto i = 0 ; i < values_.size();i++){
+            for  (size_t i = 0 ; i < values_.size();i++){
                 for (auto hit = single_value_header_indexes_.begin();hit != single_value_header_indexes_.end();hit++)
                     ofs_single_value<<values_[i][*hit]<<"\t";
 
@@ -703,7 +701,7 @@ void SimulatorMonitor<dim>::Out()
             }
             ofs_areas_volumes<<endl;
             // now write in any possible read-in data from previous runs. These are values loaded into the database during construction of this class!
-            for  (auto i = 0 ; i < values_.size();i++){
+            for  (size_t i = 0 ; i < values_.size();i++){
                 for (auto hit = dimensional_header_indexes_.begin();hit != dimensional_header_indexes_.end();hit++)
                     ofs_areas_volumes<<values_[i][*hit]<<"\t";
                 ofs_areas_volumes<<endl;

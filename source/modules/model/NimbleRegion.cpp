@@ -391,7 +391,7 @@ size_t NimbleRegion<dim>::Cells() const
     Consecutive numbering, interior nodes first, perimeter nodes second.
 */
 template<uint32_t dim>
-size_t NimbleRegion<dim>::RenumberNodes() const
+size_t NimbleRegion<dim>::RenumberNodes() const noexcept
  {
      size_t node_number(0U);
      for ( auto& nit : this->node_vec_ )

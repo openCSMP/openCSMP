@@ -342,8 +342,8 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
           _test( ctrFaIps == 6 );
           
           size_t ctrSeIps(0);
-          for( auto s(0); s < ePtr->Sectors(); ++s )
-            for( auto sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
+          for( uint32_t s(0); s < ePtr->Sectors(); ++s )
+            for( uint32_t sip(0); sip < ePtr->IntegrationPointsPerSector(); ++sip )
             {
               ePtr->Read( s, sip, seipTensorKey, tvPlain );
               _test( tvPlain == tv );
@@ -363,7 +363,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
         ctrSeIps = 0;
 
         for( uint32_t f(0); f < ePtr->Facets(); ++f )
-          for( auto fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
+          for( uint32_t fip(0); fip < ePtr->IntegrationPointsPerFacet(); ++fip )
           {
             ePtr->Read( f, fip, faipVectorKey, vvPlain );
             _test( vvPlain == vv );

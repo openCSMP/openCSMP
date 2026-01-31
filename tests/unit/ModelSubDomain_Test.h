@@ -108,18 +108,175 @@ namespace csmp {
 */
 class ModelSubDomain_Test : public Test {
   public:
-    virtual void run();
+    void run() override final;
 
+    /// compares node locations and connectivity (is used also in other tests)
+    template<uint32_t dim,template<uint32_t> class simplicial_complex>
+    bool CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>&,
+                                 const ModelSubDomain<dim,simplicial_complex>&,
+                                 bool verbose );
+  private:
+
+    // LEGACY TESTS (P.L. 2011)
+    /*
+        - includes IdentifyPerimeter()
+    */
     /// tests method that creates neighbor connectivity inside of CSMP
     bool Test_EstablishNeighborConnectivity();
     
     void Test_RebuildCellAndNodeVectors();
 
-    /// compares node locations and connectivity
-    template<uint32_t dim,template<uint32_t> class simplicial_complex>
-    bool CompareModelSubdomains( const ModelSubDomain<dim,simplicial_complex>&,
-                                 const ModelSubDomain<dim,simplicial_complex>&,
-                                 bool verbose );
+
+
+    // TESTING SPECIFIC MODELSUBDOMAIN FUNCTIONALITY
+
+    /**
+    std::string Name() const noexcept;
+    void Name( const std::string& ) noexcept;
+    
+    void ScheduleForRebuild() noexcept;
+    bool NeedsRebuild() const noexcept;
+
+    void CreateNodePointerVector();
+    void CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells );
+    void SortVectors( size_t interior_cells, size_t interior_nodes );
+
+    int32_t DomainIndex() const noexcept;
+    virtual size_t  RenumberNodes() const noexcept;
+    size_t  RenumberCells() const noexcept;
+    void    UpdateMemberIndexes() const noexcept;
+    std::vector<size_t>  MemberCellIndexes() const noexcept;
+    typename std::vector<CELL<dim>*>::const_iterator  PerimeterCellsBegin() const noexcept;
+    typename std::vector<CELL<dim>*>::const_iterator  CellsEnd() const noexcept;
+
+    bool IsUnique()
+    void IsUnique( bool unique_domain )
+    bool IsContiguous() const;
+    std::pair<CELL_SHAPE,bool>  SingleCellShapeDomain() const;
+    */
+    void Test_Basics();
+    
+    /**
+    void UpdateTopoTypeNodeFlags();
+    void BuildPerimeterFaceVector( int64_t interior_cells );
+    void RebuildSubDomainAfterChangeOfCellVector();
+    void RebuildSubDomainAfterChangeOfNodeVector();
+
+    void UpdateCellMembershipApplyingConstraints( typename std::vector<CELL<dim>*>::const_iterator master_domain_start,
+                                                  typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
+                                                  const PropertyConstraints& );
+    size_t RebuildCellAndPerimeterFaceVector();
+    size_t RebuildNodeVector();
+    */
+    void Test_SubDomainConstructionMethods();
+
+
+    /**
+    bool              Empty() const noexcept;
+    size_t            Nodes() const noexcept;
+    size_t            InteriorNodes() const noexcept;
+    size_t            PerimeterNodes() const noexcept;
+    size_t            IntegrationPoints() const noexcept;
+    size_t            SectorIntegrationPoints() const noexcept;
+    size_t            FacetIntegrationPoints() const noexcept;
+    size_t            Cells() const noexcept;
+    size_t            InteriorCells() const noexcept;
+    size_t            PerimeterCells() const noexcept;
+    bool              Contains( const CELL<dim>* const ) const noexcept;
+    bool              Contains( const Node<dim>* const ) const noexcept;
+    bool              IsPerimeterNode( const csmp::Node<dim>* const ) const noexcept;
+    bool              IsPerimeterCell( const CELL<dim>* const ) const noexcept;
+    uint32_t          PerimeterFaces( size_t cell_idx ) const;
+    uint32_t          PerimeterFace( size_t cell_idx, uint32_t face ) const;
+    bool              IsPerimeterNode( const size_t nidx ) const;
+    bool              IsPerimeterCell( const size_t eidx ) const;
+    size_t            SharedPerimeterNodes( start, end )
+
+    csmp::Node<dim>*  N( size_t n ) const noexcept;
+    CELL<dim>*        E( size_t n ) const noexcept;
+
+    */
+    void Test_SubDomainDiagnostics();
+
+    /**
+    std::pair<int32_t,int32_t>  SpatialDimensions() const;
+    Point<dim> Centroid() const;
+    Point<dim> CenterOfGravity( const csmp::Index& rho_key ) const;
+    void  MinMaxCoordinates( Point<dim>& xyz_min, Point<dim>& xyz_max ) const;
+    void AssignNodeCoordinatesTo( const char* vector_prop );
+    void AssignNodeCoordinatesTo( const char* scalar_prop, char coord );
+    void AssignCellCharacteristicsTo( const char* characteristic, const char* var );
+    void NodeAttributesToCSV();
+    */
+    void Test_GeometricOperations();
+
+    /**
+    void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
+    void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
+    void ChangePropertyStatus( const char* property, VARIABLE_FLAG new_status_of_scalar, SUBDOMAIN_PART=COMPLETE );
+    void ChangePropertyStatusWhere( const char* property,
+                                    VARIABLE_FLAG new_status_of_scalar,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    void ChangePropertyStatus( const char* property,
+                               const std::vector<VARIABLE_FLAG>& new_status,
+                               SUBDOMAIN_PART=COMPLETE );
+
+     void ChangePropertyStatusWhere( const char* property,
+                                    const std::vector<VARIABLE_FLAG>& new_status,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    void ChangePropertyStatus( const char* property,
+                               uint32_t component,
+                               VARIABLE_FLAG new_status,
+                               SUBDOMAIN_PART=COMPLETE );
+
+    void ChangePropertyStatusWhere( const char* property,
+                                    uint32_t component,
+                                    VARIABLE_FLAG new_status,
+                                    double min_value_to_change,
+                                    double max_value_to_change );
+
+    VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , uint32_t i=0 ) const;
+    void MinMaxOf( const char* property,   double& gmin, double& gmax ) const;
+    void MinMaxOf( const csmp::Index&,     double& gmin, double& gmax ) const;
+    void   CopyReplace( const char* from, const char* to );
+    */
+    void Test_PropertyManipulations();
+
+    /**
+    double Average( const char* property ) const;
+    Point<dim> AverageUnitNormal() const;
+    void InterpolateNodeToCellProperty( const char* nprop, const char* eprop );
+    void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* eprop );
+    void InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop );
+    void ExtrapolateCellToIntegrationPointProperty( const char* eprop, const char* cprop );
+    void ExtrapolateCellToFacetIntegrationPointProperty( const char* eprop, const char* fipprop );
+    void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance=true );
+    void ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop );
+    bool   CopyGradientOfProperty_A_To_B( const char* node_prop, const char* cell_prop );
+    */
+    void Test_PropertyTransfer();
+    
+    /**
+      PLACEMENT modelSubdomainType( const std::string& subdomain_name ) noexcept;
+      size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
+      size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
+      size_t  sharedPerimeterNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>&, std::vector<Node<dim>*>& );
+      size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const ModelSubDomain<dim,CELL>& subdomain2,
+                                    std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
+                                    
+      std::set<TOPOTYPE> nodeTopologyFlags( typename std::vector<Node<dim>*>::const_iterator first,
+                                            typename std::vector<Node<dim>*>::const_iterator last );
+                                    
+      std::set<TOPOTYPE> nodeTopologyFlags( const SplitBoundary<dim>& );
+
+      void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& ); // tested elsewhere
+    */
+    void Test_NonMemberFunctions();
+
   private:
     const bool verbose_ = false;
 };

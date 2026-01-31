@@ -138,10 +138,8 @@ UpwindControlVisitor<dim>::~UpwindControlVisitor()
 
 /** visit function for region */
 template<uint32_t dim>
-void UpwindControlVisitor<dim>::Visit(Region<dim>* n)
+void UpwindControlVisitor<dim>::Visit(Region<dim>* )
 {
-
-
 }
 
 /** visit function for elements */
@@ -154,7 +152,7 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
     n->Read( KgradP_key, KgradP );
     n->NodePropertyVector( sh_key , sh );
 
-    for (auto i = 0; i < phases; i++)
+    for ( size_t i = 0; i < phases; i++)
       {
          n->NodePropertyVector( rho_key[i], rho[i] );
          n->NodePropertyVector( relperm_visc_key[i], relperm_visc[i] );
@@ -164,7 +162,7 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
     if (with_velocity)
       {
       n->Read( phi_key, phi );
-      for (auto i = 0; i < phases; i++)
+      for (size_t i = 0; i < phases; i++)
         {
          cfl[i] = largest_time_step;      
          facet_pore_velocity[i].resize(facets);
@@ -173,9 +171,9 @@ void UpwindControlVisitor<dim>::Visit(Element<dim>* n)
 
      DetermineUpwindNodes( *n );
 
-	for (auto p = 0; p < phases; ++p) {
+	for (size_t p = 0; p < phases; ++p) {
      uc_scal() = 0;
-     for ( auto i{0}; i<n->FV()->Facets(); i++ )
+     for ( uint32_t i{0}; i<n->FV()->Facets(); i++ )
        {
         n->FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
         uc_scal() += Upwinder[p][n->Idx()](inside_node_,outside_node_);
@@ -220,7 +218,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
     sat = 0.0;
 
     // loop over facets of the element
-    for ( auto i{0}; i<facets; i++ )
+    for ( uint32_t i{0}; i<facets; i++ )
        {
            facet_cfl = true;
            e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
@@ -427,7 +425,7 @@ void UpwindControlVisitor<dim>::Flipping(bool flip)
 template<uint32_t dim>
 DenseMatrix<DM_MIN>  UpwindControlVisitor<dim>::UpwindMatrix(csmp::Index rho_index, size_t eidx)
     {
-      for (auto i = 0; i < rho_key.size(); i++)
+      for ( size_t i = 0; i < rho_key.size(); i++)
          if (rho_index == rho_key[i])
             return Upwinder[i][eidx];
       
@@ -441,7 +439,7 @@ DenseMatrix<DM_MIN>  UpwindControlVisitor<dim>::UpwindMatrix(csmp::Index rho_ind
 template<uint32_t dim>
 std::vector<DenseMatrix<DM_MIN> >& UpwindControlVisitor<dim>::UpwindMatrices(csmp::Index rho_index)
     {
-      for (auto i = 0; i < rho_key.size(); i++)
+      for ( size_t i = 0; i < rho_key.size(); i++)
          if (rho_index == rho_key[i])
             return Upwinder[i];
             

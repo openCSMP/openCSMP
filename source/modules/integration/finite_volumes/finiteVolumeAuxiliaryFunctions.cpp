@@ -224,7 +224,7 @@ void limitProperty_LSMGRAD( const Element<dim>& e,
 
     // transform local c's to global c's
     for ( uint32_t m = 0; m<e.Nodes(); m++)
-        for (auto n = 0; n<dim; n++){
+        for ( uint32_t n = 0; n<dim; n++){
           global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
 
@@ -298,8 +298,8 @@ double limitProperty_LSMGRAD( const Element<dim>& e,
     global_c.assign( dim, 0.0);
 
     // transform local c's to global c's
-    for (auto m = 0; m<e.Nodes(); m++)
-        for (auto n = 0; n<dim; n++){
+    for ( uint32_t m = 0; m<e.Nodes(); m++)
+        for (uint32_t n = 0; n<dim; n++){
           global_c[n] += e.FE()->XY(m,n)*temp[m];
     }
 
@@ -413,11 +413,11 @@ double fluxThroughFiniteVolume( Node<dim> const& node, Index const& velocityKey 
   VectorVariable<dim>  vel;
 
   // for all those sectors of the FE_FV-stencils which contribute to finite volume
-  for ( auto t(0); t < node.Parents(); ++t ) {
+  for ( uint32_t t(0); t < node.Parents(); ++t ) {
     const auto nid(node.ParentNodeNumber(t));
     double  flux(0.);
     // for all facets surrounding the finite volume at the boundary
-    for ( auto i(0); i < node.Parent(t)->FV()->FacetsPerSector(nid); ++i )
+    for ( uint32_t i(0); i < node.Parent(t)->FV()->FacetsPerSector(nid); ++i )
     {
       auto iFacet( node.Parent(t)->FV()->FacetSurroundingSector(nid,i) );
       // fluxes are determined for the sectors inside and outside of the advection region

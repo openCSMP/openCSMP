@@ -198,7 +198,7 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 
 // LOCAL VARIABLE STORAGE INTERFACE
 template<uint32_t dim>
-bool Region<dim>::ValidVariable( const char* variableName ) const
+bool Region<dim>::ValidVariable( const char* variableName ) const noexcept
 {
   const PLACEMENT p( this->pref_.Placement( variableName ) );
   if ( p == NODE || p == ELEMENT || p == REGION )

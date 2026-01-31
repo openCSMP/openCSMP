@@ -143,7 +143,7 @@ void pointPropertyMapping( const string& model_name )
 static void AssignToNodes( const csmp::Index& prop_key, Element<3U>* elmt, ScalarVariable sp )
 {
   const size_t nodes(elmt->Nodes());
-  for (auto i = 0; i < nodes; ++i )
+  for (uint32_t i = 0; i < nodes; ++i )
     elmt->N(i)->Store(prop_key,sp);
 }
 
@@ -152,7 +152,7 @@ static void AssignToNodes( const csmp::Index& prop_key, Element<3U>* elmt, Scala
 static void MakeNodesDirichlet( const csmp::Index& prop_key, Element<3U>* elmt )
 {
   const size_t nodes(elmt->Nodes());
-  for(auto i = 0;i < nodes;++i)
+  for(uint32_t i = 0;i < nodes;++i)
     elmt->N(i)->Status(prop_key,DIRICH);
 }
 
@@ -162,7 +162,7 @@ static pair<double,size_t> VectorSum(const vector<double>& vector){
   double sum = 0;
   size_t length = 0;
   const size_t vec_size(vector.size());
-  for(auto i = 0;i<vec_size;++i){
+  for(size_t i = 0;i<vec_size;++i){
     if(vector[i]!=ZERO_DATA_VALUE){
       sum += vector[i];
       length++;
@@ -181,7 +181,7 @@ static double VectorAverage(const vector<double>& vector){
 static vector<double> AverageVectorOfVectors(const vector<vector<double > >& vecvecs){
   vector<double> averages;
   const size_t vec_size(vecvecs.size());
-  for(auto i = 0;i < vec_size;++i){
+  for(size_t i = 0;i < vec_size;++i){
     averages.push_back(VectorAverage(vecvecs[i]));
   }
   return averages;
@@ -359,8 +359,8 @@ static bool checkInputPropertyRanges( const PropertyDatabase<3U>& database,
 
 
 /// changed return value to avoid copying
-static void  AveragePropertiesOnElements( size_t num, map<Element<3U>*,vector<vector<double> > >& elementPropertyMap,
-                                          bool average, map<Element<3U>*,vector<double> >&  elementPropertyAveragedMap ){
+static void  AveragePropertiesOnElements( size_t, map<Element<3U>*,vector<vector<double> > >& elementPropertyMap,
+                                          bool, map<Element<3U>*,vector<double> >&  elementPropertyAveragedMap ){
   
   if ( !elementPropertyAveragedMap.empty() ) elementPropertyAveragedMap.clear();
   
@@ -395,7 +395,7 @@ static void SpreadElementPropertyToNodeProperty( map<Element<3U>*,vector<double>
 
 
 static void AssignElementProperties( map<Element<3U>*,vector<double> >& elementPropertyMap,
-                                      const list<string>& property_names,
+                                      const list<string>&,
                                       const vector<csmp::Index>& property_keys )
 {
   for( map<Element<3U>*,vector<double> >::iterator it=elementPropertyMap.begin();it!=elementPropertyMap.end(); ++it )
@@ -442,7 +442,7 @@ static void AssignDefaultValuesToElements( const vector<vector<Element<3U>*> >& 
   Element<3U>* elmt(NULL);
   ScalarVariable sp;
   vector<Element<3U>*> vector;
-  for(auto i = 0;i<property_keys.size();++i){
+  for(size_t i = 0;i<property_keys.size();++i){
     vector = elementVectors[i];
     sp() = defaultValues[i];
     for(size_t j = 0;j<vector.size();++j){
@@ -463,12 +463,12 @@ static void AssignElementFromNodalProperty( const vector<vector<Element<3U>*> >&
   vector<Element<3U>*> vector;
   csmp::ScalarVariable propertyVal;
   double value;
-  for(auto i = 0;i<property_keys.size();++i){
+  for(size_t i = 0;i<property_keys.size();++i){
     vector = elementVectors[i];
     for(size_t j = 0;j<vector.size();++j){
       value = 0;
       elmt = vector[j];
-      for(auto k = 0;k<elmt->Nodes();++k){
+      for(uint32_t k = 0;k<elmt->Nodes();++k){
         value += elmt->N(k)->Read(nodal_keys[i]);
       }
       propertyVal() = (value/(elmt->Nodes()));
@@ -486,7 +486,7 @@ static void AssignElementPropertyFromElementList( const vector<vector<Element<3U
   Element<3U>* elmt(NULL);
   vector<Element<3U>*> vector;
   csmp::ScalarVariable propertyVal;
-  for(auto i = 0;i<property_keys.size();++i){
+  for(size_t i = 0;i<property_keys.size();++i){
     vector = elementVectors[i];
     for(size_t j = 0;j<vector.size();++j){
       elmt = vector[j];
@@ -505,7 +505,7 @@ static void AssignElementPropertyFromElementList( const vector<Element<3U>*>& el
 {
   Element<3U>* elmt(NULL);
   csmp::ScalarVariable propertyVal;
-  for(auto j = 0;j<elementVector.size();++j){
+  for(size_t j = 0;j<elementVector.size();++j){
     elmt = elementVector[j];
     propertyVal() = elmt->Read(temp_key);
     elmt->Store(property_key,propertyVal);
@@ -687,7 +687,7 @@ static pair<Element<3U>*,bool>  EvaluateBarycentricCoordinates( Element<3U>* ele
 
 
 /// comment on type vs. operator
-static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Region<3U>& region, Element<3U>* elmt)
+static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Region<3U>&, Element<3U>* elmt )
 {
   const uint32_t dimension = 3;
   
@@ -702,7 +702,7 @@ static Element<3U>* FindPointIn3DVolumetricRegion(csmp::Point<3U> pXYZ, const Re
   pair<Element<3U>*,Node<3U>*> return_vals;
   size_t num_nodes;
   map<double,csmp::Element<3U>*> face_list;
-  int iteration = 0;
+  size_t iteration = 0;
   
   vector<double> pos_position;
   ScalarVariable sp;
@@ -827,7 +827,7 @@ static Element<3U>*  FindPointIn3DSurfaceTetraMesh( const csmp::Point<3U>& point
   pair<Element<3U>*,bool> traversingValues;
   csmp::Point<3U> barycentricCoordinates;
   vector<double> RESULT;
-  std:vector<uint32_t> iterations;
+  vector<uint32_t> iterations;
   const size_t maxiter = 250; //Do a maximum of 1000 Steps inside the mesh
   size_t i = 0;
   
@@ -898,17 +898,13 @@ static void OutputPointsToCSV( vector<csmp::Point<3U> >& point_vec )
     }
 
   ofstream outdata("points_not_found.csv");
-  int i; // loop index
-  double x;
-  double y;
-  double z;
   
   outdata<<"x coord, y coord, z coord"<<endl;
   //for (it=point_vec.begin();it!=point_vec.end();it++){
-  for(i = 0;i<point_vec.size();++i){
-    x = point_vec[i].Coordinates()[0];
-    y = point_vec[i].Coordinates()[1];
-    z = point_vec[i].Coordinates()[2];
+  for(size_t i = 0;i<point_vec.size();++i){
+    auto x = point_vec[i].Coordinates()[0];
+    auto y = point_vec[i].Coordinates()[1];
+    auto z = point_vec[i].Coordinates()[2];
     outdata << x;
     outdata <<',';
     outdata << y;
@@ -923,7 +919,7 @@ static void OutputPointsToCSV( vector<csmp::Point<3U> >& point_vec )
 static void OutputVectorToCSV(vector<size_t>& vec,string file_name){
   ofstream outdata; // outdata is like cin
   outdata.open(file_name.c_str());// opens the file
-  for( auto i = 0;i<vec.size();++i){
+  for( size_t i = 0;i<vec.size();++i){
     outdata << vec[i]<<endl;
   }
   outdata.close();
@@ -953,7 +949,7 @@ static void OutputMapToCSV(map<double,size_t>& dtmap,string file_name){
 static vector<vector<double> > RemapToVectorOfProperties(const vector<double>& vec){
   vector<vector<double> > vecvecs;
   vector<double> temp;
-  for(auto i = 0;i < vec.size();++i){
+  for(size_t i = 0;i < vec.size();++i){
     temp.clear();
     temp.push_back(vec[i]);
     vecvecs.push_back(temp);
@@ -989,9 +985,9 @@ static void  MapPointsTo3DVolumetricRegion( const map<csmp::Point<3U>,vector<dou
   
   auto points_size = points.size();
   cerr<<"total points to map = "<<points_size<<endl;
-  int count = 0, i=0;
+  size_t count = 0, i=0;
   
-  for(map<csmp::Point<3U>,vector<double> >::const_iterator pts = points.begin(); pts!=points.end() ; ++pts){
+  for(auto pts = points.begin(); pts!=points.end() ; ++pts){
     //monitoring the progress
     if (count>=points_size/10*i){
         cerr<<"processed "<<round(double(count)/double(points_size)*100.0)<<" %"<<endl;
@@ -1106,7 +1102,7 @@ static void  MapPointsToElements3DSurfaceTetraMesh( const map<csmp::Point<3U>, v
         //Element has been found
         //Each point has a vector with its properties This needs to be split into the structure PropertyVector=>Vector of Properties for this element.
         
-        for(auto i = 0; i < pts->second.size();++i){
+        for(size_t i = 0; i < pts->second.size();++i){
           it->second[i].push_back(pts->second[i]);
         }
       }else{
@@ -1235,7 +1231,7 @@ list<string> ConvertToList(const vector<string>& property_descriptors){
 static vector<csmp::Index> DatabaseKeysFromNameList( Model<3U>& model, const vector<string>& property_descriptors ){
   vector<csmp::Index> keys;
   csmp::Index property_key;
-  for(auto i = 0; i < property_descriptors.size();++i){
+  for(size_t i = 0; i < property_descriptors.size();++i){
     property_key = model.Database().StorageKey(property_descriptors[i].c_str());
     keys.push_back(property_key);
   }
@@ -1291,7 +1287,7 @@ static void GetElementsAndCurrentPropertyMap( const size_t& index,map<Element<3U
     
     ToDo: propertiesToRegions: break this spaghetti up into reasonable parts
 */
-void propertiesToRegions( Model<3U>& model, const char* model_name, const char* point_data_file, bool debug )
+void propertiesToRegions( Model<3U>& model, const char*, const char* point_data_file, bool debug )
 {
   // ---------------------------------------------------------
   // 1. reading point property data, and setting up storage
@@ -1328,7 +1324,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
   
   if(debug){
     //Outputs the Property descriptors as well as the Property Model
-    for(auto i = 0; i < property_descriptors.size(); ++i) cout << property_descriptors.at(i) << endl;
+    for(size_t i = 0; i < property_descriptors.size(); ++i) cout << property_descriptors.at(i) << endl;
     OutPutPropertyModel(propertyPointData);
     for( map<string,map<csmp::Point<3U>,vector<double> > >::iterator
          it = propertyPointData.begin(); it!=propertyPointData.end(); ++it ) {
@@ -1336,7 +1332,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
       for(map<Point<3U>,vector<double> >::iterator iter = it->second.begin();iter!=it->second.end();++iter){
         cout << "Current Point Info: " << endl;
         iter->first.Out();
-        for(auto i = 0;i < iter->second.size();++i)
+        for(size_t i = 0;i < iter->second.size();++i)
           cout << "Property Value At Current Point: " << iter->second[i] <<endl;
       }
     }
@@ -1389,7 +1385,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
              map<Element<3U>*,vector<vector<double> > >::iterator map_it;
              for(map_it = mapped.begin();map_it !=mapped.end();++map_it){
                cout << "Outputing Values for this Element" << endl;
-            for(auto i = 0;i<map_it->second.size();++i){
+            for(size_t i = 0;i<map_it->second.size();++i){
               cout << "Ouputing Values for this Property"<<endl;
               for(size_t j = 0;j<map_it->second[i].size();++j)
                 cout << "Value: "<<map_it->second[i][j]<<endl;
@@ -1404,7 +1400,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
             cout << "Output of averaged property map: " <<endl;
             for( map<Element<3U>*,vector<double> >::iterator
                  avg_it = elementAveragedPropertyMap.begin(); avg_it !=elementAveragedPropertyMap.end();++avg_it )
-            for(auto i = 0;i<avg_it->second.size();++i)
+            for(size_t i = 0;i<avg_it->second.size();++i)
               cout << "value: "<<avg_it->second[i]<<endl;
         }
       
@@ -1478,7 +1474,7 @@ void propertiesToRegions( Model<3U>& model, const char* model_name, const char* 
           cout << "Outputing Averaged Property Map" <<endl;
           map<Element<3U>*,vector<double> >::iterator avg_it;
           for(avg_it = elementAveragedPropertyMap.begin();avg_it !=elementAveragedPropertyMap.end();++avg_it)
-            for(auto i = 0;i<avg_it->second.size();++i)
+            for(size_t i = 0;i<avg_it->second.size();++i)
               cout << "Value: "<<avg_it->second[i]<<endl;
         }
 

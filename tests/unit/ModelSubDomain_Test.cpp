@@ -91,8 +91,8 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
     Region<2> model_domain = model.Region("Model");
     auto      n_interior_elmts  = distance( model_domain.CellsBegin(), model_domain.PerimeterCellsBegin() );
     auto      n_perimeter_elmts = distance( model_domain.PerimeterCellsBegin(), model_domain.CellsEnd() );
-    _test( n_interior_elmts == model_domain.InteriorCells() );
-    _test( n_interior_elmts == model_domain.Cells() - n_perimeter_elmts );
+    _test( n_interior_elmts == static_cast<long>(model_domain.InteriorCells()) );
+    _test( n_interior_elmts == static_cast<long>(model_domain.Cells()) - n_perimeter_elmts );
     model_domain.UpdateMemberIndexes();
     // remembering the perimeter faces
     vector<uint32_t> original_perimeter_faces;
@@ -109,8 +109,8 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
     model.Mesh().Delete( next(model_domain.CellVector().begin(),3) );
     model_domain.RebuildCellAndPerimeterFaceVector();
     _test( model_domain.Cells() == model.Mesh().Elements() );
-    _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
-    _test( model_domain.PerimeterCells() == n_perimeter_elmts );
+    _test( static_cast<long>(model_domain.InteriorCells()) == n_interior_elmts - 1 );
+    _test( static_cast<long>(model_domain.PerimeterCells()) == n_perimeter_elmts );
     // the perimeter face vector should still be valid
     vector<uint32_t> perimeter_faces;
     perimeter_faces.reserve( model_domain.PerimeterCells() );
@@ -124,8 +124,8 @@ void ModelSubDomain_Test::Test_RebuildCellAndNodeVectors()
     model.Mesh().Delete( next(model_domain.CellVector().begin(),5) );
     model_domain.RebuildCellAndPerimeterFaceVector();
     _test( model_domain.Cells() == model.Mesh().Elements() );
-    _test( model_domain.InteriorCells() == n_interior_elmts - 1 );
-    _test( model_domain.PerimeterCells() == n_perimeter_elmts - 1 );
+    _test( static_cast<long>(model_domain.InteriorCells()) == n_interior_elmts - 1 );
+    _test( static_cast<long>(model_domain.PerimeterCells()) == n_perimeter_elmts - 1 );
     // has the perimeter face vector been rebuild?
     vector<uint32_t> perimeter_faces2;
     perimeter_faces2.reserve( model_domain.PerimeterCells() );
@@ -289,7 +289,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     set<vector<size_t> > plist_entries1;
     for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
          vector<size_t> nodes( (*it)->Nodes() );
-         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
+         for ( uint32_t i{0U}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
          plist_entries1.insert( std::move(nodes) );
@@ -297,7 +297,7 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     set<vector<size_t> > plist_entries2;
     for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
          vector<size_t> nodes( (*it)->Nodes() );
-         for ( auto i{0U}; i<(*it)->Nodes(); ++i ) {
+         for ( uint32_t i{0U}; i<(*it)->Nodes(); ++i ) {
               nodes[i] = (*it)->N(i)->Idx();
            }
 //cerr <<"\n"<< (*it)->Idx() <<": ";
@@ -321,18 +321,18 @@ bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<dim,simpl
     set<vector<int64_t> > pfverts_entries1;
     for ( auto it=domain1.CellsBegin(); it!=domain1.CellsEnd(); ++it ) {
          vector<int64_t> nbors( (*it)->Neighbors(),0 );
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+         for ( uint32_t i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
-                nbors[i] = (*it)->Neighbor(i)->Idx();
+                nbors[i] = static_cast<long>((*it)->Neighbor(i)->Idx());
              }
          pfverts_entries1.insert( std::move(nbors) );
       }
     set<vector<int64_t> > pfverts_entries2;
     for ( auto it=domain2.CellsBegin(); it!=domain2.CellsEnd(); ++it ) {
          vector<int64_t> nbors( (*it)->Neighbors(),0 );
-         for ( auto i{0}; i<(*it)->Neighbors(); ++i )
+         for ( uint32_t i{0}; i<(*it)->Neighbors(); ++i )
            if ( (*it)->Neighbor(i) != nullptr ) {
-                nbors[i] = (*it)->Neighbor(i)->Idx();
+                nbors[i] = static_cast<long>((*it)->Neighbor(i)->Idx());
              }
          pfverts_entries2.insert( std::move(nbors) );
       }
@@ -373,6 +373,8 @@ template bool ModelSubDomain_Test::CompareModelSubdomains( const ModelSubDomain<
     Using vsets from 'vset_makers' as input data, this tests weither     ModelSubDoman::EstablishNeighborConnectivity()  recreates the correct neighbor connectivity
     
         @author SKM 5/12/20
+        
+    @note this actually tests functionality of the MeshManager
 
 */
 bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity() 
@@ -400,15 +402,16 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     // -----------------------------------------------------
     const csmp::Index eid_key(model.Database().StorageKey("element number"));
     Region<3U>& domain = model.Region("Model");
-    model.Mesh().UpdateConnectivity();
     
+    model.Mesh().UpdateConnectivity();
+    //           ^^^^^^^^^^^^^^^^^^^^^
     bool no_mismatch(true);
-    for ( vector<Element<3U>*>::const_iterator it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it )
-      for ( auto i{0}; i<(*it)->Neighbors(); ++i ) {
+    for ( auto it=domain.CellsBegin(); it!=domain.CellsEnd(); ++it )
+      for ( uint32_t i{0}; i<(*it)->Neighbors(); ++i ) {
            if ( (*it)->Neighbor(i) != nullptr ) {
-                const size_t elmt_id = static_cast<uint32_t>((*it)->Read( eid_key ));
-                const size_t nbor_id = static_cast<uint32_t>((*it)->Neighbor(i)->Read( eid_key ));
-               _test( nbor_id == vset.Pfvert( elmt_id, i ) );
+                const auto elmt_id = static_cast<size_t>((*it)->Read( eid_key ));
+                const auto nbor_id = static_cast<long>((*it)->Neighbor(i)->Read( eid_key ));
+                _test( nbor_id == vset.Pfvert( elmt_id, i ) );
                 if ( nbor_id != vset.Pfvert( elmt_id, i ) ) {
                      cerr <<"\nelmt "<< elmt_id <<":"<< i <<": vset vs. reconstructed neighbor: ";
                      cerr << vset.Pfvert( elmt_id, i ) <<" vs. "<< nbor_id;

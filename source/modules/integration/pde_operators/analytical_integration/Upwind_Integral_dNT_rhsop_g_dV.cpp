@@ -113,8 +113,8 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>::ComputeContribution( const CELL<d
       e.CoordinateMatrix();
       
        // calculate upwinding coefficients and multiply them with operand matrix   
-      for ( auto i{0}; i <e.Nodes(); ++i) {
-          for ( auto j{0U}; j <e.Nodes(); ++j ) {;
+      for ( uint32_t i{0}; i <e.Nodes(); ++i) {
+          for ( uint32_t j{0U}; j <e.Nodes(); ++j ) {;
               if (i != j) {
                   const double decision = DNT(i, j)*(trigger_var_[j]() - trigger_var_[i]());
                   if      (decision > 0) DNT(i, j) *= upwind_var_[i]();
@@ -125,19 +125,19 @@ void Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>::ComputeContribution( const CELL<d
           }
       }
     
-      for (auto i = 0; i < e.Nodes(); ++i) {
+      for (uint32_t i = 0; i < e.Nodes(); ++i) {
     	  DNT(i, i) = -DNT.RowSum(i);
       }
       
       // the matrix is contracted into a vector by multiplying with the basis vector
-      for (auto i = 0; i < e.Nodes(); ++i) {
-        for ( auto j = 0; j < e.Nodes(); ++j) {
+      for (uint32_t i = 0; i < e.Nodes(); ++i) {
+        for ( uint32_t j = 0; j < e.Nodes(); ++j) {
           MathOperatorRHS<dim,CELL>::RHS[i] += DNT(i, j) * e.FE()->XY(j, xyz-1);
         }
       }
       
       // scaling with prefactor
-      for (auto i = 0; i < e.Nodes(); ++i)
+      for (uint32_t i = 0; i < e.Nodes(); ++i)
         MathOperatorRHS<dim,CELL>::RHS[i] *= e.Volume() * prefactor_ * -gravity;
     
     } else { // lumped formulation

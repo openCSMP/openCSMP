@@ -224,7 +224,7 @@ class FibonacciHeap
 
         size_t newMaxDegree = 0;
 
-        for (auto i = 0; i < consolidation_size; ++i) {
+        for (size_t i = 0; i < consolidation_size; ++i) {
             node_ptr newRoot = consolidation_[i];
             if (newRoot) {
                 newRoot->next_ = newRoot->prev_ = newRoot;

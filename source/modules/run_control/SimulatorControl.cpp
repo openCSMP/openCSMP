@@ -755,10 +755,11 @@ void SimulatorControl<dim>::SetRegionFlag(const char* prop_name,string region,VA
 
 
 template <uint32_t dim>
-void SimulatorControl<dim>::SetFlagNearestToPoint(Index key,double x, double y, double z, VARIABLE_FLAG flag)
+void SimulatorControl<dim>::SetFlagNearestToPoint(Index, double, double, double, VARIABLE_FLAG )
 {
-
+   cerr <<"\nSimulatorControl<dim>::SetFlagNearestToPoint: called empty method."<< endl;
 }
+
 
 template <uint32_t dim>
 void SimulatorControl<dim>::SetValueNearestToPoint(Index key,double x, double y, double z, double value,VARIABLE_FLAG flag,SUBDOMAIN_PART sub)

@@ -46,7 +46,7 @@ namespace csmp
     it_p_max                   = it;
     tcurrent                   = tmax; // needs to be intialized before calling naclsatvap!
     pcurrent                   = pmax; // dito;
-    if( max_index-1 != 7)
+    if( max_index-1 != 7 )
       {
         cout << "max_index is " << max_index << endl;
         csmp_error.Note( FATAL_ERROR, 

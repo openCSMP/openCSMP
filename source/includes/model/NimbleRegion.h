@@ -83,7 +83,7 @@ class NimbleRegion : public ModelSubDomain<dim,Element>,
     size_t InteriorNodes() const;
     size_t PerimeterNodes() const;
     size_t Cells() const;
-    size_t RenumberNodes() const override final;
+    size_t RenumberNodes() const noexcept override final;
 
 
     // accessors
