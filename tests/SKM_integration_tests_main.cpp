@@ -32,8 +32,18 @@
 using namespace std;
 using namespace csmp;
 
+// ======================================================
+// for the development of the test suite inside on an IDE
+// ======================================================
+#ifdef DEBUG
+int main()
+{
+   int argc{0};
+   char **argv=nullptr;
+#else
 int main(int argc, char **argv )
 {
+#endif
     cout << "Received " << argc << " arguments...\n";
     for (int i=0; i<argc; i++)
         cout << "argument " << i << ": " << argv[i] << endl;
@@ -56,10 +66,10 @@ int main(int argc, char **argv )
 
 		if( test_name.find("_TestSuite") == std::string::npos ){
 
-            //*****************************************************************************************************************
-            // Tests list
+      //*****************************************************************************************************************
+      // Tests list
 
-            //Please add your test to the list imitating the ones shown below.  If you are beginning to implement a test,
+      //Please add your test to the list imitating the ones shown below.  If you are beginning to implement a test,
 			//please add it in the second section for verification cases under construction.
 			//Tests in Section 1 are online.
 
@@ -67,47 +77,46 @@ int main(int argc, char **argv )
 			// SECTION 1 - HERE WE START WITH THE TESTS THAT ARE ACTUALLY ONLINE IN BUILDBOT
 			//*****************************************************************
 
-            //*****************************************************************************************************************
-			//**** Finite Element, PDE_Integrator-related tests.
-			s.addTest("IncompressibleSinglePhaseFlowFEM_VVCase", new IncompressibleSinglePhaseFlowFEM_VVCase(argv[2])); //By: Julian
-			s.addTest("IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase", new IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase(argv[2])) ; //By: Julian
-			s.addTest("IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase", new IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase(argv[2])) ; //By: Julian
+        //*****************************************************************************************************************
+        //**** Finite Element, PDE_Integrator-related tests.
+        s.addTest("IncompressibleSinglePhaseFlowFEM_VVCase", new IncompressibleSinglePhaseFlowFEM_VVCase(argv[2])); //By: Julian
+        s.addTest("IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase", new IncompressibleSinglePhaseFlowTensorPerm2DFEM_VVCase(argv[2])) ; //By: Julian
+        s.addTest("IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase", new IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase(argv[2])) ; //By: Julian
 
-			//*****************************************************************************************************************
-			//**** Two-Phase flow tests. FEFV - In some cases, please scroll to the right to read more details about each test!
-			//s.addTest("InflowOutflowCalculation_VVCase", new InflowOutflowCalculation_VVCase<2U>(argv[2])); //By: Philipp & Georg, modified by Julian
-			s.addTest("InflowOutflowCalculation_VVCase", new InflowOutflowCalculation_VVCase<3U>(argv[2])); //By: Philipp & Georg, modified by Julian
+        //*****************************************************************************************************************
+        //**** Two-Phase flow tests. FEFV - In some cases, please scroll to the right to read more details about each test!
+        //s.addTest("InflowOutflowCalculation_VVCase", new InflowOutflowCalculation_VVCase<2U>(argv[2])); //By: Philipp & Georg, modified by Julian
+        s.addTest("InflowOutflowCalculation_VVCase", new InflowOutflowCalculation_VVCase<3U>(argv[2])); //By: Philipp & Georg, modified by Julian
 
-
-            s.addTest("IncompressibleTwoPhaseFlowFractures_Viscous_VVCase_2D_BC_imp_1st", new IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<2U>(argv[2], "Brooks Corey Model","1st order")); //By: Christine
+        s.addTest("IncompressibleTwoPhaseFlowFractures_Viscous_VVCase_2D_BC_imp_1st", new IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<2U>(argv[2], "Brooks Corey Model","1st order")); //By: Christine
 
 			//*****************************************************************
 			// SECTION 2 - TESTS BELOW ARE STILL UNDER CONSTRUCTION
 			//*****************************************************************
 
-            //*****************************************************************************************************************
-            //**** Mechanics Tests
-            s.addTest("Linear Elasitcity 2D Beam Displacement", new LinearElasticityA_VVCase(argv[2])); //By: Philipp L.
-            s.addTest("BoreHole_stability2D_VVCase", new BoreHole_stability2D_VVCase(argv[2])); //By: Mokhles M.
-            s.addTest("BoreHole_stability_VerticalWell3D_VVCase", new BoreHole_stability_VerticalWell3D_VVCase(argv[2])); //By: Mokhles M.
-            s.addTest("BoreHole_stability_InclinedWell3D_VVCase", new BoreHole_stability_InclinedWell3D_VVCase(argv[2])); //By: Mokhles M.
+        //*****************************************************************************************************************
+        //**** Mechanics Tests
+        s.addTest("Linear Elasitcity 2D Beam Displacement", new LinearElasticityA_VVCase(argv[2])); //By: Philipp L.
+        s.addTest("BoreHole_stability2D_VVCase", new BoreHole_stability2D_VVCase(argv[2])); //By: Mokhles M.
+        s.addTest("BoreHole_stability_VerticalWell3D_VVCase", new BoreHole_stability_VerticalWell3D_VVCase(argv[2])); //By: Mokhles M.
+        s.addTest("BoreHole_stability_InclinedWell3D_VVCase", new BoreHole_stability_InclinedWell3D_VVCase(argv[2])); //By: Mokhles M.
 
-            //*****************************************************************************************************************
-            //**** Geothermal Tests
-            s.addTest("Geothermal_pseudo1D_VVCase", new Geothermal_pseudo1D_VVCase(argv[2])); //By: Alina
-            s.addTest("Geothermal_2D_VVCase", new Geothermal_2D_VVCase(argv[2])); //By: Alina
-            s.addTest("Geothermal_3D_VVCase", new Geothermal_3D_VVCase(argv[2])); //By: Alina
+        //*****************************************************************************************************************
+        //**** Geothermal Tests
+        s.addTest("Geothermal_pseudo1D_VVCase", new Geothermal_pseudo1D_VVCase(argv[2])); //By: Alina
+        s.addTest("Geothermal_2D_VVCase", new Geothermal_2D_VVCase(argv[2])); //By: Alina
+        s.addTest("Geothermal_3D_VVCase", new Geothermal_3D_VVCase(argv[2])); //By: Alina
 
-            //*****************************************************************************************************************
-            //**** Two Phase Flow Tests
+        //*****************************************************************************************************************
+        //**** Two Phase Flow Tests
 
-            s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<1U>(argv[2])); //By: Julian
-            s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<2U>(argv[2])); //By: Julian
-            s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<3U>(argv[2])); //By: Julian
+        s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<1U>(argv[2])); //By: Julian
+        s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<2U>(argv[2])); //By: Julian
+        s.addTest("CFL_Calculation_VVCase", new CFL_Calculation_VVCase<3U>(argv[2])); //By: Julian
 
 
-            //*****************************************************************************************************************
-            // end of Tests list
+        //*****************************************************************************************************************
+        // end of Tests list
 
 
 			s.RunSpecificTest(argv[1]);

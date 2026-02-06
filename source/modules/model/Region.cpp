@@ -196,6 +196,8 @@ Region<dim>::Region( const PropertyDatabase<dim>& pref,
 } // end region re-constructor (using the nodes and the elements from the MeshManager)
 
 
+
+
 // LOCAL VARIABLE STORAGE INTERFACE
 template<uint32_t dim>
 bool Region<dim>::ValidVariable( const char* variableName ) const noexcept
@@ -229,7 +231,7 @@ LocalVariables Region<dim>::ElementVariables() const
 template<uint32_t dim>
 void Region<dim>::SetRegion_ID( int32_t region_id )
 {
-   // only if a negative number is inserted, the reference-counted domain index is not used
+   // only if a negative number is inserted, the instance-counted domain index is not used
    region_id = ( region_id < 0 ) ? this->DomainIndex() : region_id;
    for ( auto& it : this->cell_vec_ ) it->Region_ID( region_id );
 }

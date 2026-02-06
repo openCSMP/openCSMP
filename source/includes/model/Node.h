@@ -154,6 +154,9 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// connects the node to other topologically collocated nodes if any
     void Assign( NodeManifold<dim>& );
     
+    /// unassigns any potential manifold
+    void Disconnect();
+    
     /// access to manifold if any; returns nullptr if the node is not a manifold
     bool IsManifold() const;
 

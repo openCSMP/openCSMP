@@ -1032,9 +1032,10 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
   	vset.AddXYZ( px, py, pz );
   	
   	//--------------------------NODE BOUNDARY FLAGS (35)
-    const BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT}, I{INTERNAL}, N{NOT};
-    //                          0  1 2  3    4 5 6 7  8 9 1011121314 151617181920 212223242526 27282930  31  32 33  34
-    vector<int8_t> bflags = { CNR4,U,U,CNR3, L,N,N,R, L,I, L,I,I,N,R, L,I,I,I,I,R, L,I,I,I,I,R, L,N,I,R, CNR1,B,B,CNR2 };
+    const int8_t B{BOTTOM_OUTSIDE}, R{RIGHT_OUTSIDE}, U{TOP_OUTSIDE}, L{LEFT_OUTSIDE}, I{REGION_BOUNDARY}, N{0},
+                 C1{CNR_MIN}, C2{CNR_X}, C3{CNR_XY}, C4{CNR_Y};
+    //                          0 1 2  3  4 5 6 7  8 9 1011121314 151617181920 212223242526 27282930  31 32 33  34
+    vector<int8_t> bflags = {  C4,U,U,C3, L,N,N,R, L,I, L,I,I,N,R, L,I,I,I,I,R, L,I,I,I,I,R, L,N,I,R, C1, B, B, C2 };
     assert( bflags.size() == n_nodes );
     vset.AddBFlags( bflags.begin(), bflags.end() );
     
@@ -1042,7 +1043,7 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     //--------------------------TOPOTYPE NODE FLAGS (35)
     const TOPOTYPE v{MESH_VERTEX}, i{INTERIOR_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
     //                        0 1 2 3  4 5 6 7  8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
-    vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, l, l, v, x, x, l, i, i, l, x, x, l, i, i, l, x, x, v, p, x, e, x, x, e };
+    vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, l, l, v, x, e, l, i, i, l, e, e, l, i, i, l, e, x, v, p, x, e, x, x, e };
     assert( gflags.size() == n_nodes );
     vset.AddBREP_Flags( gflags.begin(), gflags.end() );
 

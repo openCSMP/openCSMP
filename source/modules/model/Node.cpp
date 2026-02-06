@@ -527,11 +527,18 @@ bool Node<dim>::IsManifold() const { return (manifold_ != nullptr); }
 template<uint32_t dim>
 NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
 
-
+// node cannot be member of multiple manifolds at the same time
 template<uint32_t dim>
 void Node<dim>::Assign( NodeManifold<dim>& nmf )
  {
     manifold_ = &nmf;
+ }
+
+// node cannot be member of multiple manifolds at the same time
+template<uint32_t dim>
+void Node<dim>::Disconnect()
+ {
+    manifold_ = nullptr;
  }
 
 

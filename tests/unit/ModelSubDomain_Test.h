@@ -137,6 +137,7 @@ class ModelSubDomain_Test : public Test {
     void ScheduleForRebuild() noexcept;
     bool NeedsRebuild() const noexcept;
 
+    size_t RebuildNodeVector();
     void CreateNodePointerVector();
     void CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells );
     void SortVectors( size_t interior_cells, size_t interior_nodes );
@@ -155,7 +156,8 @@ class ModelSubDomain_Test : public Test {
     std::pair<CELL_SHAPE,bool>  SingleCellShapeDomain() const;
     */
     void Test_Basics();
-    
+  
+  
     /**
     void UpdateTopoTypeNodeFlags();
     void BuildPerimeterFaceVector( int64_t interior_cells );
@@ -166,8 +168,7 @@ class ModelSubDomain_Test : public Test {
                                                   typename std::vector<CELL<dim>*>::const_iterator master_domain_end,
                                                   const PropertyConstraints& );
     size_t RebuildCellAndPerimeterFaceVector();
-    size_t RebuildNodeVector();
-    */
+     */
     void Test_SubDomainConstructionMethods();
 
 
@@ -197,6 +198,7 @@ class ModelSubDomain_Test : public Test {
 
     */
     void Test_SubDomainDiagnostics();
+
 
     /**
     std::pair<int32_t,int32_t>  SpatialDimensions() const;
@@ -278,7 +280,7 @@ class ModelSubDomain_Test : public Test {
     void Test_NonMemberFunctions();
 
   private:
-    const bool verbose_ = false;
+    const bool verbose_ = true;
 };
 
 } // end csmp

@@ -10,8 +10,11 @@ using namespace std;
 namespace csmp {
 
 /**
-    Transfers manifold information directly from supplied data to new manifold,
-    connecting the nodes from the container in the MeshManager with the newly created manifolds.
+    Transfers selected Nodes into manifold, according to their placement in the plf:colony as indicated by number in manifold_nodes.
+    This will  also connect the nodes from the pfl::nodes_ container in the MeshManager with the newly created manifolds.
+    
+    @param nodes Node<> container inside MeshManager
+    @param manifold_nodes vector indicating the placement of the nodes inside the plf node colony
     
     @attention the manifold vector does not get sorted!
  */
@@ -32,6 +35,8 @@ NodeManifold<dim>::NodeManifold( plf::colony<Node<dim> >& nodes, const vector<si
 
     // sorting branches using the node pointers as keys (default of sort)
     // sort( branches_.begin(), branches_.end() );
+
+     // ATTENTION assigning the Nodes to the NodeManifold cannot be done in this constructor
 }
 
 
@@ -48,6 +53,7 @@ NodeManifold<dim>::NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node
      branches_.reserve(2U);
      branches_.push_back( &inside_node );
      branches_.push_back( &outside_node );
+     // assigning the Nodes to the NodeManifold cannot be done in this constructor
  }
 
 
@@ -60,6 +66,7 @@ NodeManifold<dim>::NodeManifold( const manifold& nodes )
     assert( branches_.size() >= 2 );
     for( auto& nd : branches_ )
       nd->Assign( *this );
+    // assigning the Nodes to the NodeManifold cannot be done in this constructor
 }
 
 
@@ -120,11 +127,15 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
         }
 
         /* ------------------------------------------------------------
-           1. Pure interior / duplicated nodes
+           1. Interior duplicated nodes or Split-boundary ends
            ------------------------------------------------------------ */
-
-        if (c.total() == 0 || n == 1)
-            return ManifoldType::STAND_ALONE;
+        
+        switch( c.total() ) {
+             case 0: return ManifoldType::STAND_ALONE;
+             case 1: return ManifoldType::SPLIT_BOUNDARY_END;
+             default:
+               break;
+          }
 
         /* ------------------------------------------------------------
            2. Split-boundary interior (most common)
@@ -134,23 +145,35 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             c.perimeter_line == 0 &&
             c.perimeter_point == 0)
             return ManifoldType::SPLIT_BOUNDARY;
+            
+        // lower-dimensional SplitBoundary
+        if (c.interior_line >= 2 &&
+            c.perimeter_line == 0 &&
+            c.perimeter_point == 0)
+            return ManifoldType::SPLIT_BOUNDARY;
 
         /* ------------------------------------------------------------
            3. Split-boundary with internal mesh constraint
            ------------------------------------------------------------ */
 
         if (c.interior_surface >= 2 &&
-            (c.interior_line > 0 || c.interior_point > 0))
+            (c.interior_line == 0 || c.interior_point == 0))
             return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
 
         /* ------------------------------------------------------------
-           4. Split-boundary crossings
+           4. Split-boundary crossings (must be on a line or a point)
            ------------------------------------------------------------ */
 
-        if (c.interior_surface == 4)
+        if (c.interior_line == 4)
             return ManifoldType::SPLIT_BOUNDARY_CROSSING;
 
-        if (c.interior_surface >= 6)
+        if (c.interior_line >= 6)
+            return ManifoldType::MULTI_SB_CROSSING;
+
+        if (c.interior_point == 8)
+            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
+
+        if (c.interior_point >= 12)
             return ManifoldType::MULTI_SB_CROSSING;
 
         /* ------------------------------------------------------------
@@ -161,6 +184,18 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             (c.perimeter_line > 0 || c.perimeter_point > 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
             
+        if ( c.exterior_surface == 2 &&
+            (c.interior_line == 0 && c.interior_point == 0))
+            return ManifoldType::SPLIT_BOUNDARY_END;
+
+        if ( c.exterior_line >= 2 &&
+            (c.interior_line == 0 && c.interior_point == 0))
+            return ManifoldType::SPLIT_BOUNDARY_END;
+
+        if ( c.exterior_surface == 2 &&
+            (c.interior_line == 0 && c.interior_point == 0))
+            return ManifoldType::SPLIT_BOUNDARY_END;
+
         /* ------------------------------------------------------------
            Fallback
            ------------------------------------------------------------ */
@@ -197,18 +232,22 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
         }
 
         /* ------------------------------------------------------------
-           1. Pure interior / duplicated nodes
+           1. Single interior duplicated nodes
            ------------------------------------------------------------ */
 
-        if (c.total() == 0 || n == 1) return ManifoldType::STAND_ALONE;
+        switch( c.total() ) {
+             case 0: return ManifoldType::STAND_ALONE;
+             case 1: return ManifoldType::SPLIT_BOUNDARY_END;
+             default:
+               break;
+          }
 
         /* ------------------------------------------------------------
            2. Split-boundary interior (most common)
            ------------------------------------------------------------ */
 
-        if (c.interior_line == 2 &&
-            c.perimeter_line == 0 &&
-            c.perimeter_point == 0)
+        if ( c.interior_line == 2 &&
+             (c.perimeter_line == 0 || c.perimeter_point == 0) )
             return ManifoldType::SPLIT_BOUNDARY;
 
         /* ------------------------------------------------------------
@@ -223,18 +262,26 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
            4. Split-boundary crossings
            ------------------------------------------------------------ */
 
-        if (c.interior_line == 4)
+        if (c.interior_point == 4)
             return ManifoldType::SPLIT_BOUNDARY_CROSSING;
 
-        if (c.interior_line >= 6)
+        if (c.interior_point >= 5)
             return ManifoldType::MULTI_SB_CROSSING;
 
         /* ------------------------------------------------------------
            5. Split-boundary terminations
            ------------------------------------------------------------ */
 
-        if (c.interior_line >= 2 &&
+        if ( c.interior_line == 0 &&
             (c.perimeter_line > 0 || c.perimeter_point > 0))
+            return ManifoldType::SPLIT_BOUNDARY_END;
+ 
+        if ( c.interior_line == 0 &&
+            (c.exterior_line > 0 || c.exterior_point > 0))
+            return ManifoldType::SPLIT_BOUNDARY_END;
+ 
+        if ( c.exterior_line == 2 &&
+            (c.interior_line == 0 || c.interior_point == 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
 
         /* ------------------------------------------------------------
@@ -248,6 +295,13 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
      return ManifoldType::SPLIT_BOUNDARY_END;
 }
 
+
+
+template<uint32_t dim>
+void NodeManifold<dim>::AssignManifoldToMemberNodes() noexcept
+{
+   for ( auto& node : branches_ ) node->Assign( *this );
+}
 
 
 template<uint32_t dim>
@@ -426,7 +480,7 @@ std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> Node
 
 
 template<uint32_t dim>
-bool NodeManifold<dim>::Add( Node<dim>* nd )
+bool NodeManifold<dim>::Add( Node<dim>* const nd )
 {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -459,9 +513,13 @@ bool NodeManifold<dim>::Add( Node<dim>* nd )
 
 
 
+/**
+       Removes the node from the Manifold
 
+      @return false if the Node was not contained in the manifold
+*/
 template<uint32_t dim>
-bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
+bool NodeManifold<dim>::Remove( Node<dim>* const nd ) noexcept
 {
    // in this is true, this should not be a manifold anymore
    if ( branches_.empty() ) return false;
@@ -469,15 +527,13 @@ bool NodeManifold<dim>::Remove( const Node<dim>* const nd )
    for ( auto& nit : branches_ )
      if ( nit == nd ) {
          // disconnecting the node from the manifold
+         nd->Disconnect();
          nit = nullptr;
          // removing the Node entry from the branch list
          branches_.erase( remove( branches_.begin(), branches_.end(), nit ) );
          return true;
        }
 
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    csmp_error.Note( WARNING, "NodeManifold<dim>::Remove(Node<dim>*)",
-                                "Node does not exist in manifold. Nothing was done.");
     return false;
 }
 
@@ -496,6 +552,43 @@ bool NodeManifold<dim>::AreNodesCollocated() const noexcept
  }
 
 
+
+/**
+   Checks whether any of the Nodes in the Manifold are connected to each-other and returs these clusters
+   
+   @return pair of interconnected Node clusters, and boolean indicating whether there are any.
+   
+   @note optimized for very small N (2-8 nodes).
+*/
+template<uint32_t dim>
+pair<vector<vector<Node<dim>*>>,bool>  NodeManifold<dim>::InterConnectedMemberNodes() const noexcept
+ {
+    const size_t n_branches = branches_.size();
+    
+    vector<vector<Node<dim>*>>  adjacency_list( branches_.size() );
+    bool has_connections{false};
+
+    // Optimized for Undirected/Bidirectional Connectivity.
+    // Since connections between nodes are bidirectional (A <-> B), a triangular loop is used
+    // (j = i + 1), i.e., LinearSearch needs to be performed only in one direction.
+    // If a connection is found, we populate both adjacency slots simultaneously.
+    assert( n_branches >= 2 );
+    for ( size_t i = 0; i < n_branches; ++i ) {
+        for ( size_t j = i + 1; j < n_branches; ++j ) {
+            // finding whether node i is connected to node j
+            if ( branches_[i]->LinearSearch(branches_[j]) ) {
+                adjacency_list[i].push_back(branches_[j]);
+                adjacency_list[j].push_back(branches_[i]);
+                has_connections = true;
+            }
+        }
+    }
+
+    return make_pair( std::move(adjacency_list), has_connections );
+ }
+
+
+
 /**
     Returns manifold node indices and type to data structure used to initialise VData
 */
@@ -506,7 +599,7 @@ pair<vector<size_t>,ManifoldType>  NodeManifold<dim>::Data() const noexcept
     vector<size_t> node_ids{ branches_[0]->Idx(), branches_[1]->Idx() };
     if ( branches_.size() > 2 ) {
          node_ids.reserve( branches_.size() );
-         for ( auto i{2U}; i<branches_.size(); i++ )
+         for ( uint32_t i{2U}; i<branches_.size(); i++ )
            node_ids.push_back( branches_[i]->Idx() );
       }
     return make_pair( node_ids, Classify() );
@@ -519,13 +612,17 @@ template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
   cout << "\nNodeManifold: "<< parse(Classify()) <<" with nodes (indices):\t";
-  for ( auto i{0U}; i<Branches(); i++ ) {
-      if ( NodeManifold<dim>::N(i) )
-        cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": ";
+  for ( uint32_t i{0U}; i<Branches(); i++ ) {
+      if ( NodeManifold<dim>::N(i) ) {
+           cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": ";
+           cout << parseBoundary( NodeManifold<dim>::N(i)->AtBoundary() ) <<": ";
+           cout << parseTopology( NodeManifold<dim>::N(i)->Attribute() ) <<": ";
+        }
       else
         cerr <<"\nNodeManifold<dim>::Out: branch node pointer is a null pointer.";
     }
-  cout << endl;
+  cout <<"\n\t"<<"ManifoldType: "<< parse( this->Classify() );
+  cout << endl << endl;
 }
 
 template class NodeManifold<1U>;

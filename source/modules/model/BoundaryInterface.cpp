@@ -2421,7 +2421,7 @@ long BoundaryInterface<dim, BOUNDARY_COMPLEX>::BoundariesOut() const
      if ( BoxShaped() ) cout <<"box-shaped model:\n";
      else cout <<"irregularly-shaped model:\n";
      for ( auto bit=BoundariesBegin(); bit!=BoundariesEnd(); ++bit ) {
-          cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
+          cout <<"\n\t"<< (*bit).first <<": d-idx:"<< (*bit).second.DomainIndex() <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
           cout <<" "<< (*bit).second.Cells() <<" faces, ";
           // in 3D a boudary is a surface
            if constexpr ( dim == 3U ) {

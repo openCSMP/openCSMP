@@ -31,8 +31,10 @@ class NodeManifold {
       using manifold              = std::vector<Node<dim>*>;
       using manifoldIterator      = typename std::vector<Node<dim>*>::iterator;
       using manifoldConstIterator = typename std::vector<Node<dim>*>::const_iterator;
+      
+      // CONSTRUCTION AND CONFIGURATION
 
-      /// main constructor in NodeManifoldManager: sorts created vector by Node pointers in ascending order, so that it can be searched for nodes using std::binary_search
+      /// constructs manifold from Nodes selected by number from within the plf::colony in the MeshManager; node numbers are supplied by manifold_nodes
       NodeManifold( plf::colony<Node<dim> >& nodes, const std::vector<size_t>& manifold_nodes );
       
       /// constructs new Manifold from two nodes on the inside and outside of it; @attention nodes must be assigned to this manifold once it has been constructed
@@ -41,27 +43,50 @@ class NodeManifold {
       /// constructs manifold from vector pointer and qualifier pairs
       NodeManifold( const manifold& );
 
-      /// adds a node to the manifold storing the interface side, it is on; @note  this might also have implications for Manifold geometry to be addressed later
-      bool Add( Node<dim>* );
+      /// adds node to manifold and connects it to it; if it is already a manifold node, an error is raised
+      bool Add( Node<dim>* const );
 
       /// removes node from the current manifold and sets its manifold pointer to zero because a Node can only belong to a single manifold
-      bool Remove( const Node<dim>* const );
+      bool Remove( Node<dim>* const ) noexcept;
+      
+      /// since this cannot be done during construction this separate function is provided to connect the manifold pointers in the nodes to this NodeManifold
+      void AssignManifoldToMemberNodes() noexcept;
 
       /// asscending sort (scalar on Node or Element only) - default is sorted by pointer in sequence entered
       void SortByVariableValue( const Index& scalar_node_variable );
 
-      ///Assign ------------------------------------------------------
-      void Assign( Node<dim>*,
-                   std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes );
+      
+      // DIAGNOSTICS
 
-
-      ///Access -------------------------------------------------------
+      /// reports geometric role of the manifold inferred from the TOPOTYPEs of the nodes that care contained in the
+      ManifoldType Classify() const noexcept;
+      
+      /// checks whether all nodes in the  manifold have the same location using operator< of point
+      bool AreNodesCollocated() const noexcept;
+      
+      /// checks whether any of the Nodes in the Manifold are connected to each-other and returs these clusters
+      std::pair<std::vector<std::vector<Node<dim>*>>,bool> InterConnectedMemberNodes() const noexcept;
+      
+      
+      // MANIFOLD USAGE
 
       /// number of entries
       uint32_t Branches() const noexcept;
 
       /// access to node
       Node<dim>* const N( size_t branch ) const  noexcept;
+
+      /// outputs manifold state to data structure used to initialise VData
+      std::pair<std::vector<size_t>,ManifoldType> Data() const noexcept;
+
+      /// prints out state of the manifold
+      void Out() const;
+
+
+     // TODO: deprecate these methds together with node_parent_interface_map_?
+
+      void Assign( Node<dim>*,
+                   std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes );
 
       /// Gives size of node interface parent map - should correspond with number of nodes(branches) when configured correctly
       //   MeshManager::ReplaceElementsByInterFaces
@@ -83,20 +108,7 @@ class NodeManifold {
       // REMOVE-not used
       std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector( Node<dim>* const n );
 
-     ///Query -----------------------------------------------------------
-
-      /// reports geometric role of the manifold inferred from the TOPOTYPEs of the nodes that care contained in the
-      ManifoldType Classify() const noexcept;
-      
-      /// checks whether all nodes in the  manifold have the same location using operator< of point
-      bool AreNodesCollocated() const noexcept;
-      
-      /// outputs manifold state to data structure used to initialise VData
-      std::pair<std::vector<size_t>,ManifoldType> Data() const noexcept;
-
-      /// prints out state of the manifold
-      void Out() const;
-
+ 
     private:
       manifold branches_;  ///< vector of Node pointers
 

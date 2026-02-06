@@ -717,7 +717,7 @@ if ( !interfaces_.empty() ) {
    size_t counter{0U};
    for ( auto nit=node_manifold_manager_->ManifoldsBegin(); nit!=node_manifold_manager_->ManifoldsEnd(); ++nit ) {
         cerr <<"\n\t\t"<< counter++ <<": "<< parse( (*nit).Classify() ) <<" ";
-        for ( auto z{0U}; z<(*nit).Branches(); z++ )
+        for ( uint32_t z{0U}; z<(*nit).Branches(); z++ )
           cerr << (*nit).N(z)->Idx() <<" ";
      }
     cerr << endl;

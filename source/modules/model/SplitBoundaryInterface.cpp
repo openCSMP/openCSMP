@@ -879,11 +879,11 @@ size_t SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::FormSplitBoundariesFro
                 topo.CellsOfDomainEnd( split_boundarie.c_str() ),
                 back_inserter( cell_ids ) );
 
-          // retrieving the elements by their IDs and assigning them  to the region
+          // retrieving the interfaces by their IDs and assigning them  to the region
           (*it.first).second.AccumulateByNumber( static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this)->Mesh(), cell_ids );
           cell_ids.erase( cell_ids.begin(), cell_ids.end() );
 
-          // removing the group if it contains no elements
+          // removing the split boundary if it contains no interfaces
           if ( (*it.first).second.Cells() == 0U ) {
               splitBoundaryMap_.erase( it.first );
               csmp_error.Note( WARNING, "SplitBoundaryInterface::FormSplitBoundariesFrom",
@@ -2038,7 +2038,7 @@ long SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::SplitBoundariesOut() co
      if ( model->BoxShaped() ) cout <<"box-shaped model:\n";
      else cout <<"irregularly-shaped model:\n";
      for ( auto bit=SplitBoundariesBegin(); bit!=SplitBoundariesEnd(); ++bit ) {
-          cout <<"\n\t"<< (*bit).first <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
+          cout <<"\n\t"<< (*bit).first <<": d-idx:"<< (*bit).second.DomainIndex() <<", box-flag: "<< parseBoundary( (*bit).second.AtBoundary() );
           cout <<" "<< (*bit).second.Cells() <<" interfaces, ";
           // in 3D a boudary is a surface
            if constexpr ( dim == 3U ) {

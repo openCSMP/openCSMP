@@ -129,8 +129,7 @@ enum class ManifoldType : int8_t {
                                     SPLIT_BOUNDARY_WITH_INTERNAL_MESH,
                                     SPLIT_BOUNDARY_CROSSING,    ///<  4-node manifold intersection of split boundaries
                                     MULTI_SB_CROSSING,          ///<  6-node cross of 3 SBs in
-//                                    SPLIT_BOUNDARY_TERMINATION, ///<  T-intersection of SBs or termination of SB against Boundary
-                                    SPLIT_BOUNDARY_END,         ///<  termination against model boundary or another SplitBoundary ( T-intersection)
+                                    SPLIT_BOUNDARY_END,         ///<  termination against Boundary or another SplitBoundary ( T-intersection)
                                 };
 
 /// converts classifiers to strings so that they can be printed

@@ -1315,37 +1315,37 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionFrom( const char* newRegi
 
 
 /**
-Forms regions using the element ID containers stored in the model topology
-object. The regions are numbered in their alphabetical order and corresponding numbers
-are assigned to the material ID of the element class.
+  Forms unique regions using the element ID containers stored in the model topology
+  object. The regions are numbered in their alphabetical order and corresponding numbers
+  are assigned to the material ID of the element class.
 
-@param ignore_domain_type_identifiers when true all topological entities are turned into regions
-even if the contain boundary names etc.
+  @param ignore_domain_type_identifiers when true all topological entities are turned into regions
+  even if the contain boundary names etc.
 
-@note the material IDs may later be overwritten by rocktypes.
+  @note the material IDs may later be overwritten by rocktypes.
 
-@section arguments Input Arguments
+  @section arguments Input Arguments
 
-The method takes the information on the basis of which the regions
-are formed from a model topology object via const reference.
+  The method takes the information on the basis of which the regions
+  are formed from a model topology object via const reference.
 
-@section implementation Implementation
+  @section implementation Implementation
 
-The assumption is made that a master Region already exists.
-The method uses the region interface 'AccumulateElements()'.
+  The assumption is made that a master Region already exists.
+  The method uses the region interface 'AccumulateElements()'.
 
-@section application Application
+  @section application Application
 
-When a model is build and external topological information is available,
-such as subvolume names etc., this method provides a convenient and
-rapid way to form computational domains in a Model on the basis
-of the supplied information.
+  When a model is build and external topological information is available,
+  such as subvolume names etc., this method provides a convenient and
+  rapid way to form computational domains in a Model on the basis
+  of the supplied information.
 
-@section messages Messages
+  @section messages Messages
 
-The method reports which regions are being formed.
+  The method reports which regions are being formed.
 
-@todo for the debug version, put in a check that verifies that all element ids stored in the model topology are actually contained in the mesh.
+  @todo for the debug version, put in a check that verifies that all element ids stored in the model topology are actually contained in the mesh.
 */
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopology& topo, bool ignore_domain_type_identifiers )
@@ -1361,7 +1361,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
   cout << "\nRegionInterface::FormRegionsFrom: Forming the regions: ";
 
   uint32_t new_regions( 0U );
-  for ( typename list<string>::const_iterator lit = regions.begin(); lit != regions.end(); lit++ )
+  for ( auto lit = regions.begin(); lit != regions.end(); lit++ )
     {
       string region_name( *lit );
       pair<typename map<string, csmp::Region<dim> >::iterator, bool>
@@ -1395,6 +1395,7 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
                // reporting the name of the newly generated region
                cout << region_name << " ";
                
+               // since all these regions are unique
                (*it.first).second.SetRegion_ID();
 
                new_regions++;
@@ -1409,8 +1410,6 @@ size_t RegionInterface<dim, REGION_COMPLEX>::FormRegionsFrom( const ModelTopolog
   return new_regions;
 
 } // end FormRegionsFrom
-
-
 
 
 
@@ -1659,6 +1658,9 @@ size_t  RegionInterface<dim, REGION_COMPLEX>::PartitionRegionIntoContiguousSubRe
         subgroup.push_back( rit->second );
 
         (*it.first).second.Accumulate( subgroup.begin(), subgroup.end() );
+        
+        // assign a region ID to the elements of the new region
+        if ( (*it.first).second.IsUnique() ) (*it.first).second.SetRegion_ID();
 
       // copy all values of region properties from parent to child region
       (*it.first).second.LVS( gref.LVS() );
@@ -1718,19 +1720,17 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
   set<string>  region_names, groups_to_remove;
 
   // 1. making a set of all region names
-  for ( typename map<string, csmp::Region<dim> >::const_iterator
-        grit = UniqueRegionsBegin(); grit != UniqueRegionsEnd(); grit++ )
+  for ( auto grit = UniqueRegionsBegin(); grit != UniqueRegionsEnd(); grit++ )
     region_names.insert( (*grit).first );
 
   // 2. For all regions whose name does not contain any numbers,
   //    find subregions identified by numbers attached to their names
-  for ( typename map<string, csmp::Region<dim> >::const_iterator
-        grit = UniqueRegionsBegin(); grit != UniqueRegionsEnd(); grit++ )
+  for ( auto grit = UniqueRegionsBegin(); grit != UniqueRegionsEnd(); grit++ )
     if ( (*grit).first.find( target ) == string::npos )
     {
       // checking whether the name contains a number
       bool hasnumber = false;
-      for ( string::const_iterator sit = (*grit).first.begin(); sit != (*grit).first.end(); sit++ )
+      for ( auto sit = (*grit).first.begin(); sit != (*grit).first.end(); sit++ )
         if ( isdigit( *sit ) ) { hasnumber = true; break; }
       // if not it is assumed that this is a primary region
       if ( !hasnumber ) {
@@ -1748,14 +1748,12 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
 
   // Any region can only be unique or non unique. If no unique region was found the non-unique ones are searched
   if ( groups_to_remove.empty() ) {
-    for ( typename map<string, csmp::Region<dim> >::const_iterator
-          grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
+    for ( auto grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
       region_names.insert( (*grit).first );
 
     // 2. For all regions whose names do not contain any numbers,
     //    find subregions identified by numbers attached to their names
-    for ( typename map<string, csmp::Region<dim> >::const_iterator
-          grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
+    for ( auto grit = RegionsBegin(); grit != RegionsEnd(); grit++ )
       if ( (*grit).first.find( target ) == string::npos )
       {
         // checking whether the name contains a number
@@ -1782,13 +1780,15 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RemoveRegionPartitionsFor( const ch
   // 3. removing the subregions and extra regions
   size_t  groups_removed( 0 );
   if ( !groups_to_remove.empty() ) cout << "\nRegionsInterface<dim,REGION_COMPLEX>::RemoveRegionPartitionsFor: removing region(s): ";
-  for ( set<string>::const_iterator it = groups_to_remove.begin(); it != groups_to_remove.end(); it++ ) {
+  for ( auto it = groups_to_remove.begin(); it != groups_to_remove.end(); it++ ) {
        cout << "'" << (*it) << "' ";
        const bool also_remove_elmts{ false };
        RemoveRegion( (*it).c_str(), also_remove_elmts );
        groups_removed++;
     }
   if ( !groups_to_remove.empty() ) cout << endl << endl;
+  
+  // TODO: make the no-longer partitioned region unique again if there is no overlap with another one
 
   return groups_removed;
 
@@ -1930,6 +1930,9 @@ void  RegionInterface<dim, REGION_COMPLEX>::CopyRegion( const char* existing_reg
 
   // assigning new region name
   (*it.first).second.Name( new_copied_region );
+  
+  // assign a region ID to the elements of the new region
+  if ( (*it.first).second.IsUnique() ) (*it.first).second.SetRegion_ID();
 
 } // end copyRegion
 
@@ -2814,6 +2817,8 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
              // assuming the the element neighbor connectivity was updated before by the MeshManager
              (*rit).second.RebuildSubDomainAfterChangeOfCellVector();
              cout << "Rebuilt Subdomain " << (*rit).first << " -> element and node vector now up to date" << std::endl;
+             // domain indices
+             (*rit).second.SetRegion_ID();
           }
        
  } // end UpdateRegions
@@ -2829,8 +2834,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
      cout <<"\n\nRegionInterface<"<< dim <<",Region<Element>>::RegionsOut:\n";
      cout <<"\n\tUnique regions of model:\n";
      for ( auto rit=UniqueRegionsBegin(); rit!=UniqueRegionsEnd(); ++rit ) {
-          cout <<"\t\t"<< (*rit).first <<":"<< (*rit).second.DomainIndex();
-          cout <<" "<< (*rit).second.Cells() <<" elements,";
+          cout <<"\t\t"<< (*rit).first <<": d-idx:"<< (*rit).second.DomainIndex();
+          cout <<", "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();
@@ -2842,8 +2847,8 @@ size_t RegionInterface<dim, REGION_COMPLEX>::RegionsOut() const
        }
      cout <<"\n\tNon-unique regions of model:\n";
      for ( auto rit=RegionsBegin(); rit!=RegionsEnd(); ++rit ) {
-          cout <<"\t\t"<< (*rit).first;
-          cout <<" "<< (*rit).second.Cells() <<" elements,";
+          cout <<"\t\t"<< (*rit).first <<": d-idx:"<< (*rit).second.DomainIndex();
+          cout <<", "<< (*rit).second.Cells() <<" elements,";
           pair<int32_t, int32_t> rdim = (*rit).second.ElementSpatialDimensions();
           if ( rdim.second == 3U )
             cout <<" volume (m3): "<< (*rit).second.Volume() <<", surface area (m2): "<< (*rit).second.SurfaceArea();

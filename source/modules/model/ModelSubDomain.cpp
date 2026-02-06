@@ -43,7 +43,7 @@ ModelSubDomain<dim, CELL>::ModelSubDomain( const string& subdomain_name, const P
 	: pref_(pref),
 	  subdomain_name_(subdomain_name),
     is_unique_(unique),
-// default set in class declaration:    rebuilt_needed_
+// rebuilt_needed_ - default gets set in class declaration
     domain_idx_(++domain_count_)
  {
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called custom constructor.\n";
@@ -69,17 +69,17 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
 /// move constructor; @attention remove verbose output after testing
 template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
- : pref_( std::move(ed.pref_) ),
+ : pref_( ed.pref_ ),
    cell_vec_( std::move(ed.cell_vec_) ),
    node_vec_( std::move(ed.node_vec_) ),
-   first_bd_node_( std::move(ed.first_bd_node_) ),
+   first_bd_node_( ed.first_bd_node_),
    bd_face_vec_( std::move(ed.bd_face_vec_) ),
    subdomain_name_( std::move(ed.subdomain_name_) ),
-   rebuilt_needed_(std::move(ed.rebuilt_needed_) ),
-   domain_idx_( std::move(ed.domain_idx_) ), // since argument object gets destroyed there is no incrementation of domain_idx_
-   is_unique_(std::move(ed.is_unique_) ) // since argument object gets destroyed there is no incrementation of domain_idx_
+   rebuilt_needed_(ed.rebuilt_needed_),
+   domain_idx_(ed.domain_idx_), // watch out! - ed becomes defunct but still exists!
+   is_unique_(ed.is_unique_) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
-    domain_count_++; // needed because when destructor is called on 'ed' the object count will be decremented!
+    ++domain_count_;
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
  }
 
@@ -131,10 +131,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDomain& ed ) noexcept
  {
      if ( &ed != this ) {
+        // DO NOT touch domain_idx_
+        // domain_idx_ stays the identity of *this*
           cell_vec_       = ed.cell_vec_;
           node_vec_       = ed.node_vec_;
           first_bd_node_  = ed.first_bd_node_;
-          //domain_idx_     = ed.domain_idx_; - keep the domain index unique!
           bd_face_vec_    = ed.bd_face_vec_;
           subdomain_name_ = ed.subdomain_name_;
           rebuilt_needed_ = ed.rebuilt_needed_;
@@ -144,14 +145,16 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( const ModelSubDo
  }
 
 
+
 template<uint32_t dim, template<uint32_t> class CELL>
 ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&& ed ) noexcept
  {
      if ( &ed != this ) {
+        // DO NOT touch domain_idx_
+        // domain_idx_ stays the identity of *this*
          cell_vec_       = std::move( ed.cell_vec_ );
          node_vec_       = std::move( ed.node_vec_ );
-         first_bd_node_  = std::move( ed.first_bd_node_ );
-         domain_idx_     = std::move( ed.domain_idx_ );
+         first_bd_node_  = ed.first_bd_node_;
          bd_face_vec_    = std::move( ed.bd_face_vec_ );
          subdomain_name_ = std::move( ed.subdomain_name_ );
          rebuilt_needed_ = std::move( ed.rebuilt_needed_ );
@@ -1314,7 +1317,9 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                     }
               }
           }
+          
         // 2D models
+        // =========
         else if constexpr (dim == 2 ) {
              // equidimensional (surface) regions
              if ( cell_dim == 2 ) {
@@ -1330,14 +1335,15 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                         case INTERNAL:
                             (*nit)->Attribute(INTERIOR_LINE);
                             break;
-                        default: // leaves perimeter lines intact
-                             break;
+                        default:
+                            (*nit)->Attribute(PERIMETER_LINE);
+                            break;
                     }
-                  // region interiors
+                  // region interiors (no action is needed)
                 }
                 
-              // line domains
-              // ------------
+              // line domains (including boundaries in 2D)
+              // -----------------------------------------
              else if ( cell_dim == 1 ) {
                    // end points
                    for ( auto nit=PerimeterNodesBegin(); nit!=NodesEnd(); ++nit )
@@ -1348,25 +1354,28 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                               (*nit)->Attribute(EXTERIOR_POINT);
                               break;
                           case INTERNAL:
-                          default: // case NOT
                               (*nit)->Attribute(PERIMETER_POINT);
                               break;
+                          default: // case NOT
+                              break;
                       }
-                  // lines themselves detecting potential intersection points
+                  // domain interiors: detecting potential intersection points
                   for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
-                    switch ((*nit)->Attribute()) {
-                        case INTERIOR_LINE:
-                            (*nit)->Attribute(INTERIOR_POINT);
-                            break;
-                        default:
-                            (*nit)->Attribute(INTERIOR_LINE);
-                            break;
-                    }
-                  // interior lines
-                  for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
-                    if ( (*nit)->AtBoundary() == NOT || (*nit)->AtBoundary() == INTERNAL )
-                      (*nit)->Attribute(INTERIOR_LINE);
-                }
+                      switch ((*nit)->AtBoundary()) {
+                          case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+                          case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                              (*nit)->Attribute(EXTERIOR_LINE);
+                              break;
+                          case CNR1: case CNR2: case CNR3: case CNR4:
+                              (*nit)->Attribute(EXTERIOR_POINT);
+                              break;
+                          case INTERNAL:
+                              (*nit)->Attribute(INTERIOR_LINE);
+                              break;
+                         default: // case NOT - the original flag is retained
+                              break;
+                      }
+               }
           }
         // 1D models
         else {
@@ -1557,6 +1566,8 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
 /**
     Uses vector to create unique node vector by pushing back all node of the elements including duplicates,
     then sorting it and eliminating the duplicates.
+    
+    @attention no distinction is made between interior and perimeter nodes; use RebuildNodeVector() if this what is desired!
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
@@ -1593,9 +1604,13 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector()
 
 
 
-    /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
+/**
+   Creates  node_vec_ node-pointer vector from the shared face nodes of the supplied range of contacting cells adjacent to a lower-dimensional ModelSubDomain to which this method is applied.
+   
+   @param contacting_cells output vector of pairs of contacting cells. For each of these the cell faces which contact eachother are also provided.
+*/
 template<uint32_t dim, template<uint32_t> class CELL>
-void ModelSubDomain<dim,CELL>::CreateNodePointerVector( std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& contacting_cells )
+void ModelSubDomain<dim,CELL>::CreateNodePointerVector( vector<pair<pair<CELL<dim>*,uint32_t>,pair<CELL<dim>*,uint32_t> > >& contacting_cells )
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 

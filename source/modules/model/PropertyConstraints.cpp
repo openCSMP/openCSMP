@@ -40,11 +40,6 @@ PropertyConstraints& PropertyConstraints::operator=( const PropertyConstraints& 
  }
  
 
-PropertyConstraints::~PropertyConstraints()
- {
- }
- 
-
 bool PropertyConstraints::WithIndexes() const
  {
     return !check_list.empty();

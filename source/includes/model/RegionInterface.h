@@ -251,8 +251,6 @@ class RegionInterface {
     void UpdateRegions();
 
   protected:
-    /// rebuilds unique regions, but only if they contain some nulled element pointers
-    void RebuildUniqueRegions();
 
     //       region name  region / creation constraints
     std::map<std::string, csmp::Region<dim> >   uniqueRegionMap_;  ///<  map of unique regions that do not overlap

@@ -90,7 +90,7 @@ class ModelSubDomain {
     /// stores topological  information on the mesh that is associated with PERIMETER, boundary and split boundary information
     void UpdateTopoTypeNodeFlags();
     
-    /// creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms
+    /// creates node pointer vector from cell vector, using a vector to achieve uniqueness via sort, unique, erase algorithms; NOTE: does not distinguish interior and perimeter nodes!
     void CreateNodePointerVector();
 
     /// creates node pointer vector from the shared face nodes of the supplied range of contacting cells
@@ -355,8 +355,8 @@ class ModelSubDomain {
     std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< matching second sorted range of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
     size_t                              first_bd_node_  = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
-    inline static int32_t               domain_count_   = 0;     ///< reference-counting to get unique identifier for subdomains
-    int32_t                             domain_idx_     = 0;     ///< created during construction from domain_count_
+    inline static int32_t               domain_count_   = 0;     ///< instance-counting to get unique identifiers regions, boundaries and splitboundaries (seperate counts)
+    int32_t                             domain_idx_     = 0;     ///< unique subdomain identifier (1..n), created during region, boundary or splitboundary construction
     bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
     bool                                is_unique_      = false; ///< distinguishes space-exclusive from potentially overlapping subdomains
     static constexpr bool               verbose_ = false;

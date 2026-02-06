@@ -46,6 +46,7 @@
 #include "Box_Test.h"
 #include "Point_Test.h"
 #include "Node_Test.h"
+#include "NodeManifold_Test.h"
 #include "NodeFunctions_Test.h"
 #include "Element_Test.h"
 #include "ElementPolicyIntegrity_Test.h"
@@ -271,6 +272,7 @@ int main()
       
       // Model
       basic.addTest( new Node_Test() );
+      basic.addTest( new NodeManifold_Test() );
       basic.addTest( new Element_Test());
       basic.addTest( new Face_Test() );
       basic.addTest( new InterFace_Test() );

@@ -150,7 +150,6 @@ namespace csmp {
     void create_Pyramid_VSet( VSet<3U>&, bool bSkewed=false );
     
     /// 27 hexahedra forming a  cube
-    // TODO: fix neighbor conectivity / elment numbering
     void create_Hexahedra_VSet( VSet<3U>&, bool bSkewed=false );
     
     /// mesh with 54 prism elements
@@ -159,13 +158,12 @@ namespace csmp {
     
     // 3D element sets with different types of elements
     // ------------------------------------------------
-    // TODO: fix neighbor conectivity / elment numbering
     void create_Pyramid_Hexa_VSet( VSet<3U>&, bool bSkewed=false );
 
     /// three layers of 3 x 3 hexahedral elements (in the XY plane, but with a Z-axis aligned stack of prism elements in the middle
-    // TODO: fix neighbor conectivity / elment numbering
     void create_Prism_Hexa_VSet( VSet<3U>&, bool bSkewed=false );
-    
+
+
     // more complex models created externally but available as VSets
     // -------------------------------------------------------------
 

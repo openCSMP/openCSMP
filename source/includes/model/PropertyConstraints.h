@@ -31,7 +31,7 @@ class PropertyConstraints {
     PropertyConstraints( const PropertyConstraints& cr );
     PropertyConstraints( const char* prop_name, double pmin, double pmax );
     PropertyConstraints& operator=( const PropertyConstraints& cr );
-    ~PropertyConstraints();
+    ~PropertyConstraints() = default;
     bool    WithIndexes() const;
     uint32_t  Constraints() const;
     void    CheckLengthOfVectorVariables( bool check );
