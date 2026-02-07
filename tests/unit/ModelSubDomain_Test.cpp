@@ -696,24 +696,26 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        if ( verbose_ ) cout <<"\n"<<"classifiers in VData vs. TOPOTYPE attribute in Model:";
        for ( size_t n{0}; n<vset.Vertices(); ++n ) {
            // finding the node with the matching node by number (that was stored in the VSet)
-           size_t n_node = numeric_limits<size_t>::max();
+           const Node<2>* matching_node = nullptr;
            for ( const auto& node : model_domain.NodeVector() )
              if ( static_cast<size_t>(node->Read(nkey)) == n ) {
-                  n_node = static_cast<size_t>(node->Read(nkey));
+                  matching_node = node;
                   break;
              }
-           if ( n_node >= vset.Vertices() ) throw csmp::Exception( ERROR, "ModelSubDomain_Test::Test_SubDomainConstructionMethods", "node mapping wrong");
+           assert( matching_node != nullptr );
            if ( verbose_ ) {
                 cout <<"\n\t"<<"Node "<< n <<": "
                      << parseBoundary(static_cast<BOX_BOUNDARY>(vset.BFlag(n))) <<": "
                      << parseTopology( static_cast<TOPOTYPE>(vset.BREP_Flag(n)) )
-                     <<":"<< parseTopology( model_domain.N(n_node)->Attribute() );
+                     <<":"<< parseTopology( matching_node->Attribute() );
              }
-//           _test( vset.BREP_Flag(n) == model_domain.N(n_node)->Attribute() );
+           _test( vset.BREP_Flag(n) == matching_node->Attribute() );
          }
        
        model_domain.UpdateTopoTypeNodeFlags();
        //           ^^^^^^^^^^^^^^^^^^^^^^^^^
+ 
+       // did the gflags change
        vector<TOPOTYPE> gflags1; gflags1.reserve( model_domain.Nodes() );
        for ( const auto& node : model_domain.NodeVector() ) gflags1.push_back( node->Attribute() );
        _test( gflags0 == gflags1 );
