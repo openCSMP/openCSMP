@@ -278,6 +278,10 @@ class ModelSubDomain_Test : public Test {
       void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& ); // tested elsewhere
     */
     void Test_NonMemberFunctions();
+    
+    /// helper that prints TOPOTYPE values to VTU
+    template<uint32_t dim>
+    void BoundaryAndTopoTypeFlagsToVTU( Model<dim>& model );
 
   private:
     const bool verbose_ = true;

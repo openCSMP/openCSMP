@@ -1214,6 +1214,9 @@ size_t Region<dim>::AccumulateAll( MeshManager<dim>& mesh )
    for ( auto it=mesh.NodesBegin(); it!=mesh.NodesEnd(); ++it )
      this->node_vec_.push_back( &(*it) );
 
+   this->cell_vec_.shrink_to_fit();
+   this->node_vec_.shrink_to_fit();
+
    // sorting in interior and perimeter ranges
    this->IdentifyPerimeter();
     

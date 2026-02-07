@@ -4762,25 +4762,26 @@ TODO: needs complete rewrite
 
 
 
-/** (Re)number all cells; either continuous (in_a_single_sequence=true): Elements then Faces then InterFaces) or in seperate 0..n-1 ranges for the different entity types.
+/**
+    (Re)number all cells; either continuous (in_a_single_sequence=true): Elements then Faces then InterFaces) or in seperate 0..n-1 ranges for the different entity types.
 
-@note this member function is constant because the idx_ is a mutable variable in the cell classes
+    @note this member function is constant because the idx_ is a mutable variable in the cell classes
 
 */
 template<uint32_t dim>
-void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence )
+void MeshManager<dim>::AssignUniqueNumbers( bool in_a_single_sequence ) const
 {
-  size_t n{ 0ul };
-  for_each( nodes_.begin(), nodes_.end(), [&n]( Node<dim>& nd ) { nd.Idx( n++ ); } );
+  size_t n{ 0ul };                                               // indices are mutable!
+  for_each( nodes_.begin(), nodes_.end(), [&n]( const Node<dim>& nd ) { nd.Idx( n++ ); } );
 
   n = 0U; // resetting the counter
-  for_each( elements_.begin(), elements_.end(), [&n]( Element<dim>& e ) { e.Idx( n++ ); } );
+  for_each( elements_.begin(), elements_.end(), [&n]( const Element<dim>& e ) { e.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( faces_.begin(), faces_.end(), [&n]( Face<dim>& f ) { f.Idx( n++ ); } );
+  for_each( faces_.begin(), faces_.end(), [&n]( const Face<dim>& f ) { f.Idx( n++ ); } );
 
   if ( !in_a_single_sequence ) n = 0U;
-  for_each( interfaces_.begin(), interfaces_.end(), [&n]( InterFace<dim>& i ) { i.Idx( n++ ); } );
+  for_each( interfaces_.begin(), interfaces_.end(), [&n]( const InterFace<dim>& i ) { i.Idx( n++ ); } );
 
 } // end AssignUniqueNumbers
 
@@ -8237,17 +8238,25 @@ template<uint32_t dim>
 void MeshManager<dim>::Out() const
 {
   cout << "\nMeshManager<" << dim << ">::Out: " << endl;
+  AssignUniqueNumbers( true /* in a continuous sequence */ );
   
   // nodes
   cout << "\nNODES: " << endl;
   size_t n_node{0};
   for ( const auto& n : nodes_ ) {
        string bound = parseBoundary( n.AtBoundary() );
-       cout << "\nNode ID: " << n.Idx() << " ";
-       cout << n.Coordinate();
-       cout << " Boundary flag: " << bound << endl;
+       cout <<"\nNode ID: "<< n.Idx() << ": "<< bound;
+       cout <<", Topology: "<< parseTopology(n.Attribute()) <<", ";
+       if ( n.IsManifold() ) {
+          cout<<" Manifold with nodes: ";
+          for ( uint32_t i{0}; i<n.Manifold()->Branches(); ++i )
+            cout << n.Manifold()->N(i)->Idx() <<", ";
+       }
+      cout <<"Coordinate: ";
+      for ( uint32_t i{0}; i<dim; ++i ) cout << n.Coordinate()[i] <<",";
       n_node++;
     }
+  cout << endl;
 
   // elements
   size_t n_elmt{0};
@@ -8318,7 +8327,7 @@ void MeshManager<dim>::Out() const
   cout << endl << endl;
   cout << "PARENT ELEMENT INFORMATION FOR ALL NODES: " << endl;
   for ( const auto& n : nodes_ ) {
-      cout << "\nNode: " << n.Idx() << ", parent elements: " << endl;
+      cout << "\nNode: " << n.Idx() << ", parent elements: ";
       for ( uint32_t i = 0u; i < n.Parents(); i++ )
         cout << n.Parent( i )->Idx() << " ";
       cout << endl;

@@ -171,22 +171,23 @@ class Element : public FiniteElementPolicy<dim, Element>,
     // NB: no rule of zero because FE/FV pointers in policies
     Element( const Element<dim>& );
     Element<dim>& operator=( const Element<dim>& );
+    
     // move semantics essential for storage in plf::colony
-    Element( Element<dim>&& );
-    Element<dim>& operator=( Element<dim>&& );
+    Element( Element<dim>&& ) noexcept;
+    Element<dim>& operator=( Element<dim>&& ) noexcept;
     
     // ~Element();
 
     /// compares finite element type, material id, nodes, and neighbors; ignoring mutable idx and other attributes
-    bool operator==( const Element<dim>& ) const;
+    bool operator==( const Element<dim>& ) const noexcept;
 
     /// less than operator for comparing barycentre locations using operator of the corresponding point object
-    bool operator<( const Element<dim>& ) const;
+    bool operator<( const Element<dim>& ) const noexcept;
  
     /// Local variable storage interface
     PLACEMENT Placement() const noexcept { return ELEMENT; }
 
-    void Accept( csmp::Visitor<dim>& );
+    void Accept( csmp::Visitor<dim>& ) noexcept;
 
     // ------------------------------------------------------------------------
     // Functionality of construction process
@@ -262,16 +263,16 @@ class Element : public FiniteElementPolicy<dim, Element>,
 
     /// returns a vector of the property of interest discretized on the node
     template<class Var>
-    void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const;
+    void        NodePropertyVector( const csmp::Index&, std::vector<Var>& ) const noexcept;
 
     /// inputs node coordinates into supplied matrix
-    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const;
+    void        NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const noexcept;
 
     /// the centre of gravity of the elemt
-    Point<dim>  BaryCenter() const;
+    Point<dim>  BaryCenter() const noexcept;
 
     /// projects node points onto line returning max distance between them; vec direction can have any length
-    double      LengthInDirection( const VectorVariable<dim>& vecDirection ) const;
+    double      LengthInDirection( const VectorVariable<dim>& vecDirection ) const noexcept;
 
 
     // ------------------------------------------------------------------------

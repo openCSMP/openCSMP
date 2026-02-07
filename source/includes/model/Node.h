@@ -54,28 +54,32 @@ class Node : public LocalVariableStorage<dim,Node> {
     
     Node( const Node<dim>& );
     Node<dim>& operator=( const Node<dim>& );
-    // move semantics for colony
-    Node( Node<dim>&& );
-    Node<dim>& operator=( Node<dim>&& );
+
+    /// move constructor with semantics for colony
+    Node( Node<dim>&& ) noexcept;
     
-    ~Node();
+    Node<dim>& operator=( Node<dim>&& ) noexcept;
+    
+    ~Node() = default;
 
     /// compares memory location, idx_, BREP classifier and boundary flag
-    bool operator==( const Node<dim>& ) const;
+    bool operator==( const Node<dim>& ) const noexcept;
 
     /// Local variable storage interface
-    PLACEMENT Placement() const { return NODE; }
+    PLACEMENT Placement() const noexcept { return NODE; }
     
     /// for node forming part of line elements (2D) or surface elements (3D), method returns a unit normal that represents the average of the normals of the connected elements
-    bool UnitNormal( Point<dim>& unrml ) const;
+    bool UnitNormal( Point<dim>& unrml ) const noexcept;
  
     /// normal to surface mesh at the Node as based on its connectivity with the surrounding nodes on the surface  (cf., computer graphics) TODO: fails for quadrilateral meshes
     Point<dim> VertexNormal( typename std::vector<Node<dim>*>::const_iterator first,
-                             typename std::vector<Node<dim>*>::const_iterator last ) const;
+                             typename std::vector<Node<dim>*>::const_iterator last ) const noexcept;
 
     /// which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to
-    TOPOTYPE Attribute() const { return BREP_entity_; }
-    void Attribute( TOPOTYPE geom_feature ) { BREP_entity_ = geom_feature; }
+    TOPOTYPE Attribute() const noexcept;
+    
+    /// assign topologic role of the Node in the mesh, i.e., point that prescribes the geometry of a point line, surface etc.
+    void Attribute( TOPOTYPE geom_feature ) noexcept;
 
 
     // node to parent element connectivity (sorted vector that is searchable)
@@ -90,18 +94,18 @@ class Node : public LocalVariableStorage<dim,Node> {
     void EraseParents();
 
     /// returns how many elements share this node
-    uint32_t Parents() const;
+    uint32_t Parents() const  noexcept;
     /// access to the (0..n-1) parent element
-    Element<dim>* Parent( uint32_t );
-    const Element<dim>* const Parent( uint32_t ) const;
+    Element<dim>* Parent( uint32_t ) noexcept;
+    const Element<dim>* const Parent( uint32_t ) const noexcept;
     /// the local number of this node within the node-numbering scheme of parent element (and equal to sector number)
-    uint32_t ParentNodeNumber( uint32_t parent_element ) const;
+    uint32_t ParentNodeNumber( uint32_t parent_element ) const noexcept;
     /// checks whether Element is a parent of the node; call SortParents() first !!!
-    bool IsParent( const Element<dim>* const ) const;
+    bool IsParent( const Element<dim>* const ) const noexcept;
   
-    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin() const
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsBegin() const noexcept
       { return parents_.ParentsBegin(); }
-    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd() const
+    typename std::vector<std::pair<Element<dim>*,short>>::const_iterator ParentElementsEnd() const noexcept
       { return parents_.ParentsEnd(); }
 
     // node neighbors (sort vector to make it searchable by binary_search and other stl algorithms)
@@ -113,7 +117,7 @@ class Node : public LocalVariableStorage<dim,Node> {
     void Assign( std::vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors=false );
     
     /// copies property values from the argument node to the current node
-    void CopyPropertyValuesFrom( Node<dim>& );
+    void CopyPropertyValuesFrom( Node<dim>& ) noexcept;
 
     /// builds the neighbor connectivity working through higher-dimensional parent element edges that the node is part of; returns new number of neighbors
     uint32_t AssignNodeNeighbors();
@@ -121,47 +125,47 @@ class Node : public LocalVariableStorage<dim,Node> {
     /// removes null pointers and potential duplicates returning the resulting number of neighbors
     uint32_t UpdateNeighbors();
     
-    bool IsNeighbor( const Node<dim>* const ) const;
+    bool IsNeighbor( const Node<dim>* const ) const noexcept;
     void AddNeighbor( Node<dim>* neighbor_node );
     void RemoveNeighbor( const Node<dim>* const neighbor_node );
     /// releases all the memory used
     void EraseNeighbors();
     
     /// the number of corner nodes that this node is directly connected with via segments
-    uint32_t Neighbors() const;
+    uint32_t Neighbors() const noexcept;
     
     /// access to any of the neighbor nodes
-    Node<dim>* Neighbor( uint32_t ) const;
+    Node<dim>* Neighbor( uint32_t ) const noexcept;
     
-    typename std::vector<Node<dim>*>::const_iterator NeighborsBegin() const { return neighbor_node_pointers_.begin(); }
-    typename std::vector<Node<dim>*>::const_iterator NeighborsEnd() const { return neighbor_node_pointers_.end(); }
+    typename std::vector<Node<dim>*>::const_iterator NeighborsBegin() const noexcept { return neighbor_node_pointers_.begin(); }
+    typename std::vector<Node<dim>*>::const_iterator NeighborsEnd() const noexcept { return neighbor_node_pointers_.end(); }
  
      /// check whether a node is neighbor  of this node via linear search algorithm
-    bool LinearSearch( Node<dim>* const nptr ) const
+    bool LinearSearch( Node<dim>* const nptr ) const noexcept
      { return std::find( neighbor_node_pointers_.begin(),
                          neighbor_node_pointers_.end(), nptr ) != neighbor_node_pointers_.end(); }
 
     /// checks whether a node is neighbor of this node ( since a sorted vector is required call SortNeighbors() first)
-    bool BinarySearch( Node<dim>* const nptr ) const
+    bool BinarySearch( Node<dim>* const nptr ) const noexcept
       { return std::binary_search( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end(), nptr ); }
 
     ///  to prepare neighbor vector for binary search
-    void SortNeighbors() { sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() ); };
+    void SortNeighbors() noexcept { sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() ); };
     
 
     // node manifolds (where nodes have been multiplicated at material interfaces)
     
     /// connects the node to other topologically collocated nodes if any
-    void Assign( NodeManifold<dim>& );
+    void Assign( NodeManifold<dim>& ) noexcept;
     
     /// unassigns any potential manifold
-    void Disconnect();
+    void Disconnect() noexcept;
     
     /// access to manifold if any; returns nullptr if the node is not a manifold
-    bool IsManifold() const;
+    bool IsManifold() const noexcept;
 
     /// access to other topologically collocarted Node objects through manifold if any; returns nullptr if the node is not a manifold
-    NodeManifold<dim>* const Manifold() const;
+    NodeManifold<dim>* const Manifold() const noexcept;
 
 
     // basic functionality of the Node
@@ -170,26 +174,26 @@ class Node : public LocalVariableStorage<dim,Node> {
     void Accept( csmp::Visitor<dim>& );
 
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
-    void Idx( size_t id_0_to_n_minus_1 ) const; // since idx is mutable
-    size_t Idx() const;
-    void Coordinate( const Point<dim>& );
-    Point<dim> Coordinate() const;
+    void Idx( size_t id_0_to_n_minus_1 ) const noexcept; // since idx is mutable
+    size_t Idx() const noexcept;
+    void Coordinate( const Point<dim>& ) noexcept;
+    Point<dim> Coordinate() const noexcept;
     /// flagging for box-shaped models: NOT, LEFT, BOTTOM, RIGHT, TOP, BACK, FRONT etc.
-    void AtBoundary( BOX_BOUNDARY );
-    BOX_BOUNDARY AtBoundary() const;
+    void AtBoundary( BOX_BOUNDARY ) noexcept;
+    BOX_BOUNDARY AtBoundary() const noexcept;
 
     /// accessors/mutators for specific node coordinates x=0, y=1, z=2 (z exists only in 3D)
     double  operator[]( uint32_t i ) const;
     double& operator[]( uint32_t i );
     double& operator()( uint32_t i );
     
-    void x( double );
-    void y( double );
-    void z( double );
+    void x( double ) noexcept;
+    void y( double ) noexcept;
+    void z( double ) noexcept;
     
-    double x() const;
-    double y() const;
-    double z() const;
+    double x() const noexcept;
+    double y() const noexcept;
+    double z() const noexcept;
 
     /// output current state of class Node
     void Out() const;

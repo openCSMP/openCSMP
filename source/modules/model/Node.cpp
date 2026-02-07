@@ -67,15 +67,16 @@ Node<dim>::Node( const Node<dim>& nd )
 
 
 
+
 /**
     Move constructor also copies the pointer assignments (!).
 */
 template<uint32_t dim>
-Node<dim>::Node( Node<dim>&& nd )
+Node<dim>::Node( Node<dim>&& nd ) noexcept
   : xyz_{ std::move(nd.xyz_) },
-    idx_{ std::move(nd.idx_) },
-    parents_{ nd.parents_ },
-    neighbor_node_pointers_{ nd.neighbor_node_pointers_ },
+    idx_{ nd.idx_ },
+    parents_{ std::move(nd.parents_) },
+    neighbor_node_pointers_{ std::move(nd.neighbor_node_pointers_) },
     manifold_{ nd.manifold_ },
     at_boundary_{ nd.at_boundary_ },
     BREP_entity_{ nd.BREP_entity_ }
@@ -114,15 +115,15 @@ Node<dim>& Node<dim>::operator=( const Node<dim>& nd )
     @note this assumes that the supplied node is a temporary.
 */
 template<uint32_t dim>
-Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
+Node<dim>& Node<dim>::operator=( Node<dim>&& nd ) noexcept
  {
     assert( this != &nd );
     xyz_                     = nd.xyz_;
     idx_                     = nd.idx_;
     at_boundary_             = nd.at_boundary_;
     BREP_entity_             = nd.BREP_entity_ ;
-    parents_                 = nd.parents_;
-    neighbor_node_pointers_  = nd.neighbor_node_pointers_;
+    parents_                 = std::move(nd.parents_);
+    neighbor_node_pointers_  = std::move(nd.neighbor_node_pointers_);
     manifold_                = nd.manifold_;
 
     this->LVS( nd.LVS() );
@@ -131,17 +132,6 @@ Node<dim>& Node<dim>::operator=( Node<dim>&& nd )
  
     return *this;
  }
-
-
-
-
-template<uint32_t dim>
-Node<dim>::~Node()
- {
-    manifold_ = nullptr;
-//    cerr <<"\nNode "<< Idx() <<": called destructor.";
- }
-
 
 
 
@@ -156,7 +146,7 @@ Node<dim>::~Node()
     That must be coordinate and parent elements
 */
 template<uint32_t dim>
-bool  Node<dim>::operator==( const Node<dim>& nd ) const
+bool  Node<dim>::operator==( const Node<dim>& nd ) const noexcept
  {
     if ( &nd == this ) return true;
     if ( idx_ != nd.idx_ ) return false;
@@ -259,7 +249,7 @@ void  Node<dim>::Assign( vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors
 
     /// copies property values from the argument node to the current node
 template<uint32_t dim>
-void  Node<dim>::CopyPropertyValuesFrom( Node<dim>& nd )
+void  Node<dim>::CopyPropertyValuesFrom( Node<dim>& nd ) noexcept
  {
     this->LVS( nd.LVS() );
  }
@@ -320,7 +310,7 @@ uint32_t  Node<dim>::UpdateNeighbors()
 
  
 template<uint32_t dim>
-bool  Node<dim>::IsNeighbor( const Node<dim>* const nptr ) const
+bool  Node<dim>::IsNeighbor( const Node<dim>* const nptr ) const noexcept
  {
     return binary_search( neighbor_node_pointers_.begin(),
                           neighbor_node_pointers_.end(), nptr );
@@ -371,7 +361,7 @@ void Node<dim>::EraseNeighbors()
    @test correct SKM (unit test exists)
 */
 template<uint32_t dim>
-uint32_t  Node<dim>::Neighbors() const
+uint32_t  Node<dim>::Neighbors() const noexcept
  {
    return static_cast<uint32_t>(neighbor_node_pointers_.size());
  }
@@ -390,7 +380,7 @@ uint32_t  Node<dim>::Neighbors() const
     @date 8/10/2021
 */
 template<uint32_t dim>
-Node<dim>*  Node<dim>::Neighbor( uint32_t neighbor_node ) const
+Node<dim>*  Node<dim>::Neighbor( uint32_t neighbor_node ) const noexcept
  {
     assert( neighbor_node < neighbor_node_pointers_.size() );
     return neighbor_node_pointers_[ neighbor_node ];
@@ -414,10 +404,10 @@ template<uint32_t dim>
 double&  Node<dim>::operator()( uint32_t i ) { return xyz_[i]; }
 
 template<uint32_t dim>
-Point<dim>  Node<dim>::Coordinate() const { return xyz_; }
+Point<dim>  Node<dim>::Coordinate() const  noexcept { return xyz_; }
 
 template<uint32_t dim>
- void Node<dim>::Coordinate( const Point<dim>& p ) { xyz_=p; }
+ void Node<dim>::Coordinate( const Point<dim>& p )  noexcept { xyz_=p; }
 
 
 
@@ -431,12 +421,12 @@ void  Node<dim>::EraseParents()
 
 
 template<uint32_t dim>
-uint32_t   Node<dim>::Parents() const
+uint32_t   Node<dim>::Parents() const noexcept
   { return static_cast<uint32_t>(parents_.Size()); }
 
 
 template<uint32_t dim>
-uint32_t  Node<dim>::ParentNodeNumber( uint32_t parent_element_number ) const
+uint32_t  Node<dim>::ParentNodeNumber( uint32_t parent_element_number ) const noexcept
   {
      assert( parent_element_number < parents_.Size() );
      return parents_.LocalNodeNumber( parent_element_number );
@@ -444,14 +434,14 @@ uint32_t  Node<dim>::ParentNodeNumber( uint32_t parent_element_number ) const
 
 
 template<uint32_t dim>
-Element<dim>* Node<dim>::Parent( uint32_t parent_element_number )
+Element<dim>* Node<dim>::Parent( uint32_t parent_element_number ) noexcept
   {
      assert( parent_element_number < parents_.Size() );
      return parents_.ParentElement( parent_element_number );
   }
 
 template<uint32_t dim>
-const Element<dim>* const  Node<dim>::Parent( uint32_t parent_element_number ) const
+const Element<dim>* const  Node<dim>::Parent( uint32_t parent_element_number ) const noexcept
   {
      assert( parent_element_number < parents_.Size() );
      return parents_.ParentElement( parent_element_number );
@@ -460,7 +450,7 @@ const Element<dim>* const  Node<dim>::Parent( uint32_t parent_element_number ) c
 
     /// checks whether Element is a parent of the node
 template<uint32_t dim>
-bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const
+bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const noexcept
   {
      return parents_.IsParent(eptr);
   }
@@ -472,14 +462,14 @@ bool  Node<dim>::IsParent( const Element<dim>* const eptr ) const
 
 
 template<uint32_t dim>
-void  Node<dim>::Idx( size_t idx_to_assign ) const
+void  Node<dim>::Idx( size_t idx_to_assign ) const noexcept
  {
     idx_ = idx_to_assign;
  }
 
 
 template<uint32_t dim>
-size_t   Node<dim>::Idx() const
+size_t   Node<dim>::Idx() const noexcept
  {
     return idx_;
  }
@@ -490,53 +480,53 @@ size_t   Node<dim>::Idx() const
    Set or return the global boundary flag of the Node.
 */
 template<uint32_t dim>
-void Node<dim>::AtBoundary( BOX_BOUNDARY b ) { at_boundary_ = b; }
+void Node<dim>::AtBoundary( BOX_BOUNDARY b ) noexcept { at_boundary_ = b; }
 
 
 template<uint32_t dim>
-BOX_BOUNDARY  Node<dim>::AtBoundary() const { return at_boundary_; }
+BOX_BOUNDARY  Node<dim>::AtBoundary() const noexcept { return at_boundary_; }
 
 /// Set or return the coordinates of the current node.
 template<uint32_t dim>
-void            Node<dim>::x( double xc )  { xyz_[0u] = xc; }
+void            Node<dim>::x( double xc ) noexcept  { xyz_[0u] = xc; }
 
 template<uint32_t dim>
-void            Node<dim>::y( double yc )  { xyz_[1u] = yc; }
+void            Node<dim>::y( double yc ) noexcept  { xyz_[1u] = yc; }
 
 template<uint32_t dim>
-void            Node<dim>::z( double zc )  { xyz_[2u] = zc; }
+void            Node<dim>::z( double zc ) noexcept  { xyz_[2u] = zc; }
 
 
 template<uint32_t dim>
-double          Node<dim>::x() const { return xyz_[0u]; }
+double          Node<dim>::x() const noexcept { return xyz_[0u]; }
 
 template<uint32_t dim>
-double          Node<dim>::y() const { return xyz_[1u]; }
+double          Node<dim>::y() const noexcept { return xyz_[1u]; }
 
 template<uint32_t dim>
-double          Node<dim>::z() const { return xyz_[2u]; }
+double          Node<dim>::z() const noexcept { return xyz_[2u]; }
 
 
 // MANIFOLDS
 
 /// access to manifold if any; returns nullptr if the node is not a manifold
 template<uint32_t dim>
-bool Node<dim>::IsManifold() const { return (manifold_ != nullptr); }
+bool Node<dim>::IsManifold() const noexcept { return (manifold_ != nullptr); }
 
 
 template<uint32_t dim>
-NodeManifold<dim>* const Node<dim>::Manifold() const { return manifold_; }
+NodeManifold<dim>* const Node<dim>::Manifold() const noexcept { return manifold_; }
 
 // node cannot be member of multiple manifolds at the same time
 template<uint32_t dim>
-void Node<dim>::Assign( NodeManifold<dim>& nmf )
+void Node<dim>::Assign( NodeManifold<dim>& nmf ) noexcept
  {
     manifold_ = &nmf;
  }
 
 // node cannot be member of multiple manifolds at the same time
 template<uint32_t dim>
-void Node<dim>::Disconnect()
+void Node<dim>::Disconnect() noexcept
  {
     manifold_ = nullptr;
  }
@@ -548,7 +538,7 @@ void Node<dim>::Disconnect()
    @return false if 1) the node is not located on the inside of a patch of lower dimensional elements, 2) not properly initialised or 3) adjacent element normals are pointing in opposite directions
 */
 template<uint32_t dim>
-bool Node<dim>::UnitNormal( Point<dim>& avg_nrml ) const
+bool Node<dim>::UnitNormal( Point<dim>& avg_nrml ) const noexcept
  {
     // 1. verifying that the node indeed lies on an internal surface
     // 1.1 finding the surface elements connected to the node and their normals
@@ -627,7 +617,7 @@ bool Node<dim>::UnitNormal( Point<dim>& avg_nrml ) const
 */
 template<uint32_t dim>
 Point<dim> Node<dim>::VertexNormal( typename vector<Node<dim>*>::const_iterator first,
-                                    typename vector<Node<dim>*>::const_iterator last ) const
+                                    typename vector<Node<dim>*>::const_iterator last ) const noexcept
  {
 //     throw csmp::Exception( ERROR, "Node<dim>::VertexNormal", "method fails if node ordering on surface is not correct" );
  
@@ -651,6 +641,20 @@ Point<dim> Node<dim>::VertexNormal( typename vector<Node<dim>*>::const_iterator 
      return nbor_polygon.UnitNormal( Coordinate() );
      
   } // end VertexNormal
+
+
+
+
+    /// which geometric part of the discretisation of the initial boundary representation (BREP) of the model geometry the node belongs to
+ template<uint32_t dim>
+ TOPOTYPE Node<dim>::Attribute() const noexcept {
+     return BREP_entity_;
+  }
+    
+template<uint32_t dim>
+void Node<dim>::Attribute( TOPOTYPE geom_feature ) noexcept {
+    BREP_entity_ = geom_feature;
+ }
 
 
 

@@ -572,9 +572,10 @@ std::string parseTopology( TOPOTYPE topology )
         case INTERIOR_SURFACE: return "INTERIOR_SURFACE";
         case PERIMETER_SURFACE: return "PERIMETER_SURFACE";
         case EXTERIOR_SURFACE: return "EXTERIOR_SURFACE";
-        //default: return "NOT_CLASSIFIED";
+        default:
+//          cerr <<"\n"<<"parseTopology: error: topology not parsed, returning 'NOT CLASSIFIED'"<< endl;
+          return "NOT_CLASSIFIED";
       }
-    return "STAND_ALONE";
  }
 
 

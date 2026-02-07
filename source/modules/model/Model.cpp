@@ -3991,7 +3991,7 @@ template void flagToNumber( Model<3U>&, const char* );
 
 
 /**
-    convert the flag(s) of first variable into double values stored in the second variable
+    Converts the flag(s) of first variable into double values stored in the second variable
     
     @attention works only for node-property placement.
     
@@ -4017,8 +4017,7 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
       {
          case NODE:
               if ( flag_key.type == SCALAR ) {
-                  for ( typename vector<Node<dim>*>::const_iterator
-                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                  for ( auto nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
                     {
                        // retrieves status of the flag variable
                        double value = static_cast<double>( (*nit)->Status(flag_key) );
@@ -4028,11 +4027,10 @@ void flagToNumber( Model<dim>& model, const char* flag_variable, const char* val
                 }
               else if ( flag_key.type == VECTOR ) {
                   VectorVariable<dim> vc;
-                  for ( typename vector<Node<dim>*>::const_iterator
-                        nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
+                  for ( auto nit=mref.NodesBegin(); nit!=mref.NodesEnd(); nit++ )
                     {
                        (*nit)->Read( flag_key, vc );
-                       for ( auto i{0U}; i<dim; ++ i )
+                       for ( uint32_t i{0U}; i<dim; ++ i )
                          vc(i) = static_cast<double>( vc.Flag(i) );
                        (*nit)->Store( prop_key, vc );
                     }
@@ -4050,6 +4048,33 @@ template void flagToNumber( Model<3U>&, const char*, const char* );
 
 
 
+
+
+/// converts the model topology flags of the nodes (TopoType) into node variable values that can be visualised
+template<uint32_t dim>
+void boundaryFlagToNumber( Model<dim>& model, const char* box_boundary_var )
+ {
+    csmp::Region<dim>&  mref(model.Region("Model"));
+    csmp::Index  prop_key = model.Database().StorageKey(box_boundary_var); // output
+ 
+    if ( prop_key.place != NODE )
+      throw csmp::Exception( ERROR, "boundaryFlagToNumber:", "BOX_BOUNDARY visualisation variable must be placed on the Node." );
+    if ( prop_key.type != SCALAR )
+      throw csmp::Exception( ERROR, "boundaryFlagToNumber:", "BOX_BOUNDARY visualisation variable must be a SCALAR" );
+  
+    for ( auto nit=mref.NodesBegin(); nit!=mref.NodesEnd(); ++nit )
+      {
+         // retrieves status of the flag variable
+         double value = static_cast<double>( (*nit)->AtBoundary() );
+         // overwrites value of value variable with integer value of its flag enum
+         (*nit)->Store( prop_key, makeScalar( (*nit)->Status(prop_key), value ) );
+      }
+   
+ } // end topoTypeToNumber
+
+template void boundaryFlagToNumber( Model<1>&, const char* );
+template void boundaryFlagToNumber( Model<2>&, const char* );
+template void boundaryFlagToNumber( Model<3>&, const char* );
 
 
 

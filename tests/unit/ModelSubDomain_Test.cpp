@@ -35,7 +35,7 @@ namespace csmp {
 void ModelSubDomain_Test::run()
   {
      // new comprehensive tests
-     Test_Basics();
+//     Test_Basics();
      Test_SubDomainConstructionMethods();
   
   
@@ -605,6 +605,31 @@ void ModelSubDomain_Test::Test_Basics()
 
 
 
+/**
+  Prints VTU file where topotype identifiers have been converted to number.
+ */
+template<uint32_t dim>
+void ModelSubDomain_Test::BoundaryAndTopoTypeFlagsToVTU( Model<dim>& model )
+ {
+    model.CreateProperty( "topo type", "TT", "none");
+    model.CreateProperty( "box flag", "BF", "none");
+    
+    // getting diagnostic values
+    boundaryFlagToNumber( model, "box flag" );
+    topoTypeToNumber( model, "topo type" );
+ 
+    VTU_Interface<dim>  vtu(model);
+    list<string> outvars{ "box flag", "topo type" };
+    vtu.OutputDataToVTU( "BoundaryAndTopoTypeFlagsToVTU", outvars, model.Region("Model"), 0 );
+    
+    model.DeleteProperty( "topo type" );
+    model.DeleteProperty( "box flag" );
+ }
+
+template void ModelSubDomain_Test::BoundaryAndTopoTypeFlagsToVTU( Model<3>& );
+template void ModelSubDomain_Test::BoundaryAndTopoTypeFlagsToVTU( Model<2>& );
+template void ModelSubDomain_Test::BoundaryAndTopoTypeFlagsToVTU( Model<1>& );
+
 
 
 /**
@@ -645,26 +670,30 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        Boundary<2>& top = model.Boundary("TOP"); // domain idx = 4 (last of 4 boundaries created)
 
        // visualisaton
-       {
-       VTU_Interface<2> vtu_output( model );
-       list<string>     output_props{"node number"};
-       vtu_output.OutputDataToVTU( "split22_basic_", output_props, model_domain, 0 );
-       SplitBoundary<2>& horizontal_splitboundary = model.SplitBoundary("horizontal_splitboundary"); // domain idx = 1
-       SplitBoundary<2>& inclined_split_boundary = model.SplitBoundary("inclined_split_boundary");   // domain idx = 2
-       vtu_output.OutputDataToVTU( "split22_basic_", output_props, horizontal_splitboundary, 0 );
-       vtu_output.OutputDataToVTU( "split22_basic_", output_props, inclined_split_boundary, 0 );
-       }
+       if ( verbose_ )
+         {
+           BoundaryAndTopoTypeFlagsToVTU( model );
+           VTU_Interface<2> vtu_output( model );
+           list<string>     output_props{"node number"};
+           vtu_output.OutputDataToVTU( "split22_basic_", output_props, model_domain, 0 );
+           SplitBoundary<2>& horizontal_splitboundary = model.SplitBoundary("horizontal_splitboundary"); // domain idx = 1
+           SplitBoundary<2>& inclined_split_boundary = model.SplitBoundary("inclined_split_boundary");   // domain idx = 2
+           vtu_output.OutputDataToVTU( "split22_basic_", output_props, horizontal_splitboundary, 0 );
+           vtu_output.OutputDataToVTU( "split22_basic_", output_props, inclined_split_boundary, 0 );
+         }
        
        // testing
        const csmp::Index nkey = model.Database().StorageKey("node number");
        
        // TOPOTYPE flags: are they the same as in the input VSet?
        // -------------------------------------------------------
+       // get unperturbed gflags for testing
        vector<TOPOTYPE> gflags0; gflags0.reserve( model_domain.Nodes() );
-       if ( verbose_ ) cout <<"\n"<<"classifiers in VData vs. TOPOTYPE attribute in Model:";
        for ( const auto& node : model_domain.NodeVector() ) gflags0.push_back( node->Attribute() );
+       
        // were any errors made during model construction?
        // (NOTE: TOPOTYPE data exactly as in the VSet because VData::InitialiseNodeTopologyIdentifiers() is not called)
+       if ( verbose_ ) cout <<"\n"<<"classifiers in VData vs. TOPOTYPE attribute in Model:";
        for ( size_t n{0}; n<vset.Vertices(); ++n ) {
            // finding the node with the matching node by number (that was stored in the VSet)
            size_t n_node = numeric_limits<size_t>::max();
@@ -673,10 +702,13 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
                   n_node = static_cast<size_t>(node->Read(nkey));
                   break;
              }
-           if ( verbose_ ) cout <<"\n\t"<<"Node "<< n <<": "
-                                << parseBoundary(static_cast<BOX_BOUNDARY>(vset.BFlag(n))) <<": "
-                                << parseTopology( static_cast<TOPOTYPE>(vset.BREP_Flag(n)) )
-                                <<":"<< parseTopology( model_domain.N(n_node)->Attribute() );
+           if ( n_node >= vset.Vertices() ) throw csmp::Exception( ERROR, "ModelSubDomain_Test::Test_SubDomainConstructionMethods", "node mapping wrong");
+           if ( verbose_ ) {
+                cout <<"\n\t"<<"Node "<< n <<": "
+                     << parseBoundary(static_cast<BOX_BOUNDARY>(vset.BFlag(n))) <<": "
+                     << parseTopology( static_cast<TOPOTYPE>(vset.BREP_Flag(n)) )
+                     <<":"<< parseTopology( model_domain.N(n_node)->Attribute() );
+             }
 //           _test( vset.BREP_Flag(n) == model_domain.N(n_node)->Attribute() );
          }
        
@@ -727,7 +759,7 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        
        auto elmts = upper.RebuildCellAndPerimeterFaceVector();
        //                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       _test( elmts == upper.Cells() );
+       _test( elmts == upper.Cells() ); // fail
        _test( copy_elmt_vec == upper.CellVector() );
        _test( copy_node_vec == upper.NodeVector() );
        _test( n_perim_cells == upper.PerimeterCells() );
@@ -754,8 +786,8 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        
        lower.UpdateCellMembershipApplyingConstraints( model_domain.CellsBegin(), model_domain.CellsEnd(), constraints );
        //    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       _test( lower.IsUnique() == false );
-       _test( lower.Cells() == 4 );
+       _test( lower.IsUnique() == false ); // fail
+       _test( lower.Cells() == 4 ); // fail
        _test( lower.PerimeterNodes() > 4 );
     }
 

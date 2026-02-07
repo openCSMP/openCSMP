@@ -130,7 +130,7 @@ Element<dim>::Element( const Element<dim>& el )
 
 
 template<uint32_t dim>
-Element<dim>::Element( Element<dim>&& el )
+Element<dim>::Element( Element<dim>&& el ) noexcept
   : FiniteElementPolicy<dim, csmp::Element>{ el }, // moves the pointer (inbuilt type)
     FiniteVolumePolicy<dim, csmp::Element>{ el.FV() },
     // local variable storage
@@ -139,8 +139,8 @@ Element<dim>::Element( Element<dim>&& el )
     idx_{ el.idx_ },
     material_id_{ el.material_id_},
     region_id_{ el.region_id_ },
-    elmt_connector_{ el.elmt_connector_ },
-    node_connector_{ el.node_connector_ }
+    elmt_connector_{ std::move(el.elmt_connector_) },
+    node_connector_{ std::move(el.node_connector_) }
 {
    assert( this != &el );
    
@@ -189,8 +189,10 @@ Element<dim>& Element<dim>::operator=( const Element<dim>& el )
 }
 
 
+
+
 template<uint32_t dim>
-Element<dim>& Element<dim>::operator=( Element<dim>&& el )
+Element<dim>& Element<dim>::operator=( Element<dim>&& el ) noexcept
 {
   // should never happen because a temporary variable cannot be an lvalue
   assert( &el != this );
@@ -200,8 +202,8 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
   LocalVariableStorage<dim, csmp::Element>::LVS( el.LVS() );
 
   idx_            = el.idx_;
-  elmt_connector_ = el.elmt_connector_;
-  node_connector_ = el.node_connector_;
+  elmt_connector_ = std::move(el.elmt_connector_);
+  node_connector_ = std::move(el.node_connector_);
   material_id_    = el.material_id_;
   region_id_      = el.region_id_;
   
@@ -219,7 +221,7 @@ Element<dim>& Element<dim>::operator=( Element<dim>&& el )
 
 /// comparitor
 template<uint32_t dim>
-bool  Element<dim>::operator==( const Element<dim>& el ) const
+bool  Element<dim>::operator==( const Element<dim>& el ) const noexcept
 {
   if ( &el != this )
     {
@@ -250,7 +252,7 @@ bool  Element<dim>::operator==( const Element<dim>& el ) const
     @date 6/9/2021
 */
 template<uint32_t dim>
-bool  Element<dim>::operator<( const Element<dim>& el ) const
+bool  Element<dim>::operator<( const Element<dim>& el ) const noexcept
 {
   if ( &el != this )
     {
@@ -306,17 +308,16 @@ The Accept method is used, for instance, by the TranportVisitor class.
 @param vis A reference to a Visitor subclass.
 */
 template<uint32_t dim>
-void Element<dim>::Accept( csmp::Visitor<dim>& vis )
+void Element<dim>::Accept( csmp::Visitor<dim>& vis ) noexcept
 {
   if ( vis.ApplicationTarget() == ELEMENT ) {
     vis.Visit( this );
     return;
   }
-  if ( vis.ApplicationTarget() == NODE ) {
+  else if ( vis.ApplicationTarget() == NODE ) {
     for ( auto& nit : node_connector_ ) nit->Accept( vis );
       return;
   }
-  throw logic_error( "Element<dim>::Accept: target of visitation unresolved." );
 
 } // end Accept    
 
@@ -588,7 +589,7 @@ const csmp::Node<dim>*  Element<dim>::N( uint32_t n ) const
 */
 
 template<uint32_t dim>
-csmp::Node<dim>*  const Element<dim>::N( uint32_t n ) const  noexcept
+csmp::Node<dim>*  const Element<dim>::N( uint32_t n ) const noexcept
 {
   assert( n < node_connector_.size() );
   return node_connector_[n];
@@ -641,7 +642,7 @@ node coordinates will still be required to compute Jacobian (coordinate-
 transformation) matrix.
 */
 template<uint32_t dim>
-void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const
+void  Element<dim>::NodeCoordinateMatrix( DenseMatrix<DM_MIN>& XY ) const noexcept
 {
   const uint32_t n_nodes{ Nodes() };
   XY.Resize( n_nodes, dim );
@@ -681,7 +682,7 @@ BaryCentre().
 
 */
 template<uint32_t dim>
-Point<dim>  Element<dim>::BaryCenter() const
+Point<dim>  Element<dim>::BaryCenter() const noexcept
 {
   Point<dim>  pt( N( 0U )->Coordinate() );
   const uint32_t  n_nodes{ Nodes() };
@@ -717,7 +718,7 @@ when evaluating the quality of a certain mesh.
 
 */
 template<uint32_t dim>
-double  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const
+double  Element<dim>::LengthInDirection( const VectorVariable<dim>& vecDirection ) const noexcept
 {
   double fMinTemp( static_cast<double>(DBL_MAX) );
   double fMaxTemp( static_cast<double>(-DBL_MAX) );
@@ -752,7 +753,7 @@ returns property values at the nodes
 */
 template<uint32_t dim>
 template< class Var>
-void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V ) const
+void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>& V ) const noexcept
 {
   if ( idx.place != NODE ) {
     std::cerr << "\nElement<" << dim;
@@ -771,25 +772,25 @@ void  Element<dim>::NodePropertyVector( const csmp::Index& idx, std::vector<Var>
 }
 
 // scalar
-template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
-template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
-template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const;
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const noexcept;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const noexcept;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ScalarVariable>& ) const noexcept;
 // vector
-template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<1U> >& ) const;
-template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<2U> >& ) const;
-template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<3U> >& ) const;
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<1U> >& ) const noexcept;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<2U> >& ) const noexcept;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<VectorVariable<3U> >& ) const noexcept;
 // tensor
-template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<1U> >& ) const;
-template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<2U> >& ) const;
-template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<3U> >& ) const;
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<1U> >& ) const noexcept;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<2U> >& ) const noexcept;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<TensorVariable<3U> >& ) const noexcept;
 // array
-template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
-template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
-template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const;
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const noexcept;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const noexcept;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<ArrayVariable>& ) const noexcept;
 // flagged array
-template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
-template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
-template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const;
+template void  Element<1U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const noexcept;
+template void  Element<2U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const noexcept;
+template void  Element<3U>::NodePropertyVector( const csmp::Index&, std::vector<FlaggedArrayVariable>& ) const noexcept;
 
 
 // OUTPUT

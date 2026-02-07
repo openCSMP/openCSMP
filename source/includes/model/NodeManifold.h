@@ -41,7 +41,7 @@ class NodeManifold {
       NodeManifold( Node<dim>& node1, Node<dim>& node2 );
 
       /// constructs manifold from vector pointer and qualifier pairs
-      NodeManifold( const manifold& );
+      explicit NodeManifold( const manifold& );
 
       /// adds node to manifold and connects it to it; if it is already a manifold node, an error is raised
       bool Add( Node<dim>* const );
@@ -74,7 +74,7 @@ class NodeManifold {
       uint32_t Branches() const noexcept;
 
       /// access to node
-      Node<dim>* const N( size_t branch ) const  noexcept;
+      Node<dim>* const N( size_t branch ) const noexcept;
 
       /// outputs manifold state to data structure used to initialise VData
       std::pair<std::vector<size_t>,ManifoldType> Data() const noexcept;

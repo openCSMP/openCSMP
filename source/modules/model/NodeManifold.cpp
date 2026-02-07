@@ -9,6 +9,18 @@ using namespace std;
 
 namespace csmp {
 
+
+template<uint32_t dim>
+NodeManifold<dim>::NodeManifold( const manifold& nodes )
+ : branches_(nodes)
+{
+    assert( branches_.size() >= 2 );
+    for( auto& nd : branches_ )
+      nd->Assign( *this );
+    // assigning the Nodes to the NodeManifold cannot be done in this constructor
+}
+
+
 /**
     Transfers selected Nodes into manifold, according to their placement in the plf:colony as indicated by number in manifold_nodes.
     This will  also connect the nodes from the pfl::nodes_ container in the MeshManager with the newly created manifolds.
@@ -60,19 +72,257 @@ NodeManifold<dim>::NodeManifold( Node<dim>& inside_node, Node<dim>& outside_node
 
 
 template<uint32_t dim>
-NodeManifold<dim>::NodeManifold( const manifold& nodes )
- : branches_(nodes)
+bool NodeManifold<dim>::Add( Node<dim>* const nd )
 {
-    assert( branches_.size() >= 2 );
-    for( auto& nd : branches_ )
-      nd->Assign( *this );
-    // assigning the Nodes to the NodeManifold cannot be done in this constructor
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    //a node can only exist in one manifold
+    if(nd->Manifold() != nullptr) {
+        csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+                                 "Node already in another manifold. Nothing was done.");         
+        return false;
+    }
+
+    //the node is already in current manifold
+    for ( auto& nit : branches_ )
+      if ( nit == nd ) {
+          csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
+                                   "Node already part of current manifold. Nothing was done.");
+          return false;
+        }
+
+    // making sure that the vector does not grow by multiples of 2
+    if ( branches_.capacity() == branches_.size() ) branches_.reserve( branches_.size() + 1 );
+    branches_.push_back( nd );
+    nd->Assign( *this );
+    
+    // reviewing topology of node after insertion to see whether change is necessary
+    // Do this after multiple additions: parent_geometry_ = consistencyCheck( *this );
+
+    return true;
+
+}
+
+
+
+/**
+       Removes the node from the Manifold
+
+      @return false if the Node was not contained in the manifold
+*/
+template<uint32_t dim>
+bool NodeManifold<dim>::Remove( Node<dim>* const nd ) noexcept
+{
+   // in this is true, this should not be a manifold anymore
+   if ( branches_.empty() ) return false;
+   
+   for ( auto& nit : branches_ )
+     if ( nit == nd ) {
+         // disconnecting the node from the manifold
+         nd->Disconnect();
+         nit = nullptr;
+         // removing the Node entry from the branch list
+         branches_.erase( remove( branches_.begin(), branches_.end(), nit ) );
+         return true;
+       }
+
+    return false;
 }
 
 
 
 
+/**
+    checks whether all nodes in the  manifold have the same  physical location using operator<() of point
+*/
+template<uint32_t dim>
+bool NodeManifold<dim>::AreNodesCollocated() const noexcept
+ {
+    const Point<dim> pt = branches_[0]->Coordinate();
+    for ( const auto& nit : branches_ )
+      if ( pt != nit->Coordinate() )
+        return false;
+        
+    return true;
+ }
 
+
+
+
+template<uint32_t dim>
+void NodeManifold<dim>::SortByVariableValue( const Index& index )
+{
+    assert(index.type==SCALAR);
+    assert(index.place==NODE || index.place==ELEMENT);
+
+    if(index.type!=SCALAR)
+      throw csmp::Exception( INFO, "NodeManifold<dim>::SortByVariableValue",
+                                   "variable type not supported, must be SCALAR");
+                                   
+    const size_t n_branches(branches_.size());
+    
+    // if the variable is associated with the node manifold
+    // (different values on each node of the manifold)
+    if(index.place==NODE){
+        for ( size_t i = 0; i < n_branches; ++i) {
+            double first = branches_[i]->Read(index);
+            assert(!isnan(first));
+            for (size_t j = i + 1; j < n_branches; ++j) {
+                double second = branches_[j]->Read(index);
+                assert(!isnan(second));
+                if (first > second) swap(branches_[i], branches_[j]);
+            }
+        }
+    // if the variable is associated with the parent elements
+    } else if(index.place==ELEMENT) {
+        for ( size_t i = 0; i < branches_.size(); ++i) {
+            //double first = numeric_limits<double>::quiet_NaN();
+            double first_value(0.);
+            size_t first_count(0);
+            for( uint32_t e = 0; e < branches_[i]->Parents(); e++) {
+                //if( (dim==2 && nodes_[i]->Parent(e)->IsSurface()) || (dim==3 && nodes_[i]->Parent(e)->IsVolume()) ) {
+                if ( !isnan(branches_[i]->Parent(e)->Read(index)) ) {
+                    first_value += branches_[i]->Parent(e)->Read(index);
+                    first_count ++;
+                }
+            }
+            //assert(!isnan(first));
+            assert(first_count != 0);
+            first_value /= first_count;
+            assert(!isnan(first_value));
+
+            for ( size_t j = i + 1; j < n_branches; ++j) {
+                //double second = numeric_limits<double>::quiet_NaN();
+                double second_value(0.);
+                uint32_t second_count(0);
+                for( uint32_t e = 0; e < branches_[j]->Parents(); e++) {
+                    //if( (dim==2 && nodes_[j]->Parent(e)->IsSurface()) || (dim==3 && nodes_[j]->Parent(e)->IsVolume()) ) {
+                    if( !isnan(branches_[j]->Parent(e)->Read(index)) ) {
+                        second_value += branches_[j]->Parent(e)->Read(index);
+                        second_count ++;
+                    }
+                }
+                //assert(!isnan(second));
+                assert(second_count != 0);
+                second_value /= second_count;
+                assert(!isnan(second_value));                
+                if (first_value > second_value) swap(branches_[i], branches_[j]);
+            }
+        } 
+    } else {
+        throw csmp::Exception( INFO, "NodeManifold<dim>::SortByVariableValue",
+                                     "variable placement not supported");      
+
+    }
+    
+} // end SortByVariableValue
+
+
+
+
+
+/**
+   Checks whether any of the Nodes in the Manifold are connected to each-other and returs these clusters
+   
+   @return pair of interconnected Node clusters, and boolean indicating whether there are any.
+   
+   @note optimized for very small N (2-8 nodes).
+*/
+template<uint32_t dim>
+pair<vector<vector<Node<dim>*>>,bool>  NodeManifold<dim>::InterConnectedMemberNodes() const noexcept
+ {
+    const size_t n_branches = branches_.size();
+    
+    vector<vector<Node<dim>*>>  adjacency_list( branches_.size() );
+    bool has_connections{false};
+
+    // Optimized for Undirected/Bidirectional Connectivity.
+    // Since connections between nodes are bidirectional (A <-> B), a triangular loop is used
+    // (j = i + 1), i.e., LinearSearch needs to be performed only in one direction.
+    // If a connection is found, we populate both adjacency slots simultaneously.
+    assert( n_branches >= 2 );
+    for ( size_t i = 0; i < n_branches; ++i ) {
+        for ( size_t j = i + 1; j < n_branches; ++j ) {
+            // finding whether node i is connected to node j
+            if ( branches_[i]->LinearSearch(branches_[j]) ) {
+                adjacency_list[i].push_back(branches_[j]);
+                adjacency_list[j].push_back(branches_[i]);
+                has_connections = true;
+            }
+        }
+    }
+
+    return make_pair( std::move(adjacency_list), has_connections );
+ }
+
+
+
+/**
+    Returns manifold node indices and type to data structure used to initialise VData
+*/
+template<uint32_t dim>
+pair<vector<size_t>,ManifoldType>  NodeManifold<dim>::Data() const noexcept
+ {
+    // there must be at least 2 nodes
+    vector<size_t> node_ids{ branches_[0]->Idx(), branches_[1]->Idx() };
+    if ( branches_.size() > 2 ) {
+         node_ids.reserve( branches_.size() );
+         for ( uint32_t i{2U}; i<branches_.size(); i++ )
+           node_ids.push_back( branches_[i]->Idx() );
+      }
+    return make_pair( node_ids, Classify() );
+ }
+
+
+
+
+template<uint32_t dim>
+void NodeManifold<dim>::Out() const
+{
+  cout << "\nNodeManifold: "<< parse(Classify()) <<" with nodes (indices):\t";
+  for ( uint32_t i{0U}; i<Branches(); i++ ) {
+      if ( NodeManifold<dim>::N(i) ) {
+           cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": ";
+           cout << parseBoundary( NodeManifold<dim>::N(i)->AtBoundary() ) <<": ";
+           cout << parseTopology( NodeManifold<dim>::N(i)->Attribute() ) <<": ";
+        }
+      else
+        cerr <<"\nNodeManifold<dim>::Out: branch node pointer is a null pointer.";
+    }
+  cout <<"\n\t"<<"ManifoldType: "<< parse( this->Classify() );
+  cout << endl << endl;
+}
+
+
+template<uint32_t dim>
+void NodeManifold<dim>::AssignManifoldToMemberNodes() noexcept
+{
+   for ( auto& node : branches_ ) node->Assign( *this );
+}
+
+
+
+
+template<uint32_t dim>
+uint32_t NodeManifold<dim>::Branches() const noexcept
+{
+  return static_cast<uint32_t>(branches_.size());
+}
+
+
+
+
+template<uint32_t dim>
+Node<dim>* const NodeManifold<dim>::N( size_t branch ) const noexcept
+{
+  assert( branch < branches_.size() );
+  return branches_[branch];
+}
+
+
+
+
+// helper structure
 struct TopoCounts {
     uint8_t interior_surface = 0;
     uint8_t perimeter_surface = 0;
@@ -297,337 +547,6 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
 
 
 
-template<uint32_t dim>
-void NodeManifold<dim>::AssignManifoldToMemberNodes() noexcept
-{
-   for ( auto& node : branches_ ) node->Assign( *this );
-}
-
-
-template<uint32_t dim>
-void NodeManifold<dim>::SortByVariableValue( const Index& index )
-{
-    assert(index.type==SCALAR);
-    assert(index.place==NODE || index.place==ELEMENT);
-
-    if(index.type!=SCALAR)
-      throw csmp::Exception( INFO, "NodeManifold<dim>::SortByVariableValue",
-                                   "variable type not supported, must be SCALAR");
-                                   
-    const size_t n_branches(branches_.size());
-    
-    // if the variable is associated with the node manifold
-    // (different values on each node of the manifold)
-    if(index.place==NODE){
-        for ( size_t i = 0; i < n_branches; ++i) {
-            double first = branches_[i]->Read(index);
-            assert(!isnan(first));
-            for (size_t j = i + 1; j < n_branches; ++j) {
-                double second = branches_[j]->Read(index);
-                assert(!isnan(second));
-                if (first > second) swap(branches_[i], branches_[j]);
-            }
-        }
-    // if the variable is associated with the parent elements
-    } else if(index.place==ELEMENT) {
-        for ( size_t i = 0; i < branches_.size(); ++i) {
-            //double first = numeric_limits<double>::quiet_NaN();
-            double first_value(0.);
-            size_t first_count(0);
-            for( uint32_t e = 0; e < branches_[i]->Parents(); e++) {
-                //if( (dim==2 && nodes_[i]->Parent(e)->IsSurface()) || (dim==3 && nodes_[i]->Parent(e)->IsVolume()) ) {
-                if ( !isnan(branches_[i]->Parent(e)->Read(index)) ) {
-                    first_value += branches_[i]->Parent(e)->Read(index);
-                    first_count ++;
-                }
-            }
-            //assert(!isnan(first));
-            assert(first_count != 0);
-            first_value /= first_count;
-            assert(!isnan(first_value));
-
-            for ( size_t j = i + 1; j < n_branches; ++j) {
-                //double second = numeric_limits<double>::quiet_NaN();
-                double second_value(0.);
-                uint32_t second_count(0);
-                for( uint32_t e = 0; e < branches_[j]->Parents(); e++) {
-                    //if( (dim==2 && nodes_[j]->Parent(e)->IsSurface()) || (dim==3 && nodes_[j]->Parent(e)->IsVolume()) ) {
-                    if( !isnan(branches_[j]->Parent(e)->Read(index)) ) {
-                        second_value += branches_[j]->Parent(e)->Read(index);
-                        second_count ++;
-                    }
-                }
-                //assert(!isnan(second));
-                assert(second_count != 0);
-                second_value /= second_count;
-                assert(!isnan(second_value));                
-                if (first_value > second_value) swap(branches_[i], branches_[j]);
-            }
-        } 
-    } else {
-        throw csmp::Exception( INFO, "NodeManifold<dim>::SortByVariableValue",
-                                     "variable placement not supported");      
-
-    }
-    
-} // end SortByVariableValue
-
-
-
-
-///Clears existing InterFaces of assigned to node and assigns a new set to them.
-/// @attention This overwrites existing interfaces assigned to node if they are assigned.
-template<uint32_t dim>
-void NodeManifold<dim>::Assign(Node<dim>* n, std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes )
-{
-  assert(!interface_indexes.empty());
-
-  auto nmap_it = node_parent_interface_map_.find(n);
-  //If new node entry
-  if ( nmap_it==node_parent_interface_map_.end()){
-    //create interface_index_vector from set
-    vector<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> if_idx_vec;
-    for (auto& pair:interface_indexes){
-      if_idx_vec.push_back(pair);
-    }
-    //insert into map
-    node_parent_interface_map_.insert(make_pair(n,if_idx_vec));
-    return;
-  } else {
-    auto if_indexes = nmap_it->second;
-    //if vector is already assigned - we overwrite
-    if (!if_indexes.empty())
-      if_indexes.clear(); //clear current vector
-
-    for ( auto pair : interface_indexes)
-      if_indexes.push_back(pair);           //insert interface index pair into map
-
-    return;
-  }
-}//end of Assign
-
-
-
-
-
-
-
-template<uint32_t dim>
-uint32_t NodeManifold<dim>::Branches() const  noexcept
-{
-  return static_cast<uint32_t>(branches_.size());
-}
-
-
-template<uint32_t dim>
-uint32_t NodeManifold<dim>::NodeMapSize() const
-{
-  return static_cast<uint32_t>(node_parent_interface_map_.size());
-}
-
-
-
-
-template<uint32_t dim>
-uint32_t NodeManifold<dim>::InterFaces( Node<dim>* const n ) const noexcept
-{
-  //check map has been calibrated
-  assert( !node_parent_interface_map_.empty() );
-
-  return static_cast<uint32_t>(node_parent_interface_map_.at(n).size());
-}
-
-
-template<uint32_t dim>
-Node<dim>* const NodeManifold<dim>::N( size_t branch ) const noexcept
-{
-  assert( branch < branches_.size() );
-  return branches_[branch];
-}
-
-
-
-template<uint32_t dim>
-InterFace<dim>* NodeManifold<dim>::I( Node<dim>* const n, uint32_t i )
-{
-  assert(!node_parent_interface_map_.empty());
-
-  auto interface_indexes = node_parent_interface_map_.at(n);
-  assert(i < interface_indexes.size()); //out of scope
-  return interface_indexes[i].first;
-}
-
-
-template<uint32_t dim>
-std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>::InterFaceIndex( Node<dim>* const n, uint32_t i )
-{
-  assert(!node_parent_interface_map_.empty());
-  auto interface_indexes = node_parent_interface_map_.at(n);
-  assert(i < interface_indexes.size()); //out of scope
-
-  return interface_indexes[i];
-}
-
-
-template<uint32_t dim>
-std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> NodeManifold<dim>::InterFaceIndexVector( Node<dim>* const n )
-{
-  assert(!node_parent_interface_map_.empty());
-  return  node_parent_interface_map_.at(n);
-}
-
-
-
-
-template<uint32_t dim>
-bool NodeManifold<dim>::Add( Node<dim>* const nd )
-{
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    
-    //a node can only exist in one manifold
-    if(nd->Manifold() != nullptr) {
-        csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
-                                 "Node already in another manifold. Nothing was done.");         
-        return false;
-    }
-
-    //the node is already in current manifold
-    for ( auto& nit : branches_ )
-      if ( nit == nd ) {
-          csmp_error.Note( INFO, "NodeManifold<dim>::Add(Node<dim>*)",
-                                   "Node already part of current manifold. Nothing was done.");
-          return false;
-        }
-
-    // making sure that the vector does not grow by multiples of 2
-    if ( branches_.capacity() == branches_.size() ) branches_.reserve( branches_.size() + 1 );
-    branches_.push_back( nd );
-    nd->Assign( *this );
-    
-    // reviewing topology of node after insertion to see whether change is necessary
-    // Do this after multiple additions: parent_geometry_ = consistencyCheck( *this );
-
-    return true;
-
-}
-
-
-
-/**
-       Removes the node from the Manifold
-
-      @return false if the Node was not contained in the manifold
-*/
-template<uint32_t dim>
-bool NodeManifold<dim>::Remove( Node<dim>* const nd ) noexcept
-{
-   // in this is true, this should not be a manifold anymore
-   if ( branches_.empty() ) return false;
-   
-   for ( auto& nit : branches_ )
-     if ( nit == nd ) {
-         // disconnecting the node from the manifold
-         nd->Disconnect();
-         nit = nullptr;
-         // removing the Node entry from the branch list
-         branches_.erase( remove( branches_.begin(), branches_.end(), nit ) );
-         return true;
-       }
-
-    return false;
-}
-
-
-
-      /// checks whether all nodes in the  manifold have the same location using operator< of point
-template<uint32_t dim>
-bool NodeManifold<dim>::AreNodesCollocated() const noexcept
- {
-    const Point<dim> pt = branches_[0]->Coordinate();
-    for ( const auto& nit : branches_ )
-      if ( pt != nit->Coordinate() )
-        return false;
-        
-    return true;
- }
-
-
-
-/**
-   Checks whether any of the Nodes in the Manifold are connected to each-other and returs these clusters
-   
-   @return pair of interconnected Node clusters, and boolean indicating whether there are any.
-   
-   @note optimized for very small N (2-8 nodes).
-*/
-template<uint32_t dim>
-pair<vector<vector<Node<dim>*>>,bool>  NodeManifold<dim>::InterConnectedMemberNodes() const noexcept
- {
-    const size_t n_branches = branches_.size();
-    
-    vector<vector<Node<dim>*>>  adjacency_list( branches_.size() );
-    bool has_connections{false};
-
-    // Optimized for Undirected/Bidirectional Connectivity.
-    // Since connections between nodes are bidirectional (A <-> B), a triangular loop is used
-    // (j = i + 1), i.e., LinearSearch needs to be performed only in one direction.
-    // If a connection is found, we populate both adjacency slots simultaneously.
-    assert( n_branches >= 2 );
-    for ( size_t i = 0; i < n_branches; ++i ) {
-        for ( size_t j = i + 1; j < n_branches; ++j ) {
-            // finding whether node i is connected to node j
-            if ( branches_[i]->LinearSearch(branches_[j]) ) {
-                adjacency_list[i].push_back(branches_[j]);
-                adjacency_list[j].push_back(branches_[i]);
-                has_connections = true;
-            }
-        }
-    }
-
-    return make_pair( std::move(adjacency_list), has_connections );
- }
-
-
-
-/**
-    Returns manifold node indices and type to data structure used to initialise VData
-*/
-template<uint32_t dim>
-pair<vector<size_t>,ManifoldType>  NodeManifold<dim>::Data() const noexcept
- {
-    // there must be at least 2 nodes
-    vector<size_t> node_ids{ branches_[0]->Idx(), branches_[1]->Idx() };
-    if ( branches_.size() > 2 ) {
-         node_ids.reserve( branches_.size() );
-         for ( uint32_t i{2U}; i<branches_.size(); i++ )
-           node_ids.push_back( branches_[i]->Idx() );
-      }
-    return make_pair( node_ids, Classify() );
- }
-
-
-
-
-template<uint32_t dim>
-void NodeManifold<dim>::Out() const
-{
-  cout << "\nNodeManifold: "<< parse(Classify()) <<" with nodes (indices):\t";
-  for ( uint32_t i{0U}; i<Branches(); i++ ) {
-      if ( NodeManifold<dim>::N(i) ) {
-           cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": ";
-           cout << parseBoundary( NodeManifold<dim>::N(i)->AtBoundary() ) <<": ";
-           cout << parseTopology( NodeManifold<dim>::N(i)->Attribute() ) <<": ";
-        }
-      else
-        cerr <<"\nNodeManifold<dim>::Out: branch node pointer is a null pointer.";
-    }
-  cout <<"\n\t"<<"ManifoldType: "<< parse( this->Classify() );
-  cout << endl << endl;
-}
-
-template class NodeManifold<1U>;
-template class NodeManifold<2U>;
-template class NodeManifold<3U>;
 
 
 
@@ -741,6 +660,115 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
     return nmf.Classify();
 
  } // end consistency check
+
+
+// ================================================================================================================
+//
+//          METHODS THAT INVOLVE INTERFACES
+//
+// ================================================================================================================
+// TODO: deprecate
+
+///Clears existing InterFaces of assigned to node and assigns a new set to them.
+/// @attention This overwrites existing interfaces assigned to node if they are assigned.
+template<uint32_t dim>
+void NodeManifold<dim>::Assign(Node<dim>* n, std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes )
+{
+  assert(!interface_indexes.empty());
+
+  auto nmap_it = node_parent_interface_map_.find(n);
+  //If new node entry
+  if ( nmap_it==node_parent_interface_map_.end()){
+    //create interface_index_vector from set
+    vector<pair<InterFace<dim>*,pair<uint32_t,INTERFACE_SIDE>>> if_idx_vec;
+    for (auto& pair:interface_indexes){
+      if_idx_vec.push_back(pair);
+    }
+    //insert into map
+    node_parent_interface_map_.insert(make_pair(n,if_idx_vec));
+    return;
+  } else {
+    auto if_indexes = nmap_it->second;
+    //if vector is already assigned - we overwrite
+    if (!if_indexes.empty())
+      if_indexes.clear(); //clear current vector
+
+    for ( auto pair : interface_indexes)
+      if_indexes.push_back(pair);           //insert interface index pair into map
+
+    return;
+  }
+}//end of Assign
+
+
+
+
+
+
+
+
+
+template<uint32_t dim>
+uint32_t NodeManifold<dim>::NodeMapSize() const
+{
+  return static_cast<uint32_t>(node_parent_interface_map_.size());
+}
+
+
+
+
+template<uint32_t dim>
+uint32_t NodeManifold<dim>::InterFaces( Node<dim>* const n ) const noexcept
+{
+  //check map has been calibrated
+  assert( !node_parent_interface_map_.empty() );
+
+  return static_cast<uint32_t>(node_parent_interface_map_.at(n).size());
+}
+
+
+
+
+
+template<uint32_t dim>
+InterFace<dim>* NodeManifold<dim>::I( Node<dim>* const n, uint32_t i )
+{
+  assert(!node_parent_interface_map_.empty());
+
+  auto interface_indexes = node_parent_interface_map_.at(n);
+  assert(i < interface_indexes.size()); //out of scope
+  return interface_indexes[i].first;
+}
+
+
+
+
+template<uint32_t dim>
+std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>> NodeManifold<dim>::InterFaceIndex( Node<dim>* const n, uint32_t i )
+{
+  assert(!node_parent_interface_map_.empty());
+  auto interface_indexes = node_parent_interface_map_.at(n);
+  assert(i < interface_indexes.size()); //out of scope
+
+  return interface_indexes[i];
+}
+
+
+
+
+template<uint32_t dim>
+std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> NodeManifold<dim>::InterFaceIndexVector( Node<dim>* const n )
+{
+  assert(!node_parent_interface_map_.empty());
+  return  node_parent_interface_map_.at(n);
+}
+
+
+
+
+template class NodeManifold<1U>;
+template class NodeManifold<2U>;
+template class NodeManifold<3U>;
 
 template ManifoldType  consistencyCheck( const NodeManifold<3>&, bool );
 template ManifoldType  consistencyCheck( const NodeManifold<2>&, bool );

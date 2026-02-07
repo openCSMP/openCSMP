@@ -463,13 +463,17 @@ void printRangeOf( const std::vector<std::pair<double, double> >& );
 /// prints min/max values stored in supplied vector of vectors
 void printRangeOfVectorOfVectors( const std::vector<std::vector<double> >& );
 
-/// convert the flag(s) of a variable into integer values stored in its number part
+/// converts the VARIABLE_FLAG flag(s) of a variable into integer values stored in its number part
 template<uint32_t dim>
 void flagToNumber( Model<dim>&, const char* variable );
 
-/// convert the flag(s) of first variable into integer values stored in the second variable
+/// converts the VARIABLE_FLAG flag(s) of first variable into integer values stored in the second variable
 template<uint32_t dim>
 void flagToNumber( Model<dim>&, const char* flag_variable, const char* number_variable );
+
+/// converts BOX_BOUNDARY flag to variable values stored in specified variable
+template<uint32_t dim>
+void boundaryFlagToNumber( Model<dim>& model, const char* box_boundary_var );
 
 /// converts the model topology flags of the nodes (TopoType) into node variable values that can be visualised
 template<uint32_t dim>

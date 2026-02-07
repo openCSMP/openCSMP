@@ -470,8 +470,9 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
      interior_nodes.reserve( inside_nodes.size() );
      // node sorting is retained
      for ( const auto& nit : inside_nodes )
-       // TODO: wrong assumption? - perimeter is indicated by absence of manifolds
-       if ( !nit->IsManifold() || ( nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
+       // either off: a) no manifold and inside model or (b) on the exterior
+       if ( (!nit->IsManifold() && (nit->AtBoundary() == NOT || nit->AtBoundary() == INTERNAL)) ||
+            (nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
        else
          interior_nodes.push_back( nit );
@@ -524,7 +525,9 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
      interior_nodes.reserve( outside_nodes.size() );
      // node that sorting is retained
      for ( const auto& nit : outside_nodes )
-       if ( !nit->IsManifold() || ( nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
+       // either off: a) no manifold and inside model or (b) on the exterior
+       if ( (!nit->IsManifold() && (nit->AtBoundary() == NOT || nit->AtBoundary() == INTERNAL)) ||
+            (nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
        else
          interior_nodes.push_back( nit );
@@ -547,24 +550,29 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
 template<uint32_t dim>
 size_t SplitBoundary<dim>::RenumberNodes() const noexcept
   {
+     // pair<vector<Node<dim>*>,"n interior nodes">
      auto inside_node_ptrs  = this->InsideNodes();
      auto outside_node_ptrs = this->OutsideNodes();
      
-     // remove the inside nodes from the outside node vector
-     unordered_set<Node<dim>*> remove_set( inside_node_ptrs.first.begin(), inside_node_ptrs.first.end());
+     vector<Node<dim>*> perimeter_nodes;
 
-     outside_node_ptrs.first.erase( remove_if( outside_node_ptrs.first.begin(), outside_node_ptrs.first.end(),
-                                               [&](Node<dim>* n ) { return remove_set.contains(n); // C++20
-                                                                  }), outside_node_ptrs.first.end() );
-
-     cout <<"\n"<<"SplitBoundary<"<< dim <<">::RenumberNodes: ";
-     cout <<"removed "<< outside_node_ptrs.second - outside_node_ptrs.first.size() <<" outside-node pointers";
-     cout <<" shared with the inside."<< endl;
-     size_t n_node{0};
-     for ( const auto& nit : inside_node_ptrs.first ) nit->Idx(n_node++);
-     for ( const auto& nit : outside_node_ptrs.first ) nit->Idx(n_node++);
+     // finding the shared perimeter nodes that must not be duplicated
+     set_intersection( inside_node_ptrs.first.begin(), inside_node_ptrs.first.end(),
+                       outside_node_ptrs.first.begin(), outside_node_ptrs.first.end(),  back_inserter(perimeter_nodes) );
      
-     return inside_node_ptrs.first.size() + outside_node_ptrs.first.size();
+     // renumbering the interior of the inside
+     size_t n_node{0};
+     for ( auto nit=inside_node_ptrs.first.begin(); nit!=inside_node_ptrs.first.end(); ++nit ) (*nit)->Idx(n_node++);
+     // interior nodes of the outside
+     const long perim_node1 = static_cast<long>(outside_node_ptrs.second);
+     for ( auto nit=outside_node_ptrs.first.begin(); nit!=next(outside_node_ptrs.first.begin(),perim_node1); ++nit )
+       (*nit)->Idx(n_node++);
+     // perimeter nodes of the outside but only if they were not already numbered
+     for ( auto nit=next(outside_node_ptrs.first.begin(),perim_node1); nit!=outside_node_ptrs.first.end(); ++nit )
+       if ( !binary_search( perimeter_nodes.begin(), perimeter_nodes.end(), (*nit) ) )
+         (*nit)->Idx(n_node++);
+           
+     return inside_node_ptrs.first.size() + outside_node_ptrs.first.size() - perimeter_nodes.size();
   }
 
 

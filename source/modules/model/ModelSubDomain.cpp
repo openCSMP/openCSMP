@@ -1229,6 +1229,9 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
     // (in these subdomains we have nodes)
     if constexpr ( is_same<CELL<dim>,Element<dim> >::value || is_same<CELL<dim>,Face<dim> >::value )
       {
+        // =========
+        // 3D models
+        // =========
         if constexpr ( dim == 3 )
           {
              // volumetric domains: only perimeter surface needs updating
@@ -1280,8 +1283,26 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                     }
                   // interior surfaces
                   for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
-                    if ( (*nit)->AtBoundary() == NOT || (*nit)->AtBoundary() == INTERNAL )
-                      (*nit)->Attribute(INTERIOR_SURFACE);
+                    switch ((*nit)->AtBoundary()) {
+                        case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                            (*nit)->Attribute(EXTERIOR_SURFACE);
+                            break;
+                        case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                        case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                        case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                            (*nit)->Attribute(EXTERIOR_LINE);
+                            break;
+                        case CNR1: case CNR2: case CNR3: case CNR4:
+                        case CNR5: case CNR6: case CNR7: case CNR8:
+                            (*nit)->Attribute(EXTERIOR_POINT);
+                            break;
+                        case INTERNAL: // if there is a pre-existing Boundary or SplitBoundary
+                            (*nit)->Attribute(INTERIOR_SURFACE);
+                            break;
+                        case NOT:
+                        default: // not marked yet
+                            break;
+                  }
                 }
                 
              // line domains: we are dealing with end points
@@ -1318,6 +1339,7 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
               }
           }
           
+        // =========
         // 2D models
         // =========
         else if constexpr (dim == 2 ) {
@@ -1352,28 +1374,30 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                           case EDGE1: case EDGE2: case EDGE3: case EDGE4:
                           case CNR1: case CNR2: case CNR3: case CNR4:
                               (*nit)->Attribute(EXTERIOR_POINT);
-                              break;
+                            break;
                           case INTERNAL:
                               (*nit)->Attribute(PERIMETER_POINT);
-                              break;
+                            break;
                           default: // case NOT
-                              break;
+                            break;
                       }
                   // domain interiors: detecting potential intersection points
                   for ( auto nit=NodesBegin(); nit!=PerimeterNodesBegin(); ++nit )
                       switch ((*nit)->AtBoundary()) {
                           case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
                           case EDGE1: case EDGE2: case EDGE3: case EDGE4:
-                              (*nit)->Attribute(EXTERIOR_LINE);
-                              break;
+                              // if we encounter a SplitBoundary
+                              if ( (*nit)->IsManifold() ) (*nit)->Attribute(EXTERIOR_POINT);
+                              else (*nit)->Attribute(EXTERIOR_LINE);
+                            break;
                           case CNR1: case CNR2: case CNR3: case CNR4:
                               (*nit)->Attribute(EXTERIOR_POINT);
-                              break;
+                            break;
                           case INTERNAL:
                               (*nit)->Attribute(INTERIOR_LINE);
-                              break;
-                         default: // case NOT - the original flag is retained
-                              break;
+                            break;
+                          default: // case NOT - the original flag is retained
+                            break;
                       }
                }
           }
@@ -1396,9 +1420,9 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
        // NOTE: everything is already handled above; nothing extra needs to be done
        
        
-    // =====================================
-    // SplitBoundary model sub-domains
-    // =====================================
+    // ===============================================================
+    // 3D SplitBoundary models manifest as surface or line sub-domains
+    // ===============================================================
     // (yet we not that SplitBoundaries only exist on the inside of the model;
     //  where they reach an outside Boundary the SplitBoundary persists)
     // 3D case
@@ -1458,6 +1482,7 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                         break;
                 }
             // interior of line-shaped SplitBoundary, detecting intersection points
+            // TODO: loop over interfaces instead
             for ( size_t n{0}; n < inner_nodes.first[inner_nodes.second]; ++n )
               switch (inner_nodes.first[n]->Attribute()) {
                   case MESH_VERTEX:
@@ -1495,13 +1520,126 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                       break; // no change
               }
            }
-      }
+       }
 
-       // 2D models with SplitBoundaries
+       // ===================================================================
+       // 2D SplitBoundary models where these are line domains
+       // ===================================================================
        if constexpr ( is_same<CELL<dim>,InterFace<dim> >::value && dim == 2 )
          {
            // the SplitBoundary must be a line element region
            if ( cell_dim != 1 ) throw logic_error("UpdateTopoTypeNodeFlags (In 2D model SplitBoundary must be a line");
+           
+           for ( auto& iface : CellVector() )
+             {
+                 INTERFACE_SIDE side = INSIDE;
+                 const auto n_nodes{ iface->FE()->Nodes() };
+                 
+                 // processing MIDDLE, INSIDE (interior) and PERIMETER nodes
+                 // --------------------------------------------------------
+                 for ( uint32_t i=0; i<n_nodes; ++i ) {
+                       // diagnostics
+                       BOX_BOUNDARY bflag = iface.N(i,side)->AtBoundary();
+                       TOPOTYPE     gflag = iface.N(i,side)->Attribute();
+                       // identifying perimeter nodes where inside is same as outside
+                       const bool is_interior_node = ( iface.N(i,side) == iface.MatchingN(i,side) ) ? false : true;
+                       
+                       // interior nodes
+                       if ( is_interior_node ) {
+                            // middle element nodes
+                            if ( iface.HasInterveningElement() )
+                              iface.N(i,MIDDLE)->Attribute(INTERIOR_LINE);
+                            // interface nodes
+                            assert( iface.N(i,side)->IsManifold() );
+                            assert( bflag == NOT || bflag == INTERNAL );
+                            switch (gflag) {
+                                case INTERIOR_LINE:
+                                     iface.N(i,side)->Attribute(INTERIOR_LINE);
+                                   break;
+                                case INTERIOR_POINT:
+                                     iface.N(i,side)->Attribute(INTERIOR_POINT);
+                                   break;
+                                case PERIMETER_LINE:
+                                     cerr <<"\ndetected PERIMETER_LINE in inside of SplitBoundary"<< endl;
+                                     iface.N(i,side)->Out();
+                                     iface.N(i,side)->Attribute(INTERIOR_LINE);
+                                   break;
+                                default:
+                                     iface.N(i,side)->Attribute(MESH_VERTEX);
+                                   break; // no change
+                            }
+                          }
+                        // perimeter nodes
+                        else {
+                            // only a single node needs to be flagged with TOPOTYPE
+                            switch (bflag) {
+                                case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+                                case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                                     iface.N(i,side)->Attribute(EXTERIOR_LINE);
+                                     if ( iface.HasInterveningElement() )
+                                       iface.N(i,MIDDLE)->Attribute(EXTERIOR_LINE);
+                                   break;
+                                case CNR1: case CNR2: case CNR3: case CNR4:
+                                     iface.N(i,side)->Attribute(EXTERIOR_POINT);
+                                     if ( iface.HasInterveningElement() )
+                                       iface.N(i,MIDDLE)->Attribute(EXTERIOR_POINT);
+                                   break;
+                                case INTERNAL: case NOT:
+                                default:
+                                     iface.N(i,side)->Attribute(PERIMETER_POINT);
+                                     if ( iface.HasInterveningElement() )
+                                       iface.N(i,MIDDLE)->Attribute(PERIMETER_POINT);
+                                   break;
+                              }
+                         }
+                   } // nodes
+ 
+                 // processing interior nodes of OUTSIDE
+                 // ------------------------------------
+                 side = OUTSIDE;
+                 for ( uint32_t i=0; i<n_nodes; ++i ) {
+                       // diagnostics
+                       BOX_BOUNDARY bflag = iface.N(i,side)->AtBoundary();
+                       TOPOTYPE     gflag = iface.N(i,side)->Attribute();
+                       // identifying perimeter nodes where inside is same as outside
+                       const bool is_interior_node = ( iface.N(i,side) == iface.MatchingN(i,side) ) ? false : true;
+                       
+                       // flagging interior nodes
+                       if ( is_interior_node ) {
+                            // interior nodes
+                            assert( iface.N(i,side)->IsManifold() );
+                            assert( bflag == NOT || bflag == INTERNAL );
+                            switch (gflag) {
+                                case INTERIOR_LINE:
+                                     iface.N(i,side)->Attribute(INTERIOR_LINE);
+                                   break;
+                                case INTERIOR_POINT:
+                                     iface.N(i,side)->Attribute(INTERIOR_POINT);
+                                   break;
+                                case PERIMETER_LINE:
+                                     cerr <<"\ndetected PERIMETER_LINE in inside of SplitBoundary"<< endl;
+                                     iface.N(i,side)->Out();
+                                     iface.N(i,side)->Attribute(INTERIOR_LINE);
+                                   break;
+                                default:
+                                     iface.N(i,side)->Attribute(MESH_VERTEX);
+                                   break; // no change
+                            }
+                          }
+                        // perimeter nodes (already done)
+
+                   } // nodes
+ 
+             } // end cell vector
+
+
+        } // end SplitBoundaries
+    }
+    
+ } // end UpdateTopoTypeNodeFlags
+
+
+/* REPLACED with loop over InterFace objects
 
            // here we deal with interior and perimeter nodes
            pair<vector<Node<dim>*>,size_t> inner_nodes = static_cast<ModelSubDomain<dim,InterFace>>(this)->InsideNodes();
@@ -1552,13 +1690,8 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                     break; // no change
             }
 
-        } // end SplitBoundaries
-    }
-    
- } // end UpdateTopoTypeNodeFlags
 
-
-
+*/
 
 
 

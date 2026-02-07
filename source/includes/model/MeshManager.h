@@ -402,7 +402,7 @@ private:
   void DetachNeighborsFrom( CELL<dim>* const );
 
   /// (Re)number all cells; either continuous for all cells or seperate ranges for all entity types (const because idx is mutable)
-  void AssignUniqueNumbers( bool in_a_single_sequence=false );
+  void AssignUniqueNumbers( bool in_a_single_sequence=false ) const;
   
   /// puts nodes, elements, faces, and interfaces into the order given by Idx() variables; removes nullptr cells first
   void ReorderObjectsByIndexes();
