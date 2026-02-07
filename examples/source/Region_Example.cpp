@@ -148,7 +148,7 @@ void Region_Example::Run()
    // creation of a region from combined property values using PropertyConstraints
    // test 4: O.K.
    cout <<"\nmain: FormRegionFrom()  forming new region using permeability and fluid pressure constraints."<< endl;
-   PropertyConstraints  rangeP( "permeability", 1.e-11, 1.e-9 );
+   PropertyConstraints  rangeP( model.Database(), "permeability", 1.e-11, 1.e-9 );
    rangeP.AddConstraint("fluid pressure", 1.5e6, 1.8e7 );
    model.FormRegionFrom( "pressure_permeability_overlap1", rangeP, false );
    //    ^^^^^^^^^^^^^^

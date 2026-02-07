@@ -5,6 +5,7 @@
 #include "Node.h"
 #include "Exception.h"
 #include "PropertyDatabase.h"
+#include "ErrorHandler.h"
 
 using namespace std;
 
@@ -16,45 +17,67 @@ PropertyConstraints::PropertyConstraints()
  
 
 PropertyConstraints::PropertyConstraints( const PropertyConstraints& cr )
+ :  criteria_(cr.criteria_),
+    check_list_(cr.check_list_),
+    vector_length_check_(cr.vector_length_check_),
+    one_node_only_(cr.one_node_only_),
+    nodal_average_(cr.nodal_average_)
  {
-   *this = cr;
  }
  
+template<uint32_t dim>
+PropertyConstraints::PropertyConstraints( const PropertyDatabase<dim>& database, const char* prop_name, double pmin, double pmax )
+ {
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
+  
+    if ( database.IsDefined(prop_name) == false ) {
+         csmp_error.Note( ERROR, "PropertyConstraints (ctor)", prop_name, "is undefined; constraint was ignored" );
+         return;
+      }
+ 
+    // map<string,pair<double,double> >
+    criteria_[ prop_name ] = pair<double,double>(pmin,pmax);
+    
+    // map<Index,pair<double,double> >
+    check_list_.insert( make_pair( database.StorageKey(prop_name), make_pair(pmin,pmax) ) );
+ }
 
-PropertyConstraints::PropertyConstraints( const char* prop_name, double pmin, double pmax )
- {
-    criteria[ prop_name ] = pair<double,double>(pmin,pmax);
- }
- 
+template PropertyConstraints::PropertyConstraints( const PropertyDatabase<3>&, const char*, double, double );
+template PropertyConstraints::PropertyConstraints( const PropertyDatabase<2>&, const char*, double, double );
+template PropertyConstraints::PropertyConstraints( const PropertyDatabase<1>&, const char*, double, double );
+
+
+
 
 PropertyConstraints& PropertyConstraints::operator=( const PropertyConstraints& cr )
  {
     if ( &cr != this ) {
-         criteria                = cr.criteria;
-         check_list              = cr.check_list;
-         vector_length_check     = cr.vector_length_check;
-         one_node_only           = cr.one_node_only;
-         nodal_average           = cr.nodal_average;
+         criteria_                = cr.criteria_;
+         check_list_              = cr.check_list_;
+         vector_length_check_     = cr.vector_length_check_;
+         one_node_only_           = cr.one_node_only_;
+         nodal_average_           = cr.nodal_average_;
       }
     return *this;
  }
  
+ 
 
 bool PropertyConstraints::WithIndexes() const
  {
-    return !check_list.empty();
+    return !check_list_.empty();
  }
   
     
 void PropertyConstraints::SatisfyConstraintsForAtLeastOneNode( bool satisfy )
  {
-    one_node_only = satisfy;
+    one_node_only_ = satisfy;
  }
  
  
 void PropertyConstraints::SatisfyConstraintsForNodalAverage( bool satisfy )
  {
-    nodal_average = satisfy;
+    nodal_average_ = satisfy;
  }
 
 
@@ -65,7 +88,7 @@ bool PropertyConstraints::AddConstraint( const char* prop_name, double pmin, dou
     string  property(prop_name);
     
     pair<map<string,pair<double,double>,less<string> >::iterator,bool>
-      it = criteria.insert( make_pair(property,make_pair(pmin,pmax)) );
+      it = criteria_.insert( make_pair(property,make_pair(pmin,pmax)) );
     
     return it.second;
  }
@@ -76,8 +99,8 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double pmin, 
     map<string,pair<double,double> >::iterator it;
     map<Index,pair<double,double> >::iterator  cit;
 
-    if ( (it=criteria.find(prop_name)) != criteria.end() ) {
-         for ( it=criteria.begin(), cit=check_list.begin(); it!=criteria.end(); it++, cit++ )
+    if ( (it=criteria_.find(prop_name)) != criteria_.end() ) {
+         for ( it=criteria_.begin(), cit=check_list_.begin(); it!=criteria_.end(); it++, cit++ )
            if ( (*it).first == prop_name ) {
                 (*it).second.first  = (*cit).second.first   = pmin;
                 (*it).second.second = (*cit).second.second  = pmax;
@@ -85,7 +108,7 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double pmin, 
       }
     else
     throw csmp::Exception( INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
-    criteria[ prop_name ] = make_pair(pmin,pmax);
+    criteria_[ prop_name ] = make_pair(pmin,pmax);
  }
  
 
@@ -93,17 +116,16 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double pmin, 
 template<uint32_t dim>
 bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>& pref )
   {
-    if ( criteria.empty() ) {
+    if ( criteria_.empty() ) {
         throw csmp::Exception( WARNING, "PropertyConstraints::InitializePropertyIndices",
           "No criteria have been defined so far");
         return false;
       }
 
-    if ( !check_list.empty() && check_list.size() == criteria.size() ) return true; 
+    if ( !check_list_.empty() && check_list_.size() == criteria_.size() ) return true; 
 
-    for ( auto it=criteria.begin(); it!=criteria.end(); it++ )
-      check_list[ pref.StorageKey( (*it).first.c_str() ) ] =
-      std::make_pair((*it).second.first,(*it).second.second);
+    for ( const auto& it : criteria_ )
+      check_list_[ pref.StorageKey( it.first.c_str() ) ] = make_pair( it.second.first, it.second.second );
 
     return true;
   }
@@ -118,8 +140,8 @@ template bool PropertyConstraints::InitializePropertyIndices( const PropertyData
 template<uint32_t dim>
 void PropertyConstraints::DeleteConstraint( const PropertyDatabase<dim>& pref, const char* prop_name )
   {
-     criteria.erase( prop_name );
-     check_list.erase( pref.StorageKey(prop_name) );
+     criteria_.erase( prop_name );
+     check_list_.erase( pref.StorageKey(prop_name) );
   }
 
 template void PropertyConstraints::DeleteConstraint( const PropertyDatabase<1U>&, const char* );
@@ -140,7 +162,7 @@ their length and tensors for their Eigenvalues.
 template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_upon ) const
  {  
-    if ( vector_length_check ) {
+    if ( vector_length_check_ ) {
          throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::CheckConstraints",
                                       "Tensor Eigenvalue check not implemented yet");
          return false;
@@ -149,9 +171,9 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
     
     // in this process, the actual variable ranges could be collected into the criteria map
     for ( typename map<csmp::Index,pair<double,double> >::const_iterator 
-          it=check_list.begin(); it!=check_list.end(); it++ )
+          it=check_list_.begin(); it!=check_list_.end(); it++ )
       {
-         if ( vector_length_check && (*it).first.place )
+         if ( vector_length_check_ && (*it).first.place )
            return VectorLengthCheck( e, (*it).first, (*it).second.first, (*it).second.second );
 
          switch( (*it).first.place ) {
@@ -171,7 +193,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                         VectorVariable<dim> vc;
                         for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
                             e->N(i)->Read( (*it).first, vc );
-                            if ( vector_length_check ) {
+                            if ( vector_length_check_ ) {
                               if ( (*it).second.first  > vc.Length() ||
                                    (*it).second.second < vc.Length() ) {
                                     failed_upon = (*it).first;
@@ -217,7 +239,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                         VectorVariable<dim> vc;
                         for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ ) {
                             e->Read( i, (*it).first, vc );
-                            if ( vector_length_check ) {
+                            if ( vector_length_check_ ) {
                               if ( (*it).second.first  > vc.Length() ||
                                    (*it).second.second < vc.Length() ) {
                                     failed_upon = (*it).first;
@@ -260,7 +282,7 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
                    else if ( (*it).first.type == VECTOR ) {
                         VectorVariable<dim>  vc;
                         e->Read( (*it).first, vc );
-                        if ( vector_length_check ) {
+                        if ( vector_length_check_ ) {
                            if ( (*it).second.first  > vc.Length() ||
                                (*it).second.second < vc.Length() ) {
                                 failed_upon = (*it).first;
@@ -304,31 +326,31 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e, Index& failed_up
 template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::CheckConstraints( const CELL<dim>* e ) const
  {  
-    if ( one_node_only )
+    if ( one_node_only_ )
       return CheckSingleNodeConstraints( e );
 
-    if ( nodal_average )
+    if ( nodal_average_ )
       return CheckNodeAverageConstraints( e );
 
     // in this process, the actual variable ranges could be collected into the criteria map
-    for ( auto it=check_list.begin(); it!=check_list.end(); it++ )
+    for ( const auto& it : check_list_ )
       {
-         if ( vector_length_check && (*it).first.type == VECTOR )
-           return VectorLengthCheck( e, (*it).first, (*it).second.first, (*it).second.second );
+         if ( vector_length_check_ && it.first.type == VECTOR )
+           return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
-         switch( (*it).first.place ) {
+         switch( it.first.place ) {
               case NODE:
-                   for ( auto i{0U}; i<e->Nodes(); i++ )
-                     if ( !e->N(i)->IsWithinRange( (*it).first, (*it).second.first, (*it).second.second ) )
+                   for ( uint32_t i{0U}; i<e->Nodes(); i++ )
+                     if ( !e->N(i)->IsWithinRange( it.first, it.second.first, it.second.second ) )
                        return false;
                 break;
               case ELEMENT_INTEGRATION_POINT:
-                   for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
-                     if ( !e->IsWithinRange( i, (*it).first, (*it).second.first, (*it).second.second ) )
+                   for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ )
+                     if ( !e->IsWithinRange( i, it.first, it.second.first, it.second.second ) )
                        return false;
                 break;
               case ELEMENT:
-                   if ( !e->IsWithinRange( (*it).first, (*it).second.first, (*it).second.second ) )
+                   if ( !e->IsWithinRange( it.first, it.second.first, it.second.second ) )
                      return false;
                 break;
               default:
@@ -347,15 +369,15 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e ) const
 
 
 
-uint32_t  PropertyConstraints::Constraints() const { return static_cast<uint32_t>(criteria.size()); }
+uint32_t  PropertyConstraints::Constraints() const { return static_cast<uint32_t>(criteria_.size()); }
  
-void PropertyConstraints::CheckLengthOfVectorVariables( bool check ) { vector_length_check=check; }
+void PropertyConstraints::CheckLengthOfVectorVariables( bool check ) { vector_length_check_=check; }
  
     
 void PropertyConstraints::Erase()
  {
-    criteria.erase( criteria.begin(), criteria.end() );
-    check_list.erase( check_list.begin(), check_list.end() );
+    criteria_.clear();
+    check_list_.clear();
  }
  
 
@@ -367,26 +389,26 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
  {
     uint32_t i, counter;
     
-    for ( auto it=check_list.begin(); it!=check_list.end(); it++ )
+    for ( const auto& it : check_list_ )
       {
-         if ( vector_length_check && (*it).first.place )
-           return VectorLengthCheck( e, (*it).first, (*it).second.first, (*it).second.second );
+         if ( vector_length_check_ && it.first.place )
+           return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
-         switch( (*it).first.place ) {
+         switch( it.first.place ) {
               case NODE:
                    for ( counter=i=0U; i<e->Nodes(); i++ ) {
-                     if ( !e->N(i)->IsWithinRange( (*it).first, (*it).second.first, (*it).second.second ) )
+                     if ( !e->N(i)->IsWithinRange( it.first, it.second.first, it.second.second ) )
                           counter++;
                      }   
                    if ( counter >= e->Nodes()-1U ) return false;
                 break;
               case ELEMENT_INTEGRATION_POINT:
                    for ( i=0; i<e->IntegrationPoints(); i++ )
-                     if ( !e->IsWithinRange( i, (*it).first, (*it).second.first, (*it).second.second ) )
+                     if ( !e->IsWithinRange( i, it.first, it.second.first, it.second.second ) )
                        return false;
                 break;
               case ELEMENT:
-                   if ( !e->IsWithinRange( (*it).first, (*it).second.first, (*it).second.second ) )
+                   if ( !e->IsWithinRange( it.first, it.second.first, it.second.second ) )
                      return false;
                 break;
               default:
@@ -404,39 +426,38 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
 template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::CheckNodeAverageConstraints( const CELL<dim>* e ) const
  {
-    for ( typename map<Index,pair<double,double> >::const_iterator
-          it=check_list.begin(); it!=check_list.end(); it++ )
+    for ( const auto& it : check_list_ )
       {
-         if ( vector_length_check && (*it).first.place )
-           return VectorLengthCheck( e, (*it).first, (*it).second.first, (*it).second.second );
+         if ( vector_length_check_ && it.first.place )
+           return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
-         csmp::Index index = (*it).first;
+         csmp::Index index = it.first;
          
-         switch( (*it).first.place ) {
+         switch( it.first.place ) {
               case NODE:
-                   if ( (*it).first.type == SCALAR ) {
+                   if ( it.first.type == SCALAR ) {
                         ScalarVariable sc;
                         e->PropertyValueAtBaryCenter( index, sc );
-                        if ( !sc.IsWithinRange( (*it).second.first, (*it).second.second ) ) return false; 
+                        if ( !sc.IsWithinRange( it.second.first, it.second.second ) ) return false; 
                      }
-                   else if ( (*it).first.type == VECTOR ) {
+                   else if ( it.first.type == VECTOR ) {
                         VectorVariable<dim> vc;
                         e->PropertyValueAtBaryCenter( index, vc );
-                        if ( !vc.IsWithinRange( (*it).second.first, (*it).second.second ) ) return false; 
+                        if ( !vc.IsWithinRange( it.second.first, it.second.second ) ) return false; 
                      }
-                   else if ( (*it).first.type == TENSOR ) {
+                   else if ( it.first.type == TENSOR ) {
                         TensorVariable<dim> ts;
                         e->PropertyValueAtBaryCenter( index, ts );
-                        if ( !ts.IsWithinRange( (*it).second.first, (*it).second.second ) ) return false; 
+                        if ( !ts.IsWithinRange( it.second.first, it.second.second ) ) return false; 
                      }
                 break;
               case ELEMENT_INTEGRATION_POINT:
                    for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
-                     if ( !e->IsWithinRange( i, (*it).first, (*it).second.first, (*it).second.second ) )
+                     if ( !e->IsWithinRange( i, it.first, it.second.first, it.second.second ) )
                        return false;
                 break;
               case ELEMENT:
-                   if ( !e->IsWithinRange( (*it).first, (*it).second.first, (*it).second.second ) )
+                   if ( !e->IsWithinRange( it.first, it.second.first, it.second.second ) )
                      return false;
                 break;
               default:
@@ -457,28 +478,28 @@ bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* e,
  {
     VectorVariable<dim>  vc;
  
-    if ( nodal_average ) {
+    if ( nodal_average_ ) {
          throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
                                       "'nodal average' and 'vector_length_check' are mutually exclusive switches");
          return false;
       }
  
     if ( idx.place == NODE ) {
-         if ( one_node_only ) {
-              for ( auto i{0U}; i<e->Nodes(); i++ ) {
+         if ( one_node_only_ ) {
+              for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
                    e->N(i)->Read( idx, vc );
                    if ( vc.IsWithinRange( vmin, vmax ) ) return true; 
                 }
               return false;
            }
          else
-         for ( auto i{0U}; i<e->Nodes(); i++ ) {
+         for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
               e->N(i)->Read( idx, vc );
               if ( !vc.IsWithinRange( vmin, vmax ) ) return false; 
            }
       }
     else if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
-         for ( auto i{0U}; i<e->IntegrationPoints(); i++ ) {
+         for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ ) {
               e->Read( i, idx, vc );
               if ( !vc.IsWithinRange( vmin, vmax ) ) return false; 
            }
@@ -496,16 +517,16 @@ bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* e,
 void PropertyConstraints::Out() const
  {
     cout <<"\nPropertyConstraints::Out: "<< endl;
-    if ( vector_length_check )      cout <<"\tSet to check the length of vector variables"<< endl;
-    if ( one_node_only )            cout <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
-    if ( nodal_average )            cout <<"\tAll nodal variables are averaged"<< endl;
-    if ( check_list.empty() )       cout <<"\tIndex data are not established yet."<< endl;
+    if ( vector_length_check_ )      cout <<"\tSet to check the length of vector variables"<< endl;
+    if ( one_node_only_ )            cout <<"\tIf at least one node matches criteria, constraints are satisfied"<< endl;
+    if ( nodal_average_ )            cout <<"\tAll nodal variables are averaged"<< endl;
+    if ( check_list_.empty() )       cout <<"\tIndex data are not established yet."<< endl;
     else                            cout <<"\tIndex data have been established."<< endl;
 
     map<string,pair<double,double> >::const_iterator  crit;       
     
     cout <<"\tAssigned property constraints, and their ranges:";
-    for ( crit=criteria.begin(); crit!=criteria.end(); crit++ )
+    for ( crit=criteria_.begin(); crit!=criteria_.end(); crit++ )
       cout <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
     
     cout << endl; 

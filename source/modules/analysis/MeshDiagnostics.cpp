@@ -469,7 +469,7 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
 
     
     //create property constraints for "fit for computation" cells
-    PropertyConstraints prop_constraints("cell volume", cell_volume_threshold, 1.0e30);
+    PropertyConstraints prop_constraints(model.Database(), "cell volume", cell_volume_threshold, 1.0e30);
     prop_constraints.AddConstraint("Jacobian determinant", 0., 1.0e30);
     prop_constraints.AddConstraint("aspect ratio", 0., aspect_ratio_threshold);
     prop_constraints.AddConstraint("shortest distance to node", shortest_distance_to_node_threshold, 1.0e30);

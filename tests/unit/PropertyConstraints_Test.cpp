@@ -73,7 +73,7 @@ bool PropertyConstraints_Test::TestBuildRegionsFromPropertyConstraints()
        matrix_domain.E(eidx)->Store( phi_key, makeScalar(ANY,0.8) );
        
      // building new region from PropertyConstraints
-     PropertyConstraints porosity_constraints( "porosity", 0.75, 0.85 );
+     PropertyConstraints porosity_constraints( model.Database(), "porosity", 0.75, 0.85 );
      porosity_constraints.AddConstraint( "permeability", 1.0e-12, 1.0e-12 );
      
      model.FormRegionFrom( "medium porosity", porosity_constraints );

@@ -28,13 +28,18 @@ template<uint32_t> class PropertyDatabase;
 class PropertyConstraints {
   public:
     PropertyConstraints();
+
+    template<uint32_t dim>
+    PropertyConstraints( const PropertyDatabase<dim>&, const char* prop_name, double pmin, double pmax );
+
     PropertyConstraints( const PropertyConstraints& cr );
-    PropertyConstraints( const char* prop_name, double pmin, double pmax );
-    PropertyConstraints& operator=( const PropertyConstraints& cr );
     ~PropertyConstraints() = default;
-    bool    WithIndexes() const;
-    uint32_t  Constraints() const;
-    void    CheckLengthOfVectorVariables( bool check );
+    
+    PropertyConstraints& operator=( const PropertyConstraints& cr );
+    
+    bool     WithIndexes() const;
+    uint32_t Constraints() const;
+    void     CheckLengthOfVectorVariables( bool check );
     
     bool AddConstraint( const char* prop_name, double pmin, double pmax );
     void ChangeConstraint( const char* prop_name, double pmin, double pmax );
@@ -70,11 +75,11 @@ class PropertyConstraints {
     bool VectorLengthCheck( const CELL<dim>*,
                             const csmp::Index&, double vmin, double vmax ) const;
 
-    std::map<std::string,std::pair<double,double> >  criteria;
-    std::map<Index,std::pair<double,double> >        check_list;
-    bool                                             vector_length_check = true;  ///< for VectorVariable uses length as constraint
-    bool                                             one_node_only       = false; ///< will include elements even if only a single node falls into range
-    bool                                             nodal_average       = false; ///< will use the average of node properties to apply constraints
+    std::map<std::string,std::pair<double,double> >  criteria_;
+    std::map<Index,std::pair<double,double> >        check_list_;
+    bool                                             vector_length_check_ = true;  ///< for VectorVariable uses length as constraint
+    bool                                             one_node_only_       = false; ///< will include elements even if only a single node falls into range
+    bool                                             nodal_average_       = false; ///< will use the average of node properties to apply constraints
 };
 
 } // csmp

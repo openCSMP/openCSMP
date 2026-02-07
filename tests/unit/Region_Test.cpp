@@ -169,7 +169,7 @@ void Region_Test::run()
     // creation of a region from combined k & pf ranges using PropertyConstraints
     // --------------------------------------------------------------------------
     if ( verbose_ ) cout <<"\nRegion_Test::run: FormRegionFrom()  forming new region using permeability and fluid pressure constraints."<< endl;
-    PropertyConstraints  rangeP( "permeability", 1.e-12, 1.e-11 );
+    PropertyConstraints  rangeP( model.Database(), "permeability", 1.e-12, 1.e-11 );
 
     rangeP.AddConstraint("fluid pressure", 1.5e6, 1.8e6 );
 

@@ -2772,6 +2772,7 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
  {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+     const REGION_COMPLEX<dim>& regionComplex( static_cast<const REGION_COMPLEX<dim>& >(*this) );
      csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
 
      // the model region is affected by any changes, does it need to be updated?
@@ -2802,7 +2803,7 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
        if ( (*rit).second.NeedsRebuild() && (*rit).first != "Model" ) {
              auto crit = regionTraits_.find( (*rit).first );
              PropertyConstraints region_traits = ( crit == regionTraits_.end() )
-                                                    ? PropertyConstraints("permeability", 1e-21,1e-5) : (*crit).second;
+                                                    ? PropertyConstraints(regionComplex.Database(),"permeability", 1e-21,1e-5) : (*crit).second;
                                                     
              (*rit).second.UpdateCellMembershipApplyingConstraints( model_domain.CellsBegin(), model_domain.CellsEnd(), region_traits );
              

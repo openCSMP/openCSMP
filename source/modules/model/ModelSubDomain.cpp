@@ -1340,7 +1340,7 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
           }
           
         // =========
-        // 2D models
+        // 2D models (tested: OK 7/2/26 with splitboundary model)
         // =========
         else if constexpr (dim == 2 ) {
              // equidimensional (surface) regions
@@ -1349,17 +1349,22 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
                     switch ((*nit)->AtBoundary()) {
                         case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
                         case EDGE1: case EDGE2: case EDGE3: case EDGE4:
-                            (*nit)->Attribute(EXTERIOR_LINE);
-                            break;
+                            if ( (*nit)->IsManifold() ) (*nit)->Attribute(EXTERIOR_POINT);
+                            else (*nit)->Attribute(EXTERIOR_LINE);
+                          break;
                         case CNR1: case CNR2: case CNR3: case CNR4:
                             (*nit)->Attribute(EXTERIOR_POINT);
-                            break;
+                          break;
                         case INTERNAL:
-                            (*nit)->Attribute(INTERIOR_LINE);
-                            break;
+                            if ( (*nit)->IsManifold() ) {
+                                 if ( (*nit)->Manifold()->Branches() == 2 ) (*nit)->Attribute(INTERIOR_LINE);
+                                 else if ( (*nit)->Manifold()->Branches() >= 2 ) (*nit)->Attribute(INTERIOR_POINT);
+                              }
+                            else (*nit)->Attribute(PERIMETER_POINT);
+                          break;
                         default:
-                            (*nit)->Attribute(PERIMETER_LINE);
-                            break;
+                          // this node does not form topology:  (*nit)->Attribute(MESH_VERTEX);
+                          break;
                     }
                   // region interiors (no action is needed)
                 }
@@ -5739,9 +5744,11 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
                                                                         typename vector<CELL<dim>*>::const_iterator end,
                                                                         const PropertyConstraints& constraints )
  {
-    cell_vec_.clear();
+    // this will be a non-unique subdomain
+    is_unique_ = false;
     
-    // selecting the cells on the basis of the criteria specified in PropertyContraints
+    // selecting cells on the basis of the criteria specified in PropertyContraints
+    cell_vec_.clear();
     while( start != end ) {
          if ( constraints.CheckConstraints( (*start) ) )
            cell_vec_.push_back( (*start) );
@@ -5754,11 +5761,12 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
     
     // sorting vectors and identifying perimeter cells and nodes
     IdentifyPerimeter();
+    
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
     // BuildPerimeterFaceVector( InteriorCells() );
 
     // only if this is a non-overlapping subdomain
-    if ( IsUnique() ) UpdateTopoTypeNodeFlags();
+    // if ( IsUnique() ) UpdateTopoTypeNodeFlags();
 
     rebuilt_needed_ = false;
 

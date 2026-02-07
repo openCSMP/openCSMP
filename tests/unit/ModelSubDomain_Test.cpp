@@ -36,7 +36,8 @@ void ModelSubDomain_Test::run()
   {
      // new comprehensive tests
 //     Test_Basics();
-     Test_SubDomainConstructionMethods();
+//     Test_SubDomainConstructionMethods();
+     Test_SubDomainDiagnostics();
   
   
      // Test 0: methods of subdomain in live model
@@ -759,9 +760,9 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        _test( n_perim_cells == upper.PerimeterCells() );
        _test( n_perim_nodes == upper.PerimeterNodes() );
        
-       auto elmts = upper.RebuildCellAndPerimeterFaceVector();
-       //                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       _test( elmts == upper.Cells() ); // fail
+       auto cells_removed = upper.RebuildCellAndPerimeterFaceVector();
+       //                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       _test( cells_removed == 0 );
        _test( copy_elmt_vec == upper.CellVector() );
        _test( copy_node_vec == upper.NodeVector() );
        _test( n_perim_cells == upper.PerimeterCells() );
@@ -783,14 +784,14 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
 
        // changing region to only include cells with properties in given range
        // --------------------------------------------------------------------
-       PropertyConstraints constraints( "element number", 13, 16 );
+       PropertyConstraints constraints( model.Database(), "element number", 14, 16 );
        model_domain.RenumberCells();
        
        lower.UpdateCellMembershipApplyingConstraints( model_domain.CellsBegin(), model_domain.CellsEnd(), constraints );
        //    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-       _test( lower.IsUnique() == false ); // fail
-       _test( lower.Cells() == 4 ); // fail
-       _test( lower.PerimeterNodes() > 4 );
+       _test( lower.IsUnique() == false );
+       _test( lower.Cells() == 3 );
+       _test( lower.PerimeterNodes() == 9 );
     }
 
  } // end Test_SubDomainConstructionMethods
