@@ -15,6 +15,7 @@
 #include "SplitBoundary.h"
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
+#include "meshManagementUtilities.h"
 #include "VTK_Interface.h"
 #include "VTU_Interface.h"
 #include "vsetMakers.h"
@@ -815,8 +816,8 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
     bool              Contains( const Node<dim>* const ) const noexcept;
     bool              IsPerimeterNode( const csmp::Node<dim>* const ) const noexcept;
     bool              IsPerimeterCell( const CELL<dim>* const ) const noexcept;
-    uint32_t          PerimeterFaces( size_t cell_idx ) const;
-    uint32_t          PerimeterFace( size_t cell_idx, uint32_t face ) const;
+    uint32_t        PerimeterFaces( size_t cell_idx ) const;
+    uint32_t        PerimeterFace( size_t cell_idx, uint32_t face ) const;
     bool              IsPerimeterNode( const size_t nidx ) const;
     bool              IsPerimeterCell( const size_t eidx ) const;
     size_t            SharedPerimeterNodes( start, end )
@@ -845,12 +846,125 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        Region<2>& lower = model.Region("lower"); // domain idx = 2
        Region<2>& upper = model.Region("upper"); // domain idx = 3
       
-       Boundary<2>& top = model.Boundary("TOP"); // domain idx = 4 (last of 4 boundaries created)
+       Boundary<2>& top   = model.Boundary("TOP"); // domain idx = 4 (last of 4 boundaries created)
+       Boundary<2>& right = model.Boundary("RIGHT");
        
        SplitBoundary<2>& horizontal_splitboundary = model.SplitBoundary("horizontal_splitboundary"); // domain idx = 1
        SplitBoundary<2>& inclined_split_boundary = model.SplitBoundary("inclined_split_boundary");   // domain idx = 2
 
-       // testing
+       // testing using hand-coded model SPLIT22_BASIC (vsetMakers create_BoundarySplitBoundaryPatch() )
+       // Non-unique Region 'Model'
+       // -------------------------
+       _test( model_domain.Empty() == false );
+       _test( model_domain.Nodes() == 35 );
+       _test( model_domain.InteriorNodes() == 4 );   // TODO: fail
+       if ( model_domain.InteriorNodes() != 4 && verbose_ ) printNodeAttibutes<2>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+       _test( model_domain.PerimeterNodes() == 31 ); // fail->32 interesting question: are nodes at interior boundaries added to perimeter?
+       _test( model_domain.IntegrationPoints() == (16 * 4 + 3 * 3) );       // 16 quads + 3 triangles
+       model.Mesh().InitializeFiniteVolumeStencils( model.Database(), true /* assign_to_elmts */ );
+       _test( model_domain.SectorIntegrationPoints() == (16 * 4 + 3 * 3) ); // elmts * nodes
+       _test( model_domain.FacetIntegrationPoints() == (16 * 4 + 3 * 3) );  // elements * facets per element
+       _test( model_domain.Cells() == 19 ); // elements
+       _test( model_domain.InteriorCells() == 2 );
+       _test( model_domain.PerimeterCells() == 17 );
+       model_domain.UpdateMemberIndexes();
+       _test( model_domain.Contains( model_domain.E(5) ) == true );
+       _test( model_domain.Contains( model_domain.N(3) ) == true );
+       _test( model_domain.IsPerimeterCell( 0ul ) == false );
+       _test( model_domain.IsPerimeterCell( (*next(model_domain.PerimeterCellsBegin(),1)) ) == true );
+       _test( model_domain.IsPerimeterNode( 1ul ) == false );
+       _test( model_domain.IsPerimeterNode( model_domain.Nodes()-1 ) == true );
+       _test( model_domain.IsPerimeterNode( (*next(model_domain.PerimeterNodesBegin(),2)) ) == true );
+       // corner quad has two perimeter faces
+       _test( model_domain.PerimeterFaces( model_domain.InteriorCells()) == 2 );
+       // _test( model_domain.PerimeterFaces(0) == 2 ); - does not crash
+       // in positions 0 & 3
+       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) == 0 );
+       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 3 );
+       _test( model_domain.SharedPerimeterNodes( lower.NodesBegin(), lower.NodesEnd() ) == 14 ); // should this be 13?
+
+       // Unique Region 'Upper' (intersected by SB)
+       // -----------------------------------------
+       // tested: OK SKM 8/2/26
+       _test( upper.Empty() == false );
+       _test( upper.Nodes() == 21 );
+       _test( upper.InteriorNodes() == 3 );
+       if ( upper.InteriorNodes() != 3 && verbose_ ) printNodeAttibutes<2>( upper.NodesBegin(), upper.NodesEnd() );
+       _test( upper.PerimeterNodes() == 18 ); // fail->32 interesting question: are nodes at interior boundaries added to perimeter?
+       _test( upper.IntegrationPoints() == (10 * 4 + 2 * 3) );       // 10 quads + 2 triangles
+       model.Mesh().InitializeFiniteVolumeStencils( model.Database(), true /* assign_to_elmts */ );
+       _test( upper.SectorIntegrationPoints() == (10 * 4 + 2 * 3) ); // elmts * nodes
+       _test( upper.FacetIntegrationPoints() == (10 * 4 + 2 * 3) );  // elements * facets per element
+       _test( upper.Cells() == 12 ); // elements
+       _test( upper.InteriorCells() == 2 );
+       _test( upper.PerimeterCells() == 10 );
+       upper.UpdateMemberIndexes();
+       _test( upper.Contains( upper.E(2) ) == true );
+       _test( upper.Contains( upper.N(3) ) == true );
+       _test( upper.IsPerimeterCell( 0ul ) == false );
+       _test( upper.IsPerimeterCell( (*next(upper.PerimeterCellsBegin(),1)) ) == true );
+       _test( upper.IsPerimeterNode( 1ul ) == false );
+       _test( upper.IsPerimeterNode( upper.Nodes()-1 ) == true );
+       _test( upper.IsPerimeterNode( (*next(upper.PerimeterNodesBegin(),2)) ) == true );
+       // corner quad has two perimeter faces
+       _test( upper.PerimeterFaces( upper.InteriorCells()) == 2 );
+       _test( upper.PerimeterFace( upper.InteriorCells(), 0 ) == 0 );
+       _test( upper.PerimeterFace( upper.InteriorCells(), 1 ) == 3 );
+       _test( upper.SharedPerimeterNodes( lower.NodesBegin(), lower.NodesEnd() ) == 0 );
+
+       // Boundary 'TOP'
+       // -----------------------------------------
+       // tested:
+       _test( top.Empty() == false );
+       _test( top.Nodes() == 4 );
+       _test( top.InteriorNodes() == 2 );
+       if ( top.InteriorNodes() != 2 && verbose_ ) printNodeAttibutes<2>( top.NodesBegin(), top.NodesEnd() );
+       _test( top.PerimeterNodes() == 2 ); // fail->32 interesting question: are nodes at interior boundaries added to perimeter?
+       _test( top.IntegrationPoints() == (3 * 2) );       // 3 line elements
+       model.Mesh().InitializeFiniteVolumeStencils( model.Database(), true /* assign_to_elmts */ );
+       _test( top.SectorIntegrationPoints() == (3 * 2) ); // cells * nodes
+       _test( top.FacetIntegrationPoints() == 3 );  // cells * facets per element
+       _test( top.Cells() == 3 ); // elements
+       _test( top.InteriorCells() == 1 );
+       _test( top.PerimeterCells() == 2 );
+       upper.UpdateMemberIndexes();
+       _test( top.Contains( top.E(2) ) == true );
+       _test( top.Contains( top.N(3) ) == true );
+       _test( top.IsPerimeterCell( 1ul ) == true );
+       _test( top.IsPerimeterCell( (*next(top.PerimeterCellsBegin(),1)) ) == true );
+       _test( top.IsPerimeterNode( 1ul ) == false );
+       _test( top.IsPerimeterNode( top.Nodes()-1 ) == true );
+       _test( top.IsPerimeterNode( (*next(top.PerimeterNodesBegin(),1)) ) == true );
+       // corner quad has two perimeter faces
+       _test( top.PerimeterFaces( top.InteriorCells()) == 1 );
+       _test( top.PerimeterFaces( top.Cells()-1) == 1 );
+       _test( top.PerimeterFace( top.InteriorCells(), 0 ) == 1 );
+       _test( top.SharedPerimeterNodes( right.NodesBegin(), right.NodesEnd() ) == 1 ); // TODO: fails, gives zero
+
+       // SplitBoundary 'inclined_split_boundary'
+       // -----------------------------------------
+       // tested:
+       _test( inclined_split_boundary.Empty() == false );
+       _test( inclined_split_boundary.NodeManifolds().size() == 2 );
+       _test( inclined_split_boundary.InsideNodes().first.size() == 5 ); // 3 + 2 at intersection with horiz. SB
+       _test( inclined_split_boundary.OutsideNodes().first.size() == 5 );
+       _test( inclined_split_boundary.IntegrationPoints() == (3 * 2) );       // 3 line cells
+       model.Mesh().InitializeFiniteVolumeStencils( model.Database(), true /* assign_to_elmts */ );
+       _test( inclined_split_boundary.SectorIntegrationPoints() == (3 * 2) ); // cells * nodes
+       _test( inclined_split_boundary.FacetIntegrationPoints() == 3 );  // cells * facets per element
+       _test( inclined_split_boundary.Cells() == 3 ); // InterFace objects
+       _test( inclined_split_boundary.InteriorCells() == 1 );
+       _test( inclined_split_boundary.PerimeterCells() == 2 );
+       upper.UpdateMemberIndexes();
+       _test( inclined_split_boundary.Contains( inclined_split_boundary.E(2) ) == true );
+       _test( inclined_split_boundary.IsPerimeterCell( 1ul ) == true );
+       // perimeter manifolds should only exist at model exterior
+       // corner quad has two perimeter faces
+       _test( inclined_split_boundary.PerimeterFaces( top.InteriorCells()) == 1 );
+       _test( inclined_split_boundary.PerimeterFaces( top.Cells()-1) == 1 );
+       _test( inclined_split_boundary.PerimeterFace( top.InteriorCells(), 0 ) == 1 );
+
+       if ( verbose_ ) cout <<"\nThat's it."<< endl;
      }
  } // end
 

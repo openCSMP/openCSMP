@@ -277,6 +277,11 @@ void printNodeCoordinates( typename std::vector<Node<dim>*>::const_iterator firs
 template<uint32_t dim, template<uint32_t> class CELL>
 void printNodes( const CELL<dim>& );
 
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim>
+void printNodeAttibutes( typename std::vector<Node<dim>*>::const_iterator first,
+                         typename std::vector<Node<dim>*>::const_iterator last );
+
 } // end csmp
 
 #endif /* CSMP_MESH_MANAGEMENT_UTILITIES_H */

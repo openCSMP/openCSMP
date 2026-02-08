@@ -260,6 +260,77 @@ size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
 
 
 
+/**
+    To loop over the faces of the perimeter cells which lie on the subdomain boundary.
+    
+    @param cell_idx marks the location of the cell in  bd_face_vec_  and has to be in the range of InteriorCells() and total number of Cells in the subdomain-1U.
+    
+    To loop over all the boundary faces of a subdomain, use the following code snippet:
+    
+    @code
+    for ( size_t i{ subdomain.InteriorCells() }; i<subdomain.Cells(); i++ )
+      for ( uint32_t j{0U}; j<subdomain.PerimeterFaces(i); j++ ) {
+           auto perim_face = subdomain.PerimeterFace(i,j);
+           // get a normal to the cell face
+           Point<dim> unrml = subdomain.E(i)->FE()->Point<dim> UnitNormalToFace(j);
+           ...
+        }
+    @endcode
+        
+    @return returns how many faces of the target cell lie on the subdomain boundary
+ 
+    @attention the cell index that is supplied as a method argument has to
+    range between e = interior cells and cells-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
+ {
+#if defined(DEBUG)
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( cell_idx < InteriorCells() ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be equal to or greater than InteriorCells()" );
+         return numeric_limits<uint32_t>::max();
+      }
+    else if ( cell_idx >= cell_vec_.size() ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be less than Cells()" );
+         return numeric_limits<uint32_t>::max();
+      }
+#endif
+    return static_cast<uint32_t>( bd_face_vec_[cell_idx - InteriorCells()].size() );
+ }
+
+
+/**
+    @return returns cells local cell face number (0..faces-1) for
+    the n'th face that is on the subdomain boundary.
+
+    @attention the cell index that is supplied as a method argument has to
+    range between e = interior cells and cells-1.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t cell_idx, uint32_t face ) const
+ {
+#if defined(DEBUG)
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    if ( cell_idx < InteriorCells() ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be equal to or greater than InteriorCells()" );
+         return numeric_limits<uint32_t>::max();
+      }
+    else if ( cell_idx >= cell_vec_.size() ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be less than Cells()" );
+         return numeric_limits<uint32_t>::max();
+      }
+    if ( face >= PerimeterFaces(cell_idx) ) {
+         csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "face number must be smaller than PerimeterFaces(eidx)" );
+         return numeric_limits<uint32_t>::max();
+      }
+#endif
+    return static_cast<uint32_t>(bd_face_vec_[cell_idx-InteriorCells()][face]);
+ }
+
+
+
+
 
 
 /**

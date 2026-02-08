@@ -194,7 +194,7 @@ class ModelSubDomain {
     bool              IsPerimeterNode( const csmp::Node<dim>* const ) const noexcept;
     bool              IsPerimeterCell( const CELL<dim>* const ) const noexcept;
     
-    /// for looping over the perimeter faces of perimeter cell with #eid, method is used to travel across subdomain surface / outline
+    /// for looping over the perimeter faces of perimeter cell with #eid (>=InteriorCells() to Cells()), method is used to travel across subdomain surface / outline
     uint32_t          PerimeterFaces( size_t cell_idx ) const;
     /// returns local face id of face #face that lies on perimeter of model subdomain
     uint32_t          PerimeterFace( size_t cell_idx, uint32_t face ) const;
@@ -437,54 +437,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline void  ModelSubDomain<dim,CELL>::Name( const std::string& name ) noexcept
  {
     subdomain_name_ = name;
- }
-
-
-/**
-    To loop over the faces of the perimeter cells which lie on the subdomain boundary.
-    
-    @param cell_idx marks the location of the cell in  bd_face_vec_  and has to be in the range of InteriorCells() and total number of Cells in the subdomain-1U.
-    
-    To loop over all the boundary faces of a subdomain, use the following code snippet:
-    
-    @code
-    for ( size_t i{ subdomain.InteriorCells() }; i<subdomain.Cells(); i++ )
-      for ( auto j{0U}; j<subdomain.PerimeterFaces(i); j++ ) {
-           auto perim_face = subdomain.PerimeterFace(i,j);
-           // get a normal to the cell face
-           Point<dim> unrml = subdomain.E(i)->FE()->Point<dim> UnitNormalToFace(j);
-           ...
-        }
-    @endcode
-        
-    @return returns how many faces of the target cell lie on the subdomain boundary
- 
-    @attention the cell index that is supplied as a method argument has to
-    range between e = interior cells and cells-1.
-*/
-template<uint32_t dim, template<uint32_t> class CELL>
-inline  uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
- {
-    assert( cell_idx >= InteriorCells() );
-    assert( cell_idx < cell_vec_.size() );
-    return static_cast<uint32_t>( bd_face_vec_[cell_idx - InteriorCells()].size() );
- }
-
-
-/**
-    @return returns cells local cell face number (0..faces-1) for
-    the n'th face that is on the subdomain boundary.
-
-    @attention the cell index that is supplied as a method argument has to
-    range between e = interior cells and cells-1.
-*/
-template<uint32_t dim, template<uint32_t> class CELL>
-inline uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t e, uint32_t face ) const
- {
-    assert( e >= InteriorCells() );
-    assert( e < cell_vec_.size() );
-    assert( face < PerimeterFaces(e) );
-    return static_cast<uint32_t>(bd_face_vec_[e-InteriorCells()][face]);
  }
 
 

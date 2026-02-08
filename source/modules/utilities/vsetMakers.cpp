@@ -999,7 +999,7 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     //--------------------------ELEMENT TYPES
   	//add element types
     const CSMP_FEM_TYPE T(ISOPARAMETRIC_LINEAR_TRIANGLE), Q(ISOPARAMETRIC_LINEAR_QUADRILATERAL), P(ISOPARAMETRIC_LINEAR_BAR);
-    deque<int8_t> vecElementTypes = { Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q, // elements
+    deque<int8_t> vecElementTypes = { Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q, // elements (16 quads + 3 triangles)
                                       P,P,P, P,P,P,P,P, P,P,P, P,P,P,P,P,P,  // faces
                                       P,P,P,P, P,P,P };                      // interfaces
     const int n_cells{43};

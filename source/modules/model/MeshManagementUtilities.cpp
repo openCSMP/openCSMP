@@ -2054,6 +2054,25 @@ template void printNodes( const InterFace<3U>& );
 
 
 
+/// prints sorted global element node numbers in a compact way
+template<uint32_t dim>
+void printNodeAttibutes( typename vector<Node<dim>*>::const_iterator first,
+                         typename vector<Node<dim>*>::const_iterator last )
+ {
+    cout <<"\n"<<"printNodeAttibutes: idx, BOX_BOUNDARY, TOPOTYPE, coordinates:";
+    while( first != last ) {
+         cout <<"\n\t"<< (*first)->Idx();
+         cout <<": "<< parseBoundary( (*first)->AtBoundary() );
+         cout <<": "<< parseTopology( (*first)->Attribute() );
+         cout <<": "<< (*first)->Coordinate();
+         first++;
+      }
+ }
+
+template void printNodeAttibutes<3>( typename vector<Node<3>*>::const_iterator, typename vector<Node<3>*>::const_iterator );
+template void printNodeAttibutes<2>( typename vector<Node<2>*>::const_iterator, typename vector<Node<2>*>::const_iterator );
+template void printNodeAttibutes<1>( typename vector<Node<1>*>::const_iterator, typename vector<Node<1>*>::const_iterator );
+
 
 
 /**

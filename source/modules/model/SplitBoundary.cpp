@@ -451,7 +451,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
                              this->Name(), "interface vector is empty; nothing could be done." );
     // return vector
     vector<Node<dim>*>  inside_nodes;
-    inside_nodes.reserve( this->Cells() );
+    inside_nodes.reserve( this->Cells() ); // initial guess of how many nodes there may be
 
     // creating the inside node vector
     for ( auto& it : this->cell_vec_ ) {
@@ -470,7 +470,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::InsideNodes() const
      interior_nodes.reserve( inside_nodes.size() );
      // node sorting is retained
      for ( const auto& nit : inside_nodes )
-       // either off: a) no manifold and inside model or (b) on the exterior
+       // either of: a) no manifold and inside model or (b) on the exterior
        if ( (!nit->IsManifold() && (nit->AtBoundary() == NOT || nit->AtBoundary() == INTERNAL)) ||
             (nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
