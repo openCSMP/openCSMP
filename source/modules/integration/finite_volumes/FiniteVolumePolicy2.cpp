@@ -256,7 +256,7 @@ double  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
     TODO: test for all relevant cases
 */
 template<template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<2U,Var>
 void FiniteVolumePolicy<2U,CELL>::PropertyValueAtFacetIntegrationPoint(
                                                  const csmp::Index& prop_key,
                                                  uint32_t iFacet,
@@ -315,7 +315,7 @@ template void FiniteVolumePolicy<2U,InterFace>::PropertyValueAtFacetIntegrationP
 
 
 template<template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<2U,Var>
 void  FiniteVolumePolicy<2U,CELL>::PropertyValueAtSectorIntegrationPoint(
                                                             const csmp::Index& prop_key,
                                                             uint32_t iSector,

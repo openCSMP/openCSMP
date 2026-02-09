@@ -1630,6 +1630,40 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
 
 
 
+/**
+ * Replaces specific boundary keywords with "REGION" or appends "_REGION".
+ * Avoids string::contains() for MSVC compatibility.
+ */
+static void regionNameFromSplitBoundaryName( string& name ) {
+    // Define the target substrings
+    const std::vector<std::string_view> targets = {
+        "SPLITBOUNDARY",
+        "SPLIT_BOUNDARY",
+        "split_boundary",
+        "split-boundary"
+    };
+
+    bool replaced = false;
+
+    for (const auto& target : targets) {
+        size_t pos = name.find(target);
+        
+        // While loop in case the substring appears multiple times
+        while (pos != std::string::npos) {
+            name.replace(pos, target.length(), "REGION");
+            replaced = true;
+            
+            // Advance position to avoid infinite loop if "REGION" contained the target
+            pos = name.find(target, pos + 6); // 6 is length of "REGION"
+        }
+    }
+
+    // If none of the targets were found, append the suffix
+    if (!replaced) {
+        name += "_REGION";
+    }
+}
+
 
 /**
     @author E.P
@@ -1713,9 +1747,8 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      // 4. construct the new unique region between the interface elements in the model
      //    given it the same name as the split boundary but calling it region instead
      // -----------------------------------------------------------------------------
-     string       region_name( splitBoundary.Name() );
-     const size_t str_length( string("SPLITBOUNDARY").length() );
-     region_name.replace( region_name.find("SPLITBOUNDARY"), str_length, "REGION" );
+     string region_name = splitBoundary.Name();
+     regionNameFromSplitBoundaryName( region_name );
      
      const bool  unique_map(true);
      model->FormRegionFrom( region_name.c_str(), elmt_pointers.begin(), elmt_pointers.end(), unique_map );

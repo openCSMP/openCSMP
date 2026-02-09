@@ -123,11 +123,11 @@ class FiniteVolumePolicy<3U, CELL> {
     double PropertyValueAtSectorIntegrationPoint( uint32_t iSector, uint32_t ip, const csmp::Index& ) const;
   
     /// interpolate values of any node variable to facet integration point (XYZ)
-    template<class Var>
+    template<class Var> requires CsmpVariable<3U, Var>
     void   PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, uint32_t iFacet,  uint32_t ip,  Var& )   const;
 
     /// interpolate values of any node variable to sector integration point (XYZ)
-    template<class Var>
+    template<class Var> requires CsmpVariable<3U, Var>
     void   PropertyValueAtSectorIntegrationPoint( const csmp::Index&, uint32_t iSector, uint32_t ip,  Var& )   const;
 
     /// integrates value of property over the area of the facet
@@ -197,9 +197,9 @@ class FiniteVolumePolicy<2U,CELL> {
     double   dN_At( const Point<2U>& rst, DenseMatrix<DM_MIN>& DN )  const;
     double   PropertyValueAtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, const csmp::Index& prop_key ) const;
     double   PropertyValueAtSectorIntegrationPoint( uint32_t iSector, uint32_t ip, const csmp::Index& prop_key ) const;
-    template<class Var>
+    template<class Var> requires CsmpVariable<2U, Var>
     void       PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, uint32_t iFacet, uint32_t ip,  Var& )    const;
-    template<class Var>
+    template<class Var> requires CsmpVariable<2U, Var>
     void       PropertyValueAtSectorIntegrationPoint( const csmp::Index&, uint32_t iSector, uint32_t ip, Var& )    const;
     double   FacetIntegral(  uint32_t iFacet,  const csmp::Index& prop_key ) const;
     double   SectorIntegral( uint32_t iSector, const csmp::Index& prop_key ) const;
@@ -244,9 +244,9 @@ class FiniteVolumePolicy<1U, CELL> {
     double   dN_At( const Point<1U>& rst, DenseMatrix<DM_MIN>& DN )  const;
     double   PropertyValueAtFacetIntegrationPoint(  uint32_t iFacet,  uint32_t ip, const csmp::Index& prop_key ) const;
     double   PropertyValueAtSectorIntegrationPoint( uint32_t iSector, uint32_t ip, const csmp::Index& prop_key ) const;
-    template<class Var>
+    template<class Var> requires CsmpVariable<1U, Var>
     void     PropertyValueAtFacetIntegrationPoint(  const csmp::Index&, uint32_t iFacet, uint32_t ip,  Var& )    const;
-    template<class Var>
+    template<class Var> requires CsmpVariable<1U, Var>
     void     PropertyValueAtSectorIntegrationPoint( const csmp::Index&, uint32_t iSector, uint32_t ip,  Var& )   const;
     double   FacetIntegral(  uint32_t iFacet,  const csmp::Index& prop_key ) const;
     double   SectorIntegral( uint32_t iSector, const csmp::Index& prop_key ) const;

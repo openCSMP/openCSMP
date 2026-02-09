@@ -24,7 +24,7 @@ namespace csmp {
     
     @author SKM 10/9/2014
 */
-template<uint32_t dim, template<uint32_t> class CELL, class Var>
+template<uint32_t dim, template<uint32_t> class CELL, class Var> requires CsmpVariable<dim, Var>
 void writeVariableIf( CELL<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
     std::cerr <<"\nwriteVariableIf( CELL<dim>*, const csmp::Index&, const Var&, VARIABLE_FLAG ): generic should never be called.\n";
@@ -125,7 +125,7 @@ void writeVariableIf( CELL<dim>* ptr,
     
     Generic version for variables that are placed on Element/Face/Interface integration points.
 */
-template<uint32_t dim, template<uint32_t> class CELL, class Var>
+template<uint32_t dim, template<uint32_t> class CELL, class Var> requires CsmpVariable<dim, Var>
 void writeVariableIf( CELL<dim>*, uint32_t, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
     std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): generic should never be called.\n";
@@ -229,12 +229,13 @@ void writeVariableIf( CELL<dim>* ptr,
     
     Generic version for finite volume-related integration points.
 */
-template<uint32_t dim, template<uint32_t> class CELL, class Var>
-void writeVariableIf( CELL<dim>*, uint32_t sector_or_facet,
+template<uint32_t dim, template<uint32_t> class CELL, class Var> requires CsmpVariable<dim, Var>
+void writeVariableIf( CELL<dim>*, uint32_t /* sector_or_facet */,
                       uint32_t, const csmp::Index&, const Var&, VARIABLE_FLAG )
  {
     std::cerr <<"\nwriteVariableIf( CELL<dim>*, uint32_t sector_or_facet, uint32_t ip, const csmp::Index&, const Var&, VARIABLE_FLAG ): should never be called; only specialisation thereof.\n";
  } // end generic specification
+
 
 /// write guard for scalar variables
 template<uint32_t dim, template<uint32_t> class CELL>

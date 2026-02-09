@@ -263,12 +263,19 @@ void Boundary<dim>::Accept( Visitor<dim>& v )
       @date 7/6/2020
 */
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "Boundary<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+
       const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
+      
       if ( prop_key.place == BOUNDARY ) {
            if ( sd != COMPLETE )
              csmp_error.Note( WARNING, "Boundary<dim>::InputPropertyValue",
@@ -309,11 +316,17 @@ template void Boundary<3U>::InputPropertyValue( const char*, const FlaggedArrayV
 
 
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void Boundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "Boundary<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+
       const csmp::Index key(this->pref_.StorageKey(input_prop));
       
       if ( key.place == BOUNDARY ) {
@@ -371,7 +384,7 @@ Outs FEM_Data of provided variable type and placement to binary
 @return  true if it succeeds, false if it fails.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 bool Boundary<dim>::Out( fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const
 {
   set<string> propList;
@@ -421,10 +434,19 @@ by local id numbers.
 The idea is to extract the property data that corresponds to this group only.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& property_values ) const
 {
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( this->pref_.IsDefined(property) == false ) {
+       csmp_error.Note( WARNING, "Boundary<dim>::OutputVariableTo",
+                        property, "is not defined in the PropertyDatabase" );
+       return;
+    }
+
   csmp::Index  idx = this->pref_.StorageKey( property );
+  
   Var          var;
   femDataOutputDispatch::initVariable( idx, var );
 
@@ -465,9 +487,8 @@ void Boundary<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& prope
     }
       break;
     default:break; {
-      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
       csmp_error.Note( WARNING, "Boundary::OutputVariableTo",
-                         property, "placement not identified" );
+                       property, "placement not identified" );
     }
   }
 
@@ -512,7 +533,7 @@ Complimentary to Out(...) function.
 @return  true if it succeeds, false if it fails.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 bool Boundary<dim>::In( fstream& fp, PLACEMENT, VARIABLE_TYPE )
 {
   size_t vCount = numeric_limits<size_t>::max();
@@ -553,13 +574,19 @@ from from the data container.
 Enable to store data to disk to faciliate persistance.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void Boundary<dim>::InputVariableFrom( const char* property,
                                        const FEM_Data<Var>& vdata )
 {
-  const csmp::Index  idx = this->pref_.StorageKey( property );
-
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( this->pref_.IsDefined(property) == false ) {
+       csmp_error.Note( WARNING, "Boundary<dim>::InputVariableFrom",
+                        property, "is not defined in the PropertyDatabase" );
+       return;
+    }
+
+  const csmp::Index  idx = this->pref_.StorageKey( property );
 
   switch ( idx.place ) {
     case FACE:
@@ -632,18 +659,9 @@ template void Boundary<3>::InputVariableFrom<TensorVariable<3U> >( const char*, 
 
 
 
-
-
-
-
-
-
-
 // ------------------------------------------------------------------
 // Building blocks
 // -------------------------------------------------------------------
-
-
 
 
 /**
@@ -1057,18 +1075,24 @@ double  Boundary<dim>::Area() const
 
 
 template<uint32_t dim>
-double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const char* property ) const
+double Boundary<dim>::SurfaceIntegral( const char* property ) const
 {
-  csmp::Index prop_key = p.StorageKey( property );
+  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+  if ( this->pref_.IsDefined(property) == false ) {
+       csmp_error.Note( WARNING, "Boundary<dim>::SurfaceIntegral",
+                        property, "is not defined in the PropertyDatabase" );
+       return numeric_limits<double>::signaling_NaN();
+    }
+
+  csmp::Index prop_key = this->pref_.StorageKey( property );
 
   if ( prop_key.place == ELEMENT_INTEGRATION_POINT or prop_key.place == REGION ) {
-    throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
-                           property, "placed on IntegrationPoint or Region cannot be assigned on boundary" );
+    csmp_error.Note( ERROR, "Boundary<dim>::SurfaceIntegral", property, "placed on IntegrationPoint or Region cannot be assigned on boundary" );
     return std::numeric_limits<double>::signaling_NaN();
   }
   if ( prop_key.type == TENSOR ) {
-    throw csmp::Exception( ERROR, "Boundary<dim>::SurfaceIntegral",
-                           property, "is a tensor property; this method does not know how to integrate it" );
+    csmp_error.Note( ERROR, "Boundary<dim>::SurfaceIntegral", property, "is a tensor property; this method does not know how to integrate it" );
     return std::numeric_limits<double>::signaling_NaN();
   }
 
@@ -1081,14 +1105,12 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
                              property, "is an Element property; this method does not know how to integrate it" );
     }
     else if ( prop_key.place == FACE ) {
-      for ( typename vector<Face<dim>*>::const_iterator
-            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ )
         property_integral += (*it)->Volume() * (*it)->Read( prop_key );
     }
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       ScalarVariable  sc;
-      for ( typename vector<Face<dim>*>::const_iterator
-            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->PropertyValueAtBaryCenter( prop_key, sc );
         property_integral += (*it)->Volume() * sc();
       }
@@ -1103,8 +1125,7 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
     // the average of the values projected onto the normal are being used.
     if ( prop_key.place == FACE or prop_key.place == INTER_FACE ) {
       VectorVariable<dim>  unrml, vc;
-      for ( typename vector<Face<dim>*>::const_iterator
-            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->UnitNormal( unrml );
         (*it)->Read( prop_key, vc );
         property_integral += dotProduct( unrml, vc );
@@ -1112,8 +1133,7 @@ double Boundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p, const cha
     }
     else if ( prop_key.place == NODE ) { // for nodes on first side of interface
       VectorVariable<dim>  unrml, vc;
-      for ( typename vector<Face<dim>*>::const_iterator
-            it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
+      for ( auto it = this->cell_vec_.begin(); it != this->cell_vec_.end(); it++ ) {
         (*it)->UnitNormal( unrml );
         (*it)->PropertyValueAtBaryCenter( prop_key, vc );
         property_integral += dotProduct( unrml, vc );

@@ -160,11 +160,6 @@ struct INDEX : public Index {
    explicit INDEX( csmp::Index&& idx ) : Index(idx) {}
 };
 
-
-// type parsing (although slow)
-template<typename Var>  VARIABLE_TYPE variableType( const Var& );
-
-
 // console input and output
 std::ostream& operator<<( std::ostream&, const csmp::Index& );
 std::istream& operator>>( std::istream&, csmp::Index& );

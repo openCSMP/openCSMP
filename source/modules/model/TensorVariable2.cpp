@@ -8,7 +8,7 @@ namespace csmp {
 /**
     @todo SKM initialise array elements in the initialiser list
 */
-TensorVariable<2U>::TensorVariable()
+TensorVariable<2U>::TensorVariable() noexcept
   : flag{{ANY,ANY}},
     data{ { {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()},
             {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN()}  } }
@@ -23,7 +23,7 @@ TensorVariable<2U>::TensorVariable()
     initialises variable as diagonal isotropic tensor with flag and value
     SKM 17/6/2015
 */
-TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double val )
+TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double val ) noexcept
   : flag{{f,f}},
     data{ { {val,0.},{0.,val} } }
  {
@@ -34,7 +34,7 @@ TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, double val )
 
 TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f, 
                                     double v11, double v12,
-                                    double v21, double v22 )
+                                    double v21, double v22 ) noexcept
   : flag{{f,f}},
     data{ { {v11,v12},{v21,v22} } }
  {
@@ -44,7 +44,7 @@ TensorVariable<2U>::TensorVariable( VARIABLE_FLAG f,
  
 TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLAG& f22,
                                     const double&  v11, const double&  v12,
-                                    const double&  v21, const double&  v22 )
+                                    const double&  v21, const double&  v22 ) noexcept
   : flag{{f11,f22}},
     data{ { {v11,v12},{v21,v22} } }
  {
@@ -54,7 +54,7 @@ TensorVariable<2U>::TensorVariable( const VARIABLE_FLAG& f11, const VARIABLE_FLA
 
 
 
-double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j )
+double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j ) noexcept
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -72,7 +72,7 @@ double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j )
 
 
 
-const double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j ) const
+const double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j ) const noexcept
  {
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -89,33 +89,25 @@ const double& TensorVariable<2U>::operator()( uint32_t i, uint32_t j ) const
 
 
 
-void TensorVariable<2U>::Component( uint32_t i, double val )
- { 
-    assert( i < Size() );
-    // row by row
-    if ( i == 0U )      data[0U][0U] = val;
-    else if ( i == 1U ) data[0U][1U] = val;
-    else if ( i == 2U ) data[1U][0U] = val;
-    else                data[1U][1U] = val; // remaining case
+void TensorVariable<2U>::Component( uint32_t i, double val ) noexcept
+ {
+    assert(i < Size());
+    data[i / 2][i % 2] = val;   // row = i/2 , column = i%2
  }
 
 
 
-double TensorVariable<2U>::Component( uint32_t i ) const
+double TensorVariable<2U>::Component( uint32_t i ) const noexcept
  { 
-    assert( i < Size() );
-    // row by row
-    if ( i == 0U ) return data[0U][0U];
-    if ( i == 1U ) return data[0U][1U];
-    if ( i == 2U ) return data[1U][0U];
-    return data[1U][1U]; // remaining case
+    assert(i < Size());
+    return data[i / 2][i % 2];   // row = i/2 , column = i%2
  }
 
 
  
  
 
-VARIABLE_FLAG& TensorVariable<2U>::Flag( uint32_t i )
+VARIABLE_FLAG& TensorVariable<2U>::Flag( uint32_t i ) noexcept
  { 
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -128,7 +120,7 @@ VARIABLE_FLAG& TensorVariable<2U>::Flag( uint32_t i )
 
 
 
-VARIABLE_FLAG  TensorVariable<2U>::Flag( uint32_t i ) const
+VARIABLE_FLAG  TensorVariable<2U>::Flag( uint32_t i ) const noexcept
  { 
 #ifndef NDEBUG 
     if ( i >= 2U ) { 
@@ -139,28 +131,21 @@ VARIABLE_FLAG  TensorVariable<2U>::Flag( uint32_t i ) const
     return flag[i]; 
  }
 
-
-uint32_t TensorVariable<2U>::Size() const
-  {
-    return 4U;
-  }
-
- 
                                    
-bool  TensorVariable<2U>::operator==( const TensorVariable<2U>& ts ) const
+bool  TensorVariable<2U>::operator==( const TensorVariable<2U>& ts ) const noexcept
  {
     return ( data == ts.data && flag == ts.flag );
  }
 
 
-bool  TensorVariable<2U>::operator!=( const TensorVariable<2U>& t ) const
+bool  TensorVariable<2U>::operator!=( const TensorVariable<2U>& t ) const noexcept
  {
      return !(*this == t);
  } 
 
 
 
-bool  TensorVariable<2U>::operator<( const TensorVariable<2U>& t ) const
+bool  TensorVariable<2U>::operator<( const TensorVariable<2U>& t ) const noexcept
  {
      return (this < &t);
  } 
@@ -174,21 +159,21 @@ bool  TensorVariable<2U>::operator<( const TensorVariable<2U>& t ) const
 
 // re-tested: SKM 29-9-2001
 // @test tested: O.K.
-double TensorVariable<2U>::Determinant() const
+double TensorVariable<2U>::Determinant() const noexcept
  {
     return data[0][0]*data[1][1] - data[0][1]*data[1][0];
  }
  
 
 
-double TensorVariable<2U>::Trace() const
+double TensorVariable<2U>::Trace() const noexcept
  {
     return data[0][0]+data[1][1];
  }
 
 
 
-void TensorVariable<2U>::AssignToRow( uint32_t iRow, VectorVariable<2U>& vc )
+void TensorVariable<2U>::AssignToRow( uint32_t iRow, VectorVariable<2U>& vc ) noexcept
 {
 	if ( iRow == 0U )
 	    flag[0U] = vc.Flag(0U);
@@ -199,7 +184,7 @@ void TensorVariable<2U>::AssignToRow( uint32_t iRow, VectorVariable<2U>& vc )
 }
 
 
-void TensorVariable<2U>::AssignToColumn( uint32_t iCol, VectorVariable<2U>& vc )
+void TensorVariable<2U>::AssignToColumn( uint32_t iCol, VectorVariable<2U>& vc ) noexcept
 {
 	if ( iCol == 0U )
 	    flag[0U] = vc.Flag(0U);
@@ -212,14 +197,15 @@ void TensorVariable<2U>::AssignToColumn( uint32_t iCol, VectorVariable<2U>& vc )
 
 
 
-VectorVariable<2U> TensorVariable<2U>::Row( uint32_t iRow ) const
+VectorVariable<2U> TensorVariable<2U>::Row( uint32_t iRow ) const noexcept
 {
-	return VectorVariable<2U>( flag[iRow], flag[iRow], 
+  //static_assert( iRow < 2, "TensorVariable<2U>::Row: row access violation" );
+	return VectorVariable<2U>( flag[iRow], flag[iRow],
 	                           data[iRow][0U], data[iRow][1U] );
 }
 
 
-VectorVariable<2U> TensorVariable<2U>::Column( uint32_t iCol ) const
+VectorVariable<2U> TensorVariable<2U>::Column( uint32_t iCol ) const noexcept
 {
 	return VectorVariable<2U>( flag[iCol], flag[iCol], 
 	                           data[0U][iCol], data[1U][iCol] );
@@ -259,7 +245,7 @@ bool TensorVariable<2U>::In( std::fstream& fp )
 
 // here the flag of the lefthand tensor-variable is sustained
 
-TensorVariable<2U>  TensorVariable<2U>::operator+( const TensorVariable<2U>& t ) const
+TensorVariable<2U>  TensorVariable<2U>::operator+( const TensorVariable<2U>& t ) const noexcept
  {
       return TensorVariable( flag[0], flag[1],  
                              t.data[0][0]+data[0][0], t.data[0][1]+data[0][1],
@@ -268,7 +254,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator+( const TensorVariable<2U>& t )
 
 
 
-TensorVariable<2U>  TensorVariable<2U>::operator-( const TensorVariable<2U>& t ) const
+TensorVariable<2U>  TensorVariable<2U>::operator-( const TensorVariable<2U>& t ) const noexcept
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0]-t.data[0][0], data[0][1]-t.data[0][1],
@@ -276,7 +262,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator-( const TensorVariable<2U>& t )
  }
 
 
-TensorVariable<2U>  TensorVariable<2U>::operator+( double val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator+( double val ) const noexcept
  {
       return TensorVariable( flag[0], flag[1],  
                              data[0][0]+val, data[0][1]+val, 
@@ -285,7 +271,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator+( double val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator-( double val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator-( double val ) const noexcept
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0]-val, data[0][1]-val,
@@ -294,7 +280,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator-( double val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator*( double val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator*( double val ) const noexcept
  {
       return TensorVariable( flag[0], flag[1],  
                              data[0][0]*val, data[0][1]*val,
@@ -303,7 +289,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator*( double val ) const
  
  
 
-TensorVariable<2U>  TensorVariable<2U>::operator/( double val ) const
+TensorVariable<2U>  TensorVariable<2U>::operator/( double val ) const noexcept
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0]/val, data[0][1]/val,
@@ -314,7 +300,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator/( double val ) const
 // matrix vector multiplication: v = M * v
 // @test tested: O.K. SKM 29-9-2001
 
-VectorVariable<2U>  TensorVariable<2U>::operator*( const VectorVariable<2U>& vc ) const
+VectorVariable<2U>  TensorVariable<2U>::operator*( const VectorVariable<2U>& vc ) const noexcept
  {
     VectorVariable<2U> temp( vc.Flag(0), vc.Flag(1),
                              data[0][0] * vc[0] + data[0][1] * vc[1],
@@ -322,7 +308,7 @@ VectorVariable<2U>  TensorVariable<2U>::operator*( const VectorVariable<2U>& vc 
     return temp;
  } 
 
-Point<2U>  TensorVariable<2U>::operator*( const Point<2U>& v ) const
+Point<2U>  TensorVariable<2U>::operator*( const Point<2U>& v ) const noexcept
  {
     return Point<2U>(
         data[0][0] * v[0] + data[0][1] * v[1],
@@ -334,7 +320,7 @@ Point<2U>  TensorVariable<2U>::operator*( const Point<2U>& v ) const
 // re-tested: SKM 29-9-2001
 // retested after partial specialization SKM9/12/03
 
-TensorVariable<2U> TensorVariable<2U>::Adjoint() const
+TensorVariable<2U> TensorVariable<2U>::Adjoint() const noexcept
  {
     // forming B matrix
       return TensorVariable( flag[0], flag[1],
@@ -345,7 +331,7 @@ TensorVariable<2U> TensorVariable<2U>::Adjoint() const
 
 // @test tested: O.K. 
 
-TensorVariable<2U>  TensorVariable<2U>::operator*( const TensorVariable<2U>& ts ) const 
+TensorVariable<2U>  TensorVariable<2U>::operator*( const TensorVariable<2U>& ts ) const noexcept
  {
    TensorVariable<2U> temp;
 
@@ -363,7 +349,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator*( const TensorVariable<2U>& ts 
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator+=( const ScalarVariable& sc )
+TensorVariable<2U>&  TensorVariable<2U>::operator+=( const ScalarVariable& sc ) noexcept
  {
     data[0][0] += sc();
     data[0][1] += sc();
@@ -375,7 +361,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator+=( const ScalarVariable& sc )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator-=( const ScalarVariable& sc )
+TensorVariable<2U>&  TensorVariable<2U>::operator-=( const ScalarVariable& sc ) noexcept
  {
     data[0][0] -= sc();
     data[0][1] -= sc();
@@ -387,7 +373,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator-=( const ScalarVariable& sc )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator*=( const ScalarVariable& sc )
+TensorVariable<2U>&  TensorVariable<2U>::operator*=( const ScalarVariable& sc ) noexcept
  {
     data[0][0] *= sc();
     data[0][1] *= sc();
@@ -399,7 +385,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator*=( const ScalarVariable& sc )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator/=( const ScalarVariable& sc )
+TensorVariable<2U>&  TensorVariable<2U>::operator/=( const ScalarVariable& sc ) noexcept
  {
     data[0][0] /= sc();
     data[0][1] /= sc();
@@ -411,7 +397,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator/=( const ScalarVariable& sc )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator+=( const TensorVariable<2U>& ts )
+TensorVariable<2U>&  TensorVariable<2U>::operator+=( const TensorVariable<2U>& ts ) noexcept
  {
     data[0][0] += ts.data[0][0];
     data[0][1] += ts.data[0][1];
@@ -423,7 +409,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator+=( const TensorVariable<2U>& t
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator-=( const TensorVariable<2U>& ts )
+TensorVariable<2U>&  TensorVariable<2U>::operator-=( const TensorVariable<2U>& ts ) noexcept
  {
     data[0][0] -= ts.data[0][0];
     data[0][1] -= ts.data[0][1];
@@ -436,7 +422,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator-=( const TensorVariable<2U>& t
 
 // element by element division
 
-TensorVariable<2U>&  TensorVariable<2U>::operator/=( const TensorVariable<2U>& ts )
+TensorVariable<2U>&  TensorVariable<2U>::operator/=( const TensorVariable<2U>& ts ) noexcept
  {
     data[0][0] /= ts.data[0][0];
     data[0][1] /= ts.data[0][1];
@@ -450,7 +436,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator/=( const TensorVariable<2U>& t
 
 // element by element division
 
-TensorVariable<2U>  TensorVariable<2U>::operator/( const TensorVariable<2U>& ts ) const
+TensorVariable<2U>  TensorVariable<2U>::operator/( const TensorVariable<2U>& ts ) const noexcept
  {
     TensorVariable  temp;
  
@@ -468,7 +454,7 @@ TensorVariable<2U>  TensorVariable<2U>::operator/( const TensorVariable<2U>& ts 
 
 // matrix multiplication
 
-TensorVariable<2U>&  TensorVariable<2U>::operator*=( const TensorVariable<2U>& ts )
+TensorVariable<2U>&  TensorVariable<2U>::operator*=( const TensorVariable<2U>& ts ) noexcept
  {
    TensorVariable<2U> temp;
 
@@ -484,7 +470,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator*=( const TensorVariable<2U>& t
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator+=( double val )
+TensorVariable<2U>&  TensorVariable<2U>::operator+=( double val ) noexcept
  {
     data[0][0] += val;
     data[0][1] += val;
@@ -496,7 +482,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator+=( double val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator-=( double val )
+TensorVariable<2U>&  TensorVariable<2U>::operator-=( double val ) noexcept
  {
     data[0][0] -= val;
     data[0][1] -= val;
@@ -508,7 +494,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator-=( double val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator*=( double val )
+TensorVariable<2U>&  TensorVariable<2U>::operator*=( double val ) noexcept
  {
     data[0][0] *= val;
     data[0][1] *= val;
@@ -520,7 +506,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator*=( double val )
 
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator/=( double val )
+TensorVariable<2U>&  TensorVariable<2U>::operator/=( double val ) noexcept
  {
     data[0][0] /= val;
     data[0][1] /= val;
@@ -536,7 +522,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator/=( double val )
 // --------------------
 
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( double val )
+TensorVariable<2U>&  TensorVariable<2U>::operator=( double val ) noexcept
  {
     data[0][0] = val;
     data[0][1] = val;
@@ -549,7 +535,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( double val )
 
 // the flag is adopted from the scalar variable
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( const ScalarVariable& sc )
+TensorVariable<2U>&  TensorVariable<2U>::operator=( const ScalarVariable& sc ) noexcept
  {
     flag[0] = flag[1] = sc.Flag();
     data[0][0] = sc();
@@ -563,7 +549,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const ScalarVariable& sc )
 
 // writes vector into the diagonal of the zero'd tensor
 
-TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc )
+TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc ) noexcept
  {
     flag[0] = vc.Flag(0);
     flag[1] = vc.Flag(1);
@@ -581,7 +567,7 @@ TensorVariable<2U>&  TensorVariable<2U>::operator=( const VectorVariable<2U>& vc
 
 // @test tested: O.K.
 
-void TensorVariable<2U>::Identity()
+void TensorVariable<2U>::Identity() noexcept
  {
     data[0][0] = static_cast<double>(1.0);
     data[0][1] = static_cast<double>(0.0);
@@ -591,7 +577,7 @@ void TensorVariable<2U>::Identity()
 
 
 
-void TensorVariable<2U>::DiagonalValues( double f_00, double f_11 )
+void TensorVariable<2U>::DiagonalValues( double f_00, double f_11 ) noexcept
 {
     data[0][0] = f_00;
     data[1][1] = f_11;
@@ -599,7 +585,7 @@ void TensorVariable<2U>::DiagonalValues( double f_00, double f_11 )
 
 
 
-void TensorVariable<2U>::DiagonalValues(const vector<double>& vecDiags )
+void TensorVariable<2U>::DiagonalValues(const vector<double>& vecDiags ) noexcept
 {
     data[0][0] = vecDiags[0];
     data[1][1] = vecDiags[1];
@@ -607,7 +593,7 @@ void TensorVariable<2U>::DiagonalValues(const vector<double>& vecDiags )
 
 
 
-void TensorVariable<2U>::DiagonalValues(const VectorVariable<2U>& vecDiags )
+void TensorVariable<2U>::DiagonalValues(const VectorVariable<2U>& vecDiags ) noexcept
 {
     data[0][0] = vecDiags[0];
     data[1][1] = vecDiags[1];
@@ -617,7 +603,7 @@ void TensorVariable<2U>::DiagonalValues(const VectorVariable<2U>& vecDiags )
 
 
 /// @test tested: O.K.
-TensorVariable<2U>  TensorVariable<2U>::Transposed() const
+TensorVariable<2U>  TensorVariable<2U>::Transposed() const noexcept
  {
       return TensorVariable( flag[0], flag[1], 
                              data[0][0], data[1][0],
@@ -627,7 +613,7 @@ TensorVariable<2U>  TensorVariable<2U>::Transposed() const
 
 // re-tested: SKM 29-9-2001
 // @test tested: O.K.
-TensorVariable<2U> TensorVariable<2U>::Inverse() const
+TensorVariable<2U> TensorVariable<2U>::Inverse() const noexcept
  {
     double  det = Determinant();
     
@@ -646,7 +632,7 @@ TensorVariable<2U> TensorVariable<2U>::Inverse() const
  
  
 /// @test re-tested: SKM 29-9-2001
-double  TensorVariable<2U>::MinElement() const
+double  TensorVariable<2U>::MinElement() const noexcept
  {
     double me = data[0][0];
      
@@ -660,7 +646,7 @@ double  TensorVariable<2U>::MinElement() const
   
 /// @test re-tested: SKM 29-9-2001
 
-double  TensorVariable<2U>::MaxElement() const
+double  TensorVariable<2U>::MaxElement() const noexcept
  {
     double me = data[0][0];
 
@@ -675,7 +661,7 @@ double  TensorVariable<2U>::MaxElement() const
  
 /// @test re-tested: SKM 29-9-2001
 
-bool  TensorVariable<2U>::IsWithinRange( double vmin, double vmax ) const
+bool  TensorVariable<2U>::IsWithinRange( double vmin, double vmax ) const noexcept
  {
     if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
     if ( data[0][1] < vmin || data[0][1] > vmax ) return false;
@@ -689,7 +675,7 @@ bool  TensorVariable<2U>::IsWithinRange( double vmin, double vmax ) const
  /**
     Checks only the diagonal.
 */
-bool  TensorVariable<2U>::Has_NaN_Values() const {
+bool  TensorVariable<2U>::Has_NaN_Values() const noexcept {
    if ( isnan(data[0][0]) ) return true;
    if ( isnan(data[1][1]) ) return true;
    return false;
@@ -697,7 +683,7 @@ bool  TensorVariable<2U>::Has_NaN_Values() const {
 
  
 /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
-VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariable<2U>& ts )
+VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariable<2U>& ts ) noexcept
  {
     VectorVariable<2U> temp( vc.Flag(0), vc.Flag(1), 
                              ts(0,0) * vc[0] + ts(1,0) * vc[1],
@@ -706,7 +692,7 @@ VectorVariable<2U>  operator*( const VectorVariable<2U>& vc, const TensorVariabl
  }
 
   /// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
-  Point<2U>  operator*( const Point<2U>& vc, const TensorVariable<2U>& ts )
+  Point<2U>  operator*( const Point<2U>& vc, const TensorVariable<2U>& ts ) noexcept
   {
     return Point<2U>(
               ts(0,0) * vc[0] + ts(1,0) * vc[1],
@@ -741,18 +727,15 @@ void  TensorVariable<2U>::In()
 
 /// @test tested: O.K.
 
-void  TensorVariable<2U>::Out() const
+void  TensorVariable<2U>::Out() const noexcept
  {
-     size_t   i, j;
-     
-     cout <<"\nStatus: "<< endl;
-    for ( j=0; j<2U; j++ ) cout << parseStatus(flag[j]) <<"  ";
+    cout <<"\nStatus: "<< endl;
+    for ( uint32_t j=0; j<2U; j++ ) cout << parseStatus(flag[j]) <<"  ";
     cout << endl;
 
      cout <<"\nValues: "<< endl;
-     for ( i=0; i<2U; i++ )
-       {
-          for ( j=0; j<2U; j++ ) cout << data[i][j] <<"\t\t";
+     for ( uint32_t i=0; i<2U; i++ ) {
+          for ( uint32_t j=0; j<2U; j++ ) cout << data[i][j] <<"\t\t";
           cout << endl;
        }
  } // end Out
@@ -878,8 +861,8 @@ bool TensorVariable<2U>::EigenNonSymmetric( VectorVariable<2U>& eigenVals,
     const int n = 2;
     double V[n][n], d[n], e[n];
 
-    for (int i=0; i<n; i++)
-      for (int j=0; j<n; j++)
+    for (uint32_t i=0; i<n; i++)
+      for (uint32_t j=0; j<n; j++)
         V[i][j] = (*this)(i,j);
 
     // Symmetric Householder reduction to tridiagonal form.
@@ -1110,10 +1093,8 @@ bool TensorVariable<2U>::EigenNonSymmetric( VectorVariable<2U>& eigenVals,
       }
     }
 
-    for (int i=0; i<n; i++)
-    {
-      for (int j=0; j<n; j++)
-            eigenVecs(i,j) = V[i][j];
+    for (uint32_t i=0; i<n; i++) {
+      for (uint32_t j=0; j<n; j++) eigenVecs(i,j) = V[i][j];
       eigenVals(i) = d[i];
     }
 

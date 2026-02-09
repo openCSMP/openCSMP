@@ -152,7 +152,7 @@ inline void initVariable( csmp::Index key, FlaggedArrayVariable& var )
 
 
   /// domain (Model, Region...) variables binary IO
-template<class V, class D, uint32_t dim>
+template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
 bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
 {
   size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
@@ -173,7 +173,7 @@ bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim
 }
 
 
-template<class V, class D, uint32_t dim>
+template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
 bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
 {
   size_t vcount = std::numeric_limits<size_t>::max();
@@ -237,7 +237,7 @@ bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>
     @author SKM
     @date 6/9/2021
  */
-template<class V, class D, uint32_t dim>
+template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
 bool selectedVariablesIn( std::fstream& fp, D& domain,
                           const PropertyDatabase<dim>& pref,
                           VARIABLE_TYPE, const std::set<std::string>& selection )

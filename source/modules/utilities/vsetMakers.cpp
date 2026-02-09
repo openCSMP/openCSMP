@@ -996,7 +996,7 @@ void create_Disconnected2D_VSet( VSet<2U>& vset )
 /// model  SPLIT22_BASIC  with box boundaries (Faces) and one through-going and one internal crossing split boundary
 ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
  {
-    //--------------------------ELEMENT TYPES
+    //--------------------------ELEMENT TYPES (3)
   	//add element types
     const CSMP_FEM_TYPE T(ISOPARAMETRIC_LINEAR_TRIANGLE), Q(ISOPARAMETRIC_LINEAR_QUADRILATERAL), P(ISOPARAMETRIC_LINEAR_BAR);
     deque<int8_t> vecElementTypes = { Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q,T,Q,Q,Q,Q, // elements (16 quads + 3 triangles)

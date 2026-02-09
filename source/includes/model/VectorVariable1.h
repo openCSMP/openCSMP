@@ -60,8 +60,9 @@ class VectorVariable<1U> {
     // Normal Methods
     VARIABLE_FLAG&   Flag( uint32_t i=0 );
     VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
-    uint32_t         Size() const;
-  
+
+    static constexpr uint32_t Size() noexcept { return 1u; };
+
     double           Length() const;
     Point<1U>        P() const;
     bool             IsWithinRange( double vmin, double vmax ) const;

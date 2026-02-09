@@ -53,10 +53,7 @@ VARIABLE_FLAG VectorVariable<1U>::Flag( uint32_t ) const
   return flag;
 }
 
-uint32_t VectorVariable<1U>::Size() const
-{
-  return 1U;
-}
+
 
 VectorVariable<1U>::VectorVariable( VARIABLE_FLAG f, double val )
   : flag( f ), data( val )

@@ -24,7 +24,6 @@ using namespace std;
 
 namespace csmp {
 
-
 /**
     Counts total number of cells in model and then - per cell type - whether these are volume, surface or line cells.
     Most commonly, etype will be element when this method is called.
@@ -2054,7 +2053,11 @@ template void printNodes( const InterFace<3U>& );
 
 
 
-/// prints sorted global element node numbers in a compact way
+/**
+    Prints sorted global element node numbers in a compact way.
+    
+    @note Call printNodeAttibutes(  range.begin(), range.begin()+1 ) as arguments if you only want to print a single value
+*/
 template<uint32_t dim>
 void printNodeAttibutes( typename vector<Node<dim>*>::const_iterator first,
                          typename vector<Node<dim>*>::const_iterator last )

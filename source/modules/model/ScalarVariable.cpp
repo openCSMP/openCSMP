@@ -3,58 +3,55 @@
 
 namespace csmp {
 
-double& ScalarVariable::operator()( void ) { return data_; }
-double  ScalarVariable::operator()( void ) const { return data_; }
+double& ScalarVariable::operator()( void ) noexcept { return data_; }
+double  ScalarVariable::operator()( void ) const noexcept { return data_; }
 
-VARIABLE_FLAG&  ScalarVariable::Flag() { return flag_; }
-
-
-VARIABLE_FLAG   ScalarVariable::Flag() const { return flag_; }
+VARIABLE_FLAG&  ScalarVariable::Flag() noexcept { return flag_; }
 
 
-uint32_t ScalarVariable::Size() const { return 1U; }
+VARIABLE_FLAG   ScalarVariable::Flag() const noexcept { return flag_; }
 
 
-void ScalarVariable::Resize( uint32_t, double newValue ) { data_ = newValue; }
+void ScalarVariable::Resize( uint32_t, double newValue ) noexcept { data_ = newValue; }
 
 
 
-ScalarVariable::ScalarVariable() : flag_( ANY ), data_( std::numeric_limits<double>::quiet_NaN() ) {}
+ScalarVariable::ScalarVariable() noexcept : flag_( ANY ), data_( std::numeric_limits<double>::quiet_NaN() ) {}
 
 
 
-ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double val )
+ScalarVariable::ScalarVariable( VARIABLE_FLAG f, double val ) noexcept
   : flag_( f ), data_( val )
 {
 }
 
 
-ScalarVariable&  ScalarVariable::operator+=( double val ) { data_ += val; return *this; }
-ScalarVariable&  ScalarVariable::operator-=( double val ) { data_ -= val; return *this; }
-ScalarVariable&  ScalarVariable::operator*=( double val ) { data_ *= val; return *this; }
-ScalarVariable&  ScalarVariable::operator/=( double val ) { data_ /= val; return *this; }
+ScalarVariable&  ScalarVariable::operator+=( double val ) noexcept { data_ += val; return *this; }
+ScalarVariable&  ScalarVariable::operator-=( double val ) noexcept { data_ -= val; return *this; }
+ScalarVariable&  ScalarVariable::operator*=( double val ) noexcept { data_ *= val; return *this; }
+ScalarVariable&  ScalarVariable::operator/=( double val ) noexcept { data_ /= val; return *this; }
 
 
 
-ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s )
+ScalarVariable&  ScalarVariable::operator+=( const ScalarVariable& s ) noexcept
 {
   data_ += s.data_;
   return(*this);
 }
 
-ScalarVariable&  ScalarVariable::operator-=( const ScalarVariable& s )
+ScalarVariable&  ScalarVariable::operator-=( const ScalarVariable& s ) noexcept
 {
   data_ -= s.data_;
   return(*this);
 }
 
-ScalarVariable&  ScalarVariable::operator*=( const ScalarVariable& s )
+ScalarVariable&  ScalarVariable::operator*=( const ScalarVariable& s ) noexcept
 {
   data_ *= s.data_;
   return(*this);
 }
 
-ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s )
+ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s ) noexcept
 {
   data_ /= s.data_;
   return(*this);
@@ -63,28 +60,28 @@ ScalarVariable&  ScalarVariable::operator/=( const ScalarVariable& s )
 
 
 
-bool  ScalarVariable::operator<( const ScalarVariable& s ) const
+bool  ScalarVariable::operator<( const ScalarVariable& s ) const noexcept
 {
   return(s.data_ > data_);
 }
 
 
 
-bool  ScalarVariable::operator>( const ScalarVariable& s ) const
+bool  ScalarVariable::operator>( const ScalarVariable& s ) const noexcept
 {
   return(s.data_ < data_);
 }
 
 
 
-bool  ScalarVariable::operator<=( const ScalarVariable& s ) const
+bool  ScalarVariable::operator<=( const ScalarVariable& s ) const noexcept
 {
   return(s.data_ >= data_);
 }
 
 
 
-bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
+bool  ScalarVariable::operator>=( const ScalarVariable& s ) const noexcept
 {
   return(s.data_ <= data_);
 }
@@ -92,7 +89,7 @@ bool  ScalarVariable::operator>=( const ScalarVariable& s ) const
 
 
 // keep for associative containers
-bool  ScalarVariable::operator==( const ScalarVariable& s ) const
+bool  ScalarVariable::operator==( const ScalarVariable& s ) const noexcept
 {
   if ( s.flag_ != flag_ ) return false;
   return essentiallyEqual(data_,s.data_);
@@ -102,7 +99,7 @@ bool  ScalarVariable::operator==( const ScalarVariable& s ) const
 
 
 // keep for associative containers
-bool  ScalarVariable::operator!=( const ScalarVariable& s ) const
+bool  ScalarVariable::operator!=( const ScalarVariable& s ) const noexcept
 {
   return !(*this == s);
 }
@@ -111,7 +108,7 @@ bool  ScalarVariable::operator!=( const ScalarVariable& s ) const
 
 
 
-bool  ScalarVariable::IsWithinRange( double vmin, double vmax ) const
+bool  ScalarVariable::IsWithinRange( double vmin, double vmax ) const noexcept
 {
   if ( data_ < vmin || data_ > vmax ) return false;
   return true;
@@ -119,103 +116,103 @@ bool  ScalarVariable::IsWithinRange( double vmin, double vmax ) const
 
 
 
-ScalarVariable  operator+( const ScalarVariable& l, const double& r )
+ScalarVariable  operator+( const ScalarVariable& l, const double& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() + r );
 }
 
 
 
-ScalarVariable  operator-( const ScalarVariable& l, const double& r )
+ScalarVariable  operator-( const ScalarVariable& l, const double& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() - r );
 }
 
 
 
-ScalarVariable  operator*( const ScalarVariable& l, const double& r )
+ScalarVariable  operator*( const ScalarVariable& l, const double& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() * r );
 }
 
 
 
-ScalarVariable  operator/( const ScalarVariable& l, const double& r )
+ScalarVariable  operator/( const ScalarVariable& l, const double& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() / r );
 }
 
 
 
-ScalarVariable  operator+( double l, const ScalarVariable& r )
+ScalarVariable  operator+( double l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( r.Flag(), l + r() );
 }
 
 
 
-ScalarVariable  operator-( double l, const ScalarVariable& r )
+ScalarVariable  operator-( double l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( r.Flag(), l - r() );
 }
 
 
 
-ScalarVariable  operator*( double l, const ScalarVariable& r )
+ScalarVariable  operator*( double l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( r.Flag(), l * r() );
 }
 
 
 
-ScalarVariable  operator/( double l, const ScalarVariable& r )
+ScalarVariable  operator/( double l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( r.Flag(), l / r() );
 }
 
 
 
-ScalarVariable  operator+( const ScalarVariable& l, const ScalarVariable& r )
+ScalarVariable  operator+( const ScalarVariable& l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() + r() );
 }
 
 
 
-ScalarVariable  operator-( const ScalarVariable& l, const ScalarVariable& r )
+ScalarVariable  operator-( const ScalarVariable& l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() - r() );
 }
 
 
 
-ScalarVariable  operator*( const ScalarVariable& l, const ScalarVariable& r )
+ScalarVariable  operator*( const ScalarVariable& l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() * r() );
 }
 
 
 
-ScalarVariable  operator/( const ScalarVariable& l, const ScalarVariable& r )
+ScalarVariable  operator/( const ScalarVariable& l, const ScalarVariable& r ) noexcept
 {
   return ScalarVariable( l.Flag(), l() / r() );
 }
 
 
 template<uint32_t dim>
-VectorVariable<dim>  operator*( const ScalarVariable& l, const VectorVariable<dim>& r )
+VectorVariable<dim>  operator*( const ScalarVariable& l, const VectorVariable<dim>& r ) noexcept
 {
   return r * l();
 }
 
 template<uint32_t dim>
-TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVariable<dim>& r )
+TensorVariable<dim>  operator*( const ScalarVariable& l, const TensorVariable<dim>& r ) noexcept
 {
   return r * l();
 }
 
 // extensively tested fastest version that does not generate any temporaries
-ScalarVariable  makeScalar( VARIABLE_FLAG flag, double val )
+ScalarVariable  makeScalar( VARIABLE_FLAG flag, double val ) noexcept
 {
   return ScalarVariable( flag, val );
 }
@@ -238,7 +235,7 @@ bool ScalarVariable::In( std::fstream& fp )
 }
 
 
-void  ScalarVariable::Out() const
+void  ScalarVariable::Out() const noexcept
 {
   std::cout << "\nStatus: " << parseStatus( flag_ );
   if ( std::isnan( data_ ) )
@@ -249,7 +246,7 @@ void  ScalarVariable::Out() const
 
 
 
-std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& o )
+std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& o ) noexcept
 {
   stream << o() << " (" << parseStatus( o.Flag() ) << ")";
   return stream;

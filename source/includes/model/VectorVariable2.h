@@ -12,73 +12,75 @@ class VectorVariable<2U> {
   public:
     static constexpr VARIABLE_TYPE VariableType = VECTOR;
 
-    VectorVariable();
+    VectorVariable() noexcept;
 
-    VectorVariable( VARIABLE_FLAG f, double val );
-    VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double val1, double val2 );
-    explicit VectorVariable( const std::vector<double>& );
-    explicit VectorVariable( const csmp::Point<2U>& );
+    VectorVariable( VARIABLE_FLAG f, double val ) noexcept;
+    VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, double val1, double val2 ) noexcept;
+    explicit VectorVariable( const std::vector<double>& ) noexcept;
+    explicit VectorVariable( const csmp::Point<2U>& ) noexcept;
     
-    double&        operator()( uint32_t i );
-    const double&  operator()( uint32_t i ) const;
-    double         operator[]( uint32_t i ) const;
-    void           Component( uint32_t, double );
-    double         Component( uint32_t i ) const;
+    double&        operator()( uint32_t i ) noexcept;
+    const double&  operator()( uint32_t i ) const noexcept;
+    double         operator[]( uint32_t i ) const noexcept;
+    void           Component( uint32_t, double ) noexcept;
+    double         Component( uint32_t i ) const noexcept;
 
-    VectorVariable   operator^( double val ) const;
+    VectorVariable   operator^( double val ) const noexcept;
 
-    VectorVariable&  operator+=( double val );
-    VectorVariable&  operator-=( double val );
-    VectorVariable&  operator*=( double val );
-    VectorVariable&  operator/=( double val );
+    VectorVariable&  operator+=( double val ) noexcept;
+    VectorVariable&  operator-=( double val ) noexcept;
+    VectorVariable&  operator*=( double val ) noexcept;
+    VectorVariable&  operator/=( double val ) noexcept;
     
-    VectorVariable&  operator+=( const ScalarVariable& );
-    VectorVariable&  operator-=( const ScalarVariable& );
-    VectorVariable&  operator*=( const ScalarVariable& );
-    VectorVariable&  operator/=( const ScalarVariable& );
+    VectorVariable&  operator+=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator-=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator*=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator/=( const ScalarVariable& ) noexcept;
     
-    VectorVariable   operator+(  const VectorVariable& ) const;
-    VectorVariable   operator-(  const VectorVariable& ) const;
-    VectorVariable   operator*(  const VectorVariable& ) const;
-    VectorVariable   operator/(  const VectorVariable& ) const;
+    VectorVariable   operator+(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator-(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator*(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator/(  const VectorVariable& ) const noexcept;
 
-    VectorVariable&  operator+=( const VectorVariable& );
-    VectorVariable&  operator-=( const VectorVariable& );
-    VectorVariable&  operator*=( const VectorVariable& );
-    VectorVariable&  operator/=( const VectorVariable& );
+    VectorVariable&  operator+=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator-=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator*=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator/=( const VectorVariable& ) noexcept;
     
-    VectorVariable&  operator=( double );
-    VectorVariable&  operator=( const Point<2U>& );
-    VectorVariable&  operator=( const ScalarVariable& );
+    VectorVariable&  operator=( double ) noexcept;
+    VectorVariable&  operator=( const Point<2U>& ) noexcept;
+    VectorVariable&  operator=( const ScalarVariable& ) noexcept;
 
     // extra operators
-    bool             operator==( const VectorVariable& ) const;
-    bool             operator!=( const VectorVariable& ) const;
+    bool             operator==( const VectorVariable& ) const noexcept;
+    bool             operator!=( const VectorVariable& ) const noexcept;
     // compare length
-    bool             operator<(  const VectorVariable& ) const;
+    bool             operator<(  const VectorVariable& ) const noexcept;
   
     // Normal Methods
-    VARIABLE_FLAG&   Flag( uint32_t i=0 );
-    VARIABLE_FLAG    Flag( uint32_t i=0 ) const;
-    uint32_t         Size() const;
-    double           Length() const;
-    double           AngleTo( const VectorVariable& v ) const;
-    Point<2U>        P() const;
-    bool             IsWithinRange( double vmin, double vmax ) const;
-    bool             Has_NaN_Values() const;
-    VectorVariable   Flip();
-    VectorVariable   ProjectOnto( const std::vector<double>& v ) const;
-    VectorVariable   ProjectOnto( const VectorVariable& v ) const;
-    void             Invert();
+    VARIABLE_FLAG&   Flag( uint32_t i=0 ) noexcept;
+    VARIABLE_FLAG    Flag( uint32_t i=0 ) const noexcept;
+
+    static constexpr uint32_t Size() noexcept { return 2u; };
+
+    double           Length() const noexcept;
+    double           AngleTo( const VectorVariable& v ) const noexcept;
+    Point<2U>        P() const noexcept;
+    bool             IsWithinRange( double vmin, double vmax ) const noexcept;
+    bool             Has_NaN_Values() const noexcept;
+    VectorVariable   Flip() noexcept;
+    VectorVariable   ProjectOnto( const std::vector<double>& v ) const noexcept;
+    VectorVariable   ProjectOnto( const VectorVariable& v ) const noexcept;
+    void             Invert() noexcept;
   
-    void			       EuclideanNormalize();
-    double           DotProduct( const csmp::Point<2U>& p ) const;
-    double           DotProduct( const VectorVariable& v ) const;
-    VectorVariable   CrossProduct( const csmp::Point<2U>& p ) const;
-    VectorVariable   CrossProduct( const VectorVariable& v ) const;
+    void			       EuclideanNormalize() noexcept;
+    double           DotProduct( const csmp::Point<2U>& p ) const noexcept;
+    double           DotProduct( const VectorVariable& v ) const noexcept;
+    VectorVariable   CrossProduct( const csmp::Point<2U>& p ) const noexcept;
+    VectorVariable   CrossProduct( const VectorVariable& v ) const noexcept;
 
     void             In();
-    void             Out() const;
+    void             Out() const noexcept;
     bool             In( std::fstream& fp );
     bool             Out( std::fstream& fp ) const;
 
@@ -86,7 +88,7 @@ class VectorVariable<2U> {
 
   private:
     std::array<VARIABLE_FLAG,2U> flag;
-    std::array<double,2U>      data;
+    std::array<double,2U>        data;
 };
 
 

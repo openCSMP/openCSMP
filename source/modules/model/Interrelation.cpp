@@ -441,7 +441,7 @@ void  Interrelation<dim>::Apply( Model<dim>& sg )
                           throw Exception( ERROR, "Interrelation<dim>::Apply(Model)", name_.c_str(),
                                           "only SCALAR non-BOUNDARY variables can be involved in BOUNDARY calculations ");
                        
-                        (*oiter).second = (*git).second.SurfaceIntegral( sg.Database(), sg.Database().Name(prop_key) ) / (*git).second.Area(); 
+                        (*oiter).second = (*git).second.SurfaceIntegral( sg.Database().Name(prop_key) ) / (*git).second.Area(); 
                      }
                    
                  } // end looping through operands

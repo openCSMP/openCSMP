@@ -118,11 +118,11 @@ class Region : public ModelSubDomain<dim, Element>,
     void SetRegion_ID( int32_t region_id_for_non_unique_regions = UNSPECIFIED );
 
     /// for the assignment of properties that are unique to the instance of this subclass
-    template<typename Var>
+    template<typename Var>  requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
       
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
-    template<typename Var>
+    template<typename Var>  requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value,
                             VARIABLE_FLAG flag_of_values_to_be_preserved,
                             SUBDOMAIN_PART = COMPLETE );
@@ -149,11 +149,11 @@ class Region : public ModelSubDomain<dim, Element>,
     PropertyData  OutputVariableTo( const char* region_property ) const;
 
     /// outputs distributed variable to FEM_Data container
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void OutputVariableTo( const char* property, FEM_Data<Var>& data_local ) const;
 
     /// inputs distributed variable from file into region; @note indices must match
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void InputVariableFrom( const char* property, const FEM_Data<Var>& vdata );
 
 

@@ -465,10 +465,10 @@ simply return this value.
 
  */
 template<uint32_t dim, template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
-                                                        const vector<double>& xyz,
-                                                        Var& var ) const
+                                                     const vector<double>& xyz,
+                                                     Var& var ) const
   {
     const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
@@ -496,7 +496,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
     fptr_->N( fptr_->NRST, xyz );
 
     const auto n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ )
+    for ( uint32_t i{0U}; i<n_nodes; i++ )
     {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
@@ -508,7 +508,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
 // scalar version of previous method
 template<uint32_t dim, template<uint32_t> class CELL>
 double FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
-                                                            const vector<double>& xyz ) const
+                                                       const vector<double>& xyz ) const
   {
     const CELL<dim>* eptr( static_cast<const CELL<dim>*>(this) );
 
@@ -528,7 +528,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAt( const csmp::Index& idx,
 
     double var(0.);
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ )
+    for ( uint32_t i{0U}; i<n_nodes; i++ )
        var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
 
     return var;
@@ -545,7 +545,7 @@ simply return this value.
 
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index& idx,
                                                                Var& var ) const
   {
@@ -575,7 +575,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const auto n_integration_points(IntegrationPoints());
-       for ( auto i{0U}; i < n_integration_points; i++ ) {
+       for ( uint32_t i{0U}; i < n_integration_points; i++ ) {
             eptr->Read( i, idx, temp );
             var += temp;
          }
@@ -584,7 +584,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
        const auto n_sector_integration_points(eptr->FV()->Sectors());
-       for ( auto i{0U}; i < n_sector_integration_points; i++ ) {
+       for ( uint32_t i{0U}; i < n_sector_integration_points; i++ ) {
             eptr->Read( i, 0U, idx, temp );
             var += temp;
          }
@@ -596,7 +596,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Index
     fptr_->N_AtBaryCenter( fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ ) {
+    for ( uint32_t i{0U}; i<n_nodes; i++ ) {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
     }
@@ -665,7 +665,7 @@ simply return this value.
 
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp::Index& idx,
                                                                      uint32_t ip,
                                                                      Var& var ) const
@@ -818,13 +818,26 @@ Eigen::Matrix<double,dim,Eigen::Dynamic> FiniteElementPolicy<dim,CELL>::Property
             }
             else if (prop_key.type == TENSOR) {
                 for (uint32_t a = 0; a < nnodes; ++a) {
+                    // 1. Fetch the tensor value at node 'a'
                     csmp::TensorVariable<dim> tnod;
                     cell_ptr->N(a)->Read(prop_key, tnod);
+
                     for (uint32_t j = 0; j < dim; ++j) {
+                        // DERIV(j, a) is the derivative of the basis function of node 'a'
+                        // with respect to coordinate direction 'j'.
+                        const double dNa_dxj = DERIV(j, a);
+
+                        // We accumulate the contribution of node 'a' to the gradient.
+                        // For a tensor T, the gradient (grad T)_{j, ik} = dT_{ik} / dx_j
                         uint32_t col = 0;
-                        for (uint32_t a = 0; a < dim; ++a) {
-                            for (uint32_t b = 0; b < dim; ++b, ++col) {
-                                grad(j,col) += tnod(a,b) * DERIV(j,a);
+                        for (uint32_t r = 0; r < dim; ++r) {
+                            for (uint32_t c = 0; c < dim; ++c) {
+                                // Accessing the flattened or 2D gradient structure
+                                // tnod(r, c) is the tensor component at the node
+                                grad(j, col) += tnod(r, c) * dNa_dxj;
+                                
+                                // Increment the flattened column index for the tensor components
+                                col++;
                             }
                         }
                     }
@@ -1048,7 +1061,7 @@ vector.
 
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void  FiniteElementPolicy<dim,CELL>::IntegrationPointPropertyVector( const csmp::Index& idx,
                                                                      vector<Var>& var ) const
   {
@@ -1068,7 +1081,7 @@ void  FiniteElementPolicy<dim,CELL>::IntegrationPointPropertyVector( const csmp:
     const auto n_integration_points(fptr_->IntegrationPoints());
     var.resize( n_integration_points );
 
-    for ( auto i{0U}; i<n_integration_points; i++ )
+    for ( uint32_t i{0U}; i<n_integration_points; i++ )
       {
           if constexpr( TypeMatchesVariableType<Var,ARRAY>::value || TypeMatchesVariableType<Var,FLAGGEDARRAY>::value ) {
               var[i].Resize( idx.dataDepth );

@@ -299,8 +299,50 @@ void variableTypeSet( std::set<VARIABLE_TYPE>& );
 VARIABLE_TYPE  parseType( int type );
 std::string    parseType( VARIABLE_TYPE );
 VARIABLE_TYPE  parseType( const char* type );
-template<typename csmp_type>
-VARIABLE_TYPE  variableType();
+
+class ScalarVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
+class ArrayVariable;
+class FlaggedArrayVariable;
+
+// Helper to identify VectorVariable and TensorVariable (Template template parameters)
+template <typename T> struct IsVector : std::false_type {};
+template <unsigned int N> struct IsVector<VectorVariable<N>> : std::true_type {};
+
+template <typename T> struct IsTensor : std::false_type {};
+template <unsigned int N> struct IsTensor<TensorVariable<N>> : std::true_type {};
+
+/**
+    Csmp types are resolved at compile time via if-constexpr.
+ */
+template<typename Var>
+constexpr VARIABLE_TYPE variableType(const Var&) {
+    using T = std::decay_t<Var>;
+
+    if constexpr (std::is_same_v<T, ScalarVariable>) {
+        return SCALAR;
+    }
+    else if constexpr (IsVector<T>::value) {
+        return VECTOR;
+    }
+    else if constexpr (IsTensor<T>::value) {
+        return TENSOR;
+    }
+    else if constexpr (std::is_same_v<T, ArrayVariable>) {
+        return ARRAY;
+    }
+    else if constexpr (std::is_same_v<T, FlaggedArrayVariable>) {
+        return FLAGGEDARRAY;
+    }
+    else {
+        // This will trigger at compile-time if you pass a type not listed above.
+        static_assert(sizeof(T) == 0, "variableType(const Var&): passed unsupported variable type argument");
+        return SCALAR; // Fallback to satisfy return type (will never be reached)
+    }
+}
+
+
 
 /// variable placement
 PLACEMENT      intToPLACEMENT( int i );

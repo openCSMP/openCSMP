@@ -167,9 +167,9 @@ class ModelSubDomain {
     typename std::vector<CELL<dim>*>::const_iterator        PerimeterCellsBegin() const noexcept;
     typename std::vector<CELL<dim>*>::const_iterator        CellsEnd() const noexcept;
 
-    /// returns how many of the nodes in the supplied iterator range also form part of the current subdomain's perimeter
-    size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator start,
-                                 typename std::vector<csmp::Node<dim>*>::const_iterator end ) const;
+    /// returns how many of the sorted nodes in the supplied iterator range also form part of the current subdomain's perimeter of sorted nodes
+    size_t SharedPerimeterNodes( typename std::vector<csmp::Node<dim>*>::const_iterator perimeter_nodes_start,
+                                 typename std::vector<csmp::Node<dim>*>::const_iterator nodes_end ) const;
                                  
     // see also the non-member functions below
 
@@ -252,11 +252,11 @@ class ModelSubDomain {
     // ----------------------------------------
 
     /// assigns uniform (single) variable value to either the entire subdomain or its interior or perimeter
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value,
                              VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
@@ -276,7 +276,7 @@ class ModelSubDomain {
                                const std::vector<VARIABLE_FLAG>& new_status,
                                SUBDOMAIN_PART=COMPLETE );
 
-    /// changes the flag of the vector variable 'property' to new value if the scalar variable is withing the specified range
+    /// changes the flags of the vector variable 'property' to new values if the scalar variable is within the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     const std::vector<VARIABLE_FLAG>& new_status,
                                     double min_value_to_change,
@@ -288,7 +288,7 @@ class ModelSubDomain {
                                VARIABLE_FLAG new_status,
                                SUBDOMAIN_PART=COMPLETE );
 
-    /// changes the flag of a particular variable component to new value if the scalar variable is withing the specified range
+    /// changes the flag of the variable component to new value, but only if the variable value is within the specified range
     void ChangePropertyStatusWhere( const char* property,
                                     uint32_t component,
                                     VARIABLE_FLAG new_status,
@@ -296,7 +296,7 @@ class ModelSubDomain {
                                     double max_value_to_change );
 
     /// by default (i=0) returns status of scalar variable or first component of a vector or tensor variable; if i>0 flag of corresponding component is returned
-    VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , uint32_t i=0 ) const;
+    virtual VARIABLE_FLAG  PropertyStatus( const char* variable, SUBDOMAIN_PART flag=COMPLETE , uint32_t i=0 ) const;
 
     /// min/max property values (length of vectors and eigenvalues of tensors)
     void MinMaxOf( const char* property,   double& gmin, double& gmax ) const;

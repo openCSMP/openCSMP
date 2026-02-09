@@ -424,7 +424,7 @@ double  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( uint
     @attention Does not work for array variables at the moment.
 */
 template<template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<3U,Var>
 void FiniteVolumePolicy<3U,CELL>::PropertyValueAtFacetIntegrationPoint( const csmp::Index& prop_key,
                                                                         uint32_t iFacet,
                                                                         uint32_t ip,
@@ -486,7 +486,7 @@ template void FiniteVolumePolicy<3U,InterFace>::PropertyValueAtFacetIntegrationP
 
 
 template<template<uint32_t> class CELL>
-template<class Var>
+template<class Var> requires CsmpVariable<3U,Var>
 void  FiniteVolumePolicy<3U,CELL>::PropertyValueAtSectorIntegrationPoint( const csmp::Index& prop_key,
                                                                              uint32_t iSector,
                                                                              uint32_t ip,

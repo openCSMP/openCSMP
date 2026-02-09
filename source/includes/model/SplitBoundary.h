@@ -146,19 +146,19 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     std::pair<std::vector<Node<dim>*>,size_t>  OutsideNodes() const;
 
     /// NEW: input constat node variable value on a specific side of the split boundary (options INSIDE or OUTSIDE)
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void InputNodePropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
     /// input node variable values on a specific side of the split boundary (options INSIDE or OUTSIDE)
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
     /// for the assignment of properties that are unique to the instance of this subclass
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
     /// as InputPropertyValue, but with more selective overwrite protection for variable components that have the flag 'do_not_overwrite'
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary or its interior or perimeter
@@ -225,7 +225,6 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     void ChangePropertyStatusWhere( const char*, const std::vector<VARIABLE_FLAG>&, double, double ) = delete;
     void ChangePropertyStatus( const char*, uint32_t, VARIABLE_FLAG, SUBDOMAIN_PART ) = delete;
     void ChangePropertyStatusWhere( const char*, uint32_t, VARIABLE_FLAG, double, double ) = delete;
-    VARIABLE_FLAG  PropertyStatus( const char*, SUBDOMAIN_PART, uint32_t ) const = delete;
 
     void InterpolateNodeToCellProperty( const char*, const char* ) = delete;
     void InterpolateNodeToIntegrationPointProperty( const char*, const char* ) = delete;

@@ -260,11 +260,17 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
       @date 7/6/2020
 */
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  
+
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+
       const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
       if ( prop_key.place == SPLIT_BOUNDARY ) {
            if ( sd != COMPLETE )
@@ -308,11 +314,17 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 
 
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+
       const csmp::Index key(this->pref_.StorageKey(input_prop));
       
       if ( key.place == SPLIT_BOUNDARY ) {
@@ -633,7 +645,7 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
   const auto offset = mesh.Elements() + mesh.Faces();
   this->cell_vec_.reserve( cell_ids.size() );
   for ( auto& idx : cell_ids ) {
-       InterFace<dim>* ifptr = &(*next(mesh.InterfacesBegin(),idx-offset));
+       InterFace<dim>* ifptr = &(*next(mesh.InterfacesBegin(),static_cast<long>(idx-offset)));
        assert( ifptr != nullptr );
        assert( ifptr->Idx() == idx );
        this->cell_vec_.push_back( ifptr );
@@ -943,10 +955,17 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
     @attention method overrides each node several times but circumvents the need to store vectors to inside and outside nodes.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void SplitBoundary<dim>::InputNodePropertyValue( const char* input_node_prop, const Var& var, SUBDOMAIN_PART part, INTERFACE_SIDE side )
  {
     ErrorHandler&     csmp_error( ErrorHandler::Instance() );
+
+    if ( this->pref_.IsDefined(input_node_prop) == false ) {
+         csmp_error.Note( WARNING, "SplitBoundary<dim>::InputNodePropertyValue",
+                          input_node_prop, "is not defined in the PropertyDatabase" );
+         return;
+      }
+
     const csmp::Index prop_key( this->pref_.StorageKey( input_node_prop ) );
 
     if ( prop_key.place != NODE ) {
@@ -1018,6 +1037,11 @@ void SplitBoundary<dim>::ChangeNodePropertyStatus( const char* property,
     ErrorHandler&     csmp_error( ErrorHandler::Instance() );
     const csmp::Index prop_key( this->pref_.StorageKey( property ) );
 
+    if ( this->pref_.IsDefined(property) == false ) {
+         csmp_error.Note( WARNING, "SplitBoundary<dim>::ChangeNodePropertyStatus",
+                          property, "is not defined in the PropertyDatabase" );
+         return;
+      }
     if ( prop_key.place != NODE ) {
          csmp_error.Note( ERROR, "SplitBoundary<dim>::ChangeNodePropertyStatus:", "This method applies to node properties only!" );
          return;
@@ -1099,6 +1123,12 @@ void SplitBoundary<dim>::ChangeNodePropertyStatusWhere( const char* property,
   {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
+    if ( this->pref_.IsDefined(property) == false ) {
+         csmp_error.Note( WARNING, "SplitBoundary<dim>::ChangeNodePropertyStatusWhere",
+                          property, "is not defined in the PropertyDatabase" );
+         return;
+      }
+
     const csmp::Index  prop_key = this->pref_.StorageKey(property);
     string src("SplitBoundary<");
     src += to_string(dim);
@@ -1162,11 +1192,18 @@ void SplitBoundary<dim>::ChangeNodePropertyStatusWhere( const char* property,
     Relies on the design that the node vector contains the inside nodes.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART part, INTERFACE_SIDE side )
 {
   ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  Index          ipKey( this->pref_.StorageKey( input_prop ) );
+
+  if ( this->pref_.IsDefined(input_prop) == false ) {
+       csmp_error.Note( WARNING, "SplitBoundary<dim>::InputPropertyValue",
+                        input_prop, "is not defined in the PropertyDatabase" );
+       return;
+    }
+
+  const csmp::Index ipKey( this->pref_.StorageKey( input_prop ) );
 
   if ( ipKey.place != NODE ) {
        csmp_error.Note( ERROR, "SplitBoundary<dim>::InputPropertyValue:", "This method applies to node properties only!" );
@@ -1182,7 +1219,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
   // - non manifold nodes, model-boundary or internal boundary nodes (!= flagged NOT)
   if ( part == PERIMETER ) {
       for ( auto& it : this->cell_vec_ )
-        for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+        for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ )
           if ( it->N(i,side)->AtBoundary() != NOT || !it->N(i,side)->IsManifold() )
             {
                it->N(i,side)->Store( ipKey, new_value );
@@ -1193,7 +1230,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
   // INTERIOR nodes of the SplitBoundary, always manifolds
   if ( part == INTERIOR ) {
       for ( auto& it : this->cell_vec_ )
-        for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+        for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ )
           if ( it->N(i,side)->AtBoundary() == NOT && it->N(i,side)->IsManifold() )
             {
                it->N(i,side)->Store( ipKey, new_value );
@@ -1204,7 +1241,7 @@ void SplitBoundary<dim>::InputPropertyValue( const char* input_prop, const Var& 
   // COMPLETE - all nodes but not all of them manifolds
   if ( part == COMPLETE ) {
       for ( auto& it : this->cell_vec_ )
-        for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+        for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ )
           it->N(i,side)->Store( ipKey, new_value );
      }
      
@@ -1329,13 +1366,13 @@ void SplitBoundary<dim>::WriteSplitBoundaryIndexesToBinaryFile( fstream& fp ) co
     binaryFileWrite( fp, this->Name() );
    
     // 2. writing the interior cell records of the split boundary
-    std::vector<size_t> IDs( distance(this->CellsBegin(), this->PerimeterCellsBegin() ) );
+    std::vector<size_t> IDs( static_cast<size_t>(distance(this->CellsBegin(), this->PerimeterCellsBegin() )) );
     transform( this->CellsBegin(), this->PerimeterCellsBegin(),
                IDs.begin(), []( const InterFace<dim>* const ptr ){ return ptr->Idx(); } ); // tested: OK
     binaryFileWrite( fp, IDs );
 
     // 3. writing the perimeter cell records of the split boundary
-    IDs.resize( distance(this->PerimeterCellsBegin(), this->CellsEnd()) );
+    IDs.resize( static_cast<size_t>(distance(this->PerimeterCellsBegin(), this->CellsEnd() )) );
     transform( this->PerimeterCellsBegin(), this->CellsEnd(),
                IDs.begin(), []( const InterFace<dim>* const ptr ){ return ptr->Idx(); } );
     binaryFileWrite( fp, IDs );

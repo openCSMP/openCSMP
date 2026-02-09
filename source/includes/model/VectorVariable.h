@@ -79,112 +79,112 @@ class VectorVariable<3U> {
   public:
     static constexpr VARIABLE_TYPE VariableType = VECTOR;
 
-    VectorVariable(); ///< default constructor initialising values to NaN
+    VectorVariable() noexcept; ///< default constructor initialising values to NaN
 
     /// sets all elements to fl, val
-    VectorVariable( VARIABLE_FLAG, double );
+    VectorVariable( VARIABLE_FLAG, double ) noexcept;
   
     /// constructor for 3D version
     VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3, 
-                    double val1, double val2, double val3 );
+                    double val1, double val2, double val3 ) noexcept;
      
     /// initialize with an STL vector
-    explicit VectorVariable( const std::vector<double>& );
+    explicit VectorVariable( const std::vector<double>& ) noexcept;
   
     /// initialize with a Point
-    explicit VectorVariable( const csmp::Point<3U>& );
+    explicit VectorVariable( const csmp::Point<3U>& ) noexcept;
 
     // access of vector elements
-    double&        operator()( uint32_t );
-    const double&  operator()( uint32_t ) const;
-    double         operator[]( uint32_t ) const;
-    void           Component( uint32_t, double );
-    double         Component( uint32_t ) const;
+    double&        operator()( uint32_t ) noexcept;
+    const double&  operator()( uint32_t ) const noexcept;
+    double         operator[]( uint32_t ) const noexcept;
+    void           Component( uint32_t, double ) noexcept;
+    double         Component( uint32_t ) const noexcept;
     
     // assigments
-    VectorVariable&  operator=( double );
-    VectorVariable&  operator=( const Point<3U>& );
-    VectorVariable&  operator=( const ScalarVariable& );
+    VectorVariable&  operator=( double ) noexcept;
+    VectorVariable&  operator=( const Point<3U>& ) noexcept;
+    VectorVariable&  operator=( const ScalarVariable& ) noexcept;
 
     // element-by-element operations
-    VectorVariable   operator+(  const VectorVariable& ) const;
-    VectorVariable   operator-(  const VectorVariable& ) const;
-    VectorVariable   operator*(  const VectorVariable& ) const;
-    VectorVariable   operator/(  const VectorVariable& ) const;
+    VectorVariable   operator+(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator-(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator*(  const VectorVariable& ) const noexcept;
+    VectorVariable   operator/(  const VectorVariable& ) const noexcept;
 
     /// vec1 += vec2  enables shorthand for  vec1 = vec1 + vec2
-    VectorVariable&  operator+=( double );
-    VectorVariable&  operator-=( double );
-    VectorVariable&  operator*=( double );
-    VectorVariable&  operator/=( double );
+    VectorVariable&  operator+=( double ) noexcept;
+    VectorVariable&  operator-=( double ) noexcept;
+    VectorVariable&  operator*=( double ) noexcept;
+    VectorVariable&  operator/=( double ) noexcept;
     
-    VectorVariable&  operator+=( const ScalarVariable& );
-    VectorVariable&  operator-=( const ScalarVariable& );
-    VectorVariable&  operator*=( const ScalarVariable& );
-    VectorVariable&  operator/=( const ScalarVariable& );
+    VectorVariable&  operator+=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator-=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator*=( const ScalarVariable& ) noexcept;
+    VectorVariable&  operator/=( const ScalarVariable& ) noexcept;
     
-    VectorVariable&  operator+=( const VectorVariable& );
-    VectorVariable&  operator-=( const VectorVariable& );
-    VectorVariable&  operator*=( const VectorVariable& );
-    VectorVariable&  operator/=( const VectorVariable& );
+    VectorVariable&  operator+=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator-=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator*=( const VectorVariable& ) noexcept;
+    VectorVariable&  operator/=( const VectorVariable& ) noexcept;
     
     /// comparison of flags and values
-    bool             operator==( const VectorVariable& ) const;
-    bool             operator!=( const VectorVariable& ) const;
+    bool             operator==( const VectorVariable& ) const noexcept;
+    bool             operator!=( const VectorVariable& ) const noexcept;
 
     // unary operators
   
     /// raises all elements of the vector to a certain power
-    VectorVariable   operator^( double exponent ) const;
+    VectorVariable   operator^( double exponent ) const noexcept;
 
     /// comparison by length (to allow ordering in containers)
-    bool             operator<(  const VectorVariable& ) const;
+    bool             operator<(  const VectorVariable& ) const noexcept;
   
     /// dot product = scalar product
-    double           operator&(  const VectorVariable& ) const;
+    double           operator&(  const VectorVariable& ) const noexcept;
   
     /// cross product (vector perpendicular to input vectors
-    VectorVariable   operator%(  const VectorVariable& ) const;
+    VectorVariable   operator%(  const VectorVariable& ) const noexcept;
     
     /// returns spatial i-th dimension
-    double           Length() const;
-    double           AngleTo( const VectorVariable& v ) const;
+    double           Length() const noexcept;
+    double           AngleTo( const VectorVariable& v ) const noexcept;
   
     /// returns csmp::Point initialised with vector values; @note name avoids GNU clash
-    Point<3U>       P() const;
+    Point<3U>       P() const noexcept;
   
     /// checks vector length against the value range supplied as arguments
-    bool            IsWithinRange( double vmin, double vmax ) const;
-    bool            Has_NaN_Values() const;
+    bool            IsWithinRange( double vmin, double vmax ) const noexcept;
+    bool            Has_NaN_Values() const noexcept;
 
-    VARIABLE_FLAG   Flag( uint32_t i=0 ) const;
-    VARIABLE_FLAG&  Flag( uint32_t i=0 );
+    VARIABLE_FLAG   Flag( uint32_t i=0 ) const noexcept;
+    VARIABLE_FLAG&  Flag( uint32_t i=0 ) noexcept;
   
     /// for the PropertyStorage
-    uint32_t        Size() const;
+    static constexpr uint32_t Size() noexcept { return 3u; };
   
     // projections
-    double          DotProduct( const csmp::Point<3U>& ) const;
-    double          DotProduct( const VectorVariable& ) const;
-    VectorVariable  CrossProduct( const csmp::Point<3U>& ) const;
-    VectorVariable  CrossProduct( const VectorVariable& ) const;
-    VectorVariable  ProjectOnto( const std::vector<double>& ) const;
-    VectorVariable  ProjectOnto( const VectorVariable& ) const;
+    double          DotProduct( const csmp::Point<3U>& ) const noexcept;
+    double          DotProduct( const VectorVariable& ) const noexcept;
+    VectorVariable  CrossProduct( const csmp::Point<3U>& ) const noexcept;
+    VectorVariable  CrossProduct( const VectorVariable& ) const noexcept;
+    VectorVariable  ProjectOnto( const std::vector<double>& ) const noexcept;
+    VectorVariable  ProjectOnto( const VectorVariable& ) const noexcept;
 
     // assignment and modification
   
     /// Multiplies by negative unity vector
-    VectorVariable  Flip();
+    VectorVariable  Flip() noexcept;
   
     /// reverts the sequence of entries
-    void            Invert();
+    void            Invert() noexcept;
 
     /// normalizes the vector variable by its length given the unit normal @todo replace with more generic function
-    void            EuclideanNormalize();
+    void            EuclideanNormalize() noexcept;
     
     // IO
     void            In();
-    void            Out() const;
+    void            Out() const noexcept;
     bool            In( std::fstream& );
     bool            Out( std::fstream& ) const;
 
@@ -196,11 +196,11 @@ class VectorVariable<3U> {
 };
 
 
-VectorVariable<1U> makeVector( VARIABLE_FLAG, double );
-VectorVariable<2U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, double, double );
-VectorVariable<3U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG, double, double, double );
-VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::array<double,3U>& );
-VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double>& );
+VectorVariable<1U> makeVector( VARIABLE_FLAG, double ) noexcept;
+VectorVariable<2U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, double, double ) noexcept;
+VectorVariable<3U> makeVector( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG, double, double, double ) noexcept;
+VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG,3U>&, const std::array<double,3U>& ) noexcept;
+VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>&, const std::vector<double>& ) noexcept;
 
 
 template<uint32_t dim>
@@ -209,61 +209,61 @@ std::ostream&  operator<<( std::ostream&, const VectorVariable<dim>& );
 
 // binary operators: interaction with scalar
 
-VectorVariable<1U> operator+( const VectorVariable<1U>&, const ScalarVariable& );
-VectorVariable<1U> operator-( const VectorVariable<1U>&, const ScalarVariable&  );
-VectorVariable<1U> operator*( const VectorVariable<1U>&, const ScalarVariable&  );
-VectorVariable<1U> operator/( const VectorVariable<1U>&, const ScalarVariable&  );
+VectorVariable<1U> operator+( const VectorVariable<1U>&, const ScalarVariable& ) noexcept;
+VectorVariable<1U> operator-( const VectorVariable<1U>&, const ScalarVariable& ) noexcept;
+VectorVariable<1U> operator*( const VectorVariable<1U>&, const ScalarVariable& ) noexcept;
+VectorVariable<1U> operator/( const VectorVariable<1U>&, const ScalarVariable& ) noexcept;
 
-VectorVariable<2U> operator+( const VectorVariable<2U>&, const ScalarVariable&  );
-VectorVariable<2U> operator-( const VectorVariable<2U>&, const ScalarVariable&  );
-VectorVariable<2U> operator*( const VectorVariable<2U>&, const ScalarVariable&  );
-VectorVariable<2U> operator/( const VectorVariable<2U>&, const ScalarVariable&  );
+VectorVariable<2U> operator+( const VectorVariable<2U>&, const ScalarVariable& ) noexcept;
+VectorVariable<2U> operator-( const VectorVariable<2U>&, const ScalarVariable& ) noexcept;
+VectorVariable<2U> operator*( const VectorVariable<2U>&, const ScalarVariable& ) noexcept;
+VectorVariable<2U> operator/( const VectorVariable<2U>&, const ScalarVariable& ) noexcept;
 
-VectorVariable<3U> operator+( const VectorVariable<3U>&, const ScalarVariable& );
-VectorVariable<3U> operator-( const VectorVariable<3U>&, const ScalarVariable& );
-VectorVariable<3U> operator*( const VectorVariable<3U>&, const ScalarVariable& );
-VectorVariable<3U> operator/( const VectorVariable<3U>&, const ScalarVariable& );
+VectorVariable<3U> operator+( const VectorVariable<3U>&, const ScalarVariable& ) noexcept;
+VectorVariable<3U> operator-( const VectorVariable<3U>&, const ScalarVariable& ) noexcept;
+VectorVariable<3U> operator*( const VectorVariable<3U>&, const ScalarVariable& ) noexcept;
+VectorVariable<3U> operator/( const VectorVariable<3U>&, const ScalarVariable& ) noexcept;
 
 // binary operators: interaction with double
 
-VectorVariable<1U> operator+( const VectorVariable<1U>&, double );
-VectorVariable<1U> operator-( const VectorVariable<1U>&, double );
-VectorVariable<1U> operator*( const VectorVariable<1U>&, double );
-VectorVariable<1U> operator/( const VectorVariable<1U>&, double );
+VectorVariable<1U> operator+( const VectorVariable<1U>&, double ) noexcept;
+VectorVariable<1U> operator-( const VectorVariable<1U>&, double ) noexcept;
+VectorVariable<1U> operator*( const VectorVariable<1U>&, double ) noexcept;
+VectorVariable<1U> operator/( const VectorVariable<1U>&, double ) noexcept;
 
-VectorVariable<2U> operator+( const VectorVariable<2U>&, double );
-VectorVariable<2U> operator-( const VectorVariable<2U>&, double );
-VectorVariable<2U> operator*( const VectorVariable<2U>&, double );
-VectorVariable<2U> operator/( const VectorVariable<2U>&, double );
+VectorVariable<2U> operator+( const VectorVariable<2U>&, double ) noexcept;
+VectorVariable<2U> operator-( const VectorVariable<2U>&, double ) noexcept;
+VectorVariable<2U> operator*( const VectorVariable<2U>&, double ) noexcept;
+VectorVariable<2U> operator/( const VectorVariable<2U>&, double ) noexcept;
 
-VectorVariable<3U> operator+( const VectorVariable<3U>&, double );
-VectorVariable<3U> operator-( const VectorVariable<3U>&, double );
-VectorVariable<3U> operator*( const VectorVariable<3U>&, double );
-VectorVariable<3U> operator/( const VectorVariable<3U>&, double );
+VectorVariable<3U> operator+( const VectorVariable<3U>&, double ) noexcept;
+VectorVariable<3U> operator-( const VectorVariable<3U>&, double ) noexcept;
+VectorVariable<3U> operator*( const VectorVariable<3U>&, double ) noexcept;
+VectorVariable<3U> operator/( const VectorVariable<3U>&, double ) noexcept;
 
 
 // interoperation with Point
 
 // 1D
 
-Point<1U> operator+( const Point<1U>&, const VectorVariable<1U>& );
-Point<1U> operator-( const Point<1U>&, const VectorVariable<1U>& );
-Point<1U> operator*( const Point<1U>&, const VectorVariable<1U>& );
-Point<1U> operator/( const Point<1U>&, const VectorVariable<1U>& );
+Point<1U> operator+( const Point<1U>&, const VectorVariable<1U>& ) noexcept;
+Point<1U> operator-( const Point<1U>&, const VectorVariable<1U>& ) noexcept;
+Point<1U> operator*( const Point<1U>&, const VectorVariable<1U>& ) noexcept;
+Point<1U> operator/( const Point<1U>&, const VectorVariable<1U>& ) noexcept;
 
 // 2D
 
-Point<2U> operator+( const Point<2U>&, const VectorVariable<2U>& );
-Point<2U> operator-( const Point<2U>&, const VectorVariable<2U>& );
-Point<2U> operator*( const Point<2U>&, const VectorVariable<2U>& );
-Point<2U> operator/( const Point<2U>&, const VectorVariable<2U>& );
+Point<2U> operator+( const Point<2U>&, const VectorVariable<2U>& ) noexcept;
+Point<2U> operator-( const Point<2U>&, const VectorVariable<2U>& ) noexcept;
+Point<2U> operator*( const Point<2U>&, const VectorVariable<2U>& ) noexcept;
+Point<2U> operator/( const Point<2U>&, const VectorVariable<2U>& ) noexcept;
 
 // 3D
 
-Point<3U> operator+( const Point<3U>&, const VectorVariable<3U>& );
-Point<3U> operator-( const Point<3U>&, const VectorVariable<3U>& );
-Point<3U> operator*( const Point<3U>&, const VectorVariable<3U>& );
-Point<3U> operator/( const Point<3U>&, const VectorVariable<3U>& );
+Point<3U> operator+( const Point<3U>&, const VectorVariable<3U>& ) noexcept;
+Point<3U> operator-( const Point<3U>&, const VectorVariable<3U>& ) noexcept;
+Point<3U> operator*( const Point<3U>&, const VectorVariable<3U>& ) noexcept;
+Point<3U> operator/( const Point<3U>&, const VectorVariable<3U>& ) noexcept;
 
 
 } // end namespace csmp

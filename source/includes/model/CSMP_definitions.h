@@ -78,6 +78,50 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 //#include "plf_colony.h"
 
 
+// =====================================================
+// CSMP variable types
+// =====================================================
+
+namespace csmp {
+
+class ScalarVariable;
+template<uint32_t> class VectorVariable;
+template<uint32_t> class TensorVariable;
+class ArrayVariable;
+class FlaggedArrayVariable;
+
+template<uint32_t dim, class Var>
+struct is_csmp_variable : std::false_type {};
+
+template<uint32_t dim>
+struct is_csmp_variable<dim, ScalarVariable> : std::true_type {};
+
+template<uint32_t dim>
+struct is_csmp_variable<dim, VectorVariable<dim>> : std::true_type {};
+
+template<uint32_t dim>
+struct is_csmp_variable<dim, TensorVariable<dim>> : std::true_type {};
+
+template<uint32_t dim>
+struct is_csmp_variable<dim, ArrayVariable> : std::true_type {};
+
+template<uint32_t dim>
+struct is_csmp_variable<dim, FlaggedArrayVariable> : std::true_type {};
+
+template<uint32_t dim, class Var>
+concept CsmpVariable = is_csmp_variable<dim, Var>::value;
+
+} // end csmp
+       
+// =====================================================
+/* Usage example
+
+template<uint32_t dim, CsmpVariable<dim> VAR>
+void Region<dim>::InputPropertyValue( const char* input_prop, const VAR& new_value );
+
+*/
+
+
 /*
 =======================
 JPEG Interface

@@ -298,16 +298,24 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
       @date 7/6/2020
 */
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "Region<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+  
       const csmp::Index prop_key(this->pref_.StorageKey(input_prop));
+      
       if ( prop_key.place == REGION ) {
            if ( sd != COMPLETE )
              csmp_error.Note( WARNING, "Region<dim>::InputPropertyValue",
-                                          input_prop, "is a Region property and no distinction between INTERIOR and PERIMETER can be made" );
+                              input_prop, "is a Region property. So no distinction can be made between INTERIOR and PERIMETER" );
+                              
            this->Store( prop_key, new_value );
            return;
         }
@@ -343,11 +351,17 @@ template void Region<3U>::InputPropertyValue( const char*, const FlaggedArrayVar
 
 
 template<uint32_t dim>
-template<typename Var>
+template<typename Var> requires CsmpVariable<dim, Var>
 void Region<dim>::InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd )
   {
       ErrorHandler&  csmp_error( ErrorHandler::Instance() );
   
+      if ( this->pref_.IsDefined(input_prop) == false ) {
+           csmp_error.Note( WARNING, "Region<dim>::InputPropertyValue",
+                            input_prop, "is not defined in the PropertyDatabase" );
+           return;
+        }
+
       const csmp::Index key(this->pref_.StorageKey(input_prop));
       
       if ( key.place == REGION ) {
@@ -770,7 +784,7 @@ by local id numbers.
 The idea is to extract the property data that corresponds to this group only.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void Region<dim>::OutputVariableTo( const char* property, FEM_Data<Var>& data ) const
 {
   csmp::Index  idx = this->pref_.StorageKey( property );
@@ -892,7 +906,7 @@ from from the data container.
 Enable to store data to disk to faciliate persistance.
 */
 template<uint32_t dim>
-template<class Var>
+template<class Var> requires CsmpVariable<dim, Var>
 void Region<dim>::InputVariableFrom( const char* property,
                                      const FEM_Data<Var>& vdata )
 {

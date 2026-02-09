@@ -104,18 +104,18 @@ class Boundary : public ModelSubDomain<dim, Face>,
     // -----------------------------------------------
 
     /// for the assignment of properties that are unique to the instance of this subclass
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
     /// as InputPropertyValue, but with overwrite protection for variable components that have the flag 'do_not_overwrite'
-    template<typename Var>
+    template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
     /// assigning the variable values from the FEM_DATA container to the corresponding property of the Boundary
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void InputVariableFrom( const char* property, const FEM_Data<Var>& property_values );
 
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void OutputVariableTo( const char* property, FEM_Data<Var>& property_values ) const;
 
 
@@ -150,7 +150,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
     double  Perimeter() const;
 
     /// surface integral over the variable of interest
-    double  SurfaceIntegral( const PropertyDatabase<dim>&, const char* property ) const;
+    double  SurfaceIntegral( const char* property ) const;
     
     /// reports whether the boundary lies on the outside of the whole model
     bool IsExternal() const;
@@ -179,9 +179,9 @@ class Boundary : public ModelSubDomain<dim, Face>,
 
   protected:
     // binary IO
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     bool Out( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype ) const;
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     bool In( std::fstream& fp, PLACEMENT place, VARIABLE_TYPE vtype );
 
     BOX_BOUNDARY boundaryFlag_;

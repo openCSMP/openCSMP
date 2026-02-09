@@ -5,9 +5,6 @@
 
 namespace csmp {
 
-template<uint32_t> class VectorVariable;
-template<uint32_t> class TensorVariable;
-
 /**
 @brief ScalarVariable combines a floating point value with a flag
 that specifies its use during computations.
@@ -70,63 +67,63 @@ class ScalarVariable {
 public:
   static constexpr VARIABLE_TYPE VariableType = SCALAR;
 
-  ScalarVariable();
-  ScalarVariable( VARIABLE_FLAG f, double val );
+  ScalarVariable() noexcept;
+  ScalarVariable( VARIABLE_FLAG f, double val ) noexcept;
 
-  ScalarVariable&  operator+=( double );
-  ScalarVariable&  operator-=( double );
-  ScalarVariable&  operator*=( double );
-  ScalarVariable&  operator/=( double );
+  ScalarVariable&  operator+=( double ) noexcept;
+  ScalarVariable&  operator-=( double ) noexcept;
+  ScalarVariable&  operator*=( double ) noexcept;
+  ScalarVariable&  operator/=( double ) noexcept;
 
-  ScalarVariable&  operator+=( const ScalarVariable& );
-  ScalarVariable&  operator-=( const ScalarVariable& );
-  ScalarVariable&  operator*=( const ScalarVariable& );
-  ScalarVariable&  operator/=( const ScalarVariable& );
+  ScalarVariable&  operator+=( const ScalarVariable& ) noexcept;
+  ScalarVariable&  operator-=( const ScalarVariable& ) noexcept;
+  ScalarVariable&  operator*=( const ScalarVariable& ) noexcept;
+  ScalarVariable&  operator/=( const ScalarVariable& ) noexcept;
 
   // for conformance with the interfaces of the other CSMP variables
-  ScalarVariable&  operator=( double val ) { data_ = val; return *this; }
+  ScalarVariable&  operator=( double val ) noexcept { data_ = val; return *this; }
 
   /// comparitor that is used by less<> predicate in STL
-  bool             operator<( const ScalarVariable& ) const;
+  bool             operator<( const ScalarVariable& ) const noexcept;
   /// comparitor that is used by greater than<> predicate in STL
-  bool             operator>( const ScalarVariable& ) const;
-  bool             operator<=( const ScalarVariable& ) const;
-  bool             operator>=( const ScalarVariable& ) const;
+  bool             operator>( const ScalarVariable& ) const noexcept;
+  bool             operator<=( const ScalarVariable& ) const noexcept;
+  bool             operator>=( const ScalarVariable& ) const noexcept;
 
   /// for storing scalars in associative containers with respective predicates
-  bool             operator==( const ScalarVariable& ) const;
-  bool             operator!=( const ScalarVariable& ) const;
+  bool             operator==( const ScalarVariable& ) const noexcept;
+  bool             operator!=( const ScalarVariable& ) const noexcept;
 
   /// assignment as an lvalue
-  double&          operator()( void );
-  double           operator()( void ) const;
+  double&          operator()( void ) noexcept;
+  double           operator()( void ) const noexcept;
 
   /// tests whether the variable value lies within the given bounds
-  bool             IsWithinRange( double vmin, double vmax ) const;
+  bool             IsWithinRange( double vmin, double vmax ) const noexcept;
   
   /// tests whether variable contains NaN value(s)
-  bool             Has_NaN_Values() const { return std::isnan(data_); }
+  bool             Has_NaN_Values() const noexcept { return std::isnan(data_); }
 
   /// universal way of assigning values to all CSMP variable types
-  void             Component( uint32_t, double val ) { data_ = val; }
+  void             Component( uint32_t, double val ) noexcept { data_ = val; }
 
   /// universal accessor of CSMP variable values which works for all variable types
-  double           Component( uint32_t ) const { return data_; }
+  double           Component( uint32_t ) const  noexcept{ return data_; }
 
   /// returns size = number of components of the variable (=1 for scalar)
-  uint32_t         Size() const;
+  static constexpr uint32_t Size() noexcept { return 1u; };
 
   /// value assignment to scalar: cannot resize, but assigns user-defined or default value
-  void             Resize( uint32_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() );
+  void             Resize( uint32_t newSize, double newValue = std::numeric_limits<double>::quiet_NaN() ) noexcept;
 
   /// assigment: status of variable which determines how it is used in computations
-  VARIABLE_FLAG&   Flag();
+  VARIABLE_FLAG&   Flag() noexcept;
 
   /// accessor: status of variable which determines how it is used in computations
-  VARIABLE_FLAG    Flag() const;
+  VARIABLE_FLAG    Flag() const noexcept;
 
   /// prints flag/value pair to screen
-  void             Out() const;
+  void             Out() const noexcept;
 
   /// reading and writing of scalar variables to binary files
   bool             Out( std::fstream& fp ) const;
@@ -138,33 +135,33 @@ private:
 };
 
 /// creates scalar and returns; use for inserting scalars into functions
-ScalarVariable  makeScalar( VARIABLE_FLAG, double );
+ScalarVariable  makeScalar( VARIABLE_FLAG, double ) noexcept;
 
-ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& );
-ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& );
-ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& );
-ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& );
+ScalarVariable  operator+( const ScalarVariable&, const ScalarVariable& ) noexcept;
+ScalarVariable  operator-( const ScalarVariable&, const ScalarVariable& ) noexcept;
+ScalarVariable  operator*( const ScalarVariable&, const ScalarVariable& ) noexcept;
+ScalarVariable  operator/( const ScalarVariable&, const ScalarVariable& ) noexcept;
 
-ScalarVariable  operator+( const ScalarVariable&, const double& );
-ScalarVariable  operator-( const ScalarVariable&, const double& );
-ScalarVariable  operator*( const ScalarVariable&, const double& );
-ScalarVariable  operator/( const ScalarVariable&, const double& );
+ScalarVariable  operator+( const ScalarVariable&, const double& ) noexcept;
+ScalarVariable  operator-( const ScalarVariable&, const double& ) noexcept;
+ScalarVariable  operator*( const ScalarVariable&, const double& ) noexcept;
+ScalarVariable  operator/( const ScalarVariable&, const double& ) noexcept;
 
-ScalarVariable  operator+( double, const ScalarVariable& );
-ScalarVariable  operator-( double, const ScalarVariable& );
-ScalarVariable  operator*( double, const ScalarVariable& );
-ScalarVariable  operator/( double, const ScalarVariable& );
+ScalarVariable  operator+( double, const ScalarVariable& ) noexcept;
+ScalarVariable  operator-( double, const ScalarVariable& ) noexcept;
+ScalarVariable  operator*( double, const ScalarVariable& ) noexcept;
+ScalarVariable  operator/( double, const ScalarVariable& ) noexcept;
 
 /// multiplies each element of vector variable with scalar
 template<uint32_t dim>
-VectorVariable<dim>  operator*( const ScalarVariable&, const VectorVariable<dim>& );
+VectorVariable<dim>  operator*( const ScalarVariable&, const VectorVariable<dim>& ) noexcept;
 
 /// multiplies each element of tensor variable with scalar
 template<uint32_t dim>
-TensorVariable<dim>  operator*( const ScalarVariable&, const TensorVariable<dim>& );
+TensorVariable<dim>  operator*( const ScalarVariable&, const TensorVariable<dim>& ) noexcept;
 
 /// for printing scalars using the standard streams cout, cerr, clog
-std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& );
+std::ostream&  operator<<( std::ostream& stream, const ScalarVariable& ) noexcept;
 
 
 } // csmp

@@ -92,20 +92,20 @@ class FiniteElementPolicy {
     double  PropertyIntegral( const csmp::Index& scalar_property ) const;
 
     /// interpolates node property values to the point of interest (in global coordinates); @attention costly for isoparametric elements
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void    PropertyValueAt( const csmp::Index&, const std::vector<double>& xyz, Var& ) const;
     /// scalar version
     double  PropertyValueAt( const csmp::Index&, const std::vector<double>& xyz ) const;
   
     /// returns the value of any property interpolated to the element's center of gravity
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void    PropertyValueAtBaryCenter( const csmp::Index&, Var& ) const;
 
     /// scalar version
     double  PropertyValueAtBaryCenter( const csmp::Index& ) const;
   
     /// returns the value of any property interpolated to the integration point of interest
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void    PropertyValueAtIntegrationPoint( const csmp::Index& node_prop, uint32_t integration_point, Var& ) const;
 
     /// returns the value of a scalar property interpolated to the integration point of interest
@@ -118,7 +118,7 @@ class FiniteElementPolicy {
     Eigen::Matrix<double,dim,Eigen::Dynamic> PropertyGradientAtIntegrationPoint( const Index& prop_key, uint32_t ip, double& detJ ) const;
 
     /// returns property values at the integration points
-    template<class Var>
+    template<class Var> requires CsmpVariable<dim, Var>
     void    IntegrationPointPropertyVector( const csmp::Index&, std::vector<Var>& ) const;
 
     /// uses linear extrapolation of property values from the integration points to the nodes
