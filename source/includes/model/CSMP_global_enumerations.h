@@ -308,16 +308,16 @@ class FlaggedArrayVariable;
 
 // Helper to identify VectorVariable and TensorVariable (Template template parameters)
 template <typename T> struct IsVector : std::false_type {};
-template <unsigned int N> struct IsVector<VectorVariable<N>> : std::true_type {};
+template <uint32_t dim> struct IsVector<VectorVariable<dim>> : std::true_type {};
 
 template <typename T> struct IsTensor : std::false_type {};
-template <unsigned int N> struct IsTensor<TensorVariable<N>> : std::true_type {};
+template <uint32_t dim> struct IsTensor<TensorVariable<dim>> : std::true_type {};
 
 /**
     Csmp types are resolved at compile time via if-constexpr.
  */
 template<typename Var>
-constexpr VARIABLE_TYPE variableType(const Var&) {
+constexpr VARIABLE_TYPE variableType( const Var& ) {
     using T = std::decay_t<Var>;
 
     if constexpr (std::is_same_v<T, ScalarVariable>) {
@@ -335,13 +335,15 @@ constexpr VARIABLE_TYPE variableType(const Var&) {
     else if constexpr (std::is_same_v<T, FlaggedArrayVariable>) {
         return FLAGGEDARRAY;
     }
+    // double, integer, string etc.
     else {
+        // tighter tests
+        static_assert( std::floating_point<T> == true || std::integral<T>, "variable seems to be on of the inbuilt types like double or int");
         // This will trigger at compile-time if you pass a type not listed above.
         static_assert(sizeof(T) == 0, "variableType(const Var&): passed unsupported variable type argument");
         return SCALAR; // Fallback to satisfy return type (will never be reached)
     }
 }
-
 
 
 /// variable placement

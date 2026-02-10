@@ -3105,7 +3105,8 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
           else {
                // a new manifold is created using the provided default geometric classifier
                auto nmf = node_manifold_manager_->AddManifold( nodes_, nit.first, nit.second );
-               assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY );
+               assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY ||
+                       (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY_END );
                // and its nodes are connected to it
                nit.first->Assign( (*nmf) );
                nit.second->Assign( (*nmf) );
@@ -3226,10 +3227,9 @@ size_t MeshManager<dim>::DeleteNodesAndRepairNodeConnnectivity( typename vector<
      for ( auto& nit : nodes_to_delete ) {
           // disconnecting the node from its manifold
           if ( nit->IsManifold() ) {
-               nit->Manifold()->Remove( nit );
+               if ( nit->Manifold()->Branches() > 1 ) nit->Manifold()->Remove( nit );
                // if the node no longer is a manifold, it is removed from the node-manifold manager
-               if ( nit->Manifold()->Branches() == 1U )
-               node_manifold_manager_->Delete( nit->Manifold() );
+               else node_manifold_manager_->Delete( nit->Manifold() );
             }
           nodes_.erase( nodes_.get_iterator(nit) );
        }

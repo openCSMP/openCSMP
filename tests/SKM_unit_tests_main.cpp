@@ -155,18 +155,15 @@
 using namespace std;
 using namespace csmp;
 
-
+constexpr bool COMMPREHENSIVE_TESTING = true;
 
 /**  Unit Test Development
  
-@todo ModelSubDomain_Test   extend to cover extensive functionality
-
 @todo  Model illustrate functionality with Example(s)
  
-@todo Additional Code Coverage Required
-@todo Base majority of tests on small CSMP native models avoiding all the disk read/write
+@todo Additional Code Coverage Required: PDE_Integrator: assembly of solution matrix for systems
 
-@todo PDE_Integrator - extend to test assembly of solution matrix for systems
+@todo Base majority of tests on small CSMP native models avoiding all the disk read/write
 
 @todo  IsNan_Test - refactor as it is built on false premises
 
@@ -177,22 +174,16 @@ int main()
  {
   const bool verbose(false);
 
-// COMPREHENSIVE TESTING
-/*
-  const bool test_fundamentals(true),    // OK
-             test_interdependent1(true), // OK
-             test_interdependent2(true), // OK
-             test_interfaces(true),      // OK (but not enough tests)
-             test_composite(true),       // fails Generic_FV-Transport_Test, line 581 because of tolerance issue
-             test_refactoring(false),
-             test_new_developments(false); // contains no tests at the moment
-*/
-// REFACTORING
-  const bool test_fundamentals(false), test_interdependent1(false), test_interdependent2(false),
-             test_interfaces(false), test_composite(false),
-             test_refactoring(true), // <-------------
-             test_new_developments(false);
+  const bool is_comp = (COMMPREHENSIVE_TESTING == true);
 
+  const bool test_fundamentals     = is_comp;
+  const bool test_interdependent1  = is_comp;
+  const bool test_interdependent2  = is_comp;
+  const bool test_interfaces       = is_comp;
+  const bool test_composite        = is_comp;
+  const bool test_refactoring      = !is_comp; // True only when NOT comprehensive
+  const bool test_new_developments = false;    // Always false for now
+ 
   long    fails_fundamentals(0),
           fails_interdependent1(0),
           fails_interdependent2(0),
@@ -253,6 +244,14 @@ int main()
     //             FUNDAMENTALS
     //
     // =========================================================================================================
+    cout <<"\nunit_test_main: running comprehensive suite of tests in ";
+#ifndef NDEBUG
+    cout <<"DEBUG mode..."<< endl;
+#else
+    cout <<"RELEASE mode..."<< endl;
+#endif
+    auto t0 = chrono::high_resolution_clock::now();
+
     if ( test_fundamentals ) {
       cout <<"\n"<<"1. underpinning functionality: running tests..."<< endl;
       TestSuite basic("CSMP-fundamental-unit test suite", &cout );
@@ -517,7 +516,9 @@ int main()
       cerr << "\nunit_tests_main: 6. New functionality: test failures: " << fails_new_developments << endl;
     }
     
-    
+    auto t1 = chrono::high_resolution_clock::now();
+	  cout <<"\n\t"<<"Time taken to run the comprensive suite of unit tests: "<< chrono::duration_cast<chrono::seconds>(t1-t0).count() << " seconds." << endl;
+   
     cout << "\nunit_tests_main: Total unit test failures: ";
     total_failures = fails_fundamentals + fails_interdependent1 + fails_interdependent2 + fails_interfaces + fails_composite + fails_new_developments;
     cerr << total_failures << endl;

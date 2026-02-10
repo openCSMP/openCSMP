@@ -589,6 +589,35 @@ void LocalVariableStorage_Test::run3D_with_templatized_INDEX()
 
   } // end run3D_with_templatized_INDEX
   
+  
+  
+  
+/**
+    Test constexpr VARIABLE_TYPE variableType( const Var& )
+    
+    @attention this method does not even need to be called
+ */
+void LocalVariableStorage_Test::Test_variableType()
+ {
+    //constexpr double     db=12.;
+    ScalarVariable       sc;
+    VectorVariable<1>    vc1;
+    VectorVariable<2>    vc2;
+    TensorVariable<3>    ts3;
+    ArrayVariable        ary5( 5 );
+    FlaggedArrayVariable fary5( 4 );
+    
+    //static_assert( variableType(db)    == SCALAR,       "variableType: double should trigger default: ScalarVariable" );
+    static_assert( variableType(sc)    == SCALAR,       "variableType: failed on ScalarVariable" );
+    static_assert( variableType(vc1)   == VECTOR,       "variableType: failed on VectorVariable" );
+    static_assert( variableType(vc2)   == VECTOR,       "variableType: failed on VectorVariable" );
+    static_assert( variableType(ts3)   == TENSOR,       "variableType: failed on TensorVariable" );
+    static_assert( variableType(ary5)  == ARRAY,        "variableType: failed on ArrayVariable" );
+    static_assert( variableType(fary5) == FLAGGEDARRAY, "variableType: failed on FlaggedArrayVariable" );
+ 
+ } // end Test_variableType
+  
+  
 
 
  /// ReadVector, ReadTensor, ReadArray directly returning csmp variables (skm 12/24)

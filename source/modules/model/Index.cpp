@@ -27,10 +27,10 @@ known at compile time.
 */
 bool Index::operator<( const csmp::Index& i ) const
  {
-    const int_type lhs( (type+1) * (place+1) * (index+1) * dataDepth * flagDepth
+    const int_type lhs( (static_cast<int_type>(type)+1) * (static_cast<int_type>(place)+1) * (index+1) * dataDepth * flagDepth
                       * (offsetFactorCell+1) * (offsetFactorSector+1) *(flagOffset+1) );
    
-    const int_type rhs( (i.type+1) * (i.place+1) * (i.index+1) * i.dataDepth * i.flagDepth
+    const int_type rhs( (static_cast<int_type>(i.type)+1) * (static_cast<int_type>(i.place)+1) * (i.index+1) * i.dataDepth * i.flagDepth
                       * (i.offsetFactorCell+1) * (i.offsetFactorSector+1) * (i.flagOffset+1));
    
     return (lhs < rhs);
@@ -48,7 +48,26 @@ Functions available globally in the csmp Namespace
 @{
 */
 
+/* replaced by constexpr compile-time function
+template<typename Var>
+VARIABLE_TYPE variableType( const Var& )
+ {
+    if ( typeid(Var) == typeid(ScalarVariable) )        return SCALAR;
 
+    if ( typeid(Var) == typeid(VectorVariable<1U>) )    return VECTOR;
+    if ( typeid(Var) == typeid(VectorVariable<2U>) )    return VECTOR;
+    if ( typeid(Var) == typeid(VectorVariable<3U>) )    return VECTOR;
+
+    if ( typeid(Var) == typeid(TensorVariable<1U>) )    return TENSOR;
+    if ( typeid(Var) == typeid(TensorVariable<2U>) )    return TENSOR;
+    if ( typeid(Var) == typeid(TensorVariable<3U>) )    return TENSOR;
+
+    if ( typeid(Var) == typeid(ArrayVariable) )         return ARRAY;
+    if ( typeid(Var) == typeid(FlaggedArrayVariable) )  return FLAGGEDARRAY;
+
+    return static_cast<VARIABLE_TYPE>(UNSPECIFIED);
+ }
+*/
 
 
 

@@ -4229,6 +4229,8 @@ void VData::InitialiseNodeTopologyIdentifiers()
     for ( const auto& elmt : line_elmts ) {
         uint32_t face{0};
         for ( const auto& nbor : pfverts[elmt] ) {
+              // since pfverts may contain more entries than faces
+              if ( face >= CSMP_ElementSpecifications::FacesPerElementOfType( pelmt[elmt] ) ) break;
               // if the face has no neighbor we check whether the node is a corner node of it
               if ( nbor < 0 ) {
                    // local node id (0..nodes-1) in the element that corresponds to face

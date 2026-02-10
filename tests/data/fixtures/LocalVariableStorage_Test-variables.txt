@@ -1,0 +1,14 @@
+name	MParameter	unit	index	min.	max.	place
+
+element array 1		EAV	X	4	-1e+10	1e+10	ELEMENT
+element tensor 1	NTV	X	3	-1e+10	1e+10	ELEMENT
+element vector 1	EVV	X	2	-1e+10	1e+10	ELEMENT
+nodal array 1	NAV	X	4	-1e+10	1e+10	NODE
+nodal tensor 1	NTV	X	3	-1e+10	1e+10	NODE
+nodal vector 1	NVV	X	2	-1e+10	1e+10	NODE
+eip array 1		EIA	X	4	-1e+10	1e+10	ELEMENT_INTEGRATION_POINT
+eip tensor 1	EIA	X	3	-1e+10	1e+10	ELEMENT_INTEGRATION_POINT
+eip vector 1	EIA	X	2	-1e+10	1e+10	ELEMENT_INTEGRATION_POINT
+fip array 1		EIA	X	4	-1e+10	1e+10	FACET_INTEGRATION_POINT
+fip tensor 1	EIA	X	3	-1e+10	1e+10	FACET_INTEGRATION_POINT
+fip vector 1	EIA	X	2	-1e+10	1e+10	FACET_INTEGRATION_POINT
