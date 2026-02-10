@@ -6,8 +6,8 @@
 //  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
-#ifndef ModelSubDomain_Test_hpp
-#define ModelSubDomain_Test_hpp
+#ifndef CSMP_MODEL_SUB_DOMAIN_TEST_H
+#define CSMP_MODEL_SUB_DOMAIN_TEST_H
 
 #include "Test.h"
 #include "ModelSubDomain.h"
@@ -262,6 +262,7 @@ class ModelSubDomain_Test : public Test {
     */
     void Test_PropertyTransfer();
     
+    
     /**
       PLACEMENT modelSubdomainType( const std::string& subdomain_name ) noexcept;
       size_t  sharedNodes( const ModelSubDomain<dim,CELL>&, const ModelSubDomain<dim,CELL>& );
@@ -289,4 +290,4 @@ class ModelSubDomain_Test : public Test {
 
 } // end csmp
 
-#endif /* ModelSubDomain_Test_hpp */
+#endif /* CSMP_MODEL_SUB_DOMAIN_TEST_H */

@@ -13,6 +13,7 @@
 #include "Boundary.h"
 #include "PropertyConstraints.h"
 #include "SplitBoundary.h"
+#include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
 #include "CSMP_highLevelUtilities.h"
 #include "meshManagementUtilities.h"
@@ -36,17 +37,19 @@ namespace csmp {
 */
 void ModelSubDomain_Test::run()
   {
-     // new comprehensive tests
-//     Test_Basics();
-//     Test_SubDomainConstructionMethods(); // TODO: Identify perimeter for non-unique model domain with SplitBoundaries fails!
-//     Test_SubDomainDiagnostics();
-//     Test_GeometricOperations();
-//     Test_PropertyManipulations();
-       Test_PropertyTransfer();
-       Test_NonMemberFunctions();
+     // 0. Comprehensive testing
+     // ------------------------
+     Test_Basics();
+     Test_SubDomainConstructionMethods(); // TODO: Identify perimeter for non-unique model domain with SplitBoundaries fails!
+     Test_SubDomainDiagnostics();
+     Test_GeometricOperations();
+     Test_PropertyManipulations();
+     Test_PropertyTransfer();
+     Test_NonMemberFunctions();
   
+     // misc. older tests
   
-     // Test 0: methods of subdomain in live model
+     // Test 1: methods of subdomain in live model
      // ------------------------------------------
      _test( Test_EstablishNeighborConnectivity() );
      
@@ -55,7 +58,7 @@ void ModelSubDomain_Test::run()
      bool test_binary_file_recovery1(true),
           verbose(true);
     
-     // Test 1: subdomain storage to file and recreation in a new model
+     // Test 2: subdomain storage to file and recreation in a new model
      // ---------------------------------------------------------------
      if ( test_binary_file_recovery1 )
        {
@@ -89,7 +92,8 @@ void ModelSubDomain_Test::run()
          cerr <<"\nModelSubDomain_Test::run: model reconstructed from disk.";
          if ( verbose_ ) model2.Out();
         
-        // TESTING
+        // Test 3: are subdomains consistent across different models?
+        // ----------------------------------------------------------
          _test( CompareModelSubdomains( model1.Region("Model"), model2.Region("Model"), verbose ) );
        }
         
@@ -1485,7 +1489,141 @@ void ModelSubDomain_Test::Test_PropertyTransfer()
 */
 void ModelSubDomain_Test::Test_NonMemberFunctions()
  {
+    // 2D tests: BoxHalfs2D
+    {
+       ANSYS_Model2D model( "BoxHalfs2D", "CSMP-variables.txt" );
+       Region<2>&    region1( model.Region( "MATRIX_LEFT" ) );
+       Region<2>&    region2( model.Region( "MATRIX_RIGHT" ) );
+       Region<2>&    interface( model.Region( "STANDARD" ) );
+       
+       _test( modelSubdomainType( "MATRIX_LEFT" ) == REGION );
+       //     ^^^^^^^^^^^^^^^^^^
+       _test( modelSubdomainType( "STANDARD" ) == REGION );
+       _test( modelSubdomainType( "TOP" ) == BOUNDARY );
+       
+      size_t n_shared_nodes = sharedNodes( region1, region2 );
+      //                      ^^^^^^^^^^^
+      _test( n_shared_nodes == interface.Nodes() );
  
+      size_t n_shared_perimeter_nodes = sharedPerimeterNodes( region1, region2 );
+      //                                ^^^^^^^^^^^^^^^^^^^^
+      // for this model
+      _test( n_shared_nodes == n_shared_perimeter_nodes );
+
+      vector<Node<2>*> perim_nodes, standard_nodes( interface.NodeVector() );
+      n_shared_perimeter_nodes = sharedPerimeterNodes( region1, region2, perim_nodes );
+      //                         ^^^^^^^^^^^^^^^^^^^^
+      sort( perim_nodes.begin(), perim_nodes.end() );
+      sort( standard_nodes.begin(), standard_nodes.end() );
+      _test( perim_nodes == standard_nodes );
+
+      vector<pair<pair<Element<2>*,uint32_t>,pair<Element<2>*,uint32_t> > > matching_cells;
+      const size_t n_matches = sharedPerimeterCells(  region1, region2, matching_cells );
+      //                       ^^^^^^^^^^^^^^^^^^^^
+      _test( n_matches == interface.Cells() );
+      // testing that the cells match
+      for ( const auto& cell_pair : matching_cells ) {
+           _test( cell_pair.first.first->Neighbor(cell_pair.first.second)   != nullptr );
+           _test( cell_pair.second.first->Neighbor(cell_pair.second.second) != nullptr );
+           // is the connectivity between the neighbor cells correctly represented
+           _test( cell_pair.first.first->Neighbor(cell_pair.first.second) == cell_pair.second.first );
+           _test( cell_pair.second.first->Neighbor(cell_pair.second.second) == cell_pair.first.first );
+        }
+
+      set<TOPOTYPE> topo_flags = nodeTopologyFlags<2,Element>( region1.NodesBegin(), region1.NodesEnd() );
+      //                         ^^^^^^^^^^^^^^^^^
+      _test( topo_flags.count(MESH_VERTEX)     == 1 );
+      _test( topo_flags.count(EXTERIOR_POINT)  == 1 );
+      _test( topo_flags.count(PERIMETER_POINT) == 1 );
+      _test( topo_flags.count(INTERIOR_LINE)   == 1 );
+      _test( topo_flags.count(EXTERIOR_LINE)   == 1 );
+      _test( topo_flags.size()                 == 5 );
+      
+      // we need a split boundary for the next test
+      const bool delete_elements{ true };
+      model.RemoveRegion( "STANDARD", delete_elements );
+      pair<string,bool> split_boundary = model.CreateSplitBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
+      _test( split_boundary.second == true );
+      // TODO: Between does not split the corner nodes although the SB is throughgoing
+
+      const SplitBoundary<2>& discontinuity = model.SplitBoundary( split_boundary.first );
+      topo_flags = nodeTopologyFlags( discontinuity );
+      //           ^^^^^^^^^^^^^^^^^
+      _test( discontinuity.InsideNodes().first.size() == n_shared_nodes );
+      _test( topo_flags.count(EXTERIOR_POINT) == 1 );
+      _test( topo_flags.count(INTERIOR_LINE)  == 1 );
+      _test( topo_flags.size()                == 2 );
+    }
+    
+    // 3D tests: BoxHalfs3D
+    {
+       ANSYS_Model3D model( "BoxHalfs3D", "CSMP-variables.txt" );
+       Region<3>&    region1( model.Region( "MATRIX_LEFT" ) );
+       Region<3>&    region2( model.Region( "MATRIX_RIGHT" ) );
+       Region<3>&    interface( model.Region( "HALF" ) );
+       
+       _test( modelSubdomainType( "MATRIX_LEFT" ) == REGION );
+       //     ^^^^^^^^^^^^^^^^^^
+       _test( modelSubdomainType( "HALF" ) == REGION );
+       _test( modelSubdomainType( "TOP" ) == BOUNDARY );
+       
+      size_t n_shared_nodes = sharedNodes( region1, region2 );
+      //                      ^^^^^^^^^^^
+      _test( n_shared_nodes == interface.Nodes() );
+ 
+      size_t n_shared_perimeter_nodes = sharedPerimeterNodes( region1, region2 );
+      //                                ^^^^^^^^^^^^^^^^^^^^
+      // for this model
+      _test( n_shared_nodes == n_shared_perimeter_nodes );
+
+      vector<Node<3>*> perim_nodes, standard_nodes( interface.NodeVector() );
+      n_shared_perimeter_nodes = sharedPerimeterNodes( region1, region2, perim_nodes );
+      //                         ^^^^^^^^^^^^^^^^^^^^
+      sort( perim_nodes.begin(), perim_nodes.end() );
+      sort( standard_nodes.begin(), standard_nodes.end() );
+      _test( perim_nodes == standard_nodes );
+
+      vector<pair<pair<Element<3>*,uint32_t>,pair<Element<3>*,uint32_t> > > matching_cells;
+      const size_t n_matches = sharedPerimeterCells(  region1, region2, matching_cells );
+      //                       ^^^^^^^^^^^^^^^^^^^^
+      _test( n_matches == interface.Cells() );
+      // testing that the cells match
+      for ( const auto& cell_pair : matching_cells ) {
+           _test( cell_pair.first.first->Neighbor(cell_pair.first.second)   != nullptr );
+           _test( cell_pair.second.first->Neighbor(cell_pair.second.second) != nullptr );
+           // is the connectivity between the neighbor cells correctly represented
+           _test( cell_pair.first.first->Neighbor(cell_pair.first.second) == cell_pair.second.first );
+           _test( cell_pair.second.first->Neighbor(cell_pair.second.second) == cell_pair.first.first );
+        }
+
+      set<TOPOTYPE> topo_flags = nodeTopologyFlags<3,Element>( region1.NodesBegin(), region1.NodesEnd() );
+      //                         ^^^^^^^^^^^^^^^^^
+      _test( topo_flags.count(MESH_VERTEX)      == 1 );
+      _test( topo_flags.count(EXTERIOR_POINT)   == 1 );
+      _test( topo_flags.count(EXTERIOR_LINE )   == 1 );
+      _test( topo_flags.count(INTERIOR_SURFACE) == 1 );
+      _test( topo_flags.count(EXTERIOR_SURFACE) == 1 );
+      _test( topo_flags.size()                  == 5 );
+      
+      // we need a split boundary for the next test
+      const bool delete_elements{ true };
+      model.RemoveRegion( "HALF", delete_elements );
+      pair<string,bool> split_boundary = model.CreateSplitBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
+      _test( split_boundary.second == true );
+      // TODO: Between does not split the corner nodes although the SB is throughgoing
+
+      const SplitBoundary<3>& discontinuity = model.SplitBoundary( split_boundary.first );
+      topo_flags = nodeTopologyFlags( discontinuity );
+      //           ^^^^^^^^^^^^^^^^^
+      _test( discontinuity.InsideNodes().first.size() == n_shared_nodes );
+      _test( topo_flags.count(EXTERIOR_POINT)   == 1 );
+      _test( topo_flags.count(EXTERIOR_LINE)    == 1 );
+      _test( topo_flags.count(INTERIOR_SURFACE) == 1 );
+      _test( topo_flags.size()                  == 3 );
+    }
+    
+    // TODO: add 3D tests with more complex model 'normal_fault_boundary'
+
  } // end Test_NonMemberFunctions
 
 
