@@ -6,17 +6,19 @@
 //  Copyright © 2021 Stephan Matthai. All rights reserved.
 //
 
-#include <unordered_set>
 #include "meshManagementUtilities.h"
-#include "CSMP_highLevelUtilities.h"
 #include "ModelTopology.h"
 #include "MeshManager.h"
 #include "MeshPatch.h"
 #include "Model.h"
+#include "ModelSubDomain.h"
 #include "Region.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
 #include "Element.h"
 #include "Node.h"
 #include "ErrorHandler.h"
+#include "VTU_Interface.h"
 #include "Box.h"
 #include "plf_colony.h"
 
@@ -1084,7 +1086,7 @@ pair<uint32_t,uint32_t> findAdjacentFacesFromNodes( Element<dim>* const eptr1, E
          // is this a matching face
          auto fit = find( e1_face_keys.begin(), e1_face_keys.end(), eptr2->CornerNodesOfFace(i) );
          if ( fit != e1_face_keys.end() ) {
-              size_t face_elmt1 = distance(e1_face_keys.begin(),fit);
+              size_t face_elmt1 = static_cast<size_t>(distance(e1_face_keys.begin(),fit));
               size_t face_elmt2 = i;
               return make_pair( face_elmt1, face_elmt2 );
            }
@@ -2010,7 +2012,7 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, 
  
     for ( auto it=sgroup.NodesBegin(); it!=sgroup.NodesEnd(); it++ )
       if ( pxyz.CoincidesWithWithinTolerance( (*it)->Coordinate(), tolerance ) )
-        return (*it)->Idx();
+        return static_cast<long>((*it)->Idx());
 
     ErrorHandler& csmp_error(ErrorHandler::Instance());
    
@@ -2020,7 +2022,7 @@ long  findNode( const Model<dim>& sg, const Point<dim>& pxyz, double tolerance, 
          out <<" returning node index="<< -1 << endl;
          csmp_error.Note( WARNING, "findNode:", out.str() );
       }
-    return -1;
+    return UNSPECIFIED;
      
 } // end find_node
 
@@ -2171,7 +2173,7 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
                                  std::vector<std::vector<CELL<dim>*> >& nbor_pointers )
  {
     nbor_pointers.clear();
-    nbor_pointers.reserve( distance(first,last) );
+    nbor_pointers.reserve( static_cast<size_t>(distance(first,last)) );
     assert( nbor_pointers.capacity() > 1 );
     
     while ( first != last ) {
@@ -2215,7 +2217,7 @@ bool integrityCheck( typename plf::colony<CELL<dim>>::const_iterator first,
  {
     if ( first == last ) return false;
     
-    const size_t              n_cells( distance(first,last) );
+    const size_t              n_cells( static_cast<size_t>(distance(first,last)) );
     size_t                    issues{0};
     string                    celltype("Element");
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
@@ -2461,7 +2463,7 @@ size_t duplicatesCheck( typename std::vector<CELL<dim>*>::const_iterator first,
     if constexpr ( is_same< CELL<dim>,Face<dim> >::value ) celltype = "Face";
     if constexpr ( is_same< CELL<dim>,InterFace<dim> >::value ) celltype = "InterFace";
 
-    long n_cells = distance( first, last );
+    size_t n_cells = static_cast<size_t>(distance( first, last ));
     
     unordered_set<CELL<dim>*>  unique_cell_set( first, last );
     size_t n_duplicates = n_cells - unique_cell_set.size();
@@ -2732,6 +2734,7 @@ bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* cons
 template bool interPenetrating( const Element<3>* const, const Element<3>* const );
 template bool interPenetrating( const Element<2>* const, const Element<2>* const );
 template bool interPenetrating( const Element<1>* const, const Element<1>* const );
+
 
 
 /**
@@ -3251,6 +3254,45 @@ void transformMeshIntoRefinedLinearAndQuadraticMeshes( const VSet<3>& linear_mes
  } // transformMeshIntoRefinedLinearAndQuadraticMeshes
 
 
+
+
+
+/**
+    Prints VTU file where topotype identifiers have been converted to number.
+ */
+template<uint32_t dim, template<uint32_t> class CELL>
+void boundaryAndTopoTypeFlagsToVTU( Model<dim>& model, const ModelSubDomain<dim,CELL>& model_subdomain )
+ {
+    model.CreateProperty( "topo type", "TT", "none");
+    model.CreateProperty( "box flag", "BF", "none");
+    
+    // getting diagnostic values
+    boundaryFlagToNumber( model, "box flag" );
+    topoTypeToNumber( model, "topo type" );
+ 
+    list<string> outvars{ "box flag", "topo type" };
+    if ( model.Database().IsDefined("node number") ) outvars.push_back("node number");
+    if ( model.Database().IsDefined("element number") ) outvars.push_back("element number");
+    
+    VTU_Interface<dim>  vtu(model);
+
+    vtu.OutputDataToVTU( "boundaryAndTopoTypeFlagsToVTU", outvars, model_subdomain, 0 );
+    
+    model.DeleteProperty( "topo type" );
+    model.DeleteProperty( "box flag" );
+ }
+
+template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,Element>& );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Element>&  );
+template void boundaryAndTopoTypeFlagsToVTU( Model<1>&, const ModelSubDomain<1,Element>& );
+
+template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,Face>& );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Face>&  );
+template void boundaryAndTopoTypeFlagsToVTU( Model<1>&, const ModelSubDomain<1,Face>& );
+
+template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,InterFace>& );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,InterFace>&  );
+template void boundaryAndTopoTypeFlagsToVTU<1,InterFace>( Model<1>&, const ModelSubDomain<1,InterFace>& );
 
 
 

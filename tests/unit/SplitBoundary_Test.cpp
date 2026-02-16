@@ -3,7 +3,8 @@
 #include "VTU_Interface.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
-#include "EclipseModel.h"
+//#include "EclipseModel.h"
+#include "meshManagementUtilities.h"
 #include "VTK_Interface.h"
 #include "ModelTopology.h"
 #include "InputDataManager.h"
@@ -249,18 +250,25 @@ void SplitBoundary_Test::Test_InitialiseSKUA_Model()
 
 
 
-//E.P Added Tests to SplitBoundary
-//Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
-bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
+/**
+    Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
+    
+    @author Eddi & SKM
 
+*/
+bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file /* InternalBoundary_Test */ )
+ {
     enum {dim=2U};
+    
     // Model initialization
     //const char* mesh_file_lin("InternalBoundary_Test");
     //const char* mesh_file_quad("InternalBoundary_Test_quadratic");
     const char* variables_file("SplitBoundary_Test-variables.txt");
     const char* regions_file("InternalBoundary_Test");
 
-    ANSYS_Model2D model(mesh_file, regions_file, variables_file, true, true );
+    ANSYS_Model2D  model(mesh_file, regions_file, variables_file, true, true );
+
+boundaryAndTopoTypeFlagsToVTU( model, model.Region("Model") );
 
     const bool retain_elmts_as_intervening_elmts{ false };
     pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE",retain_elmts_as_intervening_elmts);
@@ -273,6 +281,8 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
 
     // SKM fix - please check all the patches that were created
     SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
+    
+boundaryAndTopoTypeFlagsToVTU( model, model.SplitBoundary( (*sb_name.first.begin()) ) );
 
     ScalarVariable val1(PLAIN, 1.0);
     ScalarVariable val2(PLAIN, 2.0);
@@ -281,8 +291,8 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
     s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
     s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
 
-    for (typename std::vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
-        for ( auto i{0U}; i < (*ifit)->FE()->Nodes(); i++ ){
+    for (typename vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
+        for ( uint32_t i{0U}; i < (*ifit)->FE()->Nodes(); i++ ){
             _test( (*ifit)->N(i, INSIDE)->Read(model.Database().StorageKey("inside"))   == 1.0);
             _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside"))  == 2.0);
             _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))  == 3.0);
@@ -397,10 +407,10 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
 
 
 template<uint32_t dim>
-void SplitBoundary_Test::LoadModel( const std::string& model_name )
+void SplitBoundary_Test::LoadModel( const string& model_name )
 {
   // Model initialization
-  const std::string variables_file("SplitBoundary_Test-variables.txt");
+  const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
@@ -432,11 +442,11 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name )
 
 
 template<uint32_t dim>
-void SplitBoundary_Test::LoadModel( const std::string& model_name,
-                                    std::vector<std::string>& regions )
+void SplitBoundary_Test::LoadModel( const string& model_name,
+                                    vector<string>& regions )
 {
   // Model initialization
-  const std::string variables_file("SplitBoundary_Test-variables.txt");
+  const string variables_file("SplitBoundary_Test-variables.txt");
   Model<dim>* model = NULL;
   if constexpr ( dim == 2U )
     model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), true ));
@@ -453,11 +463,11 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
   string  spliboundary_regions_file( model_name );
 
   // load regions from the input file
-  InputFromFile( std::string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), regions );
+  InputFromFile( string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), regions );
 
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
   model->InputPropertyValue( "element variable", regionValue );
-  for ( std::vector<string>::const_iterator it = regions.begin(); it != regions.end(); it++ )
+  for ( vector<string>::const_iterator it = regions.begin(); it != regions.end(); it++ )
   {
     regionValue += 1.0;
     model->Region( (*it).c_str() ).InputPropertyValue( "element variable", regionValue );
@@ -473,8 +483,8 @@ void SplitBoundary_Test::LoadModel( const std::string& model_name,
 
 
 template<uint32_t dim>
-void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
-                                              std::vector<std::string>& interfaces )
+void SplitBoundary_Test::LoadContiguousModel( const string& model_name,
+                                              vector<string>& interfaces )
 {
   // 0. Model initialization
   const string variables_file("SplitBoundary_Test-variables.txt");
@@ -487,9 +497,9 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
   string  splitboundary_regions_file( model_name );
 
   // 1. InterFace sets
-  std::set<std::string> interface_basic_sets;
-  std::set<std::string> interface_sets;
-  InputFromFile( std::string( splitboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), interface_basic_sets );
+  set<string> interface_basic_sets;
+  set<string> interface_sets;
+  InputFromFile( string( splitboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), interface_basic_sets );
 
   // 2. splitting input regions if they are discontigouos
   bool discontiguous_regions( false );
@@ -519,12 +529,12 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
   interfaces.clear();
   interfaces.push_back( "interfaces" );
-  OutputToFile( std::string( splitboundary_regions_file + "-connected-interface-regions.txt" ).c_str(), interfaces );
+  OutputToFile( string( splitboundary_regions_file + "-connected-interface-regions.txt" ).c_str(), interfaces );
 
   if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
 
   // 3. creating SplitBoundaries
-  for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ ) {
+  for ( vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ ) {
        cerr <<"\nRecode this so that it does the right thing!\n";
        model->CreateInternalBoundaryFrom( (*it).c_str() );
        Boundary<dim>& bdry = model->Boundary( (*it).c_str() );
@@ -545,7 +555,7 @@ void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
 
 /// Input name of regions to split
 void SplitBoundary_Test::InputFromFile( const char* file_name,
-                                        std::set<string>& interface_basic_set )
+                                        set<string>& interface_basic_set )
 {
   assert( file_name != NULL );
 
@@ -589,8 +599,8 @@ void SplitBoundary_Test::InputFromFile( const char* file_name,
 /// Input name of regions to split
 template<uint32_t dim>
 void SplitBoundary_Test::EstablishContiguousRegionsList( Model<dim>& model,
-                                                         const std::set<string>& interface_basic_set,
-                                                         std::set<string>& interface_sets )
+                                                         const set<string>& interface_basic_set,
+                                                         set<string>& interface_sets )
 {
   if ( verbose_ ) cout << "\nSplitBoundary_Test::EstablishContiguousRegionsList:" << endl;
 
@@ -621,7 +631,7 @@ void SplitBoundary_Test::EstablishContiguousRegionsList( Model<dim>& model,
 
 /// Input name of regions to split
 void SplitBoundary_Test::InputFromFile( const char* file_name,
-                                        std::vector<string>& interfaces )
+                                        vector<string>& interfaces )
 {
   assert( file_name != NULL );
 
@@ -665,7 +675,7 @@ void SplitBoundary_Test::InputFromFile( const char* file_name,
 
 /// Write contiguous regions
 void SplitBoundary_Test::OutputToFile( const char* file_name,
-                                       const std::vector<string>& interfaces )
+                                       const vector<string>& interfaces )
 {
   assert( file_name != NULL );
 
@@ -677,7 +687,7 @@ void SplitBoundary_Test::OutputToFile( const char* file_name,
   ofs << "'" << file_name << "' interface regions to be included.\n\n";
 
   ofs << interfaces.size() << " ";
-  for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
+  for ( vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
     ofs << (*it) << " ";
 
   ofs << "\n";
@@ -692,7 +702,7 @@ void SplitBoundary_Test::OutputToFile( const char* file_name,
 
 /// Write interface regions
 void SplitBoundary_Test::OutputToFile( const char* file_name,
-                                       const std::set<string>& interfaces )
+                                       const set<string>& interfaces )
 {
   assert( file_name != NULL );
 
@@ -704,7 +714,7 @@ void SplitBoundary_Test::OutputToFile( const char* file_name,
   ofs << "'" << file_name << "' interface regions to be included.\n\n";
 
   ofs << interfaces.size() << " ";
-  for ( std::set<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
+  for ( set<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
     ofs << (*it) << " ";
 
   ofs << "\n";

@@ -24,6 +24,7 @@ template<uint32_t> class VSet;
 template<uint32_t> class Model;
 template<uint32_t> class MeshManager;
 template<uint32_t> class MeshPatch;
+template<uint32_t, template<uint32_t> class CELL> class ModelSubDomain;
 template<uint32_t> class Region;
 template<uint32_t> class Boundary;
 template<uint32_t> class SplitBoundary;
@@ -281,6 +282,11 @@ void printNodes( const CELL<dim>& );
 template<uint32_t dim>
 void printNodeAttibutes( typename std::vector<Node<dim>*>::const_iterator first,
                          typename std::vector<Node<dim>*>::const_iterator last );
+                         
+/// Prints BOX_BOUNDARY and TOPOTYPE flag values to VTU named after model and region
+template<uint32_t dim, template<uint32_t> class CELL>
+void boundaryAndTopoTypeFlagsToVTU( Model<dim>& model, const ModelSubDomain<dim,CELL>& );
+                         
 
 } // end csmp
 

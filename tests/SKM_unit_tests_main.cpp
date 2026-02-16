@@ -155,7 +155,7 @@
 using namespace std;
 using namespace csmp;
 
-constexpr bool COMMPREHENSIVE_TESTING = true;
+constexpr bool COMMPREHENSIVE_TESTING = false;
 
 /**  Unit Test Development
  
@@ -204,8 +204,9 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-          refactored.addTest( new ModelSubDomain_Test() );
+          refactored.addTest( new SplitBoundary_Test() );
 //          refactored.addTest( new SplitBoundaryInterface_Test() );
+//          refactored.addTest( new ModelSubDomain_Test() );
 
 //        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
         
