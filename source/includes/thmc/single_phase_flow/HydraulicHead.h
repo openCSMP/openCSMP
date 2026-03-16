@@ -15,8 +15,8 @@ class HydraulicHead : public Interrelation<dim> {
     
   public:
     HydraulicHead( const PropertyDatabase<dim>&, double ref_density=1000. );
-    ~HydraulicHead() {};
-    void Calculate();
+
+    void Calculate() override final;
 };
 
 } // csmp

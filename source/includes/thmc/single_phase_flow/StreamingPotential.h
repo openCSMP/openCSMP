@@ -33,8 +33,8 @@ class PotentialSource : public Interrelation<dim> {
     
   public:
     PotentialSource( const PropertyDatabase<dim>& );
-    ~PotentialSource() {};
-    void Calculate();
+
+    void Calculate() override final;
 };
  
  

@@ -7,8 +7,8 @@ namespace csmp {
 
 template<uint32_t dim>
 ExtractVectorVariableLength<dim>::ExtractVectorVariableLength( const PropertyDatabase<dim>& p,
-                                                          const char* vec_var, 
-                                                          const char* to_scalar_var )
+                                                               const char* vec_var,
+                                                               const char* to_scalar_var )
       : Interrelation<dim>(p),
         V( Interrelation<dim>::GlobalProperty(vec_var) ),
         S( Interrelation<dim>::GlobalProperty(to_scalar_var) )
@@ -33,10 +33,6 @@ ExtractVectorVariableLength<dim>::ExtractVectorVariableLength( const PropertyDat
                                    "Incompatible placement of input variables");
  }
 
-
-
-template<uint32_t dim>
-ExtractVectorVariableLength<dim>::~ExtractVectorVariableLength() {}
 
 
 template class ExtractVectorVariableLength<1U>;

@@ -63,13 +63,11 @@ class BoundaryStressVisitor : public Visitor<dim> {
                            BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED,
                            bool overwrite_force_vector=true );
 
-    virtual ~BoundaryStressVisitor();
-
     /// to zero out force vector, prior to accumulation of forces.
-    virtual void Visit( Boundary<dim>* );
+    void Visit( Boundary<dim>* ) override final;
   
     /// computes nodal forces weighted by node
-    virtual void Visit( Face<dim>* );
+    void Visit( Face<dim>* ) override final;
   
   private:
     /// normals at the boundaries are not correct; this is a workaround

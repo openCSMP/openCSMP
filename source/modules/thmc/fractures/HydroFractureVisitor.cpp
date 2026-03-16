@@ -27,11 +27,6 @@ HydroFractureVisitor<dim>::HydroFractureVisitor( Model<dim>& sg )
 
 
       
-template<uint32_t dim>
-HydroFractureVisitor<dim>::~HydroFractureVisitor() 
- {  
- }
-
 
 
 

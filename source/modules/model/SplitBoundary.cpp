@@ -254,7 +254,7 @@ INTERFACE_SIDE SplitBoundary<dim>::RegionLocation( const Region<dim>& region )
 // -----------------------------------------------
 
 /**
-   for the assignment of properties that are unique to the instance of this subclass
+   For the assignment of properties with the PLACEMENT SPLIT_BOUNDARY
    
       @author SKM
       @date 7/6/2020
@@ -1006,7 +1006,7 @@ void SplitBoundary<dim>::InputNodePropertyValue( const char* input_node_prop, co
          return;
          }
       
- } // end InputNodePropertyValue
+ } // end InputNodePropertyValues
 
 template void SplitBoundary<3U>::InputNodePropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
 template void SplitBoundary<2U>::InputNodePropertyValue( const char*, const ScalarVariable&, SUBDOMAIN_PART, INTERFACE_SIDE );
@@ -1087,7 +1087,7 @@ void SplitBoundary<dim>::ChangeNodePropertyStatus( const char* property,
         if ( side == INSIDE ) {
              const size_t n_sb_cells{ this->Cells() };
              for ( size_t i{ this->InteriorCells() }; i<n_sb_cells; i++ )
-               for ( auto j{0U}; j < this->PerimeterFaces(i); ++j ) {
+               for ( uint32_t j{0U}; j < this->PerimeterFaces(i); ++j ) {
                     // ascertaining that we are indeed at the model boundary
                     assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
                     // getting the nodes
@@ -1098,7 +1098,7 @@ void SplitBoundary<dim>::ChangeNodePropertyStatus( const char* property,
         else if ( side == OUTSIDE ) {
              const size_t n_sb_cells{ this->Cells() };
              for ( size_t i{ this->InteriorCells() }; i<n_sb_cells; i++ )
-               for ( auto j{0U}; j < this->PerimeterFaces(i); ++j ) {
+               for ( uint32_t j{0U}; j < this->PerimeterFaces(i); ++j ) {
                     // ascertaining that we are indeed at the model boundary
                     assert( this->E(i)->Neighbor( this->PerimeterFace(i,j) ) == nullptr );
                     // getting the nodes
@@ -1146,16 +1146,16 @@ void SplitBoundary<dim>::ChangeNodePropertyStatusWhere( const char* property,
          return;
       }
 
-    if ( prop_key.place == REGION or prop_key.place == BOUNDARY )
+    if ( prop_key.place == REGION || prop_key.place == BOUNDARY )
       throw csmp::Exception( ERROR, src.c_str(), "Use Status() to change flags of REGION or BOUNDARY variables.");
 
-    if ( prop_key.type == TENSOR or prop_key.type == ARRAY or  prop_key.type == FLAGGEDARRAY )
+    if ( prop_key.type == TENSOR || prop_key.type == ARRAY or  prop_key.type == FLAGGEDARRAY )
       throw csmp::Exception( ERROR, src.c_str(), "Method not implemented for tensor or array properties yet");
 
     if ( prop_key.type == SCALAR )
       {
          for ( auto& it : this->cell_vec_ )
-           for ( auto i{0U}; i<it->FE()->Nodes(); i++ ) {
+           for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ ) {
                 const double prop_val = it->N(i,side)->Read( prop_key );
                 if ( prop_val >= min_val && prop_val <= max_val )
                   it->N(i,side)->Status( prop_key, status );
@@ -1165,7 +1165,7 @@ void SplitBoundary<dim>::ChangeNodePropertyStatusWhere( const char* property,
     else if ( prop_key.type == VECTOR ) {
          VectorVariable<dim> vc;
          for ( auto& it : this->cell_vec_ )
-           for ( auto i{0U}; i<it->FE()->Nodes(); i++ ) {
+           for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ ) {
                 it->N(i,side)->Read( prop_key, vc );
                 const double prop_val = vc.Length();
                 if ( prop_val >= min_val && prop_val <= max_val )

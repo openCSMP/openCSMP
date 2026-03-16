@@ -42,10 +42,6 @@ Interrelation<dim>::Interrelation( const PropertyDatabase<dim>& p )
   
   
   
-template<uint32_t dim>
-Interrelation<dim>::~Interrelation()
- {
- } 
  
 
 

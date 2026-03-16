@@ -28,10 +28,8 @@ class ExtractVectorVariableComponent : public Interrelation<dim> {
     ExtractVectorVariableComponent( const PropertyDatabase<dim>& p,
                                     const char* vec_var, const char* scalar_var, 
                                     uint32_t comp );
-                                    
-    ~ExtractVectorVariableComponent();
     
-    void Calculate();
+    void Calculate() override final;
 };
 
 

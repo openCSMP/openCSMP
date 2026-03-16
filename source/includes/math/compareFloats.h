@@ -35,6 +35,12 @@ namespace csmp
     return fabs(a - b) <= ( (fabs(a) < fabs(b) ? fabs(b) : fabs(a)) * epsilon );
   }
   
+  // whichever is exceeded, the absolute or the relative tolerance
+  inline bool approximatelyEqual2( double a, double b, double relTol = 1e-12, double absTol = 1e-14 )
+  {
+    return fabs(a - b) <= std::max( relTol * std::max( fabs(a), fabs(b)), absTol );
+  }
+  
   inline bool essentiallyEqual(double a, double b, double epsilon )
   {
     return fabs(a - b) <= ( (fabs(a) > fabs(b) ? fabs(b) : fabs(a)) * epsilon );

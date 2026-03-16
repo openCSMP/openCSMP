@@ -18,9 +18,10 @@ class QuartzPrecipitation : public Interrelation<dim> {
     
   public:
     QuartzPrecipitation( const PropertyDatabase<dim>& p, double time_increment );
-    ~QuartzPrecipitation() {};
-    void Calculate();
+
     void SetTimeIncrement( double time_increment ) { dt=time_increment; };
+
+    void Calculate() override final;
 };
 
 } // csmp

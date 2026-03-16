@@ -52,10 +52,6 @@ OverburdenPressureVisitor<dim>::OverburdenPressureVisitor( Model<dim>& model, //
 }
 
 
-template<uint32_t dim>
-OverburdenPressureVisitor<dim>::~OverburdenPressureVisitor()
-{
-}
 
 
 

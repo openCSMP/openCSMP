@@ -30,15 +30,13 @@ class CopyReplaceVisitor : public Visitor<dim> {
     CopyReplaceVisitor( const PropertyDatabase<dim>&, 
                         const char* prop_a,
                         const char* prop_b );
-
-    virtual ~CopyReplaceVisitor();
     
-    virtual void Visit( Model<dim>* );
-    virtual void Visit( Region<dim>* );
-    virtual void Visit( Element<dim>* );  
-    virtual void Visit( Face<dim>* );
-    virtual void Visit( InterFace<dim>* );
-    virtual void Visit( Node<dim>* );
+    void Visit( Model<dim>* ) override final;
+    void Visit( Region<dim>* ) override final;
+    void Visit( Element<dim>* ) override final;
+    void Visit( Face<dim>* ) override final;
+    void Visit( InterFace<dim>* ) override final;
+    void Visit( Node<dim>* ) override final;
 
   private:
     csmp::Index  prop_key_a_, prop_key_b_;

@@ -22,37 +22,34 @@ class FourarLenormand : public TwoPhaseModel<dim> {
                      const char* res_sat_non_wetting,
                      const char* res_sat_wetting );
 
-    virtual ~FourarLenormand();
-
-    virtual void Initialize( const Element<dim>& e );
+    void Initialize( const Element<dim>& e ) override final;
 
     // relative permeabilities
-    virtual double krn_Phase() const;
-    virtual double krw_Phase() const;
+    double krn_Phase() const override final;
+    double krw_Phase() const override final;
 
     // derivatives of relative permeabilities
-    virtual double dkrnds_Phase() const;
-    virtual double dkrwds_Phase() const;
+    double dkrnds_Phase() const override final;
+    double dkrwds_Phase() const override final;
 
     // capillary pressure
-    virtual double pc_Phase( ) const;
+    double pc_Phase( ) const override final;
 
     // capillary pressure derivatives
-    virtual double dpcds_Phase( ) const;
+    double dpcds_Phase( ) const override final;
 
     // inverse capillary pressure function
-    virtual double Sw_Phase( double pc_Phase ) const;
+    double Sw_Phase( double pc_Phase ) const override final;
 
     // inverse capillary pressure derivative
-    virtual double dsdpc_Phase( double pc_Phase ) const;
+    double dsdpc_Phase( double pc_Phase ) const override final;
 
   private:
 
     FourarLenormand();
 
     double  fractureAperture_;
-    Index     fractureApertureKey_;
-
+    Index   fractureApertureKey_;
 };
 
 

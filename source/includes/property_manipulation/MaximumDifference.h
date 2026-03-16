@@ -15,10 +15,11 @@ class MaximumDifference : public Interrelation<dim> {
   public:
     explicit MaximumDifference( const PropertyDatabase<dim>& p,
                                 const char* variable1, const char* variable2 );
-    ~MaximumDifference() {};
-    void Calculate();
-    void Reset();
-    double   Value() const; /// < outputs the computed value
+
+    void Calculate() override final;
+
+    void   Reset();
+    double Value() const; /// < outputs the computed value
 };
 
 /// compare distributed variable values: calculates maximum difference between distributed variable values of the same type and placement; difference can be normalised

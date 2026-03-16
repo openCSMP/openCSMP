@@ -28,10 +28,8 @@ class ExtractTensorVariableComponent : public Interrelation<dim> {
     ExtractTensorVariableComponent( const PropertyDatabase<dim>& p,
                                     const char* tens_var, const char* scalar_var, 
                                     uint32_t i, uint32_t j );
-                                    
-    ~ExtractTensorVariableComponent();
     
-    void Calculate();
+    void Calculate() override final;
 };
 
 

@@ -5,27 +5,6 @@
 
 namespace csmp {
 
-template<uint32_t dim, template <typename> class operation>
-class ConstantFactor : public Interrelation< dim> {
-  private:
-    Operand<dim>&  res_;
-    Operand<dim>&  arg_;
-    ScalarVariable factor_, val_;
-    
-    operation<ScalarVariable > operate_;
-    bool  res_prop_equal_to_arg_prop_;
-    
-  public:
-    ConstantFactor( const PropertyDatabase<dim>& p, const char* resultProperty,
-                    const char* argumentProperty, const double factor);
-    			          
-    ~ConstantFactor() {};
-    
-    void ChangeFactor( double factor );
-    
-    void Calculate();
-};
-
 /**
 
 @class ConstantFactor ConstantFactor "interrelations/ConstantFactor.h"
@@ -60,7 +39,24 @@ when using non-commutative operands (here shown for std::minus):
 result_property = first_property - (\sum other_properties).
 @endcode
 */
-
+template<uint32_t dim, template <typename> class operation>
+class ConstantFactor : public Interrelation< dim> {
+  private:
+    Operand<dim>&  res_;
+    Operand<dim>&  arg_;
+    ScalarVariable factor_, val_;
+    
+    operation<ScalarVariable > operate_;
+    bool  res_prop_equal_to_arg_prop_;
+    
+  public:
+    ConstantFactor( const PropertyDatabase<dim>& p, const char* resultProperty,
+                    const char* argumentProperty, const double factor);
+    
+    void ChangeFactor( double factor );
+    
+    void Calculate() override final;
+};
 
 
 } // csmp

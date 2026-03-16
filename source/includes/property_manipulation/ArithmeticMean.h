@@ -18,7 +18,8 @@ class ArithmeticMean : public Interrelation<dim> {
     
   public:
     ArithmeticMean( const PropertyDatabase<dim>& p, const char* res_prop, const char* prop_to_avg );
-    virtual void Calculate();
+    
+    void Calculate() override final;
 };
 
 

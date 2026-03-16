@@ -26,9 +26,10 @@ class QuartzSolubilityNaCl : public Interrelation<dim> {
                         F;    /// < weight fraction water
 
   public:
-    QuartzSolubilityNaCl( const PropertyDatabase<dim>& p );
-    ~QuartzSolubilityNaCl() {};
-    void Calculate();
+    QuartzSolubilityNaCl( const PropertyDatabase<dim>& );
+    ~QuartzSolubilityNaCl() = default;
+    
+    void Calculate() override final;
 };
 
 

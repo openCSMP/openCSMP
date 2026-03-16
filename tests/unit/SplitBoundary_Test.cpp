@@ -267,35 +267,45 @@ bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file /* In
     const char* regions_file("InternalBoundary_Test");
 
     ANSYS_Model2D  model(mesh_file, regions_file, variables_file, true, true );
-
-boundaryAndTopoTypeFlagsToVTU( model, model.Region("Model") );
+    const size_t   n_elmts_in_model    = model.Region("Model").Cells();
+    const size_t   n_elmts_in_fracture = model.Region("FRACTURE").Cells();
 
     const bool retain_elmts_as_intervening_elmts{ false };
-    pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE",retain_elmts_as_intervening_elmts);
+    pair<set<string>,bool> sb_name = model.CreateSplitBoundaryFrom("FRACTURE",retain_elmts_as_intervening_elmts); // only a single patch
+    SplitBoundary<dim>&   splitbdr = model.SplitBoundary( (*sb_name.first.begin()) );
+    _test( splitbdr.Cells() == n_elmts_in_fracture );
+    _test( model.ContainsRegion("FRACTURE") == false );
+
+// tested flags: OK
+boundaryAndTopoTypeFlagsToVTU( model, model.Region("Model") );
+boundaryAndTopoTypeFlagsToVTU( model, splitbdr );
 
     int32_t material_id = 1;
-    model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
+    set<string>  dimM1_regions = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id); // TODO: this adds extra node into SB!
+    _test( model.Mesh().Elements() == n_elmts_in_model ); // back to the original number of elements
+    _test( dimM1_regions.size() == 1 );
+    _test( model.Region( (*dimM1_regions.begin()) ).Nodes() == n_elmts_in_fracture+1 );
+
+// testing flags: OK
+boundaryAndTopoTypeFlagsToVTU( model, model.Region( (*dimM1_regions.begin()) ) );
+    
     model.CreateProperty( "inside", "is",  "none",  SCALAR, NODE, 1, 0.0, 100);
     model.CreateProperty( "outside", "os", "none",  SCALAR, NODE, 1, 0.0, 100);
     model.CreateProperty( "middle", "mid", "none",  SCALAR, NODE, 1, 0.0, 100);
 
-    // SKM fix - please check all the patches that were created
-    SplitBoundary<dim>& s_ref = model.SplitBoundary( (*sb_name.first.begin()) );
-    
-boundaryAndTopoTypeFlagsToVTU( model, model.SplitBoundary( (*sb_name.first.begin()) ) );
-
     ScalarVariable val1(PLAIN, 1.0);
     ScalarVariable val2(PLAIN, 2.0);
     ScalarVariable val3(PLAIN, 3.0);
-    s_ref.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
-    s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
-    s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
+    splitbdr.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
+    splitbdr.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
+    splitbdr.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
 
-    for (typename vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
+    // testing: are the assigned not values correct
+    for ( auto ifit = splitbdr.CellsBegin(); ifit != splitbdr.CellsEnd(); ++ifit ){
         for ( uint32_t i{0U}; i < (*ifit)->FE()->Nodes(); i++ ){
             _test( (*ifit)->N(i, INSIDE)->Read(model.Database().StorageKey("inside"))   == 1.0);
-            _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside"))  == 2.0);
-            _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))  == 3.0);
+            _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside")) == 2.0);
+            _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))   == 3.0);
         }
     }
 

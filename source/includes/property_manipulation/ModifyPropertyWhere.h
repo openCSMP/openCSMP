@@ -13,9 +13,8 @@ class ModifyPropertyWhere : public Interrelation<dim> {
   public:
     ModifyPropertyWhere( const PropertyDatabase<dim>& p, 
                          const char* prop, double where, double to );
-                         
-    ~ModifyPropertyWhere() {};
-    void Calculate();
+
+    void Calculate() override final;
 };
 
 

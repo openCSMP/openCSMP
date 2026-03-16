@@ -10,9 +10,9 @@ namespace csmp {
 template<uint32_t dim>
 class IAPWS_H2O_Storativity : public Interrelation<dim> {
   public:
-    IAPWS_H2O_Storativity( const PropertyDatabase<dim>& p, double z_rock=1.0e-12 );
-    ~IAPWS_H2O_Storativity() {};
-    void Calculate();
+    IAPWS_H2O_Storativity( const PropertyDatabase<dim>&, double z_rock=1.0e-12 );
+
+    void Calculate() override final;
   
   private:
     Operand<dim>&  B;  // fluid compressibility

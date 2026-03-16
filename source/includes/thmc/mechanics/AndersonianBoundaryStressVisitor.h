@@ -66,13 +66,13 @@ class AndersonianBoundaryStressVisitor : public Visitor<3U> {
                                       const char* SV_variable="overburden pressure", ///< should vary with depth
                                       bool overwrite_force_vector=false );
 
-    virtual ~AndersonianBoundaryStressVisitor();
+    ~AndersonianBoundaryStressVisitor() = default;
 
     /// to zero out force vector if overwrite_force_vector=true, prior to accumulation of forces
-    virtual void Visit( Boundary<3U>* );
+    void Visit( Boundary<3U>* ) override final;
   
     /// computes nodal forces ensuing from stress and weighted by number of nodes of the boundary face
-    virtual void Visit( Face<3U>* );
+    void Visit( Face<3U>* ) override final;
   
   private:
     const StressRegime&  stress_regime_;        ///< input Andersonian stress state

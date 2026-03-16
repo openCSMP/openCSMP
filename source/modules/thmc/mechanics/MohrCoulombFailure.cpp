@@ -25,8 +25,6 @@ MohrCoulombFailure<dim>::MohrCoulombFailure( const PropertyDatabase<dim>& p,
  }
 
 
-template<uint32_t dim>
-MohrCoulombFailure<dim>::~MohrCoulombFailure() {}
 
 
 /** Zienkiewicz II, p. 89, modified Mohr-Coulomb envelope with smooth boundaries.

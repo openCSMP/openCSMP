@@ -14,9 +14,9 @@ class IAPWS_H2O_Conductivity : public Interrelation<dim> {
     ScalarVariable  perm, viscos;
 
   public: // 					                   
-    IAPWS_H2O_Conductivity( const PropertyDatabase<dim>& p );
-    ~IAPWS_H2O_Conductivity() {};
-    void Calculate();
+    IAPWS_H2O_Conductivity( const PropertyDatabase<dim>& );
+
+    void Calculate()  override final;
 };
 
 }

@@ -55,11 +55,6 @@ FlatBoundaryStressVisitor<dim>::FlatBoundaryStressVisitor( const Model<dim>& mod
 }
 
 
-template<uint32_t dim>
-FlatBoundaryStressVisitor<dim>::~FlatBoundaryStressVisitor()
-{
-}
-
 
 /**
     To zero out initial values assigned to the boundary.

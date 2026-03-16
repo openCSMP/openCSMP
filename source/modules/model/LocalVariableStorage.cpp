@@ -698,6 +698,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, ArrayVariab
     av.Flag() = data_.flags[idx.flagOffset];
   }
 
+
 /// FlaggedArray variable
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( const csmp::Index& idx, const FlaggedArrayVariable& av )

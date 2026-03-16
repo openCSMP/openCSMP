@@ -23,8 +23,7 @@ class Limiter : public Interrelation<dim> {
              double min_value,            // minimum value of specified range
              double max_value );          // maximum value of specified range
                          
-    ~Limiter() {};
-    void Calculate();
+    void Calculate() override final;
 };
 
   /**

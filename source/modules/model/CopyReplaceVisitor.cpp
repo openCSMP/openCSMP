@@ -64,10 +64,6 @@ CopyReplaceVisitor<Var,dim>::CopyReplaceVisitor( const PropertyDatabase<dim>& p,
 
 
 
-template<typename Var, uint32_t dim>
-CopyReplaceVisitor<Var,dim>::~CopyReplaceVisitor() 
- {  
- }
 
 // CopyReplaceVisitor Methods ====================
 

@@ -25,9 +25,9 @@ namespace csmp {
                             const char* fluidPressure,
                             const char* meanStress );
 
-    virtual ~EffectiveStressVisitor();
+    ~EffectiveStressVisitor() = default;
 
-    virtual void Visit(Element<dim>* );
+    void Visit(Element<dim>* ) override final;
 
   private:
     EffectiveStressVisitor();

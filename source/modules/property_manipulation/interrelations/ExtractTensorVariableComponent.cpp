@@ -46,10 +46,6 @@ ExtractTensorVariableComponent<dim>::ExtractTensorVariableComponent( const Prope
 
 
 
-template<uint32_t dim>
-ExtractTensorVariableComponent<dim>::~ExtractTensorVariableComponent() {}
-
-
 template class ExtractTensorVariableComponent<1U>;
 template class ExtractTensorVariableComponent<2U>;
 template class ExtractTensorVariableComponent<3U>;

@@ -24,16 +24,6 @@ using namespace std;
 
 namespace csmp {
 
-ModelBasics_Test::ModelBasics_Test()
-  {
-  }
-    
-
-ModelBasics_Test::~ModelBasics_Test()
-  {
-  }
-    
-
 /**
     Reading of all basic variable types and placements.
 */
@@ -97,8 +87,30 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      model_domain.InputPropertyValue( "fluid pressure", makeScalar(ANY,1e5) );
      model_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-15) );
      matrix_domain.InputPropertyValue( "permeability", makeScalar(ANY,1.0e-12) );
+     
+     // a random fluid pressure distribution to verify that nodal values are read back correctly
+     const size_t n = model_domain.Nodes();
+     constexpr double p_min = 100325.0;
+     constexpr double p_max = 2.7e7;
+     vector<double>   random_pressure(n);
 
-     if ( verbose_ ) model.Out(); // crashes when trying to print normals to FV Stencil for ISO_LIN_HEX
+     // Random engine (seeded properly)
+     std::random_device rd;
+     std::mt19937_64 gen(rd());  // 64-bit Mersenne Twister
+     std::uniform_real_distribution<double> dist(p_min, p_max);
+     // Fill using C++20 ranges and lambda
+     std::ranges::generate( random_pressure, [&] { return dist(gen); } );
+     
+     // assigning the values to the model, and mapping them to node-coordinates
+     map<Point<3>,double>  pressure_map; // (needed because the nodes will not necessarily be in the same order in the new mode)
+     csmp::Index pkey = model.Database().StorageKey("fluid pressure");
+     size_t count{0};
+     for ( auto& nit : model_domain.NodeVector() ) {
+           nit->Store( pkey, makeScalar(ANY,random_pressure[count++]) );
+           pressure_map.insert( make_pair( nit->Coordinate(), nit->Read(pkey) ) );
+       }
+
+     if ( verbose_ ) model.Out();
        
      // saving model to disk
      model.OutputToBinaryFile( "ModelBasics_Test" );
@@ -112,6 +124,42 @@ bool ModelBasics_Test::TestWriteModelToDiskAndReadBack()
      _test( approximatelyEqual( pmin, 1.0e-15 ) );
      _test( approximatelyEqual( pmax, 1.0e-12 ) );
      
+     // testing fluid pressure values
+     const Region<3>& restored_model_domain = restored_model.Region("Model");
+     map<Point<3>,double>  restored_pressure_map;
+     bool first_call{true};
+     count = 0;
+     for ( auto& nit : restored_model_domain.NodeVector() )
+       restored_pressure_map.insert( make_pair( nit->Coordinate(), nit->Read(pkey) ) );
+
+     // lexicographical comparison
+     _test( pressure_map.size() == restored_pressure_map.size() );
+     _test( pressure_map == restored_pressure_map );
+
+     // tolerance based comparison
+     // (co-iterating the maps and comparing the pressures)
+     {
+        auto it1 = pressure_map.begin();
+        auto it2 = restored_pressure_map.begin();
+        for (; it1 != pressure_map.end() && it2 != restored_pressure_map.end(); ++it1, ++it2) {
+            // keys must match
+            const auto& [k1, v1] = *it1;
+            const auto& [k2, v2] = *it2;
+            _test(k1 == k2);
+            // comparing values v1 and v2
+            _test( approximatelyEqual( v1, v2 ) );
+            if ( verbose_ ) {
+                 if ( !approximatelyEqual( v1, v2 ) && first_call ) {
+                      cout <<"\n\n"<<"pressure mismatch between original and restored model:"<< endl;
+                      cout <<" "<< fabs(v1 - v2) <<",";
+                      first_call = false;
+                   }
+                 if ( !approximatelyEqual( v1, v2 ) && !first_call ) cout <<" "<< fabs(v1 - v2) <<",";
+                 cout << std::setprecision(6);
+             }
+         }
+     }
+      
      // testing fundamental assumption made working with default initialisations of 'size_t'
      uint32_t default_uint = std::numeric_limits<uint32_t>::max();
      _test( std::numeric_limits<size_t>::max() != UINT_MAX ); // false because UINT_MAX is not for size_t

@@ -56,10 +56,6 @@ MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model,
 
 
 
-template<uint32_t dim>
-MohrCoulombFailure_Visitor<dim>::~MohrCoulombFailure_Visitor()
-{
-}
 
 
 

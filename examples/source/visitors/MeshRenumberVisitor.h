@@ -20,10 +20,8 @@ template<uint32_t dim>
 class MeshRenumberVisitor : public Visitor<dim> {
   public:
     MeshRenumberVisitor();
-
-    virtual ~MeshRenumberVisitor();
     
-    virtual void Visit( Element<dim>* );  
+    void Visit( Element<dim>* ) override final;  
     
     size_t  VisitedElements() const;
     size_t  VisitedNodes() const; 

@@ -22,8 +22,8 @@ class StokesEinsteinDiffusivity : public Interrelation<dim> {
   public:
     StokesEinsteinDiffusivity( const PropertyDatabase<dim>&, const char* species, 
                                double diffusivity, double Omega );
-    ~StokesEinsteinDiffusivity() {};
-    void Calculate();
+
+    void Calculate() override final;
 };
 
 } // csmp

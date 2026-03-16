@@ -19,9 +19,7 @@ namespace csmp{
                                                const char* fracPcGradientTermTag,
                                                const char* fracPermTag );
 
-      virtual ~FractureComputeCapillaryGradientVisitor() {}
-
-      virtual void Visit(Element<dim> *element );
+      void Visit(Element<dim> *element ) override final;
 
   private:
       Model<dim>& model_;

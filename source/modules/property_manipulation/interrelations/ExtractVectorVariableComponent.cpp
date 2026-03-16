@@ -41,10 +41,6 @@ ExtractVectorVariableComponent<dim>::ExtractVectorVariableComponent( const Prope
 
 
 
-template<uint32_t dim>
-ExtractVectorVariableComponent<dim>::~ExtractVectorVariableComponent() {}
-
-
 template class ExtractVectorVariableComponent<1U>;
 template class ExtractVectorVariableComponent<2U>;
 template class ExtractVectorVariableComponent<3U>;

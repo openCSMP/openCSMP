@@ -47,11 +47,6 @@ FourarLenormand<dim>::FourarLenormand( const PropertyDatabase<dim>& database,
  }
  
  
-template<uint32_t dim>
-FourarLenormand<dim>::~FourarLenormand()
- {
- }
-
 
 
 template<uint32_t dim>

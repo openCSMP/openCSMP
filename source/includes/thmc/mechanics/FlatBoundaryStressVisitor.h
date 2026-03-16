@@ -34,13 +34,13 @@ class FlatBoundaryStressVisitor : public Visitor<dim> {
     /// by default, any entries into the RHS force vectors will get overwritten
     explicit FlatBoundaryStressVisitor( const Model<dim>&, bool overwrite_force_vector=true );
 
-    virtual ~FlatBoundaryStressVisitor();
+    ~FlatBoundaryStressVisitor() = default;
 
     /// to zero out force vector, prior to accumulation of forces.
-    virtual void Visit( Boundary<dim>* );
+    void Visit( Boundary<dim>* ) override final;
   
     /// computes nodal forces weighted by node
-    virtual void Visit( Face<dim>* );
+    void Visit( Face<dim>* ) override final;
 
   private:
     const csmp::Index Sn_key_, Ss_key_; ///< Principal stresses, the vertical and two horizontal ones, and the azimuth of the Sh_max_. Anderson Stress convention.

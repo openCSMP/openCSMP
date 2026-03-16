@@ -22,9 +22,6 @@ template<uint32_t> class Model;
 */
 class ModelBasics_Test: public Test {
   public:
-      ModelBasics_Test();
-      ~ModelBasics_Test();
-      
       virtual void run();
       
   private:

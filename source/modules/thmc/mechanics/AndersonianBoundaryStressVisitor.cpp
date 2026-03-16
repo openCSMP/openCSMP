@@ -79,11 +79,6 @@ AndersonianBoundaryStressVisitor::AndersonianBoundaryStressVisitor( const Model<
 
 
 
-AndersonianBoundaryStressVisitor::~AndersonianBoundaryStressVisitor()
-{
-}
-
-
 
 
 /**

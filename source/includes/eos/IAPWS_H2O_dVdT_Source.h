@@ -21,8 +21,7 @@ class IAPWS_H2O_dVdT_Source : public Interrelation<dim> {
 
   public: // 					                     length-expansion coeff. for rock (concrete)
     IAPWS_H2O_dVdT_Source( const PropertyDatabase<dim>& p, double dt, double eL_rock=1.2e-5 );
-    ~IAPWS_H2O_dVdT_Source() {};
-    void Calculate();
+    void Calculate() override final;
     void SetTimeIncrement( double dt );
 };
 

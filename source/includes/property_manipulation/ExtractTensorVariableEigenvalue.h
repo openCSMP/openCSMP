@@ -25,8 +25,7 @@ class ExtractTensorVariableEigenvalue : public Interrelation<dim> {
                                      const char* tens_var, const char* scalar_var,
                                      uint32_t eval );
                                     
-    void Calculate();
-     
+    void Calculate() override final;     
 };
 
 

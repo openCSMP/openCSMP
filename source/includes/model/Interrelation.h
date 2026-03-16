@@ -14,7 +14,7 @@ template<uint32_t dim>
 class Interrelation {
   public:
     explicit Interrelation( const PropertyDatabase<dim>& p );
-    virtual ~Interrelation(); 
+    virtual ~Interrelation() = default;
     
     void          Name( const char* s );
 
@@ -27,6 +27,7 @@ class Interrelation {
     void          Apply( ModelSubDomain<dim,CELL>& );                     
 
     virtual void  Calculate();
+    // ^^^^^^^^^^^^^^^^^^^^^^
 
     bool          ResultWithinRange();
 

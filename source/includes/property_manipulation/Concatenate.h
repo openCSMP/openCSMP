@@ -13,10 +13,8 @@ class Concatenate : public Interrelation< dim> {
                  
     Concatenate( const PropertyDatabase<dim>& p, const char* resultProperty,
                  std::vector<std::string>& arguments);	
-                 		 
-    ~Concatenate() {};
-    
-    void Calculate();
+     
+    void Calculate() override final;
 
   private:
     Operand<dim>&  res_;

@@ -19,10 +19,10 @@ class MohrCoulombFailure : public Interrelation<dim> {
   public:
     MohrCoulombFailure( const PropertyDatabase<dim>&, double friction_angle );
                         
-    virtual ~MohrCoulombFailure();
+    ~MohrCoulombFailure() = default;
     
     /// computes the local value of result property "failure" which gets written back to the model
-    virtual void Calculate();
+    void Calculate() override final;
 
   protected:
     ///  average of the magnitude of the principal stress

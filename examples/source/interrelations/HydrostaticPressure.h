@@ -19,10 +19,10 @@ class HydrostaticPressure : public Interrelation<dim> {
                          double highest_elevation,
                          double ref_density=1000. );
                          
-    virtual ~HydrostaticPressure() {}
+    ~HydrostaticPressure() = default;
     
     /// uses p_h(z) = rho g z + patm for the calculation
-    virtual void Calculate();
+    void Calculate() override final;
 };
 
 }

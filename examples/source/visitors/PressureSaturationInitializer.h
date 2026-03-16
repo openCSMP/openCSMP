@@ -41,10 +41,10 @@ public:
       double WaterSaturationFromPhasePressures(double oil_pressure, 
                                                  double water_pressure);
     
-      virtual void Visit( Model<dim>* m ) const 
-        { std::cout <<"\nPressureSaturationInitializer:Visit(Model): "<< m->Name() <<"\n"; } 
+      void Visit( Model<dim>* m ) override final
+        { std::cout <<"\nPressureSaturationInitializer:Visit(Model): "<< m->Name() <<"\n"; }
             
-      virtual void Visit( Node<dim>* );    
+      void Visit( Node<dim>* ) override final;
       // for all other targets the method stubs in the base class are used
       // this may will prompt some warnings  
     

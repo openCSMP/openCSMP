@@ -21,8 +21,8 @@ class IAPWS_H2O_HeatTransferVelocity : public Interrelation<dim> {
 
   public: // 					                               
     IAPWS_H2O_HeatTransferVelocity( const PropertyDatabase<dim>& p );
-    ~IAPWS_H2O_HeatTransferVelocity() {};
-    void Calculate();
+
+    void Calculate() override final;
 };
 
 }

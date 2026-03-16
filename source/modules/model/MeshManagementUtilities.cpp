@@ -3283,16 +3283,16 @@ void boundaryAndTopoTypeFlagsToVTU( Model<dim>& model, const ModelSubDomain<dim,
  }
 
 template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,Element>& );
-template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Element>&  );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Element>& );
 template void boundaryAndTopoTypeFlagsToVTU( Model<1>&, const ModelSubDomain<1,Element>& );
 
 template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,Face>& );
-template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Face>&  );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,Face>& );
 template void boundaryAndTopoTypeFlagsToVTU( Model<1>&, const ModelSubDomain<1,Face>& );
 
 template void boundaryAndTopoTypeFlagsToVTU( Model<3>&, const ModelSubDomain<3,InterFace>& );
-template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,InterFace>&  );
-template void boundaryAndTopoTypeFlagsToVTU<1,InterFace>( Model<1>&, const ModelSubDomain<1,InterFace>& );
+template void boundaryAndTopoTypeFlagsToVTU( Model<2>&, const ModelSubDomain<2,InterFace>& );
+template void boundaryAndTopoTypeFlagsToVTU( Model<1>&, const ModelSubDomain<1,InterFace>& );
 
 
 

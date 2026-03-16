@@ -2762,7 +2762,6 @@ void ModelSubDomain<dim,CELL>::MinMaxOf( const csmp::Index& prop_key, double& vm
 
 
 
-/// @todo (3-D) Refactor!! This is a potential bug if wrong integration properties are used!
 template<uint32_t dim, template<uint32_t> class CELL>
 template<typename Var> requires CsmpVariable<dim, Var>
 void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
@@ -2777,7 +2776,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
 
      if ( prop_key.place == REGION || prop_key.place == BOUNDARY || prop_key.place == SPLIT_BOUNDARY )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
-                            input_prop, "use Store() to assign Region/SplitBoundary/Boundary values");
+                            input_prop, "use Region::, Boundary:: or SplitBoundary::Store() to assign Region/SplitBoundary/Boundary values");
 
      if ( prop_key.place == NODE && is_same<CELL<dim>,InterFace<dim>>::value )
        throw csmp::Exception( ERROR, "ModelSubDomain<dim,InterFace>::InputPropertyValue",

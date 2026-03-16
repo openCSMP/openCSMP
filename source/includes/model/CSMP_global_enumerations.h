@@ -246,7 +246,45 @@ inline constexpr bool isPerimeterNode( TOPOTYPE gflag ) noexcept {
             return false;
         }
    }
-} // end isPotentialPerimeterNode
+} // end isPerimeterNode
+
+
+template<uint32_t dim>
+inline constexpr bool isPerimeterNodeInsideModel( TOPOTYPE gflag ) noexcept {
+   if constexpr( dim == 3 ) {
+        switch( gflag ) {
+          case PERIMETER_SURFACE:
+          case PERIMETER_LINE:
+          case PERIMETER_POINT:
+          case INTERIOR_SURFACE:
+          case INTERIOR_LINE:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+     }
+   else if constexpr( dim == 2 ) {
+        switch( gflag ) {
+          case PERIMETER_LINE:
+          case PERIMETER_POINT:
+          case INTERIOR_LINE:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+     }
+   else {
+         switch( gflag ) {
+          case PERIMETER_POINT:
+          case INTERIOR_POINT:
+            return true;
+          default:
+            return false;
+        }
+   }
+} // end isPerimeterNode
 
 
 

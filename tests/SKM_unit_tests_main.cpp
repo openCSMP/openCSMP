@@ -172,9 +172,9 @@ constexpr bool COMMPREHENSIVE_TESTING = false;
 */
 int main()
  {
-  const bool verbose(false);
+  constexpr bool verbose(false);
 
-  const bool is_comp = (COMMPREHENSIVE_TESTING == true);
+  const bool is_comp = (COMMPREHENSIVE_TESTING == true) ? true : false;
 
   const bool test_fundamentals     = is_comp;
   const bool test_interdependent1  = is_comp;
@@ -204,7 +204,8 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
-          refactored.addTest( new SplitBoundary_Test() );
+          refactored.addTest( new ModelBasics_Test() );
+//         refactored.addTest( new SplitBoundary_Test() );
 //          refactored.addTest( new SplitBoundaryInterface_Test() );
 //          refactored.addTest( new ModelSubDomain_Test() );
 

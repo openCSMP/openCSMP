@@ -26,10 +26,8 @@ class ExtractVectorVariableLength : public Interrelation<dim> {
   public:
     ExtractVectorVariableLength( const PropertyDatabase<dim>& p,
                                  const char* vec_var, const char* to_scalar_var );
-                                    
-    ~ExtractVectorVariableLength();
     
-    void Calculate();
+    void Calculate() override final;
 };
 
 

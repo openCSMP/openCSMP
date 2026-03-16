@@ -153,11 +153,11 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     template<class Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_node_prop, const Var&, SUBDOMAIN_PART, INTERFACE_SIDE );
 
-    /// for the assignment of properties that are unique to the instance of this subclass
+    /// universal, safe alternative to Store()  to assign SplitBoundary properties (1 value per SplitBoundary()
     template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, SUBDOMAIN_PART sd=COMPLETE );
 
-    /// as InputPropertyValue, but with more selective overwrite protection for variable components that have the flag 'do_not_overwrite'
+    /// same as InputPropertyValue, but with overwrite protection for variable components that have a different flag than 'do_not_overwrite'
     template<typename Var> requires CsmpVariable<dim, Var>
     void InputPropertyValue( const char* input_prop, const Var& new_value, VARIABLE_FLAG do_not_overwrite, SUBDOMAIN_PART sd=COMPLETE );
 
@@ -169,7 +169,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
     /// changes the flag of the scalar node variable 'property' to the new value; applied either to the INSIDE or OUTSIDE of the entire splitboundary but only where the variable value is in the target range
     void ChangeNodePropertyStatusWhere( const char*, VARIABLE_FLAG, INTERFACE_SIDE, double, double );
 
-    // returns location of split boundary relative to adjacent region
+    /// returns facing direction of split boundary relative to adjacent region
     INTERFACE_SIDE  RegionLocation( const Region<dim>& );
 
     /// output length(2D) or area(3d) of the split boundary=lower dimensional region; middle refers to bisector if nodes are displaced

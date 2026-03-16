@@ -375,20 +375,24 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void VelocityAndVolumeFlux<dim,CELL>::TestRangeOfOutputVariables() const
   {
      // velocity, interstitial velocity
-     for ( uint32_t i{0U}; i<dim; i++ )
-       {
-          if ( velo_[i] < minmaxV_.first || velo_[i] > minmaxV_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
-                          "Result variable 'velocity' outside of range specified in database file." );
-
-          if ( ivelo_[i] < minmaxV_.first || ivelo_[i] > minmaxV_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
-                          "Result variable 'pore velocity' outside of range specified in database file." );
+     if ( velo_.Length() > minmaxV_.second ) {
+          velo_.Out();
+          throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+                                "Result variable 'velocity' outside of range specified in database file." );
        }
+
+     if ( ivelo_.Length() > minmaxV_.second ) {
+          ivelo_.Out();
+          throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+                                "Result variable 'pore velocity' outside of range specified in database file." );
+       }
+
      // volume flux
-     if ( flux_() < minmaxF_.first || flux_() > minmaxF_.second )
-            throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
-                          "Result variable 'volume flux' outside of range specified in database file." );
+     if ( flux_() < minmaxF_.first || flux_() > minmaxF_.second ) {
+          flux_.Out();
+          throw csmp::Exception( ERROR, "VelocityAndVolumeFlux::TestRangeOfOutputVariables:",
+                                "Result variable 'volume flux' outside of range specified in database file." );
+       }
   }
 
 

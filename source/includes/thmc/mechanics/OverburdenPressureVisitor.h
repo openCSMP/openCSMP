@@ -37,14 +37,12 @@ class OverburdenPressureVisitor : public Visitor<dim> {
   public:
     /// for the computation of nodal 'gravity force'
     OverburdenPressureVisitor( Model<dim>&, double acc_gravity ); ///< local constant for reservoir
-
-    virtual ~OverburdenPressureVisitor();
   
     /// this method computes all the element properties 'K' and 'gravity term', etc.
-    virtual void Visit( Element<dim>* );
+    void Visit( Element<dim>* ) override final;
 
     /// nothing needs to be done at the level of the model
-    virtual void Visit( Model<dim>* ) {}
+    void Visit( Model<dim>* ) override final {}
 
   private:
     double dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity );
@@ -54,7 +52,7 @@ class OverburdenPressureVisitor : public Visitor<dim> {
                          rhob_key_, phi_key_,      ///< bulk- (fluid+rock) density and porosity
                          k_key_, mu_key_, K_key_,  ///< (element) permeability, (nodal) 'fluid viscosity' and hydraulic 'conductivity' (scalar)
                          gf_key_, gt_key_;         ///< (nodal) gravity force and (elemental) 'gravity term' (vector)
-    const double       acc_gravity_;
+    const double         acc_gravity_;
     VectorVariable<dim>  gravity_;
 };
 

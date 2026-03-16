@@ -28,9 +28,7 @@ class FractureComputeVelocityVisitor : public Visitor<dim>
                                         bool withCapillaryGradient,
                                         bool withGravity );
 
-        virtual ~FractureComputeVelocityVisitor() {}
-
-        virtual void Visit(Element<dim>* element);
+        virtual void Visit(Element<dim>* element) override final;
 
     private:
         Model<dim>& model_;

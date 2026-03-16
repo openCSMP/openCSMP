@@ -17,10 +17,10 @@ class ConcentrationFluidVolumeSource : public Interrelation<dim> {
     
   public:
     ConcentrationFluidVolumeSource( const PropertyDatabase<dim>&, double rho_max );
-    ~ConcentrationFluidVolumeSource() {};
-    virtual void Calculate();
+    virtual ~ConcentrationFluidVolumeSource() = default;
     void TimeIncrement( double time_increment );
     
+    void Calculate() override final;
 };
 
 template<uint32_t dim>

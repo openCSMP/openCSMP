@@ -31,8 +31,9 @@ class MohrCoulombFailure_Visitor : public Visitor<dim> {
                                          bool positive_compressive_stress_convention = true,
                                          bool verbose = false );
 
-    virtual ~MohrCoulombFailure_Visitor();
-    virtual void Visit(Element<dim>* );
+    ~MohrCoulombFailure_Visitor() = default;
+    
+    void Visit(Element<dim>* ) override final;
 
   private:
     PropertyDatabase<dim>&  stressref_;

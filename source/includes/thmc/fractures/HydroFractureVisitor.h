@@ -20,12 +20,11 @@ template<uint32_t dim>
 class HydroFractureVisitor : public Visitor<dim> {
   public:
     explicit HydroFractureVisitor( Model<dim>& );
-    virtual ~HydroFractureVisitor();
 
-    virtual void Visit( Element<dim>* );
-    virtual void Visit( Model<dim>* );
+    void Visit( Element<dim>* ) override final;
+    void Visit( Model<dim>* ) override final;
     
-    void    HydroFracturedElements( std::vector<uint32_t>& ) const;
+    void HydroFracturedElements( std::vector<uint32_t>& ) const;
 
   private:
      BoolVector               fractured;

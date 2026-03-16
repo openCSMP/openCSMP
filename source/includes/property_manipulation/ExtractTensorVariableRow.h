@@ -25,8 +25,7 @@ class ExtractTensorVariableRow : public Interrelation<dim> {
                               const char* tens_var, const char* vector_var, 
                               uint32_t r );
                                     
-    void Calculate();
-     
+    void Calculate() override final;
 };
 
 
