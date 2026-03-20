@@ -206,16 +206,25 @@ int main()
  
         // SplitBoundary related testing
         // -----------------------------
+        // OK: refactored.addTest( new ModelSubDomain_Test() );
+        
         // read and write SplitBoundary to file (SplitBasic22: TestWriteModelToDiskAndReadBackWithInterfaces())
         // OK: refactored.addTest( new ModelBasics_Test() );
         
         // creation of 2D SplitBoundary during simulation and reading and writing from file
         // OK: refactored.addTest( new ANSYS_Model2D_Test() );
         
+        // creates 3D model with multiple split boundaries 'ModelDykeAllLayersSplit' writing it to disk and bringing it back and comparing them
+        // OK: refactored.addTest( new ANSYS_Model3D_Test() );
+        
+        // creating a model that was split already in ANSYS, matching up node-matched but disconnected boundaries
+        // OK: refactored.addTest( new ANSYS_SplitBoundaryMatch_Test() );
+        
         // insert lower-dim fracture into split boundary and test it
-        // OK: LFEM refactored.addTest( new SplitBoundary_Test() ); TODO: misses unit-normal functionality for QFEM
-//          refactored.addTest( new SplitBoundaryInterface_Test() );
-//          refactored.addTest( new ModelSubDomain_Test() );
+        // OK: LFEM refactored.addTest( new SplitBoundary_Test() ); // 2D only
+        
+        // 2 and 3D testing of creation methods for split boundaries: TODO: revisit correctness and reinstate all component tests
+        // OK: refactored.addTest( new SplitBoundaryInterface_Test() );
 
 //        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
         

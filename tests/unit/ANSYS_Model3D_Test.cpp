@@ -22,7 +22,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
         cout << "\nMeshManager_Test: ANSYS model 'ModelDykeAllLayersSplit'";
         cout << "\n-------------------------------------------------------";
         string varFileName = "ANSYS_SplitBoundaryMatch_Test-variables.txt";
-        model3d_name_ = "ModelDykeAllLayersSplit";
+        model3d_name_ = "DykeAllLayersSplit";
         model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str(), true );
  
         //writing ansys model to file deleting it and then recreating a csmp native model from the file
@@ -41,7 +41,7 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
     cout << "\nMeshManager_Test: ANSYS model 'prism_test'";
     cout << "\n-------------------------------------------------------";
     string varFileName = "CSMP-variables.txt";
-    model3d_name_ = "prism_test";
+    model3d_name_ = "DykePartiallySplit";
     model3d_ = new ANSYS_Model3D(model3d_name_.c_str(), varFileName.c_str());
 
     if ( reconstruct_from_file ) {
@@ -381,6 +381,31 @@ void create_ANSYS3D_Model( bool contiguous, bool reconstruct_from_file )
      _test( ctrSeIps == 4 );
      _test( ctrFaIps == 6 );
      
+      // reconstructing a complex model with SplitBoundary objects from file
+      // contiguous case (DykePartiallySplit)
+      {
+          bool contiguous{true};
+          bool reconstruct_from_file{false};
+          // construct model and save to file
+          create_ANSYS3D_Model( contiguous, reconstruct_from_file );
+          // reconstruct model from file
+          reconstruct_from_file = true;
+          create_ANSYS3D_Model( contiguous, reconstruct_from_file );
+      }
+      // discontiguous case (DykeSplitAll)
+      {
+          bool contiguous{false};
+          bool reconstruct_from_file{false};
+          // construct model and save to file
+          create_ANSYS3D_Model( contiguous, reconstruct_from_file );
+          // reconstruct model from file
+          reconstruct_from_file = true;
+          create_ANSYS3D_Model( contiguous, reconstruct_from_file );
+      }
+      
+      // write/read of simple and complex models
+      ModelRecoveryFromFileTest();
+     
       // Testing input / output of the model with quadratic FEM basis functions (midside nodes)
       Test_ReadWriteQuadraticFEM_Model();
      
@@ -567,35 +592,6 @@ void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
          _test( bnodes.count(CNR5) > 0 );
          bnodes.clear();
 
-         // mapping flags to values to test assignments
-// TODO: adding properties upsets indices for the access of the flagged array
-// call  UpdateParametersAndDatabase(); or  UpdateIndexReferences(); but they are private?
-
-/* CREATE PROPERTY UPSETS flagged array variable storage offset
-         model1.CreateProperty( "box flag", "none", SCALAR, NODE );
-         model1.CreateProperty( "box flag element", "none", SCALAR, ELEMENT );
-         boxFlagsToVariable( model1, "box flag", "box flag element" );
-
-         VTK_Interface<3U>  vtk_output;
-         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 0 );
-        
-         // checking whether the side boundary interior and boundary flags are identified correctly
-         //const csmp::Index  prop_key(model1.Database().StorageKey("box flag"));
-         Boundary<3U>&      bref(model1.Boundary("FRONT"));
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(FRONT)), INTERIOR );
-         bref.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
-
-         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 1 );
-
-         Boundary<3U>&      brefl(model1.Boundary("LEFT"));
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(LEFT)), INTERIOR );
-         brefl.InputPropertyValue( "box flag", makeScalar(ANY,static_cast<double>(REGION_BOUNDARY)), PERIMETER );
-
-         vtk_output.OutputDataToVTK( model1, "node_flag", "box flag", 2 );
-        
-         // testing by comparison with BOX_BOUNDARY flags
-*/
-
          // saving the model to csmp native binary file format
          model1.OutputToBinaryFile("ModelSubDomain_Test2");
         
@@ -613,7 +609,7 @@ void ANSYS_Model3D_Test::ModelRecoveryFromFileTest()
                                  true   /* binary_file */
                              );
         
-         model1.OutputToBinaryFile("ModelSubDomain_Test3");
+         modelOut.OutputToBinaryFile("ModelSubDomain_Test3");
          Model<3U>  modelIn( string("ModelSubDomain_Test3") );
 
          _test( comparitor.CompareModelSubdomains( modelOut.Region("FRAC_VOLUMES"),
