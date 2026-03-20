@@ -23,16 +23,12 @@ void SplitBoundary_Test::run()
     Test_InputNodePropertyValue("InternalBoundary_test");
     Test_Area_and_SurfaceIntegral("InternalBoundary_test");
 
-    // SKM 26/7/22 - test model received from Anne-Laure Tertois
-    //Test_InitialiseSKUA_Model(); //MISSING VARIABLES FILE
+    // TODO: needs new binary input files from Anne-Laure Tertois (AspenTech)
+    //Test_InitialiseSKUA_Model();
 
-//quadratic 2d tests
-//Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
-//Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
-//Test_NodeCorrespondance("InternalBoundary_Test_quadratic");
-
-
-
+    //quadratic 2d tests
+    Test_InputNodePropertyValue("InternalBoundary_Test_quadratic"); 
+    Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
 }
 
 

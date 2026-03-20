@@ -1,9 +1,6 @@
 #include "IsoparametricQuadraticTriangle.h"
 #include "ErrorHandler.h"
-#include <set>
-#include <fstream>
-#include <cstring>
-#include <climits>
+#include "MJL_Edge.h"
 #include "Exception.h"
 
 using namespace std;
@@ -1833,6 +1830,114 @@ vector<double> IsoparametricQuadraticTriangle::UnitNormal() const
     vc[2] /= length;
     return vc;
  }
+
+
+
+
+void  IsoparametricQuadraticTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
+ {
+     assert( face < Faces() );
+     // if this is a planar element in a 2D model, even if the edges are curved, the face normals are still the same!
+     if ( Dim() == 2 ) {
+         unrml.resize(2);
+         // nodes 1 and 2
+         if ( face == 0 ) {
+              mjl::Edge  normal( mjl::Point(XY(1,0),XY(1,1)), mjl::Point(XY(2,0),XY(2,1)) );
+              // rotating edge clockwise to find outward pointing normal to face
+              normal.Rot();
+              normal.NormalizeTo( 1. );
+              unrml[0] = normal.Destination()[0];
+              unrml[1] = normal.Destination()[1];
+              return;
+           }
+         // nodes 2 and 0
+         if ( face == 1 ) {
+              mjl::Edge  normal( mjl::Point(XY(2,0),XY(2,1)), mjl::Point(XY(0,0),XY(0,1)) );
+              normal.Rot();
+              normal.NormalizeTo( 1. );
+              unrml[0] = normal.Destination()[0];
+              unrml[1] = normal.Destination()[1];
+              return;
+           }
+         // nodes 0 and 1
+         if ( face == 2 ) {
+              mjl::Edge  normal( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
+              normal.Rot();
+              normal.NormalizeTo( 1. );
+              unrml[0] = normal.Destination()[0];
+              unrml[1] = normal.Destination()[1];
+              return;
+           }
+          return;
+       }
+   
+     // if the triangle is suspended into 3D space
+     unrml.resize(3);
+
+      // Face normals are found via the cross-product of the local element normal and the edge tangent
+      if ( face == 0 ) {
+          // nodes 1 and 2 (midpoint node 4)
+          Point<3> edge(XY(2,0)-XY(1,0), XY(2,1)-XY(1,1), XY(2,2)-XY(1,2));
+          
+          // Transverse tangent derived from shape function derivatives at the midpoint
+          Point<3> trans(
+              XY(0,0) + XY(1,0) - 2*XY(3,0) + 2*XY(4,0) - 2*XY(5,0),
+              XY(0,1) + XY(1,1) - 2*XY(3,1) + 2*XY(4,1) - 2*XY(5,1),
+              XY(0,2) + XY(1,2) - 2*XY(3,2) + 2*XY(4,2) - 2*XY(5,2)
+          );
+          
+          Point<3> enrml( crossProduct( trans, edge ) );
+          Point<3> nrml( crossProduct( enrml, edge ) );
+          nrml.NormalizeLengthTo(/* 1 */);
+
+          // (-) to flip the normal to the outside
+          unrml[0] = -nrml[0];
+          unrml[1] = -nrml[1];
+          unrml[2] = -nrml[2];
+          return;
+      }
+
+      if ( face == 1 ) {
+          // nodes 2 and 0 (midpoint node 5)
+          Point<3> edge(XY(0,0)-XY(2,0), XY(0,1)-XY(2,1), XY(0,2)-XY(2,2));
+          
+          Point<3> trans(
+              -XY(0,0) - XY(1,0) + 2*XY(3,0) + 2*XY(4,0) - 2*XY(5,0),
+              -XY(0,1) - XY(1,1) + 2*XY(3,1) + 2*XY(4,1) - 2*XY(5,1),
+              -XY(0,2) - XY(1,2) + 2*XY(3,2) + 2*XY(4,2) - 2*XY(5,2)
+          );
+          
+          Point<3> enrml( crossProduct( edge, trans ) );
+          Point<3> nrml( crossProduct( enrml, edge ) );
+          nrml.NormalizeLengthTo(/* 1 */);
+
+          unrml[0] = -nrml[0];
+          unrml[1] = -nrml[1];
+          unrml[2] = -nrml[2];
+          return;
+      }
+
+      if ( face == 2 ) {
+          // nodes 0 and 1 (midpoint node 3)
+          Point<3> edge(XY(1,0)-XY(0,0), XY(1,1)-XY(0,1), XY(1,2)-XY(0,2));
+          
+          Point<3> trans(
+              -XY(0,0) - XY(2,0) - 2*XY(3,0) + 2*XY(4,0) + 2*XY(5,0),
+              -XY(0,1) - XY(2,1) - 2*XY(3,1) + 2*XY(4,1) + 2*XY(5,1),
+              -XY(0,2) - XY(2,2) - 2*XY(3,2) + 2*XY(4,2) + 2*XY(5,2)
+          );
+          
+          Point<3> enrml( crossProduct( edge, trans ) );
+          Point<3> nrml( crossProduct( enrml, edge ) );
+          nrml.NormalizeLengthTo(/* 1 */);
+
+          unrml[0] = -nrml[0];
+          unrml[1] = -nrml[1];
+          unrml[2] = -nrml[2];
+          return;
+      }
+    
+ } // end UnitNormalToFace
 
 
 

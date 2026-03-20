@@ -203,9 +203,17 @@ int main()
     if ( test_refactoring ) {
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+ 
+        // SplitBoundary related testing
+        // -----------------------------
+        // read and write SplitBoundary to file (SplitBasic22: TestWriteModelToDiskAndReadBackWithInterfaces())
+        // OK: refactored.addTest( new ModelBasics_Test() );
         
-          refactored.addTest( new ModelBasics_Test() );
-//         refactored.addTest( new SplitBoundary_Test() );
+        // creation of 2D SplitBoundary during simulation and reading and writing from file
+        // OK: refactored.addTest( new ANSYS_Model2D_Test() );
+        
+        // insert lower-dim fracture into split boundary and test it
+        // OK: LFEM refactored.addTest( new SplitBoundary_Test() ); TODO: misses unit-normal functionality for QFEM
 //          refactored.addTest( new SplitBoundaryInterface_Test() );
 //          refactored.addTest( new ModelSubDomain_Test() );
 

@@ -80,7 +80,7 @@ public:
     virtual uint32_t  MidSideNodes() const { return 3U; }
     virtual uint32_t  CornerNodes() const  { return 3U; }
     virtual std::vector<double> UnitNormal() const;
-    // TODO: virtual void UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual void UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
     virtual void      N( std::vector<double>& N, const std::vector<double>& xyz );
     virtual void      N_AtIntegrationPoint( uint32_t ip, std::vector<double>& N );
