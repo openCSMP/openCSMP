@@ -58,8 +58,8 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( auto i{0U}; i<e.Nodes(); i++ )
-          for ( auto j{0U}; j<dim; j++ ) BFORCE[k++] = forces[i][j];
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ )
+          for ( uint32_t j{0U}; j<dim; j++ ) BFORCE[k++] = forces[i][j];
      }
    else // Element property
      {
@@ -70,15 +70,15 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
    
         // remapping the forces into the vector E_OP
         size_t k(0);
-        for ( auto i{0U}; i<e.Nodes(); i++ )
-          for ( auto j{0U}; j<dim; j++ ) BFORCE[k++] = vc[j];
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ )
+          for ( uint32_t j{0U}; j<dim; j++ ) BFORCE[k++] = vc[j];
     }
 
    // zeroing the corner nodes again (only for quadratic triangle in 2D
    // where number of midside nodes is equal to corner nodes)
    if ( e.FE_Type() == QUADRATIC_TRIANGLE ||
         e.FE_Type() == ISOPARAMETRIC_QUADRATIC_TRIANGLE )
-     for ( auto i{0U}; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
+     for ( uint32_t i{0U}; i<e.Nodes(); i++ ) BFORCE[i] = 0.;
 
 } // end GetOperands
 

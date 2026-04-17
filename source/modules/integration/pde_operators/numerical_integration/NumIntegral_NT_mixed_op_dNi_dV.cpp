@@ -143,7 +143,7 @@ void NumIntegral_NT_mixed_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<d
     MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0.0 );
     
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          detJ = e.dN_AtIntegrationPoint( DN, i );
          

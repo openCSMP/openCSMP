@@ -72,12 +72,12 @@ void NumIntegral_NT_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     TEMP.Resize( nodes, nodes );
    
     const size_t ipoints(e.IntegrationPoints());
-    for ( auto i{0U}; i<ipoints; i++ )
+    for ( uint32_t i{0U}; i<ipoints; i++ )
       {
          e.N_AtIntegrationPoint( i, this->IPOL );
          double det = e.dN_AtIntegrationPoint( this->DERIV, i );
-         for ( auto j{0U}; j<nodes; j++ )
-            for ( auto k=0; k<nodes; k++ )
+         for ( uint32_t j{0U}; j<nodes; j++ )
+            for ( uint32_t k=0; k<nodes; k++ )
               transp_ ? TEMP(j,k) = this->IPOL[j] * this->DERIV(xyz_,k) :
                         TEMP(j,k) = this->IPOL[k] * this->DERIV(xyz_,j);
         

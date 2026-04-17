@@ -36,7 +36,7 @@ class ComputeGravityTermVisitor : public Visitor<dim>
 
   private:
     Model<dim>& model_;
-    TwoPhaseModel<dim>* saturationFunctions_;
+    TwoPhaseModel<dim>* saturationFunctions_= nullptr;
     Index permeabilityKey_, singlePhaseViscosityKey_, singlePhaseDensityKey_, gravityVectorKey_;
     const double gravityAcc_;
 };

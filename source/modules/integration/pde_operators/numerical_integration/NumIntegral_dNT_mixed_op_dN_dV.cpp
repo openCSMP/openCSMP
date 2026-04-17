@@ -121,7 +121,7 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<d
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

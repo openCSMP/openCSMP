@@ -278,18 +278,18 @@ double  facetArea4( const Point<3U>& p0,
 } // end facetArea
 
 
-double  facetArea4( const Point<2U>& pt0,
-                    const Point<2U>& pt1,
-                    const Point<2U>& pt2,
-                    const Point<2U>& pt3 )
+double  facetArea4( const Point<2U>&,
+                    const Point<2U>&,
+                    const Point<2U>&,
+                    const Point<2U>& )
 {
     return 1.;
 }
 
-double  facetArea4( const Point<1U>& pt0,
-                    const Point<1U>& pt1,
-                    const Point<1U>& pt2,
-                    const Point<1U>& pt3 )
+double  facetArea4( const Point<1U>&,
+                    const Point<1U>&,
+                    const Point<1U>&,
+                    const Point<1U>& )
 {
     return 1.;
 }

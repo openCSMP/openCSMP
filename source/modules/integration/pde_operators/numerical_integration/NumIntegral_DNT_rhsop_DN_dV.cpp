@@ -114,7 +114,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
         OPMAT.Resize( e.Nodes(), 1 );
         OPMAT = 1.;
     
-	    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+	    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
 	         detJ = e.dN_AtIntegrationPoint( DN, i );
 	         DN.Transposed( DNT );
 
@@ -125,7 +125,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
 	         DNT *= OPMAT;
 
 	         // assembling contribution to right-hand vector
-	         for ( auto j{0U}; j<e.Nodes(); j++ )
+	         for ( uint32_t j{0U}; j<e.Nodes(); j++ )
 	           // multiplying with determinant and weights
 	           MathOperatorRHS<dim,CELL>::RHS[j] += DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ * multiplier(); 
 	      }
@@ -134,7 +134,7 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
     else {
         OPMAT.Resize( e.Nodes(), 1 );
     
-	    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+	    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
 	         detJ = e.dN_AtIntegrationPoint( DN, i );
 	         DN.Transposed( DNT );
 	         
@@ -143,13 +143,13 @@ void NumIntegral_DNT_rhsop_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
 	             
 	         if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) OPMAT = eoperand();
 	         else
-             for ( auto j{0U}; j<e.Nodes(); j++ ) OPMAT(j,0) = noperand[j]();
+             for ( uint32_t j{0U}; j<e.Nodes(); j++ ) OPMAT(j,0) = noperand[j]();
                
 	         // collapse matrix into righthand vector format
 	         DNT *= OPMAT;
 
 	         // assembling contribution to right-hand vector
-	         for ( auto j{0U}; j<e.Nodes(); j++ ) 
+	         for ( uint32_t j{0U}; j<e.Nodes(); j++ ) 
 	           // multiplying with determinant and weights
 	           MathOperatorRHS<dim,CELL>::RHS[j] += 
 	              DNT(j,0) * e.WeightAtIntegrationPoint(i) * detJ * multiplier(); 

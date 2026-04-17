@@ -67,13 +67,13 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
               MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == FACE ||
               MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == INTER_FACE)
            {
-            for ( auto j{0U}; j<e.Nodes(); j++ )
+            for ( uint32_t j{0U}; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
            }
          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE ||
                    MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
            {
-            for ( auto j{0U}; j<e.Nodes(); j++ )
+            for ( uint32_t j{0U}; j<e.Nodes(); j++ )
                 this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
            }
       }  

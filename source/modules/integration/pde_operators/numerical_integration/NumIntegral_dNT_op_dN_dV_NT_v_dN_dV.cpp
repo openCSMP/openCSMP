@@ -155,20 +155,20 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
       
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
               const double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
-              for ( auto i{0U}; i<dim; i++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc;
            }
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-              for ( auto i{0U}; i<dim; i++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
            }
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-              for ( auto i{0U}; i<dim; i++ ) 
-                for ( auto j{0U}; j<dim; j++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
+                for ( uint32_t j{0U}; j<dim; j++ ) 
                   MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
            }
       }
@@ -179,7 +179,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
            MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
                                                                   i, MathOperatorLHS<dim,CELL>::MTRL[i] );
       }

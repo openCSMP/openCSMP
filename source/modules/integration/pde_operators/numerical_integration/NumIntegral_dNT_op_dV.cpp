@@ -73,7 +73,7 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     const uint32_t n_nodes{ e.Nodes() };
     if ( this->MaterialOperandPlacement() == ELEMENT || this->MaterialOperandPlacement() == FACE )
       {
-        for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+        for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
           {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (B is already in global coordinates)
@@ -89,8 +89,8 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
              BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
 
              // row sum diagonalisation of matrix into right-hand vector
-             for ( auto k{0U}; k < dim; k++ )
-               for ( auto j{0U}; j<n_nodes; j++ )
+             for ( uint32_t k{0U}; k < dim; k++ )
+               for ( uint32_t j{0U}; j<n_nodes; j++ )
                  MathOperatorRHS<dim,CELL>::RHS[j] += BT_(j,k);
           }
         return;
@@ -98,14 +98,14 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
       
     if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
            {
               double detJ = e.dN_AtIntegrationPoint( B_, i, 1 );
               B_.Transposed( BT_ );
               BT_ *= MathOperatorRHS<dim,CELL>::MTRL[i];
               BT_ *= e.WeightAtIntegrationPoint(i) * detJ;
-              for ( auto k{0U}; k < dim; k++ )
-                for ( auto j{0U}; j<n_nodes; j++ )
+              for ( uint32_t k{0U}; k < dim; k++ )
+                for ( uint32_t j{0U}; j<n_nodes; j++ )
                   MathOperatorRHS<dim,CELL>::RHS[j] += BT_(j,k);
            }
        }

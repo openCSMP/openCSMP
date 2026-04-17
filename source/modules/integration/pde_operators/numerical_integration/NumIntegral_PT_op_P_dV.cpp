@@ -77,11 +77,11 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          {  
            volume = e.Volume();
              
-           int k{0};
+           uint32_t k{0};
              if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
                {   
-                 for ( auto n=0; n<e.Nodes(); n++ ) 
-                   for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
+                 for ( uint32_t n=0; n<e.Nodes(); n++ ) 
+                   for ( uint32_t i{0U}; i<nodal_degrees_of_freedom; i++ )
                      MathOperatorRHS<dim,CELL>::RHS[k++] = (MathOperatorRHS<dim,CELL>::MTRL[0](i,i) * volume) / e.Nodes();
                }
              else
@@ -95,25 +95,25 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
         // TODO: consistent formulation (not tested thus far)
        else 
          {
-            for ( auto i = 0; i<e.FE()->IntegrationPoints(); i++ )
+            for ( uint32_t i = 0; i<e.FE()->IntegrationPoints(); i++ )
               {
                 e.N_AtIntegrationPoint( i, N );
                 det = e.det_JINV_AtIntegrationPoint( i );
 
-                for ( auto j = 0; j < e.Nodes(); j++ )
-                  for ( auto k = 0; k < e.Nodes(); k++ )
+                for ( uint32_t j = 0; j < e.Nodes(); j++ )
+                  for ( uint32_t k = 0; k < e.Nodes(); k++ )
                     {
                       if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
                         RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim,CELL>::MTRL[0](0,0) * N[k] * det;
                       else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE )
                         RHS_TEMP(j,k) = N[j] * MathOperatorRHS<dim,CELL>::MTRL[i](0,0) * N[k] * det;
                     }
-                for ( auto j = 0; j < e.Nodes(); j++ )   
+                for ( uint32_t j = 0; j < e.Nodes(); j++ )   
                   RHS_TEMP(j,i) *= e.WeightAtIntegrationPoint(i);
                  
                 RHS_TEMP *= UNITY; 
                  
-                for ( auto l = 0; l < e.Nodes(); l++ )
+                for ( uint32_t l = 0; l < e.Nodes(); l++ )
                    MathOperatorRHS<dim,CELL>::RHS[l] += RHS_TEMP(l,1);
                 
                 RHS_TEMP.Resize( e.Nodes(), e.Nodes() );

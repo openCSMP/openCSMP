@@ -175,7 +175,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL<di
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
            MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
                                                                   i, MathOperatorLHS<dim,CELL>::MTRL[i] );
       }
@@ -192,13 +192,13 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL<di
     // --------------------------------------------
     NT3.resize(e.FE()->IntegrationPoints());
 
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          NT3[i].Resize(e.Nodes(),dim);
-         for ( auto j{0U}; j<e.Nodes(); j++ )
+         for ( uint32_t j{0U}; j<e.Nodes(); j++ )
            {
               // initializing vector of NT3 matrices at integration points
-              for ( auto k=0; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
+              for ( uint32_t k=0; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
               // gravity operand if so specified
               if ( with_gravity ) RDENS[i] += rrho_vec[j]() * IPOL[j]; 
            }
@@ -208,7 +208,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL<di
     // -------------------------------------------------
     NGRAD.resize(e.Nodes());
     e.NodePropertyVector( grad_key, sc_prop_vec );
-    for ( auto i{0U}; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
+    for ( uint32_t i{0U}; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
     
    // 5. get conductivity multiplier for gradient property
    // ----------------------------------------------------

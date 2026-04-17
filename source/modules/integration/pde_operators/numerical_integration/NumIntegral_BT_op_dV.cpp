@@ -79,7 +79,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
            }
       }
 
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)
@@ -120,11 +120,11 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          BT *= STR;
 
          // multiplying with determinant and weights
-         for ( auto n=0; n<BT.Rows(); n++ ) 
+         for ( uint32_t n=0; n<BT.Rows(); n++ ) 
            BT(n,0) *= e.WeightAtIntegrationPoint(i) * detJ; 
          
          // adding to result vector
-         for ( auto n=0; n<BT.Rows(); n++ ) 
+         for ( uint32_t n=0; n<BT.Rows(); n++ ) 
            MathOperatorRHS<dim,CELL>::RHS[n] += BT(n,0);
       }
 

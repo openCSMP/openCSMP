@@ -165,307 +165,330 @@ VARIABLE_TYPE variableType<csmp::FlaggedArrayVariable>()
 
 // VARIABLE PLACEMENT
 
+template<>  PLACEMENT parsePlacement<1U,Node>() noexcept { return NODE; }
+template<>  PLACEMENT parsePlacement<2U,Node>() noexcept { return NODE; }
+template<>  PLACEMENT parsePlacement<3U,Node>() noexcept { return NODE; }
 
-template<uint32_t dim, template<uint32_t> class PLACE>
-PLACEMENT parsePlacement() {
-    return UNDEFINED;
- }
+template<>  PLACEMENT parsePlacement<1U,Element>() noexcept { return ELEMENT; }
+template<>  PLACEMENT parsePlacement<2U,Element>() noexcept { return ELEMENT; }
+template<>  PLACEMENT parsePlacement<3U,Element>() noexcept { return ELEMENT; }
 
-template<>  PLACEMENT parsePlacement<1U,Node>() { return NODE; }
-template<>  PLACEMENT parsePlacement<2U,Node>() { return NODE; }
-template<>  PLACEMENT parsePlacement<3U,Node>() { return NODE; }
+template<>  PLACEMENT parsePlacement<1U,Face>() noexcept { return FACE; }
+template<>  PLACEMENT parsePlacement<2U,Face>() noexcept { return FACE; }
+template<>  PLACEMENT parsePlacement<3U,Face>() noexcept { return FACE; }
 
-template<>  PLACEMENT parsePlacement<1U,Element>() { return ELEMENT; }
-template<>  PLACEMENT parsePlacement<2U,Element>() { return ELEMENT; }
-template<>  PLACEMENT parsePlacement<3U,Element>() { return ELEMENT; }
+template<>  PLACEMENT parsePlacement<1U,Edge>() noexcept { return FACE; }
+template<>  PLACEMENT parsePlacement<2U,Edge>() noexcept { return FACE; }
+template<>  PLACEMENT parsePlacement<3U,Edge>() noexcept { return FACE; }
 
-template<>  PLACEMENT parsePlacement<1U,Face>() { return FACE; }
-template<>  PLACEMENT parsePlacement<2U,Face>() { return FACE; }
-template<>  PLACEMENT parsePlacement<3U,Face>() { return FACE; }
+template<>  PLACEMENT parsePlacement<1U,InterFace>() noexcept { return INTER_FACE; }
+template<>  PLACEMENT parsePlacement<2U,InterFace>() noexcept { return INTER_FACE; }
+template<>  PLACEMENT parsePlacement<3U,InterFace>() noexcept { return INTER_FACE; }
 
-template<>  PLACEMENT parsePlacement<1U,Edge>() { return FACE; }
-template<>  PLACEMENT parsePlacement<2U,Edge>() { return FACE; }
-template<>  PLACEMENT parsePlacement<3U,Edge>() { return FACE; }
+template<>  PLACEMENT parsePlacement<1U,Region>() noexcept { return REGION; }
+template<>  PLACEMENT parsePlacement<2U,Region>() noexcept { return REGION; }
+template<>  PLACEMENT parsePlacement<3U,Region>() noexcept { return REGION; }
 
-template<>  PLACEMENT parsePlacement<1U,InterFace>() { return INTER_FACE; }
-template<>  PLACEMENT parsePlacement<2U,InterFace>() { return INTER_FACE; }
-template<>  PLACEMENT parsePlacement<3U,InterFace>() { return INTER_FACE; }
+template<>  PLACEMENT parsePlacement<1U,Boundary>() noexcept { return BOUNDARY; }
+template<>  PLACEMENT parsePlacement<2U,Boundary>() noexcept { return BOUNDARY; }
+template<>  PLACEMENT parsePlacement<3U,Boundary>() noexcept { return BOUNDARY; }
 
-template<>  PLACEMENT parsePlacement<1U,Region>() { return REGION; }
-template<>  PLACEMENT parsePlacement<2U,Region>() { return REGION; }
-template<>  PLACEMENT parsePlacement<3U,Region>() { return REGION; }
+template<>  PLACEMENT parsePlacement<1U,SplitBoundary>() noexcept { return SPLIT_BOUNDARY; }
+template<>  PLACEMENT parsePlacement<2U,SplitBoundary>() noexcept { return SPLIT_BOUNDARY; }
+template<>  PLACEMENT parsePlacement<3U,SplitBoundary>() noexcept { return SPLIT_BOUNDARY; }
 
-template<>  PLACEMENT parsePlacement<1U,Boundary>() { return BOUNDARY; }
-template<>  PLACEMENT parsePlacement<2U,Boundary>() { return BOUNDARY; }
-template<>  PLACEMENT parsePlacement<3U,Boundary>() { return BOUNDARY; }
+template<>  PLACEMENT parsePlacement<1U,Model>() noexcept { return MODEL; }
+template<>  PLACEMENT parsePlacement<2U,Model>() noexcept { return MODEL; }
+template<>  PLACEMENT parsePlacement<3U,Model>() noexcept { return MODEL; }
 
-template<>  PLACEMENT parsePlacement<1U,SplitBoundary>() { return SPLIT_BOUNDARY; }
-template<>  PLACEMENT parsePlacement<2U,SplitBoundary>() { return SPLIT_BOUNDARY; }
-template<>  PLACEMENT parsePlacement<3U,SplitBoundary>() { return SPLIT_BOUNDARY; }
-
-template<>  PLACEMENT parsePlacement<1U,Model>() { return MODEL; }
-template<>  PLACEMENT parsePlacement<2U,Model>() { return MODEL; }
-template<>  PLACEMENT parsePlacement<3U,Model>() { return MODEL; }
-
-PLACEMENT  parsePlacement( const char* placement )
- {
-    string  splace(placement);
-    if ( splace == "NODE"                                   )   return NODE;
-    if ( splace == "ELEMENT_INTEGRATION_POINT"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "INTEGRATION_POINT"                      )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "ELEMENT_INTEGRATION_POINT"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "SECTOR_INTEGRATION_POINT"               )   return SECTOR_INTEGRATION_POINT;
-    if ( splace == "FACET_INTEGRATION_POINT"                )   return FACET_INTEGRATION_POINT;
-    if ( splace == "FACE_INTEGRATION_POINT"                 )   return FACE_INTEGRATION_POINT;
-    if ( splace == "FACE_SECTOR_INTEGRATION_POINT"          )   return FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "FACE_FACET_INTEGRATION_POINT"           )   return FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "INTER_FACE_INTEGRATION_POINT"           )   return INTER_FACE_INTEGRATION_POINT;
-    if ( splace == "INTER_FACE_SECTOR_INTEGRATION_POINT"    )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "INTER_FACE_FACET_INTEGRATION_POINT"     )   return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "FACE"                                   )   return FACE;
-    if ( splace == "INTER_FACE"                             )   return INTER_FACE;
-    if ( splace == "INTERFACE"                              )   return INTER_FACE;
-    if ( splace == "ELEMENT"                                )   return ELEMENT;
-    if ( splace == "REGION"                                 )   return REGION;
-    if ( splace == "BOUNDARY"                               )   return BOUNDARY;
-    if ( splace == "SPLIT_BOUNDARY"                         )   return SPLIT_BOUNDARY;
-    if ( splace == "MODEL"                                  )   return MODEL;
-
-    if ( splace == "node"                                   )   return NODE;
-    if ( splace == "cpoint"                                 )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "ipoint"                                 )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "integration point"                      )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "integration_point"                      )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "simplex integration point"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "simplex_integration_point"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "element integration point"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "element_integration_point"              )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "sector integration point"               )   return SECTOR_INTEGRATION_POINT;
-    if ( splace == "sector_integration_point"               )   return SECTOR_INTEGRATION_POINT;
-    if ( splace == "facet integration point"                )   return FACET_INTEGRATION_POINT;
-    if ( splace == "facet_integration_point"                )   return FACET_INTEGRATION_POINT;
-    if ( splace == "face integration point"                 )   return FACE_INTEGRATION_POINT;
-    if ( splace == "face_integration_point"                 )   return FACE_INTEGRATION_POINT;
-    if ( splace == "face sector integration point"          )   return FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "face_sector_integration_point"          )   return FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "face facet integration point"           )   return FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "face_facet_integration_point"           )   return FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "facet integration point"                )   return FACET_INTEGRATION_POINT;
-    if ( splace == "facet_integration_point"                )   return FACET_INTEGRATION_POINT;
-    if ( splace == "interface integration point"            )   return INTER_FACE_INTEGRATION_POINT;
-    if ( splace == "inter face integration point"           )   return INTER_FACE_INTEGRATION_POINT;
-    if ( splace == "inter_face_integration_point"           )   return INTER_FACE_INTEGRATION_POINT;
-    if ( splace == "interface sector integration point"     )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "inter face sector integration point"    )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "inter_face_sector_integration_point"    )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "inter face facet integration point"     )   return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "interface facet integration point"      )   return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "inter_face_facet_integration_point"     )   return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "face"                                   )   return FACE;
-    if ( splace == "interface"                              )   return INTER_FACE;
-    if ( splace == "inter face"                             )   return INTER_FACE;
-    if ( splace == "inter_face"                             )   return INTER_FACE;
-    if ( splace == "iface"                                  )   return INTER_FACE;
-    if ( splace == "element"                                )   return ELEMENT;
-    if ( splace == "elmt"                                   )   return ELEMENT;
-    if ( splace == "region"                                 )   return REGION;
-    if ( splace == "boundary"                               )   return BOUNDARY;
-    if ( splace == "splitboundary"                          )   return SPLIT_BOUNDARY;
-    if ( splace == "model"                                  )   return MODEL;
-
-    if ( splace == "Node"                                   )   return NODE;
-    if ( splace == "IntegrationPoint"                       )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "SimplexIntegrationPoint"                )   return ELEMENT_INTEGRATION_POINT;
-    if ( splace == "FacetIntegrationPoint"                  )   return FACET_INTEGRATION_POINT;
-    if ( splace == "SectorIntegrationPoint"                 )   return SECTOR_INTEGRATION_POINT;
-    if ( splace == "FaceIntegrationPoint"                   )   return FACE_INTEGRATION_POINT;
-    if ( splace == "FaceFacetIntegrationPoint"              )   return FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "FaceSectorIntegrationPoint"             )   return FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "InterFaceIntegrationPoint"              )   return INTER_FACE_INTEGRATION_POINT;
-    if ( splace == "InterFaceFacetIntegrationPoint"         )   return INTER_FACE_FACET_INTEGRATION_POINT;
-    if ( splace == "InterFaceSectorIntegrationPoint"        )   return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( splace == "Face"                                   )   return FACE;
-    if ( splace == "InterFace"                              )   return INTER_FACE;
-    if ( splace == "Element"                                )   return ELEMENT;
-    if ( splace == "Region"                                 )   return REGION;
-    if ( splace == "Boundary"                               )   return BOUNDARY;
-    if ( splace == "SplitBoundary"                          )   return SPLIT_BOUNDARY;
-    if ( splace == "Model"                                  )   return MODEL;
-
-    std::cout <<"\nparsePlacement(const char*): unable to parse: '";
-    std::cout << placement <<"' returning MODEL"<< endl;
+// Helper: normalise string (lowercase)
+static std::string normalise(std::string_view str) noexcept {
+    std::string result(str);
+    std::ranges::transform(result, result.begin(), 
+                          [](unsigned char c) { return std::tolower(c); });
+    return result;
+}
+// Static map for placement parsing
+PLACEMENT parsePlacement(const char* placement) noexcept {
+    static const std::unordered_map<std::string, PLACEMENT> placementMap{
+        // Uppercase variants
+        {"NODE", NODE},
+        {"ELEMENT_INTEGRATION_POINT", ELEMENT_INTEGRATION_POINT},
+        {"INTEGRATION_POINT", ELEMENT_INTEGRATION_POINT},
+        {"SECTOR_INTEGRATION_POINT", SECTOR_INTEGRATION_POINT},
+        {"FACET_INTEGRATION_POINT", FACET_INTEGRATION_POINT},
+        {"FACE_INTEGRATION_POINT", FACE_INTEGRATION_POINT},
+        {"FACE_SECTOR_INTEGRATION_POINT", FACE_SECTOR_INTEGRATION_POINT},
+        {"FACE_FACET_INTEGRATION_POINT", FACE_FACET_INTEGRATION_POINT},
+        {"INTER_FACE_INTEGRATION_POINT", INTER_FACE_INTEGRATION_POINT},
+        {"INTER_FACE_SECTOR_INTEGRATION_POINT", INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {"INTER_FACE_FACET_INTEGRATION_POINT", INTER_FACE_FACET_INTEGRATION_POINT},
+        {"FACE", FACE},
+        {"INTER_FACE", INTER_FACE},
+        {"INTERFACE", INTER_FACE},
+        {"ELEMENT", ELEMENT},
+        {"REGION", REGION},
+        {"BOUNDARY", BOUNDARY},
+        {"SPLIT_BOUNDARY", SPLIT_BOUNDARY},
+        {"MODEL", MODEL},
+        
+        // Lowercase variants
+        {"node", NODE},
+        {"cpoint", ELEMENT_INTEGRATION_POINT},
+        {"ipoint", ELEMENT_INTEGRATION_POINT},
+        {"integration point", ELEMENT_INTEGRATION_POINT},
+        {"integration_point", ELEMENT_INTEGRATION_POINT},
+        {"simplex integration point", ELEMENT_INTEGRATION_POINT},
+        {"simplex_integration_point", ELEMENT_INTEGRATION_POINT},
+        {"element integration point", ELEMENT_INTEGRATION_POINT},
+        {"element_integration_point", ELEMENT_INTEGRATION_POINT},
+        {"sector integration point", SECTOR_INTEGRATION_POINT},
+        {"sector_integration_point", SECTOR_INTEGRATION_POINT},
+        {"facet integration point", FACET_INTEGRATION_POINT},
+        {"facet_integration_point", FACET_INTEGRATION_POINT},
+        {"face integration point", FACE_INTEGRATION_POINT},
+        {"face_integration_point", FACE_INTEGRATION_POINT},
+        {"face sector integration point", FACE_SECTOR_INTEGRATION_POINT},
+        {"face_sector_integration_point", FACE_SECTOR_INTEGRATION_POINT},
+        {"face facet integration point", FACE_FACET_INTEGRATION_POINT},
+        {"face_facet_integration_point", FACE_FACET_INTEGRATION_POINT},
+        {"interface integration point", INTER_FACE_INTEGRATION_POINT},
+        {"inter face integration point", INTER_FACE_INTEGRATION_POINT},
+        {"inter_face_integration_point", INTER_FACE_INTEGRATION_POINT},
+        {"interface sector integration point", INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {"inter face sector integration point", INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {"inter_face_sector_integration_point", INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {"inter face facet integration point", INTER_FACE_FACET_INTEGRATION_POINT},
+        {"interface facet integration point", INTER_FACE_FACET_INTEGRATION_POINT},
+        {"inter_face_facet_integration_point", INTER_FACE_FACET_INTEGRATION_POINT},
+        {"face", FACE},
+        {"interface", INTER_FACE},
+        {"inter face", INTER_FACE},
+        {"inter_face", INTER_FACE},
+        {"iface", INTER_FACE},
+        {"element", ELEMENT},
+        {"elmt", ELEMENT},
+        {"region", REGION},
+        {"boundary", BOUNDARY},
+        {"splitboundary", SPLIT_BOUNDARY},
+        {"model", MODEL},
+        
+        // PascalCase variants
+        {"Node", NODE},
+        {"IntegrationPoint", ELEMENT_INTEGRATION_POINT},
+        {"SimplexIntegrationPoint", ELEMENT_INTEGRATION_POINT},
+        {"FacetIntegrationPoint", FACET_INTEGRATION_POINT},
+        {"SectorIntegrationPoint", SECTOR_INTEGRATION_POINT},
+        {"FaceIntegrationPoint", FACE_INTEGRATION_POINT},
+        {"FaceFacetIntegrationPoint", FACE_FACET_INTEGRATION_POINT},
+        {"FaceSectorIntegrationPoint", FACE_SECTOR_INTEGRATION_POINT},
+        {"InterFaceIntegrationPoint", INTER_FACE_INTEGRATION_POINT},
+        {"InterFaceFacetIntegrationPoint", INTER_FACE_FACET_INTEGRATION_POINT},
+        {"InterFaceSectorIntegrationPoint", INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {"Face", FACE},
+        {"InterFace", INTER_FACE},
+        {"Element", ELEMENT},
+        {"Region", REGION},
+        {"Boundary", BOUNDARY},
+        {"SplitBoundary", SPLIT_BOUNDARY},
+        {"Model", MODEL},
+    };
+    if (auto it = placementMap.find(placement); it != placementMap.end()) {
+        return it->second;
+    }
+    std::cerr << "\nparsePlacement(const char*): unable to parse: '" 
+              << placement << "' returning MODEL\n";
     return MODEL;
- }
+}
 
-std::string  parsePlacement( PLACEMENT splace )
- {
-    if ( splace == NODE                               ) return string("NODE");
-    if ( splace == ELEMENT_INTEGRATION_POINT          ) return string("ELEMENT_INTEGRATION_POINT");
-    if ( splace == FACET_INTEGRATION_POINT            ) return string("FACET_INTEGRATION_POINT");
-    if ( splace == SECTOR_INTEGRATION_POINT           ) return string("SECTOR_INTEGRATION_POINT");
-    if ( splace == FACE_INTEGRATION_POINT             ) return string("FACE_INTEGRATION_POINT");
-    if ( splace == FACE_FACET_INTEGRATION_POINT       ) return string("FACE_FACET_INTEGRATION_POINT");
-    if ( splace == FACE_SECTOR_INTEGRATION_POINT      ) return string("FACE_SECTOR_INTEGRATION_POINT");
-    if ( splace == INTER_FACE_INTEGRATION_POINT       ) return string("INTER_FACE_INTEGRATION_POINT");
-    if ( splace == INTER_FACE_FACET_INTEGRATION_POINT ) return string("INTER_FACE_FACET_INTEGRATION_POINT");
-    if ( splace == INTER_FACE_SECTOR_INTEGRATION_POINT) return string("INTER_FACE_SECTOR_INTEGRATION_POINT");
-    if ( splace == FACE                               ) return string("FACE");
-    if ( splace == INTER_FACE                         ) return string("INTER_FACE");
-    if ( splace == ELEMENT                            ) return string("ELEMENT");
-    if ( splace == REGION                             ) return string("REGION");
-    if ( splace == BOUNDARY                           ) return string("BOUNDARY");
-    if ( splace == SPLIT_BOUNDARY                     ) return string("SPLIT_BOUNDARY");
-    if ( splace == MODEL                              ) return string("MODEL");
 
-    cout <<"\nparsePlacement(PLACEMENT): unable to parse const char*: "<< splace << endl;
-    return string("MODEL");
- }
+std::string parsePlacement(PLACEMENT placement) noexcept {
+    static const std::unordered_map<PLACEMENT, std::string> reverseMap{
+        {NODE, "NODE"},
+        {ELEMENT_INTEGRATION_POINT, "ELEMENT_INTEGRATION_POINT"},
+        {FACET_INTEGRATION_POINT, "FACET_INTEGRATION_POINT"},
+        {SECTOR_INTEGRATION_POINT, "SECTOR_INTEGRATION_POINT"},
+        {FACE_INTEGRATION_POINT, "FACE_INTEGRATION_POINT"},
+        {FACE_FACET_INTEGRATION_POINT, "FACE_FACET_INTEGRATION_POINT"},
+        {FACE_SECTOR_INTEGRATION_POINT, "FACE_SECTOR_INTEGRATION_POINT"},
+        {INTER_FACE_INTEGRATION_POINT, "INTER_FACE_INTEGRATION_POINT"},
+        {INTER_FACE_FACET_INTEGRATION_POINT, "INTER_FACE_FACET_INTEGRATION_POINT"},
+        {INTER_FACE_SECTOR_INTEGRATION_POINT, "INTER_FACE_SECTOR_INTEGRATION_POINT"},
+        {FACE, "FACE"},
+        {INTER_FACE, "INTER_FACE"},
+        {ELEMENT, "ELEMENT"},
+        {REGION, "REGION"},
+        {BOUNDARY, "BOUNDARY"},
+        {SPLIT_BOUNDARY, "SPLIT_BOUNDARY"},
+        {MODEL, "MODEL"},
+    };
+
+    if (auto it = reverseMap.find(placement); it != reverseMap.end()) {
+        return it->second;
+    }
+
+    std::cerr << "\nparsePlacement(PLACEMENT): unable to parse: " 
+              << static_cast<int>(placement) << '\n';
+    return "MODEL";
+}
  
  
  
  
-bool  faceVariable( PLACEMENT place )
- {
-    if ( place == FACE ) return true;
-    if ( place == FACE_INTEGRATION_POINT ) return true;
-    if ( place == FACE_FACET_INTEGRATION_POINT ) return true;
-    if ( place == FACE_SECTOR_INTEGRATION_POINT ) return true;
-    return false;
- }
- 
- 
-bool  interFaceVariable( PLACEMENT place )
- {
-    if ( place == INTER_FACE ) return true;
-    if ( place == INTER_FACE_INTEGRATION_POINT ) return true;
-    if ( place == INTER_FACE_FACET_INTEGRATION_POINT ) return true;
-    if ( place == INTER_FACE_SECTOR_INTEGRATION_POINT ) return true;
-    return false;
- }
+bool faceVariable(PLACEMENT place) noexcept {
+    static constexpr std::array<PLACEMENT, 4> faceTypes{
+        FACE,
+        FACE_INTEGRATION_POINT,
+        FACE_FACET_INTEGRATION_POINT,
+        FACE_SECTOR_INTEGRATION_POINT
+    };
+    
+    return std::ranges::contains(faceTypes, place);
+}
+
+
+bool interFaceVariable(PLACEMENT place) noexcept {
+    static constexpr std::array<PLACEMENT, 4> interFaceTypes{
+        INTER_FACE,
+        INTER_FACE_INTEGRATION_POINT,
+        INTER_FACE_FACET_INTEGRATION_POINT,
+        INTER_FACE_SECTOR_INTEGRATION_POINT
+    };
+    
+    return std::ranges::contains(interFaceTypes, place);
+}
+
+
+bool isPlacedOnIntegrationPoint(PLACEMENT p) noexcept {
+    static constexpr std::array<PLACEMENT, 9> integrationPoints{
+        ELEMENT_INTEGRATION_POINT,
+        SECTOR_INTEGRATION_POINT,
+        FACET_INTEGRATION_POINT,
+        FACE_INTEGRATION_POINT,
+        FACE_FACET_INTEGRATION_POINT,
+        FACE_SECTOR_INTEGRATION_POINT,
+        INTER_FACE_INTEGRATION_POINT,
+        INTER_FACE_SECTOR_INTEGRATION_POINT,
+        INTER_FACE_FACET_INTEGRATION_POINT
+    };
+    
+    return std::ranges::contains(integrationPoints, p);
+}
  
  
 
-PLACEMENT intToPLACEMENT( int i )
-  {
-    if ( i == 0  )  return NODE;
-    if ( i == 1  )  return ELEMENT_INTEGRATION_POINT;
-    if ( i == 2  )  return SECTOR_INTEGRATION_POINT;
-    if ( i == 3  )  return FACET_INTEGRATION_POINT;
-    if ( i == 5  )  return FACE;
-    if ( i == 6  )  return INTER_FACE;
-    if ( i == 7  )  return ELEMENT;
-    if ( i == 8  )  return REGION;
-    if ( i == 9  )  return BOUNDARY;
-    if ( i == 10 )  return SPLIT_BOUNDARY;
-    if ( i == 11 )  return MODEL;
-    if ( i == 12 )  return FACE_INTEGRATION_POINT;
-    if ( i == 13 )  return FACE_SECTOR_INTEGRATION_POINT;
-    if ( i == 14 )  return FACE_FACET_INTEGRATION_POINT;
-    if ( i == 15 )  return INTER_FACE_INTEGRATION_POINT;
-    if ( i == 16 )  return INTER_FACE_SECTOR_INTEGRATION_POINT;
-    if ( i == 17 )  return INTER_FACE_FACET_INTEGRATION_POINT;
+PLACEMENT intToPLACEMENT(int i) noexcept {
+    static const std::unordered_map<int, PLACEMENT> intMap{
+        {0, NODE},
+        {1, ELEMENT_INTEGRATION_POINT},
+        {2, SECTOR_INTEGRATION_POINT},
+        {3, FACET_INTEGRATION_POINT},
+        {5, FACE},
+        {6, INTER_FACE},
+        {7, ELEMENT},
+        {8, REGION},
+        {9, BOUNDARY},
+        {10, SPLIT_BOUNDARY},
+        {11, MODEL},
+        {12, FACE_INTEGRATION_POINT},
+        {13, FACE_SECTOR_INTEGRATION_POINT},
+        {14, FACE_FACET_INTEGRATION_POINT},
+        {15, INTER_FACE_INTEGRATION_POINT},
+        {16, INTER_FACE_SECTOR_INTEGRATION_POINT},
+        {17, INTER_FACE_FACET_INTEGRATION_POINT},
+    };
 
-    cout <<"\nintToPlacement(int): unable to parse integer: "<< i << endl;
+    if (auto it = intMap.find(i); it != intMap.end()) {
+        return it->second;
+    }
+
+    std::cerr << "\nintToPlacement(int): unable to parse integer: " << i << '\n';
     return MODEL;
-  }
-
-
-bool isPlacedOnIntegrationPoint( PLACEMENT p )
- {
-     if ( p == ELEMENT_INTEGRATION_POINT ) return true;
-     if ( p == SECTOR_INTEGRATION_POINT ) return true;
-     if ( p == FACET_INTEGRATION_POINT ) return true;
-
-     if ( p == FACE_INTEGRATION_POINT ) return true;
-     if ( p == FACE_FACET_INTEGRATION_POINT ) return true;
-     if ( p == FACE_SECTOR_INTEGRATION_POINT ) return true;
-
-     if ( p == INTER_FACE_INTEGRATION_POINT ) return true;
-     if ( p == INTER_FACE_SECTOR_INTEGRATION_POINT ) return true;
-     if ( p == INTER_FACE_FACET_INTEGRATION_POINT ) return true;
-   
-     return false;
- }
+}
 
 
 
 // VARIABLE FLAG
 
-/**
-    Options numbered in this sequence, starting with zero are:
-    PLAIN,   ANY, INIT_GUESS,  INIT_COND,  FIELD_DATA,  PERIODIC,   DIRICH,   NEUMANN,   ROBIN,  CONSTANT_FLUX
-*/
-VARIABLE_FLAG intToVARIABLE_FLAG( int i )
-  {
-    if      ( i == 0 ) return PLAIN;
-    else if ( i == 1 ) return ANY;
-    else if ( i == 2 ) return INIT_GUESS;
-    else if ( i == 3 ) return INIT_COND;
-    else if ( i == 4 ) return FIELD_DATA;
-    else if ( i == 5 ) return PERIODIC;
-    else if ( i == 6 ) return DIRICH;
-    else if ( i == 7 ) return NEUMANN;
-    else if ( i == 8 ) return ROBIN;
-    else if ( i == 9 ) return CONSTANT_FLUX;
-    else
-    std::cerr <<"\nintToVARIABLE_FLAG(int): unable to parse integer: "<< i << std::endl;
+VARIABLE_FLAG intToVARIABLE_FLAG(int i) noexcept {
+    static const std::unordered_map<int, VARIABLE_FLAG> flagMap{
+        {0, PLAIN},
+        {1, ANY},
+        {2, INIT_GUESS},
+        {3, INIT_COND},
+        {4, FIELD_DATA},
+        {5, PERIODIC},
+        {6, DIRICH},
+        {7, NEUMANN},
+        {8, ROBIN},
+        {9, CONSTANT_FLUX},
+    };
+
+    if (auto it = flagMap.find(i); it != flagMap.end()) {
+        return it->second;
+    }
+
+    std::cerr << "\nintToVARIABLE_FLAG(int): unable to parse integer: " << i << '\n';
     return ANY;
-  }
+}
 
-/**
-    Converts the text string into any of the possible csmp::VARIABLE_FLAG
-    values.
 
-    @return if the flag cannot be parsed, the value ANY is returned.
-*/
-VARIABLE_FLAG  parseStatus( const char* status )
- {
-    std::string  sstatus(status);
-    // to increase performance, the flag values are listed in an order of decreasing likelihood
-    if ( sstatus == "ANY" )        return ANY;
-    if ( sstatus == "any" )        return ANY;
-    if ( sstatus == "PLAIN" )      return PLAIN;
-    if ( sstatus == "Plain" )      return PLAIN;
-    if ( sstatus == "plain" )      return PLAIN;
-    if ( sstatus == "DIRICH" )     return DIRICH;
-    if ( sstatus == "DIRICHLET" )  return DIRICH;
-    if ( sstatus == "Dirichlet" )  return DIRICH;
-    if ( sstatus == "NEUMANN" )    return NEUMANN;
-    if ( sstatus == "Neumann" )    return NEUMANN;
-    if ( sstatus == "PERIODIC" )   return PERIODIC;
-    if ( sstatus == "periodic" )   return PERIODIC;
-    if ( sstatus == "ROBIN" )      return ROBIN;
-    if ( sstatus == "Robin" )      return ROBIN;
-    if ( sstatus == "FIELD_DATA" ) return FIELD_DATA;
-    if ( sstatus == "field data" ) return FIELD_DATA;
-    if ( sstatus == "INIT_GUESS" )    return INIT_GUESS;
-    if ( sstatus == "initial guess" ) return INIT_GUESS;
-    if ( sstatus == "INIT_COND" )         return INIT_COND;
-    if ( sstatus == "initial condition" ) return INIT_COND;
+VARIABLE_FLAG parseStatus(const char* status) noexcept {
+    static const std::unordered_map<std::string, VARIABLE_FLAG> statusMap{
+        {"ANY", ANY},
+        {"any", ANY},
+        {"PLAIN", PLAIN},
+        {"Plain", PLAIN},
+        {"plain", PLAIN},
+        {"DIRICH", DIRICH},
+        {"DIRICHLET", DIRICH},
+        {"Dirichlet", DIRICH},
+        {"NEUMANN", NEUMANN},
+        {"Neumann", NEUMANN},
+        {"PERIODIC", PERIODIC},
+        {"periodic", PERIODIC},
+        {"ROBIN", ROBIN},
+        {"Robin", ROBIN},
+        {"FIELD_DATA", FIELD_DATA},
+        {"field data", FIELD_DATA},
+        {"INIT_GUESS", INIT_GUESS},
+        {"initial guess", INIT_GUESS},
+        {"INIT_COND", INIT_COND},
+        {"initial condition", INIT_COND},
+    };
 
-    std::cerr <<"\nparseStatus(const char*): unable to parse: '"<< status <<"'"<< std::endl;
+    if (auto it = statusMap.find(status); it != statusMap.end()) {
+        return it->second;
+    }
+
+    std::cerr << "\nparseStatus(const char*): unable to parse: '" << status << "'\n";
     return ANY;
+}
+
+
+std::string parseStatus(VARIABLE_FLAG status) noexcept {
+    static const std::unordered_map<VARIABLE_FLAG, std::string> reverseStatusMap{
+        {PLAIN, "PLAIN"},
+        {DIRICH, "DIRICH"},
+        {NEUMANN, "NEUMANN"},
+        {INIT_GUESS, "INIT_GUESS"},
+        {INIT_COND, "INIT_COND"},
+        {ROBIN, "ROBIN"},
+        {FIELD_DATA, "FIELD_DATA"},
+        {PERIODIC, "PERIODIC"},
+        {ANY, "ANY"},
+    };
+
+    if (auto it = reverseStatusMap.find(status); it != reverseStatusMap.end()) {
+        return it->second;
+    }
+
+    std::cerr << "\nparseStatus(VARIABLE_FLAG): unable to parse: " 
+              << static_cast<int>(status) <<"'\n";
+ 
+    return "ANY";
  }
 
-
-/**
-    Convert VARIABLE_FLAG from an enumeration to a string so that it can be printed to stdout.
-*/
-std::string  parseStatus( VARIABLE_FLAG status )
- {
-    if ( status == PLAIN ) return std::string("PLAIN");
-    if ( status == DIRICH ) return std::string("DIRICH");
-    if ( status == NEUMANN ) return std::string("NEUMANN");
-    if ( status == INIT_GUESS ) return std::string("INIT_GUESS");
-    if ( status == INIT_COND ) return std::string("INIT_COND");
-    if ( status == ROBIN ) return std::string("ROBIN");
-    if ( status == FIELD_DATA ) return std::string("FIELD_DATA");
-    if ( status == PERIODIC ) return std::string("PERIODIC");
-    if ( status == ANY ) return std::string("ANY");
-
-    std::cerr <<"\nparseStatus(VARIABLE_FLAG): unable to parse const char*"<< status << std::endl;
-    return std::string("ANY");
- }
 
 /**
 
@@ -478,27 +501,40 @@ Robbin conditions.
 
 The string that shall be interpreted as boundary condition.
 */
-VARIABLE_FLAG  parseCondition( std::string& s )
-{
-    std::string S(s);
-    std::transform(S.begin(),S.end(),S.begin(),::toupper);
+VARIABLE_FLAG parseCondition(std::string_view s) {
+    static const std::unordered_map<std::string, VARIABLE_FLAG> conditionMap{
+        {"PLAIN", PLAIN},
+        {"ANY", ANY},
+        {"INIT_GUESS", INIT_GUESS},
+        {"INITIAL GUESS", INIT_GUESS},
+        {"INIT_COND", INIT_COND},
+        {"INITIAL CONDITION", INIT_COND},
+        {"FIELD_DATA", FIELD_DATA},
+        {"FIELD DATA", FIELD_DATA},
+        {"PERIODIC", PERIODIC},
+        {"DIRICH", DIRICH},
+        {"DIRICHLET", DIRICH},
+        {"NEUMANN", NEUMANN},
+        {"NATURAL", NEUMANN},
+        {"ROBIN", ROBIN},
+        {"CONST_FLUX", CONSTANT_FLUX},
+        {"CONSTANT_FLUX", CONSTANT_FLUX},
+        {"CONSTANT FLUX", CONSTANT_FLUX},
+    };
 
-    if ( S == "PLAIN"                                                          ) return PLAIN;
-    if ( S == "ANY"                                                            ) return ANY;
-    if ( S == "INIT_GUESS" || S == "INITIAL GUESS"                             ) return INIT_GUESS;
-    if ( S == "INIT_COND"  || S == "INITIAL CONDITION"                         ) return INIT_COND;
-    if ( S == "FIELD_DATA" || S == "FIELD DATA"                                ) return FIELD_DATA;
-    if ( S == "PERIODIC"                                                       ) return PERIODIC;
-    if ( S == "DIRICH"     || S == "DIRICHLET"                                 ) return DIRICH;
-    if ( S == "NEUMANN"    || S == "NATURAL"                                   ) return NEUMANN;
-    if ( S == "ROBIN"                                                          ) return ROBIN;
-    if ( S == "CONST_FLUX" || S == "CONSTANT_FLUX"     || S == "CONSTANT FLUX" ) return CONSTANT_FLUX;
+    // Normalise input to uppercase
+    std::string normalized(s);
+    std::ranges::transform(normalized, normalized.begin(),
+                          [](unsigned char c) { return std::toupper(c); });
 
-    throw csmp::Exception( FATAL_ERROR,
-                           "parseCondition:",
-                           S.c_str(),
-                           ": boundary condition type specifier was not recognized");
-    return PLAIN;
+    if (auto it = conditionMap.find(normalized); it != conditionMap.end()) {
+        return it->second;
+    }
+
+    throw csmp::Exception(FATAL_ERROR,
+                         "parseCondition:",
+                         normalized.c_str(),
+                         ": boundary condition type specifier was not recognised");
 }
 
 
@@ -506,13 +542,19 @@ VARIABLE_FLAG  parseCondition( std::string& s )
 /**
     To print enum INTERFACE_SIDE.
 */
-string parseSide( INTERFACE_SIDE side )
- {
-    if ( side == INSIDE )  return "INSIDE";
-    if ( side == OUTSIDE ) return "OUTSIDE";
-    if ( side == MIDDLE )  return "MIDDLE";
+std::string parseSide(INTERFACE_SIDE side) noexcept {
+    static const std::unordered_map<INTERFACE_SIDE, std::string> sideMap{
+        {INSIDE, "INSIDE"},
+        {OUTSIDE, "OUTSIDE"},
+        {MIDDLE, "MIDDLE"},
+    };
+
+    if (auto it = sideMap.find(side); it != sideMap.end()) {
+        return it->second;
+    }
+
     return "UNDEFINED";
- }
+}
 
 
 

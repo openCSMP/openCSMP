@@ -1,0 +1,26 @@
+{
+  "version": 3,
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/out/build",
+      "toolset": "intel-cl",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "20",
+        "samg": "ON",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON"
+      }
+    },
+    {
+      "name": "windows-intel",
+      "inherits": "base",
+      "architecture": "x64",
+      "description": "Intel oneAPI for Windows (Debug & Release)",
+      "environment": {
+        "I_MPI_ROOT": "C:/Program Files (x86)/Intel/oneAPI/mpi/latest"
+      }
+    }
+  ]
+}

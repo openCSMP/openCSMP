@@ -104,18 +104,18 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CE
     //    a shape function derivative which has been modified in the 
     //    following way dNdx = -dNdy  & dNdy = dNdx
     // ------------------------------------------------------------------
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // interpolating basic property to integration points
          e.N_AtIntegrationPoint( i, IPOL );
-         for ( auto j{0U}; j<e.Nodes(); j++ )
-           for ( auto k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
+         for ( uint32_t j{0U}; j<e.Nodes(); j++ )
+           for ( uint32_t k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
            
          // global intpol. function derivative matrix and determinant of Jacobian matrix
          detJ = e.dN_AtIntegrationPoint( M, i, 1 );
          
          // copying scaled derivative matrix so that spatial derivatives are rotated by 90o
-         for ( auto j{0U}; j<e.Nodes(); j++ ) {
+         for ( uint32_t j{0U}; j<e.Nodes(); j++ ) {
               DNORTHO(0,j) = -M(1,j) * detJ; // dNdx = -dNdy P
               DNORTHO(1,j) =  M(0,j) * detJ; // dNdy =  dNdx P
            }
@@ -128,7 +128,7 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CE
          // single column matrix
          RES = M * UNITY;
          
-         for ( auto j{0U}; j<e.Nodes(); j++ ) 
+         for ( uint32_t j{0U}; j<e.Nodes(); j++ ) 
            // minus since flow is always down pressure
            MathOperatorRHS<dim,CELL>::RHS[j] += -RES[j] * e.WeightAtIntegrationPoint(i);
       }

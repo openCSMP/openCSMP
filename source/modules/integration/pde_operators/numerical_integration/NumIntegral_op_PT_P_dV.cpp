@@ -53,8 +53,8 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          // equally over all the nodes.
          if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
            {    
-              for ( auto n=0; n<e.Nodes(); n++ ) 
-                for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
+              for ( uint32_t n=0; n<e.Nodes(); n++ ) 
+                for ( uint32_t i{0U}; i<nodal_degrees_of_freedom; i++ )
                   MathOperatorRHS<dim,CELL>::RHS[k++] = (MathOperatorRHS<dim,CELL>::MTRL[0](i,i) * volume) / e.Nodes();
            }
          // if a nodal property is accumulated, the integration must be performed 
@@ -63,15 +63,15 @@ void NumIntegral_op_PT_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
           {
              // the property value which has already been interpolated to each integration
              // point is assembled
-             for ( auto n=0; n<e.FE()->IntegrationPoints(); n++ )
+             for ( uint32_t n=0; n<e.FE()->IntegrationPoints(); n++ )
                { 
                   if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == VECTOR )
-                    for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
+                    for ( uint32_t i{0U}; i<nodal_degrees_of_freedom; i++ )
                       MathOperatorRHS<dim,CELL>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                     MathOperatorRHS<dim,CELL>::MTRL[n](i,i) * volume) / e.Nodes();
                   else if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == TENSOR )
-                     for ( auto i{0U}; i<nodal_degrees_of_freedom; i++ )
-                       for ( auto j{0U}; j<nodal_degrees_of_freedom; j++ )
+                     for ( uint32_t i{0U}; i<nodal_degrees_of_freedom; i++ )
+                       for ( uint32_t j{0U}; j<nodal_degrees_of_freedom; j++ )
                          MathOperatorRHS<dim,CELL>::RHS[k++] = (e.WeightAtIntegrationPoint(i) * 
                                                                       MathOperatorRHS<dim,CELL>::MTRL[n](i,j) * volume) / e.Nodes();
               }

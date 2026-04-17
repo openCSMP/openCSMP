@@ -47,7 +47,7 @@ void NumIntegral_PT_op_dS<dim>::GetOperands( const Face<dim>& f )
     if( MathOperatorRHS<dim,Face>::MaterialOperandType() == VECTOR )
       {
         f.Read( this->MaterialOperandKey(), oper_ );
-        for ( auto i{0U}; i < dim; ++i )
+        for ( uint32_t i{0U}; i < dim; ++i )
           if ( oper_.Flag(i) != NEUMANN )
             oper_(i) = 0.;
         return;
@@ -84,14 +84,14 @@ void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
    fill( MathOperatorRHS<dim,Face>::RHS.begin(), MathOperatorRHS<dim,Face>::RHS.end(), 0. );
 
    vector<double> N;
-   for ( auto i{0U}; i < f.IntegrationPoints(); ++i )
+   for ( uint32_t i{0U}; i < f.IntegrationPoints(); ++i )
      {
        N.clear();
        f.N_AtIntegrationPoint( i, N );
        double const detJ = f.det_JINV_AtIntegrationPoint(i);
        double const weight = f.WeightAtIntegrationPoint(i);
        for( uint32_t j{0U}; j < f.Nodes(); ++j )
-         for( int df(0); df < dim; ++df )
+         for( uint32_t df(0); df < dim; ++df )
            MathOperatorRHS<dim,Face>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;
      }
 } 

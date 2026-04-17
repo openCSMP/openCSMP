@@ -148,7 +148,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
     MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
     
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
          if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
                // multiply property value it with multipliers
                ip_value = oper_eprop * eprop * -gravity;
@@ -163,7 +163,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
                // interpolating Operand value and multipliers to integration point
                e.N_AtIntegrationPoint( i, IPOL );
                double op_value(0.);
-               for ( auto j{0U}; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
+               for ( uint32_t j{0U}; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
 
                // multiply property value it with multipliers
                ip_value = op_value * eprop * -gravity;
@@ -173,7 +173,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
          ip_value *= e.WeightAtIntegrationPoint(i) 
                    * e.dN_AtIntegrationPoint( DN, i );
          //                                                                              Y-derivative
-         for ( auto j{0U}; j<e.Nodes(); j++ ) MathOperatorRHS<dim,CELL>::RHS[j] += ip_value * DN((xyz),j);
+         for ( uint32_t j{0U}; j<e.Nodes(); j++ ) MathOperatorRHS<dim,CELL>::RHS[j] += ip_value * DN((xyz),j);
       }
 
 } // end ComputeContribution

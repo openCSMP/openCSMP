@@ -104,7 +104,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
         const size_t ipoints(e.IntegrationPoints());
         E_.resize(ipoints);
         nu_.resize(ipoints);
-        for ( auto i{0U}; i<ipoints; ++i )
+        for ( uint32_t i{0}; i<ipoints; ++i )
           {
              // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
              E_[i]  = e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
@@ -114,7 +114,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )
       {
          ScalarVariable sc;
-         for ( auto i{0}; i<e.IntegrationPoints(); i++ ) {
+         for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ ) {
              e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i, sc );
              E_[i] = sc();
              e.PropertyValueAtIntegrationPoint( nu_key_, i, sc );

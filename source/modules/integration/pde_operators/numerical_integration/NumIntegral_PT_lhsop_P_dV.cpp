@@ -65,7 +65,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
          // reading density but using the porosity variable temporarily
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), phi );
-              for ( auto i{0U}; i<dim; i++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = phi();
            }
       }
@@ -87,9 +87,9 @@ void  NumIntegral_PT_lhsop_P_dV<dim,CELL>::N_to_P( const std::vector<double>& N,
  {
     mP.Resize(1,nodal_degrees_of_freedom * static_cast<uint32_t>(N.size()) );
 
-    int k{0};
-    for ( auto i{0U}; i<N.size(); i++ ) 
-      for ( auto j{0U}; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
+    uint32_t k{0};
+    for ( uint32_t i{0U}; i<N.size(); i++ ) 
+      for ( uint32_t j{0U}; j<nodal_degrees_of_freedom; j++ ) mP(0,k++ ) = N[i];
 }
 
 
@@ -110,7 +110,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
     vector<double>  N( e.Nodes() );
     double          det( 0.0 );
     
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          e.N_AtIntegrationPoint( i, N );
          det = e.det_JINV_AtIntegrationPoint( i );
@@ -119,7 +119,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
          N_to_P( N, P );
          P.Transposed( PT );
          
-         for ( auto j{0U}; j<P.Cols(); j++ )
+         for ( uint32_t j{0U}; j<P.Cols(); j++ )
            if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
              P(0,j) *= MathOperatorLHS<dim,CELL>::MTRL[0](0,0) * phi();
            else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )

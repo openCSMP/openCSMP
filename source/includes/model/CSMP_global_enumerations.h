@@ -385,25 +385,25 @@ constexpr VARIABLE_TYPE variableType( const Var& ) {
 
 
 /// variable placement
-PLACEMENT      intToPLACEMENT( int i );
-PLACEMENT      parsePlacement( const char* placement );
-std::string    parsePlacement( PLACEMENT );
-bool           faceVariable( PLACEMENT );
-bool           interFaceVariable( PLACEMENT );
+PLACEMENT      intToPLACEMENT( int i ) noexcept;
+PLACEMENT      parsePlacement( const char* placement ) noexcept;
+std::string    parsePlacement( PLACEMENT ) noexcept;
+bool           faceVariable( PLACEMENT ) noexcept;
+bool           interFaceVariable( PLACEMENT ) noexcept;
 
 /// determine from the element type whether the placement of the variable is Region, Boundary or SplitBoundary
 template<uint32_t dim, template<uint32_t> class PLACE>
-PLACEMENT      parsePlacement();
+PLACEMENT      parsePlacement() noexcept;
 
-bool           isPlacedOnIntegrationPoint( PLACEMENT );
+bool           isPlacedOnIntegrationPoint( PLACEMENT ) noexcept;
 /// variable flag
-VARIABLE_FLAG  intToVARIABLE_FLAG( int i );
-VARIABLE_FLAG  parseCondition( std::string& s );
-VARIABLE_FLAG  parseStatus( const char* status );
-std::string    parseStatus( VARIABLE_FLAG );
+VARIABLE_FLAG  intToVARIABLE_FLAG( int i ) noexcept;
+VARIABLE_FLAG  parseCondition( std::string_view );
+VARIABLE_FLAG  parseStatus( const char* status ) noexcept;
+std::string    parseStatus( VARIABLE_FLAG ) noexcept;
 
 /// returns the side of the Face or InterFace element
-std::string    parseSide( INTERFACE_SIDE );
+std::string    parseSide( INTERFACE_SIDE ) noexcept;
 
 /** @} */
 

@@ -71,25 +71,25 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL<dim>& e
       {
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
               double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
-              for ( auto i{0U}; i<dim; i++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc;
            }
          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
               VectorVariable<dim>  vc;
               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-              for ( auto i{0U}; i<dim; i++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
                 MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
            }
          else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
               TensorVariable<dim>  ts;
               e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-              for ( auto i{0U}; i<dim; i++ ) 
-                for ( auto j{0U}; j<dim; j++ ) 
+              for ( uint32_t i{0U}; i<dim; i++ ) 
+                for ( uint32_t j{0U}; j<dim; j++ ) 
                   MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
            }
       }
     else { // or an integration point variable
-         for ( auto i{0}; i<e.IntegrationPoints(); i++ )
+         for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ )
            MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
                                                                   i, MathOperatorLHS<dim,CELL>::MTRL[i] );
       }
@@ -125,7 +125,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( auto i{0}; i<e.IntegrationPoints(); i++ )
+    for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ )
       {
         // 1. Compute "diffusion" matrix DNT_K_DN_DV
         // -----------------------------------------
@@ -155,12 +155,12 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
         // 2. Compute "velocity" 'VIP' matrix NT3 NTNTNT_V at integration point
         // --------------------------------------------------------------------
         VIP.Zero();
-        for ( auto j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
+        for ( uint32_t j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
 
         e.N_AtIntegrationPoint( i, IPOL );
 
         NT3.Resize(e.Nodes(),dim);
-        for ( auto j{0U}; j<e.Nodes(); j++ ) {
+        for ( uint32_t j{0U}; j<e.Nodes(); j++ ) {
              NT3(j,0) = IPOL[j];
              if ( dim == 2U ) NT3(j,1) = IPOL[j];
              if ( dim == 3U ) NT3(j,2) = IPOL[j];

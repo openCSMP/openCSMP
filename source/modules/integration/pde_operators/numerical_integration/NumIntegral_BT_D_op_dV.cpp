@@ -98,7 +98,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     else { // Node or Constraint Point
          E_.resize(e.FE()->IntegrationPoints());
          nu_.resize(e.FE()->IntegrationPoints());
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
               MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e, Y_key_, i, E_[i] );
               MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e, nu_key_, i, nu_[i] );
            }
@@ -123,13 +123,13 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     else if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
          MathOperatorRHS<dim,CELL>::MTRL.resize(e.IntegrationPoints());
-         for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
-           for ( auto j{0U}; j<dim; ++j )
+         for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
+           for ( uint32_t j{0U}; j<dim; ++j )
              MathOperatorRHS<dim,CELL>::MTRL[i](j,j) = e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
       }
     else // if a nodal variable is dealt with
       {
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
           MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( e,
                                          MathOperatorRHS<dim,CELL>::MaterialOperandKey(), 
                                          i, MathOperatorRHS<dim,CELL>::MTRL[i] );

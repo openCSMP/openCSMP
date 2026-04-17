@@ -190,7 +190,7 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( const InterFa
     if ( piecewise_constant_material )
       {
         // looping over the integration points of the prism or hexahedral element
-        for ( auto i{0U}; i<iface.IntegrationPoints(); i++ ) {
+        for ( uint32_t i{0U}; i<iface.IntegrationPoints(); i++ ) {
              // getting global intpol. function derivative matrix and determinant of
              // byproduct Jacobian matrix (DN is already in global coordinates)
              const double detJ = iface.dN_AtIntegrationPoint( DN_, i, SCALAR );
@@ -210,7 +210,7 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::ComputeContribution( const InterFa
       }
       
     // NODE or ELEMENT_INTEGRATION_POINT material placements
-    for ( auto i{0U}; i<iface.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<iface.FE()->IntegrationPoints(); i++ ) {
          const double detJ = iface.dN_AtIntegrationPoint( DN_, i, SCALAR );
          DN_.Transposed( DNT_ );
          DNT_ *= MathOperatorLHS<dim,InterFace>::MTRL[i];

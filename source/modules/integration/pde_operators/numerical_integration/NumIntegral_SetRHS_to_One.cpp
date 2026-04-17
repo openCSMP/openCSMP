@@ -47,7 +47,7 @@ void NumIntegral_SetRHS_to_One<dim,CELL>::ComputeContribution( const CELL<dim>& 
 
    // create a RHS vector of zeros
    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
-   for ( auto i{0U}; i<e.Nodes(); i++ ) MathOperatorRHS<dim,CELL>::RHS[i] = 1.0/static_cast<double>(e.N(i)->Parents());
+   for ( uint32_t i{0U}; i<e.Nodes(); i++ ) MathOperatorRHS<dim,CELL>::RHS[i] = 1.0/static_cast<double>(e.N(i)->Parents());
 
 } // end ComputeContribution
 
