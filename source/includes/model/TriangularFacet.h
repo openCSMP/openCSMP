@@ -7,7 +7,7 @@
 namespace csmp {
 
 /**
-@file TriangularFacet.h
+@file triangularFacet.h
 @addtogroup CSMPglobalFunctions
 @{
 */

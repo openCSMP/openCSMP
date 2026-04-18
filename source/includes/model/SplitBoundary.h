@@ -106,7 +106,7 @@ class SplitBoundary : public ModelSubDomain<dim,InterFace>,
                    MeshManager<dim>&,
                    const SubDomainInfo& );  ///< contains correctly partitioned vectors and boundary faces
     
-    ~SplitBoundary() override final = default;
+    ~SplitBoundary() = default;
     SplitBoundary<dim>&  operator=( const SplitBoundary& );
 
     /// applies visitor to split boundary

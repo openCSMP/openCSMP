@@ -1,6 +1,6 @@
 #include "IsoparametricLinearPrism.h"
 #include "Exception.h"
-#include "TriangularFacet.h"
+#include "triangularFacet.h"
 #include "QuadrilateralFacet.h"
 
 using namespace std;

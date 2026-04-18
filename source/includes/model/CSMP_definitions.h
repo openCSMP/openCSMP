@@ -67,6 +67,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <vector>
 #include <unordered_set>
 #include <unordered_map>
+#include <ranges>
 
 /*
 =====================================================

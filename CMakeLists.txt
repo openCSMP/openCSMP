@@ -3,6 +3,22 @@ cmake_minimum_required(VERSION 3.29)
 # ===============================================================================================
 #  Setup of open-csmp (library, examples and tests)
 # ===============================================================================================
+# prerequisites
+# - C++23 capabable compiler (g++ 13.3 or later, CLang, Intel, NVC++)
+# - MPI 
+# - git
+# ===============================================================================================
+# usage alternatives
+#
+#   cmake .. -DCMAKE_BUILD_TYPE="Release" -Dsamg=ON
+#   make -j$(sysctl -n hw.ncpu)
+#
+#   cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -Dsamg=ON
+#   cmake --build .
+#
+# ===============================================================================================
+
+
 option(SAMG_ENABLE "Enable SAMG Solver" OFF)
 option(BUILD_TESTING "Enable building tests" ON)
 option(BUILD_EXAMPLES "Enable building examples" ON)
@@ -17,12 +33,13 @@ project(open-csmp
         DESCRIPTION "Open-CSMP++ library"
         LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Use 'lib' for shared libs default override by user
+# OFF sets default to 'lib' for shared libs as opposed to .so, .dll etc.
 option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+
 
 # ===============================================================================================
 # Dependencies: MPI
@@ -30,8 +47,9 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 find_package(MPI REQUIRED)
 message(STATUS "MPI found: ${MPI_CXX_LIBRARIES}")
 
+
 # ===============================================================================================
-# Source/Headers discovery (recursive and robust)
+# Source/Headers discovery (recursive)
 # ===============================================================================================
 # Collect .cpp sources (compile these). Collect headers for determining include dirs.
 file(GLOB_RECURSE LIBRARY_SOURCES CONFIGURE_DEPENDS
@@ -68,8 +86,9 @@ foreach(v_file ${VARIABLE_INDEX_SETS})
     endif()
 endforeach()
 
+
 # ===============================================================================================
-# Helper: extract unique directories from headers/sources for flat includes
+# Extract unique directories from headers/sources for flat includes
 # ===============================================================================================
 function(get_directories result file_list)
     set(dir_list "")
@@ -95,16 +114,19 @@ list(APPEND ALL_SUBDIRECTORIES
         ${CMAKE_CURRENT_SOURCE_DIR}/source/modules
         ${CMAKE_CURRENT_SOURCE_DIR}/source/non-GIT-files
         ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony
+        ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg
 )
 list(REMOVE_DUPLICATES ALL_SUBDIRECTORIES)
 
+
 # ===============================================================================================
-# Filter out SAMG source files by default (we add them back conditionally later)
+# Filter out SAMG source files by default (they are added back conditionally later)
 # ===============================================================================================
 if(NOT SAMG_ENABLE)
     list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX ".*SAMG.*")
     list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX ".*samg.*")
 endif()
+
 
 # ===============================================================================================
 # Core Library Definition
@@ -117,11 +139,13 @@ target_include_directories(open-csmp-core PUBLIC
         $<INSTALL_INTERFACE:include/open-csmp>
 )
 
+
 # ===============================================================================================
 # Third Party Libraries (Built as part of the project)
 # ===============================================================================================
 
 # 1. IAPS H2O EOS (if sources exist)
+# ----------------------------------
 file(GLOB_RECURSE IAPS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/iaps_h2o_eos/*.cpp")
 list(FILTER IAPS_SRC EXCLUDE REGEX "/deprecated/")
 if(IAPS_SRC)
@@ -132,18 +156,18 @@ else()
     message(STATUS "IAPS H2O EOS not found - skipping.")
 endif()
 
-# 2. JPEG
-file(GLOB_RECURSE JPEG_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg/*.cpp")
-list(FILTER JPEG_SRC EXCLUDE REGEX "/deprecated/")
-if(JPEG_SRC)
-    add_library(jpeg STATIC ${JPEG_SRC})
-    target_include_directories(jpeg PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg)
-    target_link_libraries(open-csmp-core PUBLIC jpeg)
-else()
-    message(STATUS "JPEG sources not found - skipping.")
-endif()
+# 2. JPEG (libjpeg-turbo would be better but does not lnk with Rosetta) 
+# ---------------------------------------------------------------------
+file(GLOB JPEG_SOURCE_FILES CONFIGURE_DEPENDS
+    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg/*.cpp"
+    RECURSE
+)
+list(FILTER JPEG_SOURCE_FILES EXCLUDE REGEX "thirdparty/jpeg/deprecated/.*")
+add_library(jpeg STATIC ${JPEG_SOURCE_FILES})
+target_include_directories(jpeg PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg")
 
 # 3. Eigen (header-only)
+# ---------------------------------------------------------------------
 set(EIGEN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/eigen")
 if(CMAKE_GENERATOR MATCHES "Xcode")
     set(EIGEN_PATH "${EIGEN_PATH}/eigen")
@@ -153,6 +177,7 @@ target_include_directories(eigen_lib INTERFACE ${EIGEN_PATH})
 target_link_libraries(open-csmp-core PUBLIC eigen_lib)
 
 # 4. CGNS & RapidXML (Interface only)
+# ---------------------------------------------------------------------
 add_library(cgns INTERFACE)
 target_include_directories(cgns INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cgns)
 target_link_libraries(open-csmp-core PUBLIC cgns)
@@ -161,26 +186,9 @@ add_library(rapidxml INTERFACE)
 target_include_directories(rapidxml INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/rapidxml)
 target_link_libraries(open-csmp-core PUBLIC rapidxml)
 
-# 5. Catch2 (compile from bundled sources)
-set(CATCH_CONFIG_CONSOLE_WIDTH 80)
-configure_file(
-        ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/Catch2/src/catch2/catch_user_config.hpp.in
-        ${CMAKE_CURRENT_BINARY_DIR}/catch2/catch_user_config.hpp
-        @ONLY
-)
-file(GLOB_RECURSE CATCH2_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/Catch2/src/catch2/*.cpp")
-if(CATCH2_SRC)
-    add_library(Catch2 STATIC ${CATCH2_SRC})
-    target_include_directories(Catch2 PUBLIC
-            ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/Catch2/src
-            ${CMAKE_CURRENT_BINARY_DIR}
-    )
-else()
-    message(WARNING "Catch2 sources not found - tests may fail to build.")
-endif()
-
 # Link Core to basic dependencies
 target_link_libraries(open-csmp-core PUBLIC MPI::MPI_CXX)
+
 
 # ===============================================================================================
 # Feature: SAMG Solver
@@ -224,6 +232,7 @@ if(SAMG_ENABLE)
     endif()
 endif()
 
+
 # ===============================================================================================
 # Optimization
 # ===============================================================================================
@@ -233,38 +242,91 @@ if(IPO_SUPPORTED)
     set_target_properties(open-csmp-core PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
 endif()
 
+
 # ===============================================================================================
 # Examples Executable
 # ===============================================================================================
 if(BUILD_EXAMPLES)
+    # 1. Collect Example Sources
     file(GLOB_RECURSE EXAMPLES_SRC
-            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.h"
-            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.h"
     )
-    list(APPEND EXAMPLES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony/plf_colony.h")
-    list(APPEND EXAMPLES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp")
-    list(APPEND EXAMPLES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h")
-    list(APPEND EXAMPLES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp")
-    list(APPEND EXAMPLES_SRC "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h")
-    # Exclude deprecated directory
+
+    # 2. Including CSMP API Library Headers + Tests because they are demo'ed in examples
+    list(APPEND EXAMPLES_SRC 
+        ${LIBRARY_HEADERS}
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
+    )
+
+    # 3. Exclude deprecated directory
     list(FILTER EXAMPLES_SRC EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/deprecated/.*")
 
+    # 4. Create Executable
     if(EXAMPLES_SRC)
-        add_executable(open-csmp-examples ${EXAMPLES_SRC} )
+        add_executable(open-csmp-examples ${EXAMPLES_SRC})
+        
         target_include_directories(open-csmp-examples PRIVATE
-                ${CMAKE_CURRENT_SOURCE_DIR}/examples/source
-                ${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations
-                ${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors
-                ${CMAKE_CURRENT_SOURCE_DIR}/tests
-                ${EIGEN_INCLUDE_DIR}
+        	"${CMAKE_CURRENT_SOURCE_DIR}"
+       	"${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
+       	"${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
+          	"${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
+   		 "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
+    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
+            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+            "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
         )
-        target_link_libraries(open-csmp-examples PRIVATE open-csmp-core Catch2)
+        # This links libjpeg-turbo or standard libjpeg
+        target_link_libraries(open-csmp-examples PRIVATE open-csmp-core jpeg )
     else()
         message(STATUS "No example sources found.")
     endif()
 endif()
+
 
 # ===============================================================================================
 # Testing (unit and integration tests)
@@ -290,7 +352,7 @@ if(BUILD_TESTING)
                                 ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration
                                 ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony
     )
-    target_link_libraries(open-csmp-tests PRIVATE open-csmp-core Catch2)
+    target_link_libraries(open-csmp-tests PRIVATE open-csmp-core )
 
     # Directory to place test runtime data
     set(TEST_WORKING_DIR "${CMAKE_BINARY_DIR}/tests_runtime")
@@ -314,6 +376,7 @@ if(BUILD_TESTING)
     set_tests_properties(open-csmp-tests PROPERTIES WORKING_DIRECTORY ${TEST_WORKING_DIR})
 
 endif()
+
 
 # ===============================================================================================
 # Installation
@@ -361,6 +424,7 @@ endif()
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/continuous_integration_testing")
 install(DIRECTORY continuous_integration_testing/ DESTINATION continuous_integration_testing)
 endif()
+
 
 # ===============================================================================================
 # Diagnostics / Summary of what was found

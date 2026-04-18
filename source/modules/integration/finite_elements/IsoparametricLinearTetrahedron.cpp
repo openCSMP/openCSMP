@@ -1,7 +1,7 @@
 #include "IsoparametricLinearTetrahedron.h"
 //#include <climits>
 #include "Exception.h"
-#include "TriangularFacet.h"
+#include "triangularFacet.h"
 
 using namespace std;
 

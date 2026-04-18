@@ -5,6 +5,7 @@
 
 #ifdef CSMP_WITH_IMAGE_OUTPUT
 #include "ColorPalette.h"
+//#include </opt/homebrew/include/jpeglib.h>
 #include "jpeglib.h"
 #endif
 
@@ -1487,83 +1488,66 @@ void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep,
       }
     double  old_range = old_max - old_min;
     double  new_range = 255.0; 
-    double  out_val; 
 
     // ----------------------------------------------------------------------------------
-    // JPG Stuff
+    // JPG Export (C++20 RAII Style)
     // ----------------------------------------------------------------------------------
-    // creating RGB scanline memory for central grid portion without frame
-    JSAMPROW          row_pointer[1];
-    int32_t             image_components = 3;
-    if ( greyscale )  image_components = 1;
-    int32_t             row_stride = size_x * image_components;
-  
-    // allocating image memory buffer and storing RGB values within it  
-    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
 
-      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
-        for ( int32_t j=0; j<size_x; j++ )
-          {
-             // scaling value to 0-256 scale
-             if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
-             else           out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
-             if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
-             else
-               {
-                  // getting red,green, blue color values
-                  rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
-               }
-          }
- 
-    // setting up the jpg storage structures
-    jpeg_compress_struct  cinfo;
-    jpeg_error_mgr        jerr;
-    
-    // initializing the error manager in the compression object
-    cinfo.err = jpeg_std_error( &jerr );
-    jpeg_create_compress( &cinfo );
-    
-    FILE*  outfile;
-    if ((outfile = fopen( name.c_str(), "wb")) == NULL ) 
-      {
-          cout <<"\nFiniteDifferenceGrid:SaveToJPG: cannot open outputfile: "<< name << endl;
-          return;
-      }
-    jpeg_stdio_dest( &cinfo, outfile );
-    
-    // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32_t>(size_x);
-    cinfo.image_height     = static_cast<uint32_t>(size_y);
-    cinfo.input_components = 3;        // color values per pixel
-    cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
-    if ( greyscale ) 
-      {
-        cinfo.input_components = 1;        // color values per pixel
-        cinfo.in_color_space   = JCS_GRAYSCALE; 
-      }
+    int32_t image_components = greyscale ? 1 : 3;
+    int32_t row_stride = size_x * image_components;
 
-    // assigning the values
-    jpeg_set_defaults( &cinfo );
-    
-    // writing data to file: TRUE for complete jpg interchange datastream
-    jpeg_start_compress( &cinfo, TRUE );
-    while ( cinfo.next_scanline < cinfo.image_height )
-      {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
-          jpeg_write_scanlines( &cinfo, row_pointer, 1 );
-      }
-    jpeg_finish_compress( &cinfo );
-    fclose( outfile );
+    // Use std::vector for automatic memory management
+    std::vector<unsigned char> image_buffer(static_cast<size_t>(size_x * size_y * image_components));
 
-    // cleanup
-    jpeg_destroy_compress( &cinfo );  
-    delete[] image_buffer;
+    size_t incr = 0;
+    for (int32_t i = size_y - 1; i >= 0; i--) {
+        for (int32_t j = 0; j < size_x; j++) {
+            // Pre-calculate common factors if possible, but keeping your logic:
+            double val = (*this)(i, j);
+            double out_val = sqrt_of ? ((std::sqrt(val) - old_min) / old_range) * new_range
+                                    : ((val - old_min) / old_range) * new_range;
 
-    cout <<"\n'" << name <<"' written successfully..." << endl;
-          
+            if (greyscale) {
+                image_buffer[incr++] = static_cast<unsigned char>(out_val);
+            } else {
+                rgb_colorizer.GiveRgb(static_cast<float>(out_val), colors);
+                image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
+                image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
+                image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
+            }
+        }
+    }
+
+    // RAII for FILE pointer
+    std::unique_ptr<FILE, decltype(&fclose)> outfile(fopen(name.c_str(), "wb"), &fclose);
+    if (!outfile) {
+        std::cerr << "Error: Cannot open " << name << std::endl;
+        return;
+    }
+
+    jpeg_compress_struct cinfo;
+    jpeg_error_mgr jerr;
+
+    cinfo.err = jpeg_std_error(&jerr);
+    jpeg_create_compress(&cinfo);
+    jpeg_stdio_dest(&cinfo, outfile.get());
+
+    cinfo.image_width  = static_cast<JDIMENSION>(size_x);
+    cinfo.image_height = static_cast<JDIMENSION>(size_y);
+    cinfo.input_components = image_components;
+    cinfo.in_color_space   = greyscale ? JCS_GRAYSCALE : JCS_RGB;
+
+    jpeg_set_defaults(&cinfo);
+    jpeg_start_compress(&cinfo, TRUE);
+
+    while (cinfo.next_scanline < cinfo.image_height) {
+        JSAMPROW row_pointer = &image_buffer[ cinfo.next_scanline * static_cast<JDIMENSION>(row_stride) ];
+        jpeg_write_scanlines(&cinfo, &row_pointer, 1);
+    }
+
+    jpeg_finish_compress(&cinfo);
+    jpeg_destroy_compress(&cinfo);
+
  } // end SaveToJPG
 
 

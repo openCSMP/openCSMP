@@ -842,7 +842,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
   {
-    for (auto i = 0; i < RHS.size(); i++)
+    for (uint32_t i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
   }
 
@@ -862,20 +862,20 @@ void MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double
 
     const size_t dof(IDT.size());
 
-    for (auto i{0U}; i < dof; i++)
+    for (uint32_t i{0U}; i < dof; i++)
       IDT[i] += this->TestOperandOffset();
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_)
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         rhs[IDT[i]] *= RHS[i] * factor_;
 
     else if (add_accumulate_ || add_accumulate_later_)
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         rhs[IDT[i]] += RHS[i] * factor_;
 
     else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         rhs[IDT[i]] -= RHS[i] * factor_;
     else
       throw csmp::Exception(ERROR,
@@ -883,44 +883,6 @@ void MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<double
         "accumulation instructions could not be parsed.");
   }
 
-/*
-  template<uint32_t dim>
-  void MathOperatorRHS<dim,CELL>::AssignToGlobal(const Face<dim>& e, vector<double>& rhs)
-  {
-    // map local to global indexes for test(basic) operands
-    const size_t nodes(e.Nodes());
-
-    IDT.resize(nodes);
-    for (auto i{0U}; i < nodes; i++)
-      IDT[i] = e.N(i)->Idx();
-
-    if (TestOperandType() != SCALAR)
-      transformNodeIndexVector(dim, TestOperandKey(), IDT);
-
-    const size_t dof(IDT.size());
-
-    for (auto i{0U}; i < dof; i++)
-      IDT[i] += this->TestOperandOffset();
-
-    // perform assignment from local matrix to global matrix
-
-    if (multiply_accumulate_)
-      for (auto i{0U}; i < dof; i++)
-        rhs[IDT[i]] *= RHS[i] * factor_;
-
-    else if (add_accumulate_ || add_accumulate_later_)
-      for (auto i{0U}; i < dof; i++)
-        rhs[IDT[i]] += RHS[i] * factor_;
-
-    else if (subtract_accumulate_ || subtract_accumulate_later_)
-      for (auto i{0U}; i < dof; i++)
-        rhs[IDT[i]] -= RHS[i] * factor_;
-    else
-      throw csmp::Exception(ERROR,
-        "MathOperatorRHS<dim,CELL>::AssignToGlobal(Face)",
-        "accumulation instructions could not be parsed.");
-  }
-*/
 
 
 
@@ -946,26 +908,26 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
 
     const size_t dof(IDT.size());
 
-    for (auto i{0U}; i < dof; i++) {
+    for (uint32_t i{0U}; i < dof; i++) {
       IDT[i] += this->TestOperandOffset();
        IDT[i] = DOF_indexes[IDT[i]]; //-> to the global index 
     }
 
     // perform assignment from local matrix to global matrix
     if (multiply_accumulate_) {
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] *= RHS[i] * factor_;
         }
     }
     else if (add_accumulate_ || add_accumulate_later_){
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] += RHS[i] * factor_;
         }
     }
     else if (subtract_accumulate_ || subtract_accumulate_later_) {
-      for (auto i{0U}; i < dof; i++)
+      for (uint32_t i{0U}; i < dof; i++)
         if (IDT[i] != NULL_IDX) {
           rhs[IDT[i]] -= RHS[i] * factor_;
         }
@@ -1008,25 +970,27 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
   is a vector or tensor property.
   */
 
-void transformNodeIndexVector( const csmp::Index& idx, vector<size_t>& N )
-  {
-    assert(!N.empty());
-    assert(idx.type != SCALAR);
+void transformNodeIndexVector(const csmp::Index& idx, std::vector<size_t>& N) {
+    if (N.empty() || idx.type == SCALAR) return;
 
-    // creating a running index for decrementation
-    const auto length = idx.dataDepth;
-    const auto N_size = N.size() - 1;
-    
-    // for all variable types
-    N.resize( N.size() * length, 0U ); // new size of N vector ( length of array * number of nodes )
-    
-    for ( auto i=N_size, k=N.size()-1; i-- > 0; )
-      // for current node, cycle through all variable components
-      for ( uint32_t j{0U}; j < length; ++j )
-        N[ k-- ] = ((N[i] + 1) * length - j) - 1;
+    const size_t num_nodes = N.size();
+    const size_t length = static_cast<size_t>(idx.dataDepth);
 
-  } // end transformNodeIndexVector
+    // 1. Resize upfront
+    N.resize(num_nodes * length);
 
+    // 2. Work backwards to avoid overwriting data we haven't read yet
+    // Use ptrdiff_t to safely handle the decrement down to 0
+    for (auto i = static_cast<std::ptrdiff_t>(num_nodes) - 1; i >= 0; --i) {
+        size_t original_val = N[static_cast<size_t>(i)];
+        
+        for (size_t j = 0; j < length; ++j) {
+            // This formula maps Node Index -> Component Index
+            // Example: Node 5, Length 3 -> Indices 15, 16, 17
+            N[static_cast<size_t>(i) * length + j] = (original_val * length) + j;
+        }
+    }
+}
 
 
 template class MathOperatorRHS<1U>;

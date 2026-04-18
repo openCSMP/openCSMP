@@ -3,8 +3,6 @@
 #include "VectorVariable.h"
 #include "TensorVariable.h"
 
-#include <chrono>
-
 using namespace std;
 
 namespace csmp {
@@ -90,32 +88,43 @@ To pre-process DN matrices in multi-DOF computations.
 
     @test OK SKM refactored and retested 2/12/2014
 */
-void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
- {
-    assert( B.Cols() == nodes );
-    const auto dof(B.Cols() * 2U);
+void dN_To2DOF(uint32_t nodes, DenseMatrix<DM_MIN>& B)
+{
+    assert(B.Cols() == nodes);
 
-    // farming old matrix out into entries of new one
-    // starting with last row
-    B.Resize(3,B.Cols() * 2U);
-    for ( auto i{0U}; i<nodes; i++ )
-      {
-         B(2,i*2)   = B(1,i);
-         B(2,i*2+1) = B(0,i);
-      }
-    
-    // spreading out first row
-    for ( int i=nodes; i>0; i-- ) B(0,(i-1)*2) = B(0,(i-1));
-    // zeroing intermediate positions
-    for ( auto i=1; i<dof; i+=2 ) B(0,i) = 0.;
-      
-    // spreading out second row
-    for ( int i=nodes; i>0; i-- ) B(1,(i-1)*2+1) = B(1,(i-1));
-    // zeroing intermediate positions
-    for ( auto i{0U}; i<dof; i+=2 ) B(1,i) = 0.;
-      
- } // end DNto2DOF
+    const uint32_t total_cols = nodes * 2;
 
+    // 1. Expand the matrix structure
+    // Since stride is adjusted, Row 0 and Row 1 data now occupy the 
+    // first 'n' columns of their respective (now wider) rows.
+    B.Resize(3, total_cols);
+
+    // 2. Row 2: Farming (dN/dy and dN/dx components)
+    // Row 2 was essentially empty/new, so we loop forward safely.
+    for (uint32_t i = 0; i < nodes; ++i) {
+        B(2, i * 2)     = B(1, i); // Usually dN/dy
+        B(2, i * 2 + 1) = B(0, i); // Usually dN/dx
+    }
+
+    // 3. Row 0: Spread out dN/dx and zero intermediate slots
+    // MUST loop backward because B(0, 2*i) would overwrite B(0, i) forward.
+    for (uint32_t i = nodes; i > 0; --i) {
+        B(0, (i - 1) * 2) = B(0, i - 1);
+    }
+    // Zero out the odd-indexed columns (0, 1, 0, 3, 0, 5...)
+    for (uint32_t i = 1; i < total_cols; i += 2) {
+        B(0, i) = 0.0;
+    }
+
+    // 4. Row 1: Spread out dN/dy and zero intermediate slots
+    for (uint32_t i = nodes; i > 0; --i) {
+        B(1, (i - 1) * 2 + 1) = B(1, i - 1);
+    }
+    // Zero out the even-indexed columns (0, 0, 2, 0, 4, 0...)
+    for (uint32_t i = 0; i < total_cols; i += 2) {
+        B(1, i) = 0.0;
+    }
+} // end dN_To2DOF
 
 
 
@@ -126,55 +135,57 @@ void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
     
     @test OK SKM retested 2/12/2014
 */
-void  dN_To3DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B )
- {
-    assert( B.Cols() == nodes );
-    const auto dof = B.Cols() * 3U;
-    const auto old_nodes = B.Cols();
+void dN_To3DOF(uint32_t nodes, DenseMatrix<DM_MIN>& B)
+{
+    assert(static_cast<uint32_t>(B.Cols()) == nodes);
+    const uint32_t total_cols = nodes * 3U;
 
-    B.Resize(6,dof);
+    // 1. Expand matrix to 6 rows and 3*nodes columns
+    B.Resize(6, total_cols);
     
-    // inserting values into the extra three bottom rows
-    for ( auto i{0U}; i<old_nodes; i++ )
-      {
-         // fourth row
-         B(3,i*3)   = B(1,i); // d/dy
-         B(3,i*3+1) = B(0,i); // d/dx
-         B(3,i*3+2) = 0.0;    // 0
-         
-         // fifth row
-         B(4,i*3)   = 0.0;    // 0
-         B(4,i*3+1) = B(2,i); // d/dz
-         B(4,i*3+2) = B(1,i); // d/dy
+    // 2. Bottom Rows (3, 4, 5): Farming values forward
+    // These rows handle the shear components of the strain-displacement matrix.
+    for (uint32_t i = 0U; i < nodes; ++i) {
+        const uint32_t base = i * 3U;
 
-         // sixth row
-         B(5,i*3)   = B(2,i); // d/dz
-         B(5,i*3+1) = 0.0;    // 0
-         B(5,i*3+2) = B(0,i); // d/dx
-      }
+        // Row 3: gamma_xy (dN/dy, dN/dx, 0)
+        B(3, base)      = B(1, i); 
+        B(3, base + 1U) = B(0, i); 
+        B(3, base + 2U) = 0.0;
+         
+        // Row 4: gamma_yz (0, dN/dz, dN/dy)
+        B(4, base)      = 0.0;
+        B(4, base + 1U) = B(2, i); 
+        B(4, base + 2U) = B(1, i); 
+
+        // Row 5: gamma_xz (dN/dz, 0, dN/dx)
+        B(5, base)      = B(2, i); 
+        B(5, base + 1U) = 0.0;
+        B(5, base + 2U) = B(0, i); 
+    }
       
-    // spreading out the values in the first three rows
-    // (going backward in order not to overwrite values in old
-    //  position, while these are still needed)
-    for ( auto i=(old_nodes-1U); (i+1U)>0U; i-- )
-      {
-         // first row
-         B(0,i*3)   = B(0,i);
-         B(0,i*3+1) = 0.0;
-         B(0,i*3+2) = 0.0; // zeros in the first row
+    // 3. Top Rows (0, 1, 2): Spreading values backward
+    // These rows handle the normal components (epsilon_xx, yy, zz).
+    for (uint32_t i = nodes; i > 0U; --i) {
+        const uint32_t old_idx = i - 1U;
+        const uint32_t base    = old_idx * 3U;
+
+        // Row 0: Spread dN/dx
+        B(0, base)      = B(0, old_idx);
+        B(0, base + 1U) = 0.0;
+        B(0, base + 2U) = 0.0;
          
-         // second row
-         B(1,i*3+1) = B(1,i);
-         B(1,i*3)   = 0.0;
-         B(1,i*3+2) = 0.0; // zeros in the first row
+        // Row 1: Spread dN/dy
+        B(1, base + 1U) = B(1, old_idx);
+        B(1, base)      = 0.0;
+        B(1, base + 2U) = 0.0;
          
-         // third row
-         B(2,i*3+2) = B(2,i);
-         B(2,i*3)   = 0.0;
-         B(2,i*3+1) = 0.0; // zeros in the first row
-      }
-    
- } // end dN_To3DOF
+        // Row 2: Spread dN/dz
+        B(2, base + 2U) = B(2, old_idx);
+        B(2, base)      = 0.0;
+        B(2, base + 1U) = 0.0;
+    }
+} // end dN_To3DOF
 
 
 

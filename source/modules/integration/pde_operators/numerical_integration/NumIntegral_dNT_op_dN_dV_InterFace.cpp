@@ -134,12 +134,20 @@ void NumIntegral_dNT_op_dN_dV_InterFace<dim>::InitialiseCoordinateMatrix( const 
 
      // assigning the outside nodes extruding their position by interface thickness along the unit normal
      // -------------------------------------------------------------------------------------------------
-     uint32_t node{ 0U };
-     for ( int32_t i{ static_cast<int32_t>(n_side_nodes) * 2 - 1 }; i>=0; i-- ) {
-          Point<dim> extr_coord = iface.N(static_cast<uint32_t>(i),OUTSIDE)->Coordinate() + unrml;
-          XYX.AssignRow( node++, extr_coord );
-       }
-    
+      uint32_t node_idx = 0;
+      const auto total_nodes = iface.Nodes();
+
+      // Create a view of indices from (total_nodes - 1) down to 0
+      auto reversed_indices = views::iota(0u, total_nodes) | views::reverse;
+
+      for (auto i : reversed_indices) {
+          // Check if the node exists before accessing to prevent crashes
+          if (auto* node_ptr = iface.N(static_cast<uint32_t>(i), OUTSIDE)) {
+              Point<dim> extr_coord = node_ptr->Coordinate() + unrml;
+              XYX.AssignRow(node_idx++, extr_coord);
+          }
+      }
+
  } // end InitialiseCoordinateMatrix
 
 

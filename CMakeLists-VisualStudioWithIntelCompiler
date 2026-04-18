@@ -22,7 +22,7 @@ project(open-csmp
         DESCRIPTION "OpenCSMP library from open-csmp-2024" 
         LANGUAGES CXX)
 
-# Set C++20 as the standard
+# Set C++23 as the standard
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 

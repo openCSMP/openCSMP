@@ -644,7 +644,7 @@ void StaggeredGridStokesSolver_Example::AssignNoSlipBoundaryConditions( Model<3U
          // re-imposing no-slip constraints on side edges
          for ( auto it=stokes_flow_domain.PerimeterNodesBegin(); it!=stokes_flow_domain.NodesEnd(); ++it ) {
               const BOX_BOUNDARY edge( (*it)->AtBoundary() );
-              if ( edge == EDGE1 or edge == EDGE3 or edge == EDGE9 or edge == EDGE11 or (edge <= CNR1 and edge >= CNR8) ) {
+              if ( edge == EDGE1 || edge == EDGE3 || edge == EDGE9 || edge == EDGE11 || (edge <= CNR1 &&edge >= CNR8) ) {
                    (*it)->Status( nvy_key, DIRICH );
                    (*it)->Status( nvz_key, DIRICH );
                }
@@ -662,7 +662,7 @@ void StaggeredGridStokesSolver_Example::AssignNoSlipBoundaryConditions( Model<3U
          model.Boundary("BACK").ChangePropertyStatus( "nodal velocity y", ANY );
          for ( auto it=stokes_flow_domain.PerimeterNodesBegin(); it!=stokes_flow_domain.NodesEnd(); ++it ) {
               const BOX_BOUNDARY edge( (*it)->AtBoundary() );
-              if ( edge == EDGE2 or edge == EDGE4 or edge == EDGE10 or edge == EDGE12 or (edge <= CNR1 and edge >= CNR8) ) {
+              if ( edge == EDGE2 || edge == EDGE4 || edge == EDGE10 || edge == EDGE12 || (edge <= CNR1 &&edge >= CNR8) ) {
                    (*it)->Status( nvx_key, DIRICH );
                    (*it)->Status( nvz_key, DIRICH );
                 }
@@ -680,7 +680,7 @@ void StaggeredGridStokesSolver_Example::AssignNoSlipBoundaryConditions( Model<3U
          model.Boundary("RIGHT").ChangePropertyStatus( "nodal velocity z", ANY );
          for ( auto it=stokes_flow_domain.PerimeterNodesBegin(); it!=stokes_flow_domain.NodesEnd(); ++it ) {
               const BOX_BOUNDARY edge( (*it)->AtBoundary() );
-              if ( edge == EDGE5 or edge == EDGE6 or edge == EDGE7 or edge == EDGE8 or (edge <= CNR1 and edge >= CNR8) ) {
+              if ( edge == EDGE5 || edge == EDGE6 || edge == EDGE7 || edge == EDGE8 || (edge <= CNR1 &&edge >= CNR8) ) {
                    (*it)->Status( nvx_key, DIRICH );
                    (*it)->Status( nvy_key, DIRICH );
                 }
