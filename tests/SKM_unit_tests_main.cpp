@@ -203,7 +203,12 @@ int main()
     if ( test_refactoring ) {
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
- 
+
+        // FAIL: SPLIT22_BASIC - lefthandside node geometry flag 9: INTERIOR_LINE vs PERIMETER_POINT
+        //refactored.addTest( new VData_Test() );
+        
+        refactored.addTest( new PDE_Integrator_Test() );
+
         // SplitBoundary related testing
         // -----------------------------
         // OK: refactored.addTest( new ModelSubDomain_Test() );

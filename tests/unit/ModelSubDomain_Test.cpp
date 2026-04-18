@@ -901,7 +901,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        model_domain.UpdateMemberIndexes();
        _test( model_domain.Contains( model_domain.E(5) ) == true );
        _test( model_domain.Contains( model_domain.N(3) ) == true );
-       _test( model_domain.IsPerimeterCell( 0ul ) == false );
+       _test( model_domain.IsPerimeterCell( static_cast<size_t>(0) ) == false );
        _test( model_domain.IsPerimeterCell( (*next(model_domain.PerimeterCellsBegin(),1)) ) == true );
        _test( model_domain.IsPerimeterNode( 1ul ) == false );
        _test( model_domain.IsPerimeterNode( model_domain.Nodes()-1 ) == true );
@@ -932,7 +932,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        upper.UpdateMemberIndexes();
        _test( upper.Contains( upper.E(2) ) == true );
        _test( upper.Contains( upper.N(3) ) == true );
-       _test( upper.IsPerimeterCell( 0ul ) == false );
+       _test( upper.IsPerimeterCell( static_cast<size_t>(0) ) == false );
        _test( upper.IsPerimeterCell( (*next(upper.PerimeterCellsBegin(),1)) ) == true );
        _test( upper.IsPerimeterNode( 1ul ) == false );
        _test( upper.IsPerimeterNode( upper.Nodes()-1 ) == true );
@@ -961,7 +961,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        upper.UpdateMemberIndexes();
        _test( top.Contains( top.E(2) ) == true );
        _test( top.Contains( top.N(3) ) == true );
-       _test( top.IsPerimeterCell( 1ul ) == true );
+       _test( top.IsPerimeterCell( static_cast<size_t>(1) ) == true );
        _test( top.IsPerimeterCell( (*next(top.PerimeterCellsBegin(),1)) ) == true );
        _test( top.IsPerimeterNode( 1ul ) == false );
        _test( top.IsPerimeterNode( top.Nodes()-1 ) == true );
@@ -988,7 +988,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        _test( inclined_split_boundary.PerimeterCells() == 2 );
        upper.UpdateMemberIndexes();
        _test( inclined_split_boundary.Contains( inclined_split_boundary.E(2) ) == true );
-       _test( inclined_split_boundary.IsPerimeterCell( 1ul ) == true );
+       _test( inclined_split_boundary.IsPerimeterCell( static_cast<size_t>(1) ) == true );
        // perimeter manifolds should only exist at model exterior
        // corner quad has two perimeter faces
        _test( inclined_split_boundary.PerimeterFaces( top.InteriorCells()) == 1 );

@@ -323,13 +323,13 @@ void PDE_Integrator_Test::TestAssembly()
     // --------------------------------------------------------------------------
     // 3. setting up PDE_Integrator for case with a single vector solution variable
     // ----------------------------------------------------------------------------
-    TestAssemblySingleVectorNoDirichlet( debug );
+    TestAssemblySingleVectorNoDirichlet( debug ); // fails
 
     // --------------------------------------------------------------------------
     // 4. setting up PDE_Integrator for case with a single vector solution variable
     //    and a Dirichlet boundary condition
     // ----------------------------------------------------------------------------
-    TestAssemblySingleVectorDirichlet( debug );
+    TestAssemblySingleVectorDirichlet( debug ); // fails
 
     // 5. setting up PDE_Integrator for coupled system of 2 scalars
     // ----------------------------------------------------------------------------
@@ -845,4 +845,5 @@ void PDE_Integrator_Test::TestAssemblyScalarAndVectorVariableNoDirichlet( bool d
 
 
 } // end namespace csmp
+
 
