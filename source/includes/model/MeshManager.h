@@ -19,6 +19,7 @@ template<uint32_t> struct IndexToPointerMapping;
 template<uint32_t> class PropertyDatabase;
 template<uint32_t> class VSet;
 template<uint32_t> class NodeManifoldManager;
+template<uint32_t> class Model;
 template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 template<uint32_t> class FaceConstructionData;
 

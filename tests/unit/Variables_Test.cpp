@@ -1,4 +1,6 @@
 #include "Variables_Test.h"
+
+#include "Model.h"
 #include "Boundary.h"
 #include "Region.h"
 

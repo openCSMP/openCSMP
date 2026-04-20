@@ -1,6 +1,7 @@
 #ifndef CSMP_VSET_TEST_2_H
 #define CSMP_VSET_TEST_2_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

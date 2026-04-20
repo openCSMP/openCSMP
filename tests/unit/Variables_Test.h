@@ -1,6 +1,7 @@
 #ifndef VARIABLES_TEST_H
 #define VARIABLES_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp  {
@@ -25,8 +26,8 @@ class Variables_Test : public Test {
     virtual void run();
 
   private:
-    void runModel( Model<3>& );
-    const char* prefix_;
+    void runModel( Model<3U>& );
+    const char* prefix_ = nullptr;
 };
 
   } // csmp
