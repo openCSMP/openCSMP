@@ -1,6 +1,7 @@
 #ifndef CSMP_VECTORVARTEST_H
 #define CSMP_VECTORVARTEST_H
 
+#include "CSMP_definitions.h"
 #include "VectorVariable.h"
 #include "Test.h"
 

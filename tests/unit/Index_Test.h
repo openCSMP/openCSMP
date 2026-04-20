@@ -3,7 +3,6 @@
 
 #include "Test.h"
 
-
 namespace csmp
 {
 	struct Index;

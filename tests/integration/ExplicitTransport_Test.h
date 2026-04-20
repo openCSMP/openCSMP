@@ -9,6 +9,7 @@
 #ifndef CSMP_EXPLICIT_TRANSPORT_TEST_H
 #define CSMP_EXPLICIT_TRANSPORT_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

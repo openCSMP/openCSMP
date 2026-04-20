@@ -2,7 +2,6 @@
 #define CSMP_ISNAN_ISINF_TEST_H
 
 #include "CSMP_definitions.h"
-#include <iostream>
 #include "Test.h"
 
 namespace csmp 

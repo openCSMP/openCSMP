@@ -14,8 +14,6 @@
 
 namespace csmp {
 
-class ANSYS_Model3D;
-
 class InputDataManager_Test: public Test {
   public:
       explicit InputDataManager_Test( bool verbose=false );

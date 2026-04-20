@@ -1,6 +1,7 @@
 #ifndef SPARSE_MATRIX_TEST_H
 #define SPARSE_MATRIX_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "SparseMatrix.h"
 #include "TensorVariable.h"

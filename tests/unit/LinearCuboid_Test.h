@@ -38,7 +38,7 @@ namespace csmp {
 		LinearCuboid    lcuboid_;
 		Element<3U>     element_;
 		Node<3U>        n0, n1, n2, n3, n4, n5, n6, n7;
-		const double  tolerance_factor_;
+		const double    tolerance_factor_;
 		bool            verbose_;
 	};
 

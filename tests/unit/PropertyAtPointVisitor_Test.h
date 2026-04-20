@@ -1,8 +1,7 @@
-#ifndef PROPERTYATPOINTVISITOR_TEST_H
-#define PROPERTYATPOINTVISITOR_TEST_H
+#ifndef PROPERTY_AT_POINT_VISITOR_TEST_H
+#define PROPERTY_AT_POINT_VISITOR_TEST_H
 
 #include "Test.h"
-
 #include "PropertyAtPointVisitor.h"
 
 namespace csmp {
@@ -34,4 +33,4 @@ class PropertyAtPointVisitor_Test: public Test
 
 }
 
-#endif // PROPERTYATPOINTVISITOR_TEST_H
+#endif

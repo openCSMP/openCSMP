@@ -1,10 +1,8 @@
 #ifndef CSMP_VSET_TEST_1_H
 #define CSMP_VSET_TEST_1_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
-#include "VSet.h"
-#include "vsetMakers.h"
-#include "FEM_Data.h"
 
 namespace csmp {
 

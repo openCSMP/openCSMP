@@ -9,8 +9,8 @@
 #ifndef CSMP_UG4_UGX_FILE_EXPORT_TEST_H
 #define CSMP_UG4_UGX_FILE_EXPORT_TEST_H
 
-#include "Test.h"
 #include "CSMP_definitions.h"
+#include "Test.h"
 
 namespace csmp {
 

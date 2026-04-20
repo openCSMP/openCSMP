@@ -4,7 +4,7 @@
 #include "Test.h"
 #include "GenericSingleton.h"
 
-namespace csmp{
+namespace csmp {
 
 class GenericSingleton_Test : public Test
 {

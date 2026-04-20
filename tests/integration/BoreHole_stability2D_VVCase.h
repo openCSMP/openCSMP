@@ -1,6 +1,7 @@
 #ifndef BOREHOLE_STABILITY2D_VVCase_H
 #define BOREHOLE_STABILITY2D_VVCase_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

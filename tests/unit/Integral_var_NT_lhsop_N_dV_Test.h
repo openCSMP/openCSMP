@@ -1,13 +1,11 @@
 #ifndef __Integral_var_NT_lhsop_N_dV_Test_h__
 #define __Integral_var_NT_lhsop_N_dV_Test_h__
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
-#include "VSet.h"
-#include "ANSYS_Interface.h"
-#include "ModelTopology.h"
+#include "SparseMatrix.h"
 
-#include "PDE_Integrator.h"
 #include "Integral_var_NT_lhsop_N_dV.h"
 #include "Integral_NT_lhsop_N_dV.h"
 #include "Concatenate.h"
@@ -15,7 +13,7 @@
 namespace csmp {
 
 class Integral_var_NT_lhsop_N_dV_Test : public Test {
-public:
+  public:
     Integral_var_NT_lhsop_N_dV_Test( bool verbose );
     ~Integral_var_NT_lhsop_N_dV_Test();
     void run();
@@ -25,7 +23,7 @@ public:
     void lumpedTest();
     void rowSumTest();
 
-private:
+  private:
     void compareTest(bool lumped);
 
     void setNodeVariable(std::vector<double>& var, const char* var_name);

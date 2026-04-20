@@ -9,6 +9,7 @@
 #ifndef CSMP_VariableBenchmarking_Test_hpp
 #define CSMP_VariableBenchmarking_Test_hpp
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "TensorVariable.h"
 

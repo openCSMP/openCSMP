@@ -1,6 +1,7 @@
 #ifndef Integral_var_NT_rhsop_N_dV_Test_h
 #define Integral_var_NT_rhsop_N_dV_Test_h
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
 #include "VSet.h"

@@ -1,6 +1,7 @@
 #ifndef LOCAL_VARIABLE_STORAGE_TEST_H
 #define LOCAL_VARIABLE_STORAGE_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp

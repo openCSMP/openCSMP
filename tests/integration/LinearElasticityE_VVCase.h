@@ -3,8 +3,7 @@
 
 #include "Test.h"
 
-namespace csmp
-  {
+namespace csmp {
   
   /** Linear Elasticity Test Case E
   =================================

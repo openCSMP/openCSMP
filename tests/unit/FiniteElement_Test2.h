@@ -1,7 +1,6 @@
 #ifndef FINITE_ELEMENT_TEST2_H
 #define FINITE_ELEMENT_TEST2_H
 
-#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

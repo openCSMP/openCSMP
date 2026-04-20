@@ -4,8 +4,7 @@
 #include "CSMP_definitions.h"
 #include "Test.h"
 
-namespace csmp
-  {
+namespace csmp {
 
   class LinearElasticIsotropicDeformation2D_VVCase: public Test
     {

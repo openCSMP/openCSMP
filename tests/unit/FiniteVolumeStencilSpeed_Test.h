@@ -1,6 +1,7 @@
 #ifndef CSMP_FINITE_VOLUME_STENCIL_SPEED_TEST_H
 #define CSMP_FINITE_VOLUME_STENCIL_SPEED_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp

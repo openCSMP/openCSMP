@@ -1,5 +1,31 @@
 #include "CVFEM_1D_VVCase.h"
 
+// model
+#include "Model1D.h"
+
+// File I/O and Initialization
+#include "ComputationalSettings.h"
+#include "InputDataManager.h"
+
+#include "NumIntegral_dNT_op_dV.h"
+#include "VelocityAndVolumeFlux.h"
+
+// finite volumes
+// CVFEM PHX
+#include "CVFEM_MathOperatorRHS.h"
+#include "CVFEM_PHX_Scheme.h"
+
+// visitors
+#include "ConductivityVisitor.h"
+#include "ComputeGravityTermVisitor.h"
+//#include "GEMS3K_Visitor.h"
+// Solver
+#include "LUdcmp_Solver.h"
+
+// Output
+#include "VTU_Interface.h"
+
+
 using namespace std;
 
 

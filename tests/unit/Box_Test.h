@@ -1,6 +1,7 @@
 #ifndef BOX_TEST_H
 #define BOX_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "Box.h"
 

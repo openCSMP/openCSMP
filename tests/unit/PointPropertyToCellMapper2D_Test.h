@@ -3,7 +3,7 @@
 
 #include "Test.h"
 
-namespace csmp{
+namespace csmp {
 
   class PointPropertyToCellMapper2D_Test : public Test
     {

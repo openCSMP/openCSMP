@@ -1,8 +1,8 @@
 #ifndef GEOTHERMAL_PSEUDO1D_VVCASE_H
 #define GEOTHERMAL_PSEUDO1D_VVCASE_H
 
-#include "Test.h"
 #include "CSMP_definitions.h"
+#include "Test.h"
 
 namespace csmp {
 

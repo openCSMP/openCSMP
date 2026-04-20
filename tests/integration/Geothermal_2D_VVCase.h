@@ -1,40 +1,9 @@
 #ifndef GEOTHERMAL_2D_VVCASE_H
 #define GEOTHERMAL_2D_VVCASE_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
-#include "Model.h"
-#include "VTU_Interface.h"
-#include "ANSYS_Model3D.h"
-#include "CSMP_highLevelUtilities.h"
-#include "LinearSolver.h"
-#include "LUdcmp_Solver.h"
-#include "CSMP_definitions.h"
-#include "GlobalVerbose.h"
-
-// finite volumes 
-#include "ExplicitMassBasedTransport.h"
-#include "MassBasedStencilProcessor.h"
-
-// finite elements
-#include "PDE_Integrator.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_dNT_op_dV.h"
-#include "NumIntegral_SetRHS_to_Zero.h"
-#include "PointSource_rhsop.h"
-#include "VelocityAndVolumeFlux.h"
-
-// visitors
-#include "ComputeGravityTermVisitor.h"
-#include "ThermalVisitor.h"
-#include "SourceVisitor.h"
-#include "ConductivityVisitor.h"
-
-// utilities and monitoring
-#include "InputDataManager.h"
-#include "ComputationalSettings.h"
 
 using namespace std;
 using namespace csmp;
@@ -42,6 +11,8 @@ using namespace csmp;
 
 namespace csmp
   {
+  
+template<uint32_t> class Model;
 
   /** Geothermal 2D Test Case
   =================================

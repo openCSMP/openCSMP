@@ -4,7 +4,7 @@
 #include "CSMP_definitions.h"
 #include "Test.h"
 
-namespace csmp{
+namespace csmp {
 
 template<uint32_t> class Model;
 struct CFL_TestData;
@@ -34,7 +34,6 @@ public:
     void Test( CFL_TestData& data, double satOil, double tolFront );
 
 };
-
 
 } // csmp
 

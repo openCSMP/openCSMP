@@ -4,6 +4,7 @@
 #include "Test.h"
 #include "InterFace.h"
 #include "DenseMatrix.h"
+#include "Element.h"
 
 namespace csmp
 {
@@ -60,10 +61,6 @@ class InterFace_Test : public Test
                                                Node<3> &n_out0, Node<3> &n_out1, Node<3> &n_out2, Node<3> &n_out4,
                                                Element<3> &e_nb_in1, Element<3> &e_nb_in2,
                                                Element<3> &e_nb_ou1, Element<3> &e_nb_ou2 );
-
-
-
-
 
   private:
     const static bool verbose_ = true;

@@ -24,6 +24,7 @@
 #include "Variables_Test.h"
 #include "GenericSingleton_Test.h"
 #include "ConvexPolygon_Test.h"
+#include "vsetMakers.h"
 
 // math
 #include "IsnanIsinf_Test.h"

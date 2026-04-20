@@ -1,6 +1,7 @@
 #ifndef CSMP_VARIABLE_STORAGE_SPEED_TEST_H
 #define CSMP_VARIABLE_STORAGE_SPEED_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp

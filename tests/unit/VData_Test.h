@@ -1,6 +1,7 @@
 #ifndef CSMP_VDATA_TEST_H
 #define CSMP_VDATA_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

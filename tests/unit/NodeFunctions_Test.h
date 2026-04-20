@@ -9,6 +9,7 @@
 #ifndef CSMP_NODE_FUNCTIONS_TEST_H
 #define CSMP_NODE_FUNCTIONS_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "Node.h"
 

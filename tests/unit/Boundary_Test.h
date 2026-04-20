@@ -1,8 +1,10 @@
 #ifndef BOUNDARY_TEST_H
 #define BOUNDARY_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
+#include "Boundary.h"
 #include "VTU_Interface.h"
 
 namespace csmp {

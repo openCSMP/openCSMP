@@ -5,7 +5,6 @@
 
 namespace csmp {
 
-
 class BoreHole_stability_InclinedWell3D_VVCase : public Test {
 public:
    BoreHole_stability_InclinedWell3D_VVCase(const char* prefix);

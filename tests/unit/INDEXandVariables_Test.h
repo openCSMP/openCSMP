@@ -1,6 +1,7 @@
 #ifndef CSMP_INDEX_AND_VARIABLES_TEST_H
 #define CSMP_INDEX_AND_VARIABLES_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp  {

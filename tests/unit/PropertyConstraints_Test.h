@@ -9,6 +9,7 @@
 #ifndef CSMP_PROPERTY_CONSTRAINTS_TEST_H
 #define CSMP_PROPERTY_CONSTRAINTS_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

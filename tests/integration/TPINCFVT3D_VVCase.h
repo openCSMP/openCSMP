@@ -1,13 +1,10 @@
 #ifndef TPINCFVT3D_VVCASE_H
 #define TPINCFVT3D_VVCASE_H
 
-#include <iostream>
-#include <iomanip>
-#include <limits>
+#include "CSMP_definitions.h"
 #include "Test.h"
 
-
-namespace csmp{
+namespace csmp {
 
 template<uint32_t> class Model;
 struct TPINCFVT3D_TestData;

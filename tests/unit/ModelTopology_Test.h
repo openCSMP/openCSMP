@@ -4,7 +4,7 @@
 #include "Test.h"
 #include "ModelTopology.h"
 
-namespace csmp{
+namespace csmp {
 
 /// PL Dec 2010
 class ModelTopology_Test : public Test

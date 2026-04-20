@@ -32,7 +32,7 @@ template<uint32_t dim>
 class ElementOnly {
   public:
     ElementOnly( size_t id, size_t nodes, size_t nbors )
-     : idx_(0), at_boundary_(NOT),
+     : idx_(id), at_boundary_(NOT),
        elmt_connector_(nbors,nullptr), ///< a triangle
        node_connector_(nodes,nullptr)
      {}

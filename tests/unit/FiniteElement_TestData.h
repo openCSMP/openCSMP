@@ -1,6 +1,7 @@
 #ifndef FINITE_ELEMENT_TESTDATA_H
 #define FINITE_ELEMENT_TESTDATA_H
 
+#include "CSMP_definitions.h"
 #include "FiniteElement.h"
 #include "Node.h"
 

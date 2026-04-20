@@ -9,6 +9,7 @@
 #ifndef DIRICHLET_PRESSURE_BOX_MODEL_VV_CASE_H
 #define DIRICHLET_PRESSURE_BOX_MODEL_VV_CASE_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp {

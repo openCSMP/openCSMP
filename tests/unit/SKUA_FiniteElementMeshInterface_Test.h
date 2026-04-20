@@ -11,6 +11,7 @@
 
 #include "Test.h"
 #include "SKUA_FiniteElementMeshInterface.h"
+#include "Model.h"
 
 namespace csmp {
 

@@ -1,5 +1,7 @@
 #ifndef PROPERTY_DATABASE_TEST_H
 #define PROPERTY_DATABASE_TEST_H
+
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp

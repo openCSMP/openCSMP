@@ -1,7 +1,34 @@
 #include "Geothermal_2D_VVCase.h"
 #include "Model.h"
 #include "Boundary.h"
-//#include "SplitBoundary.h"
+#include "VTU_Interface.h"
+#include "ANSYS_Model3D.h"
+#include "CSMP_highLevelUtilities.h"
+#include "GlobalVerbose.h"
+
+// finite volumes 
+#include "ExplicitMassBasedTransport.h"
+#include "MassBasedStencilProcessor.h"
+
+// finite elements
+#include "PDE_Integrator.h"
+#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_lhsop_N_dV.h"
+#include "NumIntegral_dNT_op_dV.h"
+#include "NumIntegral_SetRHS_to_Zero.h"
+#include "PointSource_rhsop.h"
+#include "VelocityAndVolumeFlux.h"
+
+// visitors
+#include "ComputeGravityTermVisitor.h"
+#include "ThermalVisitor.h"
+#include "SourceVisitor.h"
+#include "ConductivityVisitor.h"
+
+// utilities and monitoring
+#include "InputDataManager.h"
+#include "ComputationalSettings.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"

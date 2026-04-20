@@ -4,7 +4,8 @@
 #include "CSMP_definitions.h"
 #include "Test.h"
 
-namespace csmp{
+namespace csmp {
+
 template <uint32_t dim>
 class CFL_Calculation_VVCase : public Test
 {
@@ -14,7 +15,7 @@ public:
     ~CFL_Calculation_VVCase();
     virtual void run();
 };
-}
 
+} // csmp
 
 #endif // CFL_CALCULATION_VVCASE_H

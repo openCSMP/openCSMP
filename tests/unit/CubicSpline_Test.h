@@ -1,6 +1,7 @@
 #ifndef CUBICSPLINE_TEST_H
 #define CUBICSPLINE_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "CubicSpline.h"
 

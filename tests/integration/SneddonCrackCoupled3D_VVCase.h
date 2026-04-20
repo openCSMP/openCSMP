@@ -2,9 +2,6 @@
 #define SNEDDON_CRACK_COUPLED_3D_VVCASE_H
 
 #include "Test.h"
-#include "GlobalVerbose.h"
-
-#include "CSMP_highLevelUtilities.h"
 
 namespace csmp
   {

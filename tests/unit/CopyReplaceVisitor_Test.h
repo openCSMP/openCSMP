@@ -1,8 +1,8 @@
 #ifndef CSMP_COPY_REPLACE_VISITOR_TEST_H
 #define CSMP_COPY_REPLACE_VISITOR_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
-
 
 namespace csmp {
 

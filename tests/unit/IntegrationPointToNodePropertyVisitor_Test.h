@@ -1,6 +1,7 @@
 #ifndef CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
 #define CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp{

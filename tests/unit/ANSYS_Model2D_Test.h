@@ -3,7 +3,7 @@
 
 #include "Test.h"
 
-namespace csmp{
+namespace csmp {
 
 // P. Lang 2011
 class ANSYS_Model2D_Test : public Test

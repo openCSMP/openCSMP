@@ -1,6 +1,7 @@
 #ifndef FACE_TEST_H
 #define FACE_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 
 namespace csmp{

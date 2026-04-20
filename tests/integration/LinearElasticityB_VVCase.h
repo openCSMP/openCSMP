@@ -3,8 +3,7 @@
 
 #include "Test.h"
 
-namespace csmp
-  {
+namespace csmp {
  
   /** LinearElasticity Test Case B
   ================================

@@ -20,13 +20,14 @@
 // CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-#ifndef FIBHEAP_HH
-#define FIBHEAP_HH
+#ifndef FIBONACCI_HEAP_H
+#define FIBONACCI_HEAP_H
 
 #include <vector>
 #include <limits>
 #include <deque>
 #include <iostream>
+#include <cstdint>
 
 namespace ajb {
 
@@ -61,24 +62,24 @@ namespace detail {
         {
         }
 
-        bool singleton() const {
+        bool singleton() const noexcept {
             return next_ == this;
         }
 
-        void link(FibonacciHeap_Node* n) {
+        void link(FibonacciHeap_Node* n)  noexcept {
             next_->prev_ = n->prev_;
             n->prev_->next_ = next_;
             next_ = n;
             n->prev_ = this;
         }
 
-        void unlink() {
+        void unlink() noexcept {
             prev_->next_ = next_;
             next_->prev_ = prev_;
             next_ = prev_ = this;
         }
 
-        void add_child(FibonacciHeap_Node* n) {
+        void add_child(FibonacciHeap_Node* n) noexcept {
             if (!child_) {
                 child_ = n;
             }
@@ -90,7 +91,7 @@ namespace detail {
             ++degree_;
         }
 
-        void remove_child(FibonacciHeap_Node* n)
+        void remove_child(FibonacciHeap_Node* n) noexcept
         {
             if (n->singleton()) {
                 child_ = 0;
@@ -110,6 +111,7 @@ namespace detail {
         K getK() {return key_;}
     };
 }
+
 
 /// A Fibonacci min-heap
 /**
@@ -309,11 +311,13 @@ public:
         return insert_node(new detail::FibonacciHeap_Node<K,V>(key, value));
     }
     
+    
     finger insert(node_ptr new_node)
     {
         ++count_;
         return insert_node(new_node);
     }    
+
 
     /// Get the minimum element in the heap
     finger minimum()
@@ -321,17 +325,20 @@ public:
         return root_;
     }
 
+
     /// Get the minimum element in the heap
     const_finger minimum() const
     {
         return root_;
     }
  
+ 
     /// Remove the minimum element in the heap
     void remove_minimum()
     {
         remove_current_root();
     }
+
 
     /// Decrease the key of an element in the heap
     void decrease_key(finger node, K new_key)
@@ -354,6 +361,7 @@ public:
         cascading_cut(node);
     }
 
+
     /// Remove an element from the heap
     void remove(node_ptr node)
     {
@@ -366,8 +374,8 @@ public:
 
 };
 
-}
+} // csmp
 
 
-#endif
+#endif // FIBONACCI_HEAP_H
 

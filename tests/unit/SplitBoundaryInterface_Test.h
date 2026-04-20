@@ -1,6 +1,7 @@
 #ifndef SPLIT_BOUNDARY_INTERFACE_TEST_H
 #define SPLIT_BOUNDARY_INTERFACE_TEST_H
 
+#include "CSMP_definitions.h"
 #include "Test.h"
 #include "SplitBoundaryInterface.h"
 

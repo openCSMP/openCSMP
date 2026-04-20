@@ -8,8 +8,9 @@
 #ifndef CSMP_ISOPARAMETRICLINEARHEXAHEDRON_TEST_H
 #define CSMP_ISOPARAMETRICLINEARHEXAHEDRON_TEST_H
 
-#include "Test.h"
 #include "CSMP_definitions.h"
+#include "Test.h"
+
 namespace csmp {
 
 class IsoparametricLinearHexahedron_Test : public Test {
