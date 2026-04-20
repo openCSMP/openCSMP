@@ -51,7 +51,7 @@ The weights of the interpolation functions always must add up to 1. Thus,
 since there are 3 integration points, each weight is 0.33...
 
 */
-class IsoparametricQuadraticTriangle : public FiniteElement {
+class IsoparametricQuadraticTriangle final : public FiniteElement {
 
 public:
 

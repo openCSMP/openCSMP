@@ -157,7 +157,7 @@ wm withdraw .
 @endcode
  
 */
-class LinearTriangle3D : public FiniteElement {
+class LinearTriangle3D final : public FiniteElement {
   public:
     LinearTriangle3D();
 

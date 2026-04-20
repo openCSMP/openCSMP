@@ -386,7 +386,7 @@ std::map<Point<dim>, Node<dim>*> Fracture<dim>::NodeMap(INTERFACE_SIDE side){
 template<uint32_t dim>
 std::map<double, Node<dim>*> Fracture<dim>::NodeMap(INTERFACE_SIDE side, size_t xyz){
   std::map<double, Node<dim>*> nodemap;
-  for ( typename std::vector<InterFace<dim>*>::const_iterator ifit = sb_ref_.CellsBegin();
+  for ( auto ifit = sb_ref_.CellsBegin();
         ifit != sb_ref_.CellsEnd(); ++ifit){
     for ( uint32_t n=0u; n < (*ifit)->FE()->Nodes(); ++n)
       nodemap[(*ifit)->N(n,side)->Coordinate()[xyz]] = (*ifit)->N(n,side) ;

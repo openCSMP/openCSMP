@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// 3-noded triangle with a choice of Gaussian quadrature points and construction options for 2D and 3D models
-class IsoparametricLinearTriangle : public FiniteElement {
+class IsoparametricLinearTriangle final : public FiniteElement {
   public:
     explicit IsoparametricLinearTriangle( uint32_t dimensions=2,
                                           uint32_t ipoints=3 );

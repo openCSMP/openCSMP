@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// Straight-sided, analytically integrated triangular element for 2D calculations
-class LinearTriangle : public FiniteElement {
+class LinearTriangle final : public FiniteElement {
   public:
     LinearTriangle();
 

@@ -8,7 +8,7 @@
 namespace csmp {
 
 /// line element with linear interpolation functions for 1D, 2D and 3D models and variable number of integration points
-class IsoparametricLinearLineElement : public FiniteElement {
+class IsoparametricLinearLineElement final : public FiniteElement {
   public:
     explicit IsoparametricLinearLineElement( uint32_t dimensions = 2, uint32_t ips = 2  );
 

@@ -612,7 +612,7 @@ namespace csmp
       }
   }
     
-  double TwophaseLiquidLookup::NormalInterpolation( const int& property_index )
+  double TwophaseLiquidLookup::NormalInterpolation( const int& /*property_index*/ )
   {
     //d cout << "Using TwophaseLiquidLookup::NormalInterpolation( const int& property_index ) ...\n";
 	
@@ -657,7 +657,7 @@ namespace csmp
     //     | _/       V\     |
     //     |/           L\   |
     //   _/|              H\ |  
-    //  /  |       VH        \ 
+    //  /  |       VH        \
     //     |                 | \
     //   --A-----------------B-- ip_p_max // needs:-1
     //     |                 |

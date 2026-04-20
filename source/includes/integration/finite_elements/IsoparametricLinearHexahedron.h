@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class IsoparametricLinearHexahedron : public FiniteElement {
+class IsoparametricLinearHexahedron final : public FiniteElement {
 
 public:
 

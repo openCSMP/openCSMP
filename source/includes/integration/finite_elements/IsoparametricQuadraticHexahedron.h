@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class IsoparametricQuadraticHexahedron : public FiniteElement {
+class IsoparametricQuadraticHexahedron final : public FiniteElement {
 
 public:
     /// 4, 6 or 8 integration points are possible

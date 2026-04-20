@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class LinearRectangle : public FiniteElement {
+class LinearRectangle final : public FiniteElement {
 	public:
 		LinearRectangle( uint32_t dim);
 

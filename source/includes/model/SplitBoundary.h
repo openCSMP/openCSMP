@@ -86,8 +86,8 @@ SplitBoundary objects permit the implementation of jump discontinuities in conti
 
 */
 template<uint32_t dim>
-class SplitBoundary : public ModelSubDomain<dim,InterFace>,
-                      public LocalVariableStorage<dim, SplitBoundary>
+class SplitBoundary final : public ModelSubDomain<dim,InterFace>,
+                            public LocalVariableStorage<dim, SplitBoundary>
  {
   public:
     SplitBoundary() = delete;

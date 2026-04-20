@@ -13,7 +13,7 @@ namespace csmp {
 @author Stephen G. Roberts
 
 */
-class IsoparametricLinearPrism : public FiniteElement {
+class IsoparametricLinearPrism final : public FiniteElement {
   public:
     explicit IsoparametricLinearPrism( uint32_t integrationPoints = 6 /* 1 or 6*/ );
 

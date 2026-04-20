@@ -649,7 +649,7 @@ namespace csmp
     //     | _/       V\     |
     //     |/           L\   |
     //   _/|              H\ |  
-    //  /  |       VH          \ 
+    //  /  |       VH        \
     //     |                 | \
     //   --A-----------------B-- ip_p_max // and this ip_p_max-1 ?
     //     |                 |

@@ -10,7 +10,7 @@ namespace csmp {
     @author Hani Akbari (Jan. 2017)
     This class implements linear cuboid element, so each element has 8 nodes.
 */
-class LinearCuboid : public FiniteElement {
+class LinearCuboid final : public FiniteElement {
   public:
     LinearCuboid();
 

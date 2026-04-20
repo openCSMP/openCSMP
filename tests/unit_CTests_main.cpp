@@ -90,7 +90,6 @@
 #include "FV_Parameter_Test.h"
 #include "FluxMismatch_Test.h"
 #include "GFVT_ParametricSpaceComputation_Test.h"
-#include "GenericFiniteVolumeTransport_Test.h" // TODO: from Andrew Bromage: test fails for non-simplex elements
 
 // interfaces to other software
 // importing
@@ -108,7 +107,6 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "TRIANGLE_Interface_Test.h"
-// TODO: test Quadrilaterator
 // exporting
 #include "UG4_UGX_FileExport_Test.h"
 #include "VTU_Interface_Test.h"
@@ -156,36 +154,40 @@
 using namespace std;
 using namespace csmp;
 
-constexpr bool COMMPREHENSIVE_TESTING = false;
+//  number-of-args  arg-strings
+int main( int argc, char* argv[] )
+{
+    bool verbose = true;
+    bool run_all = false;
+    std::string target_suite = "";
 
-/**  Unit Test Development
- 
-@todo  Model illustrate functionality with Example(s)
- 
-@todo Additional Code Coverage Required: PDE_Integrator: assembly of solution matrix for systems
+    // 1. Basic Command Line Parser
+    for (int i = 1; i < argc; ++i) {
+        std::string arg = argv[i];
+        if (arg == "--suite" && i + 1 < argc) {
+            target_suite = argv[++i];
+        } else if (arg == "--all") {
+            run_all = true;
+        } else if (arg == "--quiet") {
+            verbose = false;
+        }
+    }
 
-@todo Base majority of tests on small CSMP native models avoiding all the disk read/write
+    // Default to comprehensive if no suite is specified
+    if (target_suite.empty()) {
+        run_all = true;
+    }
 
-@todo  IsNan_Test - refactor as it is built on false premises
+    // 2. Map flags based on CLI arguments
+    const bool test_fundamentals     = run_all || (target_suite == "fundamentals");
+    const bool test_interdependent1  = run_all || (target_suite == "interdependent1");
+    const bool test_interdependent2  = run_all || (target_suite == "interdependent2");
+    const bool test_interfaces       = run_all || (target_suite == "interfaces");
+    const bool test_composite        = run_all || (target_suite == "composite");
+    const bool test_refactoring      = run_all || (target_suite == "refactored");
+    const bool test_new_developments = run_all || (target_suite == "new");
 
-@todo  refactor   CompressedRowMatrix - include elimitation etc.
-
-*/
-int main()
- {
-  constexpr bool verbose(true);
-
-  const bool is_comp = (COMMPREHENSIVE_TESTING == true) ? true : false;
-
-  const bool test_fundamentals     = is_comp;
-  const bool test_interdependent1  = is_comp;
-  const bool test_interdependent2  = is_comp;
-  const bool test_interfaces       = is_comp;
-  const bool test_composite        = is_comp;
-  const bool test_refactoring      = !is_comp; // True only when NOT comprehensive
-  const bool test_new_developments = false;    // Always false for now
- 
-  long    fails_fundamentals(0),
+    long  fails_fundamentals(0),
           fails_interdependent1(0),
           fails_interdependent2(0),
           fails_interfaces(0),
@@ -193,64 +195,18 @@ int main()
           fails_new_developments(0),
           total_failures(0);
 
-  try {
-    cout <<"\nunit_test_main: running tests..."<< endl;
+    try {
+        if (run_all) cout <<"\nunit_test_main: running ALL tests..."<< endl;
 
-    // =========================================================================================================
-    //
-    //             TESTING REFACTORED CODE
-    //
-    // =========================================================================================================
-    if ( test_refactoring ) {
-        cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
+        // =====================================================================
+        // REFACTORED CODE
+        // =====================================================================
+        if ( test_refactoring ) {
+        cout <<"\n1. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-        // FAIL: SPLIT22_BASIC - lefthandside node geometry flag 9: INTERIOR_LINE vs PERIMETER_POINT
-        //refactored.addTest( new VData_Test() );
-        
-        refactored.addTest( new PDE_Integrator_Test() );
-
-        // SplitBoundary related testing
-        // -----------------------------
-        // OK: refactored.addTest( new ModelSubDomain_Test() );
-        
-        // read and write SplitBoundary to file (SplitBasic22: TestWriteModelToDiskAndReadBackWithInterfaces())
-        // OK: refactored.addTest( new ModelBasics_Test() );
-        
-        // creation of 2D SplitBoundary during simulation and reading and writing from file
-        // OK: refactored.addTest( new ANSYS_Model2D_Test() );
-        
-        // creates 3D model with multiple split boundaries 'ModelDykeAllLayersSplit' writing it to disk and bringing it back and comparing them
-        // OK: refactored.addTest( new ANSYS_Model3D_Test() );
-        
-        // creating a model that was split already in ANSYS, matching up node-matched but disconnected boundaries
-        // OK: refactored.addTest( new ANSYS_SplitBoundaryMatch_Test() );
-        
-        // insert lower-dim fracture into split boundary and test it
-        // OK: LFEM refactored.addTest( new SplitBoundary_Test() ); // 2D only
-        
-        // 2 and 3D testing of creation methods for split boundaries: TODO: revisit correctness and reinstate all component tests
-        // OK: refactored.addTest( new SplitBoundaryInterface_Test() );
-
-//        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
-        
-        /*
-            Compares physical space with parametric space computations
-            Not using test framework yet but printing everything to std::cerr
-        */
-//        refactored.addTest( new GFVT_ParametricSpaceComputation_Test() );  // TODO: understand why test is failing for non-simplex elements
-//        ex         refactored.addTest( new GenericFiniteVolumeTransport_Test() );
-
-
-// TODO: no satisfactorily fast access yet; compare with access of a fictious rock-type to determine whether improvement would pay off
-// tested: 6/1/26: no speed-up from extra inlining, complications when attempting to remove macros in LocalVariableStorageArithmetic
-// added new method to read vecs, tensors and arrays using declarative programming
-//        refactored.addTest( new VariableStorageSpeed_Test() );
-                
-        
-   // TODO: uncomment and fix failing tests listed below
-   // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test( verbose ) );
-   // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test( verbose ) );
+        // add your test of the suggested refactoring here
+        //refactored.addTest( new PDE_Integrator_Test() );
 
         // actually running the test
         refactored.run();
@@ -530,8 +486,17 @@ int main()
       cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
       TestSuite new_developments("new tests of the CSMP base library", &cout );
       
-      new_developments.addTest( new SplitBoundaryPressureDiffusion_Test() );
-      
+       new_developments.addTest( new PropertyStorageSpeed_Test( &cout ) );
+       new_developments.addTest( new VariableStorageSpeed_Test() );
+       new_developments.addTest( new JaggedArray3D_Comparison_Test() );
+       new_developments.addTest( new FiniteVolumeStencilSpeed_Test() );
+       new_developments.addTest( new AccumulationSpeedProfiling_Test() );
+       new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+
+  //     new_developments.addTest( new VariableBenchmarking_Test() );  // FAIL
+  //     new_developments.addTest( new SplitBoundaryPressureDiffusion_Test() );
+
+   
       // running unit tests and reporting errors
       new_developments.run();
       fails_new_developments = new_developments.report();
@@ -632,13 +597,3 @@ int main()
 } // end main
 
 
-// ECMOR24 - speed stuff
-
-// refactored.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
-//  refactored.addTest( new AccumulationSpeedProfiling_Test() );
-// refactored.addTest( new VariableBenchmarking_Test() );  // FAIL
-
-// refactored.addTest( new PropertyStorageSpeed_Test( &cout ) );
-// refactored.addTest( new VariableStorageSpeed_Test() );
-// refactored.addTest( new JaggedArray3D_Comparison_Test() );
-// refactored.addTest( new FiniteVolumeStencilSpeed_Test() );

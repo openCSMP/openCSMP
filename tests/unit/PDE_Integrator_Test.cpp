@@ -642,34 +642,27 @@ void PDE_Integrator_Test::run()
     //=======================================
     // test single variable
     //=======================================
+
+    // test scalar variable with and without BCs
+    // test vector variable and or without BCs
     TestAssembly();
 
-    // test scalar variable
-    //TestSingleVariable();
-    //TestOutputSingleVariable();
-    // test vector variable
-
+    // TODO: test tensor variable
     // test array variable
-
     // test flagged array variable
-
-    // test tensor variable
-
-
 
 
     //=======================================
     // test multiple solutionvariables
     //=======================================
-    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
-    TestAssemblyScalarAndVectorVariableNoDirichlet( true /* debug */ );
-    
+
     // test 2 scalar variables
-    //TestTwoScalarVariables();
+    TestAssemblyTwoScalarVariablesNoDirichlet( true /* debug */ );
 
     // test scalar variable and vector variable
-
-    // test vector variable and vector variable
+    TestAssemblyScalarAndVectorVariableNoDirichlet( true /* debug */ );
+    
+    // TODO: test vector variable and vector variable
 
   } // end run
 

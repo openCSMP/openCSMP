@@ -144,9 +144,9 @@ Thus, one can have an element with FEM but without FVM, but not vice versa.
 
 */
 template<uint32_t dim>
-class Element : public FiniteElementPolicy<dim, Element>,
-                public FiniteVolumePolicy<dim, Element>,
-                public LocalVariableStorage<dim, Element> {
+class Element final : public FiniteElementPolicy<dim, Element>,
+                      public FiniteVolumePolicy<dim, Element>,
+                      public LocalVariableStorage<dim, Element> {
   public:
     /// constructor for testing element in isolation
     explicit Element( FiniteElement* );

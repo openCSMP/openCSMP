@@ -81,8 +81,8 @@ their faces coincides with the region boundary.
 
 */
 template<uint32_t dim>
-class Region : public ModelSubDomain<dim, Element>,
-               public LocalVariableStorage<dim, Region> {
+class Region final : public ModelSubDomain<dim, Element>,
+                     public LocalVariableStorage<dim, Region> {
   public:
 
     /// construction of named empty region with appropriately sized property storage
@@ -92,7 +92,7 @@ class Region : public ModelSubDomain<dim, Element>,
     Region( Region&& );
     Region& operator=( const Region& );
 
-    virtual ~Region() = default;
+    ~Region() override = default;
 
     // ---------------------------------------------
     // reconstruction of regions that existed before

@@ -63,11 +63,9 @@ Extended by
 
       @attention From a User Perspective! When advancing to a new time step, the user must set run SetOldCoordinatesToCurrentTip()
         in order to calibrate the old tip coordinate of all FractureTip objects (this ensures propagation velocity is calculated correctly every time step)
-
-
 */
 
-
+// TODO: clean-up partially used macros etc.
 template<uint32_t dim>
 class Fracture
 {

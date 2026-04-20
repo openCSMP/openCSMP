@@ -7,6 +7,8 @@ cmake_minimum_required(VERSION 3.29)
 # - C++23 capabable compiler (g++ 13.3 or later, CLang, Intel, NVC++)
 # - MPI 
 # - git
+# - Rosetta on OSX if you want to use SAMG (Intel (x86_64))
+#     cmake -DCMAKE_OSX_ARCHITECTURES=x86_64  (note that this will also require Intel MPI!)
 # ===============================================================================================
 # usage alternatives
 #
@@ -18,7 +20,7 @@ cmake_minimum_required(VERSION 3.29)
 #
 # ===============================================================================================
 
-
+# toggle Fraunhofer's SAMG Solver and its configuration ON if you have access to it!
 option(SAMG_ENABLE "Enable SAMG Solver" OFF)
 option(BUILD_TESTING "Enable building tests" ON)
 option(BUILD_EXAMPLES "Enable building examples" ON)
@@ -228,7 +230,8 @@ if(SAMG_ENABLE)
     if(SAMG_LIB AND OMP_LIB)
         target_link_libraries(open-csmp-core PUBLIC ${SAMG_LIB} ${OMP_LIB})
     else()
-        message(FATAL_ERROR "SAMG Libraries not found.")
+        message(WARNING "SAMG requested but SAMG_LIB or OMP_LIB is missing. Disabling SAMG support.")
+        set(WITH_SAMG OFF)
     endif()
 endif()
 
@@ -271,54 +274,54 @@ if(BUILD_EXAMPLES)
         add_executable(open-csmp-examples ${EXAMPLES_SRC})
         
         target_include_directories(open-csmp-examples PRIVATE
-        	"${CMAKE_CURRENT_SOURCE_DIR}"
-       	"${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
-       	"${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
-          	"${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
-   		 "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
-    		"${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
-            "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
+          "${CMAKE_CURRENT_SOURCE_DIR}"
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
         )
         # This links libjpeg-turbo or standard libjpeg
         target_link_libraries(open-csmp-examples PRIVATE open-csmp-core jpeg )
@@ -345,14 +348,62 @@ if(BUILD_TESTING)
     )
     list(FILTER TEST_FILES EXCLUDE REGEX "/deprecated/")
 
-    add_executable(open-csmp-tests ${CMAKE_CURRENT_SOURCE_DIR}/tests/SKM_unit_tests_main.cpp ${TEST_FILES})
+    add_executable(open-csmp-tests ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit_CTests_main.cpp ${TEST_FILES})
     target_include_directories(open-csmp-tests PRIVATE
-                                ${CMAKE_CURRENT_SOURCE_DIR}/tests
-                                ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit
-                                ${CMAKE_CURRENT_SOURCE_DIR}/tests/integration
-                                ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony"
+          "${CMAKE_CURRENT_SOURCE_DIR}"
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
+          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
+          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
     )
-    target_link_libraries(open-csmp-tests PRIVATE open-csmp-core )
+    target_link_libraries( open-csmp-tests PRIVATE open-csmp-core )
 
     # Directory to place test runtime data
     set(TEST_WORKING_DIR "${CMAKE_BINARY_DIR}/tests_runtime")
@@ -374,6 +425,38 @@ if(BUILD_TESTING)
 
     add_test(NAME open-csmp-tests COMMAND open-csmp-tests)
     set_tests_properties(open-csmp-tests PROPERTIES WORKING_DIRECTORY ${TEST_WORKING_DIR})
+
+
+# Enable testing
+enable_testing()
+
+# Define the individual test suites
+    add_test(NAME Suite_Fundamentals     COMMAND open-csmp-tests --suite fundamentals)
+    add_test(NAME Suite_Interdependent1  COMMAND open-csmp-tests --suite interdependent1)
+    add_test(NAME Suite_Interdependent2  COMMAND open-csmp-tests --suite interdependent2)
+    add_test(NAME Suite_Interfaces       COMMAND open-csmp-tests --suite interfaces)
+    add_test(NAME Suite_Composite        COMMAND open-csmp-tests --suite composite)
+
+# Enforce the strict execution sequence
+    set_tests_properties(Suite_Interdependent1 PROPERTIES DEPENDS Suite_Fundamentals)
+    set_tests_properties(Suite_Interdependent2 PROPERTIES DEPENDS Suite_Interdependent1)
+    set_tests_properties(Suite_Interfaces      PROPERTIES DEPENDS Suite_Interdependent2)
+    set_tests_properties(Suite_Composite       PROPERTIES DEPENDS Suite_Interfaces)
+
+# NOTE - how to perform the testing:
+#    compile your code and run ctest in your build directory.
+#
+#    To run normally: ctest
+#
+#    To see the detailed output of a failing test: ctest --output-on-failure
+#
+#    To run a specific suite manually: ctest -R Suite_Fundamentals
+#
+#    CTest will give a pass/fail summary broken down by suite, 
+#    while the standard test output will print test-by-test Passed/Failed counts 
+#    generated by your custom TestSuite objects.
+#
+#    get nice dashboard with JUnit XML format using option: ctest --output-junit test-dashboard.xml
 
 endif()
 

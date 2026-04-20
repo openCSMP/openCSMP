@@ -6,7 +6,7 @@
 namespace csmp {
 
 /// 4-noded tetrahedron with a choice of Gaussian quadrature points
-class IsoparametricLinearTetrahedron : public FiniteElement {
+class IsoparametricLinearTetrahedron final : public FiniteElement {
   public:
     explicit IsoparametricLinearTetrahedron( uint32_t integrationPoints = 4 /* 1 or 4*/ );
 

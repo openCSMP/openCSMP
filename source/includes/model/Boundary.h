@@ -61,8 +61,8 @@ boundary-specific calculations separately.
 
 */
 template<uint32_t dim>
-class Boundary : public ModelSubDomain<dim, Face>,
-                 public LocalVariableStorage<dim, Boundary>
+class Boundary final : public ModelSubDomain<dim, Face>,
+                       public LocalVariableStorage<dim, Boundary>
  {
   public:
     Boundary() = delete; ///< there is no sensible default contruction
@@ -81,7 +81,7 @@ class Boundary : public ModelSubDomain<dim, Face>,
     Boundary( Boundary&& );
 
     /// gets MeshManager to delete the boundary including Faces
-    ~Boundary() override final = default;
+    ~Boundary() = default;
 
     Boundary<dim>&  operator=( const Boundary& );
 

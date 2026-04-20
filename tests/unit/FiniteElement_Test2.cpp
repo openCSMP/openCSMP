@@ -4,7 +4,7 @@
 #include "Element.h"
 #include "IsoparametricLinearPrism.h"
 #include "compareFloats.h"
-#include "MeshManagementUtilities.h"
+#include "meshManagementUtilities.h"
 
 using namespace std;
 

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class LinearTetrahedron : public FiniteElement {
+class LinearTetrahedron final : public FiniteElement {
   public:
 
     LinearTetrahedron();

@@ -5,7 +5,7 @@
 
 namespace csmp {
 
-class IsoparametricLinearPyramid : public FiniteElement {
+class IsoparametricLinearPyramid final : public FiniteElement {
 
   public:
 

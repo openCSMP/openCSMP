@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-class LinearLineElement : public FiniteElement {
+class LinearLineElement final : public FiniteElement {
   public:
     explicit LinearLineElement( uint32_t dimensions=2 );
 
