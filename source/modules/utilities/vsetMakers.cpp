@@ -1041,9 +1041,9 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     
     
     //--------------------------TOPOTYPE NODE FLAGS (35)
-    const TOPOTYPE v{MESH_VERTEX}, i{INTERIOR_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
+    const TOPOTYPE v{MESH_VERTEX}, i{INTERIOR_POINT}, e{EXTERIOR_POINT}, p{PERIMETER_POINT}, m{PERIMETER_LINE}, l{INTERIOR_LINE}, x{EXTERIOR_LINE};
     //                        0 1 2 3  4 5 6 7  8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34
-    vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, l, l, v, x, e, l, i, i, l, e, e, l, i, i, l, e, x, v, p, x, e, x, x, e };
+    vector<int8_t> gflags = { e,x,x,e, x,v,v,x, x,p, x, m, m, v, x, e, m, i, i, m, e, e, m, i, i, m, e, x, v, p, x, e, x, x, e };
     assert( gflags.size() == n_nodes );
     vset.AddBREP_Flags( gflags.begin(), gflags.end() );
 
@@ -1109,12 +1109,12 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( size_t n{0U}; n<vset.Elements(); ++n ) pushBack( elmt_nums, makeScalar( ANY, n ) );
+    for ( size_t n{0U}; n<vset.Elements(); ++n ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(n) ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t n{0U}; n<vset.Vertices(); ++n ) pushBack( node_nums, makeScalar( ANY, n ) );
+    for ( size_t n{0U}; n<vset.Vertices(); ++n ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(n) ) );
     vset.AddData( "node number", node_nums );
     // permeability
     PropertyData perm( ELEMENT, SCALAR, 2U );

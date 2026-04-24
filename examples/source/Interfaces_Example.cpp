@@ -541,7 +541,7 @@ void Interfaces_Example::BuildFromTRIANGLEModel(const string& model_name) {
   cout<<"\nStart building TRIANGLE model '"<<model_name<<"'..."<<endl;
   TRIANGLE_Interface  mesh_interface;
   VSet<2U>            mesh_container;
-  VSetConverter<2U>   mesh_converter;
+  VSetConverter       mesh_converter;
   stayInInputMeshes();
 
   mesh_interface.ReadTriangle2DMesh( model_name.c_str(), mesh_container );

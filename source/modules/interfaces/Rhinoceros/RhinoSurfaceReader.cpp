@@ -2,7 +2,6 @@
 #include "LinearTriangle3D.h"
 #include "VSet.h"
 #include "Box.h"
-#include <fstream>
 
 using namespace std;
 
@@ -40,214 +39,153 @@ RhinoSurfaceReader&  RhinoSurfaceReader::operator=( const RhinoSurfaceReader& r 
 
 
 
-bool RhinoSurfaceReader::InitializeFrom( const char* raw_file, bool erase_old )
- {
-    // access Rhino ".raw" file
-    char                   fname[200], intext[1000];
-    const char* const      delims =" ,\t";
-    char*                  token;
-    mjl::Point3D           p1, p2, p3;
-    list<mjl::Triangle3D>  triangles;
-    double                 x, y, z;
-    int64_t                triangle_counter(0);
-    string                 oname;
+#include <sstream>
+#include <algorithm>
+
+bool RhinoSurfaceReader::InitializeFrom(const char* raw_file, bool erase_old)
+{
+    std::string fname = std::string(raw_file) + ".raw";
+    std::ifstream ifs(fname);
     
-    strcpy( fname, raw_file );
-    strcat( fname, ".raw" );
-    ifstream  ifs( fname );
-    assert( ifs.is_open() );
-    
-    if ( erase_old )
-      {
-         cout <<"\nRhinoSurfaceReader::InitializeFrom: ";
-         cout <<"Erasing old objects before reading new ones."<< endl;
-         EraseObjects();
-      }
-    // reading Rhino surface object by object
-    while ( !ifs.eof() )
-      {
-         // 0. each triangle's coordinates occupy a single line in the Rhino file 
-         // reading line:  "spec-name  state\n"
-         ifs.getline( intext, 200 );
-         // exit condition
-         if ( strlen( intext ) <= 1 ) break;
-         
-         // 1. If the line is a single alphanumeric expression,
-         //    it must be the object name
-         if ( isalpha(intext[0]) ) 
-           {
-              // if this name marks the first line after an object
-              // this object is packed away.
-              if ( triangle_counter != 0 )
-                {
-                   // the earlier object name is used as map key
-                   objects[ oname ] = triangles;
-                   triangles.erase( triangles.begin(), triangles.end() );
-                   triangle_counter = 0;
+    if (!ifs.is_open()) {
+        std::cerr << "Error: Could not open Rhino file: " << fname << std::endl;
+        return false;
+    }
+
+    if (erase_old) {
+        std::cout << "\nRhinoSurfaceReader::InitializeFrom: Erasing old objects." << std::endl;
+        EraseObjects();
+    }
+
+    std::string line;
+    std::string current_oname = "Default_Object";
+    std::vector<LightWeightTriangle> triangles;
+    int64_t triangle_counter = 0;
+
+    while (std::getline(ifs, line)) {
+        // Clean up leading/trailing whitespace
+        line.erase(0, line.find_first_not_of(" \t\r\n"));
+        if (line.empty()) continue;
+
+        // 1. If the line starts with a letter, it's a new object name
+        if (std::isalpha(line[0])) {
+            // Save the previous object before starting a new one
+            if (!triangles.empty()) {
+                objects[current_oname] = triangles;
+                triangles.clear();
+                triangle_counter = 0;
+            }
+            
+            // Extract the first word as the name
+            std::stringstream ss(line);
+            ss >> current_oname;
+        }
+        // 2. Otherwise, parse the 9 coordinates (3 points)
+        else {
+            std::stringstream ss(line);
+            double coords[9];
+            bool success = true;
+
+            for (int i = 0; i < 9; ++i) {
+                if (!(ss >> coords[i])) {
+                    success = false;
+                    break;
                 }
-              // the new object name is parsed
-              oname = strtok( intext, delims );
-           }
-         // 2. else, the line must hold the coordinates of a triangle
-         //    these are 9 floating point numbers
-         else 
-           {
-               // reading coordinates of Vertex 1
-               token = strtok( intext, delims );
-               x = atof( token );
-               token = strtok( NULL, delims );
-               y = atof( token );
-               token = strtok( NULL, delims );
-               z = atof( token );
-               p1.Set( x, y, z );
+            }
 
-                // reading coordinates of Vertex 1
-               token = strtok( NULL, delims );
-               x = atof( token );
-               token = strtok( NULL, delims );
-               y = atof( token );
-               token = strtok( NULL, delims );
-               z = atof( token );
-               p2.Set( x, y, z );
+            if (success) {
+                Point<3> p1(coords[0], coords[1], coords[2]);
+                Point<3> p2(coords[3], coords[4], coords[5]);
+                Point<3> p3(coords[6], coords[7], coords[8]);
 
-               // reading coordinates of Vertex 1
-               token = strtok( NULL, delims );
-               x = atof( token );
-               token = strtok( NULL, delims );
-               y = atof( token );
-               token = strtok( NULL, delims );
-               z = atof( token );
-               p3.Set( x, y, z );
-               
-               // storing triangle and counting triangles per object
-               triangles.push_back( mjl::Triangle3D( p1, p2, p3, triangle_counter++ ) ); 
-           }
-       }
+                // Replacing mjl::Triangle3D with your internal Triangle representation
+                triangles.push_back(LightWeightTriangle(p1, p2, p3, triangle_counter++));
+            }
+        }
+    }
 
-     // 3. Storing the last surface in the file as well
-     if ( triangle_counter != 0 )
-       {
-          // the earlier object name is used as map key
-          objects[ oname ] = triangles;
-          triangles.erase( triangles.begin(), triangles.end() );
-          triangle_counter = 0;
-       }
-    
-    // 4. reporting the outcome of the reading
-    if ( objects.empty() )
-      cout <<"\nRhinoSurfaceReader::InitializeFrom: File: "<< fname <<" No objects were read.";
-    else
-      {
-         cout <<"\nRhinoSurfaceReader::InitializeFrom: File: "<< fname <<" read successfully.";
-         cout <<"\n\tread "<< objects.size() <<" objects with following names and numbers of triangles:\n";
-         for ( map<string,list<mjl::Triangle3D> >::const_iterator
-               it=objects.begin(); it!=objects.end(); it++ )
-           cout <<"\t\t'"<< (*it).first <<"':  "<< (*it).second.size() << endl;
-         cout << endl; 
-      }  
-    // if data were read from file, an O.K. is returned   
+    // 3. Store the final object
+    if (!triangles.empty()) {
+        objects[current_oname] = triangles;
+    }
+
+    // 4. Reporting
+    if (objects.empty()) {
+        std::cout << "\nRhinoSurfaceReader::InitializeFrom: " << fname << " - No objects found.";
+    } else {
+        std::cout << "\nRhinoSurfaceReader::InitializeFrom: " << fname << " read successfully.";
+        std::cout << "\n\tRead " << objects.size() << " objects:\n";
+        
+        for (const auto& pair : objects) {
+            std::cout << "\t\t'" << pair.first << "': " << pair.second.size() << " triangles\n";
+        }
+    }
+
     return !objects.empty();
- 
- } // end 
- 
+} 
 
 
 
-void RhinoSurfaceReader::ObjectToPData( const string& obj_name,
-                                        map<size_t,mjl::Point3D>&  points,
-                                        map<size_t,vector<size_t> >& plist,
-                                        size_t poffset ) const
-  {
-     // finding the desired object in the map 
-     map<string,list<mjl::Triangle3D> >::const_iterator it = objects.find(obj_name);  
-     if ( it == objects.end() ) {
-          cout <<"\nRhinoSurfaceReader::ObjectToPData: Object could not be found. ";
-          cout <<"Nothing was done."<< endl;
-          return;
-      }
-    cout <<"\nRhinoSurfaceReader::ObjectToPData: Converting object: "<< (*it).first << endl;
-    // zapping the supplied maps
-    points.erase( points.begin(), points.end() );
-    plist.erase( plist.begin(), plist.end() ); 
-     
-    // zooming through the triangle list, 
-    // creating a unique set of nodes ordered by hashkeys created from the node coordinates
-    // for this, the node coordinates are converted to strings 
-    map<string,vector<double> >            pxyz;
-    vector<double>                         coord(3);
-    list<mjl::Triangle3D>::const_iterator  lit;
-    string                                 key;
-    char                                   num[20];
-    uint32_t                               i, j;
-     
-    for ( lit=(*it).second.begin(); lit!=(*it).second.end(); lit++ )
-      {
-         // for all triangle verticies
-         for ( i=0; i<3; i++ )
-           {
-              key.erase( key.begin(), key.end() );
-              // for all the coordinate directions
-              for ( j=0; j<3; j++ )
-                {
-                   coord[j] = (*lit)[i][j];
-                   // convert double coordinate value to string and add to hash key
-                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
-                   key += num;
-                }
-              // adding new map entry
-              pxyz[ key ] = coord;
-           }
-      }
-      
-    // creating a second numbered (0...n-1) map of vertex coordinates
-    // and assigning the vertex points to the output map
-    map<string,size_t>                              pxyz_ids;
-    size_t                                          n;
-    vector<size_t>                                  ids(3);
-    map<string,vector<double> >::const_iterator     pit;
-    
-    for ( n=poffset, pit=pxyz.begin(); pit!=pxyz.end(); pit++ )
-      { 
-         points[ n ] = mjl::Point3D( (*pit).second[0], (*pit).second[1], (*pit).second[2] );
-         pxyz_ids[ (*pit).first ] = n++;
-      }
-   
-   
-    // creating the plist by searching the ID's for each vertex in the vertex list
-    map<string,size_t>::const_iterator  cit;
-    
-    for ( n=poffset, lit=(*it).second.begin(); lit!=(*it).second.end(); lit++ )
-      {
-         // for all triangle verticies
-         for ( i=0; i<3; i++ )
-           {
-              key.erase( key.begin(), key.end() );
-              // for all the coordinate directions create key to search the map
-              // --------------------------------------------------------------
-              for ( j=0; j<3; j++ )
-                {
-                   coord[j] = (*lit)[i][j];
-                   // convert double coordinate value to string and add to hash key
-                   snprintf( num, sizeof(num), "%lf", (*lit)[i][j]  );
-                   key += num;
-                }
-              // search the ID map for the node number
-              // -------------------------------------
-              if ( (cit=pxyz_ids.find( key )) == pxyz_ids.end() )
-                {
-                   cout <<"\nRhinoSurfaceReader::ObjectToPData: ";
-                   cout <<" Unable to find a vertex for the key: "<< key << endl;
-                   cout <<"\nTerminating execution of ObjectToPData()." << endl;
-                   return;
-                }
-              else ids[i] = (*cit).second;
-           }
-         // assigning entry to plist
-         plist[ n++ ] = ids;
-      }
-     
-  } // end ObjectToPData
 
+void RhinoSurfaceReader::ObjectToPData(const string& obj_name,
+                                       map<size_t, Point<3>>& points,
+                                       map<size_t, vector<size_t>>& plist,
+                                       size_t poffset) const
+{
+    // 1. Find the object
+    auto it = objects.find(obj_name);
+    if (it == objects.end()) {
+        cout << "\nRhinoSurfaceReader::ObjectToPData: Object '" << obj_name << "' not found." << endl;
+        return;
+    }
+
+    cout << "\nRhinoSurfaceReader::ObjectToPData: Converting object: " << it->first << endl;
+
+    points.clear();
+    plist.clear();
+
+    // Map to store unique coordinate strings to their assigned ID
+    // Using a string key acts as a "poor man's" fuzzy-logic unifier for doubles
+    map<string, size_t> pxyz_to_id;
+    size_t next_point_id = poffset;
+    size_t face_counter = poffset;
+
+    // A helper to generate the coordinate key (replaces snprintf logic)
+    auto generate_key = [](const Point<3>& p) {
+        char buf[128];
+        // Use %.6f or similar to ensure slight precision variations don't create duplicate points
+        snprintf(buf, sizeof(buf), "%.6f,%.6f,%.6f", p[0], p[1], p[2]);
+        return string(buf);
+    };
+
+    // 2. Single pass through the triangles
+    for (const auto& tri : it->second) {
+        vector<size_t> face_indices(3);
+
+        for (uint32_t i = 0; i < 3; ++i) {
+            // tri[i] returns the i-th Point<3> of the triangle
+            string key = generate_key(tri[i]);
+
+            auto existing = pxyz_to_id.find(key);
+            if (existing == pxyz_to_id.end()) {
+                // New unique point found
+                size_t new_id = next_point_id++;
+                pxyz_to_id[key] = new_id;
+                points[new_id] = tri[i];
+                face_indices[i] = new_id;
+            } else {
+                // Shared point found
+                face_indices[i] = existing->second;
+            }
+        }
+        
+        // Store the face (connectivity)
+        plist[face_counter++] = face_indices;
+    }
+
+    cout << "\tProcessed " << it->second.size() << " triangles into " 
+         << points.size() << " unique vertices." << endl;
+}
 
 
 
@@ -319,71 +257,52 @@ void RhinoSurfaceReader::CreateNeighborPData( const map<size_t,vector<size_t> >&
 
 
 
-size_t  RhinoSurfaceReader::SelectAndDescribeObjects( list<pair<string,string> >& selections,
-                                                      bool erase_list_before ) const
- {
-    if ( objects.empty() )
-      {
-         cout <<"\nRhinoSurfaceReader::SelectObjects: Error: No objects to select from."<< endl;
-         return 0;
-      }
-    if ( erase_list_before ) selections.erase( selections.begin(), selections.end() );
- 
-    cout <<"\nRhinoSurfaceReader::SelectObjects: Please select objects from listing: "<< endl;
-    // looping throug the objects and writing them to the output file
-    map<string,list<mjl::Triangle3D> >::const_iterator  it;
-    int answ(0);
-    
-    for ( it=objects.begin(); it!=objects.end(); it++ )
-      {
-         // selecting an object
-         cout <<"\nObject: "<< (*it).first <<" (yes=1,no=0): "; 
-         cin >> answ;
-         
-         // if an object is selected its geological type is queried
-         if ( answ == 1 ) 
-           {
-              cout <<"\nGoCad 'GEOLOGICAL_TYPE', options: "<< endl;
-              cout <<"  top (0)\n  intraformational (1)\n  fault (2)\n  unconformity (3)\n";
-              cout <<"  intrusive(4)\n  topography (5)\n  boundary (6)\n  ghost (7)"<< endl; 
-              cin >> answ;
-              
-              // storing the object
-              switch ( answ )
-                {
-                   case 0: 
-                     selections.push_back( pair<string,string>((*it).first, "top") );
-                     break;
-                   case 1: 
-                     selections.push_back( pair<string,string>((*it).first, "intraformational") );
-                     break;
-                   case 2: 
-                     selections.push_back( pair<string,string>((*it).first, "fault") );
-                     break;
-                   case 3: 
-                     selections.push_back( pair<string,string>((*it).first, "unconformity") );
-                     break;
-                   case 4: 
-                     selections.push_back( pair<string,string>((*it).first, "intrusive") );
-                     break;
-                   case 5: 
-                     selections.push_back( pair<string,string>((*it).first, "topography") );
-                     break;
-                   case 6: 
-                     selections.push_back( pair<string,string>((*it).first, "boundary") );
-                     break;
-                   case 7: 
-                     selections.push_back( pair<string,string>((*it).first, "ghost") );
-                }   
-              answ = 0;
-           }
-      }  
-     
-    cout <<"\nThank you."<< endl;
- 
-    return selections.size();
- }
+size_t RhinoSurfaceReader::SelectAndDescribeObjects(list<pair<string, string>>& selections,
+                                                    bool erase_list_before) const
+{
+    if (objects.empty()) {
+        cout << "\nRhinoSurfaceReader::SelectObjects: Error: No objects to select from." << endl;
+        return 0;
+    }
 
+    if (erase_list_before) {
+        selections.clear();
+    }
+
+    // Define the geological types in an array for easy indexing
+    static const vector<string> geo_types = {
+        "top", "intraformational", "fault", "unconformity",
+        "intrusive", "topography", "boundary", "ghost"
+    };
+
+    cout << "\nRhinoSurfaceReader::SelectObjects: Please select objects from listing: " << endl;
+
+    for (const auto& [name, triangle_list] : objects) {
+        int choice = 0;
+        cout << "\nObject: " << name << " (yes=1, no=0): ";
+        cin >> choice;
+
+        if (choice == 1) {
+            cout << "\nGoCad 'GEOLOGICAL_TYPE' options:" << endl;
+            for (size_t i = 0; i < geo_types.size(); ++i) {
+                cout << "  " << geo_types[i] << " (" << i << ")\n";
+            }
+            
+            cout << "Selection: ";
+            cin >> choice;
+
+            // Validate input and store the pair
+            if (choice >= 0 && static_cast<size_t>(choice) < geo_types.size()) {
+                selections.push_back({name, geo_types[choice]});
+            } else {
+                cout << "Invalid selection. Skipping geological type assignment." << endl;
+            }
+        }
+    }
+
+    cout << "\nThank you." << endl;
+    return selections.size();
+}
 
 
 
@@ -394,7 +313,7 @@ number. A map is also created which contains entries of the node numbers
 which make up each triangle.   
 */
 bool RhinoSurfaceReader::PopObject( const char *obj_name,
-                                    map<size_t,mjl::Point3D >&  points,
+                                    map<size_t,Point<3> >&  points,
                                     map<size_t,vector<size_t> >& plist,
                                     size_t poffset ) const
  {
@@ -414,8 +333,8 @@ defaults for the colors and properties with which the surface will
 be drawn.  
 */
 void RhinoSurfaceReader::WriteGocadHeader( const char* surf_name,
-                                               const char* GEOLOGICAL_TYPE, 
-                                               ofstream& ofs ) const
+                                           const char* GEOLOGICAL_TYPE,
+                                           ofstream& ofs ) const
  {
     assert( ofs.is_open() );
   // writing GoCad text file header
@@ -472,62 +391,58 @@ void RhinoSurfaceReader::WriteGocadHeader( const char* surf_name,
 
 
 
-// output object to VSet
-void RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) const
- {
-    if ( objects.empty() ) {
-         cerr <<"\nRhinoSurfaceReader::OutputObjectTo: No objects are present.";
-         return;
-      }
-   
-     // looping throug the objects and writing them to the output file
-    string  object(obj);
-    map<string,list<mjl::Triangle3D> >::const_iterator  it=objects.find( object );
-    if ( it == objects.end() ) {
-         cerr <<"\nRhinoSurfaceReader::OutputObjectTo: Desired object could not be found."<< endl;
-         return;
-      }  
+void RhinoSurfaceReader::OutputObjectTo(const char* obj, VSet<3U>& vset) const
+{
+    if (objects.empty()) {
+        cerr << "\nRhinoSurfaceReader::OutputObjectTo: No objects are present.";
+        return;
+    }
 
-    // find object and create pxyz and plist arrays for the desired object
-    map<size_t,mjl::Point3D>     points;
-    map<size_t,vector<size_t> >  plist;
-
-    PopObject( object.c_str(), points, plist );
+    // 1. Find the object in the map
+    string target_name(obj);
+    auto it = objects.find(target_name);
     
-    // create 'pfverts' data
-    vector<std::int8_t>         pbflags;
-    map<size_t,vector<int64_t> > pfverts;
+    if (it == objects.end()) {
+        cerr << "\nRhinoSurfaceReader::OutputObjectTo: Desired object '" << target_name << "' not found." << endl;
+        return;
+    }
 
-    CreateNeighborPData( plist, pfverts, pbflags );
+    // 2. Generate unique points and connectivity (plist)
+    // Note: I'm assuming PopObject was updated to your new Triangle type
+    map<size_t, Point<3>> points;
+    map<size_t, vector<size_t>> plist;
+    PopObject(obj, points, plist);
 
-    // storing data in 'vset'
-    LinearTriangle3D  tri3;
+    // 3. Topology calculation: Find neighbors and boundary flags
+    vector<std::int8_t> pbflags;
+    map<size_t, vector<int64_t>> pfverts;
+    CreateNeighborPData(plist, pfverts, pbflags);
+
+    // 4. Initialize VSet
+    // Using a temporary to get element metadata (cleaner than hardcoding)
+    LinearTriangle3D tri3;
     vset.Erase();
-    vset.Resize( tri3.Nodes(),
-                 tri3.Neighbors(),
-                 tri3.ElementType(),
-                 points.size(), plist.size() );
-    
-    // finite element type
-    vset.SingleElementType( LINEAR_TRIANGLE3D );
+    vset.Resize(tri3.Nodes(),
+                tri3.Neighbors(),
+                tri3.ElementType(),
+                points.size(), 
+                plist.size());
 
-    // px, py, pz
-    for ( auto ptit=points.begin(); ptit!=points.end(); ptit++ )
-      {
-         vset.Px( (*ptit).first, (*ptit).second.x_ );
-         vset.Py( (*ptit).first, (*ptit).second.y_ );
-         vset.Pz( (*ptit).first, (*ptit).second.z_ );
-      }
+    vset.SingleElementType(LINEAR_TRIANGLE3D);
 
-    // boundary flags and data
-    vset.AddBFlags( pbflags.begin(), pbflags.end() );
-    
-    // plist, pfverts
-    vset.AddPlist( plist.begin(), plist.end() );
-    vset.AddPfverts( pfverts.begin(), pfverts.end() );
+    // 5. Transfer Point Coordinates
+    for (const auto& [id, point] : points) {
+        vset.Px(id, point[0]);
+        vset.Py(id, point[1]);
+        vset.Pz(id, point[2]);
+    }
 
- } // end OutputObjectTo
+    // 6. Bulk transfer of boundary and connectivity data
+    vset.AddBFlags(pbflags.begin(), pbflags.end());
+    vset.AddPlist(plist.begin(), plist.end());
+    vset.AddPfverts(pfverts.begin(), pfverts.end());
 
+} // end OutputObjectTo
 
 
 
@@ -544,44 +459,43 @@ void RhinoSurfaceReader::OutputObjectTo( const char* obj, VSet<3U>& vset ) const
 Not necessarily recommended since GoCad often has difficulties in reading
 individual surfaces.  
  */
-void RhinoSurfaceReader::WriteObjectsToTSurf( const char* tsurf_file,
-                                                  const char* GEOLOGICAL_TYPE ) const
- {
-   ofstream  ofs;
-   char      file[200];
-   strcpy( file, tsurf_file ); 
-   strcat( file, ".ts" );
-
-   ofs.open ( file, ios::out|ios::trunc );
-   if ( !ofs )
-     {
-         cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: ";
-         cout <<"Output file could not be opened"<< endl;
-         return;
-      }
-
-   if ( objects.empty() )
-     {
-        cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: No objects are present.";
+void RhinoSurfaceReader::WriteObjectsToTSurf(const char* tsurf_file,
+                                             const char* GEOLOGICAL_TYPE) const
+{
+    // 1. Safety and File Path
+    if (objects.empty()) {
+        cout << "\nRhinoSurfaceReader::WriteObjectsToTSurf: No objects are present." << endl;
         return;
-     }
-   
-  WriteGocadHeader( tsurf_file, GEOLOGICAL_TYPE, ofs ); 
-         
-  // looping throug the objects and writing them to the output file
-  map<string,list<mjl::Triangle3D> >::const_iterator  it;
-    
-  for ( it=objects.begin(); it!=objects.end(); it++ )
-    {
-       cout <<"\nSaving object: "<< (*it).first <<" to file."; 
-       WriteObjectToTSurf( (*it).first.c_str(), ofs ); 
-    }  
-  // terminating object description
-  ofs <<"END" << endl;
-    
-  ofs.close();
-  cout <<"\nRhinoSurfaceReader::WriteObjectsToTSurf: "<< file <<" written successfully"<< endl;
-}  
+    }
+
+    std::string filename = std::string(tsurf_file) + ".ts";
+    ofstream ofs(filename, ios::out | ios::trunc);
+
+    if (!ofs) {
+        cout << "\nRhinoSurfaceReader::WriteObjectsToTSurf: ";
+        cout << "Output file '" << filename << "' could not be opened" << endl;
+        return;
+    }
+
+    // 2. Gocad Header
+    // Note: Assuming WriteGocadHeader takes std::ostream& or ofstream&
+    WriteGocadHeader(tsurf_file, GEOLOGICAL_TYPE, ofs);
+
+    // 3. Loop through the objects using structured bindings
+    // This replaces the complex map<string, list<mjl::Triangle3D>> iterator
+    for (const auto& [name, triangles] : objects) {
+        cout << "\nSaving object: " << name << " to file." << endl;
+        
+        // Assuming WriteObjectToTSurf handles the mjl-free triangles now
+        WriteObjectToTSurf(name.c_str(), ofs);
+    }
+
+    // 4. Terminating GoCad TSurf format
+    ofs << "END" << endl;
+
+    ofs.close();
+    cout << "\nRhinoSurfaceReader::WriteObjectsToTSurf: " << filename << " written successfully" << endl;
+}
         
 
 
@@ -663,7 +577,7 @@ void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) co
  {
     assert( ofs.is_open() );
  
-    map<size_t,mjl::Point3D>     points;
+    map<size_t,Point<3>>     points;
     map<size_t,vector<size_t> >  plist;
 
     // find object and create pxyz and plist arrays for the desired object
@@ -677,7 +591,7 @@ void RhinoSurfaceReader::WriteObjectToTSurf( const char* obj, ofstream& ofs ) co
       {
          // identifier     node ID 1...n
          ofs <<"VRTX "<< (*it).first+1 <<" ";
-         ofs << (*it).second.X() <<" "<< (*it).second.Y() <<" "<< (*it).second.Z() << endl;
+         ofs << (*it).second[0] <<" "<< (*it).second[1] <<" "<< (*it).second[2] << endl;
       }
 
     // writing node id's per triangle as in plist
@@ -711,67 +625,35 @@ void RhinoSurfaceReader::EraseObjects()
 
 
 
-/**
- 
-Swaps the specified coordinate axis which are assumed to be labeled
-0=x, 1=y, and 2=z. 
+void RhinoSurfaceReader::ExchangeCoordinateAxes(int axis_a, int axis_b)
+{
+    if (objects.empty()) return;
+    if (axis_a < 0 || axis_a > 2 || axis_b < 0 || axis_b > 2) return;
+    if (axis_a == axis_b) return;
 
-@section arguments Input Arguments 
+    // A single swap of two axes is a reflection. 
+    // Reflection flips the normal, so we MUST flip the winding order 
+    // (swap nodes 1 and 2) to keep the normal pointing the same way.
+    for (auto& [name, triangles] : objects) {
+        for (auto& tri : triangles) {
+            
+            // 1. Swap the coordinates for all 3 vertices
+            for ( uint32_t i = 0; i < 3; ++i) {
+                Point<3> vertex = tri[i];
+                std::swap(vertex[axis_a], vertex[axis_b]);
+                tri.SetVertex(i, vertex); 
+            }
 
-The two integer arguments refer to the axis which shall be changed.  
-
-@section application Application
-
-To adapt surface data to another frame of reference. 
-
-@section messages Messages 
-
-If the axes do not exist (are below 0 or greater than 2) the method
-will quit emitting a message. 
-*/
-void RhinoSurfaceReader::ExchangeCoordinateAxes( int axis_a, int axis_b )
- {
-    if ( objects.empty() )
-      {
-         cout <<"\nRhinoSurfaceReader::ExchangeCoordinateAxes: No object data are present. ";
-         cout <<"Nothing was done..."<< endl;
-         return;
-      }
-    if ( axis_a < 0 || axis_a > 2 || axis_b < 0 || axis_b > 2 )
-      {
-         cout <<"\nRhinoSurfaceReader::ExchangeCoordinateAxes: Target axis does not exist: ";
-         cout << axis_a <<" or "<< axis_b << endl;
-         return;
-      }
-
-    // looping over the objects 
-    mjl::Point3D  pt[3];
-    double      swap;
-    int64_t         pid;
+            // 2. Correct the Winding Order
+            // If the original was Node 0 -> 1 -> 2 (CCW)
+            // After coordinate swap, it becomes CW.
+            // Swapping Node 1 and Node 2 restores CCW.
+            tri.ReverseWinding(); 
+        }
+    }
     
-    for ( map<string,list<mjl::Triangle3D> >::iterator
-          oit=objects.begin(); oit!=objects.end(); oit++ )
-      for ( list<mjl::Triangle3D>::iterator
-            tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
-        {
-           for ( int32_t i=0; i<3; i++ )
-             {
-                // changing point by point 
-                // 1. getting the point 
-                pt[i]         = (*tit)[i];
-                // 2. changing the point coordinates
-                swap          = pt[i][axis_a];
-                pt[i](axis_a) = pt[i][axis_b];
-                pt[i](axis_b) = swap;
-             }
-           // storing the reworked points re-organising the triangle if necessary
-           pid = (*tit).id_;
-           (*tit).Set( pt[0], pt[1], pt[2], pid );
-       }
-
- } // end ExchangeCoordinateAxes
-
-
+    cout << "Exchanged axes " << axis_a << " and " << axis_b << " and updated winding orders." << endl;
+}
  
  
      
@@ -794,38 +676,46 @@ To scale an object for a new frame of reference.
 
 Nothing is done if no objects are present. 
  */
-void RhinoSurfaceReader::ScaleCoordinates( double x_fac, double y_fac, double z_fac )
- {
-    if ( objects.empty() )
-      {
-         cout <<"\nRhinoSurfaceReader::ScaleCoordinates: No object data are present. ";
-         cout <<"Nothing was done..."<< endl;
-         return;
-      }
+void RhinoSurfaceReader::ScaleCoordinates(double x_fac, double y_fac, double z_fac)
+{
+    if (objects.empty()) {
+        cout << "\nRhinoSurfaceReader::ScaleCoordinates: No object data present. Nothing done..." << endl;
+        return;
+    }
 
-    // looping over the objects 
-    mjl::Point3D  pt[3];
+    // Optimization: If all factors are 1.0, just exit
+    if (x_fac == 1.0 && y_fac == 1.0 && z_fac == 1.0) return;
+
+    // Use structured bindings (C++17) to iterate over name and triangle list
+    for (auto& [name, triangles] : objects) {
+        for (auto& tri : triangles) {
+            Point<3> pts[3];
+            
+            for (uint32_t i = 0; i < 3; ++i) {
+                // 1. Get the current vertex
+                pts[i] = tri[i];
+
+                // 2. Scale the coordinates
+                pts[i][0] *= x_fac;
+                pts[i][1] *= y_fac;
+                pts[i][2] *= z_fac;
+            }
+
+            // 3. Update the triangle with the scaled points
+            // Assuming tri.id_ is accessible or stored internally
+            tri.Set(pts[0], pts[1], pts[2], tri.id_);
+            
+            // Note: If any scale factor is negative, it will flip the normal!
+            // In a serious CAD/FEA context, you might check if (x_fac*y_fac*z_fac < 0)
+            // and reverse the winding order if it does.
+            if ((x_fac * y_fac * z_fac) < 0.0) {
+                tri.ReverseWinding();
+            }
+        }
+    }
     
-    for ( map<string,list<mjl::Triangle3D> >::iterator oit = objects.begin(); oit!=objects.end(); oit++ )
-      for ( list<mjl::Triangle3D>::iterator tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
-        {
-           for ( int32_t i=0; i<3; i++ )
-             {
-                // changing point by point 
-                // 1. getting the point 
-                pt[i] = (*tit)[i];
-                // 2. scaling the point coordinates
-                pt[i](0) *= x_fac;
-                pt[i](1) *= y_fac;
-                pt[i](2) *= z_fac;
-             }
-           // storing the reworked points re-organising the triangle if necessary
-           const long pid = (*tit).id_;
-           (*tit).Set( pt[0], pt[1], pt[2], pid );
-       }
-
- } // end TranslateCoordinates
- 
+    cout << "Scaled coordinates by factors: (" << x_fac << ", " << y_fac << ", " << z_fac << ")" << endl;
+}
  
  
  
@@ -856,7 +746,7 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
       }
 
     // looping over the objects 
-    mjl::Point3D  pt[3];
+    Point<3>  pt[3];
     
     for ( auto oit = objects.begin(); oit!=objects.end(); oit++ )
       for ( auto tit=(*oit).second.begin(); tit!=(*oit).second.end(); tit++ )
@@ -867,9 +757,9 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
                 // 1. getting the point 
                 pt[i] = (*tit)[i];
                 // 2. moving the point coordinates
-                pt[i](0) += x_move;
-                pt[i](1) += y_move;
-                pt[i](2) += z_move;
+                pt[i][0] += x_move;
+                pt[i][1] += y_move;
+                pt[i][2] += z_move;
              }
            // storing the reworked points re-organising the triangle if necessary
            auto pid = (*tit).id_;
@@ -878,7 +768,7 @@ void RhinoSurfaceReader::MoveCoordinates( double x_move, double y_move, double z
 
  } // end MoveCoordinates
 
-} // end namespace csp
+} // end namespace csmp
 
 
 

@@ -1,4 +1,5 @@
 #include "LinearLineElement.h"
+#include "Point.h"
 
 using namespace std;
 
@@ -115,38 +116,12 @@ matrix M of dimensions rows = spatial dimensions x columns = nodes.
 second method argument.
 */
 void LinearLineElement::dN( DenseMatrix<DM_MIN>& DN )
-  {
-     double  len;
-     DN.Resize(dim,npe);
-
-     // 2-dimensional edge
-     if ( dim == 2 ) {
-          org2.Set(XY(0,0),XY(0,1));
-          dest2.Set(XY(1,0),XY(1,1));
-          edge2.Set( org2, dest2 );
-          len = edge2.Length();
-          // x-derivatives
-          DN(0,0) = -(dest2[0]-org2[0]) / len; DN(0,1) = (dest2[0]-org2[0]) / len;
-          // y-derivatives
-          DN(1,0) = -(dest2[1]-org2[1]) / len; DN(1,1) = (dest2[1]-org2[1]) / len;
-       }
-     // 3-dimensional edge
-     else
-       {
-          org3.Set(XY(0,0),XY(0,1),XY(0,2));
-          dest3.Set(XY(1,0),XY(1,1),XY(1,2));
-          edge3.Set( org3, dest3 );
-          len = edge3.Length();
-          // x-derivatives
-          DN(0,0) = -(dest3[0]-org3[0]) / len; DN(0,1) = (dest3[0]-org3[0]) / len;
-          // y-derivatives
-          DN(1,0) = -(dest3[1]-org3[1]) / len; DN(1,1) = (dest3[1]-org3[1]) / len;
-          // z-derivatives
-          DN(2,0) = -(dest3[2]-org3[2]) / len; DN(2,1) = (dest3[2]-org3[2]) / len;
-       }
-
-  } // end dN
-
+{
+    // Initialize with size 1 even though it's not used, 
+    // just to prevent any internal vector access crashes.
+    static const vector<double> dummy_coords(1, 0.0);
+    dN_At( DN, dummy_coords );
+}
 
 
 
@@ -168,41 +143,33 @@ second method argument and the length of the Line element is returned
 as a double variable.
  */
 double LinearLineElement::dN_At( DenseMatrix<DM_MIN>& DN, const vector<double>& )
- {
-     double  len(std::numeric_limits<double>::quiet_NaN());
-     DN.Resize(dim,npe);
+{
+    // npe = 2 (nodes per element), dim = 2 or 3
+    DN.Resize(dim, npe); 
+    
+    // Create vector from Org to Dest
+    // Using Point<3> as a container even for 2D is often safer in generic code,
+    // but here we follow your dim logic.
+    double dx = XY(1,0) - XY(0,0);
+    double dy = XY(1,1) - XY(0,1);
+    double dz = (dim == 3) ? (XY(1,2) - XY(0,2)) : 0.0;
 
-     // 2-dimensional edge
-     if ( dim == 2 ) {
-          org2.Set(XY(0,0),XY(0,1));
-          dest2.Set(XY(1,0),XY(1,1));
-          edge2.Set( org2, dest2 );
-          len = edge2.Length();
-          // x-derivatives
-          DN(0,0) = -(dest2[0]-org2[0]) / len; DN(0,1) = (dest2[0]-org2[0]) / len;
-          // y-derivatives
-          DN(1,0) = -(dest2[1]-org2[1]) / len; DN(1,1) = (dest2[1]-org2[1]) / len;
-       }
-     // 3-dimensional edge
-     else
-       {
-          org3.Set(XY(0,0),XY(0,1),XY(0,2));
-          dest3.Set(XY(1,0),XY(1,1),XY(1,2));
-          edge3.Set( org3, dest3 );
-          len = edge3.Length();
-          // x-derivatives
-          DN(0,0) = -(dest3[0]-org3[0]) / len; DN(0,1) = (dest3[0]-org3[0]) / len;
-          // y-derivatives
-          DN(1,0) = -(dest3[1]-org3[1]) / len; DN(1,1) = (dest3[1]-org3[1]) / len;
-          // z-derivatives
-          DN(1,0) = -(dest3[2]-org3[2]) / len; DN(1,1) = (dest3[2]-org3[2]) / len;
-       }
+    double lenSq = dx*dx + dy*dy + dz*dz;
+    double len = std::sqrt(lenSq);
 
-     return len;
+    // Shape function derivatives (Constant over the element)
+    // Node 0 (N1): Derivative is -delta / L^2
+    // Node 1 (N2): Derivative is +delta / L^2
+    
+    DN(0,0) = -dx / lenSq;  DN(0,1) = dx / lenSq; // dN/dx
+    DN(1,0) = -dy / lenSq;  DN(1,1) = dy / lenSq; // dN/dy
+    
+    if (dim == 3) {
+        DN(2,0) = -dz / lenSq;  DN(2,1) = dz / lenSq; // dN/dz
+    }
 
- } // end
-
-
+    return len;
+}
 
 
 
@@ -218,19 +185,15 @@ the area is computed.
 */
 double LinearLineElement::Volume()
 {
-   // 2-dimensional models
-   if ( dim == 2 ) {
-         org2.Set(XY(0,0),XY(0,1));
-         dest2.Set(XY(1,0),XY(1,1));
-         return (dest2 - org2).Length();
-     }
+    // The "Volume" of a line element is its length (L)
+    // potentially multiplied by a cross-sectional area if defined.
+    
+    double dx = XY(1,0) - XY(0,0);
+    double dy = XY(1,1) - XY(0,1);
+    double dz = (dim == 3) ? (XY(1,2) - XY(0,2)) : 0.0;
 
-   // 3-dimensional models
-   org3.Set(XY(0,0),XY(0,1),XY(0,2));
-   dest3.Set(XY(1,0),XY(1,1),XY(1,2));
-   return (dest3 - org3).Length();
+    return std::sqrt(dx*dx + dy*dy + dz*dz);
 }
-
 
 
 /**
@@ -274,21 +237,17 @@ void LinearLineElement::N( vector<double>& FN, const vector<double>& xy )
 
      // 2-dimensional edge
      if ( dim == 2 ) {
-          org2.Set(XY(0,0),XY(0,1));
-          dest2.Set(XY(1,0),XY(1,1));
-          p2.Set(xy[0],xy[1]);
-          len = (dest2 - org2).Length();
-          l1  = (dest2 - p2).Length();
+          Point<2> org(XY(0,0),XY(0,1)), dest(XY(1,0),XY(1,1)), p(xy[0],xy[1]);
+          len = (dest - org).Length();
+          l1  = (dest - p).Length();
           l2  = len - l1;
        }
      // 3-dimensional edge
      else
        {
-          org3.Set(XY(0,0),XY(0,1),XY(0,2));
-          dest3.Set(XY(1,0),XY(1,1),XY(1,2));
-          p3.Set(xy[0],xy[1],xy[2]);
-          len = (dest3 - org3).Length();
-          l1  = (dest3 - p3).Length();
+          Point<3> org(XY(0,0),XY(0,1),XY(0,2)), dest(XY(1,0),XY(1,1),XY(1,2)), p(xy[0],xy[1],xy[2]);
+          len = (dest - org).Length();
+          l1  = (dest - p).Length();
           l2  = len - l1;
        }
 
@@ -379,7 +338,7 @@ void LinearLineElement::N_AtBaryCenter(std::vector<double>& N)
 {
 	vector<double> p;
 	p.resize(dim);
-	for (auto i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
+	for ( uint32_t i = 0; i < dim; ++i) p[i] = 0.5*(XY(0, i) + XY(1, i));
 	LinearLineElement::N(N, p);
 }
 
@@ -389,33 +348,42 @@ void LinearLineElement::N_AtBaryCenter(std::vector<double>& N)
     In 3D, the input vector must contain the rotation axis around which
     the edge is turned to create the unit normal.
 */
-vector<double>  LinearLineElement::UnitNormal() const
- {
-    vector<double> vc(2, 0.);
-    static bool first_call(true);
+vector<double> LinearLineElement::UnitNormal() const
+{
+    // 2D Case
+    if (dim == 2) {
+        // 1. Calculate direction vector (Tangent)
+        double dx = XY(1,0) - XY(0,0);
+        double dy = XY(1,1) - XY(0,1);
 
-    if ( dim == 2 ) {
-        edge2.Set( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
-        edge2.Rot();
-        edge2.NormalizeTo(1.0);
-        vc[0] = edge2.Destination()[0];
-        vc[1] = edge2.Destination()[1];
-      }
-    else
-      {
-        if ( first_call )  cout <<"\nLinearLineElement::UnitNormal: Using input vector as reference axis."<< endl;
-        edge3.Set( mjl::Point3D(XY(0,0),XY(0,1),XY(0,2)),
-                   mjl::Point3D(XY(1,0),XY(1,1),XY(1,2)) );
-        edge3.Rot( mjl::Point3D( vc[0], vc[1], vc[2] ) );
-        edge3.Normalize();
-        vc[0] = edge3.dest_.X();
-        vc[1] = edge3.dest_.Y();
-        vc[2] = edge3.dest_.Z();
-        first_call = false;
-      }
-      
-    return vc;
- }
+        // 2. Rotate 90 degrees CLOCKWISE (dy, -dx)
+        // To match the InterFace test results and Quadratic consistency
+        double nx = dy;
+        double ny = -dx;
+
+        // 3. Normalize
+        double length = std::sqrt(nx * nx + ny * ny);
+        if (length > 1e-14) {
+            return { nx / length, ny / length };
+        }
+        return { 0.0, 0.0 };
+    }
+
+    // 3D Case
+    // Standardizing to return the Unit Tangent for 1D elements in 3D space,
+    // as a unique normal is undefined without a reference orientation.
+    double dx = XY(1,0) - XY(0,0);
+    double dy = XY(1,1) - XY(0,1);
+    double dz = XY(1,2) - XY(0,2);
+
+    double length = std::sqrt(dx*dx + dy*dy + dz*dz);
+    if (length > 1e-14) {
+        return { dx / length, dy / length, dz / length };
+    }
+    
+    // If it's truly degenerate, we'll throw or return a default
+    throw std::runtime_error("LinearLineElement::UnitNormal: Element has zero length.");
+}
 
 
 
@@ -441,76 +409,35 @@ void  LinearLineElement::IntegralNN( DenseMatrix<DM_MIN>& M )
     
     @note convention: face 1 is located at the first node.
 */
-void  LinearLineElement::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-   
-     if ( Dim() == 1 ) {
-         unrml.resize(1);
-         if ( face == 0 ) {
-              unrml[0] = -1.;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = 1.;
-              return;
-           }
-         return;
-       }
-   
-     // the normal lies in the plane of the model
-     // point in the direction of the element
-     if ( Dim() == 2 ) {
-         unrml.resize(2);
-         if ( face == 0 ) {
-              unrml[0] = XY(0,0) - XY(1,0);
-              unrml[1] = XY(0,1) - XY(1,1);
-              // normalise to length
-              const double length = hypot(unrml[0], unrml[1]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = XY(1,0) - XY(0,0);
-              unrml[1] = XY(1,1) - XY(0,1);
-              const double length = hypot(unrml[0], unrml[1]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              return;
-           }
-         return;
-       }
+void LinearLineElement::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < 2); // Line elements have exactly 2 faces (endpoints)
 
-     // 3D
-     if ( Dim() == 3 ) {
-         unrml.resize(3);
-         if ( face == 0 ) {
-              unrml[0] = XY(0,0) - XY(1,0);
-              unrml[1] = XY(0,1) - XY(1,1);
-              unrml[2] = XY(0,2) - XY(1,2);
-              // normalise to length
-              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              unrml[2] /= length;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = XY(1,0) - XY(0,0);
-              unrml[1] = XY(1,1) - XY(0,1);
-              unrml[2] = XY(1,2) - XY(0,2);
-              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              unrml[2] /= length;
-              return;
-           }
-         return;
-       }
-   
- } // end UnitNormalToFace
+    const uint32_t d = Dim();
+    unrml.assign(d, 0.0);
 
+    // If face is 0, vector is (Node 0 - Node 1)
+    // If face is 1, vector is (Node 1 - Node 0)
+    const uint32_t this_node  = (face == 0) ? 0 : 1;
+    const uint32_t other_node = (face == 0) ? 1 : 0;
+
+    double length_sq = 0.0;
+    for (uint32_t i = 0; i < d; ++i) {
+        unrml[i] = XY(this_node, i) - XY(other_node, i);
+        length_sq += unrml[i] * unrml[i];
+    }
+
+    const double length = std::sqrt(length_sq);
+    
+    if (length > 1e-14) {
+        for (uint32_t i = 0; i < d; ++i) {
+            unrml[i] /= length;
+        }
+    } else {
+        // Fallback for degenerate (zero-length) element
+        if (d > 0) unrml[0] = (face == 0) ? -1.0 : 1.0;
+    }
+}
 
 
 

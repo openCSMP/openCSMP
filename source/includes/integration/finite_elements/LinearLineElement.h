@@ -1,9 +1,8 @@
 #ifndef LINEAR_LINE_ELEMENT_H
 #define LINEAR_LINE_ELEMENT_H
 
+#include "CSMP_definitions.h"
 #include "FiniteElement.h"
-#include "MJL_Edge.h"
-#include "MJL_Edge3D.h"
 
 namespace csmp {
 
@@ -42,12 +41,6 @@ class LinearLineElement final : public FiniteElement {
     virtual void     OutputNodeDataToVTK( const char* file_name,
                                           const char* var_name,
                                           DenseMatrix<DM_MIN>& DATA ) const;
-
-  private:
-    mutable mjl::Point   org2, dest2, p2;
-    mutable mjl::Edge    edge2;
-    mutable mjl::Point3D org3, dest3, p3;
-    mutable mjl::Edge3D  edge3;
 };
 
 /**

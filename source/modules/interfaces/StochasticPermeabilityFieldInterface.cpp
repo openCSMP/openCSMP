@@ -1,6 +1,4 @@
-#include <sstream>
 #include "StochasticPermeabilityFieldInterface.h"
-#include "MJL_Point.h"
 #include "InterFace.h"
 #include "Region.h"
 #include "Model.h"
@@ -60,9 +58,9 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
         return false;
       }             
     
-    typename std::map<mjl::Point, size_t>  coor_map, node_map;
+    typename std::map<Point<2>, size_t>  coor_map, node_map;
 
-    mjl::Point  xy;
+    Point<2>    xy;
     double      xval, yval, perm;
     char        file[200];
     std::string text_line;
@@ -89,8 +87,8 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     
     // store xy-coordinates and node ID in a map to find node id using xy-coordinates from input file
     for ( auto it = model_domain.NodesBegin(); it !=  model_domain.NodesEnd(); it++ ) {
-        xy(0) = (*it)->x();
-        xy(1) = (*it)->y();
+        xy[0] = (*it)->x();
+        xy[1] = (*it)->y();
         node_map.insert( make_pair( xy, (*it)->Idx() ) );
       }
 
@@ -118,8 +116,8 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     // read in xy coordinates and log k from file, find node with same xy coordinates, store log k and k
     for ( size_t i{0U}; i<model_domain.Nodes(); i++ ) {
         ifs >> xval >> yval >> perm;
-        xy(0) = xval;
-        xy(1) = yval;
+        xy[0] = xval;
+        xy[1] = yval;
         auto mit = node_map.find( xy );
         if ( xy != (*mit).first ) {
             cout << "\nCoordinates x: " << xval << ", y: " << yval << endl;
@@ -140,12 +138,12 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     
     // now check that each node as a permeability assigned to it, if this is not the case, assign NAN to each node for nk, logk  
     for ( auto it = model_domain.NodesBegin(); it !=  model_domain.NodesEnd(); it++ ) {
-        xy(0) = (*it)->x();
-        xy(1) = (*it)->y();
+        xy[0] = (*it)->x();
+        xy[1] = (*it)->y();
         auto mit = coor_map.find( xy );
         if ( xy != (*mit).first ) {
-            cout << "\nCoordinates x: " << xy(0) << ", y: " << xy(1) << endl;
-            throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid", 
+            cout << "\nCoordinates x: " << xy[0] << ", y: " << xy[1] << endl;
+            throw csmp::Exception( ERROR, "StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFieldOnRegularGrid",
                      "\nNodes where found that do not have a stochastic permeability assigned to them, nothing is done" );
             cout << endl;
             ScalarVariable nan(PLAIN,std::strtod("NAN",NULL));         
@@ -198,7 +196,7 @@ bool StochasticPermeabilityFieldInterface<dim>::Read2DStochasticPermeabilityFiel
     Region<dim>&  model_domain(sg.Region("Model"));
     
     typename std::vector<double>  xvec, yvec, kvec;
-    mjl::Point xy;                                    
+    Point<2> xy;                                    
     double dx=std::numeric_limits<double>::quiet_NaN(), dy=std::numeric_limits<double>::quiet_NaN(), x, y, k, xmax(0.), ymax(0.);
     size_t index(0);
     char    file[200];

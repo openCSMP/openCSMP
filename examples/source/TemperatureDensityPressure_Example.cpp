@@ -94,12 +94,12 @@ void TemperatureDensityPressure_Example::Run()
 
     // creating elements into the positive x direction (meaning upwards, see later)
     vector<size_t>  elms;
-    for ( auto i{0}; i<N_ELEMENTS; ++i ) elms.push_back(i);
+    for ( size_t i{0}; i<N_ELEMENTS; ++i ) elms.push_back(i);
     mesh_topology.AddDomain( "ROCK", fem_types, elms );
     elms.erase( elms.begin(), elms.end() );
 
     // to get isoparametric elements
-    VSetConverter<1U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
+    VSetConverter().ConvertElementTypesToOnesUsingLocalCoordinateSystem( mesh_container );
     Model<1U>  model( mesh_topology, mesh_container, "example17.txt", true );
     printModelDimensions( model );
 

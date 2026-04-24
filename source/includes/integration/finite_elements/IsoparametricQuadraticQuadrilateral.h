@@ -25,7 +25,7 @@ public:
     virtual uint32_t      MidSideNodes() const { return 4U; }
     virtual uint32_t      CornerNodes() const  { return 4U; }
     virtual std::vector<double> UnitNormal() const;
-    // TODO: virtual void        UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual void        UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
     virtual CSMP_FEM_TYPE ElementTypeOfFace( uint32_t face ) const;
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t /* segment */ ) const { return ISOPARAMETRIC_QUADRATIC_BAR; };

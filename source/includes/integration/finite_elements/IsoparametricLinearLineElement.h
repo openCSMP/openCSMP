@@ -1,9 +1,8 @@
 #ifndef ISOPARAMETRIC_LINEAR_LINE_ELEMENT_H
 #define ISOPARAMETRIC_LINEAR_LINE_ELEMENT_H
 
+#include "CSMP_definitions.h"
 #include "FiniteElement.h"
-#include "MJL_Edge.h"
-#include "MJL_Edge3D.h"
 
 namespace csmp {
 

@@ -13,7 +13,9 @@ class FiniteDifferenceGrid;
 template<uint32_t> class DenseMatrix;
 template<uint32_t> class Element;
 
-// works only in 2D, requires contiguous, unique element numbering
+// TODO: IsInsideTriangle(), IsInsideQuadrilateral() are replicated in FemFromGridVisitor and TransportVisitor2D, reuse the code instead
+
+/// works only in 2D, requires contiguous, unique element numbering
 template<uint32_t dim>
 class FemToGridVisitor : public Visitor<dim> {
   public:

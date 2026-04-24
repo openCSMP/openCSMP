@@ -4168,12 +4168,186 @@ size_t VData::ExtractNodeManifolds( vertexManifoldIndices& indexes ) const
      
      All previous flags are overwritten.
      
+     gflags Mapping
+     
+     To ensure your assert passes against the refactored function, this mapping is used:
+     
      @attention this method must be applied before line and surface elements dividing the volume mesh into different regions are removed but AFTER the BOX_BOUNDARY flags have been assigned.
      
      @attention successful applicaton of the method requires and intact element connectivity with disambiguated manifolds of lower dimensional elements.
      
      @attention when the topology of the model is changed due to the creation of Boundary or SplitBoundary objects the TOPOTYPES must be updated as well.
 */
+void VData::InitialiseNodeTopologyIdentifiers()
+{
+    const uint32_t dim = SpatialDimension();
+    if (!WithNeighbourConnectivity())
+        throw csmp::Exception(ERROR, "VData::InitialiseNodeTopologyIdentifiers", "Needs connectivity info");
+
+    // 1. Initialize all to MESH_VERTEX
+    for (auto nit = BREP_FlagsBegin(); nit != BREP_FlagsEnd(); ++nit)
+        (*nit) = static_cast<int8_t>(MESH_VERTEX);
+
+    // 2. Identify Element Types
+    unordered_set<size_t> line_elmts, surf_elmts;
+    for (size_t i = 0; i < pelmt.size(); ++i) {
+        CSMP_FEM_TYPE etype = ( HybridElementTypeMesh() ) ? static_cast<CSMP_FEM_TYPE>(pelmt[i]) : static_cast<CSMP_FEM_TYPE>(pelmt[0]);
+        if (isSurfaceElement(etype)) surf_elmts.insert(i);
+        else if (isLineElement(etype)) {
+            // FIX 2: Exclude interface elements from standard line processing.
+            // Elements are ordered: Volumes -> Faces -> Interfaces
+            if (i < Elements() + Faces()) {
+                line_elmts.insert(i);
+            }
+        }
+    }
+
+    // 3. Process Surface Elements (Holes and Internal Boundaries)
+    for (const auto& elmt : surf_elmts) {
+        uint32_t n_faces = CSMP_ElementSpecifications::FacesPerElementOfType(pelmt[elmt]);
+        for (uint32_t face = 0; face < n_faces; ++face) {
+            // If face has no neighbor, it's a boundary
+            if (pfverts[elmt][face] < 0) {
+                uint32_t n_fn = CSMP_ElementSpecifications::NodesPerFaceForElementOfType(pelmt[elmt], face);
+                for (uint32_t k = 0; k < n_fn; ++k) {
+                    uint32_t fn = CSMP_ElementSpecifications::FaceNodeForElementOfType(pelmt[elmt], face, k);
+                    size_t nid = plist[elmt][fn];
+                    
+                    // FIX 3: Prevent sweeping purely internal nodes (like Node 28)
+                    if (BFlag(nid) != 0) { 
+                        if (dim == 2) BREP_Flag(nid, static_cast<int8_t>(PERIMETER_LINE));
+                        else if (dim == 3) BREP_Flag(nid, static_cast<int8_t>(PERIMETER_SURFACE));
+                    }
+                }
+            }
+        }
+    }
+
+    // 4. Process Line Elements (Valence-based logic)
+    map<size_t, uint32_t> lineValence;
+    for (const auto& elmt : line_elmts) {
+        for (const auto nid : plist[elmt]) {
+            lineValence[nid]++;
+        }
+    }
+
+    for (auto const& [nid, count] : lineValence) {
+        if (count == 1) {
+            // It's a "Tip"
+            BREP_Flag(nid, static_cast<int8_t>(PERIMETER_POINT));
+        } else if (count == 2) {
+            // It's a sliding line segment
+            // Only assign if not already flagged as a higher-order Perimeter by Step 3
+            if (BREP_Flag(nid) == MESH_VERTEX)
+                BREP_Flag(nid, static_cast<int8_t>(INTERIOR_LINE));
+        } else if (count >= 3) {
+            // It's a Junction/Crossing
+            BREP_Flag(nid, static_cast<int8_t>(INTERIOR_POINT));
+        }
+    }
+    
+    // 5. Handle Interfaces and Manifolds (SplitBoundaries)
+    if (Interfaces() > 0) {
+      // 5.1 Crossing points / Ends / Tips
+      for (auto nit = PmanifoldsBegin(); nit != PmanifoldsEnd(); ++nit) {
+          auto type = (*nit).second;
+          if (type == ManifoldType::SPLIT_BOUNDARY_CROSSING ||
+              type == ManifoldType::MULTI_SB_CROSSING ||
+              type == ManifoldType::SPLIT_BOUNDARY_END) {
+              
+              for (const auto& n : (*nit).first) {
+                  const BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>(BFlag(n));
+                  bool on_hull = (bflag != NOT && bflag != INTERNAL);
+
+                  if (type == ManifoldType::SPLIT_BOUNDARY_END) {
+                      if (on_hull) {
+                          // Intersection with the outer model boundary
+                          BREP_Flag(n, static_cast<int8_t>(EXTERIOR_POINT));
+                      } else {
+                          // Internal "Tip" of a split boundary - MUST be a point
+                          BREP_Flag(n, static_cast<int8_t>(PERIMETER_POINT));
+                      }
+                  } else {
+                      // Interior crossings (where multiple split boundaries meet)
+                      BREP_Flag(n, static_cast<int8_t>(INTERIOR_POINT));
+                  }
+              }
+          }
+      }
+      
+      // 5.2 SplitBoundary internal nodes
+      map<size_t, uint32_t> sharedNodeOccurrence;
+      vector<size_t> sharedNodes;
+
+      // First pass: Find all shared nodes and count occurrences
+      for (auto it = PlistInterFacesBegin(); it != PlistInterFacesEnd(); ++it) {
+          const auto& interfaceNodes = *it;
+          const size_t n_pair = interfaceNodes.size() / 2;
+          for (uint32_t i = 0; i < n_pair; ++i) {
+              size_t leftN = interfaceNodes[i];
+              size_t rightN = interfaceNodes[interfaceNodes.size() - 1 - i];
+              
+              if (leftN == rightN) {
+                  sharedNodeOccurrence[leftN]++;
+                  sharedNodes.push_back(leftN);
+              }
+          }
+      }
+
+      // Second pass: Assign flags based on connectivity
+      for (size_t nid : sharedNodes) {
+          int8_t currentFlag = BREP_Flag(nid);
+          
+          // If it's already an EXTERIOR_POINT (from Step 5.1/Hull), leave it!
+          if (currentFlag == static_cast<int8_t>(EXTERIOR_POINT)) continue;
+
+          if (sharedNodeOccurrence[nid] == 1) {
+              // It's a "Tip": The interface starts or ends here.
+              BREP_Flag(nid, static_cast<int8_t>(PERIMETER_POINT));
+          } else {
+              // It's a "Link": Part of the interface body.
+              // Only assign if not already a more restrictive point (1, 2, or 3)
+              if (currentFlag < 1 || currentFlag > 3) {
+                  if (dim == 2) BREP_Flag(nid, static_cast<int8_t>(PERIMETER_LINE));
+                  else if (dim == 3) BREP_Flag(nid, static_cast<int8_t>(PERIMETER_SURFACE));
+              }
+          }
+      }
+    }
+    
+// 6. Box Boundary Qualification (The "Hull" Sweep)
+    for (size_t i = 0; i < Vertices(); ++i) {
+        const BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>(BFlag(i));
+        if (bflag == NOT || bflag == INTERNAL) continue;
+
+        int8_t current = BREP_Flag(i);
+
+        if (isCorner(bflag)) {
+            BREP_Flag(i, static_cast<int8_t>(EXTERIOR_POINT));
+        } else {
+            // Promotion Logic:
+            // If the node is a "Point" type (Tip or Junction) and sits on the hull, 
+            // it MUST be an EXTERIOR_POINT.
+            if (current == PERIMETER_POINT || current == INTERIOR_POINT) {
+                BREP_Flag(i, static_cast<int8_t>(EXTERIOR_POINT));
+            } 
+            // Otherwise, apply standard hull sliding constraints
+            else if (current != EXTERIOR_POINT) {
+                if (dim == 2 && isSide(bflag)) {
+                    BREP_Flag(i, static_cast<int8_t>(EXTERIOR_LINE));
+                } else if (dim == 3) {
+                    if (isEdge(bflag)) BREP_Flag(i, static_cast<int8_t>(EXTERIOR_LINE));
+                    else if (isSide(bflag)) BREP_Flag(i, static_cast<int8_t>(EXTERIOR_SURFACE));
+                }
+            }
+        }
+    }
+    
+} // end InitialiseNodeTopologyIdentifiers
+
+
+/* BROKEN FOR INTERIOR LINE VS PERIMETER SURFACE
+
 void VData::InitialiseNodeTopologyIdentifiers()
  {
     const uint32_t dim = SpatialDimension();
@@ -4346,6 +4520,7 @@ void VData::InitialiseNodeTopologyIdentifiers()
       }
 
  } // end InitialiseNodeTopologyIdentifiers
+*/
 
 // TESTING (up to here all external flags are correctly initialised)
 //{

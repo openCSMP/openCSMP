@@ -174,7 +174,7 @@ constexpr bool COMMPREHENSIVE_TESTING = false;
 */
 int main()
  {
-  constexpr bool verbose(true);
+  constexpr bool verbose(false);
 
   const bool is_comp = (COMMPREHENSIVE_TESTING == true) ? true : false;
 
@@ -209,7 +209,11 @@ int main()
         // FAIL: SPLIT22_BASIC - lefthandside node geometry flag 9: INTERIOR_LINE vs PERIMETER_POINT
         //refactored.addTest( new VData_Test() );
         
-        refactored.addTest( new PDE_Integrator_Test() );
+        refactored.addTest( new VData_Test() );
+//        refactored.addTest( new VSet_Test2() );
+//       refactored.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );
+//        refactored.addTest( new PDE_Integrator_Test() );
+//        refactored.addTest( new SplitBoundary_Test() ); // 2D only
 
         // SplitBoundary related testing
         // -----------------------------

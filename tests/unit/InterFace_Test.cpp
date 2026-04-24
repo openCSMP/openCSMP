@@ -30,7 +30,7 @@ InterFace_Test::~InterFace_Test(){
 
 void InterFace_Test::run()
 {
-std::cout << "InterFace Test is Being Run " << std::endl;
+    std::cout << "InterFace Test is Being Run " << std::endl;
 
     Assign_tests();
     Geometry_tests();
@@ -41,10 +41,10 @@ std::cout << "InterFace Test is Being Run " << std::endl;
     Assign_Geometry_quadratic2_test();
 
     Assign_tests_linear_3D();
-
-
 }
 	
+ 
+ 
 void InterFace_Test::Assign_tests(){
 
     std::cout << "Running Test: Assign_Tests" << std::endl;

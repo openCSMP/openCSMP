@@ -2,6 +2,7 @@
 #define CSMP_FRED_INTERFACE_H
 
 #include "FRED_Fracture.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -14,7 +15,7 @@ class FRED_Interface {
     void   InitializeFrom_FRED_File( const char* ffb_file );
     
     /// returns volume of box
-    double BoundingBox( mjl::Point3D& pmin, mjl::Point3D& pmax ) const;
+    double BoundingBox( Point<3>& pmin, Point<3>& pmax ) const;
     
     void   MoveGeometryToOrigin();
     

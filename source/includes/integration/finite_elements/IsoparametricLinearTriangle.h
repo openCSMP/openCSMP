@@ -26,6 +26,7 @@ class IsoparametricLinearTriangle final : public FiniteElement {
     virtual void      CounterClockwiseNodes( std::vector<uint32_t>& ids ) const;
     virtual uint32_t  MidSideNodes() const { return 0; }
     virtual uint32_t  CornerNodes() const  { return 3U; }
+    
     virtual std::vector<double> UnitNormal() const;
     virtual void      UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 

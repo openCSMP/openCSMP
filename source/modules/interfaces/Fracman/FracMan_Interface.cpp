@@ -238,10 +238,10 @@ void FRACMAN_Interface::InitializeFrom_FRACMAN_File( const char* ffb_file )
  
  
 /// returns volume of box
-double FRACMAN_Interface::BoundingBox( mjl::Point3D& pmin, mjl::Point3D& pmax ) const
+double FRACMAN_Interface::BoundingBox( Point<3>& pmin, Point<3>& pmax ) const
  {
     map<string,FRACMAN_Fracture,less<string> >::const_iterator  it = fractures.begin();
-    list<mjl::Point3D>::const_iterator  pit = (*it).second.Begin();
+    list<Point<3>>::const_iterator  pit = (*it).second.Begin();
     
     if ( fractures.empty() ) {
          cout <<"\nFRACMAN_Interface::BoundingBox: Currently no data are stored."<< endl;
@@ -250,29 +250,29 @@ double FRACMAN_Interface::BoundingBox( mjl::Point3D& pmin, mjl::Point3D& pmax ) 
       
     // 1. Finding extrema of points
     double xmin, xmax, ymin, ymax, zmin, zmax;
-    xmin = xmax = (*pit).X();
-    ymin = ymax = (*pit).Y();
-    zmin = zmax = (*pit).Z();
+    xmin = xmax = (*pit)[0];
+    ymin = ymax = (*pit)[1];
+    zmin = zmax = (*pit)[2];
     
     for ( it=fractures.begin(); it!=fractures.end(); it++ )
       for ( pit=(*it).second.Begin(); pit!=(*it).second.End(); pit++ ) {
            // X
-           if (   (*pit).X() < xmin  ) xmin = (*pit).X();
-           if (   (*pit).X() > xmax  ) xmax = (*pit).X();
+           if (   (*pit)[0] < xmin  ) xmin = (*pit)[0];
+           if (   (*pit)[0] > xmax  ) xmax = (*pit)[0];
            // Y
-           if (   (*pit).Y() < ymin  ) ymin = (*pit).Y();
-           if (   (*pit).Y() > ymax  ) ymax = (*pit).Y();
+           if (   (*pit)[1] < ymin  ) ymin = (*pit)[1];
+           if (   (*pit)[1] > ymax  ) ymax = (*pit)[1];
            // Z
-           if (   (*pit).Z() < zmin  ) zmin = (*pit).Z();
-           if (   (*pit).Z() > zmax  ) zmax = (*pit).Z();
+           if (   (*pit)[2] < zmin  ) zmin = (*pit)[2];
+           if (   (*pit)[2] > zmax  ) zmax = (*pit)[2];
         }
     
     // 2. Getting volume of bounding box
     pmin.Set( xmin, ymin, zmin );
     pmax.Set( xmax, ymax, zmax );
-    mjl::Point3D  pt = pmax - pmin;
+    Point<3>  pt = pmax - pmin;
     
-    return pt.X() * pt.Y() * pt.Z();
+    return pt[0] * pt[1] * pt[2];
         
  } // end
 
@@ -282,7 +282,7 @@ double FRACMAN_Interface::BoundingBox( mjl::Point3D& pmin, mjl::Point3D& pmax ) 
 /// the origin of the coordinate system
 void FRACMAN_Interface::MoveGeometryToOrigin()
  {
-    mjl::Point3D pmin, pmax;
+    Point<3> pmin, pmax;
  
     BoundingBox( pmin, pmax );
 
@@ -290,7 +290,7 @@ void FRACMAN_Interface::MoveGeometryToOrigin()
     map<string,FRACMAN_Fracture,less<string> >::iterator  it;
     
     for ( it=fractures.begin(); it!=fractures.end(); it++ )
-      (*it).second.Move( -pmin.X(), -pmin.Y(), -pmin.Z() );
+      (*it).second.Move( -pmin[0], -pmin[1], -pmin[2] );
  }
  
 
@@ -315,7 +315,7 @@ void FRACMAN_Interface::OutputToDXF( const char* dxf_file ) const
       }
 
     map<string,FRACMAN_Fracture>::const_iterator  it;
-    list<mjl::Point3D>::const_iterator  pit;
+    list<Point<3>>::const_iterator  pit;
     char                               name[100];
     strcpy ( name, dxf_file );
     strcat( name, ".dxf" );

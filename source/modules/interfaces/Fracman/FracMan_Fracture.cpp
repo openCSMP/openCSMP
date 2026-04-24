@@ -25,7 +25,7 @@ FRACMAN_Fracture::FRACMAN_Fracture( double        ap,
                               double        compr,
                               double        perm,
                               const list<double>& properties,
-                              const list<mjl::Point3D>& bry )
+                              const list<Point<3>>& bry )
  :  id(++global_id),
     fracture_set_id(1),
     aperture(ap),
@@ -120,7 +120,7 @@ bool  FRACMAN_Fracture::InitializeFrom( long nprops, ifstream& ifs )
     char        *token;
     const char* const  delims = " ,=#%<>"; 
     long          n_pts, p_id;
-    mjl::Point3D  pt;
+    Point<3>  pt;
     
     // 0. zapping all previous storage
     Erase();
@@ -186,13 +186,13 @@ bool  FRACMAN_Fracture::InitializeFrom( long nprops, ifstream& ifs )
          // coordinates of point
          token = strtok( NULL, delims ); // X
          if ( token == NULL ) return false;
-         pt(0) = atof( token ); 
+         pt[0] = atof( token );
          token = strtok( NULL, delims ); // Y
          if ( token == NULL ) return false;
-         pt(1) = atof( token );         
+         pt[1] = atof( token );
          token = strtok( NULL, delims ); // Z
          if ( token == NULL ) return false;
-         pt(2) = atof( token );
+         pt[2] = atof( token );
          // perimeter point list
          boundary.push_back( pt );   
       }
@@ -207,17 +207,17 @@ bool  FRACMAN_Fracture::InitializeFrom( long nprops, ifstream& ifs )
     // coordinate lengths of unit normal
     token = strtok( NULL, delims ); // X
     if ( token == NULL ) return false;
-    pt(0) = atof( token ); 
+    pt[0] = atof( token );
     token = strtok( NULL, delims ); // Y
     if ( token == NULL ) return false;
-    pt(1) = atof( token );         
+    pt[1] = atof( token );
     token = strtok( NULL, delims ); // Z
     if ( token == NULL ) return false;
-    pt(2) = atof( token );
+    pt[2] = atof( token );
 
-    mjl::Point3D  orig(0.,0.,0.);
+    Point<3>  orig(0.,0.,0.);
     
-    unit_normal.Set(orig,pt);
+    unit_normal = pt - orig;
 
     return true;
     
@@ -234,9 +234,9 @@ bool FRACMAN_Fracture::operator<( const FRACMAN_Fracture& ffr ) const
  }
     
     
-void FRACMAN_Fracture::BaryCenter( mjl::Point3D& ctr ) const
+void FRACMAN_Fracture::BaryCenter( Point<3>& ctr ) const
  {
-    list<mjl::Point3D>::const_iterator  ita;
+    list<Point<3>>::const_iterator  ita;
     double                             points;
   
     for ( ctr.Set(0.,0.,0.), points=0.0, 
@@ -250,31 +250,28 @@ void FRACMAN_Fracture::BaryCenter( mjl::Point3D& ctr ) const
 
 void FRACMAN_Fracture::BaryCenter( double& x, double& y, double& z ) const
  {
-    mjl::Point3D  ctr(0.,0.,0.);
+    Point<3>  ctr(0.,0.,0.);
     
     BaryCenter( ctr );
-    x = ctr.X();
-    y = ctr.Y();
-    z = ctr.Z();
+    x = ctr[0];
+    y = ctr[1];
+    z = ctr[2];
  }
  
  
 double  FRACMAN_Fracture::Perimeter() const
  {
-    list<mjl::Point3D>::const_iterator  ita, itb = boundary.begin();
-    mjl::Edge3D                         edge;
-    double                             perim(0.0);
+    list<Point<3>>::const_iterator  ita, itb = boundary.begin();
+    double                          perim(0.0);
   
     // getting segments from point to point
     for ( itb++, ita=boundary.begin(); itb!=boundary.end(); ita++, itb++ ) 
       {
-         edge.Set( (*ita), (*itb) );
-         perim += edge.Length();
+         perim += distance( (*ita), (*itb) );
       }
       
     // adding segment from last point to first point
-    edge.Set( (*boundary.rbegin()), (*boundary.begin()) );
-    perim += edge.Length();
+    perim += distance( (*boundary.rbegin()), (*boundary.begin()) );
     
     return perim; 
  }
@@ -289,7 +286,7 @@ double  FRACMAN_Fracture::Diameter() const
  
  
 
-void FRACMAN_Fracture::BoundingBox( mjl::Point3D& cnr1, mjl::Point3D& cnr8 ) const
+void FRACMAN_Fracture::BoundingBox( Point<3>& cnr1, Point<3>& cnr8 ) const
  {
     cnr1 = (*min_element( boundary.begin(), boundary.end() ) );
     cnr8 = (*max_element( boundary.begin(), boundary.end() ) );
@@ -314,8 +311,8 @@ void FRACMAN_Fracture::Erase()
 // move entire fracture by specified amount 
 void FRACMAN_Fracture::Move( double dx, double dy, double dz )
  {
-    list<mjl::Point3D>::iterator  ita;
-    mjl::Point3D                  displacement(dx,dy,dz);
+    list<Point<3>>::iterator  ita;
+    Point<3>                  displacement(dx,dy,dz);
     
     for ( ita=boundary.begin(); ita!=boundary.end(); ita++ ) 
       (*ita) += displacement;
@@ -325,15 +322,15 @@ void FRACMAN_Fracture::Move( double dx, double dy, double dz )
 // move entire fracture by specified amount 
 void FRACMAN_Fracture::Scale( double xfac, double yfac, double zfac )
  {
-    list<mjl::Point3D>::iterator  ita;
-    mjl::Point3D                  scale(xfac,yfac,zfac);
+    list<Point<3>>::iterator  ita;
+    Point<3>                  scale(xfac,yfac,zfac);
     
     for ( ita=boundary.begin(); ita!=boundary.end(); ita++ ) 
       (*ita) *= scale;
       
     // scaling the unit normal as well
-    unit_normal.dest_ *= scale;
-    unit_normal.Normalize();
+    unit_normal *= scale;
+    unit_normal.NormalizeLengthTo(1.);
  }
 
 
@@ -357,22 +354,22 @@ void FRACMAN_Fracture::Out() const
       }
     
     cout <<"\n\nPoints defining the perimeter of fracture: "<< endl;
-    list<mjl::Point3D>::const_iterator  ita;
+    list<Point<3>>::const_iterator  ita;
     int                                a;
   
     for ( a=1, ita=boundary.begin(); ita!=boundary.end(); ita++, a++ ) 
-      cout <<"\t"<< a <<": "<< (*ita).X() <<"\t"<< (*ita).Y() <<"\t"<< (*ita).Z() << endl;
+      cout <<"\t"<< a <<": "<< (*ita)[0] <<"\t"<< (*ita)[1] <<"\t"<< (*ita)[2] << endl;
     
     cout <<"\nUnit normal to fracture plane:"<< endl;
-    cout <<"\t"<< unit_normal.dest_.x_ <<"\t"<< unit_normal.dest_.y_;
-    cout <<"\t"<< unit_normal.dest_.z_ << endl;
+    cout <<"\t"<< unit_normal[0] <<"\t"<< unit_normal[1];
+    cout <<"\t"<< unit_normal[2] << endl;
     
     cout <<"\nPerimeter of fracture:  "<< Perimeter() << endl;
       
     cout << endl; 
  }
 
-} // end namespace csp 
+} // end namespace csmp
  
  
  

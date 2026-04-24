@@ -1,6 +1,5 @@
 #include "IsoparametricQuadraticLineElement.h"
 #include "Exception.h"
-#include "MJL_Edge.h"
 
 using namespace std;
 
@@ -564,36 +563,86 @@ double IsoparametricQuadraticLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& 
 
 /// here the normal is calculated using the derivative of the shape function
 /// at the middle node
-vector<double>  IsoparametricQuadraticLineElement::UnitNormal() const
- {
-    if ( dim == 1U ) return vector<double>{ 1 };
+vector<double> IsoparametricQuadraticLineElement::UnitNormal() const
+{
+    if (dim == 1U) return { 1.0 };
     
-    // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2U ) {
-         // finding tangent at mid-point node
-         dNr( NX[2], DNR );
-         const double vc0 = JacobianFor( DNR, 0 ); // dx
-         const double vc1 = JacobianFor( DNR, 1 ); // dy
-         mjl::Edge  normal( mjl::Point(0.,0.), mjl::Point(vc0,vc1) ); 
-         // rotating tangent edge counter-clockwise to find normal to face
-         normal.Rot();
-         normal.NormalizeTo( 1. );
-         return vector<double>{ normal.Destination()[0], normal.Destination()[1] };
-      }
+    dNr(0.0, DNR); // Midpoint
+    double tx = JacobianFor(DNR, 0); 
+    double ty = JacobianFor(DNR, 1);
+    
+    if (dim == 2U) {
+        // Applying CW Rotation: (x, y) -> (y, -x)
+        // This ensures that the INSIDE face points "outward" 
+        // relative to the primary element's domain.
+        double nx = ty;
+        double ny = -tx;
 
-    // if ( dim == 3 ) {
-     // using slope at mid-point node
-     dNr( NX[2], DNR );
-     vector<double> vc{ JacobianFor( DNR, 0 ), JacobianFor( DNR, 1 ), JacobianFor( DNR, 2 ) }; // dx dy dz
-     double sum = vc[0] + vc[1] + vc[2];
-     // normalizing the normal
-     vc[0] /= sum;
-     vc[1] /= sum;
-     vc[2] /= sum;
-     cerr <<"\nIsoparametricQuadraticLineElement::UnitNormal: In 3D a reference direction is needed to find normal.\n";
-     return vc;
+        double len = std::sqrt(nx * nx + ny * ny);
+        if (len > 1e-14) {
+            return { nx / len, ny / len };
+        }
+        return { 0.0, 0.0 }; 
+    }
 
- } // end UnitNormal
+    // 3D Fallback: Unit Tangent
+    double tz = JacobianFor(DNR, 2);
+    double len = std::sqrt(tx*tx + ty*ty + tz*tz);
+    return (len > 1e-14) ? vector<double>{ tx/len, ty/len, tz/len } 
+                         : vector<double>{ 0.0, 0.0, 0.0 };
+}
+
+
+void IsoparametricQuadraticLineElement::UnitNormalToFace(uint32_t face, std::vector<double>& unrml ) const
+{
+    assert(face < 2); // Still only 2 faces (endpoints)
+
+    const uint32_t d = Dim();
+    unrml.assign(d, 0.0);
+
+    // Quadratic line elements usually have:
+    // Face 0 at Node 0 (r = -1)
+    // Face 1 at Node 1 (r = 1)
+    // Node 2 is the midpoint (r = 0)
+
+    // To find the outward direction:
+    // At Face 0, we want the direction pointing AWAY from the element.
+    // We evaluate the derivative dN/dr at the endpoint to get the local tangent.
+    double r = (face == 0) ? -1.0 : 1.0;
+    dNr(r, DNR);
+
+    double length_sq = 0.0;
+    for (uint32_t i = 0; i < d; ++i) {
+        // JacobianFor(DNR, i) gives dx/dr, dy/dr, etc.
+        double tangent = JacobianFor(DNR, i);
+        
+        // At r = -1 (face 0), the outward normal is -Tangent
+        // At r =  1 (face 1), the outward normal is +Tangent
+        unrml[i] = (face == 0) ? -tangent : tangent;
+        length_sq += unrml[i] * unrml[i];
+    }
+
+    double length = std::sqrt(length_sq);
+    if (length > 1e-14) {
+        for (uint32_t i = 0; i < d; ++i) {
+            unrml[i] /= length;
+        }
+    } else {
+        // Fallback to simple chord-based direction if Jacobian is degenerate
+        uint32_t this_node  = (face == 0) ? 0 : 1;
+        uint32_t other_node = (face == 0) ? 1 : 0;
+        
+        length_sq = 0.0;
+        for (uint32_t i = 0; i < d; ++i) {
+            unrml[i] = XY(this_node, i) - XY(other_node, i);
+            length_sq += unrml[i] * unrml[i];
+        }
+        double len = std::sqrt(length_sq);
+        if (len > 1e-14) {
+            for (uint32_t i = 0; i < d; ++i) unrml[i] /= len;
+        }
+    }
+}
 
 
 

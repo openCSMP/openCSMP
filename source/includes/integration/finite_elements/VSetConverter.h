@@ -15,7 +15,6 @@ template<uint32_t> class VSet;
     @date 2001
  
 */
-template<uint32_t dim>
 class VSetConverter {
   public:
     /// the coordinates of the bounding box are initialized to Not A Number
@@ -26,25 +25,23 @@ class VSetConverter {
     ~VSetConverter() {};
     
     /// replaces straight-sided global element types with isoparametric ones
+    template<uint32_t dim>
     void ConvertElementTypesToOnesUsingLocalCoordinateSystem( VSet<dim>& );
   
-    /// applies the naming conventions TOP, BOTTOM etc. to sides, edges and cornier points of the box
-    void EstablishBoundaryFlagsForBoxModel( VSet<dim>&, double tolerance=0.2 );
-    
     /// turn triangular element mesh data to target element data
-    void ConvertLinearToQuadraticTriangles( VSet<dim>& );
+    void ConvertLinearToQuadraticTriangles( VSet<2>& );
     
     /// turn triangular element mesh data to target 3D surface element data
-    void ConvertLinearToQuadraticTriangles3D( VSet<dim>& );
+    void ConvertLinearToQuadraticTriangles3D( VSet<3>& );
 
     /// create a mesh of 7-noded barycentric triangular finite elements
-    void ConvertLinearToBarycentricTriangles( VSet<dim>& );
+    void ConvertLinearToBarycentricTriangles( VSet<2>& );
     
     /// create 10-noded tetrahedra from 4-noded ones
-    void ConvertLinearToQuadraticTetrahedra( VSet<dim>& );
+    void ConvertLinearToQuadraticTetrahedra( VSet<3>& );
     
     /// turn linear tetrahedral mesh into 11-noded barycentric tetrahedral mesh
-    void ConvertLinearToBarycentricTetrahedra( VSet<dim>& );
+    void ConvertLinearToBarycentricTetrahedra( VSet<3>& );
     
   private:
     double xmin, xmax, ymin, ymax, zmin, zmax; ///< coordinates values of bounding box of model
@@ -53,7 +50,8 @@ class VSetConverter {
     // --------------------
   
     /// rectangular model in 2 and 3D, flagging of corner node
-    void FlagCornerNodes( VSet<dim>&, bool three_dimensional=false ) const;
+    template<uint32_t dim>
+    void FlagCornerNodes( VSet<dim>& ) const;
     
     /// returns 0 if face is not at the model boundary
     int8_t  TestForBoundaryFlags( const std::vector<std::int8_t>& bflags,
@@ -66,13 +64,15 @@ class VSetConverter {
     // TODO: from linear to quadratic mesh; perhaps via Visitor inside of CSMP?
     //void InterpolateNodeProperties( size_t nodes, int32_t enodes, VSet<dim>& ) const;
     
+    template<uint32_t dim>
     void OrderQuadraticTriangleCoordinateOrigins( VSet<dim>& ) const;
 
+    template<uint32_t dim>
     void OrderBarycentricQuadraticTriangleCoordinateOrigins( VSet<dim>& ) const;
     
     // 3D tetrahedral meshes
-    // ---------------------                    default as in most Rhino models
-    void   FlagEdges( VSet<dim>& vset, double tolerance=1.0e-4 ) const;
+    // ---------------------          default as in most Rhino models
+    void   FlagEdges( VSet<3>& vset, double tolerance=1.0e-4 ) const;
 
     /// flag-based check
     int8_t  BoundaryFlags3D( const std::vector<std::int8_t>& bflags,

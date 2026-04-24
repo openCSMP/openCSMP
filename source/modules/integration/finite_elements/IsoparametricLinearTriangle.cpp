@@ -1,10 +1,5 @@
 #include "IsoparametricLinearTriangle.h"
-//#include <set>
-//#include <fstream>
-//#include <cstring>
-#include <climits>
 #include "Exception.h"
-#include "MJL_Edge.h"
 
 using namespace std;
 
@@ -1592,81 +1587,55 @@ vector<double>  IsoparametricLinearTriangle::UnitNormal() const
     
     @test OK - for 3D version
 */
-void  IsoparametricLinearTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-     // if this is a planar element in a 2D model
-     if ( Dim() == 2 ) {
-         unrml.resize(2);
-         // nodes 1 and 2
-         if ( face == 0 ) {
-              mjl::Edge  normal( mjl::Point(XY(1,0),XY(1,1)), mjl::Point(XY(2,0),XY(2,1)) );
-              // rotating edge clockwise to find outward pointing normal to face
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 2 and 0
-         if ( face == 1 ) {
-              mjl::Edge  normal( mjl::Point(XY(2,0),XY(2,1)), mjl::Point(XY(0,0),XY(0,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 0 and 1
-         if ( face == 2 ) {
-              mjl::Edge  normal( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-          return;
-       }
-   
-     // if the triangle is suspended into 3D space
-     unrml.resize(3);
-     Point<3> face1(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
-     Point<3> face2(XY(0,0)-XY(2,0),XY(0,1)-XY(2,1),XY(0,2)-XY(2,2));
-     Point<3> enrml( crossProduct( face1, face2 ) );
+void IsoparametricLinearTriangle::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < Faces());
 
-     // the face normals are found as cross-products between element normal and edges
-     // nodes 1 and 2
-     if ( face == 0 ) {
-          Point<3> nrml( crossProduct( enrml, face1 ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          // (-) to flip the normal to the outside
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-       }
-     // nodes 2 and 0
-     if ( face == 1 ) {
-          Point<3> nrml( crossProduct( enrml, face2 ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-       }
-     // nodes 0 and 1
-     if ( face == 2 ) {
-          Point<3> face3(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
-          Point<3> nrml( crossProduct( enrml, face3 ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-       }
-   
- } // end UnitNormalToFace
+    // Local node mapping for faces: Face 0: (1,2), Face 1: (2,0), Face 2: (0,1)
+    static const uint32_t f_node[3][2] = {{1, 2}, {2, 0}, {0, 1}};
+    uint32_t n1 = f_node[face][0];
+    uint32_t n2 = f_node[face][1];
 
+    if (Dim() == 2) {
+        unrml.resize(2);
+
+        // Edge vector
+        double dx = XY(n2, 0) - XY(n1, 0);
+        double dy = XY(n2, 1) - XY(n1, 1);
+
+        // For CCW triangles, the outward normal is (dy, -dx)
+        double nx = dy;
+        double ny = -dx;
+
+        double len = std::sqrt(nx * nx + ny * ny);
+        if (len > 1e-12) {
+            unrml[0] = nx / len;
+            unrml[1] = ny / len;
+        }
+    } 
+    else {
+        unrml.resize(3);
+        
+        // Quad/Triangle plane normal calculation
+        Point<3> v12(XY(2,0)-XY(1,0), XY(2,1)-XY(1,1), XY(2,2)-XY(1,2));
+        Point<3> v20(XY(0,0)-XY(2,0), XY(0,1)-XY(2,1), XY(0,2)-XY(2,2));
+        Point<3> enrml = crossProduct(v12, v20);
+
+        // Face edge vector
+        Point<3> fface(XY(n2, 0) - XY(n1, 0),
+                       XY(n2, 1) - XY(n1, 1),
+                       XY(n2, 2) - XY(n1, 2));
+
+        // Cross product element normal with edge to get face normal
+        Point<3> nrml = crossProduct(enrml, fface);
+        nrml.NormalizeLengthTo(1.0);
+
+        // Outward flip
+        unrml[0] = -nrml[0];
+        unrml[1] = -nrml[1];
+        unrml[2] = -nrml[2];
+    }
+}
 
 
 

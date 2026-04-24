@@ -18,7 +18,7 @@ Public constructor of the FV_IntegrationPointsAndWeights class.
 As default constructor of the class is declares private, this constructor
 should be used in all cases.
 
-@param typeOfElement type of Finite Element in CSMP
+@param type type of Finite Element in CSMP
 */
 template<uint32_t dim>
 FV_IntegrationPointsAndWeights<dim>::FV_IntegrationPointsAndWeights( CSMP_FEM_TYPE typeOfElement )
@@ -2020,7 +2020,7 @@ void FV_IntegrationPointsAndWeights<dim>::CreateDataFor_ISOPARAMETRIC_LINEAR_PYR
             NumOfIPperFacet,
             NumOfIPperVolume );
             
-    for ( auto i{0U}; i<NumOfInternalVolumes; i++ )
+    for ( uint32_t i{0U}; i<NumOfInternalVolumes; i++ )
       m_volume_integration_weights[i][0]=1./4.;
     
     m_volume_integration_weights[4][0]=1./3.;

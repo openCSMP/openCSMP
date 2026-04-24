@@ -1,6 +1,5 @@
 #include "LinearTriangle.h"
 #include "Exception.h"
-#include "MJL_Edge.h"
 
 using namespace std;
 
@@ -402,39 +401,35 @@ void  LinearTriangle::ConsecutiveNodesAtBoundary( const vector<uint32_t>& bnodes
 /**
      @author SKM 18/2/2016
 */
-void  LinearTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-     unrml.resize(2);
-     // nodes 1 and 2
-     if ( face == 0 ) {
-          mjl::Edge  normal( mjl::Point(XY(1,0),XY(1,1)), mjl::Point(XY(2,0),XY(2,1)) );
-          // rotating edge clockwise to find outward pointing normal to face
-          normal.Rot();
-          normal.NormalizeTo( 1. );
-          unrml[0] = normal.Destination()[0];
-          unrml[1] = normal.Destination()[1];
-          return;
-       }
-     // nodes 2 and 0
-     if ( face == 1 ) {
-          mjl::Edge  normal( mjl::Point(XY(2,0),XY(2,1)), mjl::Point(XY(0,0),XY(0,1)) );
-          normal.Rot();
-          normal.NormalizeTo( 1. );
-          unrml[0] = normal.Destination()[0];
-          unrml[1] = normal.Destination()[1];
-          return;
-       }
-     // nodes 0 and 1
-     if ( face == 2 ) {
-          mjl::Edge  normal( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
-          normal.Rot();
-          normal.NormalizeTo( 1. );
-          unrml[0] = normal.Destination()[0];
-          unrml[1] = normal.Destination()[1];
-       }
- }
+void LinearTriangle::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < Faces());
+    unrml.resize(2);
 
+    // Map face index to node endpoints: 0:(1,2), 1:(2,0), 2:(0,1)
+    static const uint32_t f_node[3][2] = {{1, 2}, {2, 0}, {0, 1}};
+    const uint32_t n1 = f_node[face][0];
+    const uint32_t n2 = f_node[face][1];
+
+    // Calculate edge vector components
+    const double dx = XY(n2, 0) - XY(n1, 0);
+    const double dy = XY(n2, 1) - XY(n1, 1);
+
+    // For CCW winding, the outward normal is (dy, -dx)
+    // This is equivalent to a 90-degree clockwise rotation of the tangent vector
+    double nx = dy;
+    double ny = -dx;
+
+    const double length = std::sqrt(nx * nx + ny * ny);
+
+    if (length > 1e-12) {
+        unrml[0] = nx / length;
+        unrml[1] = ny / length;
+    } else {
+        unrml[0] = 0.0;
+        unrml[1] = 0.0;
+    }
+}
 
 
 

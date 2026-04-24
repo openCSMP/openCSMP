@@ -408,43 +408,40 @@ element.
 
 
 tested:   */
-void IsoparametricLinearLineElement::N( vector<double>& FN, const vector<double>& xy )
- {
-     double  len, l1, l2;
+void IsoparametricLinearLineElement::N(vector<double>& FN, const vector<double>& xy)
+{
+    // The element has two nodes (npe = 2)
+    FN.resize(2); 
 
-     // 1-dimensional models
-     if ( dim == 1U ) {
-          len = XY(1,0) - XY(0,0);
-          l1 = XY(1,0) - xy[0];
-       }
-     // 2-dimensional edge
-     else if ( dim == 2U ) {
-          mjl::Point org2(XY(0,0),XY(0,1));
-          mjl::Point dest2(XY(1,0),XY(1,1));
-          mjl::Point p2(xy[0],xy[1]);
-          len = (dest2 - org2).Length();
-          l1  = (dest2 - p2).Length();
-       }
-     // 3-dimensional edge
-     else
-       {
-          mjl::Point3D org3(XY(0,0),XY(0,1),XY(0,2));
-          mjl::Point3D dest3(XY(1,0),XY(1,1),XY(1,2));
-          mjl::Point3D p3(xy[0],xy[1],xy[2]);
-          len = (dest3 - org3).Length();
-          l1  = (dest3 - p3).Length();
-       }
-     l2 = len - l1;
+    double length_sq = 0.0;
+    double dist_to_node1_sq = 0.0;
 
-     FN.resize(npe);
-     //before:
-     //FN[0] = l2 / len;
-     //FN[1] = l1 / len;
-     //after:
-     FN[0] = l1 / len;
-     FN[1] = l2 / len;
- } // end
+    // Calculate squared distances to avoid multiple sqrt calls if possible,
+    // but for basis functions, we need the actual linear ratio.
+    for (uint32_t i = 0; i < dim; ++i) {
+        double d_edge = XY(1, i) - XY(0, i); // Vector from node 0 to node 1
+        double d_p1   = XY(1, i) - xy[i];    // Vector from input point to node 1
+        
+        length_sq        += d_edge * d_edge;
+        dist_to_node1_sq += d_p1 * d_p1;
+    }
 
+    double len = std::sqrt(length_sq);
+    double l1  = std::sqrt(dist_to_node1_sq);
+
+    // Safeguard against zero-length elements
+    if (len < 1e-14) {
+        FN[0] = 0.5;
+        FN[1] = 0.5;
+        return;
+    }
+
+    // Basis functions for a linear line element:
+    // N0 is 1 at node 0 and 0 at node 1 (l1/len)
+    // N1 is 0 at node 0 and 1 at node 1 ((len-l1)/len)
+    FN[0] = l1 / len;
+    FN[1] = 1.0 - FN[0]; 
+}
 
 
 
@@ -726,41 +723,38 @@ double IsoparametricLinearLineElement::dN_AtBarycenter( DenseMatrix<DM_MIN>& DN 
     here the normal is calculated using the derivative of the shape function at the middle node
     the normal is the 90o counter-clockwise rotated origin to destination vector.
 */
-vector<double>  IsoparametricLinearLineElement::UnitNormal() const
- {
-    if ( dim == 1U ) return vector<double>{ 1. };
+vector<double> IsoparametricLinearLineElement::UnitNormal() const
+{
+    if (dim == 1U) return { 1.0 };
 
-    const double rAtBaryCenter(0.0);
-    // dx = (N1'x1 + N2'x2 + N3'x3) dr
-    if ( dim == 2U ) {
-         // finding tangent at mid-point node
-         dNr( rAtBaryCenter, DNR );
-         const double vc0 = JacobianFor( DNR, 0 ); // dx
-         const double vc1 = JacobianFor( DNR, 1 ); // dy
-         //                      origin             destination
-         mjl::Edge  normal( mjl::Point(vc0,vc1), mjl::Point(0.,0.) );
-         // rotating tangent edge clockwise to find normal to face
-         normal.Rot();
-         normal.NormalizeTo( 1. );
-         // flipping normal so that it will be outward pointing
-         return vector<double>{ -normal.Destination()[0], -normal.Destination()[1] };
-      }
+    const double rAtBaryCenter = 0.0;
+    dNr(rAtBaryCenter, DNR);
 
-    //if ( dim == 3U ) {
-     // using slope at mid-point node
-     dNr( rAtBaryCenter, DNR );
-     double vc0 = JacobianFor( DNR, 0 ); // dx
-     double vc1 = JacobianFor( DNR, 1 ); // dy
-     double vc2 = JacobianFor( DNR, 2 ); // dz
-     const double sum = vc0 + vc1 + vc2;
-     // normalizing the normal
-     vc0 /= sum;
-     vc1 /= sum;
-     vc2 /= sum;
-     return vector<double>{ vc0, vc1, vc2 }; // dx, dy, dz
+    double dx = JacobianFor(DNR, 0);
+    double dy = JacobianFor(DNR, 1);
+    
+    if (dim == 2U) {
+        // Updated to CW Rotation: (dx, dy) -> (dy, -dx)
+        // This ensures consistency with the Quadratic element and the InterFace logic.
+        double nx = dy;
+        double ny = -dx;
 
- } // end UnitNormal
+        double len = std::sqrt(nx * nx + ny * ny);
+        if (len > 1e-14) {
+            return { nx / len, ny / len };
+        }
+        return { 0.0, 0.0 }; 
+    }
 
+    // 3D Case: Unit Tangent
+    double dz = JacobianFor(DNR, 2);
+    double len = std::sqrt(dx*dx + dy*dy + dz*dz);
+    
+    if (len > 1e-14) {
+        return { dx / len, dy / len, dz / len };
+    }
+    return { 0.0, 0.0, 0.0 };
+}
 
 
 /**
@@ -769,76 +763,38 @@ vector<double>  IsoparametricLinearLineElement::UnitNormal() const
     
     @note convention: face 1 is located at the first node.
 */
-void  IsoparametricLinearLineElement::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-   
-     if ( Dim() == 1 ) {
-         unrml.resize(1);
-         if ( face == 0 ) {
-              unrml[0] = -1.;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = 1.;
-              return;
-           }
-         return;
-       }
-   
-     // the normal lies in the plane of the model
-     // point in the direction of the element
-     if ( Dim() == 2 ) {
-         unrml.resize(2);
-         if ( face == 0 ) {
-              unrml[0] = XY(0,0) - XY(1,0);
-              unrml[1] = XY(0,1) - XY(1,1);
-              // normalise to length
-              const double length = hypot( unrml[0], unrml[1] );
-              unrml[0] /= length;
-              unrml[1] /= length;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = XY(1,0) - XY(0,0);
-              unrml[1] = XY(1,1) - XY(0,1);
-              const double length = hypot( unrml[0], unrml[1] );
-              unrml[0] /= length;
-              unrml[1] /= length;
-              return;
-           }
-         return;
-       }
+void IsoparametricLinearLineElement::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < 2); // A line has exactly 2 faces (endpoints)
+    
+    const uint32_t d = Dim();
+    unrml.assign(d, 0.0);
 
-     // 3D
-     if ( Dim() == 3 ) {
-         unrml.resize(3);
-         if ( face == 0 ) {
-              unrml[0] = XY(0,0) - XY(1,0);
-              unrml[1] = XY(0,1) - XY(1,1);
-              unrml[2] = XY(0,2) - XY(1,2);
-              // normalise to length
-              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              unrml[2] /= length;
-              return;
-           }
-         if ( face == 1 ) {
-              unrml[0] = XY(1,0) - XY(0,0);
-              unrml[1] = XY(1,1) - XY(0,1);
-              unrml[2] = XY(1,2) - XY(0,2);
-              const double length = sqrt(unrml[0]*unrml[0] + unrml[1]*unrml[1] + unrml[2]*unrml[2]);
-              unrml[0] /= length;
-              unrml[1] /= length;
-              unrml[2] /= length;
-              return;
-           }
-         return;
-       }
-   
- } // end UnitNormalToFace
+    // Identify indices for "this" node and the "other" node
+    // If face is 0, we use (Node 0 - Node 1)
+    // If face is 1, we use (Node 1 - Node 0)
+    uint32_t this_node  = (face == 0) ? 0 : 1;
+    uint32_t other_node = (face == 0) ? 1 : 0;
 
+    double length_sq = 0.0;
+    for (uint32_t i = 0; i < d; ++i) {
+        unrml[i] = XY(this_node, i) - XY(other_node, i);
+        length_sq += unrml[i] * unrml[i];
+    }
+
+    double length = std::sqrt(length_sq);
+    if (length > 1e-14) {
+        for (uint32_t i = 0; i < d; ++i) {
+            unrml[i] /= length;
+        }
+    } else {
+        // Fallback for degenerate element
+        if (d > 0) {
+            unrml[0] = (face == 0) ? -1.0 : 1.0;
+            // Optionally set others to 0.0, though .assign(d, 0.0) already did that.
+        }
+    }
+}
 
 
 /**
@@ -871,8 +827,8 @@ void  IsoparametricLinearLineElement::IntegralN( DenseMatrix<DM_MIN>& EPROP )
         M *= EPROP;
 
         EPROP.Resize(dim,npe);
-        for ( auto i{0U}; i<dim; i++ )
-          for ( auto j{0U}; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
+        for ( uint32_t i{0U}; i<dim; i++ )
+          for ( uint32_t j{0U}; j<npe; j++ ) EPROP(i,j) = M(i,j) * 1. / 6.;
 
         return;
      }

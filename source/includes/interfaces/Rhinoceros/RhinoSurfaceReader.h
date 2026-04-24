@@ -1,12 +1,47 @@
 #ifndef CSMP_RHINO_SURFACE_READER_H
 #define CSMP_RHINO_SURFACE_READER_H
 
-#include "MJL_geometry.h"
-#include "MJL_Point3D.h"
-#include "MJL_Triangle3D.h"
 #include "CSMP_definitions.h"
+#include "Point.h"
 
 namespace csmp {
+
+class LightWeightTriangle {
+public:
+    // Member initializer list with perfect forwarding or moves 
+    // for maximum efficiency
+    LightWeightTriangle(const Point<3>& p1, const Point<3>& p2, const Point<3>& p3, int64_t id) noexcept
+        : id_(id), nodes_{p1, p2, p3} {}
+
+    // Default constructor for container pre-allocation
+    LightWeightTriangle() noexcept : id_(-1) {}
+
+    // Coordinate access - noexcept for high-performance loops
+    // Using const and non-const overloads
+    [[nodiscard]] const Point<3>& operator[](size_t i) const noexcept {  return nodes_[i];  }
+    
+    [[nodiscard]] Point<3>& operator[](size_t i) noexcept { return nodes_[i]; }
+
+    // Modern SetVertex using move semantics
+    void SetVertex(size_t i, Point<3> p) noexcept { if (i < 3) nodes_[i] = std::move(p); }
+
+    // Efficient swap for winding reversal
+    void ReverseWinding() noexcept { std::swap(nodes_[1], nodes_[2]); }
+
+    // Bulk update method
+    void Set(Point<3> p1, Point<3> p2, Point<3> p3, int64_t id) noexcept {
+          nodes_[0] = std::move(p1);
+          nodes_[1] = std::move(p2);
+          nodes_[2] = std::move(p3);
+          id_ = id;
+      }
+
+    int64_t id_;
+
+private:
+    Point<3> nodes_[3];
+};
+
 
 template<uint32_t> class VSet;
 
@@ -53,12 +88,12 @@ class RhinoSurfaceReader {
      bool InitializeFrom( const char* raw_file, bool erase_old=true );
 
      bool PopObject( const char *obj_name,
-                     std::map<size_t,mjl::Point3D>& points,
+                     std::map<size_t,Point<3>>& points,
                      std::map<size_t,std::vector<size_t> >& plist,
                      size_t poffset=0 ) const; ///< node/element numbering (0..n-1)
                      
      void ObjectToPData( const std::string& obj_name,
-                         std::map<size_t,mjl::Point3D>& pxyz,
+                         std::map<size_t,Point<3>>& pxyz,
                          std::map<size_t,std::vector<size_t> >& plist,
                          size_t poffset ) const; ///< node/element numbering (0..n-1)
                          
@@ -73,8 +108,8 @@ class RhinoSurfaceReader {
                                        bool erase_list_before ) const;
    private:
      ///         obj.name   contained triangles
-     std::map<std::string,std::list<mjl::Triangle3D> >  objects;
- };
+     std::map<std::string, std::vector<LightWeightTriangle>> objects;
+};
 
 } // csmp
 

@@ -152,6 +152,26 @@
 #include "GravityInducedFluidPressure_Test.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
 
+
+// find the directory where the test data are stored
+std::string getTestDataPath(const std::string& filename) {
+    const char* dataRoot = std::getenv("CSMP_DATA_ROOT");
+    if (dataRoot == nullptr) {
+        // Fallback for when you run it manually in Xcode without CTest
+        return "./fallback_data/" + filename; 
+      }
+    return std::string(dataRoot) + "/" + filename;
+}
+
+/*
+// Inside your test:
+void testSomething() {
+    std::string meshPath = getTestDataPath("IsoparametricLinearTetrahedron1P.txt");
+    // Open file using meshPath...
+}
+*/
+
+
 using namespace std;
 using namespace csmp;
 

@@ -1061,6 +1061,7 @@ IsoparametricQuadraticQuadrilateral::dN_At( DenseMatrix<DM_MIN>& DN2,
 
  }
 
+
 /**
 
 When a surface element is located in a 3D space, the Jacobian matrix reduces
@@ -1751,6 +1752,74 @@ vector<double> IsoparametricQuadraticQuadrilateral::UnitNormal() const
  }
 
 
+
+void IsoparametricQuadraticQuadrilateral::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < 4);
+    unrml.assign(dim, 0.0);
+
+    // 1. Define local coordinates for the midpoint of the requested face
+    vector<double> rs(2, 0.0);
+    if      (face == 0) rs[1] = -1.0; // Bottom (s=-1)
+    else if (face == 1) rs[0] =  1.0; // Right  (r=1)
+    else if (face == 2) rs[1] =  1.0; // Top    (s=1)
+    else if (face == 3) rs[0] = -1.0; // Left   (r=-1)
+
+    // 2. Compute the 2xdim Jacobian Matrix (JMAT) using your existing method
+    // This also updates JMAT(0,i) as dx_i/dr and JMAT(1,i) as dx_i/ds
+    double jacobi = const_cast<IsoparametricQuadraticQuadrilateral*>(this)->Jacobi(rs);
+
+    // 3. Extract the tangent vectors from JMAT
+    // r_tangent (dr) is row 0, s_tangent (ds) is row 1
+    
+    // 4. Calculate the unnormalized normal vector
+    // We use the property that a vector perpendicular to a tangent in a 
+    // curvilinear space can be derived from the reciprocal basis or 
+    // via a cross product with the surface normal.
+    
+    // For Face 0 & 2 (r-tangent is the edge): Normal is related to s-direction
+    // For Face 1 & 3 (s-tangent is the edge): Normal is related to r-direction
+    
+    vector<double> n(dim, 0.0);
+    if (face == 0 || face == 2) {
+        // Edge is along 'r'. We need a vector in-plane perp to 'r'.
+        // We use the Gram-Schmidt-like orthogonalization: n = g_s - (F/E)g_r
+        // But more simply, for an isoparametric quad, the outward directions 
+        // are aligned with the signs of the local gradients.
+        double E(0.0), F(0.0);
+        for(uint32_t i=0; i<dim; ++i) {
+            E += JMAT(0,i) * JMAT(0,i);
+            F += JMAT(0,i) * JMAT(1,i);
+        }
+        
+        double scale = (face == 0) ? -1.0 : 1.0;
+        for(uint32_t i=0; i<dim; ++i) {
+            n[i] = scale * (JMAT(1, i) - (F / E) * JMAT(0, i));
+        }
+    } 
+    else {
+        // Edge is along 's'. We need a vector in-plane perp to 's'.
+        double G(0.0), F(0.0);
+        for(uint32_t i=0; i<dim; ++i) {
+            G += JMAT(1,i) * JMAT(1,i);
+            F += JMAT(0,i) * JMAT(1,i);
+        }
+        
+        double scale = (face == 1) ? 1.0 : -1.0;
+        for(uint32_t i=0; i<dim; ++i) {
+            n[i] = scale * (JMAT(0, i) - (F / G) * JMAT(1, i));
+        }
+    }
+
+    // 5. Final Normalization
+    double len_sq = 0.0;
+    for (double val : n) len_sq += val * val;
+    double len = sqrt(len_sq);
+
+    if (len > 1e-14) {
+        for (uint32_t i = 0; i < dim; ++i) unrml[i] = n[i] / len;
+    }
+}
 
 
 

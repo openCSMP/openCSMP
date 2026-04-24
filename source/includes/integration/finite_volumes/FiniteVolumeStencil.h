@@ -71,88 +71,88 @@ class FiniteVolumeStencil {
     ~FiniteVolumeStencil() = default;
     
     /// number of facets that delimited the FV sector on the insider of the parent finite element
-    uint32_t  FacetsPerSector( uint32_t iSector ) const;
+    uint32_t  FacetsPerSector( uint32_t iSector ) const noexcept;
   
     /// n-th facet that delimits the FV sector in the inside of the finite element
-    uint32_t  FacetSurroundingSector( uint32_t iSector, uint32_t n ) const;
+    uint32_t  FacetSurroundingSector( uint32_t iSector, uint32_t n ) const noexcept;
 
     /// reports the type of a facet
-    FV_FACET_TYPE FacetType( uint32_t iFacet ) const;
+    FV_FACET_TYPE FacetType( uint32_t iFacet ) const noexcept;
   
     /// choice of rst-integration point coordinate of the facet integration point
-    double  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, uint32_t r_or_s_or_t ) const;
+    double  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, uint32_t r_or_s_or_t ) const noexcept;
   
     /// rst coordinate of facet integration point in parametric space
-    void    FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, std::vector<double>& rst ) const;
+    void    FacetIntegrationPoint( uint32_t iFacet, uint32_t ip, std::vector<double>& rst ) const noexcept;
   
     /// returns rst coordinate of facet integration point in parametric space
-    const Point<dim>  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip ) const;
+    const Point<dim>  FacetIntegrationPoint( uint32_t iFacet, uint32_t ip ) const noexcept;
   
     /// integration weight of given integration point correlated with facet area and number of facet integration points
-    double  FacetIntegrationWeight( uint32_t iFacet, uint32_t ip ) const;
+    double  FacetIntegrationWeight( uint32_t iFacet, uint32_t ip ) const noexcept;
   
     /// scale factor to match sector integration weights between adjacent finite elements that have a different volume in rst space
-    double  FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const;
+    double  FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const noexcept;
   
     /// nodes that sit on the opposite sides of the facet; outside is direction into which facet normal points
-    void    FacetEdgeNodes( uint32_t iFacet, uint32_t& inside_node, uint32_t& outside_node ) const;
+    void    FacetEdgeNodes( uint32_t iFacet, uint32_t& inside_node, uint32_t& outside_node ) const noexcept;
   
     /// opposite side of the outward pointing normal of the facet
-    uint32_t InsideNode( uint32_t iFacet ) const;
+    uint32_t InsideNode( uint32_t iFacet ) const noexcept;
 
     /// same side as the outward pointing normal of the facet
-    uint32_t OutsideNode( uint32_t iFacet ) const;
+    uint32_t OutsideNode( uint32_t iFacet ) const noexcept;
   
     /// point on the finite-element edge that is touched by the facet
-	  const Point<dim>  FacetEdgeMidPoint( uint32_t iFacet ) const;
+	  const Point<dim>  FacetEdgeMidPoint( uint32_t iFacet ) const noexcept;
   
     /// of finite element in parametric space
-    const Point<dim>  Barycenter() const;
+    const Point<dim>  Barycenter() const noexcept;
   
-    double             SectorIntegrationPoint( uint32_t iSector, uint32_t ip, uint32_t r_or_s_or_t ) const;
-    void               SectorIntegrationPoint( uint32_t iSector, uint32_t ip, std::vector<double>& rst ) const;
-    const Point<dim>   SectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const;
-    double             SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const;
-    const Point<dim>   FacetPoint( uint32_t iFacet, uint32_t iPoint ) const;
-    uint32_t           FacetPoints( uint32_t iFacet ) const { return static_cast<uint32_t>(facet_points_[iFacet].size()); }
+    double             SectorIntegrationPoint( uint32_t iSector, uint32_t ip, uint32_t r_or_s_or_t ) const noexcept;
+    void               SectorIntegrationPoint( uint32_t iSector, uint32_t ip, std::vector<double>& rst ) const noexcept;
+    const Point<dim>   SectorIntegrationPoint( uint32_t iSector, uint32_t ip ) const noexcept;
+    double             SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const noexcept;
+    const Point<dim>   FacetPoint( uint32_t iFacet, uint32_t iPoint ) const noexcept;
+    uint32_t           FacetPoints( uint32_t iFacet ) const noexcept { return static_cast<uint32_t>(facet_points_[iFacet].size()); }
 
     /// corner points of the (hexahedral) sector in parametric space
-    const Point<dim>   SectorPoint( uint32_t iSector, uint32_t iPoint ) const;
+    const Point<dim>   SectorPoint( uint32_t iSector, uint32_t iPoint ) const noexcept;
   
     /// pairs of sector edge points definining the intersection lines of the sector with the finite element faces
-    std::pair<Point<dim>,Point<dim> >  SectorEdgePoints( uint32_t iSector, uint32_t iEdge ) const;
+    std::pair<Point<dim>,Point<dim> >  SectorEdgePoints( uint32_t iSector, uint32_t iEdge ) const noexcept;
   
     /// pairs of the ids (0..n-1) of the sector edge point definining the intersection lines of the sector with the finite element faces
-    const std::pair<uint32_t,uint32_t>  SectorEdge( uint32_t iSector, uint32_t iEdge ) const;
+    const std::pair<uint32_t,uint32_t>  SectorEdge( uint32_t iSector, uint32_t iEdge ) const noexcept;
   
     /// number of corner points of the finite volume sector
-    uint32_t    SectorPoints( uint32_t iSector ) const;
+    uint32_t    SectorPoints( uint32_t iSector ) const noexcept;
   
     /// number of edges of the finite volume sector
-    uint32_t    SectorEdges( uint32_t iSector ) const;
+    uint32_t    SectorEdges( uint32_t iSector ) const noexcept;
   
     /// number of finite-volume facets in the parent finite element
-    uint32_t    Facets() const;
+    uint32_t    Facets() const noexcept;
   
     /// number of finite-volume sectors in the parent finite element
-    uint32_t    Sectors() const;
+    uint32_t    Sectors() const noexcept;
   
     /// number of quadrature points of the finite volume facet i
-    uint32_t    IntegrationPointsPerFacet( uint32_t iFacet=0U ) const;
+    uint32_t    IntegrationPointsPerFacet( uint32_t iFacet=0U ) const noexcept;
   
     /// number of quadrature points of the finite volume sector i
-    uint32_t    IntegrationPointsPerSector( uint32_t iSector=0U ) const;
+    uint32_t    IntegrationPointsPerSector( uint32_t iSector=0U ) const noexcept;
   
     /// returns unit normal to facet in parametric space
-    const Point<dim>  UnitParametricNormalTo( uint32_t iFacet ) const;
+    const Point<dim>  UnitParametricNormalTo( uint32_t iFacet ) const noexcept;
   
     /// returns x,y or z component of unit normal in parametric space
-    double  UnitParametricNormalComponent( uint32_t iFacet, uint32_t x_or_y_or_z ) const;
+    double  UnitParametricNormalComponent( uint32_t iFacet, uint32_t x_or_y_or_z ) const noexcept;
 
-    std::pair<double,double>  FacetNormalTransformationNodeWeights( uint32_t iFacet, uint32_t iNode ) const;
+    std::pair<double,double>  FacetNormalTransformationNodeWeights( uint32_t iFacet, uint32_t iNode ) const noexcept;
   
     /// returns the parent element of the finite volume stencil
-    const std::string  ParentElement() const { return parent_element_; }
+    const std::string  ParentElement() const noexcept { return parent_element_; }
 
     /// reports whether the parent element of the stencil is a line, surface or volume
     CELL_SHAPE  Geometry() const;
@@ -250,7 +250,7 @@ Returns the number of internal facets - division walls inside the FE.
 Accesses the private data of the class, retreiving the value.
 */
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::Facets() const
+inline uint32_t  FiniteVolumeStencil<dim>::Facets() const noexcept
  {
     return static_cast<uint32_t>(edges_of_element_.rows());
  }
@@ -269,34 +269,10 @@ the number of facets, adding flux to the given node.
 Accesses the private data of the class, retrieving the value.
 */
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::FacetsPerSector( uint32_t iSector ) const
+inline uint32_t  FiniteVolumeStencil<dim>::FacetsPerSector( uint32_t iSector ) const noexcept
  {
     assert( iSector < facets_surrounding_node_.size() );
     return static_cast<uint32_t>(facets_surrounding_node_[iSector].size());
-/*
-    if constexpr ( dim == 1u ) return 1U;
-    if constexpr ( dim == 2U ) {
-         if ( space_dimension_ == LINE ) return 1U;
-         return 2U;
-      }
-    
-    // special cases of pyramid apex and lower dimensional elements
-    if constexpr( dim == 3U ) {
-         if ( space_dimension_ == VOLUME ) {
-              if ( parent_element_type_ == ISOPARAMETRIC_LINEAR_PYRAMID && iSector == 4U ) {
- #ifdef PYRAMID_TRIANGULAR_FACETS
-                   return 9U; // apex node 4
- #else
-                   return 4U; // Special case of the Pyramid vertex 4 is surrounded by 4 facets
- #endif
-                 }
-              return dim;
-           }
-         if ( space_dimension_ == SURFACE ) return 2U;
-         if ( space_dimension_ == LINE ) return 1U;
-      }
-    return dim;
-*/
  }
 
 
@@ -312,7 +288,7 @@ Returns number of internal FV sectors, given FE is divided to.
 Accesses the private data of the class, retreiving the value.
 */
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::Sectors() const
+inline uint32_t  FiniteVolumeStencil<dim>::Sectors() const noexcept
  {
     // since this is a vector of vectors of points per sector
 //    return static_cast<uint32_t>(sector_points_.depth());
@@ -336,7 +312,7 @@ For current implementation this value is 1.
 
 */
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerFacet( uint32_t iFacet ) const
+inline uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerFacet( uint32_t iFacet ) const noexcept
  {
     assert( iFacet < facet_integration_weights_.size() );
 #ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
@@ -361,7 +337,7 @@ Accesses the private data of the class, retreiving the value.
 For current implementation this value is 1.
 */
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerSector( uint32_t iSector ) const
+inline uint32_t  FiniteVolumeStencil<dim>::IntegrationPointsPerSector( uint32_t iSector ) const noexcept
  {
     assert( iSector < sector_integration_weights_.size() );
 #ifdef FV_STENCIL_WITH_MORE_THAN_1_INTEGRATION_POINT_PER_FACET_OR_SECTOR
@@ -396,7 +372,7 @@ FVPEM method is working with 1 facet integration point only.
 */
 template<uint32_t dim>
 inline const Point<dim>  FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
-                                                                          uint32_t ip ) const
+                                                                          uint32_t ip ) const noexcept
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -431,7 +407,7 @@ inline const Point<dim>  FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32
 template<uint32_t dim>
 inline void FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
                                                              uint32_t ip,
-                                                             std::vector<double>& rst ) const
+                                                             std::vector<double>& rst ) const noexcept
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -473,7 +449,7 @@ inline void FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
 template<uint32_t dim>
 inline double FiniteVolumeStencil<dim>::FacetIntegrationPoint( uint32_t iFacet,
                                                                uint32_t ip,
-                                                               uint32_t rst ) const
+                                                               uint32_t rst ) const noexcept
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -495,8 +471,8 @@ the end node. The end node is the one on the side of the facet into
 which the outward pointing normal points.  
 
 @param iFacet index of the internal dividing facet in the FE.
-@param estart local index of the FE edge start  node
-@param eend   local index of the FE edge end node
+@param inside_node ocal index of the FE edge start  node
+@param outside_node local index of the FE edge end node
 
 @section implementation Implementation
 
@@ -504,17 +480,17 @@ Accesses the private pair of nodes, associated with the facet.
 */
 template<uint32_t dim>
 inline void FiniteVolumeStencil<dim>::FacetEdgeNodes( uint32_t iFacet,
-                                                      uint32_t& estart,
-                                                      uint32_t& eend ) const
+                                                      uint32_t& inside_node,
+                                                      uint32_t& outside_node ) const noexcept
 {
     assert( iFacet < Facets() );
-    estart=edges_of_element_(iFacet,0U);
-    eend=edges_of_element_(iFacet,1U);
+    inside_node=edges_of_element_(iFacet,0U);
+    outside_node=edges_of_element_(iFacet,1U);
 }
 
 
 template<uint32_t dim>
-inline uint32_t FiniteVolumeStencil<dim>::InsideNode( uint32_t iFacet ) const
+inline uint32_t FiniteVolumeStencil<dim>::InsideNode( uint32_t iFacet ) const noexcept
 {
     assert( iFacet < Facets() );
     return edges_of_element_(iFacet,0u);
@@ -522,7 +498,7 @@ inline uint32_t FiniteVolumeStencil<dim>::InsideNode( uint32_t iFacet ) const
 
 
 template<uint32_t dim>
-inline uint32_t FiniteVolumeStencil<dim>::OutsideNode( uint32_t iFacet ) const
+inline uint32_t FiniteVolumeStencil<dim>::OutsideNode( uint32_t iFacet ) const noexcept
 {
     assert( iFacet < Facets() );
     return edges_of_element_(iFacet,1U);
@@ -552,7 +528,7 @@ FVPEM method is working with 1 facet integration point only.
 */
 template<uint32_t dim>
 inline const Point<dim>  FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
-                                                                           uint32_t ip ) const
+                                                                           uint32_t ip ) const noexcept
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -583,7 +559,7 @@ inline const Point<dim>  FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint3
 template<uint32_t dim>
 inline void FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
                                                               uint32_t ip,
-                                                              std::vector<double>& rst ) const
+                                                              std::vector<double>& rst ) const noexcept
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -621,7 +597,7 @@ inline void FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
 template<uint32_t dim>
 inline double FiniteVolumeStencil<dim>::SectorIntegrationPoint( uint32_t iSector,
                                                                 uint32_t ip,
-                                                                uint32_t rst ) const
+                                                                uint32_t rst ) const noexcept
 {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -655,7 +631,7 @@ FVPEM method is working with 1 facet integration point only.
 */    
 template<uint32_t dim>
 inline double FiniteVolumeStencil<dim>::FacetIntegrationWeight( uint32_t iFacet,
-                                                                uint32_t ip ) const
+                                                                uint32_t ip ) const noexcept
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -692,7 +668,7 @@ FVPEM method is working with 1 facet integration point only.
 */
  
 template<uint32_t dim>
-inline double FiniteVolumeStencil<dim>::FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const
+inline double FiniteVolumeStencil<dim>::FacetProjectionWeight( uint32_t iFacet, uint32_t ip ) const noexcept
  {
     assert( iFacet < Facets() );
     assert( ip < IntegrationPointsPerFacet(iFacet) );
@@ -726,7 +702,7 @@ For current implementation index ip is constrained to 0 only, i.e. the
 FVPEM method is working with 1 facet integration point only.
 */
 template<uint32_t dim>
-inline double FiniteVolumeStencil<dim>::SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const
+inline double FiniteVolumeStencil<dim>::SectorIntegrationWeight( uint32_t iSector, uint32_t ip ) const noexcept
  {
     assert( iSector < Sectors() );
     assert( ip < IntegrationPointsPerSector(iSector) );
@@ -743,7 +719,7 @@ inline double FiniteVolumeStencil<dim>::SectorIntegrationWeight( uint32_t iSecto
  
   // overloaded method, returns specific index of a facet 
 template<uint32_t dim>
-inline uint32_t  FiniteVolumeStencil<dim>::FacetSurroundingSector( uint32_t iSector, uint32_t n ) const
+inline uint32_t  FiniteVolumeStencil<dim>::FacetSurroundingSector( uint32_t iSector, uint32_t n ) const noexcept
  {
     assert( iSector < Sectors() );
     assert( n < FacetsPerSector(iSector) );
@@ -770,7 +746,7 @@ Accesses the private data of the class, retreiving tabulated vector.
 @attention here parametric space has same dimensions as physical space, but third dimension may be zero
 */
 template<uint32_t dim>
-inline const Point<dim>  FiniteVolumeStencil<dim>::UnitParametricNormalTo( uint32_t iFacet ) const
+inline const Point<dim>  FiniteVolumeStencil<dim>::UnitParametricNormalTo( uint32_t iFacet ) const noexcept
 {
     assert( iFacet < facet_types_.size() );
     if constexpr ( dim == 1u )
@@ -787,7 +763,7 @@ inline const Point<dim>  FiniteVolumeStencil<dim>::UnitParametricNormalTo( uint3
 
 template<uint32_t dim>
 inline double FiniteVolumeStencil<dim>::UnitParametricNormalComponent( uint32_t iFacet,
-                                                                uint32_t x_or_y_or_z ) const
+                                                                uint32_t x_or_y_or_z ) const noexcept
 {
    assert( iFacet < facet_types_.size() );
    assert( x_or_y_or_z < dim );
@@ -813,7 +789,7 @@ Accesses the private data of the class, retreiving tabulated vector.
 */
 template<uint32_t dim>
 inline std::pair<double,double>  FiniteVolumeStencil<dim>::FacetNormalTransformationNodeWeights(
-                                                               uint32_t iFacet, uint32_t iNode ) const
+                                                               uint32_t iFacet, uint32_t iNode ) const noexcept
 {
 //    assert( iFacet < facet_normal_xforms_.depth() );
 //    assert( iNode < sector_integration_weights_.size() );
@@ -826,7 +802,7 @@ inline std::pair<double,double>  FiniteVolumeStencil<dim>::FacetNormalTransforma
 
 
 template<uint32_t dim>
-inline const Point<dim>  FiniteVolumeStencil<dim>::FacetEdgeMidPoint( uint32_t iFacet ) const
+inline const Point<dim>  FiniteVolumeStencil<dim>::FacetEdgeMidPoint( uint32_t iFacet ) const noexcept
  {
     assert( iFacet < facet_types_.size() );
     if constexpr ( dim == 1u )
@@ -841,14 +817,14 @@ inline const Point<dim>  FiniteVolumeStencil<dim>::FacetEdgeMidPoint( uint32_t i
 
 
 template<uint32_t dim>
-inline const Point<dim>  FiniteVolumeStencil<dim>::Barycenter() const
+inline const Point<dim>  FiniteVolumeStencil<dim>::Barycenter() const noexcept
 {
 	 return barycenter_;
 }
 
 
 template<uint32_t dim>
-inline const Point<dim>  FiniteVolumeStencil<dim>::FacetPoint( uint32_t iFacet, uint32_t iPoint ) const
+inline const Point<dim>  FiniteVolumeStencil<dim>::FacetPoint( uint32_t iFacet, uint32_t iPoint ) const noexcept
  {
     assert( iFacet < facet_points_.size() );
     assert( iPoint < facet_points_[iPoint].size() );
@@ -870,7 +846,7 @@ inline const Point<dim>  FiniteVolumeStencil<dim>::FacetPoint( uint32_t iFacet, 
 
 
 template<uint32_t dim>
-inline FV_FACET_TYPE  FiniteVolumeStencil<dim>::FacetType( uint32_t iFacet ) const
+inline FV_FACET_TYPE  FiniteVolumeStencil<dim>::FacetType( uint32_t iFacet ) const noexcept
 {
    assert( iFacet < facet_types_.size() );
 	 return facet_types_[iFacet];
@@ -879,7 +855,7 @@ inline FV_FACET_TYPE  FiniteVolumeStencil<dim>::FacetType( uint32_t iFacet ) con
     
     
 template<uint32_t dim>
-inline const csmp::Point<dim>  FiniteVolumeStencil<dim>::SectorPoint( uint32_t iSector, uint32_t iPoint ) const
+inline const csmp::Point<dim>  FiniteVolumeStencil<dim>::SectorPoint( uint32_t iSector, uint32_t iPoint ) const noexcept
  {
     assert( iSector < sector_points_.size() );
     assert( iPoint < sector_points_[iSector].size() );
@@ -902,7 +878,7 @@ inline const csmp::Point<dim>  FiniteVolumeStencil<dim>::SectorPoint( uint32_t i
   
 template<uint32_t dim>
 inline std::pair<csmp::Point<dim>,csmp::Point<dim> >  FiniteVolumeStencil<dim>::SectorEdgePoints(
-                                                               uint32_t iSector, uint32_t iEdge ) const
+                                                               uint32_t iSector, uint32_t iEdge ) const noexcept
 {
    assert( iSector < edges_of_sectors_.size() );
    assert( iEdge < edges_of_sectors_[iSector].size() );
@@ -931,7 +907,7 @@ inline std::pair<csmp::Point<dim>,csmp::Point<dim> >  FiniteVolumeStencil<dim>::
 
 template<uint32_t dim>
 inline const std::pair<uint32_t,uint32_t>  FiniteVolumeStencil<dim>::SectorEdge( uint32_t iSector,
-                                                                                 uint32_t iEdge ) const
+                                                                                 uint32_t iEdge ) const noexcept
 {
    assert( iSector < edges_of_sectors_.size() );
    assert( iEdge < edges_of_sectors_[iSector].size() );
@@ -941,7 +917,7 @@ inline const std::pair<uint32_t,uint32_t>  FiniteVolumeStencil<dim>::SectorEdge(
     
 /// number of corner points of the finite volume sector
 template<uint32_t dim>
-inline uint32_t FiniteVolumeStencil<dim>::SectorPoints( uint32_t iSector ) const
+inline uint32_t FiniteVolumeStencil<dim>::SectorPoints( uint32_t iSector ) const noexcept
 {
    assert( iSector < sector_points_.size() );
    // assumes that all sectors have the same number of points
@@ -950,7 +926,7 @@ inline uint32_t FiniteVolumeStencil<dim>::SectorPoints( uint32_t iSector ) const
 
 
 template<uint32_t dim>
-inline uint32_t FiniteVolumeStencil<dim>::SectorEdges( uint32_t iSector ) const
+inline uint32_t FiniteVolumeStencil<dim>::SectorEdges( uint32_t iSector ) const noexcept
 {
    assert( iSector < edges_of_sectors_.size() );
    return static_cast<uint32_t>(edges_of_sectors_[iSector].size());

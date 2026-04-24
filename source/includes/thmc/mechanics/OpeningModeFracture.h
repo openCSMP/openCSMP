@@ -2,7 +2,7 @@
 #define OPENING_MODE_FRACTURE_H
 
 #include "CSMP_definitions.h"
-#include "MJL_Point.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -38,30 +38,30 @@ class OpeningModeFracture {
     /// 2D construction routines for fracture polygons
     void    SixteenPointConvexHull( double pf,
                                     double syy,
-                                    const mjl::Point& a, 
-                                    const mjl::Point& b, std::list<mjl::Point>& chain );
+                                    const Point<2>& a, 
+                                    const Point<2>& b, std::list<Point<2>>& chain );
                                     
     void    BluntTenPointHull( double pf,
                                double syy,
-                               const mjl::Point& b,
-                               const mjl::Point& c, 
-                               std::list<mjl::Point>& chain );
+                               const Point<2>& b,
+                               const Point<2>& c, 
+                               std::list<Point<2>>& chain );
                                     
     void    RectangleHull( double pf,
                            double syy,
-                           mjl::Point& b, mjl::Point& c,
-                           std::list<mjl::Point>& chain );                                
+                           Point<2>& b, Point<2>& c,
+                           std::list<Point<2>>& chain );                                
 
     void    RectangleHull( double fixed_aperture,
-                           mjl::Point& b, mjl::Point& c,
-                           std::list<mjl::Point>& chain );
+                           Point<2>& b, Point<2>& c,
+                           std::list<Point<2>>& chain );
   private:
     double        nu,        // Poisson's ratio
-                    E,         // Young's modulus (GPa)
-                    a,         // half-length of joint
-                    x,         // distance from fracture center
-                    pos,
-                    length;    // fracture length
+                  E,         // Young's modulus (GPa)
+                  a,         // half-length of joint
+                  x,         // distance from fracture center
+                  pos,
+                  length;    // fracture length
     const double  MINIMUM_APERTURE;
  };
 

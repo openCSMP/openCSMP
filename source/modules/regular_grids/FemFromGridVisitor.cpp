@@ -1,7 +1,5 @@
 #include "FemFromGridVisitor.h"
 #include "Exception.h"
-#include "MJL_Point.h"
-#include "MJL_Edge.h"
 #include "PropertyDatabase.h"
 #include "FiniteDifferenceGrid.h"
 #include "Node.h"
@@ -72,60 +70,76 @@ void FemFromGridVisitor<dim>::MinMaxCoordinates( double& min_x, double& max_x,
 
 
 template<uint32_t dim>
-bool  FemFromGridVisitor<dim>::IsInsideTriangle( double x, double y, bool update )
-  {
-     mjl::Point p1(XY(0,0),XY(0,1)), 
-               p2(XY(1,0),XY(1,1)), 
-               p3(XY(2,0),XY(2,1)), 
-               p(x,y), mp(XY(0,0),XY(0,1));
-               
-     mjl::Edge a[3];
- 
-     if ( update )
-       {
-          mp += p2;
-          mp += p3;
-          mp /= 3.0;
-          a[0].Set( p1, p2 );
-          a[1].Set( p2, p3 );
-          a[2].Set( p3, p1 );
-          
-          // flipping segments if triangles are numbered counter-clockwise
-          if ( a[0].Classify(mp) == mjl::RIGHT )
-            for ( int32_t r=0; r<3; r++ ) a[r].Flip();
-       }
-     // TEST: if the midpoint does not lie to the right of each edge
-     // the edges are flipped to change the sense of rotation
-     // of the triangle
-     for ( size_t q=0; q<3; q++ )
-       if ( a[q].Classify(p) == mjl::RIGHT ) return false;
-       
-     return true;
-  }
+bool FemFromGridVisitor<dim>::IsInsideTriangle(double x, double y, bool /*update*/ )
+{
+    // 1. Setup points
+    Point<2> p1(XY(0,0), XY(0,1)), 
+             p2(XY(1,0), XY(1,1)), 
+             p3(XY(2,0), XY(2,1)), 
+             p(x,y);
+
+    // 2. Cross product helper function (2D version)
+    // Returns positive if P is to the LEFT of vector AB, negative if to the RIGHT
+    auto cross_product = [](const Point<2>& a, const Point<2>& b, const Point<2>& p) {
+        return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    };
+
+    // 3. Determine orientation (CCW vs CW)
+    // The proprietary code used a midpoint test to handle orientation.
+    // We can simply calculate the signed area (cross product) of the triangle.
+    double area = cross_product(p1, p2, p3);
+    
+    // 4. Perform the "Point in Triangle" test
+    double d1 = cross_product(p1, p2, p);
+    double d2 = cross_product(p2, p3, p);
+    double d3 = cross_product(p3, p1, p);
+
+    if (area > 0) {
+        // Counter-Clockwise triangle: Point must be to the left of all edges
+        return (d1 >= 0 && d2 >= 0 && d3 >= 0);
+    } else {
+        // Clockwise triangle: Point must be to the right of all edges
+        return (d1 <= 0 && d2 <= 0 && d3 <= 0);
+    }
+}
 
 
 template<uint32_t dim>
-bool  FemFromGridVisitor<dim>::IsInsideQuadrilateral( double x, double y )
-  {
-     // this method currently works only for regular rectangles
-     // test if the quadrilateral is straightsided and regular
-     // if MJL_Points and MJL_Edges are used to identify if points
-     // lie within the quadrilateral, as in the function IsInsideTriangle()
-     // sometimes FD points that lie on the edge of the quadrilateral 
-     // are flagged as 'outside' and the JPEG output is crappy
-     if ( XY(0,1) != XY(1,1) || XY(2,1) != XY(3,1) ||  // y coordinate
-          XY(0,0) != XY(3,0) || XY(1,0) != XY(2,0) )   // x coordinate
-       { 
-         cout << "\nFemToGridVisitor<dim>::IsInsideQuadrilateral: ";
-         cout << "\nApparently quadrilateral is not straightsided and rectangular";
-         cout << "\nMethod cannot identify if point lies within quadrilateral";
-         cout << "\nNothing is done..." << endl;
-         return false;
-       }
-          
-     if ( x >= XY(0,0) && x <= XY(1,0) && y >= XY(0,1) && y <= XY(3,1) ) return true;
-     return false;
-  }
+bool FemFromGridVisitor<dim>::IsInsideQuadrilateral(double x, double y)
+{
+    // 1. Setup points for the 4 corners
+    Point<2> p[4] = {
+        Point<2>(XY(0,0), XY(0,1)),
+        Point<2>(XY(1,0), XY(1,1)),
+        Point<2>(XY(2,0), XY(2,1)),
+        Point<2>(XY(3,0), XY(3,1))
+    };
+    Point<2> p_test(x, y);
+
+    // 2. Cross product helper: returns positive if P is to the LEFT of AB
+    auto cross_product = [](const Point<2>& a, const Point<2>& b, const Point<2>& p) {
+        return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]);
+    };
+
+    // 3. Determine winding order using the first three points
+    double area = cross_product(p[0], p[1], p[2]);
+    
+    // 4. Check against all 4 edges
+    // We use a small epsilon or simply 0.0 with '=' to include edges
+    if (area > 0) {
+        // Counter-Clockwise: Point must be Left/On all edges
+        for (int i = 0; i < 4; ++i) {
+            if (cross_product(p[i], p[(i + 1) % 4], p_test) < -1e-12) return false;
+        }
+    } else {
+        // Clockwise: Point must be Right/On all edges
+        for (int i = 0; i < 4; ++i) {
+            if (cross_product(p[i], p[(i + 1) % 4], p_test) > 1e-12) return false;
+        }
+    }
+
+    return true;
+}
 
 
 template<uint32_t dim>

@@ -5,7 +5,7 @@
 #include "HashKey.h"
 #include "LinearTriangle3D.h"
 #include "LinearTetrahedron.h"
-#include "MJL_Triangle3D.h"
+#include "Point.h"
 #include "Exception.h"
 #include "PropertyData.h"
 
@@ -45,46 +45,51 @@ bool  GoCadInterface<dim>::IsInNextLine( ifstream& ifs, const char* search_strin
 }
 
 
+
 template<uint32_t dim>
-BOX_BOUNDARY  GoCadInterface<dim>::IdentifyTetrahedronBoundary( const vector<double>& nd1,
-                                                                      const vector<double>& nd2,
-                                                                      const vector<double>& nd3 )
- {
-    assert( nd1.size() == 3U );
-    assert( nd2.size() == 3U );
-    assert( nd3.size() == 3U );
+BOX_BOUNDARY GoCadInterface<dim>::IdentifyTetrahedronBoundary(const vector<double>& nd1,
+                                                              const vector<double>& nd2,
+                                                              const vector<double>& nd3)
+{
+    assert(nd1.size() == 3U && nd2.size() == 3U && nd3.size() == 3U);
 
-    mjl::Triangle3D  face( (mjl::Point3D( nd1[0],nd1[1],nd1[2] )),
-                           (mjl::Point3D( nd2[0],nd2[1],nd2[2] )),
-                           (mjl::Point3D( nd3[0],nd3[1],nd3[2] )), 1 );
+    // 1. Calculate the face normal using cross product of two edges
+    Point<3> v12(nd2[0] - nd1[0], nd2[1] - nd1[1], nd2[2] - nd1[2]);
+    Point<3> v13(nd3[0] - nd1[0], nd3[1] - nd1[1], nd3[2] - nd1[2]);
+    
+    Point<3> n = crossProduct(v12, v13);
+    double mag = std::sqrt(n[0]*n[0] + n[1]*n[1] + n[2]*n[2]);
 
-    int32_t  facing_direction = face.FacingDirection();
+    if (mag < 1e-12) return NOT; // Degenerate triangle
 
-    if ( facing_direction == MJL3D_BOTTOM ) return BOTTOM;
-    if ( facing_direction == MJL3D_FRONT )  return FRONT;
-    if ( facing_direction == MJL3D_RIGHT )  return RIGHT;
-    if ( facing_direction == MJL3D_BACK )   return BACK;
-    if ( facing_direction == MJL3D_LEFT )   return LEFT;
-    if ( facing_direction == MJL3D_TOP )    return TOP;
+    // Normalize
+    double nx = n[0] / mag;
+    double ny = n[1] / mag;
+    double nz = n[2] / mag;
 
-    cout <<"\nGoCadInterface::IdentifyTetrahedronBoundary: facing direction was not found."<< endl;
-    cout <<"Coordinates of face (triangle) nodes: "<< endl;
-    for ( size_t i{0U}; i<nd1.size(); i++ ) cout << nd1[i] <<" ";
-    cout << endl;
-    for ( size_t q=0; q<nd2.size(); q++ ) cout << nd2[q] <<" ";
-    cout << endl;
-    for ( size_t r=0; r<nd3.size(); r++ ) cout << nd3[r] <<" ";
-    cout << endl;
+    // 2. Identify direction based on the dominant normal component
+    // Tolerance for axis-alignment (e.g., 0.9 captures slightly tilted but mostly aligned faces)
+    const double tol = 0.9; 
 
-    if ( facing_direction == MJL3D_TILTED ) {
-         cout <<"\nGoCadInterface::IdentifyTetrahedronBoundary: Assigned IRREGULAR flag."<< endl;
-         return IRREGULAR;
-      }
+    // Z-axis (Top/Bottom)
+    if (nz > tol)  return TOP;
+    if (nz < -tol) return BOTTOM;
 
-    return NOT; // NOT = 0
+    // Y-axis (Front/Back)
+    if (ny > tol)  return FRONT;
+    if (ny < -tol) return BACK;
 
- } // end IdentifyTetrahedronBoundary
+    // X-axis (Right/Left)
+    if (nx > tol)  return RIGHT;
+    if (nx < -tol) return LEFT;
 
+    // 3. Fallback for tilted faces
+    // If no single axis is dominant, it's an irregular/tilted face.
+    cout << "\nGoCadInterface::IdentifyTetrahedronBoundary: Facing direction is TILTED/IRREGULAR." << endl;
+    cout << "Normal: (" << nx << ", " << ny << ", " << nz << ")" << endl;
+    
+    return IRREGULAR;
+}
 
 
 

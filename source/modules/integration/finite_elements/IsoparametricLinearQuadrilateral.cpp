@@ -1,7 +1,6 @@
 #include "IsoparametricLinearQuadrilateral.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
-#include "MJL_Edge.h"
 
 using namespace std;
 
@@ -1727,18 +1726,25 @@ vector<double>  IsoparametricLinearQuadrilateral::UnitNormal() const
     if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
 
     // genuine normal only exists in 3D
-    const double  X12 = XY(1,0) - XY(0,0), // X
-                  X31 = XY(0,0) - XY(2,0),
-                  Y12 = XY(1,1) - XY(0,1), // Y
-                  Y31 = XY(0,1) - XY(2,1),
-                  Z12 = XY(1,2) - XY(0,2), // Z
-                  Z31 = XY(0,2) - XY(2,2);
+// Evaluates at the center (r=0, s=0)
+    // This is more robust for warped quadrilaterals than just using 3 nodes.
+    dNr(0.0, 0.0, DNR);
+    dNs(0.0, 0.0, DNS);
 
-     // normal to quad
-     vector<double> vc{ -Y12*Z31 + Z12*Y31,
-                        -Z12*X31 + X12*Z31,
-                        -X12*Y31 + Y12*X31 };
-                        
+    double gr[3] = {0,0,0}, gs[3] = {0,0,0};
+    for (uint32_t i = 0; i < 3; ++i) {
+        for (uint32_t j = 0; j < 4; ++j) {
+            gr[i] += DNR[j] * XY(j, i);
+            gs[i] += DNS[j] * XY(j, i);
+        }
+    }
+    // Normal = g_r x g_s
+    vector<double> vc = {
+        gr[1]*gs[2] - gr[2]*gs[1],
+        gr[2]*gs[0] - gr[0]*gs[2],
+        gr[0]*gs[1] - gr[1]*gs[0]
+      };
+      
      // normalization to unit length
      double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
      vc[0] /= length;
@@ -1758,100 +1764,50 @@ vector<double>  IsoparametricLinearQuadrilateral::UnitNormal() const
     
     @test  - for 3D version
 */
-void  IsoparametricLinearQuadrilateral::UnitNormalToFace( uint32_t face, vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-     // if this is a planar element in a 2D model
-     if ( Dim() == 2 ) {
-         unrml.resize(2);
-         // nodes 0 and 1
-         if ( face == 0 ) {
-              mjl::Edge  normal( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
-              // rotating edge clockwise to find outward pointing normal to face
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 1 and 2
-         if ( face == 1 ) {
-              mjl::Edge  normal( mjl::Point(XY(1,0),XY(1,1)), mjl::Point(XY(2,0),XY(2,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 2 and 3
-         if ( face == 2 ) {
-              mjl::Edge  normal( mjl::Point(XY(2,0),XY(2,1)), mjl::Point(XY(3,0),XY(3,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 3 and 0
-         if ( face == 3 ) {
-              mjl::Edge  normal( mjl::Point(XY(3,0),XY(3,1)), mjl::Point(XY(0,0),XY(0,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-          return;
-       }
+void IsoparametricLinearQuadrilateral::UnitNormalToFace(uint32_t face, vector<double>& unrml) const
+{
+    assert(face < Faces());
+    uint32_t next = (face + 1) % 4; // Wrap around (0->1, 1->2, 2->3, 3->0)
 
-     // if the quadrilateral is suspended into 3D space, we first need a normal to the quad
-     Point<3> enrml( UnitNormal() );
-   
-     unrml.resize(3);
-     // the face normals are found as cross-products between element normal and edges
-     // nodes 0 and 1
-     if ( face == 0 ) {
-          Point<3> fface(XY(1,0)-XY(0,0),XY(1,1)-XY(0,1),XY(1,2)-XY(0,2));
-          Point<3> nrml( crossProduct( enrml, fface ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          // (-) to flip the normal to the outside
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-       }
-     // nodes 1 and 2
-     if ( face == 1 ) {
-          Point<3> fface(XY(2,0)-XY(1,0),XY(2,1)-XY(1,1),XY(2,2)-XY(1,2));
-          Point<3> nrml( crossProduct( enrml, fface ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-       }
-     // nodes 2 and 3
-     if ( face == 2 ) {
-          Point<3> fface(XY(3,0)-XY(2,0),XY(3,1)-XY(2,1),XY(3,2)-XY(2,2));
-          Point<3> nrml( crossProduct( enrml, fface ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-       }
-     // nodes 3 and 0
-     if ( face == 3 ) {
-          Point<3> fface(XY(0,0)-XY(3,0),XY(0,1)-XY(3,1),XY(0,2)-XY(3,2));
-          Point<3> nrml( crossProduct( enrml, fface ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-       }
-   
- } // end UnitNormalToFace
+    if (Dim() == 2) {
+        unrml.resize(2);
 
+        // Vector along the face (edge)
+        double dx = XY(next, 0) - XY(face, 0);
+        double dy = XY(next, 1) - XY(face, 1);
+
+        // The mjl::Edge Rot() for an outward normal usually means 
+        // a 90-degree Clockwise rotation: (x, y) -> (y, -x)
+        // or Counter-Clockwise: (x, y) -> (-y, x). 
+        // Given your previous CCW hull building, Outward usually is (dy, -dx).
+        double nx = dy;
+        double ny = -dx;
+
+        double len = std::sqrt(nx * nx + ny * ny);
+        if (len > 1e-12) {
+            unrml[0] = nx / len;
+            unrml[1] = ny / len;
+        }
+    }
+    else {
+        unrml.resize(3);
+        Point<3> enrml(UnitNormal()); // Normal to the quad plane
+
+        // Vector along the face (edge)
+        Point<3> fface(XY(next, 0) - XY(face, 0),
+                       XY(next, 1) - XY(face, 1),
+                       XY(next, 2) - XY(face, 2));
+
+        // Face normal is cross product of quad normal and edge vector
+        Point<3> nrml = crossProduct(enrml, fface);
+        nrml.NormalizeLengthTo(1.0);
+
+        // Apply the flip to ensure it points outward
+        unrml[0] = -nrml[0];
+        unrml[1] = -nrml[1];
+        unrml[2] = -nrml[2];
+    }
+}
 
 
 

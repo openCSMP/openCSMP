@@ -379,7 +379,7 @@ bool VData_Test::TestReplacementOfCornerTetrahedra()
      
      // checking whether equidimensional mesh connectivity is still intact
      // to get isoparametric elements
-     VSetConverter<3U>().ConvertElementTypesToOnesUsingLocalCoordinateSystem( vset );
+     VSetConverter().ConvertElementTypesToOnesUsingLocalCoordinateSystem( vset );
      Model<3U> model( vset, "CSMP-1phase-variables.txt" );
      
      // making a Region of volumetric elements only
@@ -644,8 +644,8 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
       
       vset2 = vset1;
       vset2.InitialiseNodeTopologyIdentifiers();
-      // TODO: fix boundary flags for FRAC_BOX so it can be used for this test
-      // _test( vset2 == vset1 );
+      // TODO: Get this test to pass
+      _test( vset2 == vset1 );
    }
 
  } // end Test_InitialiseNodeTopologyIdentifiers

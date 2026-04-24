@@ -2,6 +2,7 @@
 #define CSMP_FRACMAN_INTERFACE_H
 
 #include "FracMan_Fracture.h"
+#include "Point.h"
 
 namespace csmp {
 
@@ -13,7 +14,7 @@ class FRACMAN_Interface {
     void   InitializeFrom_FRACMAN_File( const char* ffb_file );
     
     /// returns volume of box
-    double BoundingBox( mjl::Point3D& pmin, mjl::Point3D& pmax ) const;
+    double BoundingBox( Point<3>& pmin, Point<3>& pmax ) const;
     
     void   MoveGeometryToOrigin();
     

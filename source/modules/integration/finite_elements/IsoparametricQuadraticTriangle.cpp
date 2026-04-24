@@ -1,6 +1,5 @@
 #include "IsoparametricQuadraticTriangle.h"
 #include "ErrorHandler.h"
-#include "MJL_Edge.h"
 #include "Exception.h"
 
 using namespace std;
@@ -1811,134 +1810,109 @@ triangle is warped, normals must be calculated for each integration
 point.
 */
 vector<double> IsoparametricQuadraticTriangle::UnitNormal() const
- {
-    if ( dim == 2U ) return vector<double>{ 0., 0., 1. };
+{
+    // In 2D, the normal is simply the Z-axis
+    if (dim == 2U) return { 0.0, 0.0, 1.0 };
 
-    const double  X12 = XY(1,0) - XY(0,0), // X
-                  X31 = XY(0,0) - XY(2,0),
-                  Y12 = XY(1,1) - XY(0,1), // Y
-                  Y31 = XY(0,1) - XY(2,1),
-                  Z12 = XY(1,2) - XY(0,2), // Z
-                  Z31 = XY(0,2) - XY(2,2);
-
-  // normal to triangle (but not unit normal!)
-    vector<double> vc{ -Y12*Z31 + Z12*Y31, -Z12*X31 + X12*Z31, -X12*Y31 + Y12*X31 };
-    // normalization to unit length
-    double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
-    vc[0] /= length;
-    vc[1] /= length;
-    vc[2] /= length;
-    return vc;
- }
-
-
-
-
-void  IsoparametricQuadraticTriangle::UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const
- {
-     assert( face < Faces() );
-     // if this is a planar element in a 2D model, even if the edges are curved, the face normals are still the same!
-     if ( Dim() == 2 ) {
-         unrml.resize(2);
-         // nodes 1 and 2
-         if ( face == 0 ) {
-              mjl::Edge  normal( mjl::Point(XY(1,0),XY(1,1)), mjl::Point(XY(2,0),XY(2,1)) );
-              // rotating edge clockwise to find outward pointing normal to face
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 2 and 0
-         if ( face == 1 ) {
-              mjl::Edge  normal( mjl::Point(XY(2,0),XY(2,1)), mjl::Point(XY(0,0),XY(0,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-         // nodes 0 and 1
-         if ( face == 2 ) {
-              mjl::Edge  normal( mjl::Point(XY(0,0),XY(0,1)), mjl::Point(XY(1,0),XY(1,1)) );
-              normal.Rot();
-              normal.NormalizeTo( 1. );
-              unrml[0] = normal.Destination()[0];
-              unrml[1] = normal.Destination()[1];
-              return;
-           }
-          return;
-       }
-   
-     // if the triangle is suspended into 3D space
-     unrml.resize(3);
-
-      // Face normals are found via the cross-product of the local element normal and the edge tangent
-      if ( face == 0 ) {
-          // nodes 1 and 2 (midpoint node 4)
-          Point<3> edge(XY(2,0)-XY(1,0), XY(2,1)-XY(1,1), XY(2,2)-XY(1,2));
-          
-          // Transverse tangent derived from shape function derivatives at the midpoint
-          Point<3> trans(
-              XY(0,0) + XY(1,0) - 2*XY(3,0) + 2*XY(4,0) - 2*XY(5,0),
-              XY(0,1) + XY(1,1) - 2*XY(3,1) + 2*XY(4,1) - 2*XY(5,1),
-              XY(0,2) + XY(1,2) - 2*XY(3,2) + 2*XY(4,2) - 2*XY(5,2)
-          );
-          
-          Point<3> enrml( crossProduct( trans, edge ) );
-          Point<3> nrml( crossProduct( enrml, edge ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-
-          // (-) to flip the normal to the outside
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-      }
-
-      if ( face == 1 ) {
-          // nodes 2 and 0 (midpoint node 5)
-          Point<3> edge(XY(0,0)-XY(2,0), XY(0,1)-XY(2,1), XY(0,2)-XY(2,2));
-          
-          Point<3> trans(
-              -XY(0,0) - XY(1,0) + 2*XY(3,0) + 2*XY(4,0) - 2*XY(5,0),
-              -XY(0,1) - XY(1,1) + 2*XY(3,1) + 2*XY(4,1) - 2*XY(5,1),
-              -XY(0,2) - XY(1,2) + 2*XY(3,2) + 2*XY(4,2) - 2*XY(5,2)
-          );
-          
-          Point<3> enrml( crossProduct( edge, trans ) );
-          Point<3> nrml( crossProduct( enrml, edge ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-      }
-
-      if ( face == 2 ) {
-          // nodes 0 and 1 (midpoint node 3)
-          Point<3> edge(XY(1,0)-XY(0,0), XY(1,1)-XY(0,1), XY(1,2)-XY(0,2));
-          
-          Point<3> trans(
-              -XY(0,0) - XY(2,0) - 2*XY(3,0) + 2*XY(4,0) + 2*XY(5,0),
-              -XY(0,1) - XY(2,1) - 2*XY(3,1) + 2*XY(4,1) + 2*XY(5,1),
-              -XY(0,2) - XY(2,2) - 2*XY(3,2) + 2*XY(4,2) + 2*XY(5,2)
-          );
-          
-          Point<3> enrml( crossProduct( edge, trans ) );
-          Point<3> nrml( crossProduct( enrml, edge ) );
-          nrml.NormalizeLengthTo(/* 1 */);
-
-          unrml[0] = -nrml[0];
-          unrml[1] = -nrml[1];
-          unrml[2] = -nrml[2];
-          return;
-      }
+    // In 3D, we need the surface normal.
+    // For quadratic elements, we evaluate at the barycenter (r=1/3, s=1/3)
+    vector<double> rs = { 1.0/3.0, 1.0/3.0 };
     
- } // end UnitNormalToFace
+    // We can reuse the Jacobian logic from the Quadrilateral 
+    // (Triangle will have its own dNr/dNs for 6 nodes)
+    dNr(rs[0], rs[1], DNR);
+    dNs(rs[0], rs[1], DNS);
 
+    double gr[3], gs[3];
+    for (uint32_t i = 0; i < 3; ++i) {
+        gr[i] = 0.0; gs[i] = 0.0;
+        for (uint32_t j = 0; j < npe; ++j) {
+            gr[i] += DNR[j] * XY(j, i);
+            gs[i] += DNS[j] * XY(j, i);
+        }
+    }
+
+    // Normal = g_r x g_s
+    vector<double> vc = {
+        gr[1]*gs[2] - gr[2]*gs[1],
+        gr[2]*gs[0] - gr[0]*gs[2],
+        gr[0]*gs[1] - gr[1]*gs[0]
+    };
+
+    double length = sqrt(vc[0]*vc[0] + vc[1]*vc[1] + vc[2]*vc[2]);
+    if (length > 1e-14) {
+        vc[0] /= length; vc[1] /= length; vc[2] /= length;
+    }
+    return vc;
+}
+
+
+
+void IsoparametricQuadraticTriangle::UnitNormalToFace(uint32_t face, std::vector<double>& unrml) const
+{
+    assert(face < 3);
+    unrml.assign(dim, 0.0);
+
+    // 1. Local coordinates for the midpoint of the triangle edges:
+    // Face 0 (Nodes 1-2): r=0.5, s=0.5
+    // Face 1 (Nodes 2-0): r=0.0, s=0.5
+    // Face 2 (Nodes 0-1): r=0.5, s=0.0
+    double r = 0.5, s = 0.5;
+    if (face == 1) { r = 0.0; s = 0.5; }
+    else if (face == 2) { r = 0.5; s = 0.0; }
+
+    // 2. Get Jacobian vectors at the edge midpoint
+    dNr(r, s, DNR);
+    dNs(r, s, DNS);
+
+    vector<double> gr(dim, 0.0), gs(dim, 0.0);
+    for (uint32_t i = 0; i < dim; ++i) {
+        for (uint32_t j = 0; j < npe; ++j) {
+            gr[i] += DNR[j] * XY(j, i);
+            gs[i] += DNS[j] * XY(j, i);
+        }
+    }
+
+    // 3. Define the edge tangent vector (T)
+    // Face 0: Tangent is (gs - gr) 
+    // Face 1: Tangent is -gs
+    // Face 2: Tangent is gr
+    vector<double> T(dim);
+    if (face == 0) {
+        for(uint32_t i=0; i<dim; ++i) T[i] = gs[i] - gr[i];
+    } else if (face == 1) {
+        for(uint32_t i=0; i<dim; ++i) T[i] = -gs[i];
+    } else {
+        for(uint32_t i=0; i<dim; ++i) T[i] = gr[i];
+    }
+
+    // 4. Perpendicular logic (CW Rotation in-plane)
+    if (dim == 2) {
+        // Apply our verified CW rotation: (x, y) -> (y, -x)
+        unrml[0] = T[1];
+        unrml[1] = -T[0];
+    } 
+    else {
+        // In 3D: Face Normal = T x SurfaceNormal
+        // SurfaceNormal = gr x gs
+        double sn[3] = {
+            gr[1]*gs[2] - gr[2]*gs[1],
+            gr[2]*gs[0] - gr[0]*gs[2],
+            gr[0]*gs[1] - gr[1]*gs[0]
+        };
+        unrml[0] = T[1]*sn[2] - T[2]*sn[1];
+        unrml[1] = T[2]*sn[0] - T[0]*sn[2];
+        unrml[2] = T[0]*sn[1] - T[1]*sn[0];
+    }
+
+    // 5. Normalize
+    double len = 0.0;
+    for (double v : unrml) len += v*v;
+    len = sqrt(len);
+    if (len > 1e-14) {
+        for (double &v : unrml) v /= len;
+    }
+}
 
 
 

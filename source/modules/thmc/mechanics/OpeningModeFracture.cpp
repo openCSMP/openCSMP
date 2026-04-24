@@ -1,7 +1,5 @@
 #include "OpeningModeFracture.h"
 #include "CSMP_mathUtilities.h"
-#include "MJL_Edge.h"
-#include "MJL_Polygon.h"
 
 using namespace std;
 
@@ -140,229 +138,114 @@ double  OpeningModeFracture::Dilatation( double frac_intensity, double pf, doubl
 
 
 
-// tested: O.K.
 void OpeningModeFracture::SixteenPointConvexHull( double pf,
                                                   double syy,
-                                                  const mjl::Point& b, // left
-                                                  const mjl::Point& c, // right
-                                                  list<mjl::Point>& chain )
- {
-    mjl::Point point;
-    mjl::Edge  line( b, c );
-    
-    // getting the length of the fracture given by 'a' and 'b'
-    // O.K.
-    length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    a      = length / 2.0;
-           
-    // getting apertures at x0, x1 and x2 
-    // O.K.      
-    double a0 = Aperture( pf, syy, 0.0 );
-    double a1 = Aperture( pf, syy, a - a*1.0e-1 );
-    double a2 = Aperture( pf, syy, a - a*1.0e-2 );
-    double a3 = Aperture( pf, syy, a / 2.0 );
-    
-    // checking apertures
-    if ( a0 < MINIMUM_APERTURE ) a0 = MINIMUM_APERTURE;
-    if ( a1 < MINIMUM_APERTURE ) a1 = MINIMUM_APERTURE;
-    if ( a2 < MINIMUM_APERTURE ) a2 = MINIMUM_APERTURE;
-    if ( a3 < MINIMUM_APERTURE ) a3 = MINIMUM_APERTURE;
- 
-    // checking supplied chain of points
-    if ( !chain.empty() )
-      chain.erase( chain.begin(), chain.end() );
+                                                  const Point<2>& b, // left tip
+                                                  const Point<2>& c, // right tip
+                                                  list<Point<2>>& chain )
+{
+    // 1. Basic Geometry
+    Point<2> vec = c - b;
+    double L = distance(b, c);
+    double a_half = L / 2.0;
 
-    // Along the fracture find the two points p and q that
-    // are separated by a distance corresponding to the 
-    // fracture aperture and that have, as a center between
-    // them, the point along the fracture from which this
-    // aperture is to be constructed.
-    
-    // 1. find the 2 points for the first fracture opening
-    double t_p = (a * 1.0e-2) / length - (a2/2.0) / length, 
-           t_q = (a * 1.0e-2) / length + (a2/2.0) / length;    
-         
-   // 2. build new edge for those points  
-   mjl::Edge  oe1( line.Point(t_q), line.Point(t_p) );
-   mjl::Point p2, p3, p4, p5, p6, p7, p8, p10, p11, p12,
-             p13, p14, p15, p16;
-     
-   // rotate edge 90o counter clockwise around its center
-   oe1.Rot();
-   p2  = oe1.Origin();
-   p16 = oe1.Destination();
-    
-   // second point on segment 
-   t_p = (a * 1.0e-1) / length  -  (a1/2.0) / length; 
-   t_q = (a * 1.0e-1) / length  +  (a1/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p3  = oe1.Origin();
-   p15 = oe1.Destination();
+    // Unit vector along fracture and the perpendicular (normal) vector
+    Point<2> u = vec / L;
+    Point<2> n(-u[1], u[0]); // 90 deg CCW rotation
 
-   // third point on segment 
-   t_p = (a / 2.0) / length  -  (a3/2.0) / length; 
-   t_q = (a / 2.0) / length  +  (a3/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p4  = oe1.Origin();
-   p14 = oe1.Destination();
+    // 2. Sample apertures at specific locations along the fracture
+    // Locations: near tip (1%), slightly further (10%), quarter point (50% of half-length)
+    double a0 = std::max(Aperture(pf, syy, 0.0), MINIMUM_APERTURE);            // Center
+    double a1 = std::max(Aperture(pf, syy, a_half * 0.9), MINIMUM_APERTURE);   // 10% from tip
+    double a2 = std::max(Aperture(pf, syy, a_half * 0.99), MINIMUM_APERTURE);  // 1% from tip
+    double a3 = std::max(Aperture(pf, syy, a_half * 0.5), MINIMUM_APERTURE);   // Mid-wing
 
-   // fracture center 
-   t_p = a / length  -  (a0/2.0) / length; 
-   t_q = a / length  +  (a0/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p5  = oe1.Origin();
-   p13 = oe1.Destination();
+    chain.clear();
 
-   // fourth point on segment 
-   t_p = (a + a / 2.0) / length  -  (a3/2.0) / length; 
-   t_q = (a + a / 2.0) / length  +  (a3/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p6  = oe1.Origin();
-   p12 = oe1.Destination();
+    // 3. Define the sampling positions (t from 0 to 1) and their associated apertures
+    // We follow the CCW order: Start at tip B, go along top, reach C, return along bottom.
+    struct Sample { double t; double half_ap; };
+    vector<Sample> top_samples = {
+        { (a_half * 0.01) / L, a2 / 2.0 },
+        { (a_half * 0.1) / L,  a1 / 2.0 },
+        { (a_half * 0.5) / L,  a3 / 2.0 },
+        { a_half / L,          a0 / 2.0 }, // Center
+        { (a_half + a_half * 0.5) / L, a3 / 2.0 },
+        { (L - a_half * 0.1) / L,      a1 / 2.0 },
+        { (L - a_half * 0.01) / L,     a2 / 2.0 }
+    };
 
-   // third point on segment 
-   t_p = (length - a * 1.0e-1) / length  -  (a1/2.0) / length; 
-   t_q = (length - a * 1.0e-1) / length  +  (a1/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p7  = oe1.Origin();
-   p11 = oe1.Destination();
+    // 4. Build the Chain
+    chain.push_back(b); // Start at Left Tip
 
-   // fourth point on segment 
-   t_p = (length - a * 1.0e-2) / length  -  (a2/2.0) / length; 
-   t_q = (length - a * 1.0e-2) / length  +  (a2/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p8 = oe1.Origin();
-   p10 = oe1.Destination();
+    // Add Top Points (Offset by +n)
+    for (const auto& s : top_samples) {
+        chain.push_back(b + (u * (s.t * L)) + (n * s.half_ap));
+    }
 
-   // adding points to chain in counter-clockwise order
-   chain.push_back( b );
-   chain.push_back( p2 );
-   chain.push_back( p3 );
-   chain.push_back( p4 );
-   chain.push_back( p5 );
-   chain.push_back( p6 );
-   chain.push_back( p7 );
-   chain.push_back( p8 );
-   chain.push_back( c );
-   chain.push_back( p10 );
-   chain.push_back( p11 );
-   chain.push_back( p12 );
-   chain.push_back( p13 );
-   chain.push_back( p14 );
-   chain.push_back( p15 );
-   chain.push_back( p16 );
-   
- } // end SixteenPointConvexHull
- 
+    chain.push_back(c); // Right Tip
+
+    // Add Bottom Points (Offset by -n, in reverse order of t)
+    for (auto it = top_samples.rbegin(); it != top_samples.rend(); ++it) {
+        chain.push_back(b + (u * (it->t * L)) - (n * it->half_ap));
+    }
+} 
 
 
 
 
 
-// tested: O.K. 
 void OpeningModeFracture::BluntTenPointHull( double pf,
                                              double syy,
-                                             const mjl::Point& b, // left
-                                             const mjl::Point& c, // right
-                                             list<mjl::Point>& chain )
- {
-    mjl::Point point;
-    mjl::Edge  line( b, c );
-    
-    // make sure that counter-clockwise building occurs
-    if ( b > c ) line.Flip();
-    
-    // getting the length of the fracture given by 'a' and 'b'
-    // O.K.
-    length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    a      = length / 2.0;
-           
-    // getting apertures at x0, x1 and x2 
-    // O.K.      
-    double a0 = Aperture( pf, syy, 0.0 );
-    double a1 = Aperture( pf, syy, a - a*0.1 ); // is moved to fracture tip
-    double a3 = Aperture( pf, syy, a / 2.0 );
+                                             const Point<2>& b, // left tip
+                                             const Point<2>& c, // right tip
+                                             list<Point<2>>& chain )
+{
+    // 1. Basic Geometry
+    // Handle the b > c flip logic using simple swap if needed
+    Point<2> start = b;
+    Point<2> end = c;
+    if (start[0] > end[0] || (start[0] == end[0] && start[1] > end[1])) {
+        std::swap(start, end);
+    }
 
-    // checking apertures
-    if ( a0 < MINIMUM_APERTURE ) a0 = MINIMUM_APERTURE;
-    if ( a1 < MINIMUM_APERTURE ) a1 = MINIMUM_APERTURE;
-    if ( a3 < MINIMUM_APERTURE ) a3 = MINIMUM_APERTURE;
- 
-    // checking supplied chain of points
-    if ( !chain.empty() )
-      chain.erase( chain.begin(), chain.end() );
+    Point<2> vec = end - start;
+    double L = distance(start, end);
+    double a_half = L / 2.0;
 
-    // Along the fracture find the two points p and q that
-    // are separated by a distance corresponding to the 
-    // fracture aperture and that have, as a center between
-    // them, the point along the fracture from which this
-    // aperture is to be constructed.
-    mjl::Point p1, p2, p3, p4, p5, p6, p7, p8, p9, p10;
-    
-    // 1. find the 2 points for the blunt end of fracture
-    //    exaggerating its aperture
-    double t_p = 0.0  -  (a1/2.0) / length, 
-           t_q = 0.0  +  (a1/2.0) / length;    
-         
-   // 2. build new edge for those points  
-   mjl::Edge  oe1( line.Point(t_q), line.Point(t_p) );
-     
-   // rotate edge 90o counter clockwise around its center
-   oe1.Rot();
-   p1  = oe1.Origin();
-   p10 = oe1.Destination();
-    
-   // second segment along fracture
-   t_p = (a / 2.0) / length  -  (a3/2.0) / length; 
-   t_q = (a / 2.0) / length  +  (a3/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p2  = oe1.Origin();
-   p9  = oe1.Destination();
+    // Unit vector along fracture and the perpendicular normal (90 deg CCW)
+    Point<2> u = vec / L;
+    Point<2> n(-u[1], u[0]); 
 
-   // fracture center 
-   t_p = a / length  -  (a0/2.0) / length; 
-   t_q = a / length  +  (a0/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p3  = oe1.Origin();
-   p8  = oe1.Destination();
+    // 2. Calculate Apertures
+    double a0 = std::max(Aperture(pf, syy, 0.0), MINIMUM_APERTURE);            // Center
+    double a1 = std::max(Aperture(pf, syy, a_half * 0.9), MINIMUM_APERTURE);   // Near tips
+    double a3 = std::max(Aperture(pf, syy, a_half * 0.5), MINIMUM_APERTURE);   // Mid-wing
 
-   // fourth point on segment 
-   t_p = (a + a / 2.0) / length  -  (a3/2.0) / length; 
-   t_q = (a + a / 2.0) / length  +  (a3/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p4  = oe1.Origin();
-   p7  = oe1.Destination();
+    chain.clear();
 
-   // blunt second fracture tip 
-   t_p = 1.0  -  (a1/2.0) / length; 
-   t_q = 1.0  +  (a1/2.0) / length;    
-   oe1.Set( line.Point(t_q), line.Point(t_p) );
-   oe1.Rot();
-   p5  = oe1.Origin();
-   p6  = oe1.Destination();
+    // 3. Define sampling positions along the segment (t = 0.0 to 1.0)
+    // Note: p1 and p5 are at the actual tips (0.0 and 1.0)
+    struct Sample { double t; double half_ap; };
+    vector<Sample> samples = {
+        { 0.0, a1 / 2.0 },    // Left blunt tip
+        { 0.25, a3 / 2.0 },   // Mid-left
+        { 0.5, a0 / 2.0 },    // Center
+        { 0.75, a3 / 2.0 },   // Mid-right
+        { 1.0, a1 / 2.0 }     // Right blunt tip
+    };
 
-   // adding points to chain in counter-clockwise order
-   chain.push_back( p1 );
-   chain.push_back( p2 );
-   chain.push_back( p3 );
-   chain.push_back( p4 );
-   chain.push_back( p5 );
-   chain.push_back( p6 );
-   chain.push_back( p7 );
-   chain.push_back( p8 );
-   chain.push_back( p9 );
-   chain.push_back( p10 );
-   
- } // end BluntTenPointHull
+    // 4. Build the Chain (Counter-Clockwise)
+    // First pass: Top side (Positive normal offset)
+    for (const auto& s : samples) {
+        chain.push_back(start + (u * (s.t * L)) + (n * s.half_ap));
+    }
+
+    // Second pass: Bottom side (Negative normal offset, reverse order)
+    for (auto it = samples.rbegin(); it != samples.rend(); ++it) {
+        chain.push_back(start + (u * (it->t * L)) - (n * it->half_ap));
+    }
+}
  
 
 
@@ -372,54 +255,51 @@ void OpeningModeFracture::BluntTenPointHull( double pf,
 
 
 
-void OpeningModeFracture::RectangleHull( double pf, double syy,
-                                         mjl::Point& b,
-                                         mjl::Point& c,
-                                         list<mjl::Point>& chain )
+void OpeningModeFracture::RectangleHull( double pf, 
+                                         double syy,
+                                         Point<2>& b,
+                                         Point<2>& c,
+                                         list<Point<2>>& chain )
  {
-    mjl::Edge  line( b, c );
-
-    // make sure that counter-clockwise building occurs
-    if ( b > c ) line.Flip();
-
-    double aperture = CenterAperture( pf, syy );
-
-    // checking apertures
-    if ( aperture < MINIMUM_APERTURE ) aperture = MINIMUM_APERTURE;
-
-    // 1. find the 2 points for the end edge of the fracture
-    length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    double t_p = -(aperture/2.0) / length, 
-           t_q =  (aperture/2.0) / length;  
-         
-    // 2. build new edge for those points  
-    mjl::Edge  oe1( line.Point(t_q), line.Point(t_p) );
-     
-    // rotate edge 90o counter clockwise around its center
-    oe1.Rot();
-    mjl::Point p1 = oe1.Origin();
-    mjl::Point p2 = oe1.Destination();
+    // 1. Basic Geometry & Sorting
+    Point<2> start = b;
+    Point<2> end = c;
     
-    // second point on segment 
-    t_p = 1.0 - (aperture/2.0) / length; 
-    t_q = 1.0 + (aperture/2.0) / length;    
-    oe1.Set( line.Point(t_q), line.Point(t_p) );
-    oe1.Rot();
-    mjl::Point p4 = oe1.Origin();
-    mjl::Point p3 = oe1.Destination();
-    
-    // checking supplied chain of points
-    if ( !chain.empty() )
-      chain.erase( chain.begin(), chain.end() );
+    // Ensure consistent CCW winding by sorting points
+    if (start[0] > end[0] || (start[0] == end[0] && start[1] > end[1])) {
+        std::swap(start, end);
+    }
 
-    // adding points to chain in counter-clockwise order
-    chain.push_back( p1 );
-    chain.push_back( p2 );
-    chain.push_back( p3 );
-    chain.push_back( p4 );
-    
- } // end RectangleHull                                                                                
+    Point<2> vec = end - start;
+    double L = distance(start, end);
 
+    // Unit vector along fracture (u) and perpendicular normal (n)
+    Point<2> u = vec / L;
+    Point<2> n(-u[1], u[0]); // 90 deg CCW rotation
+
+    // 2. Aperture handling
+    double aperture = CenterAperture(pf, syy);
+    if (aperture < MINIMUM_APERTURE) aperture = MINIMUM_APERTURE;
+    double half_ap = aperture / 2.0;
+
+    // 3. Clear and rebuild the chain
+    chain.clear();
+
+    // The four corners of the rectangle:
+    // p1: Bottom-Left (offset back from start and down)
+    // p2: Top-Left    (offset back from start and up)
+    // p3: Top-Right   (offset forward from end and up)
+    // p4: Bottom-Right(offset forward from end and down)
+    
+    // Using your original logic where the rectangle slightly overshoots the tips
+    // by (half_ap) to encapsulate the tips.
+    
+    chain.push_back(start - (u * half_ap) - (n * half_ap)); // p1
+    chain.push_back(start - (u * half_ap) + (n * half_ap)); // p2
+    chain.push_back(end   + (u * half_ap) + (n * half_ap)); // p3
+    chain.push_back(end   + (u * half_ap) - (n * half_ap)); // p4
+    
+ } // end RectangleHull
 
 
 
@@ -427,50 +307,48 @@ void OpeningModeFracture::RectangleHull( double pf, double syy,
 
 
 void OpeningModeFracture::RectangleHull( double fixed_aperture,
-                                         mjl::Point& b,
-                                         mjl::Point& c,
-                                         list<mjl::Point>& chain )
- {
-    mjl::Edge  line( b, c );
-
-    // make sure that counter-clockwise building occurs
-    if ( b > c ) line.Flip();
-
-    double aperture = fixed_aperture;
-
-    // 1. find the 2 points for the end edge of the fracture
-    length = sqrt( (c[0]-b[0])*(c[0]-b[0]) + (c[1]-b[1])*(c[1]-b[1]) );
-    double t_p = -(aperture/2.0) / length, 
-           t_q =  (aperture/2.0) / length;  
-         
-    // 2. build new edge for those points  
-    mjl::Edge  oe1( line.Point(t_q), line.Point(t_p) );
-     
-    // rotate edge 90o counter clockwise around its center
-    oe1.Rot();
-    mjl::Point p1 = oe1.Origin();
-    mjl::Point p2 = oe1.Destination();
+                                         Point<2>& b,
+                                         Point<2>& c,
+                                         list<Point<2>>& chain )
+{
+    // 1. Basic Geometry and Sorting
+    Point<2> start = b;
+    Point<2> end = c;
     
-    // second point on segment 
-    t_p = 1.0 - (aperture/2.0) / length; 
-    t_q = 1.0 + (aperture/2.0) / length;    
-    oe1.Set( line.Point(t_q), line.Point(t_p) );
-    oe1.Rot();
-    mjl::Point p4 = oe1.Origin();
-    mjl::Point p3 = oe1.Destination();
-    
-    // checking supplied chain of points
-    if ( !chain.empty() )
-      chain.erase( chain.begin(), chain.end() );
+    // Maintain consistent winding order regardless of input point order
+    if (start[0] > end[0] || (start[0] == end[0] && start[1] > end[1])) {
+        std::swap(start, end);
+    }
 
-    // adding points to chain in counter-clockwise order
-    chain.push_back( p1 );
-    chain.push_back( p2 );
-    chain.push_back( p3 );
-    chain.push_back( p4 );
-    
- } // end RectangleHull                                                                                
+    Point<2> vec = end - start;
+    double L = distance(start, end);
 
+    // Safeguard for zero-length fractures
+    if (L < 1e-12) return;
+
+    // Unit vector along fracture (u) and perpendicular normal (n)
+    Point<2> u = vec / L;
+    Point<2> n(-u[1], u[0]); // 90 deg CCW rotation
+
+    double half_ap = fixed_aperture / 2.0;
+
+    // 2. Clear existing chain
+    chain.clear();
+
+    // 3. Calculate 4 corners
+    // The original logic extends the rectangle beyond the tips by half_ap
+    // to create a box that fully "contains" the segment nodes.
+    
+    // p1: Back-Bottom
+    chain.push_back(start - (u * half_ap) - (n * half_ap)); 
+    // p2: Back-Top
+    chain.push_back(start - (u * half_ap) + (n * half_ap)); 
+    // p3: Front-Top
+    chain.push_back(end   + (u * half_ap) + (n * half_ap)); 
+    // p4: Front-Bottom
+    chain.push_back(end   + (u * half_ap) - (n * half_ap)); 
+    
+} // end RectangleHull
 
 
 
@@ -483,8 +361,8 @@ void OpeningModeFracture::RectangleHull( double fixed_aperture,
 /*
     // making a rectangular fracture
     OpeningModeFracture frac10;
-    mjl::Point           x(2.0,5.0), y(8.0,4.0);
-    list<mjl::Point>     chain_x;
+    Point<2>           x(2.0,5.0), y(8.0,4.0);
+    list<Point<2>>     chain_x;
 
     frac10.RectangleHull( 1.0e+9, 2.0e+5, x, y, chain_x );
     mjl::Polygon poly10( chain_x.begin(), chain_x.end() );
@@ -497,8 +375,8 @@ void OpeningModeFracture::RectangleHull( double fixed_aperture,
    // --------------------------------------------
 
    OpeningModeFracture frac1, frac2;
-   mjl::Point           a(2.0,1.0), b(8.0,1.0);
-   list<mjl::Point>     chain;
+   Point<2>           a(2.0,1.0), b(8.0,1.0);
+   list<Point<2>>     chain;
     
    frac1.SixteenPointConvexHull( 1.0e+9, 2.0e+5, a, b, chain );
    mjl::Polygon poly1( chain.begin(), chain.end() );
@@ -515,7 +393,7 @@ void OpeningModeFracture::RectangleHull( double fixed_aperture,
    poly3.BuildIntersectionPolygon( poly1, poly2 );
    poly3.Out();
    
-   mjl::Point p = poly3.Point();
+   Point<2> p = poly3.Point();
    
    poly1.RemoveSharedPoints( poly3 );
    poly2.RemoveSharedPoints( poly3 );

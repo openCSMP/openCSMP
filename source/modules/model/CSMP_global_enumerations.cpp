@@ -588,17 +588,17 @@ string parse( ManifoldType topology )
 /**
        Topologic qualifiers include:
        
-      MESH_VERTEX,              - a point within the model volume
+      MESH_VERTEX,        - a point within the model volume
       INTERSECTION_POINT  - a point where lines cross or multiple surfaces intersect
-      PERIMETER_POINT,       - point at the end of a line inside a 2D model
-      EXTERIOR_POINT,         - on an outside surface of the model
-      INTERIOR_LINE,            - a line on the interior of the model
-      PERIMETER_LINE,        -  a surface edge inside of the model
-      EXTERIOR_LINE,          - an edge of the model
-      INTERSECTION_LINE, - belonging to multiple surfaces
-      INTERIOR_SURFACE,    - a surface withing the model
-      PERIMETER_SURFACE,    - a surface forming the hull of an object inside of the model
-      EXTERIOR_SURFACE       - a surface delimiting the model
+      PERIMETER_POINT,    - point at the end of a line inside a 2D model
+      EXTERIOR_POINT,     - on an outside surface of the model
+      INTERIOR_LINE,      - a line on the interior of the model
+      PERIMETER_LINE,     - a surface edge inside of the model
+      EXTERIOR_LINE,      - an edge of the model
+      INTERSECTION_LINE,  - belonging to multiple surfaces
+      INTERIOR_SURFACE,   - a surface withing the model
+      PERIMETER_SURFACE,  - a surface forming the hull of an object inside of the model
+      EXTERIOR_SURFACE    - a surface delimiting the model
       
 */
 std::string parseTopology( TOPOTYPE topology )

@@ -38,8 +38,7 @@ public:
     virtual void      IntegralN( DenseMatrix<DM_MIN>& M );
 
     virtual std::vector<double>  UnitNormal() const;
-    
-    // TODO: virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
+    virtual void   UnitNormalToFace( uint32_t face, std::vector<double>& unrml ) const;
 
     virtual void      IntegrationPoint( uint32_t i, std::vector<double>& xyz ) const;
     virtual void      ExtrapolateIntegrationPointVariableToNodes( uint32_t nvars,
