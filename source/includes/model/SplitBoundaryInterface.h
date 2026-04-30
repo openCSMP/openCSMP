@@ -60,6 +60,7 @@ class SplitBoundaryInterface {
     std::pair<std::set<std::string>,bool>  CreateSplitBoundaryFrom( const char* dim_1_region, bool retain_elmts_as_intervening_elements );
 
     /// creates SplitBoundary between non-overlapping regions that share nodes at their perimeter; all shared nodes are multiplicated including perimeter nodes
+    // TODO: does not split nodes at perimeter even if the split boundary slices through entire model
     std::pair<std::string,bool>  CreateSplitBoundaryBetween( const char* region1_name, const char* region2_name );
 
     /// inserts a lower-dimensional Region inside of the SplitBoundary, assigning its elements to the InterveningElement() pointers of its interfaces; the name will be that of the SplitBoundary followed by _REGION
@@ -118,6 +119,69 @@ class SplitBoundaryInterface {
  protected:
     std::map<std::string,csmp::SplitBoundary<dim> >  splitBoundaryMap_; ///< boundary name & boundary container of key-value pairs
 };
+
+
+/**
+ * @brief Updates TOPOTYPE flags for nodes belonging to a SplitBoundary.
+ * 
+ * @tparam dim The spatial dimension of the model (1, 2, or 3).
+ * @param interfaces A collection of InterFace elements within the SplitBoundary.
+ *
+ * Method also detects potential intersections of SplitBoundary objects by looking at the contained NodeManifold objects.
+ * These are flagged correspondingly.
+ */
+template <std::size_t dim>
+inline void updateSplitBoundaryTopoFlags( auto& interfaces ) {
+    // flags based on model dimensionality
+    constexpr TOPOTYPE perimeter_flag = (dim == 3) ? PERIMETER_LINE    : PERIMETER_POINT;
+    constexpr TOPOTYPE exterior_flag  = (dim == 3) ? EXTERIOR_LINE     : EXTERIOR_POINT;
+    constexpr TOPOTYPE interior_flag  = (dim == 3) ? PERIMETER_SURFACE : PERIMETER_LINE;
+
+    for (auto const& iface : interfaces) {
+        const std::uint32_t n_nodes = iface->FE()->Nodes();
+
+        for (std::uint32_t i = 0; i < n_nodes; ++i) {
+            auto* node_in  = iface->N(i, INSIDE);
+            auto* node_out = iface->MatchingN(i, OUTSIDE);
+
+            // 1. Zipped perimeter (tips of the split boundary)
+            if (node_in == node_out) {
+                node_in->Attribute(perimeter_flag);
+            }
+            else {
+                // 2. Intersection Check: Do other split-boundaries meet here?
+                // We check if the manifold has more than the 2 standard branches (IN/OUT)
+                bool is_intersection = false;
+                if (auto* m = node_in->Manifold(); m && m->Branches() > 2) {
+                    is_intersection = true;
+                }
+
+                if (is_intersection) {
+                    // Intersections act as the perimeter of the intersecting patches
+                    node_in->Attribute(perimeter_flag);
+                    node_out->Attribute(perimeter_flag);
+                }
+                else {
+                    // 3. Exterior Model Hull Check
+                    const bool is_exterior = 
+                        (node_in->AtBoundary()  != NOT && node_in->AtBoundary()  != INTERNAL) ||
+                        (node_out->AtBoundary() != NOT && node_out->AtBoundary() != INTERNAL);
+
+                    if (is_exterior) {
+                        node_in->Attribute(exterior_flag);
+                        node_out->Attribute(exterior_flag);
+                    } 
+                    // 4. Standard Interior Split
+                    else {
+                        node_in->Attribute(interior_flag);
+                        node_out->Attribute(interior_flag);
+                    }
+                }
+            }
+        }
+    }
+}
+
 
 } // csmp
 

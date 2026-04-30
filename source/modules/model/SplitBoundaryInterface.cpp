@@ -1590,6 +1590,9 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::CreateSpl
                                                                                                            matched_elmts,
                                                                                                            create_manifolds_on_perimeter,
                                                                                                            halo_elements );
+    // Flagging the topology of interface nodes
+    updateSplitBoundaryTopoFlags<dim>( interfaces );
+    
     // 3. creation of the new SplitBoundary
     // ------------------------------------
     string split_boundary_name = CreateSplitBoundaryName( make_pair( region1_name, region2_name ) );

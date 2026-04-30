@@ -644,11 +644,13 @@ void VData_Test::Test_InitialiseNodeTopologyIdentifiers()
       
       vset2 = vset1;
       vset2.InitialiseNodeTopologyIdentifiers();
-      // TODO: Get this test to pass
       _test( vset2 == vset1 );
    }
 
  } // end Test_InitialiseNodeTopologyIdentifiers
+
+
+
 
 
 

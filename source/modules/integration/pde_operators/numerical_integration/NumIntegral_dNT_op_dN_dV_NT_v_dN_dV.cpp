@@ -247,7 +247,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          // 1. Compute "diffusion" matrix DNT_K_DN_DV
          // -----------------------------------------
@@ -277,11 +277,11 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
          // 2. Compute "velocity" 'v' matrix NT3 NTNTNT_V at integration point
          // ------------------------------------------------------------------
          VIP.Zero();
-         for ( auto j{0U}; j<dim; j++ ) {
+         for ( uint32_t j{0U}; j<dim; j++ ) {
               //                                x,y,z-component  d/dx,y,z  grad_prop at node
-              for ( auto k{0U}; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
+              for ( uint32_t k{0U}; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
               // adjusting vertical flow component if gravity is acting
-              if ( with_gravity && j == xyz-1 )       VIP(j,j) -=  gravity * RDENS[i]; 
+              if ( with_gravity && j == xyz-1 )        VIP(j,j) -=  gravity * RDENS[i];
 
               // multiply with interpolated scalar nodal multiplier
               VIP(j,j) *= NMULT[i];

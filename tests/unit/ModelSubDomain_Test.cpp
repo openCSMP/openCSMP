@@ -40,7 +40,7 @@ void ModelSubDomain_Test::run()
      // 0. Comprehensive testing
      // ------------------------
      Test_Basics();
-     Test_SubDomainConstructionMethods(); // TODO: Identify perimeter for non-unique model domain with SplitBoundaries fails!
+     Test_SubDomainConstructionMethods();
      Test_SubDomainDiagnostics();
      Test_GeometricOperations();
      Test_PropertyManipulations();
@@ -750,27 +750,71 @@ void ModelSubDomain_Test::Test_SubDomainConstructionMethods()
        vector<TOPOTYPE> gflags1; gflags1.reserve( model_domain.Nodes() );
        for ( const auto& node : model_domain.NodeVector() ) gflags1.push_back( node->Attribute() );
        _test( gflags0 == gflags1 );
+       if ( gflags0 != gflags1 ) {
+          for ( size_t i{0}; i<gflags0.size(); ++i ) {
+             if ( gflags0[i] != gflags1[i] ) {
+                  cout <<"\n\t"<<"original "<< i<<" versus recreated: "<< parseTopology( static_cast<TOPOTYPE>(gflags0[i]));
+                  cout <<" "<< parseTopology( static_cast<TOPOTYPE>(gflags1[i]));
+               }
+          }
+       }
 
-       // perimeter face vector (in presence of boundaries and split boundaries
-       // ---------------------------------------------------------------------
-       // equidimensional region
-       // ----------------------
+       // Testing the perimeter face vector (in the presence of boundaries and split boundaries)
+       // --------------------------------------------------------------------------------------
+       // equidimensional region "lower"
+       // -----------------------------
        // existing perimeter face vector
-       for ( size_t f=lower.InteriorCells(); f<lower.Cells(); ++f )
-         for ( uint32_t i{0}; i<lower.PerimeterFaces(f); ++i )
-             // must either be a nullptr or a cell that is not part of the region
-              _test( lower.E(f)->Neighbor( lower.PerimeterFace(f,i) ) == nullptr ||
-                     lower.Contains( lower.E(f)->Neighbor( lower.PerimeterFace(f,i) ) ) == false );
+       for ( size_t f = lower.InteriorCells(); f < lower.Cells(); ++f ) {
+           for ( uint32_t i{0}; i < lower.PerimeterFaces(f); ++i ) {
+               
+               uint32_t local_face = lower.PerimeterFace(f, i);
+               auto* neighbor = lower.E(f)->Neighbor(local_face);
+               
+               bool is_null = (neighbor == nullptr);
+               bool is_contained = (!is_null && lower.Contains(neighbor));
+               
+               // The face is a valid perimeter if it points to void OR outside the region
+               bool is_valid_perimeter = (is_null || !is_contained);
+
+               if ( !is_valid_perimeter ) {
+                   std::cerr << "\n[DIAGNOSTIC - Original] Perimeter Face Test Failed!\n"
+                             << "  -> Cell index (f): " << f <<" (cell "<< lower.E(f)->Idx() <<")\n"
+                             << "  -> Perimeter face index (i): " << i << "\n"
+                             << "  -> Local face ID: " << local_face << "\n"
+                             << "  -> Failure Reason: Neighbor is NOT nullptr (cell "<< neighbor->Idx() <<"), AND 'lower' CONTAINS the neighbor.\n"
+                             << "  -> Neighbor pointer address: " << neighbor << "\n";
+               }
+               
+               _test( is_valid_perimeter );
+           }
+       }
                      
        // rebuild version
        lower.BuildPerimeterFaceVector( static_cast<int64_t>(lower.InteriorCells()) );
-       //    ^^^^^^^^^^^^^^^^^^^^^^^^^
-       for ( size_t f=lower.InteriorCells(); f<lower.Cells(); ++f )
-         for ( uint32_t i{0}; i<lower.PerimeterFaces(f); ++i )
-             // must either be a nullptr or a cell that is not part of the region
-              _test( lower.E(f)->Neighbor( lower.PerimeterFace(f,i) ) == nullptr ||
-                     lower.Contains( lower.E(f)->Neighbor( lower.PerimeterFace(f,i) ) ) == false );
-                     
+       //   ^^^^^^^^^^^^^^^^^^^^^^^^^
+       for ( size_t f = lower.InteriorCells(); f < lower.Cells(); ++f ) {
+           for ( uint32_t i{0}; i < lower.PerimeterFaces(f); ++i ) {
+               
+               uint32_t local_face = lower.PerimeterFace(f, i);
+               auto* neighbor = lower.E(f)->Neighbor(local_face);
+               
+               bool is_null = (neighbor == nullptr);
+               bool is_contained = (!is_null && lower.Contains(neighbor));
+               
+               bool is_valid_perimeter = (is_null || !is_contained);
+
+               if ( !is_valid_perimeter ) {
+                   std::cerr << "\n[DIAGNOSTIC - Rebuild] Perimeter Face Test Failed!\n"
+                             << "  -> Cell index (f): " << f << "\n"
+                             << "  -> Perimeter face index (i): " << i << "\n"
+                             << "  -> Local face ID: " << local_face << "\n"
+                             << "  -> Failure Reason: Neighbor is NOT nullptr (cell "<< neighbor->Idx() <<"), AND 'lower' CONTAINS the neighbor.\n"
+                             << "  -> Neighbor pointer address: " << neighbor << "\n";
+               }
+               
+               _test( is_valid_perimeter );
+           }
+       }                     
                      
        // rebuilding regions
        // ------------------
@@ -896,8 +940,8 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        _test( model_domain.SectorIntegrationPoints() == (16 * 4 + 3 * 3) ); // elmts * nodes
        _test( model_domain.FacetIntegrationPoints() == (16 * 4 + 3 * 3) );  // elements * facets per element
        _test( model_domain.Cells() == 19 ); // elements
-       _test( model_domain.InteriorCells() == 2 );
-       _test( model_domain.PerimeterCells() == 17 );
+       _test( model_domain.InteriorCells() == 1 );
+       _test( model_domain.PerimeterCells() == 18 );
        model_domain.UpdateMemberIndexes();
        _test( model_domain.Contains( model_domain.E(5) ) == true );
        _test( model_domain.Contains( model_domain.N(3) ) == true );
@@ -912,7 +956,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        // in positions 0 & 3
        _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) == 0 );
        _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 3 );
-       _test( model_domain.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 14 );
+       _test( model_domain.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 13 );
 
        // Unique Region 'Upper' (intersected by SB)
        // -----------------------------------------
@@ -927,8 +971,8 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        _test( upper.SectorIntegrationPoints() == (10 * 4 + 2 * 3) ); // elmts * nodes
        _test( upper.FacetIntegrationPoints() == (10 * 4 + 2 * 3) );  // elements * facets per element
        _test( upper.Cells() == 12 ); // elements
-       _test( upper.InteriorCells() == 2 );
-       _test( upper.PerimeterCells() == 10 );
+       _test( upper.InteriorCells() == 1 );
+       _test( upper.PerimeterCells() == 11 ); 
        upper.UpdateMemberIndexes();
        _test( upper.Contains( upper.E(2) ) == true );
        _test( upper.Contains( upper.N(3) ) == true );
@@ -1534,24 +1578,23 @@ void ModelSubDomain_Test::Test_NonMemberFunctions()
       //                         ^^^^^^^^^^^^^^^^^
       _test( topo_flags.count(MESH_VERTEX)     == 1 );
       _test( topo_flags.count(EXTERIOR_POINT)  == 1 );
-      _test( topo_flags.count(PERIMETER_POINT) == 1 );
       _test( topo_flags.count(INTERIOR_LINE)   == 1 );
       _test( topo_flags.count(EXTERIOR_LINE)   == 1 );
-      _test( topo_flags.size()                 == 5 );
+      _test( topo_flags.size()                 == 4 );
       
       // we need a split boundary for the next test
       const bool delete_elements{ true };
       model.RemoveRegion( "STANDARD", delete_elements );
       pair<string,bool> split_boundary = model.CreateSplitBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
       _test( split_boundary.second == true );
-      // TODO: Between does not split the corner nodes although the SB is throughgoing
 
       const SplitBoundary<2>& discontinuity = model.SplitBoundary( split_boundary.first );
       topo_flags = nodeTopologyFlags( discontinuity );
       //           ^^^^^^^^^^^^^^^^^
       _test( discontinuity.InsideNodes().first.size() == n_shared_nodes );
+      // TODO: CreateSplitBoundaryBetween() does not split the corner nodes although the SB is throughgoing
       _test( topo_flags.count(EXTERIOR_POINT) == 1 );
-      _test( topo_flags.count(INTERIOR_LINE)  == 1 );
+      _test( topo_flags.count(PERIMETER_LINE) == 1 );
       _test( topo_flags.size()                == 2 );
     }
     
@@ -1596,6 +1639,10 @@ void ModelSubDomain_Test::Test_NonMemberFunctions()
            _test( cell_pair.second.first->Neighbor(cell_pair.second.second) == cell_pair.first.first );
         }
 
+      // turning the lower-dim region "HALF" into a Boundary
+      model.CreateInternalBoundaryFrom( "HALF" );
+
+      // testing that the INTERNAL flagging of the new Boundary is recognised
       set<TOPOTYPE> topo_flags = nodeTopologyFlags<3,Element>( region1.NodesBegin(), region1.NodesEnd() );
       //                         ^^^^^^^^^^^^^^^^^
       _test( topo_flags.count(MESH_VERTEX)      == 1 );
@@ -1610,16 +1657,16 @@ void ModelSubDomain_Test::Test_NonMemberFunctions()
       model.RemoveRegion( "HALF", delete_elements );
       pair<string,bool> split_boundary = model.CreateSplitBoundaryBetween( "MATRIX_LEFT", "MATRIX_RIGHT" );
       _test( split_boundary.second == true );
-      // TODO: Between does not split the corner nodes although the SB is throughgoing
+      // TODO: CreateSplitBoundaryBetween() does not split the corner nodes although the SB is throughgoing
 
       const SplitBoundary<3>& discontinuity = model.SplitBoundary( split_boundary.first );
       topo_flags = nodeTopologyFlags( discontinuity );
       //           ^^^^^^^^^^^^^^^^^
       _test( discontinuity.InsideNodes().first.size() == n_shared_nodes );
-      _test( topo_flags.count(EXTERIOR_POINT)   == 1 );
-      _test( topo_flags.count(EXTERIOR_LINE)    == 1 );
-      _test( topo_flags.count(INTERIOR_SURFACE) == 1 );
-      _test( topo_flags.size()                  == 3 );
+      _test( topo_flags.count(EXTERIOR_LINE)     == 1 );
+      _test( topo_flags.count(PERIMETER_SURFACE) == 1 );
+      _test( topo_flags.count(INTERIOR_SURFACE)  == 1 ); // TODO: are these left on the perimeter of model?
+      _test( topo_flags.size()                   == 3 );
     }
     
     // TODO: add 3D tests with more complex model 'normal_fault_boundary'

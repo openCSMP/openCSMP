@@ -1057,10 +1057,10 @@ ModelTopology  create_BoundarySplitBoundaryPatch( VSet<2U>& vset )
     assert( plist.size() == n_cells );
     vset.AddPlist( plist.begin(), plist.end() );
 
-     //---------------------------------NEIGHBORS
-    //define neighbors per element
-    deque<vector<int64_t> > pfverts = { {L,3,1,U}, {0,4,2,U}, {1,7,R,U}, {L,5,4,0}, {6,1,3}, {L,8,I,3}, {5,10,7,4}, {6,11,R,2}, {L,I,9,5}, {I,I,8}, // element neighbors
-                                        {I,I,11,6}, {10,I,R,7}, {L,16,13,I}, {12,17,I,I}, {15,I,I}, {14,18,R,I}, {L,B,17,12}, {16,B,18,13}, {17,B,R,15},
+     //---------------------------------NEIGHBORS                                                   was {5,10,7,4}
+    //define neighbors per element          0          1          2          3         4         5           6           7          8        9
+    deque<vector<int64_t> > pfverts = { {L,3,1,U}, {0,4,2,U}, {1,7,R,U}, {L,5,4,0}, {6,1,3}, {L,8,I,3}, {I,10,7,4}, {6,11,R,2}, {L,I,9,5}, {I,I,8}, // element neighbors
+                                        {I,I,11,6}, {10,I,R,7}, {L,16,13,I}, {17,I,I,12}, {15,I,I}, {14,18,R,I}, {L,B,17,12}, {16,B,18,13}, {17,B,R,15},
                                         // face neighbors: { face-nbors, connected high-dim elmts, local face ids of high dim elmts }
                                         {20,35,16,B,1,B}, {21,19,17,B,1,B}, {22,20,18,B,1,B},
                                         {23,21,18,R,2,R}, {24,22,15,R,2,R}, {25,23,11,R,2,R}, {26,24,7,R,2,R}, {27,25,2,R,2,R},
@@ -2945,8 +2945,8 @@ void create_Pyramid_VSet(VSet<3U>& vset, bool bSkewed)
                 
                 if (bBoundary != NOT)
                 {
-                    size_t iNode = iDim_k2 * k + iDim_j * j + i;
-                    vset.BFlag(iNode, bBoundary);
+                    auto iNode = iDim_k2 * k + iDim_j * j + i;
+                    vset.BFlag( static_cast<size_t>(iNode), bBoundary);
                 }
             }
     
@@ -5043,6 +5043,8 @@ deque<vector<size_t> >  plist( 1872 );
   // side boundaries to start with
   vector<int8_t>  bflags{bf,bf,0,0,0,bf,0,bf,0,bf,bf,0,0,0,0,0,bf,bf,0,bf,0,bf,0,0,0,0,0,0,0,0,0,0,0,0,0,0,bf,0,bf,0,bf,0,bf,bf,bf,0,bf,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,bf,bf,bf,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,0,0,bf,bf,bf,bf,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,0,bf,0,0,0,0,bf,0,0,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,0,0,bf,bf,0,bf,bf,0,bf,bf,bf,bf,0,0,bf,0,bf,bf,bf,bf,0,0,0,0,bf,bf,0,0,bf,bf,0,0,0,0,0,0,0,bf,bf,bf,0,0,0,bf,bf,bf,bf,bf,0,bf,bf,bf,0,0,bf,0,0,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,bf,0,bf,bf,bf,0,bf,bf,bf,bf,0,0,0,0,bf,0,0,0,0,0,0,0,bf,bf,bf,bf,0,0,0,bf,0,0,0,bf,bf,bf,0,0,0,bf,0,bf,bf,bf,0,bf,bf,0,0,0,0,0,bf,0,0,0,bf,bf,0,bf,0,bf,bf,0,bf,0,bf,bf,0,bf,bf,0,bf,bf,0,bf,0,0,bf,0,bf,bf,bf,bf,bf,bf,bf,0,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf,bf};
 
+
+  // BOX_BOUNDARY flags
   // INTERNAL boundaries inferred from lower-dimensional elements that are not part of the side boundaries
   for ( const auto& eit : plist ) {
        // identifying interior elements
@@ -5056,24 +5058,16 @@ deque<vector<size_t> >  plist( 1872 );
          for ( const auto& n : eit )
            bflags[n] = INTERNAL;
     }
-
   vset.AddBFlags( bflags.begin(), bflags.end() );
-
-  // geometry flags
-  vector<int8_t>  gflags( bflags.size(), MESH_VERTEX );
-  for ( size_t i{0U}; i<bflags.size(); i++ ) {
-       if (      bflags[i] == IRREGULAR ) gflags[i] = EXTERIOR_SURFACE;
-       else if ( bflags[i] == INTERNAL )  gflags[i] = INTERIOR_SURFACE;
-    }
-  
-  vset.AddBREP_Flags( gflags.begin(), gflags.end() );
 
   // PFVERTS - neighbor connectivity is created automatically
   vset.EstablishElementConnectivity3D();
+
+  // TOPOTYPE geometry flags
+  vset.InitialiseNodeTopologyIdentifiers();
   
 
 // MATERIAL PROPERTIES
-
   const int32_t   material_identifier{1};
   vector<int32_t> pmtrl( vset.Elements(), material_identifier );
   vset.AddPmtrl( pmtrl.begin(), pmtrl.end() );

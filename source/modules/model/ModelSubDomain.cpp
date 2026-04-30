@@ -1324,6 +1324,195 @@ size_t  ModelSubDomain<dim,CELL>::PartitionCellVectorForSplitBoundary()
     @author SKM
  */
 template<uint32_t dim, template<uint32_t> class CELL>
+void ModelSubDomain<dim, CELL>::UpdateTopoTypeNodeFlags() 
+{
+    assert(SingleCellShapeDomain().second == true);
+    const uint32_t cell_dim = (cell_vec_[0]->IsVolume()) ? 3 : (cell_vec_[0]->IsSurface()) ? 2 : 1;
+
+    // =====================================
+    // Region and Boundary model sub-domains
+    // =====================================
+    if constexpr (std::is_same_v<CELL<dim>, Element<dim>> || std::is_same_v<CELL<dim>, Face<dim>>) 
+    {
+        if constexpr (dim == 3) 
+        {
+            auto assign_3d_exterior = [](Node<dim>* node, TOPOTYPE default_internal) {
+                switch (node->AtBoundary()) {
+                    case LEFT: case RIGHT: case TOP: case BOTTOM: case FRONT: case BACK: case IRREGULAR:
+                        node->Attribute(EXTERIOR_SURFACE); break;
+                    case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                    case EDGE5: case EDGE6: case EDGE7: case EDGE8:
+                    case EDGE9: case EDGE10: case EDGE11: case EDGE12:
+                        node->Attribute(EXTERIOR_LINE); break;
+                    case CNR1: case CNR2: case CNR3: case CNR4:
+                    case CNR5: case CNR6: case CNR7: case CNR8:
+                        node->Attribute(EXTERIOR_POINT); break;
+                    case INTERNAL: case NOT: default:
+                        node->Attribute(default_internal); break;
+                }
+            };
+
+            if (cell_dim == 3) {
+                for (auto nit = PerimeterNodesBegin(); nit != NodesEnd(); ++nit)
+                    assign_3d_exterior(*nit, INTERIOR_SURFACE);
+            } 
+            else if (cell_dim == 2) {
+                for (auto nit = PerimeterNodesBegin(); nit != NodesEnd(); ++nit)
+                    assign_3d_exterior(*nit, PERIMETER_LINE);
+                for (auto nit = NodesBegin(); nit != PerimeterNodesBegin(); ++nit)
+                    assign_3d_exterior(*nit, INTERIOR_SURFACE);
+            } 
+            else if (cell_dim == 1) {
+                for (auto nit = PerimeterNodesBegin(); nit != NodesEnd(); ++nit) {
+                    BOX_BOUNDARY b = (*nit)->AtBoundary();
+                    if (b == INTERNAL || b == NOT) (*nit)->Attribute(PERIMETER_POINT);
+                    else (*nit)->Attribute(EXTERIOR_POINT);
+                }
+                for (auto nit = NodesBegin(); nit != PerimeterNodesBegin(); ++nit) {
+                    TOPOTYPE attr = (*nit)->Attribute();
+                    if (attr == INTERIOR_SURFACE || attr == INTERIOR_LINE) (*nit)->Attribute(INTERIOR_POINT);
+                    else (*nit)->Attribute(INTERIOR_LINE);
+                }
+            }
+        }
+
+        // =========
+        // 2D models
+        // =========
+// =========
+        // 2D models
+        // =========
+        else if constexpr (dim == 2) 
+        {
+            auto assign_2d_node = [&](Node<dim>* node, TOPOTYPE default_internal) {
+                BOX_BOUNDARY b = node->AtBoundary();
+                
+                // 1. Check for Model Hull (Highest Priority)
+                if (b >= CNR1 && b <= CNR4) {
+                    node->Attribute(EXTERIOR_POINT);
+                    return;
+                } 
+                if (b >= LEFT && b <= EDGE4) {
+                    // Intersection: If an internal line hits the hull, it's a point.
+                    if (node->IsManifold() && node->Manifold()->Branches() > 2)
+                        node->Attribute(EXTERIOR_POINT);
+                    else
+                        node->Attribute(EXTERIOR_LINE);
+                    return;
+                }
+
+                // 2. Check for SplitBoundary Protection
+                TOPOTYPE current = node->Attribute();
+                if (current == PERIMETER_LINE || current == PERIMETER_POINT) {
+                    return; 
+                }
+
+                // 3. Handle Internal Sub-domain Boundaries
+                if (b == INTERNAL || b == NOT) {
+                    node->Attribute(default_internal);
+                }
+            };
+
+            if (cell_dim == 2) { // 2D Region
+                // Perimeter of the region
+                for (auto nit = PerimeterNodesBegin(); nit != NodesEnd(); ++nit) {
+                    // Default for internal perimeter of a 2D region is INTERIOR_LINE
+                    assign_2d_node(*nit, INTERIOR_LINE);
+                    
+                    // Junction check: if 3+ lines meet internally, it's a point
+                    if ((*nit)->AtBoundary() == INTERNAL && (*nit)->IsManifold() && (*nit)->Manifold()->Branches() > 2)
+                        (*nit)->Attribute(INTERIOR_POINT);
+                }
+                // Interior of the region
+                for (auto nit = NodesBegin(); nit != PerimeterNodesBegin(); ++nit) {
+                    (*nit)->Attribute(MESH_VERTEX);
+                }
+            } 
+            else if (cell_dim == 1) { // 1D Boundary (Line) in 2D Model
+                // Perimeter of the line (The tips)
+                for (auto nit = PerimeterNodesBegin(); nit != NodesEnd(); ++nit) {
+                    BOX_BOUNDARY b = (*nit)->AtBoundary();
+                    if (b == INTERNAL || b == NOT) (*nit)->Attribute(INTERIOR_POINT);
+                    else (*nit)->Attribute(EXTERIOR_POINT);
+                }
+                // Interior of the line
+                for (auto nit = NodesBegin(); nit != PerimeterNodesBegin(); ++nit) {
+                    assign_2d_node(*nit, INTERIOR_LINE);
+                }
+            }
+        }
+    }
+    
+    // ===============================================================
+    // SplitBoundary (InterFace) models
+    // ===============================================================
+    else if constexpr (std::is_same_v<CELL<dim>, InterFace<dim>>) 
+    {
+        if constexpr (dim == 3) {
+            auto sb_ptr = dynamic_cast<SplitBoundary<dim>*>(this);
+            if (!sb_ptr) return;
+            auto inner_nodes = sb_ptr->InsideNodes();
+            auto outer_nodes = sb_ptr->OutsideNodes();
+
+            if (cell_dim == 2) { // 3D Surface SB
+                for (size_t n = 0; n < inner_nodes.second; ++n)
+                    inner_nodes.first[n]->Attribute(PERIMETER_SURFACE);
+                for (size_t n = 0; n < outer_nodes.second; ++n)
+                    outer_nodes.first[n]->Attribute(PERIMETER_SURFACE);
+                for (size_t n = inner_nodes.second; n < inner_nodes.first.size(); ++n) {
+                    BOX_BOUNDARY b = inner_nodes.first[n]->AtBoundary();
+                    if (b >= LEFT && b <= IRREGULAR) inner_nodes.first[n]->Attribute(EXTERIOR_SURFACE);
+                    else if (b >= EDGE1 && b <= EDGE12) inner_nodes.first[n]->Attribute(EXTERIOR_LINE);
+                    else if (b >= CNR1 && b <= CNR8) inner_nodes.first[n]->Attribute(EXTERIOR_POINT);
+                    else inner_nodes.first[n]->Attribute(PERIMETER_LINE);
+                }
+            } 
+            else if (cell_dim == 1) { // 3D Line SB
+                for (size_t n = 0; n < inner_nodes.second; ++n)
+                    inner_nodes.first[n]->Attribute(PERIMETER_LINE);
+                for (size_t n = 0; n < outer_nodes.second; ++n)
+                    outer_nodes.first[n]->Attribute(PERIMETER_LINE);
+                for (size_t n = inner_nodes.second; n < inner_nodes.first.size(); ++n) {
+                    BOX_BOUNDARY b = inner_nodes.first[n]->AtBoundary();
+                    if (b == INTERNAL || b == NOT) inner_nodes.first[n]->Attribute(PERIMETER_POINT);
+                    else inner_nodes.first[n]->Attribute(EXTERIOR_POINT);
+                }
+            }
+        }
+        else if constexpr (dim == 2) { // 2D Line SplitBoundary
+              for (auto& iface : this->CellVector()) {
+                  const auto n_nodes{ iface->FE()->Nodes() };
+                  for (INTERFACE_SIDE side : {INSIDE, OUTSIDE}) {
+                      for (uint32_t i = 0; i < n_nodes; ++i) {
+                          Node<dim>* node = iface->N(i, side);
+                          BOX_BOUNDARY bflag = node->AtBoundary();
+                          
+                          if (node != iface->MatchingN(i, side)) { // Interior of SB line
+                              node->Attribute(PERIMETER_LINE);
+                          }
+                          else if (side == INSIDE) { // Tips of SB line
+                              // FIX: When a line (SB) hits the hull (Line), it's a Point!
+                              if (bflag >= LEFT && bflag <= EDGE4)
+                                  node->Attribute(EXTERIOR_POINT);
+                              else if (bflag >= CNR1 && bflag <= CNR4)
+                                  node->Attribute(EXTERIOR_POINT);
+                              else
+                                  node->Attribute(PERIMETER_POINT);
+
+                              if (iface->HasInterveningElement())
+                                  iface->N(i, MIDDLE)->Attribute(node->Attribute());
+                          }
+                      }
+                  }
+              }
+          }
+     }
+} // end
+
+
+/* APRIL 2026 VERSION: SUPERSEDED
+
+template<uint32_t dim, template<uint32_t> class CELL>
 void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
  {
     // making sure that the domain only contains elements of the same dimensionality
@@ -1752,6 +1941,10 @@ void ModelSubDomain<dim,CELL>::UpdateTopoTypeNodeFlags()
     
  } // end UpdateTopoTypeNodeFlags
 
+
+
+
+*/
 
 /* REPLACED with loop over InterFace objects
 

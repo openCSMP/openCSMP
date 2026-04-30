@@ -86,7 +86,7 @@ Element, Face and InterFace objects forming a mesh are collected into ModelSubDo
 
 Polygonal meshes are stored in the VSet : public VData container. The VData base class holds the node coordinates (px,py,pz), cell types ('pelmt' populated with the likes of IsoparametricLinearTriangle etc.), the nodes that make up each element ('plist'), the cell neighbors (pfverts'), node boundary flags ('pbflags'), material IDs of the Elements ('pmtrl'), and some topology flags ('gflags'). In 'plist' and 'pfverts' elements are followed by faces (if any) and interfaces (if any). For Face and InterFace objects, 'pfverts' also contains the indices of the higher-dimensional neighbor elements, following the equidimensional neighbors.
 
-@attention the orientation of the non-Simplex elements (Hexahedron, Prism, Pyramid) relative to the coordinate system iis not uniquely defined by these conventions. Thus, many are possible, but 1 of these will give an element orientation where the bottom face is in the xz plane and so forth.
+@attention The orientation of the non-Simplex elements (Hexahedron, Prism, Pyramid) relative to the coordinate system is not uniquely defined by these conventions. Thus, many are possible, but 1 of these will give an element orientation where the bottom face is in the xz plane and so forth.
 
 @note The geometry flags 'gflags' that distinguish nodes that define the topology of the model from ones that are mere degrees of freedom in the computational model, are provided only for those VSets, that contain internal boundaries.
  
