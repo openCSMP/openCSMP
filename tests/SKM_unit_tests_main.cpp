@@ -157,7 +157,7 @@
 using namespace std;
 using namespace csmp;
 
-constexpr bool COMMPREHENSIVE_TESTING = false;
+constexpr bool COMMPREHENSIVE_TESTING = true;
 
 /**  Unit Test Development
  
@@ -209,6 +209,7 @@ int main()
         refactored.addTest( new NodeManifold_Test() );
 //        refactored.addTest( new PDE_Integrator_Test() );
 
+//        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
 //        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)
 //        refactored.addTest( new ModelSubDomain_Test() );  passed 1/5/2026 (detected need to improve CreatSplitBoundaryBetween() method
 //        refactored.addTest( new VData_Test() ); passed: 27/4/2026

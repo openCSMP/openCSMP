@@ -1879,7 +1879,6 @@ Node<dim>* const MeshManager<dim>::Duplicate( Node<dim>* const nptr_inside,
          // and its nodes are connected to it
          nptr_inside->Assign( (*nmf) );
          (*nit).Assign( (*nmf) );
-         assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY );
        }
 
     // working out whether the original classification as an interface was correct

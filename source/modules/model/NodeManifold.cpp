@@ -495,205 +495,6 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
 } // end Classify
 
 
-/* version before 2/5/2025
-template<uint32_t dim>
-ManifoldType NodeManifold<dim>::Classify() const noexcept
-{
-    if constexpr ( dim == 3 )
-      {
-        const std::size_t n = branches_.size();
-
-        if (n == 0) return ManifoldType::STAND_ALONE;
-
-        TopoCounts c;
-
-        for (const Node<dim>* node : branches_) {
-            if (!node) continue;
-
-            switch (node->Attribute()) {
-                case INTERIOR_SURFACE:  ++c.interior_surface;  break;
-                case PERIMETER_SURFACE: ++c.perimeter_surface; break;
-                case EXTERIOR_SURFACE:  ++c.exterior_surface;  break;
-
-                case INTERIOR_LINE:     ++c.interior_line;     break;
-                case PERIMETER_LINE:    ++c.perimeter_line;    break;
-                case EXTERIOR_LINE:     ++c.exterior_line;     break;
-
-                case INTERIOR_POINT:    ++c.interior_point;    break;
-                case PERIMETER_POINT:   ++c.perimeter_point;   break;
-                case EXTERIOR_POINT:    ++c.exterior_point;    break;
-
-                case MESH_VERTEX:
-                default:
-                    // deliberately ignored — does not constrain topology
-                    break;
-            }
-        }
-
-        // ------------------------------------------------------------
-        //   1. Interior duplicated nodes or Split-boundary ends
-        //  ------------------------------------------------------------
-        
-        switch( c.total() ) {
-             case 0: return ManifoldType::STAND_ALONE;
-             case 1: return ManifoldType::SPLIT_BOUNDARY_END;
-             default:
-               break;
-          }
-
-        // ------------------------------------------------------------
-        //   2. Split-boundary interior (most common)
-        // ------------------------------------------------------------
-
-        if (c.interior_surface == 2 &&
-            c.perimeter_line == 0 &&
-            c.perimeter_point == 0)
-            return ManifoldType::SPLIT_BOUNDARY;
-            
-        // lower-dimensional SplitBoundary
-        if (c.interior_line >= 2 &&
-            c.perimeter_line == 0 &&
-            c.perimeter_point == 0)
-            return ManifoldType::SPLIT_BOUNDARY;
-
-        // ------------------------------------------------------------
-        //   3. Split-boundary with internal mesh constraint
-        // ------------------------------------------------------------
-
-        if (c.interior_surface >= 2 &&
-            (c.interior_line > 0 || c.interior_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
-
-        // ------------------------------------------------------------
-        //   4. Split-boundary crossings (must be on a line or a point)
-        // ------------------------------------------------------------
-
-        if (c.interior_line == 4)
-            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
-
-        if (c.interior_line >= 6)
-            return ManifoldType::MULTI_SB_CROSSING;
-
-        if (c.interior_point == 8)
-            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
-
-        if (c.interior_point >= 12)
-            return ManifoldType::MULTI_SB_CROSSING;
-
-        // ------------------------------------------------------------
-        //   5. Split-boundary terminations
-        // ------------------------------------------------------------
-
-        if (c.interior_surface >= 2 &&
-            (c.perimeter_line > 0 || c.perimeter_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
-            
-        if ( c.exterior_surface == 2 &&
-            (c.interior_line == 0 && c.interior_point == 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
-
-        if ( c.exterior_line >= 2 &&
-            (c.interior_line == 0 && c.interior_point == 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
-
-        // ------------------------------------------------------------
-        //   Fallback
-        // ------------------------------------------------------------
-
-        return ManifoldType::STAND_ALONE;
-    }
-
-  // for 2 dimensional models
-  else if constexpr ( dim == 2 )
-      {
-        const std::size_t n = branches_.size();
-
-        if (n == 0) return ManifoldType::STAND_ALONE;
-
-        TopoCounts c;
-
-        for (const Node<dim>* node : branches_) {
-            if (!node) continue;
-
-            switch (node->Attribute()) {
-                case INTERIOR_LINE:     ++c.interior_line;     break;
-                case PERIMETER_LINE:    ++c.perimeter_line;    break;
-                case EXTERIOR_LINE:     ++c.exterior_line;     break;
-
-                case INTERIOR_POINT:    ++c.interior_point;    break;
-                case PERIMETER_POINT:   ++c.perimeter_point;   break;
-                case EXTERIOR_POINT:    ++c.exterior_point;    break;
-
-                case MESH_VERTEX:
-                default:
-                    // deliberately ignored — does not constrain topology
-                    break;
-            }
-        }
-
-        // ------------------------------------------------------------
-        //   1. Single interior duplicated nodes
-        // ------------------------------------------------------------
-
-        switch( c.total() ) {
-             case 0: return ManifoldType::STAND_ALONE;
-             case 1: return ManifoldType::SPLIT_BOUNDARY_END;
-             default:
-               break;
-          }
-
-        // ------------------------------------------------------------
-        //   2. Split-boundary interior (most common)
-        // ------------------------------------------------------------
-
-        if ( c.interior_line == 2 && c.perimeter_line == 0 && c.perimeter_point == 0 )
-            return ManifoldType::SPLIT_BOUNDARY;
-
-        // ------------------------------------------------------------
-        //   3. Split-boundary with internal mesh constraint
-        // ------------------------------------------------------------
-
-        if ( c.interior_line >= 2 && c.interior_point > 0 )
-            return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
-
-        // ------------------------------------------------------------
-        //   4. Split-boundary crossings
-        // ------------------------------------------------------------
-
-        if (c.interior_point == 4)
-            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
-
-        if (c.interior_point >= 5)
-            return ManifoldType::MULTI_SB_CROSSING;
-
-        // ------------------------------------------------------------
-        //   5. Split-boundary terminations
-        // ------------------------------------------------------------
-
-        if ( c.interior_line == 0 &&
-            (c.perimeter_line > 0 || c.perimeter_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
- 
-        if ( c.interior_line == 0 &&
-            (c.exterior_line > 0 || c.exterior_point > 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
- 
-        if ( c.exterior_line == 2 &&
-            (c.interior_line == 0 || c.interior_point == 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
-
-        // ------------------------------------------------------------
-        //   Fallback
-        // ------------------------------------------------------------
-
-        return ManifoldType::STAND_ALONE;
-    }
-
-    // 1D models
-     return ManifoldType::SPLIT_BOUNDARY_END;
-}
-*/
-
 
 
 
@@ -745,8 +546,8 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
    @test refactored 9/07/2022 after removal of the side information
    
 */
-template<uint32_t dim>
-ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
+template<>
+ManifoldType  consistencyCheck( const NodeManifold<2>& nmf, bool verbose  )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     
@@ -761,15 +562,9 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
     if ( node_attributes.size() == 1U ) {
          if ( verbose ) {
            switch( (*node_attributes.begin()) ) {
-                case MESH_VERTEX: {
-                     if ( nmf.Classify() != ManifoldType::STAND_ALONE ) {
-                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'STAND_ALONE'";
-                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
-                       }
-                    }
-                  break;
                 case INTERIOR_POINT: {
-                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_CROSSING &&
+                          nmf.Classify() != ManifoldType::MULTI_SB_CROSSING ) {
                           cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
                           csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
                        }
@@ -778,6 +573,61 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                 case EXTERIOR_LINE:
                 case PERIMETER_POINT:
                 case EXTERIOR_POINT: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_LINE: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                default:
+                  cerr <<"\nconsistencyCheck(NodeManifold): Node TOPOTYPE not resolved."<< endl;
+                  return nmf.Classify();
+             }
+           }
+      }
+
+    
+    // 2. if all diagnostics fails the originally assigned qualifier is returned
+    return nmf.Classify();
+
+ } // end consistency check (2D)
+ 
+
+template<>
+ManifoldType  consistencyCheck( const NodeManifold<3>& nmf, bool verbose  )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    
+    // 0. getting the TOPOTYPES of the nodes
+    const auto collocated_nodes = nmf.Branches();
+    set<TOPOTYPE> node_attributes;
+    for ( uint32_t i{0U}; i<collocated_nodes; i++ )
+      node_attributes.insert( nmf.N(i)->Attribute() );
+
+    // 1. diagnostics: if there is only one topotype
+    // ---------------------------------------------
+    if ( node_attributes.size() == 1U ) {
+         if ( verbose ) {
+           switch( (*node_attributes.begin()) ) {
+                case INTERIOR_POINT: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_CROSSING &&
+                          nmf.Classify() != ManifoldType::MULTI_SB_CROSSING ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case EXTERIOR_LINE:
+                case EXTERIOR_POINT:
+                case PERIMETER_LINE:
+                case PERIMETER_POINT: {
                      if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
                           cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
                           csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
@@ -794,7 +644,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
                     }
                   break;
                 case EXTERIOR_SURFACE:
-                     csmp_error.Note( ERROR, "consistencyCheck", "NodeManifolds cannot contain Nodes classified as EXTERIOR_SURFACE." );
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END )
+                       csmp_error.Note( ERROR, "consistencyCheck", "NodeManifolds cannot contain Nodes classified as EXTERIOR_SURFACE." );
                   break;
                 default:
                   cerr <<"\nconsistencyCheck(NodeManifold): Node TOPOTYPE not resolved."<< endl;
@@ -807,7 +658,67 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
     // 2. if all diagnostics fails the originally assigned qualifier is returned
     return nmf.Classify();
 
- } // end consistency check
+ } // end consistency check (3D)
+
+ 
+ 
+template<>
+ManifoldType  consistencyCheck( const NodeManifold<1>& nmf, bool verbose  )
+ {
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+ 
+    // 0. getting the TOPOTYPES of the nodes
+    const auto collocated_nodes = nmf.Branches();
+    set<TOPOTYPE> node_attributes;
+    for ( uint32_t i{0U}; i<collocated_nodes; i++ )
+      node_attributes.insert( nmf.N(i)->Attribute() );
+
+    if ( collocated_nodes > 2 ) {
+         csmp_error.Note( ERROR, "consistencyCheck<1>", "manifold with more than 2 nodes possible incorrect." );
+      }
+
+    // 1. diagnostics: if there is only one topotype
+    // ---------------------------------------------
+    if ( node_attributes.size() == 1U ) {
+         if ( verbose ) {
+           switch( (*node_attributes.begin()) ) {
+                case INTERIOR_POINT: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_CROSSING ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_CROSSING'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_POINT:
+                case EXTERIOR_POINT: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY_END ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY_END'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                case PERIMETER_LINE: {
+                     if ( nmf.Classify() != ManifoldType::SPLIT_BOUNDARY ) {
+                          cerr <<"\n\t"<< parse(nmf.Classify()) <<" vs. 'SPLIT_BOUNDARY'";
+                          csmp_error.Note( WARNING, "consistencyCheck", "manifold type possible incorrect, resetting." );
+                       }
+                    }
+                  break;
+                default:
+                  cerr <<"\nconsistencyCheck(NodeManifold<1>): Node TOPOTYPE not resolved."<< endl;
+                  return nmf.Classify();
+             }
+           }
+      }
+
+    
+    // 2. if all diagnostics fails the originally assigned qualifier is returned
+    return nmf.Classify();
+
+ } // end consistency check (2D)
+
+ 
+ 
 
 
 // ================================================================================================================
@@ -815,7 +726,8 @@ ManifoldType  consistencyCheck( const NodeManifold<dim>& nmf, bool verbose  )
 //          METHODS THAT INVOLVE INTERFACES
 //
 // ================================================================================================================
-// TODO: deprecate
+
+#ifdef NODE_MANIFOLD_WITH_INTERFACE_PARENTS
 
 ///Clears existing InterFaces of assigned to node and assigns a new set to them.
 /// @attention This overwrites existing interfaces assigned to node if they are assigned.
@@ -847,10 +759,6 @@ void NodeManifold<dim>::Assign(Node<dim>* n, std::set<std::pair<InterFace<dim>*,
     return;
   }
 }//end of Assign
-
-
-
-
 
 
 
@@ -911,15 +819,11 @@ std::vector<std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> Node
   return  node_parent_interface_map_.at(n);
 }
 
-
+#endif // #ifdef NODE_MANIFOLD_WITH_INTERFACE_PARENTS
 
 
 template class NodeManifold<1U>;
 template class NodeManifold<2U>;
 template class NodeManifold<3U>;
-
-template ManifoldType  consistencyCheck( const NodeManifold<3>&, bool );
-template ManifoldType  consistencyCheck( const NodeManifold<2>&, bool );
-template ManifoldType  consistencyCheck( const NodeManifold<1>&, bool );
 
 }// csmp

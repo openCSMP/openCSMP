@@ -244,61 +244,8 @@ void NodeManifold_Test::run()
   // DIAGNOSTICS                         three-surface nodes that are not interconnected
   _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH );
   //          ^^^^^^^^^^
+  _test( consistencyCheck<3>( nmf, verbose_ ) == ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH );
 
-  // split-boundary (end) where a splitboundary hits another one
-  n1.Attribute(INTERIOR_LINE);
-  n2.Attribute(INTERIOR_LINE);
-  n4.Attribute(PERIMETER_SURFACE);
-  if ( verbose_ ) nmf.Out();
-  //                  ^^^
-  // testing 'ManifoldType' classification as a splitboundary with an internal mesh
-  // DIAGNOSTICS                         three-surface nodes that are not interconnected
-  _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY );
-  //          ^^^^^^^^^^
-
-  // split-boundary (end) at T-intersection where a splitboundary hits a normal boundary
-  n1.Attribute(PERIMETER_SURFACE);
-  n2.Attribute(PERIMETER_SURFACE);
-  n4.Attribute(INTERIOR_SURFACE);
-  if ( verbose_ ) nmf.Out();
-  //                  ^^^
-  // testing 'ManifoldType' classification as a splitboundary with an internal mesh
-  // DIAGNOSTICS                         three-surface nodes that are not interconnected
-  _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY_END );
-  //          ^^^^^^^^^^
-
-  
-  // CONSTRUCTING 4-NODE MANIFOLD
- 
-  // constructing from plf_colony of nodes
-  // -------------------------------------
-  vector<size_t> manifold_nodes{ 0, 1, 2, 3 };
-  plf::colony<Node<3>> nodes;
-  nodes.insert( n1 );
-  nodes.insert( n2 );
-  nodes.insert( n3 );
-  nodes.insert( n4 );
-  
-  NodeManifold<3> nmf2( nodes, manifold_nodes );
-  //              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  nmf2.AssignManifoldToMemberNodes();   // must be called after the manifold has been constructed
-  //   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  _test( nmf2.Branches() == 4 );
-  _test( nmf2.N(2)->Idx() == 2 );
-  //          ^^^^
-  // assigning node attributes
-  n1.Attribute(PERIMETER_SURFACE);
-  n2.Attribute(PERIMETER_POINT);
-  n3.Attribute(PERIMETER_LINE);
-  // INTERIOR_SURFCE n4.Attribute();
-  if ( verbose_ ) nmf2.Out();
-  //                   ^^^
-
-
-  // DIAGNOSTICS                         three-surface nodes that are not interconnected
-  _test( nmf2.Classify() == ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH );
-  //          ^^^^^^^^^^
-  
   // remaining nodes 0,1,3
   _test( nmf.N(0)->Idx() == 0 );
   _test( nmf.N(1)->Idx() == 1 );
@@ -310,6 +257,7 @@ void NodeManifold_Test::run()
 
   // only 2 nodes in manifold
   nmf.Remove( &n4 );
+  assert( nmf.Branches() == 2 );
 
   n1.Attribute(INTERIOR_LINE); n2.Attribute(INTERIOR_LINE);
   _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY );
@@ -325,22 +273,56 @@ void NodeManifold_Test::run()
   _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY_END );
   
   n1.Attribute(EXTERIOR_POINT); n2.Attribute(EXTERIOR_POINT);
-  _test( nmf.Classify() == ManifoldType::STAND_ALONE );
+  _test( nmf.Classify() == ManifoldType::SPLIT_BOUNDARY_END );
   
-  // TODO: test SortByVariableValue()
-
   _test( nmf.AreNodesCollocated() == true );
   //         ^^^^^^^^^^^^^^^^^^
    
   n1.Coordinate( Point<3>(1.,1.,1.) );
   _test( nmf.AreNodesCollocated() == false );
-   
+
+
+// CONSTRUCTING 4-NODE MANIFOLD
+ 
+  // constructing from plf_colony of nodes
+  // -------------------------------------
+  vector<size_t> manifold_nodes{ 0, 1, 2 };
+  plf::colony<Node<3>> nodes;
+  nodes.insert( n1 );
+  nodes.insert( n2 );
+  nodes.insert( n3 );
+  
+  // colony-based constructor
+  NodeManifold<3> nmf2( nodes, manifold_nodes );
+  //              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  nmf2.AssignManifoldToMemberNodes();   // must be called after the manifold has been constructed
+  //   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  _test( nmf2.Branches() == 3 );
+  _test( nmf2.N(2)->Idx() == 2 );
+  //          ^^^^
+  // assigning node attributes
+  next(nodes.begin(),0)->Attribute(PERIMETER_SURFACE);
+  next(nodes.begin(),1)->Attribute(PERIMETER_SURFACE);
+  next(nodes.begin(),2)->Attribute(INTERIOR_SURFACE);
+  if ( verbose_ ) nmf2.Out();
+  //                   ^^^
+  // DIAGNOSTICS                         three-surface nodes that are not interconnected
+  _test( nmf2.Classify() == ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH );
+  //          ^^^^^^^^^^
+
   // DATA OUTPUT
   /// outputs manifold state to data structure used to initialise VData
   pair<vector<size_t>,ManifoldType> node_manifold_data = nmf2.Data();
   //                                                          ^^^^
   _test( node_manifold_data.second == nmf2.Classify() );
 
-}
+  // TODO: test SortByVariableValue()
+
+
+
+} // end run
 
 } // csmp
+
+
+

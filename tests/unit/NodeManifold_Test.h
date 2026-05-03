@@ -9,7 +9,7 @@ class NodeManifold_Test : public Test {
   public:
     virtual void run();
     
-    static const bool verbose_ = true;
+    static const bool verbose_ = false;
     
   private:
     void Test_Classify2D();

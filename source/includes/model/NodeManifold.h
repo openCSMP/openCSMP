@@ -15,7 +15,7 @@ template<uint32_t> class Node;
 
 template<uint32_t> class InterFace;
 
-// TODO: do we need to track intersections between SB and Boundaries or lower-dim Regions?
+#define NODE_MANIFOLD_WITH_INTERFACE_PARENTS
   
 /**
     @brief: a class that contains pointers to topologically (and most often also physically) collocated nodes.
@@ -84,6 +84,7 @@ class NodeManifold {
 
 
      // TODO: deprecate these methds together with node_parent_interface_map_?
+#ifdef NODE_MANIFOLD_WITH_INTERFACE_PARENTS
 
       void Assign( Node<dim>*,
                    std::set<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE>>> interface_indexes );
@@ -107,14 +108,16 @@ class NodeManifold {
       /// InterFace vector of node
       // REMOVE-not used
       std::vector< std::pair<InterFace<dim>*, std::pair<uint32_t,INTERFACE_SIDE>>> InterFaceIndexVector( Node<dim>* const n );
-
+#endif
  
     private:
       manifold branches_;  ///< vector of Node pointers
 
-      // IDEA: Nodes know their parent elements; NodeManifolds know their parent InterFaces
+      // DESIGN IDEA: Nodes know their parent elements; NodeManifolds know their parent InterFaces
       // TODO: remove this huge-overhead structure (if needs be, put it as an auxiliary vector inside of MeshManager::ReplaceElementsByInterFaces()
+#ifdef NODE_MANIFOLD_WITH_INTERFACE_PARENTS
       std::map< Node<dim>*,std::vector<std::pair<InterFace<dim>*,std::pair<uint32_t,INTERFACE_SIDE> >> >   node_parent_interface_map_;     ///interfaces and index for each node on manifold
+#endif
 };
 
 
