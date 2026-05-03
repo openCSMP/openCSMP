@@ -833,17 +833,21 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
                                             const char* property,
                                             INTERFACE_SIDE side ) const
 {
-  csmp::Index prop_key = p.StorageKey( property );
+  ErrorHandler& csmp_error( ErrorHandler::Instance() );
+  csmp::Index   prop_key = p.StorageKey( property );
 
-  if ( prop_key.type == TENSOR ) {
-    throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                           property, "is a tensor property; no implementation for tensor normal projections yet." );
+  // if ( Mesh().FiniteElements().UsesElementsWithLocalCoordinateSystem() )
+  if ( !this->E(0)->FE()->UsesLocalCoordinates() ) {
+    csmp_error.Note( ERROR, "SplitBoundary<dim>::SurfaceIntegral", "method only works for numerically integrated element types" );
     return std::numeric_limits<double>::quiet_NaN();
   }
-
+  if ( prop_key.type == TENSOR ) {
+    csmp_error.Note( ERROR, "SplitBoundary<dim>::SurfaceIntegral", property, "is a tensor property; no implementation for tensor normal projections yet." );
+    return std::numeric_limits<double>::quiet_NaN();
+  }
   if ( prop_key.place == FACE or prop_key.place == BOUNDARY or prop_key.place == REGION ) {
-    throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                           property, "placed on FACE, BOUNDARY or REGION cannot be assigned on split boundary." );
+    csmp_error.Note( ERROR, "SplitBoundary<dim>::SurfaceIntegral", property,
+                    "placed on FACE, BOUNDARY or REGION cannot be read from InterFace objects making up split boundary." );
     return std::numeric_limits<double>::quiet_NaN();
   }
 
@@ -862,15 +866,15 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
     if ( prop_key.place == ELEMENT ) {
       // the property is read from ther higher dimensional neighbor element on the target side
       // and integrated over the area of its interface
-      double prop_value;
+      double prop_value = std::numeric_limits<double>::quiet_NaN();
       for ( auto& ife : this->cell_vec_ ) {
         double face_area = ife->Volume();
         if ( side != MIDDLE ) prop_value = ife->Parent( side )->Read( prop_key );
         else {
           if ( ife->HasInterveningElement() ) prop_value = ife->InterveningElement()->Read( prop_key );
           else
-            throw csmp::Exception( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                                   property, "placed on Element cannot be retrieved as there is no base element at InterFace MIDDLE." );
+            csmp_error.Note( ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                             property, "placed on Element cannot be retrieved as there is no base element at InterFace MIDDLE." );
         }
         property_integral += prop_value * face_area;
       }
@@ -887,26 +891,33 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
     }
 
     if ( prop_key.place == NODE ) {
-      // the property value is interpolated to the interface integration points and then integrated
-      // using their integration weights
-      ScalarVariable  sc;
+      ScalarVariable sc;
       for ( auto& ife : this->cell_vec_ ) {
-        ife->CurrentSide(side);             //needed so that property at int point calls correct fe nodes
-        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ) {
-          double det_j = ife->det_JINV_AtIntegrationPoint(i);
+        ife->CurrentSide(side);
+        for ( uint32_t i{0U}; i < ife->IntegrationPoints(); ++i ) {
+          // 1. Retrieve det_J (determinant of Jacobian matrix)
+          double det_j = ife->det_J_AtIntegrationPoint(i);
+// DEBUGGING
+if ( det_j <= 0. ) {
+     ife->FE()->XY.Out();
+     ife->Out();
+  }
+          // 2. Interpolate nodal value of integrand to IP
           ife->PropertyValueAtIntegrationPoint( prop_key, i, sc );
-          property_integral += det_j * ife->WeightAtIntegrationPoint( i ) * sc();
+          
+          // 3. Integral += |J| * w * value
+          property_integral += det_j * ife->WeightAtIntegrationPoint(i) * sc();
         }
       }
       return property_integral;
     }
-
+    
     if ( prop_key.place == INTER_FACE_INTEGRATION_POINT ) {
       // the property value is integrated using corresponding integration weights
       for ( auto& ife : this->cell_vec_ ) {
         ife->CurrentSide(side);             //needed so that property at int point calls correct fe nodes
-        for ( auto i{0U}; i<ife->IntegrationPoints(); ++i ){
-          double det_j = ife->det_JINV_AtIntegrationPoint(i);
+        for ( uint32_t i{0U}; i<ife->IntegrationPoints(); ++i ){
+          double det_j = ife->det_J_AtIntegrationPoint(i);
           property_integral += det_j * ife->WeightAtIntegrationPoint( i ) * ife->Read( prop_key );
         }
       }
@@ -915,7 +926,6 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
 
   } // end scalar
   
-    // TODO: still needs extra cases" element props. etc.
     // 2. if the property is a vector
   if ( prop_key.type == VECTOR ) {
     // the values projected onto the normal are integrated over the interface.
@@ -937,9 +947,10 @@ double SplitBoundary<dim>::SurfaceIntegral( const PropertyDatabase<dim>& p,
       }
     }
     else {
-      throw csmp::Exception( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
-                             parsePlacement( prop_key.place ), "Property placement not handled yet." );
+      csmp_error.Note( FATAL_ERROR, "SplitBoundary<dim>::SurfaceIntegral",
+                       parsePlacement( prop_key.place ), "Property placement not handled yet." );
     }
+    // TODO: still needs extra cases" element props. etc.
   }
 
   return property_integral;

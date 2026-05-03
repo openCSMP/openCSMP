@@ -324,11 +324,20 @@ double FiniteElementPolicy<dim,CELL>::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>
 // INTEGRATION
 
 template<uint32_t dim, template<uint32_t> class CELL>
-double FiniteElementPolicy<dim,CELL>::det_JINV_AtIntegrationPoint( uint32_t ipoint ) const
+double FiniteElementPolicy<dim,CELL>::det_J_AtIntegrationPoint( uint32_t ipoint ) const
   {
     assert( fptr_ != nullptr );
     CoordinateMatrix();
-    // SKM_FIX
+    
+#ifdef FINITE_VOLUME_POLICY_DEBUG
+    try {
+        validateCoordinateMatrix( fptr_->XY, fptr_->Nodes(), dim);
+    } catch (const std::exception& e) {
+        std::cerr <<"FiniteElementPolicy<dim,CELL>::det_J_AtIntegrationPoint: CRITICAL MESH ERROR: " << e.what() << std::endl;
+        return 0.0;
+    }
+#endif
+    
     fptr_->JacobianAtIntegrationPoint( ipoint );
     return fptr_->JacobianDeterminant();
   }

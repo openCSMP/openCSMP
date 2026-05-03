@@ -624,7 +624,7 @@ ForceAndTorque<dim> integrateFluidTractionOnFaceUsingCellBarycentre(
     for (uint32_t ip = 0; ip < nip; ++ip)
       {
         // mapped Face area
-        detJ = face->det_JINV_AtIntegrationPoint(ip);
+        detJ = face->det_J_AtIntegrationPoint(ip);
 
         // quadrature weight
         double iweight = face->WeightAtIntegrationPoint(ip);

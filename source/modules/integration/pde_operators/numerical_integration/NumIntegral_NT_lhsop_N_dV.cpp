@@ -87,7 +87,7 @@ void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
          for ( uint32_t i{0}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double det = e.det_JINV_AtIntegrationPoint( i );
+              const double det = e.det_J_AtIntegrationPoint( i );
                    
               for ( uint32_t j{0U}; j<e.Nodes(); j++ )
                 for ( uint32_t k{0U}; k<e.Nodes(); k++ )

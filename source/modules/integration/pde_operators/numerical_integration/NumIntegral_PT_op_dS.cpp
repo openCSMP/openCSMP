@@ -88,7 +88,7 @@ void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
      {
        N.clear();
        f.N_AtIntegrationPoint( i, N );
-       double const detJ = f.det_JINV_AtIntegrationPoint(i);
+       double const detJ = f.det_J_AtIntegrationPoint(i);
        double const weight = f.WeightAtIntegrationPoint(i);
        for( uint32_t j{0U}; j < f.Nodes(); ++j )
          for( uint32_t df(0); df < dim; ++df )

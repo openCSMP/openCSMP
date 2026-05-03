@@ -90,7 +90,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          if ( is_simplex_element_type ) {
               // initialising the interpolation function matrix
               e.N_AtBaryCenter( e.FE()->NRST );
-              const double detJ = e.det_JINV_AtIntegrationPoint(0);
+              const double detJ = e.det_J_AtIntegrationPoint(0);
               // forming NT * mtrl
               NT_.Resize(n_nodes,1U);
               if ( piecewise_constant_material )
@@ -114,7 +114,7 @@ void NumIntegral_NT_op_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          for ( uint32_t i{0u}; i < n_ipoints; i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double det(e.det_JINV_AtIntegrationPoint( i ));
+              const double det(e.det_J_AtIntegrationPoint( i ));
               // forming NT * mtrl
               NT_.Resize(n_nodes,1U);
               if ( piecewise_constant_material )

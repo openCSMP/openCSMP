@@ -222,7 +222,10 @@ void NodeManifold<dim>::SortByVariableValue( const Index& index )
 
 
 /**
-   Checks whether any of the Nodes in the Manifold are connected to each-other and returs these clusters
+   Checks whether any of the Nodes in the Manifold is connected to another one in it and returs these erroneous clusters.
+  
+   @attention the nodes in a manifold should not be connected with each other because the mesh is split there. This method exists to diagnose such errors.
+   @attention use Node::Neighbours() and Node::Neighbor(uint) to access the neighbors of nodes.
    
    @return pair of interconnected Node clusters, and boolean indicating whether there are any.
    
@@ -279,7 +282,7 @@ pair<vector<size_t>,ManifoldType>  NodeManifold<dim>::Data() const noexcept
 template<uint32_t dim>
 void NodeManifold<dim>::Out() const
 {
-  cout << "\nNodeManifold: "<< parse(Classify()) <<" with nodes (indices):\t";
+  cout << "\nNodeManifold: "<< parse(Classify()) <<" of nodes (indices) with BOX_BOUNDARY and TOPOTYPE flags:\t";
   for ( uint32_t i{0U}; i<Branches(); i++ ) {
       if ( NodeManifold<dim>::N(i) ) {
            cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": ";
@@ -289,7 +292,15 @@ void NodeManifold<dim>::Out() const
       else
         cerr <<"\nNodeManifold<dim>::Out: branch node pointer is a null pointer.";
     }
-  cout <<"\n\t"<<"ManifoldType: "<< parse( this->Classify() );
+  cout <<"\n\t"<<"Node-to-Node connections of member nodes: ";
+  for ( uint32_t i{0U}; i<Branches(); i++ ) {
+      if ( NodeManifold<dim>::N(i) ) {
+           cout <<"\n\t"<< NodeManifold<dim>::N(i)->Idx() <<": "; // node
+           cout << NodeManifold<dim>::N(i)->Neighbors() <<": ";
+           for ( uint32_t j{0U}; j<NodeManifold<dim>::N(i)->Neighbors(); j++ )
+             cout <<NodeManifold<dim>::N(i)->Neighbor(j)->Idx() <<" ";
+        }
+    }
   cout << endl << endl;
 }
 
@@ -345,6 +356,149 @@ struct TopoCounts {
 template<uint32_t dim>
 ManifoldType NodeManifold<dim>::Classify() const noexcept
 {
+    const size_t n = branches_.size();
+    assert(n > 0 && "NodeManifold<dim>::Classify: NodeManifold exists but contains no branches!");
+    if ( n == 1 ) {
+       cerr <<"\nERROR: NodeManifold<dim>::Classify: manifolds should contain at least two nodes to honour their name."<< endl;
+       Out();
+    }
+    if (n == 0) return ManifoldType::STAND_ALONE;
+
+    TopoCounts c;
+    for (const Node<dim>* node : branches_) {
+        if (!node) continue;
+        switch (node->Attribute()) {
+            case INTERIOR_SURFACE:  ++c.interior_surface;  break;
+            case PERIMETER_SURFACE: ++c.perimeter_surface; break;
+            case EXTERIOR_SURFACE:  ++c.exterior_surface;  break;
+            case INTERIOR_LINE:     ++c.interior_line;     break;
+            case PERIMETER_LINE:    ++c.perimeter_line;    break;
+            case EXTERIOR_LINE:     ++c.exterior_line;     break;
+            case INTERIOR_POINT:    ++c.interior_point;    break;
+            case PERIMETER_POINT:   ++c.perimeter_point;   break;
+            case EXTERIOR_POINT:    ++c.exterior_point;    break;
+            default: break;
+        }
+    }
+
+    if constexpr ( dim == 3 ) // tested: NodeManifold_Test::Test_Classify23() - weak confirmation only
+    {
+        const uint32_t total_surf = c.interior_surface + c.perimeter_surface + c.exterior_surface;
+        const uint32_t total_line = c.interior_line + c.perimeter_line + c.exterior_line;
+        const uint32_t total_point = c.interior_point + c.perimeter_point + c.exterior_point;
+
+        // 1. MODEL EXTERIOR
+        if (c.exterior_surface > 0 || c.exterior_line > 0 || c.exterior_point > 0)
+            return ManifoldType::SPLIT_BOUNDARY_END;
+
+        // 2. HIGH-VALENCE CROSSINGS
+        if (total_surf >= 6 || total_line >= 6 || total_point >= 12) 
+            return ManifoldType::MULTI_SB_CROSSING;
+        if (total_surf == 4 || total_line == 4 || total_point == 8)  
+            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
+
+        // 3. THE SPLIT LOGIC (Primary Split Branches = 2 Perimeter Surfaces)
+        if (c.perimeter_surface >= 2) {
+            
+            // T-INTERSECTION (END): Equidimensional surface contact
+            if (c.interior_surface > 0) {
+                auto [clusters, fully_connected] = InterConnectedMemberNodes();
+                // If part of the same mesh structure, it's a junction (End)
+                if (clusters.size() == 1) return ManifoldType::SPLIT_BOUNDARY_END;
+                // If the interior surface is a separate mesh patch, it's an inclusion
+                return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
+            }
+
+            // T-INTERSECTION (END): Split hits a junction edge or point
+            // This is your failing Test 2: 2 P_SURF + 1 I_LINE
+            if (total_line == 1 || total_point == 1) {
+                return ManifoldType::SPLIT_BOUNDARY_END;
+            }
+
+            // INTERNAL MESH: Split contains multiple/separate internal features
+            if (total_line > 1 || total_point > 1) {
+                return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
+            }
+        }
+
+        // 4. plain split boundary
+        if (c.perimeter_surface == 2 && c.interior_surface == 0 && total_line == 0)
+            return ManifoldType::SPLIT_BOUNDARY;
+        
+        // line-based splits 
+        if (c.interior_line == 2 && total_surf == 0)
+            return ManifoldType::SPLIT_BOUNDARY;
+
+        // intersection of splitboundary perimeter with boundary
+        if (c.perimeter_line >= 2 && c.interior_line > 0 )
+            return ManifoldType::SPLIT_BOUNDARY_END;
+
+        return ManifoldType::STAND_ALONE;
+    }
+    
+    else if constexpr ( dim == 2 ) // tested: NodeManifold_Test::Test_Classify2D()
+    {
+        const uint32_t total_points = c.interior_point + c.perimeter_point + c.exterior_point;
+        //const uint32_t total_lines = c.interior_line + c.perimeter_line + c.exterior_line;
+
+        // Potential AMBIGUITY 1: SplitBoundary Terminations (Test 4)
+        // Rule: Any contact with the exterior definitively marks an end.
+        if (c.exterior_point > 0 || c.exterior_line > 0) {
+            return ManifoldType::SPLIT_BOUNDARY_END;
+        }
+
+        // Potential AMBIGUITY 2: Crossings vs. Simple Intersections (Tests 5 & 6)
+        // 6+ interior points = Star Crossing (3+ SBs)
+        if (total_points >= 6)  return ManifoldType::MULTI_SB_CROSSING;
+        // Rule: Any intersection of split boundaries or internal terminations MUST include points.
+        // - 4+ interior points = Standard X-Crossing
+        // - 1 interior line + 2+ interior points = Split terminating against internal boundary
+        if (total_points >= 4 || (c.interior_line > 0 && total_points >= 2)) {
+            return ManifoldType::SPLIT_BOUNDARY_CROSSING;
+        }
+
+        // Potential AMBIGUITY 3: Internal Mesh (Tests 2 & 3)
+        // Rule: Internal meshes can be lower-dim or equidimensional, but lack junction points.
+        // - Interior line surrounded by perimeter lines (equidimensional)
+        if (c.perimeter_line >= 2 && c.interior_line > 0) {
+            return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
+        }
+        // - Split boundary tip inside the domain
+        if (c.interior_line > 0 && c.perimeter_point > 0) {
+            return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
+        }
+
+        // Potential AMBIGUITY 4: Standard Clean Split (Test 0)
+        // Rule: Exactly 2 perimeter lines, absolutely no points or other lines.
+        if (c.perimeter_line == 2 && total_points == 0 && c.interior_line == 0) {
+            return ManifoldType::SPLIT_BOUNDARY;
+        }
+
+        // special case where splitboundary terminates against end of a boundary
+        if (c.interior_point == 1 || c.perimeter_line == 2) {
+            return ManifoldType::SPLIT_BOUNDARY_END;
+        }
+
+        // Potential AMBIGUITY 5: True Stand-Alone (Test 1)
+        // Rule: Matches >=2 PERIMETER_POINTs, >=2 INTERIOR_POINTs, or isolated vertices.
+        return ManifoldType::STAND_ALONE;
+    }
+    
+    else // dim == 1
+    {
+        uint32_t total_p = c.interior_point + c.exterior_point + c.perimeter_point;
+        if (c.exterior_point > 0 ) return ManifoldType::SPLIT_BOUNDARY_END;
+        if (total_p == 2)          return ManifoldType::SPLIT_BOUNDARY;
+        return ManifoldType::STAND_ALONE;
+    }
+    
+} // end Classify
+
+
+/* version before 2/5/2025
+template<uint32_t dim>
+ManifoldType NodeManifold<dim>::Classify() const noexcept
+{
     if constexpr ( dim == 3 )
       {
         const std::size_t n = branches_.size();
@@ -376,9 +530,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             }
         }
 
-        /* ------------------------------------------------------------
-           1. Interior duplicated nodes or Split-boundary ends
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   1. Interior duplicated nodes or Split-boundary ends
+        //  ------------------------------------------------------------
         
         switch( c.total() ) {
              case 0: return ManifoldType::STAND_ALONE;
@@ -387,9 +541,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
                break;
           }
 
-        /* ------------------------------------------------------------
-           2. Split-boundary interior (most common)
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   2. Split-boundary interior (most common)
+        // ------------------------------------------------------------
 
         if (c.interior_surface == 2 &&
             c.perimeter_line == 0 &&
@@ -402,17 +556,17 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             c.perimeter_point == 0)
             return ManifoldType::SPLIT_BOUNDARY;
 
-        /* ------------------------------------------------------------
-           3. Split-boundary with internal mesh constraint
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   3. Split-boundary with internal mesh constraint
+        // ------------------------------------------------------------
 
         if (c.interior_surface >= 2 &&
-            (c.interior_line == 0 || c.interior_point == 0))
+            (c.interior_line > 0 || c.interior_point > 0))
             return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
 
-        /* ------------------------------------------------------------
-           4. Split-boundary crossings (must be on a line or a point)
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   4. Split-boundary crossings (must be on a line or a point)
+        // ------------------------------------------------------------
 
         if (c.interior_line == 4)
             return ManifoldType::SPLIT_BOUNDARY_CROSSING;
@@ -426,9 +580,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
         if (c.interior_point >= 12)
             return ManifoldType::MULTI_SB_CROSSING;
 
-        /* ------------------------------------------------------------
-           5. Split-boundary terminations
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   5. Split-boundary terminations
+        // ------------------------------------------------------------
 
         if (c.interior_surface >= 2 &&
             (c.perimeter_line > 0 || c.perimeter_point > 0))
@@ -442,13 +596,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             (c.interior_line == 0 && c.interior_point == 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
 
-        if ( c.exterior_surface == 2 &&
-            (c.interior_line == 0 && c.interior_point == 0))
-            return ManifoldType::SPLIT_BOUNDARY_END;
-
-        /* ------------------------------------------------------------
-           Fallback
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   Fallback
+        // ------------------------------------------------------------
 
         return ManifoldType::STAND_ALONE;
     }
@@ -481,9 +631,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             }
         }
 
-        /* ------------------------------------------------------------
-           1. Single interior duplicated nodes
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   1. Single interior duplicated nodes
+        // ------------------------------------------------------------
 
         switch( c.total() ) {
              case 0: return ManifoldType::STAND_ALONE;
@@ -492,25 +642,23 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
                break;
           }
 
-        /* ------------------------------------------------------------
-           2. Split-boundary interior (most common)
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   2. Split-boundary interior (most common)
+        // ------------------------------------------------------------
 
-        if ( c.interior_line == 2 &&
-             (c.perimeter_line == 0 || c.perimeter_point == 0) )
+        if ( c.interior_line == 2 && c.perimeter_line == 0 && c.perimeter_point == 0 )
             return ManifoldType::SPLIT_BOUNDARY;
 
-        /* ------------------------------------------------------------
-           3. Split-boundary with internal mesh constraint
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   3. Split-boundary with internal mesh constraint
+        // ------------------------------------------------------------
 
-        if (c.interior_line >= 2 &&
-            (c.interior_line > 0 || c.interior_point > 0))
+        if ( c.interior_line >= 2 && c.interior_point > 0 )
             return ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH;
 
-        /* ------------------------------------------------------------
-           4. Split-boundary crossings
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   4. Split-boundary crossings
+        // ------------------------------------------------------------
 
         if (c.interior_point == 4)
             return ManifoldType::SPLIT_BOUNDARY_CROSSING;
@@ -518,9 +666,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
         if (c.interior_point >= 5)
             return ManifoldType::MULTI_SB_CROSSING;
 
-        /* ------------------------------------------------------------
-           5. Split-boundary terminations
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   5. Split-boundary terminations
+        // ------------------------------------------------------------
 
         if ( c.interior_line == 0 &&
             (c.perimeter_line > 0 || c.perimeter_point > 0))
@@ -534,9 +682,9 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
             (c.interior_line == 0 || c.interior_point == 0))
             return ManifoldType::SPLIT_BOUNDARY_END;
 
-        /* ------------------------------------------------------------
-           Fallback
-           ------------------------------------------------------------ */
+        // ------------------------------------------------------------
+        //   Fallback
+        // ------------------------------------------------------------
 
         return ManifoldType::STAND_ALONE;
     }
@@ -544,7 +692,7 @@ ManifoldType NodeManifold<dim>::Classify() const noexcept
     // 1D models
      return ManifoldType::SPLIT_BOUNDARY_END;
 }
-
+*/
 
 
 

@@ -1068,8 +1068,8 @@ double boxBoundaryFluxFEM_Quadratic( const Boundary<dim>& boundary, const csmp::
               for ( uint32_t j=0U; j<dim; ++j )
                 face_normal_flux += nrml[j] * velo[j];
                // integrate flux over face
-               face_flux += face_normal_flux * (*it)->det_JINV_AtIntegrationPoint(i) * (*it)->WeightAtIntegrationPoint(i);
-               face_area += (*it)->det_JINV_AtIntegrationPoint(i) * (*it)->WeightAtIntegrationPoint(i);
+               face_flux += face_normal_flux * (*it)->det_J_AtIntegrationPoint(i) * (*it)->WeightAtIntegrationPoint(i);
+               face_area += (*it)->det_J_AtIntegrationPoint(i) * (*it)->WeightAtIntegrationPoint(i);
               // max flux
               maxflux = (maxflux < fabs(face_normal_flux)) ? fabs(face_normal_flux) : maxflux;
            }
@@ -1118,7 +1118,7 @@ double  volumeAveragedVelocity( const Model<3>& model, const std::string& flow_d
    //          {
               (*it)->PropertyValueAtIntegrationPoint( v_key, i, velocity );
               double velo_magnitude = velocity.Length();
-              double det_J((*it)->det_JINV_AtIntegrationPoint(i));
+              double det_J((*it)->det_J_AtIntegrationPoint(i));
               velo_integral   += velo_magnitude * det_J * (*it)->WeightAtIntegrationPoint(i);
               // test: error
               volume_integral += det_J * (*it)->WeightAtIntegrationPoint(i);

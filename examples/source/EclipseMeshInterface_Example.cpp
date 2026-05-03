@@ -102,7 +102,7 @@ namespace csmp {
 			//  at one of the integration points
 			bool broken_elmt(false);
 			for (uint32_t ipoint = 0U; ipoint<(*it)->IntegrationPoints(); ++ipoint)
-				if ((*it)->det_JINV_AtIntegrationPoint(ipoint) <= 0.) {
+				if ((*it)->det_J_AtIntegrationPoint(ipoint) <= 0.) {
 					broken_elmt = true;
 					break;
 				}

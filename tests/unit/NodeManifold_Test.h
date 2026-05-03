@@ -5,12 +5,15 @@
 
 namespace csmp {
 
-class NodeManifold_Test : public Test
-{
-public:
+class NodeManifold_Test : public Test {
+  public:
     virtual void run();
     
     static const bool verbose_ = true;
+    
+  private:
+    void Test_Classify2D();
+    void Test_Classify3D();
 };
 
 } // csmp

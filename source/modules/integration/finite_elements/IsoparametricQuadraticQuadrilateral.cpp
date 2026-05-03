@@ -1692,18 +1692,18 @@ IsoparametricQuadraticQuadrilateral::JacobianInverse()
 
     // the 2D case
     // compute determinant
-    double detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
+    current_detJ = JAC(0,0)*JAC(1,1) - JAC(1,0)*JAC(0,1);
 
     // inversion of J
-    double dum = JAC(0,0) / detJ;
-    JINV(0,0)  =  JAC(1,1) / detJ;
-    JINV(0,1)  = -JAC(0,1) / detJ;
-    JINV(1,0)  = -JAC(1,0) / detJ;
+    double dum =  JAC(0,0) / current_detJ;
+    JINV(0,0)  =  JAC(1,1) / current_detJ;
+    JINV(0,1)  = -JAC(0,1) / current_detJ;
+    JINV(1,0)  = -JAC(1,0) / current_detJ;
     JINV(1,1)  =  dum;
 
-    if ( detJ <= 0 ) {
+    if ( current_detJ <= 0 ) {
          std::cerr <<"\n\nIsoparametricQuadraticQuadrilateral::JacobianInverse: Erroneous determinant of Jacobian matrix: ";
-         std::cerr << detJ << std::endl;
+         std::cerr << current_detJ << std::endl;
          cerr <<"(are the nodes perhaps numbered clockwise?), node coordinate matrix:";
          this->XY.Out();
          string file_name{ parseFiniteElementType( ElementType() ) };
@@ -1715,7 +1715,7 @@ IsoparametricQuadraticQuadrilateral::JacobianInverse()
          throw std::range_error("IsoparametricQuadraticQuadrilateral::JacobianInverse");
       }
 
-    return detJ;
+    return current_detJ;
  }
 
 

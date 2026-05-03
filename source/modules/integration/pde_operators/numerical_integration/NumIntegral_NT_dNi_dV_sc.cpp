@@ -68,7 +68,7 @@ void NumIntegral_NT_dNi_dV_sc<dim,CELL>::ComputeContribution( const CELL<dim>& e
       {
          e.N_AtIntegrationPoint( i, IPOL );
          det = e.dN_AtIntegrationPoint( DN, i );
-         //det = e.det_JINV_AtIntegrationPoint( i );
+         //det = e.det_J_AtIntegrationPoint( i );
          for ( uint32_t j{0U}; j<e.Nodes(); j++ )
             for ( uint32_t k{0U}; k<e.Nodes(); k++ )
               transp_ ? TEMP(j,k) = IPOL[j] * DN(xyz_,k) : TEMP(j,k) = IPOL[k] * DN(xyz_,j);

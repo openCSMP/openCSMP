@@ -232,6 +232,7 @@ void  Node<dim>::Accept( csmp::Visitor<dim>& v )
 template<uint32_t dim>
 void  Node<dim>::Assign( set<Node<dim>*>& neighbor_nodes )
  {
+    assert( neighbor_nodes.count(this) == 0 );
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
  }
  
@@ -240,6 +241,7 @@ void  Node<dim>::Assign( set<Node<dim>*>& neighbor_nodes )
 template<uint32_t dim>
 void  Node<dim>::Assign( vector<Node<dim>*>& neighbor_nodes, bool sort_neighbors )
  {
+    assert(find(neighbor_nodes.begin(), neighbor_nodes.end(), this) == neighbor_nodes.end());
     neighbor_node_pointers_.assign( neighbor_nodes.begin(), neighbor_nodes.end() );
     if ( sort_neighbors )
       sort( neighbor_node_pointers_.begin(), neighbor_node_pointers_.end() );

@@ -98,7 +98,7 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
             for ( uint32_t i = 0; i<e.FE()->IntegrationPoints(); i++ )
               {
                 e.N_AtIntegrationPoint( i, N );
-                det = e.det_JINV_AtIntegrationPoint( i );
+                det = e.det_J_AtIntegrationPoint( i );
 
                 for ( uint32_t j = 0; j < e.Nodes(); j++ )
                   for ( uint32_t k = 0; k < e.Nodes(); k++ )

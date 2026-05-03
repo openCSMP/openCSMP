@@ -113,7 +113,7 @@ void NumIntegral_PT_lhsop_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& 
     for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
       {
          e.N_AtIntegrationPoint( i, N );
-         det = e.det_JINV_AtIntegrationPoint( i );
+         det = e.det_J_AtIntegrationPoint( i );
 
          // getting the transposed of P
          N_to_P( N, P );

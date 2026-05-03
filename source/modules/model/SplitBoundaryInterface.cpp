@@ -1668,6 +1668,8 @@ static void regionNameFromSplitBoundaryName( string& name ) {
 }
 
 
+
+
 /**
     @author E.P
     @date 07/2/2020
@@ -1683,11 +1685,123 @@ static void regionNameFromSplitBoundaryName( string& name ) {
     or
     2) Extends an already existing lower dimensional middle region of the split boundary to include any new interface objects which have the Middle_Element = nullptr.
 
-    //E.P TODO: Setting boundary flags to Elements which have faces on a boundary must be done for 3D case!
-    
-    TODO: May be do this mainly in the MeshManager using one of the methds that takes the adjacent higher-dim elements as an input
-    TODO: In this case, the input information is similar to entries of a VSet: new 'nodes', 'pelmt' and 'plist' vectors
 */
+template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
+pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
+                                                                                                      int32_t material_id )
+{
+    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+
+    if ( !ContainsSplitBoundary( split_boundary ) ) {
+        csmp_error.Note( WARNING, "SplitBoundaryInterface<dim,SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary",
+                         split_boundary, "Does not exist; nothing was done." );
+        return make_pair("no Region created",false);
+    }
+     
+    SPLITBOUNDARY_COMPLEX<dim>*     model(static_cast<SPLITBOUNDARY_COMPLEX<dim>*>(this));
+    csmp::SplitBoundary<dim>&       splitBoundary( model->SplitBoundary(split_boundary) );
+    csmp::MeshManager<dim>&         mesh( model->Mesh() );
+    const LocalVariables&           nlvars( model->Database().LocalVariablesAt( NODE ) );
+    const LocalVariables&           lvars( model->Database().LocalVariablesAt( ELEMENT ) );
+    const IntegrationPointVariables& ivars( model->Database().IntegrationPointVariablesAt( ELEMENT ) );
+     
+    // 1. Create a map to associate the original inside nodes with the newly duplicated nodes
+    // ---------------------------------------------------------------------------------------------
+    pair<vector<Node<dim>*>,size_t>  inside_nodes = splitBoundary.InsideNodes();
+     
+    // Use an unordered_map instead of overwriting the global Node::Idx()
+    std::unordered_map<const Node<dim>*, Node<dim>*> old_to_new_node_map;
+    old_to_new_node_map.reserve(inside_nodes.first.size());
+
+    // Duplicate nodes and populate the map
+    for ( auto* old_node : inside_nodes.first ) {
+        // NB: here new manifolds are generated or the new nodes are inserted into existing manifolds
+        Node<dim>* new_node = mesh.Duplicate( old_node, nlvars );
+        old_to_new_node_map[old_node] = new_node;
+    }
+      
+    // 2. Creating elements within InterFace objects with node-numbering matching the INNER parent
+    // --------------------------------------------------------------------------------------------------------------------------
+    vector<Element<dim>*> elmt_pointers; // new elements
+    elmt_pointers.reserve(splitBoundary.CellVector().size());
+
+    for ( auto& it : splitBoundary.CellVector() ) {
+        // Guard clause: Only add elements to interfaces that don't already have one
+        // (Assuming a method like HasInterveningElement() or similar exists in your API)
+        if ( it->HasInterveningElement() ) {
+            continue; 
+        }
+
+        vector<Node<dim>*>  nodes;  
+        nodes.reserve(it->FE()->Nodes());
+        
+        for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ ) {
+            const Node<dim>* target_inside_node = it->N(i, INSIDE);
+            
+            // Safely look up the new node without relying on corrupted global IDs
+            auto map_it = old_to_new_node_map.find(target_inside_node);
+            if (map_it != old_to_new_node_map.end()) {
+                nodes.push_back( map_it->second );
+            } else {
+                csmp_error.Note( FATAL_ERROR, "InsertRegionIntoSplitBoundary",
+                                 "InterFace INSIDE node not found in unique InsideNodes list!" );
+            }
+        }
+        
+        // New interior and perimeter elements get connected to their nodes and the middle element
+        elmt_pointers.push_back( mesh.AddInterveningElement( it, lvars, ivars, nodes, material_id ) );
+    } 
+       
+    // If no new elements were added (e.g., region was already fully populated), exit cleanly
+    if (elmt_pointers.empty()) {
+        return make_pair(splitBoundary.Name(), false);
+    }
+
+    // 3. Establishing neighbor connectivity among the new elements
+    // ------------------------------------------------------------
+    mesh.template BuildConnectivity<Element>( elmt_pointers.begin(), elmt_pointers.end() );
+    mesh.ConnectNodesToParentsAndNeighbors( elmt_pointers.begin(), elmt_pointers.end() );
+
+    // 4. Construct the new unique region between the interface elements in the model
+    // -----------------------------------------------------------------------------
+    string region_name = splitBoundary.Name();
+    regionNameFromSplitBoundaryName( region_name ); 
+     
+    const bool  unique_map(true);
+    model->FormRegionFrom( region_name.c_str(), elmt_pointers.begin(), elmt_pointers.end(), unique_map );
+     
+    // Grab the newly formed region to utilize its sorted perimeter nodes
+    auto& new_region = model->Region(region_name);
+
+    // 4.1 Flag the perimeter nodes of this new lower-dimensional region
+    for (auto nit = new_region.PerimeterNodesBegin(); nit != new_region.NodesEnd(); ++nit) {
+        (*nit)->AtBoundary(INTERNAL);
+        if constexpr (dim == 3) {
+            (*nit)->Attribute(PERIMETER_LINE);  // Edge of the internal surface patch
+        } else if constexpr (dim == 2) {
+            (*nit)->Attribute(PERIMETER_POINT); // Tip of the internal line polyline
+        }
+    }
+
+    // 4.2 Flag the interior nodes of this new lower-dimensional region
+    for (auto nit = new_region.NodesBegin(); nit != new_region.PerimeterNodesBegin(); ++nit) {
+        (*nit)->AtBoundary(INTERNAL);
+        if constexpr (dim == 3) {
+            (*nit)->Attribute(INTERIOR_SURFACE); // Nodes moving within the surface plane
+        } else if constexpr (dim == 2) {
+            (*nit)->Attribute(INTERIOR_LINE);    // Nodes sliding along the internal line
+        }
+    }
+
+    // Add new unique region to model region
+    model->Region("Model").Add( new_region );
+     
+    return make_pair( region_name, true );    
+} // end InsertRegionIntoSplitBoundary
+
+
+/* REPLACED Idx() based version (not reliable)
+
 template<uint32_t dim, template<uint32_t> class SPLITBOUNDARY_COMPLEX>
 pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertRegionIntoSplitBoundary( const char* split_boundary,
                                                                                                       int32_t material_id )
@@ -1762,7 +1876,7 @@ pair<string,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::InsertReg
      return make_pair( region_name, true ); 
      
  } // InsertRegionIntoSplitBoundary
- 
+ */
 
 
 

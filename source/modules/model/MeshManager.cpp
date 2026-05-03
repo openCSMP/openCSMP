@@ -3107,8 +3107,14 @@ vector<InterFace<dim>*>  MeshManager<dim>::CreateInterfacesBetweenNodeMatchingEl
           else {
                // a new manifold is created using the provided default geometric classifier
                auto nmf = node_manifold_manager_->AddManifold( nodes_, nit.first, nit.second );
+// DEBUGGING
+//if ( !( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY || (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY_END) ) {
+//   (*nmf).Out();
+//   cout <<"CreateInterfacesBetweenNodeMatchingElements: manifold classification error.\n";
+//}
                assert( (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY ||
-                       (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY_END );
+                       (*nmf).Classify() == ManifoldType::SPLIT_BOUNDARY_END ||
+                       (*nmf).Classify() == ManifoldType::STAND_ALONE );
                // and its nodes are connected to it
                nit.first->Assign( (*nmf) );
                nit.second->Assign( (*nmf) );

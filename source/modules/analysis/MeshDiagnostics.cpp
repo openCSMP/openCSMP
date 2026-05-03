@@ -321,9 +321,9 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
          const double cell_volume = it->Volume();
          it->Store( evol_key, makeScalar(ANY,cell_volume) );
          // determinant of Jacobian matrix (gets minimum value)
-         double min_determinant = it->det_JINV_AtIntegrationPoint(0U);
+         double min_determinant = it->det_J_AtIntegrationPoint(0U);
          for ( auto i{1u}; i<it->IntegrationPoints(); i++ )
-           min_determinant = min( min_determinant, it->det_JINV_AtIntegrationPoint(i) );
+           min_determinant = min( min_determinant, it->det_J_AtIntegrationPoint(i) );
          it->Store( mJac_key, makeScalar(ANY,min_determinant) );
          // aspect ratio = longest over shortest segment length
          it->Store( los_key, makeScalar(ANY, it->AspectRatio() ) );
@@ -411,9 +411,9 @@ bool MeshDiagnostics<dim>::ComputeQualityMetricsAndOutputToVTU( Model<dim>& mode
       it->Store( evol_key, makeScalar(ANY,cell_volume) );
 
       // determinant of Jacobian matrix (gets minimum value)
-      double min_determinant = it->det_JINV_AtIntegrationPoint(0U);
+      double min_determinant = it->det_J_AtIntegrationPoint(0U);
       for ( auto i{1u}; i<it->IntegrationPoints(); i++ )
-        min_determinant = min( min_determinant, it->det_JINV_AtIntegrationPoint(i) );
+        min_determinant = min( min_determinant, it->det_J_AtIntegrationPoint(i) );
       it->Store( mJac_key, makeScalar(ANY,min_determinant) );
 
       // aspect ratio = longest over shortest segment length

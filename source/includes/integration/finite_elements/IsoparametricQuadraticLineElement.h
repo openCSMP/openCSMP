@@ -27,8 +27,10 @@ public:
 
     virtual double    WeightAtIntegrationPoint( uint32_t i ) const;
     virtual void      N_AtIntegrationPoint( uint32_t IP, std::vector<double>& N );
+    
     virtual void      JacobianAtIntegrationPoint( uint32_t IP );
     virtual double    JacobianInverse(); // returns determinant J for values of previous function
+    virtual double    JacobianDeterminant() { return current_detJ; }
     
     virtual void      dN( DenseMatrix<DM_MIN>& M );
     virtual double    dN_AtNode( DenseMatrix<DM_MIN>& M, uint32_t node );

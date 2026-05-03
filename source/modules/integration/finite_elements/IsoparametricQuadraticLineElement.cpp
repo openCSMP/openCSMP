@@ -75,6 +75,7 @@ void IsoparametricQuadraticLineElement::Nr( double r, double* N ) const
 /// Cheung et al. p. 26
 void IsoparametricQuadraticLineElement::dNr( double r, std::vector<double>& dnr ) const
 {
+   assert( DNR.size() == 3 );
    double rr = 2. * r;
    dnr[0] = 0.5 * (-1. + rr);
    dnr[1] = 0.5 * ( 1. + rr);
@@ -84,6 +85,7 @@ void IsoparametricQuadraticLineElement::dNr( double r, std::vector<double>& dnr 
 
 double IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double>& DNR, uint32_t coord ) const
  {
+    assert( DNR.size() == 3 );
     assert( coord < dim );
     return DNR[0] * XY(0,coord) + DNR[1] * XY(1,coord) + DNR[2] * XY(2,coord);
  }
@@ -92,12 +94,14 @@ double IsoparametricQuadraticLineElement::JacobianFor( const std::vector<double>
 // these next 3 auxiliary methods are all used by the Volume() function
 double IsoparametricQuadraticLineElement::Jacobian1D( const std::vector<double>& DNR ) const
  {
+    assert( DNR.size() == 3 );
     return DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
  }
 
 
 double IsoparametricQuadraticLineElement::Jacobian2D( const std::vector<double>& DNR ) const
  {
+    assert( DNR.size() == 3 );
     double jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
     double jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
     
@@ -109,6 +113,7 @@ double IsoparametricQuadraticLineElement::Jacobian2D( const std::vector<double>&
 
 double IsoparametricQuadraticLineElement::Jacobian3D( const std::vector<double>& DNR ) const
  {
+    assert( DNR.size() == 3 );
     double jac_x = DNR[0] * XY(0,0) + DNR[1] * XY(1,0) + DNR[2] * XY(2,0);
     double jac_y = DNR[0] * XY(0,1) + DNR[1] * XY(1,1) + DNR[2] * XY(2,1);
     double jac_z = DNR[0] * XY(0,2) + DNR[1] * XY(1,2) + DNR[2] * XY(2,2);

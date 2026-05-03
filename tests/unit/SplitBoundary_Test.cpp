@@ -277,10 +277,10 @@ boundaryAndTopoTypeFlagsToVTU( model, model.Region("Model") );
 boundaryAndTopoTypeFlagsToVTU( model, splitbdr );
 
     int32_t material_id = 1;
-    set<string>  dimM1_regions = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id); // TODO: this adds extra node into SB!
+    set<string>  dimM1_regions = model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
     _test( model.Mesh().Elements() == n_elmts_in_model ); // back to the original number of elements
     _test( dimM1_regions.size() == 1 );
-    _test( model.Region( (*dimM1_regions.begin()) ).Nodes() == n_elmts_in_fracture+1 );
+    _test( model.Region( (*dimM1_regions.begin()) ).Cells() == n_elmts_in_fracture );
 
 // testing flags: OK
 boundaryAndTopoTypeFlagsToVTU( model, model.Region( (*dimM1_regions.begin()) ) );
@@ -306,9 +306,11 @@ boundaryAndTopoTypeFlagsToVTU( model, model.Region( (*dimM1_regions.begin()) ) )
     }
 
     return true;
-
-
 }
+
+
+
+
 
 //Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
 bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
@@ -354,13 +356,13 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     _test(area_middle == area_inside);
     _equal(area_inside, 2.12121, 0.0001); //actual area of crack not pulled apart should be 2.12121 for mesh InternalBoundary_Test & InternalBoundary_Test_quadratic
 
-    double int_inside = s_ref.SurfaceIntegral(model.Database(), "inside", INSIDE);
+    double int_inside  = s_ref.SurfaceIntegral(model.Database(), "inside", INSIDE);
     double int_outside = s_ref.SurfaceIntegral(model.Database(), "outside", OUTSIDE);
-    double int_middle = s_ref.SurfaceIntegral(model.Database(), "middle", MIDDLE);
+    double int_middle  = s_ref.SurfaceIntegral(model.Database(), "middle", MIDDLE);
 
-    _equal(     area_inside ,  int_inside,  0.0001);
-    _equal( 2.0*area_outside,  int_outside, 0.0001);
-    _equal( 3.0*area_middle ,  int_middle , 0.0001);
+    _equal(     area_inside , int_inside,  0.0001);
+    _equal( 2.0*area_outside, int_outside, 0.0001);
+    _equal(  3.0*area_middle, int_middle , 0.0001);
 
     for ( auto ifp : s_ref.CellVector() ){
       _test( ifp->UnitNormal(INSIDE)  == ifp->UnitNormal(MIDDLE)  );
@@ -381,33 +383,10 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     _test(area_middle == new_area_middle);    //not changed area of middle element
 
     return true;
-
-
 }
 
     
     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

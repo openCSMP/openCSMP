@@ -197,6 +197,85 @@ template<uint32_t mn_max>
 DenseMatrix<mn_max>  operator*( const std::vector<double>& v,
                                 const DenseMatrix<mn_max>& M );
 
+
+
+
+/**
+ * @brief Performs a rigorous geometric and structural check of the FE coordinate matrix.
+ * @param XY The coordinate matrix (assuming layout is XY(node_idx, coord_idx))
+ * @param expected_nodes The number of nodes the element expects (e.g., 3 for quadratic line)
+ * @param dim The model dimension (2 or 3)
+ */
+template<typename MatrixType>
+inline void validateCoordinateMatrix(const MatrixType& XY, uint32_t expected_nodes, uint32_t dim) {
+    const size_t rows = XY.Rows();
+    const size_t cols = XY.Cols();
+
+    // 1. Structural Check
+    if (rows < expected_nodes || cols < dim) {
+        throw std::runtime_error(std::format(
+            "Matrix dimensions invalid: found ({},{}), Expected at least ({},{})",
+            rows, cols, expected_nodes, dim));
+    }
+
+    // 2. Value Integrity Check (NaN/Inf and Total Zero)
+    double absolute_sum = 0.0;
+    for ( uint32_t i = 0; i < expected_nodes; ++i) {
+        for ( uint32_t j = 0; j < dim; ++j) {
+            double val = XY(i, j);
+            if (!std::isfinite(val)) {
+                throw std::runtime_error(std::format("Non-finite value (NaN/Inf) at Node {} Coord {}", i, j));
+            }
+            absolute_sum += std::abs(val);
+        }
+    }
+
+    if (absolute_sum < 1e-18) {
+        throw std::runtime_error("Matrix contains only zeros. CoordinateMatrix() failed to load data.");
+    }
+
+    // 3. Geometric Sanity: Collocation Check
+    // If Node 0 and Node 1 are at the same physical location, Jacobian is zero.
+    auto get_dist_sq = [&](size_t n1, size_t n2) {
+        double ds = 0.0;
+        for ( uint32_t d = 0; d < dim; ++d) {
+            double diff = XY(n1, d) - XY(n2, d);
+            ds += diff * diff;
+        }
+        return ds;
+    };
+
+    double L_sq = get_dist_sq(0, 1);
+    if (L_sq < 1e-14) {
+        throw std::runtime_error("Degenerate element: Corner nodes 0 and 1 are collocated.");
+    }
+
+    // 4. Quadratic Mid-side Check
+    if (expected_nodes == 3) {
+        double d02 = get_dist_sq(0, 2);
+        double d12 = get_dist_sq(1, 2);
+        
+        if (d02 < 1e-14 || d12 < 1e-14) {
+             throw std::runtime_error("Quadratic error: Mid-side node 2 is collocated with a corner.");
+        }
+        
+        // Rigorous B-Rep check: Is the mid-side node actually "between" the corners?
+        // This is required for a positive Jacobian.
+        // For a 1D element in 2D space, we check the dot product.
+        // Vector V01 = Node1 - Node0, Vector V02 = Node2 - Node0
+        double dot = 0.0;
+        for ( uint32_t d = 0; d < dim; ++d)
+            dot += (XY(1, d) - XY(0, d)) * (XY(2, d) - XY(0, d));
+            
+        if (dot < 0 || dot > L_sq) {
+             std::cerr << "Warning: Mid-side node is outside the segment. Jacobian will be erratic.\n";
+        }
+    }
+    
+    //std::cout << std::format("XY Matrix Valid: {} nodes, {}D space.\n", expected_nodes, dim);
+}
+
+
 } // csmp
 
 #endif

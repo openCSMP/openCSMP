@@ -88,7 +88,7 @@ void NumIntegral_NT_op_N_dS<dim>::ComputeContribution( const Face<dim>& e )
          for ( uint32_t i{0U}; i < e.FE()->IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double det(e.det_JINV_AtIntegrationPoint( i ));
+              const double det(e.det_J_AtIntegrationPoint( i ));
               // forming NT * mtrl
               NT.Resize(e.Nodes(),1U);
               if ( MathOperatorRHS<dim,Face>::MaterialOperandPlacement() == ELEMENT or

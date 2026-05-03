@@ -80,7 +80,7 @@ class FiniteElementPolicy {
     double  dN_AtIntegrationPoint( DenseMatrix<DM_MIN>&, uint32_t gp, uint32_t dof=1 ) const;
 
     /// returned is determinant of Jacobian matrix at given Gauss point
-    double  det_JINV_AtIntegrationPoint( uint32_t ipoint ) const;
+    double  det_J_AtIntegrationPoint( uint32_t ipoint ) const;
 
     /// interpolation function products matrix for analytically integrated element
     void    IntegralNN( DenseMatrix<DM_MIN>& M ) const;

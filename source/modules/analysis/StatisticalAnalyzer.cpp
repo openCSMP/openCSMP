@@ -570,7 +570,7 @@ const
             for ( uint32_t n=0; n<(*it)->IntegrationPoints(); ++n ) {
                 if ((*it)->PropertyValueAtIntegrationPoint( p_key, n) >= patm) {
                     (*it)->PropertyValueAtIntegrationPoint( prop_key, n, vc );
-                    double det_J((*it)->det_JINV_AtIntegrationPoint(n));
+                    double det_J((*it)->det_J_AtIntegrationPoint(n));
                     //total_volume += fabs( volume );
                     volume = det_J * (*it)->WeightAtIntegrationPoint(n);
                     val += vc.Length() * volume;

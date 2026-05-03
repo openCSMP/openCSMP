@@ -1,6 +1,7 @@
 #ifndef ISOPARAMETRIC_QUADRATIC_QUADRILATERAL_H
 #define ISOPARAMETRIC_QUADRATIC_QUADRILATERAL_H
 
+#include "CSMP_definitions.h"
 #include "FiniteElement.h"
 
 namespace csmp {
@@ -35,6 +36,7 @@ public:
     virtual void      N_AtBaryCenter( std::vector<double>& N );
     virtual void      JacobianAtIntegrationPoint( uint32_t ip );
     virtual double    JacobianInverse();
+    virtual double    JacobianDeterminant() { return current_detJ; }
 
     virtual double    dN_At( DenseMatrix<DM_MIN>& dn, const std::vector<double>& xyz  );
     virtual void      dN( DenseMatrix<DM_MIN>& M );
@@ -66,20 +68,20 @@ public:
     std::vector<double>   rr;
     std::vector<double>   ss;
     std::vector<double>   W;
-    DenseMatrix<DM_MIN>     NXY;
-    DenseMatrix<DM_MIN>     DN;
-    DenseMatrix<DM_MIN>     JMAT;
-    DenseMatrix<DM_MIN>     BEE;
+    DenseMatrix<DM_MIN>   NXY;
+    DenseMatrix<DM_MIN>   DN;
+    DenseMatrix<DM_MIN>   JMAT;
+    double                current_detJ = std::numeric_limits<double>::quiet_NaN();
+    DenseMatrix<DM_MIN>   BEE;
 
     std::vector<double>   RS, EFG;
-    bool                    use2Dto3Djacobi;
+    bool                  use2Dto3Djacobi;
 
     static const uint32_t parametricDimensions=2;
 
     void Dimensions( uint32_t dimensions );
 
-    double  Jacobi( const std::vector<double>& rs, std::vector<double>& EFG,
-                       DenseMatrix<DM_MIN>& J );
+    double  Jacobi( const std::vector<double>& rs, std::vector<double>& EFG, DenseMatrix<DM_MIN>& J );
 
     double  Jacobi( const std::vector<double>& rs );
 
