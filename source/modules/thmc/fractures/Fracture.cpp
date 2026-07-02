@@ -1078,103 +1078,105 @@ double Fracture<dim>::AnalyticalAperture(double t, double x){
 } //end of AnalyticalAperture()
 
 
+
 /**
  Analytical fluid pressure are the wellbore for a plane strain griffith crack propagating in an infinite elastic medium
 */
 template<uint32_t dim>
-double Fracture<dim>::AnalyticalPressure(double t, double x){
+double Fracture<dim>::AnalyticalPressure(double t, double x)
+{
+    if ( !configured_ )
+        throw csmp::Exception(ERROR,
+            "Fracture<dim>::AnalyticalPressure()",
+            "Configure Analytical Parameters first!");
 
-  if (configured_ == false)
-    throw csmp::Exception(ERROR,"Fracture<dim>::AnalyticalPressureAtWellbore()",
-                          "Configure Analytical Parameters first!");
+    assert(plane_strain_);
 
-  assert(plane_strain_ == true);    //Solutions only valid for plane strain propagating fracture
+    if ( x >= 1.0000001 * AnalyticalLength(t) )
+        throw csmp::Exception(ERROR,
+            "Fracture<dim>::AnalyticalPressure(double t, double x)",
+            "Along fracture coordinate x is greater than fracture half length!");
 
-  if ( x >= 1.0000001*AnalyticalLength(t) )
-    throw csmp::Exception(ERROR, "Fracture<dim>::AnalyticalPressure(double t, double x)",
-                          "Along fracture coordinate x is greater then fracture half length!");
+    // Convenient constants
+    const double Ep  = ym_ / (1.0 - nu_*nu_);
+    const double mup = 12.0 * mu_;
+    const double Kp  = 4.0 * std::sqrt(2.0/M_PI) * Kc_;
+    const double xi  = x / AnalyticalLength(t);
 
-  //convenient constants
-  double  Ep = ym_ / (1. - nu_*nu_);
-  double  mup = 12.0*mu_;
-  double  Kp  = 4.0*std::pow( 2.0/M_PI, 0.5) * Kc_;
+    const double Mv = DimensionlessViscosity();
+    const double Kt = DimensionlessToughness();
 
-  //scaled coordinate
-  double  xi  = x / AnalyticalLength(t);
+    // -----------------------------------------------------------------------
+    // Viscosity dominated (with finite toughness correction)
+    // -----------------------------------------------------------------------
+    if ( Mv > M_dominant || Kt < K_small )
+    {
+        const double p_star = std::pow( Ep*Ep * mup / t, 1.0/3.0 );
 
-  /// Analytical solutions based on propagation regime
-  //Viscosity Dominated Solution (finite toughness included)
-  if (DimensionlessViscosity() > M_dominant || DimensionlessToughness() < K_small  ){
+        constexpr double b01 = 0.475449, b02 = -0.061178, b03 =  0.066322;
+        constexpr double b11 = 0.170654, b12 =  0.017132, b13 = -0.039015,
+                         b14 = -0.045476;
+        // TODO: unused? - constexpr double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
 
-    //if (x != 0.0)
-    //  throw csmp::Exception(ERROR, "Fracture<dim>::AnalyticalPressure()",
-    //                        "Pressure solution implemented only with x = 0");
+        const double xi2 = xi * xi;
 
-   double p_star   = std::pow( Ep * Ep * mup / t , 1.0/3.0);
-    //double Pi_0     = 0.5469 ;      //lecampion code in wolfram alpha with x = 0
-    //double Pi_0_G   = 0.5450; //garagash approximation
+        // TODO: this code issues warnings because without library, we do not know the return type of the macros 'gsl_sf_hyperg(,,,)' etc.
+        const double PI_0 =
+              b01 * gsl_sf_hyperg_2F1(-1.0/6.0, 1.0, 0.5,  xi2)
+            + b02 * gsl_sf_hyperg_2F1(-7.0/6.0, 1.0, 0.5,  xi2)
+            + b03 * (2.0 - M_PI * std::fabs(xi));
 
-   constexpr double b01 = 0.475449, b02 = -0.061178, b03 = 0.066322;
-   constexpr double b11 = 0.170654, b12 = 0.017132,  b13 = -0.039015, b14 = -0.045476;
-   constexpr double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
+        const double PI_1 =
+              b11 * gsl_sf_hyperg_2F1( c11,      1.0, 0.5,  xi2)
+            + b12 * xi2 * gsl_sf_hyperg_2F1( c12, 1.0, 0.5, xi2)
+            + b13 * gsl_sf_hyperg_2F1( c13,      2.0, 1.5,  xi2)
+            + b14 * (2.0 - M_PI * std::fabs(xi));
 
+        const double epsi_K = 0.1076 * std::pow(Kt, 3.16796);
 
-    //std::cout << "x: " << x << "\tl: " << AnalyticalLength(t) << "\tx/l: " << xi << std::endl;
+        // Verify correction is small relative to leading term
+        if ( PI_0 <= epsi_K * PI_1 )
+            throw csmp::Exception(ERROR,
+                "Fracture<dim>::AnalyticalPressure()",
+                "Toughness correction exceeds leading term — outside valid range.");
 
-    double PI_0 = b01 * gsl_sf_hyperg_2F1(-1.0/6.0, 1.0, 0.5, xi*xi)
-                  + b02 * gsl_sf_hyperg_2F1(-7.0/6.0, 1.0, 0.5, xi*xi)
-                  + b03 * (2.0 - M_PI * std::fabs(xi) );
+        return p_star * (PI_0 + epsi_K * PI_1);
+    }
 
-    std::cout << "PI0: " <<  PI_0 << std::endl;
+    // -----------------------------------------------------------------------
+    // Toughness dominated — zero viscosity, uniform pressure
+    // -----------------------------------------------------------------------
+    if ( Kt > K_dominant )
+    {
+        const double p_star = std::pow( Kp*Kp*Kp*Kp / (Ep * Q_ * t), 1.0/3.0 );
+        constexpr double Pi_0 = 0.1830739859451904;
+        return p_star * Pi_0;
+    }
 
+    // -----------------------------------------------------------------------
+    // Small viscosity correction (Garagash 2007)
+    // -----------------------------------------------------------------------
+    if ( Mv < M_small )
+    {
+        const double p_star = std::pow( Kp*Kp*Kp*Kp / (Ep * Q_ * t), 1.0/3.0 );
+        constexpr double Pi_0 = 0.1830739859451904;
 
-    double PI_1 = b11 * gsl_sf_hyperg_2F1(c11, 1.0, 0.5, xi*xi)
-                  + b12 * xi*xi * gsl_sf_hyperg_2F1(c12, 1.0, 0.5, xi*xi)
-                  + b13 * gsl_sf_hyperg_2F1(c13, 2.0, 1.5, xi*xi)
-                  + b14 * (2.0 - M_PI * std::fabs(xi) );
+        const double delta_M = Mv / std::sqrt(1.0 + Mv / 0.0333);
+        const double Pi_1    = 1.243184205
+                             * (  1.0/24.0
+                                + std::log(4.0 * std::sqrt(1.0 - xi*xi))
+                                - 3.0*xi * std::acos(xi)
+                                  / (4.0 * std::sqrt(1.0 - xi*xi)) );
 
-    std::cout << "PI1: " <<  PI_1 << std::endl;
+        return p_star * (Pi_0 + delta_M * Pi_1);
+    }
 
-
-    double epsi_K  = 0.1076 * std::pow(DimensionlessToughness(), 3.16796 ) ;
-
-
-    //check only correction
-    assert( PI_0 > epsi_K*PI_1);
-
-    double pressure = p_star * ( PI_0 + epsi_K * PI_1);
-
-    return pressure;
-  }
-  //Small Toughness Solution
-  else if (DimensionlessToughness() < K_small   ){
-    throw csmp::Exception(ERROR,"Fracture<dim>::AnalyticalPressure()", "NEED TO DO THIS REGIME Still");
-    //IMPLEMENTED ABOVE
-  }
-  // Toughness Dominated Solution - Zero fluid viscosity and uniform fluid pressure
-  else if (DimensionlessToughness() > K_dominant){
-    double p_star   = std::pow( Kp*Kp*Kp*Kp / (Ep*Q_*t), 1.0/3.0);
-    double Pi_0     = 0.1830739859451904;                                     //uniform pressure
-
-    double pressure = p_star * Pi_0;
-    return pressure;
-  }
-  // Small Viscosity Correction
-  else if (DimensionlessViscosity() < M_small ){                                //See garagash 2007
-    double p_star   = std::pow( Kp*Kp*Kp*Kp / (Ep*Q_*t), 1.0/3.0);
-    double Pi_0     = 0.1830739859451904;                                     //uniform pressure
-    double M        = DimensionlessViscosity();
-    double delta_M  = M / std::pow( 1.0 + M/0.0333 , 0.5);
-    double Pi_1     = 1.243184205 * (1.0/24.0  + std::log(4.0*std::sqrt(1.0 - xi*xi) ) - 3.0*xi*std::acos(xi)/(4.0*std::sqrt(1.0 - xi*xi)) ) ;
-
-
-    double pressure = p_star * ( Pi_0 + delta_M * Pi_1);
-    return pressure;
-
-  } else
-    throw csmp::Exception(ERROR, "Fracture<dim>::AnalyticalPressure(double, double)", "Solution outside of asymptotic regimes!");
-
-
+    // -----------------------------------------------------------------------
+    // Outside all asymptotic regimes
+    // -----------------------------------------------------------------------
+    throw csmp::Exception(ERROR,
+        "Fracture<dim>::AnalyticalPressure(double, double)",
+        "Solution outside of asymptotic regimes!");
 }
 
 

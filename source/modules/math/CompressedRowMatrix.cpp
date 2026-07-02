@@ -171,10 +171,10 @@ CompressedRowMatrix::CompressedRowMatrix( const SparseMatrix& spmat, bool use_SA
  * exceeds the supplied tolerance, plus the diagonal (always included
  * to guarantee a valid sparsity pattern even for zero diagonal entries).
  *
- * @param dense     Row-major dense matrix, size n*n
- * @param n         Matrix dimension
+ * @param dense   Row-major dense matrix, size n*n
+ * @param n           Matrix dimension
  * @param tol       Drop tolerance for off-diagonal entries (default 0.0)
- * @return          Initialised CompressedRowMatrix
+ * @return      Initialised CompressedRowMatrix
  */
 CompressedRowMatrix makeCompressedRowMatrix( const vector<double>& dense, size_t n, double tol )
 {
@@ -194,30 +194,37 @@ CompressedRowMatrix makeCompressedRowMatrix( const vector<double>& dense, size_t
         // Always insert diagonal first (CRS convention used by this class)
         // Then insert off-diagonal non-zeros in column order
         //
-        // Pass 1: diagonal
+        // Pass 1: always insert diagonal first
         ja.push_back( static_cast<int32_t>(row) );
         a .push_back( dense[row * n + row] );
 
-        // Pass 2: off-diagonal columns, left of diagonal
-        for ( size_t col = 0; col < row; ++col )
+        // Pass 2: collect off-diagonal non-zeros into a temporary buffer
+        std::vector<std::pair<int32_t, double>> off_diag;
+        off_diag.reserve(n - 1);
+
+        for ( size_t col = 0; col < n; ++col )
         {
+            if ( col == row ) continue; // skip diagonal; already inserted
+
             const double val = dense[row * n + col];
-            if ( abs(val) > tol )
+            if ( std::abs(val) > tol )
             {
-                ja.push_back( static_cast<int32_t>(col) );
-                a .push_back( val );
+                off_diag.emplace_back( static_cast<int32_t>(col), val );
             }
         }
 
-        // Pass 3: off-diagonal columns, right of diagonal
-        for ( size_t col = row + 1; col < n; ++col )
+        // Pass 3: sort by column index ascending to satisfy At()/Assign() scan assumptions
+        std::sort( off_diag.begin(), off_diag.end(),
+                   []( const auto& lhs, const auto& rhs )
+                   {
+                       return lhs.first < rhs.first;
+                   });
+
+        // Pass 4: append sorted off-diagonal entries
+        for ( const auto& [col_idx, val] : off_diag )
         {
-            const double val = dense[row * n + col];
-            if ( abs(val) > tol )
-            {
-                ja.push_back( static_cast<int32_t>(col) );
-                a .push_back( val );
-            }
+            ja.push_back( col_idx );
+            a .push_back( val );
         }
 
         ia.push_back( static_cast<int32_t>(ja.size()) );
@@ -234,8 +241,8 @@ void CompressedRowMatrix::MultiplyEntryWith( size_t i, size_t j, double val )
   //Check if the compressed row matrix is converted into SAMG format.
   //This operation only applies to the matrix in its original form.
   assert( IsFormattedForSAMG() == false );
-  assert( i < ja.size()-1U );
-  assert( j < ja.size()-1U );
+  assert( i < Rows() );
+  assert( j < Cols() );
 
   if ( i >= Rows() ) {
     cerr <<"\nCompressedRowMatrix::MultiplyEntryWith("<< i <<","<< j <<","<< val <<"): ";
@@ -360,7 +367,7 @@ void CompressedRowMatrix::ZeroRow( size_t row )
   assert( row < Rows() );
   assert( row >= 0);
 
-  if ( row >= Rows() || row < 0) {
+  if ( row >= Rows() ) {
     cerr <<"\nCompressedRowMatrix::ZeroRow("<< row <<"): ";
     cerr <<"Row access index out of range."<< endl;
     throw range_error("CompressedRowMatrix::ZeroRow");
@@ -373,10 +380,7 @@ void CompressedRowMatrix::ZeroRow( size_t row )
     throw runtime_error("CompressedRowMatrix::ZeroRow:: Error: this operation should perform before the matrix is turned into SAMG format.");
   }
 
-  for ( auto index=ia[row]; index <ia[row+1]; index++ ) {
-    a[ static_cast<size_t>(index) ] = 0.;
-  }
-
+  for ( auto index=ia[row]; index <ia[row+1]; index++ ) a[ static_cast<size_t>(index) ] = 0.;
 }
 
 
@@ -694,10 +698,8 @@ void CompressedRowMatrix::InitializePointBasedSAMG( const SparseMatrix& A, size_
 			
 		      // inserting the diagonal elements at the beginning of each row
           const auto istart = ia[ static_cast<size_t>(i) ];
-          ja[static_cast<size_t>(istart)] = ja[ static_cast<size_t>(diag) ];
-          a[static_cast<size_t>(istart)]  = a[ static_cast<size_t>(diag) ];
-          a[static_cast<size_t>(diag)]    = a[ static_cast<size_t>(istart) ];
-          ja[static_cast<size_t>(diag)]   = ja[ static_cast<size_t>(istart) ];
+          swap( ja[static_cast<size_t>(istart)], ja[static_cast<size_t>(diag)] );
+          swap(  a[static_cast<size_t>(istart)],  a[static_cast<size_t>(diag)] );
        }
 
       if ( zero_diag_element ) {
@@ -1221,7 +1223,6 @@ void CompressedRowMatrix::Out(const string& outfile) const
     ofs.unsetf(ios::scientific);
     ofs.precision(original_precision);
     ofs << endl;
-    ofs.close();
 }
 
 } // end csmp
