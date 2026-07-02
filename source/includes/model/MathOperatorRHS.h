@@ -116,7 +116,7 @@ class MathOperatorRHS {
     bool          LumpedFormulation()           const noexcept;
     uint32_t      ApplicationCycle()            const noexcept;
     uint32_t      ApplicationCycles()           const noexcept;
-    double        MultiplyBy()                  const noexcept;
+    [[nodiscard]] double MultiplyBy()           const noexcept;
     bool          MultiplyWithTimeIncrement()   const noexcept;
     bool          DivideByTimeIncrement()       const noexcept;
 

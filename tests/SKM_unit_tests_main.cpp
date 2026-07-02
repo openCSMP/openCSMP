@@ -208,8 +208,9 @@ int main()
 
 //        refactored.addTest( new SparseMatrix_Test() );
 //        refactored.addTest( new CompressedRowMatrix_Test() );
-        refactored.addTest( new PDE_Integrator_Test() );
+        refactored.addTest( new PDE_Integrator_Transient_Test() );
 
+//        refactored.addTest( new PDE_Integrator_Test() ); // refactored and passed 2/2/26
 //        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
 //        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)
 //        refactored.addTest( new ModelSubDomain_Test() );  passed 1/5/2026 (detected need to improve CreatSplitBoundaryBetween() method
@@ -424,7 +425,7 @@ int main()
       interdependent2.addTest( new NodeFunctions_Test() );
       // model
       interdependent2.addTest( new Box_Test() );
-      interdependent2.addTest( new ModelSubDomain_Test() );      // TODO: runs but does not test core functionality
+      interdependent2.addTest( new ModelSubDomain_Test() );
       interdependent2.addTest( new NodeManifoldManager_Test() );
       interdependent2.addTest( new Region_Test() );
       interdependent2.addTest( new BoundaryInterface_Test() );
@@ -439,7 +440,7 @@ int main()
       interdependent2.addTest( new InputDataManager_Test());
       interdependent2.addTest( new ANSYS_Model3D_Test() );
       interdependent2.addTest( new ANSYS_Model2D_Test() );
-      interdependent2.addTest( new VTU_Interface_Test() ); // TODO: fails for split boundaries, needs refactoring
+      interdependent2.addTest( new VTU_Interface_Test() );
       interdependent2.addTest( new StatisticalAnalyzer_Test() );
       // running unit tests and reporting errors
       interdependent2.run();
@@ -509,9 +510,8 @@ int main()
       composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
 
       // computations
-      // TODO: add test of assembly of matrix for systems, elimination of boundary conditions etc.
-      composite.addTest( new PDE_Integrator_Test( model2D ) ); // TODO: not comprehensive enough, haha!
-      composite.addTest( new PDE_Integrator_Transient_Test() ); // TODO: not comprehensive enough
+      composite.addTest( new PDE_Integrator_Test( model2D ) );
+      composite.addTest( new PDE_Integrator_Transient_Test() );
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );

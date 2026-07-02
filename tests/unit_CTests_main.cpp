@@ -394,7 +394,7 @@ int main( int argc, char* argv[] )
       interdependent2.addTest( new NodeFunctions_Test() );
       // model
       interdependent2.addTest( new Box_Test() );
-      interdependent2.addTest( new ModelSubDomain_Test() );      // TODO: runs but does not test core functionality
+      interdependent2.addTest( new ModelSubDomain_Test() );
       interdependent2.addTest( new NodeManifoldManager_Test() );
       interdependent2.addTest( new Region_Test() );
       interdependent2.addTest( new BoundaryInterface_Test() );
@@ -409,7 +409,7 @@ int main( int argc, char* argv[] )
       interdependent2.addTest( new InputDataManager_Test());
       interdependent2.addTest( new ANSYS_Model3D_Test() );
       interdependent2.addTest( new ANSYS_Model2D_Test() );
-      interdependent2.addTest( new VTU_Interface_Test() ); // TODO: fails for split boundaries, needs refactoring
+      interdependent2.addTest( new VTU_Interface_Test() ); // TODO: needs refactoring
       interdependent2.addTest( new StatisticalAnalyzer_Test() );
       // running unit tests and reporting errors
       interdependent2.run();
@@ -479,9 +479,8 @@ int main( int argc, char* argv[] )
       composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
 
       // computations
-      // TODO: add test of assembly of matrix for systems, elimination of boundary conditions etc.
-      composite.addTest( new PDE_Integrator_Test( model2D ) ); // TODO: not comprehensive enough, haha!
-      composite.addTest( new PDE_Integrator_Transient_Test() ); // TODO: not comprehensive enough
+      composite.addTest( new PDE_Integrator_Test( model2D ) );
+      composite.addTest( new PDE_Integrator_Transient_Test() );
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );

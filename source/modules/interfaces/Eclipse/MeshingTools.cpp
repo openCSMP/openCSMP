@@ -1694,7 +1694,7 @@ bool addCellCentroid( PolygonGridManager* pgm,
         /// assign centroid as the middle point of axis
         pt  = 0.0;
         const size_t num_axis_nodes( axis.size() );
-        for( auto i = 0; i < num_axis_nodes; ++i )
+        for( size_t i = 0; i < num_axis_nodes; ++i )
             pt += axis[i];
         pt /= static_cast<double>( num_axis_nodes );
         cgn = pgm->AddNode( pt );
@@ -1772,7 +1772,7 @@ bool addCellCentroid( PolygonGridManager* pgm,
         /// assign centroid as the middle point of axis
         pt  = 0.0;
         const size_t num_axis_nodes( axis.size() );
-        for( auto i = 0; i < num_axis_nodes; ++i )
+        for( size_t i = 0; i < num_axis_nodes; ++i )
             pt += axis[i];
         pt /= static_cast<double>( num_axis_nodes );
         cgn = pgm->AddNode( pt );

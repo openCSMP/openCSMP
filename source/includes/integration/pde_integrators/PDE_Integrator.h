@@ -20,6 +20,8 @@ template<uint32_t> class SplitBoundary;
 class Solver;
 
 class PDE_Integrator_Test;
+class PDE_Integrator_Transient_Test;
+class PDE_Integrator_Computation_Test;
 
 /**
 
@@ -434,6 +436,8 @@ class PDE_Integrator {
     bool verbose_ = true;
     
     friend PDE_Integrator_Test;
+    friend PDE_Integrator_Transient_Test;
+    friend PDE_Integrator_Computation_Test;
 };
 
 

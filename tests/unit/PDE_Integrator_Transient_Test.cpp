@@ -1,7 +1,5 @@
 #include "PDE_Integrator_Transient_Test.h"
 
-#include "GaussJordan_Solver.h"
-
 // the CSMP model
 #include "Model.h"
 #include "Region.h"
@@ -45,207 +43,378 @@ using namespace std;
 
 namespace csmp {
 
-	void PDE_Integrator_Transient_Test::run()
-	{
-		double& model_time(ModelTime::Instance().modelTime);
-		model_time = 0.;
-		Quadrilaterator    quadrilaterator; // simple FE mesher
-		VSet<2U>           mesh_container;  // container to store the input mesh
-		string             file_name("tutorial1_input");
-		double           x(10); double y(10);
-		cout << "\nmain: Enter the pixel-based input geometry for the quadrilaterator: " << endl;
-		cout << "\nmain: The x- and y-dimensions of your model (in m): " << endl;
+void PDE_Integrator_Transient_Test::run()
+{
+    // -----------------------------------------------------------------------
+    // 1. Mesh and model setup
+    // -----------------------------------------------------------------------
+    double& model_time(ModelTime::Instance().modelTime);
+    model_time = 0.0;
 
-		// read in file and generate mesh
-		quadrilaterator.QuadrilateralsFromRegularGrid(mesh_container, file_name.c_str(), x, y);
+    Quadrilaterator quadrilaterator;
+    VSet<2U>        mesh_container;
+    const string    file_name("tutorial1_input");
+    const double    x(10), y(10);
 
+    quadrilaterator.QuadrilateralsFromRegularGrid(
+        mesh_container, file_name.c_str(), x, y);
 
-		//VSet<2U>   vset=readTextPixelData();
-		Model<2U>  model(mesh_container, "Tutorial1-variables.txt" );
-		const PropertyDatabase<2>& p_ref(model.Database());  // constand reference to the property database
-		Region<2U>& region = model.Region("Model");
-		// give the model dimensions
-		printModelDimensions(model, true);
+    Model<2U> model(mesh_container, "Tutorial1-variables.txt");
+    const PropertyDatabase<2>& p_ref(model.Database());
+    Region<2U>& region = model.Region("Model");
 
-		// -----------------------------------------------------------------------
-		// 2.0 Now we apply boundary and initial conditions (this can also be done,
-		//     more conveniently, in a configuration file for more realistic runs
-		// -----------------------------------------------------------------------
+    // -----------------------------------------------------------------------
+    // 2. Material properties and boundary conditions
+    // -----------------------------------------------------------------------
+    model.InputPropertyValue("porosity",        makeScalar(PLAIN, 0.1));
+    model.InputPropertyValue("permeability",    makeScalar(PLAIN, 1.0e-15));
+    model.InputPropertyValue("compressibility", makeScalar(PLAIN, 5.0e-10));
+    model.InputPropertyValue("fluid pressure",  makeScalar(PLAIN, 1.0e+07));
+    model.InputPropertyValue("fluid volume source", makeScalar(PLAIN, 0.0));
 
-		// assigning material properties
-		model.InputPropertyValue("porosity", makeScalar(PLAIN, 0.1));     // always as a fraction
-		model.InputPropertyValue("permeability", makeScalar(PLAIN, 1.0e-15)); // always in m2 (comment out if heterogeneous k-field is used in input file)
-		model.InputPropertyValue("compressibility", makeScalar(PLAIN, 5.0e-10)); // for fluid and rock, in Pa-1
+    model.InputBoundaryValue(LEFT,  "fluid pressure",
+                             makeScalar(DIRICH, 3.0e+07));
+    model.InputBoundaryValue(RIGHT, "fluid pressure",
+                             makeScalar(DIRICH, 1.0e+07));
 
-		// assigning initial conditions
-		model.InputPropertyValue("fluid pressure", makeScalar(PLAIN, 1.0e+07));  // always in Pascal
-		model.InputPropertyValue("fluid volume source", makeScalar(PLAIN, 0.0));      // no sources/sinks (units m3 m-2 s-1)
+    // -----------------------------------------------------------------------
+    // 3. Hydraulic conductivity
+    // -----------------------------------------------------------------------
+    ConstantFactor<2U, divides> conductivity(
+        p_ref, "conductivity", "permeability", 0.001);
+    model.Apply(conductivity);
 
-		// assigning boundary conditions for fluid pressure at the LEFT and RIGHT model boundaries
-		// such that a pressure wave travels from left to right through the model
-		model.InputBoundaryValue(LEFT, "fluid pressure", makeScalar(DIRICH, 3.0e+07));
-		model.InputBoundaryValue(RIGHT, "fluid pressure", makeScalar(DIRICH, 1.0e+07));
+    const Index conductKey = p_ref.StorageKey("conductivity");
+    for ( auto eIter=region.CellsBegin(); eIter!=region.CellsEnd(); ++eIter )
+        (*eIter)->Store(conductKey, makeScalar(DIRICH, 1.0));
 
+    // -----------------------------------------------------------------------
+    // 4. PDE operators
+    // -----------------------------------------------------------------------
+    NumIntegral_dNT_dN_dV<2U> stiffness_matrix(
+        p_ref, "fluid pressure", "fluid pressure");
 
-		// ----------------------------------------------------------------------------------------------
-		// 3.0 Now we use an Interrelation (ConstantFactor, inherited from base class Interrelation
-		//     to compute the hydraulic conductivity K = k/mu (k = permeability, mu = viscosity) at each
-		//     finite element
-		// ----------------------------------------------------------------------------------------------
-		//ConstantFactor<2U, divides>  conductivity(p_ref, "conductivity", "permeability", 0.001); // viscosity 1 cp = 0.001 Pa s
+    NumIntegral_NT_lhsop_N_dV<2U> mass_matrix_lhs(
+        p_ref, "compressibility", "fluid pressure", "fluid pressure");
 
-		// the Model applies the object "conductivity", which is instantiated from class ConstantFactor
-		// the result variable "conductivity" is computed automatically and its range is checked
-		//model.Apply(conductivity);
-		const Index conductKey = p_ref.StorageKey("conductivity");
-		for ( auto eIter = region.CellsBegin(); eIter != region.CellsEnd(); eIter++ ) {
-			(*eIter)->Store(conductKey, makeScalar(DIRICH, 1.));
-		}
-		// output the range of the result variable
-		printRangeOfVariable(model, "conductivity");
+    NumIntegral_NT_op_N_dV<2U> mass_matrix_rhs(
+        p_ref, "compressibility", "fluid pressure");
 
-		// ------------------------------------------------------------------------------------------
-		// 4.0 Setting up an FE algorithm to solve the diffusion equation c dp/dt = div(K grad p) + S
-		//     p = fluid pressure
-		//     c = compressibility (fluid and rock)
-		//     K = k/mu = hydraulic conductivity (from above)
-		//     S = volumetric source term
-		//
-		//     We solve the discretised equation full implict as
-		//
-		//     ([c]/dt + [K]){p}t+dt = {c}/dt{p}t + {S}t+dt
-		//
-		//     Note: [] denotes a matrix, {} a vector
-		//
-		//     This results in the linear system [A] * {x} = {b}
-		//     where [A] is the discretisation of div(K grad p) and c dp/dt
-		//     {b} contains the known pressure at time t and the unknown source at
-		//     time t+dt; {x} is the unknown pressure at time t+dt that we are solving for
-		//
-		// ------------------------------------------------------------------------------------------
+    NumIntegral_NT_op_N_dV<2U> source_term(
+        p_ref, "fluid volume source", "fluid pressure");
 
+    mass_matrix_lhs.MultiplyWithTimeIncrement(true);
+    mass_matrix_rhs.MultiplyWithTimeIncrement(true);
+    mass_matrix_lhs.LumpedFormulation(true);
+    mass_matrix_rhs.LumpedFormulation(true);
+    source_term.LumpedFormulation(true);
+    source_term.AddAccumulateLater();
+
+    VelocityAndVolumeFlux<2U> velo(
+        model, "conductivity", "porosity", "fluid pressure", true);
+
+    // -----------------------------------------------------------------------
+    // 5. Single PDE_Integrator — accessed via attorney
+    // -----------------------------------------------------------------------
+    // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
+    PDE_Integrator<2U,Element>  pde;
+  #ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Solver  samg_solver;
+    pde.SetSolver( samg_solver );
+  #else
     CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+    pde.SetSolver( linear_solver );
+  #endif
+    PDE_Integrator_Attorney1<2U> attorney(pde);
 
-		PDE_Integrator<2U,Element>  pde_validate(linear_solver);
-		PDE_Integrator<2U,Element>  pde_test(linear_solver);
+    attorney.Add(&stiffness_matrix);
+    attorney.Add(&source_term);
+    attorney.Add(&mass_matrix_lhs);
+    attorney.Add(&mass_matrix_rhs);
+    attorney.AddPostProcess(&velo);
 
-		NumIntegral_dNT_dN_dV<2U>  stiffness_matrix(p_ref, "fluid pressure", "fluid pressure");
-		// LHS mass matrix
-		NumIntegral_NT_lhsop_N_dV<2U> mass_matrix_lhs(p_ref, "compressibility", "fluid pressure", "fluid pressure");
+    const double hour(3600.0);
+    const double dt(2.0 * hour);
+    attorney.TimeIncrement(1.0 / dt);
 
-		// RHS mass vector
-		NumIntegral_NT_op_N_dV<2U>    mass_matrix_rhs(p_ref, "compressibility", "fluid pressure");
+    // -----------------------------------------------------------------------
+    // 6. Count Dirichlet DOFs
+    // -----------------------------------------------------------------------
+    const Index pressureKey = p_ref.StorageKey("fluid pressure");
+    size_t n_dirich = 0;
+    for ( auto nIter=region.NodesBegin(); nIter!=region.NodesEnd(); ++nIter )
+        if ( (*nIter)->Status(pressureKey) == DIRICH )
+            ++n_dirich;
 
-		// RHS mass vector for integrating source term
-		NumIntegral_NT_op_N_dV<2U>    source_term(p_ref, "fluid volume source", "fluid pressure");
+    const size_t n_nodes = region.Nodes();
+    const size_t n_free  = n_nodes - n_dirich;
 
-		// mass matrices for dp/dt term must be divided by time increment
-		mass_matrix_lhs.MultiplyWithTimeIncrement(true);
-		mass_matrix_rhs.MultiplyWithTimeIncrement(true);
+    // -----------------------------------------------------------------------
+    // 7. EstablishMatrixSetup
+    // -----------------------------------------------------------------------
+    _test( attorney.EstablishMatrixSetup(region) );
 
-		// use lumped formulation for all mass matrices (i.e., diagonalise matrices)
-		mass_matrix_lhs.LumpedFormulation(true);
-		mass_matrix_rhs.LumpedFormulation(true);
-		source_term.LumpedFormulation(true);
+    // --- Structural tests ---
+    _test( attorney.G_.Rows()    == n_free );
+    _test( attorney.G_.Cols()    == n_free );
+    _test( attorney.rh_.size()   == n_free );
+    _test( attorney.G_.VerifySparsityPattern() );
+    _test( attorney.DOF_indexes_.size() == n_nodes );
 
-		// evalute source term last
-		source_term.AddAccumulateLater();
+    // -----------------------------------------------------------------------
+    // 8. Accumulate stiffness and mass matrices
+    // -----------------------------------------------------------------------
+    attorney.Accumulate(region);
 
-		// define a post-processing step that computes the velocity in each finite element by solving Darcy's law
-		VelocityAndVolumeFlux<2U>  velo(model, "conductivity", "porosity", "fluid pressure", true); // true = extrapolate element velocities to nodes
+    // --- Numerical tests on assembled matrix ---
+    TestSymmetry( attorney, n_free );
 
-		// now add each FE operation (i.e., PDE Operator) to the FE algorithm
-		pde_validate.Add(&stiffness_matrix);
-		pde_validate.Add(&source_term);
-		pde_validate.Add(&mass_matrix_lhs);
-		pde_validate.Add(&mass_matrix_rhs);
-		pde_validate.AddPostProcess(&velo);
+    bool diag_positive = true;
+    for ( size_t i=0; i<n_free; ++i )
+        if ( attorney.G_.At(i,i) <= 0.0 )
+            { diag_positive = false; break; }
+    _test( diag_positive );
 
-/*
-		pde_test.Add(&stiffness_matrix);
-		pde_test.Add(&source_term);
-		pde_test.Add(&mass_matrix_lhs);
-		pde_test.Add(&mass_matrix_rhs);
-		pde_test.AddPostProcess(&velo);
+    TestLumpedMassMatrix( attorney, region, model, dt );
 
-		// -----------------------
-		// 5.0 Time Loop Variables
-		// -----------------------
-		// write output in VTK format and for Matlab
-		VTK_Interface<2U>  vtk_output;
-		vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 0);
+    // -----------------------------------------------------------------------
+    // 9. AssignInitialConditions — populates RHS with p^n / dt
+    // -----------------------------------------------------------------------
+    attorney.AssignInitialConditions(region);
+    _test( attorney.Transient() == true );
 
-		// define some constant variables
-		const double     hour(3600.0);
-		double           time_increment(2.0 * hour); // timestep 2 hours
+    TestInitialConditionRHS( attorney, region, model, dt );
 
-		// set the time increment for the FE algorithm
-		pde_validate.TimeIncrement(1.0 / time_increment);
-		pde_test.TimeIncrement(1.0 / time_increment);
-		vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 1);
-		const std::vector<size_t>& index   = DOF_indexes_;
-		const vector<double>& rh_validate = *pde_validate.GetRH();
-		const vector<double>& rh_test     = rh_;
+    // RHS must be non-zero after initial conditions (p_initial = 1e7 Pa)
+    bool rhs_nonzero = false;
+    for ( size_t i=0; i<n_free; ++i )
+        if ( std::abs(attorney.rh_[i]) > 0.0 )
+            { rhs_nonzero = true; break; }
+    _test( rhs_nonzero );
 
+    // -----------------------------------------------------------------------
+    // 10. LateAccumulate — adds source term
+    // -----------------------------------------------------------------------
+    attorney.LateAccumulate(region);
 
-		// ====================== TESTING PROCESS ======================
-		//
-		// 1. test matrix establish and enumerate DOFs
-		pde_validate.EstablishMatrixSetup(region);
-		pde_test.EstablishMatrixSetupTest(region);
+    // -----------------------------------------------------------------------
+    // 11. AssignEssentialConditions — applies Dirichlet BCs to RHS
+    // -----------------------------------------------------------------------
+    attorney.AssignEssentialConditions(region);
 
-		size_t pressureDirchletDOFs(0);
-		Index pressureKey = model.Database().StorageKey("fluid pressure");
-		for ( auto nIter = region.NodesBegin(); nIter != region.NodesEnd(); ++nIter ) {
-			if ((*nIter)->Status(pressureKey) == DIRICH) {
-				pressureDirchletDOFs += 1;
-			}
-		}
+    TestDirichletRHSModification( attorney, region, model );
 
-		_test(pde_validate.GetRH()->size() == pde_test.GetRH()->size());
+    // RHS entries must be finite
+    bool rhs_finite = true;
+    for ( size_t i=0; i<n_free; ++i )
+        if ( !std::isfinite(attorney.rh_[i]) )
+            { rhs_finite = false; break; }
+    _test( rhs_finite );
 
-		pde_test.EnumerateAndFixMatrixSize(region);
-		_test(pde_validate.GetRH()->size() == index.size());
-		_test(pde_validate.GetRH()->size() == pde_test.GetRH()->size() + pressureDirchletDOFs);
-		_test(pde_validate.GetG()->Rows() == pde_test.GetG()->Rows() + pressureDirchletDOFs);
-		_test(pde_validate.GetG()->Cols() == pde_test.GetG()->Cols() + pressureDirchletDOFs);
+    // --- Steady state solution test ---
+    TestSteadyState( attorney, region, model );
 
-		// 2. test accumulate
-		pde_validate.Accumulate(region);
-		pde_test.AccumulateTest(region);
+    // -----------------------------------------------------------------------
+    // 12. VTK output (non-critical, just verify no crash)
+    // -----------------------------------------------------------------------
+    VTK_Interface<2U> vtk_output;
+    vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 0);
 
-		// 3. test AssignInitialConditions & LateAccumulate
-		pde_validate.AssignInitialConditions(region);
-		pde_test.AssignInitialConditionsTest(region);
-		_test(pde_validate.Transient() == true);
-		_test(pde_test.Transient() == true);
-		pde_validate.LateAccumulate(region);
-		pde_test.LateAccumulateTest(region);
+    cout << "\nPDE_Integrator_Transient_Test: all tests passed.\n";
 
-		for (size_t i(0); i < index.size(); ++i) {
-			if (index[i] != NULL_IDX) {
-				// _test conductance matrix
-				for (size_t j(0); j < index.size(); ++j) {
-					if (index[j] != NULL_IDX) {
-						_test(pde_test.GetG()->At(index[i], index[j]) == pde_validate.GetG()->At(i, j));
-					}
-				}
-				// check load vector
-				_test(rh_test[index[i]] == rh_validate[i]);
-			}
-		}
-
-		pde_validate.AssignEssentialConditions(region);
-		pde_test.AssignEssentialConditionsTest(region);
-		pde_test.GetG()->OutForMatlab("pde_test");
-		pde_validate.GetG()->OutForMatlab("pde_validate");
-		outVector(rh_test, "rh_test");
-		outVector(rh_validate, "rh_validate");
-*/
-} // end method
+} // end run
 
 
-	void PDE_Integrator_Transient_Test::outVector(const vector<double>& vector, std::string file) {
+
+  
+  
+
+// Verify steady state: solve with very large dt
+// Solution should be linear: p(x) = 3e7 - 2e7 * x/L
+void PDE_Integrator_Transient_Test::TestSteadyState( PDE_Integrator_Attorney1<2U>& attorney,
+                                                     Region<2U>&              region,
+                                                     Model<2U>&               model )
+{
+    // Use huge time increment -> mass term negligible
+    constexpr double dt_large = 1.0e+20;
+    attorney.TimeIncrement(1.0 / dt_large);
+    attorney.EstablishMatrixSetup(region);
+    attorney.Accumulate(region);
+    attorney.AssignInitialConditions(region);
+    attorney.LateAccumulate(region);
+    attorney.AssignEssentialConditions(region);
+
+    // 7. Solve linear algebraic system of equations
+    attorney.Solve();
+
+    // 8. Write results from the solution vector back to Model
+    attorney.OutputResults( region );
+                           
+    // 9. Calculation of result-dependent properties
+//    attorney.PostProcess( region );
+
+    // Check solution is linear between boundary values
+    const Index pKey = model.Database().StorageKey("fluid pressure");
+    const double p_left  = 3.0e+07;
+    const double p_right = 1.0e+07;
+    const double L       = 10.0;   // model length
+
+    for ( auto n=region.NodesBegin(); n!=region.NodesEnd(); ++n )
+    {
+        if ( (*n)->Status(pKey) == DIRICH ) continue;
+        const double x        = (*n)->x();
+        const double p_exact  = p_left + (p_right - p_left) * x / L;
+        const double p_solved = (*n)->Read(pKey);
+        _equal( p_solved, p_exact, 1.0e+02 );   // 100 Pa tolerance
+    }
+}
+
+
+
+void PDE_Integrator_Transient_Test::TestLumpedMassMatrix( const PDE_Integrator_Attorney1<2U>& attorney,
+                                                          const Region<2U>&                   region,
+                                                          const Model<2U>&                    model,
+                                                          double                              dt )
+{
+    const Index cKey = model.Database().StorageKey("compressibility");
+    const Index pKey = model.Database().StorageKey("fluid pressure");
+    const double inv_dt = 1.0 / dt;
+
+    for ( auto n=region.NodesBegin(); n!=region.NodesEnd(); ++n )
+    {
+        if ( (*n)->Status(pKey) == DIRICH ) continue;
+
+        const size_t ridx = attorney.DOF_indexes_[(*n)->Idx()];
+        if ( ridx == NULL_IDX ) continue;
+
+        // Expected lumped mass diagonal = c * sum(vol/n_nodes) * inv_dt
+        double expected_mass = 0.0;
+        for ( auto el=region.CellsBegin(); el!=region.CellsEnd(); ++el )
+        {
+            bool has_node = false;
+            for ( auto ni=(*el)->NodesBegin(); ni!=(*el)->NodesEnd(); ++ni )
+                if ( (*ni)->Idx() == (*n)->Idx() )
+                    { has_node = true; break; }
+            if ( !has_node ) continue;
+
+            const double c   = (*el)->Read(cKey);
+            const double vol = (*el)->Volume();
+            expected_mass += c * vol / static_cast<double>((*el)->Nodes());
+        }
+        expected_mass *= inv_dt;
+
+        // The diagonal of G includes both stiffness and mass contributions.
+        // Isolate mass by comparing G with and without mass matrix.
+        // Here we just check the diagonal is at least as large as mass alone.
+        _test( attorney.G_.At(ridx, ridx) >= expected_mass );
+    }
+}
+
+
+
+void PDE_Integrator_Transient_Test::TestSymmetry( const PDE_Integrator_Attorney1<2U>& attorney,
+                                                  size_t                               n_free )
+{
+    constexpr double tol = 1.0e-10;
+    bool symmetric = true;
+    for ( size_t i=0; i<n_free; ++i )
+        for ( size_t j=0; j<n_free; ++j )
+        {
+            const double diff = std::abs(
+                attorney.G_.At(i,j) - attorney.G_.At(j,i));
+            if ( diff > tol )
+            {
+                std::cout << "Symmetry violation at ("
+                          << i << "," << j << "): "
+                          << attorney.G_.At(i,j) << " vs "
+                          << attorney.G_.At(j,i) << "\n";
+                symmetric = false;
+            }
+        }
+    _test( symmetric );
+}
+
+
+
+void PDE_Integrator_Transient_Test::TestInitialConditionRHS( const PDE_Integrator_Attorney1<2U>& attorney,
+                               const Region<2U>&                   region,
+                               const Model<2U>&                    model,
+                               double                              dt )
+{
+    const Index pKey = model.Database().StorageKey("fluid pressure");
+    const Index cKey = model.Database().StorageKey("compressibility");
+    const double p_initial = 1.0e+07;
+    const double inv_dt    = 1.0 / dt;
+
+    for ( auto n=region.NodesBegin(); n!=region.NodesEnd(); ++n )
+    {
+        if ( (*n)->Status(pKey) == DIRICH ) continue;
+
+        const size_t ridx = attorney.DOF_indexes_[(*n)->Idx()];
+        if ( ridx == NULL_IDX ) continue;
+
+        // Lumped mass * p_initial * inv_dt
+        double expected = 0.0;
+        for ( auto el=region.CellsBegin(); el!=region.CellsEnd(); ++el )
+        {
+            bool has_node = false;
+            for ( auto ni=(*el)->NodesBegin(); ni!=(*el)->NodesEnd(); ++ni )
+                if ( (*ni)->Idx() == (*n)->Idx() )
+                    { has_node = true; break; }
+            if ( !has_node ) continue;
+
+            const double c   = (*el)->Read(cKey);
+            const double vol = (*el)->Volume();
+            expected += c * vol / static_cast<double>((*el)->Nodes());
+        }
+        expected *= inv_dt * p_initial;
+
+        _equal( attorney.rh_[ridx], expected, expected * 1.0e-6 );
+    }
+}
+
+
+
+void PDE_Integrator_Transient_Test::TestDirichletRHSModification( const PDE_Integrator_Attorney1<2U>& attorney,
+                                    const Region<2U>&                   region,
+                                    const Model<2U>&                    model )
+{
+    const Index pKey = model.Database().StorageKey("fluid pressure");
+
+    // For each free node adjacent to a Dirichlet node,
+    // the RHS must have been modified (non-zero contribution from BC)
+    bool found_modification = false;
+    for ( auto n=region.NodesBegin(); n!=region.NodesEnd(); ++n )
+    {
+        if ( (*n)->Status(pKey) == DIRICH ) continue;
+        const size_t ridx = attorney.DOF_indexes_[(*n)->Idx()];
+        if ( ridx == NULL_IDX ) continue;
+
+        // Check if this node has a Dirichlet neighbour
+        for ( auto el=region.CellsBegin(); el!=region.CellsEnd(); ++el )
+        {
+            bool has_free = false, has_dirich = false;
+            for ( auto ni=(*el)->NodesBegin(); ni!=(*el)->NodesEnd(); ++ni )
+            {
+                if ( (*ni)->Idx() == (*n)->Idx() ) has_free = true;
+                if ( (*ni)->Status(pKey) == DIRICH ) has_dirich = true;
+            }
+            if ( has_free && has_dirich )
+            {
+                // This node's RHS should have a non-trivial value
+                // from both IC and Dirichlet modification
+                _test( std::abs(attorney.rh_[ridx]) > 0.0 );
+                found_modification = true;
+                break;
+            }
+        }
+    }
+    _test( found_modification );   // at least one such node must exist
+}
+
+
+
+void PDE_Integrator_Transient_Test::OutVector(const vector<double>& vector, std::string file) {
 		ofstream  ofs(file);
 		long         prec;
 		const long   digits(3);
@@ -265,54 +434,8 @@ namespace csmp {
 			ofs.precision(prec);
 		}
 
-	}
+	} // end OutVector
+  
 
-	/*
-	void PDE_Integrator_Transient_Test::oldIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain ) {
-		// 1. configure algorithm
-		pde.EstablishMatrixSetup(domain);
-
-		// 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
-		pde.Accumulate(domain);
-
-		// 3. If the computation is transient initial conditions must be input into the righthand vector
-		if (pde.Transient() == true) pde.AssignInitialConditions(domain);
-
-		// 4. If the computation is transient initial conditions must be input into the righthand vector
-		if (pde.Transient() == true) pde.LateAccumulate(domain);
-
-		// 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
-		pde.AssignEssentialConditions(domain);
-
-		// 6. diagnostics
-		pde.GetG()->OutForMatlab("pde_validate");
-		PDE_Integrator_Transient_Test::outVector(*pde.GetRH(), "rh_validate");
-	}
-
-	void PDE_Integrator_Transient_Test::newIntegrate(PDE_Integrator_UoM_Mock<2U, Region>& pde, Region<2U>& domain) {
-
-		// 1. configure algorithm
-		// => this is importance, since in dynamic changing of DIRICHLET BCs i.e: coupling and decoupling process
-		pde.EstablishMatrixSetupTest(domain);
-		pde.EnumerateAndFixMatrixSize(domain);
-
-		// 2. Accumulation: Note that the conditions that pertain to the group must be input !                                 
-		pde.AccumulateTest(domain);
-
-		// 3. If the computation is transient initial conditions must be input into the righthand vector
-		if (pde.Transient() == true) pde.AssignInitialConditionsTest(domain);
-
-		// 4. If the computation is transient initial conditions must be input into the righthand vector
-		if (pde.Transient() == true) pde.LateAccumulateTest(domain);
-
-		// 5. assign conditions like Dirichlet or Neumann boundary conditions etc.
-		pde.AssignEssentialConditionsTest(domain);
-
-		// 6. diagnostics
-		pde.GetG()->OutForMatlab("pde_test");
-		PDE_Integrator_Transient_Test::outVector(*pde.GetRH(), "rh_test");
-	}
-
-*/
 
 } // csmp

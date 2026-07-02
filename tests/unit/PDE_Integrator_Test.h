@@ -11,8 +11,8 @@ namespace csmp {
 template<uint32_t> class PropertyDatabase;
 
 
-/** Attorney design pattern gives access to protected / private member variables and methods of PDE_Integrator */
-/*
+/** Attorney design pattern gives access to protected / private member variables and methods of PDE_Integrator
+
 template<uint32_t dim>
 class PDE_Integrator_Attorney : public Attorney<class PDE_Integrator<dim>> {
 public:
@@ -40,6 +40,9 @@ public:
     // Expose member functions
     using TargetIntegrator::Accumulate;
     using TargetIntegrator::EstablishMatrixSetup;
+    using TargetIntegrator::EliminateEssentialConditions;
+    using TargetIntegrator::AssignEssentialConditions;
+    using TargetIntegrator::AssignInitialConditions;
 
     // Expose member variables (operators and matrices)
     using TargetIntegrator::lhs_operators_;
