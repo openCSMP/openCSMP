@@ -330,8 +330,15 @@ void SplitBoundaryInterface_Test::Test_ConversionOfNormalFault( const string& mo
   // solve a pressure equation to see whether the SplitBoundary is isolating its sides (without coupling term)
   model.InputPropertyValue( "element vector",   makeVector(ANY,ANY,ANY,1.0e-12,1e-13,1.0e-12) );
   model.InputPropertyValue( "element variable", makeScalar(ANY,0.0) );
+  model.InputPropertyValue( "nodal variable", makeScalar(ANY,0.0) );
   model.Boundary("BACK").InputPropertyValue( "nodal variable", makeScalar(DIRICH,2e7) );
   model.Boundary("FRONT").InputPropertyValue( "nodal variable", makeScalar(DIRICH,1e7) );
+  
+  if ( verbose_ ) {
+       printRangeOfVariable( model, "element vector", true );
+       printRangeOfVariable( model, "element variable", true );
+       printRangeOfVariable( model, "nodal variable", true );
+    }
   //                                                diffusivity      diffusing variable  source
   SteadyStateDiffusor<DIM> static_pressure( model, "element vector", "nodal variable", "element variable" );
   static_pressure.ComputeSteadyState( model.Region("Model"), false );

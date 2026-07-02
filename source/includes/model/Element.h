@@ -224,6 +224,9 @@ class Element final : public FiniteElementPolicy<dim, Element>,
     /// only constant iterators are provided because the user is not supposed to change the node pr neighbor connectivity (done by MeshManager); thus, nodes and element neighbors can be manipulated but not the pointers to them
     typename std::vector<csmp::Node<dim>*>::const_iterator      NodesBegin() const noexcept;
     typename std::vector<csmp::Node<dim>*>::const_iterator      NodesEnd() const noexcept;
+    
+    /// permits range loop over node pointer vector
+    std::span<Node<dim>* const> NodeSpan() const noexcept { return node_connector_; }
 
     /// assuming that the corner nodes are the first, the midside nodes the second, and the .. in the elements node set according to CSMP_FEM_conventions.pdf
     typename std::vector<csmp::Node<dim>*>::const_iterator      CornerNodesBegin() const noexcept;
@@ -245,6 +248,15 @@ class Element final : public FiniteElementPolicy<dim, Element>,
     /// on-the-fly 0..n-1 numbering stored in a mutable local variable (therefore const)
     void         Idx( size_t ) const noexcept;
     size_t       Idx() const noexcept;
+    
+    /// return a view of a node index vector
+    auto         NodeIndices() const noexcept;
+
+    /// for solution variable type in 'top_key', its offset in the global system create reduced unique elmt matrix dof vector 'eq_idx_vec' excluding Dirich constraints
+    template<class Inserter>
+    void ActiveEquationIndices( const csmp::Index& top_key,
+                                const std::vector<size_t>& DOF_indexes,
+                                size_t offset, Inserter& eq_idx_vec ) const;
 
     /// is element located at an outside or internal model boundary; if it shares a face with a boundary, this is true
     BOX_BOUNDARY AtBoundary( uint32_t boundary_face ) const;
@@ -298,6 +310,21 @@ class Element final : public FiniteElementPolicy<dim, Element>,
 /// Method that is not dependent on neighbor connectivity to return the nodes that are shared between the two elements; if these are the node-set of a shared face the returned boolean is set to true
 template<uint32_t dim>
 std::pair<std::vector<Node<dim>*>,bool>  sharedNodes( const Element<dim>* const eptr1, const Element<dim>* const eptr2 );
+
+
+// INLINE METHODS
+
+template<uint32_t dim>
+inline auto Element<dim>::NodeIndices() const noexcept
+{
+    return node_connector_
+         | std::views::transform([](const Node<dim>* n) -> size_t {
+               return n->Idx();
+           });
+}
+
+
+
 
 } // csmp
 

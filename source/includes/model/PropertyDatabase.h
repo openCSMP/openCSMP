@@ -248,7 +248,10 @@ class PropertyDatabase  {
                                double vmin=-1.0e+30 , double vmax=1.0e+30, std::string usage="???" );
                                    
    void           DeleteProperty( const char* property_name ); 
-   
+
+   /// renumbers Parameters in list
+   void   UpdateParametersAndDatabase();
+
    std::map<std::string,csmp::Parameter>::const_iterator  Begin() const;
    std::map<std::string,csmp::Parameter>::const_iterator  End() const;
 
@@ -303,8 +306,7 @@ class PropertyDatabase  {
    void   Initialize( const char* variables_file );
    void   InitializeCount();
    void   InitializeVariableTypeCount( std::map<VARIABLE_TYPE,uint32_t>& );
-   void   UpdateParametersAndDatabase();
-   size_t CountVariables(); 
+   size_t CountVariables();
    void   AttachIndices();
    void   UpdateIndexReferences();
    void   DetachIndices( std::string parameterName );

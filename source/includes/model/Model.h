@@ -10,6 +10,7 @@
 #include "RegionInterface.h"
 #include "BoundaryInterface.h"
 #include "SplitBoundaryInterface.h"
+#include "PDE_Integrator.h"
 #include "LocalVariableStorage.h"
 
 namespace csmp {
@@ -17,6 +18,7 @@ namespace csmp {
 class PropertyConstraints;
 class ModelTopology;
 class Standard_IO_Handler;
+class CompressedRowMatrix;
 template<uint32_t> class Face;
 template<uint32_t> class InterFace;
 template<uint32_t> class Element;
@@ -24,10 +26,6 @@ template<uint32_t> class VSet;
 template<uint32_t> class Interrelation;
 template<uint32_t> class Visitor;
 template<uint32_t> class FiniteVolumeStencilManager;
-template<typename> class FEM_Data;
-
-template<uint32_t,template<uint32_t> class> class PDE_Integrator;
-template<uint32_t,template<uint32_t> class> class PDE_Integrator_UoM;
 
 
 /**

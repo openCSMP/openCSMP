@@ -1,13 +1,28 @@
 #include "FiniteDifferenceGrid.h"
 #include "binaryReadWrite.h"
 #include "CSMP_highLevelUtilities.h"
-
+#include "ColorPalette.h"
 
 #ifdef CSMP_WITH_IMAGE_OUTPUT
-#include "ColorPalette.h"
-//#include </opt/homebrew/include/jpeglib.h>
-#include "jpeglib.h"
-#endif
+  #if defined(_WIN32)
+      // Windows
+      #include "jpeglib.h"
+  #elif defined(__APPLE__)
+      // macOS / XCode
+     #if defined(__x86_64__)
+      // Intel 64-bit build
+      #include "jpeglib.h"
+      #elif defined(__aarch64__) || defined(__arm64__)
+          // Apple Silicon build
+          // #include </opt/homebrew/include/jpeglib.h>
+          // TODO: temp fix for Rosetta project
+          #include "jpeglib.h"
+      #endif
+  #elif defined(__linux__)
+      // Linux
+      #include "jpeglib.h"
+  #endif
+#endif // CSMP_WITH_IMAGE_OUTPUT
 
 using namespace std;
 

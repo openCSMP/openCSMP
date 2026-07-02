@@ -499,7 +499,7 @@ vector<string> splitString( string str, char delimiter )
       
  */
 template<typename intType>
-size_t createUniqueCombinations( vector<intType>& sequence, intType samples,
+size_t createUniqueCombinations( vector<intType>& sequence, uint32_t samples,
                                  deque<vector<intType> >& combinations )
  {
     // checking the input
@@ -519,7 +519,7 @@ size_t createUniqueCombinations( vector<intType>& sequence, intType samples,
     do {
         combinations.push_back( vector<intType>{} );
         combinations.back().reserve( samples );
-        for ( intType i{0U}; i < N; ++i ) { // [0..N-1] integers
+        for ( size_t i{0U}; i < N; ++i ) { // [0..N-1] integers
              if ( bitmask[i] == 1 )
                combinations.back().push_back( sequence[i] );
           }
@@ -530,10 +530,10 @@ size_t createUniqueCombinations( vector<intType>& sequence, intType samples,
     
 } // end createUniqueCombinations
  
-template size_t createUniqueCombinations( vector<int64_t>& sequence, int64_t samples, deque<vector<int64_t> >& combinations );
 template size_t createUniqueCombinations( vector<uint32_t>&, uint32_t, deque<vector<uint32_t> >& );
-template size_t createUniqueCombinations( vector<size_t>&, size_t, deque<vector<size_t> >& );
-template size_t createUniqueCombinations( vector<int>&, int, deque<vector<int> >& );
+template size_t createUniqueCombinations( vector<size_t>&, uint32_t, deque<vector<size_t> >& );
+template size_t createUniqueCombinations( vector<int>&, uint32_t, deque<vector<int> >& );
+template size_t createUniqueCombinations( vector<int64_t>& sequence, uint32_t, deque<vector<int64_t> >& combinations );
 
 
 
@@ -541,7 +541,7 @@ template size_t createUniqueCombinations( vector<int>&, int, deque<vector<int> >
 static void test_createUniqueCombinations()
  {
    vector<int64_t>          sequence{0,123,20,43,17,5,8};
-   const int64_t            samples{2};
+   const uint32_t           samples{2};
    deque<vector<int64_t> >  combinations;
    
    size_t n_combinations = createUniqueCombinations( sequence, samples, combinations );
@@ -555,6 +555,26 @@ static void test_createUniqueCombinations()
      }
    cout << endl << endl;
  }
+ 
+ 
+ 
+#include <sys/sysctl.h>
+
+// is the executable compiled for the Rosetta X86 replacement environment on Apple Silicon
+inline bool running_under_Rosetta()
+{
+    int translated = 0;
+    size_t size = sizeof(translated);
+    if (sysctlbyname("sysctl.proc_translated",
+                     &translated,
+                     &size,
+                     nullptr,
+                     0) == 0)
+    {
+        return translated == 1;
+    }
+    return false;
+}
  
  
  

@@ -18,6 +18,8 @@ class EigenSolver : public Solver
     EigenSolver() = default;
     virtual ~EigenSolver() = default;
 
+  std::string Name() const override { return "EigenSolver"; }
+
   protected:
 
    /**
@@ -31,12 +33,12 @@ class EigenSolver : public Solver
     virtual void SolveMatrixEquation(SparseMatrix& A,
                                      std::vector<double>& b,
                                      std::vector<double>& x,
-                                     size_t no_unknowns);
+                                     size_t no_unknowns) override final;
 
     virtual void SolveMatrixEquation(CompressedRowMatrix& A,
                                      std::vector<double>& b,
                                      std::vector<double>& x,
-                                     size_t no_unknowns);
+                                     size_t no_unknowns) override final;
   };
 
 } // end namespace csmp

@@ -37,7 +37,7 @@ class NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region : public MathOperatorLHS
     void ComputeContribution( const InterFace<dim>& ) override final;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& ) override final;
+    // void AssignToGlobal( const InterFace<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& ) override final;
     
     /// adjusting the time increment in case it changes during the transient calculation
     void UpdateTimeIncrement( double dt ) { delta_t_ = dt; }

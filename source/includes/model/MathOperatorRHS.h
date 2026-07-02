@@ -18,6 +18,15 @@ template<uint32_t> class PropertyDatabase;
 /**
 @brief Base class for FE or FV integrals accumulated into righthand vector.
 
+@attention In a linear systemA x = b, every single row of that matrix A represents one equation.
+Each equation corresponds to one specific Test Function basis.
+
+Therefore, the rows are determined by the Test Operand.
+
+The columns represent the degrees of freedom (DOF) of your unknown variable 'u''.
+These correspond to the Basic (Trial) Functions.
+Therefore, the columns are determined by the Basic Operand and do not appear in the righthand side.
+
 @author S.K. Matthai
 @author Stephen G. Roberts
 @date 1999
@@ -59,70 +68,70 @@ class MathOperatorRHS {
 
     MathOperatorRHS& operator=( const MathOperatorRHS& );
 
-    virtual ~MathOperatorRHS();
+    virtual ~MathOperatorRHS() = default;
 
     /// Operand Functions
-    std::string   Name() const ;
-    void          Name( const char*, const char* topname );
-    void          Name( const char*, const char* opname, const char* topname );
+    std::string   Name() const noexcept;
+    void          Name( const char*, const char* topname ) noexcept;
+    void          Name( const char*, const char* opname, const char* topname ) noexcept;
 
     virtual void  Out() const;
 
     /// op
-    const Parameter& MaterialOperand()          const;
-    const Index&  MaterialOperandKey()          const;
-    std::string   MaterialOperandName()         const;
-    VARIABLE_TYPE MaterialOperandType()         const;
-    PLACEMENT     MaterialOperandPlacement()    const;
-    uint32_t      MaterialOperandDataDepth()    const;
+    const Parameter& MaterialOperand()          const noexcept;
+    const Index&  MaterialOperandKey()          const noexcept;
+    std::string   MaterialOperandName()         const noexcept;
+    VARIABLE_TYPE MaterialOperandType()         const noexcept;
+    PLACEMENT     MaterialOperandPlacement()    const noexcept;
+    uint32_t      MaterialOperandDataDepth()    const noexcept;
 
     /// bop
-    const Parameter& BasicOperand()             const;
-    const Index&  BasicOperandKey()             const;
-    std::string   BasicOperandName()            const;
-    VARIABLE_TYPE BasicOperandType()            const;
-    PLACEMENT     BasicOperandPlacement()       const;
-    uint32_t      BasicOperandDataDepth()       const;
-    size_t        BasicOperandOffset()          const;
-    void          BasicOperandOffset( size_t );
+    const Parameter& BasicOperand()             const noexcept;
+    const Index&  BasicOperandKey()             const noexcept;
+    std::string   BasicOperandName()            const noexcept;
+    VARIABLE_TYPE BasicOperandType()            const noexcept;
+    PLACEMENT     BasicOperandPlacement()       const noexcept;
+    uint32_t      BasicOperandDataDepth()       const noexcept;
+    size_t        BasicOperandOffset()          const noexcept;
+    void          BasicOperandOffset( size_t ) noexcept;
 
     /// top
-    const Parameter& TestOperand()              const;
-    const Index&  TestOperandKey()              const;
-    std::string   TestOperandName()             const;
-    VARIABLE_TYPE TestOperandType()             const;
-    PLACEMENT     TestOperandPlacement()        const;
-    uint32_t      TestOperandDataDepth()        const;
-    size_t        TestOperandOffset()           const;
-    void          TestOperandOffset( size_t );
+    const Parameter& TestOperand()              const noexcept;
+    const Index&  TestOperandKey()              const noexcept;
+    std::string   TestOperandName()             const noexcept;
+    VARIABLE_TYPE TestOperandType()             const noexcept;
+    PLACEMENT     TestOperandPlacement()        const noexcept;
+    uint32_t      TestOperandDataDepth()        const noexcept;
+    size_t        TestOperandOffset()           const noexcept;
+    void          TestOperandOffset( size_t ) noexcept;
 
     /// Accumulation Process Settings
 
     /// Get Flags and Properties
-    bool          Add()                         const;
-    bool          Subtract()                    const;
-    bool          AddLater()                    const;
-    bool          SubtractLater()               const;
-    bool          Multiply()                    const;
-    bool          LumpedFormulation()           const;
-    uint32_t      ApplicationCycle()            const;
-    uint32_t      ApplicationCycles()           const;
-    double        MultiplyBy()                  const;
-    bool          MultiplyWithTimeIncrement()   const;
-    bool          DivideByTimeIncrement()       const;
+    bool          Add()                         const noexcept;
+    bool          Subtract()                    const noexcept;
+    bool          AddLater()                    const noexcept;
+    bool          SubtractLater()               const noexcept;
+    bool          Multiply()                    const noexcept;
+    bool          LumpedFormulation()           const noexcept;
+    uint32_t      ApplicationCycle()            const noexcept;
+    uint32_t      ApplicationCycles()           const noexcept;
+    double        MultiplyBy()                  const noexcept;
+    bool          MultiplyWithTimeIncrement()   const noexcept;
+    bool          DivideByTimeIncrement()       const noexcept;
 
     /// Set Flags and Properties
-    void          AddAccumulate();
-    void          SubtractAccumulate();
-    void          AddAccumulateLater();
-    void          SubtractAccumulateLater();
-    void          MultiplyAccumulate();
-    void          LumpedFormulation ( bool );
-    void          ApplicationCycle  ( uint32_t );
-    void          ApplicationCycles ( uint32_t );
-    void          MultiplyBy( double integral_mult_factor );
-    void          MultiplyWithTimeIncrement( bool multiply );
-    void          DivideByTimeIncrement( bool divide );
+    void          AddAccumulate() noexcept;
+    void          SubtractAccumulate() noexcept;
+    void          AddAccumulateLater() noexcept;
+    void          SubtractAccumulateLater() noexcept;
+    void          MultiplyAccumulate() noexcept;
+    void          LumpedFormulation ( bool ) noexcept;
+    void          ApplicationCycle  ( uint32_t ) noexcept;
+    void          ApplicationCycles ( uint32_t ) noexcept;
+    void          MultiplyBy( double integral_mult_factor ) noexcept;
+    void          MultiplyWithTimeIncrement( bool multiply ) noexcept;
+    void          DivideByTimeIncrement( bool divide ) noexcept;
 
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const CELL<dim>&,
@@ -139,13 +148,13 @@ class MathOperatorRHS {
     virtual void  WriteOperands( CELL<dim>& );
 
     /// if so specified multiply with time increment
-    virtual void  MultiplyWithTimeFactor( double dt );
+    virtual void  MultiplyWithTimeFactor( double dt ) noexcept;
 
     /// assigment to the right hand side global vector (after everything was calculated )
-    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
+    void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    virtual void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
+    void  AssignToGlobal( const CELL<dim>&, std::vector<double>& rhs, const std::vector<size_t>& );
 
     virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
 
@@ -182,11 +191,8 @@ class MathOperatorRHS {
 
 };
 
-// for multi-dimensional solution variables
-//void transformNodeIndexVector( uint32_t dim, const csmp::Index&, std::vector<size_t>& );
-
 /// expands element dof vec in var1_comp0, var1_comp2... form
-void transformNodeIndexVector( const csmp::Index&, std::vector<size_t>& );
+void transformNodeIndexVector( const csmp::Index& test_function_operand_idx, std::vector<size_t>& ) noexcept;
 
 } // csmp
 

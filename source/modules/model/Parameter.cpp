@@ -31,11 +31,8 @@ Parameter::Parameter()
  }
 
   
-Parameter::~Parameter()
-  {
-  }
   
-
+/*
 Parameter::Parameter( const Parameter& p )
  :  name(p.name),
     notation(p.notation),
@@ -65,40 +62,12 @@ Parameter& Parameter::operator=( const Parameter& p )
       }
     return *this;
  }
+*/
 
 
-bool Parameter::operator==( const csmp::Parameter& p ) const
-  {
-    return ( name==p.name && min==p.min && max==p.max &&
-             notation==p.notation && unit==p.notation && usage==p.usage &&
-             explanation==p.explanation && reference==p.reference && key==p.key );
-  }
 
 
-bool Parameter::operator!=( const csmp::Parameter& p ) const
-  {
-     if ( name!=p.name ) return false;
-     if ( key!=p.key ) return false;
-     if ( min!=p.min ) return false;
-     if ( max!=p.max ) return false;
-     if ( name!=p.name ) return false;
-     if ( notation!=p.notation )  return false;
-     if ( unit!=p.unit ) return false;
-     if ( usage!=p.usage ) return false;
-     if ( explanation!=p.explanation ) return false;
-     if ( reference!=p.reference ) return false;
-     return true;
-  }
-
-
-/// comparison operator for associative STL containers, relying on a key comparison
-bool Parameter::operator<( const csmp::Parameter& p ) const
- {
-    return ( key < p.key );
- }
-
-
-void  Parameter::Range( double& vmin, double& vmax ) const
+void  Parameter::Range( double& vmin, double& vmax ) const noexcept
  {
      vmin = min;
      vmax = max;
@@ -127,8 +96,44 @@ ostream&  operator<<( ostream& stream, const Parameter& p )
     return stream;
  }
 
+
+/// comparison operator for associative STL containers, relying on name comparison (alphabetical order)
+bool Parameter::operator<( const csmp::Parameter& p ) const noexcept
+ {
+    // until 30/6/2026
+    // return ( key < p.key );
+    return name < p.name;
+ }
+
+
+// for testing whether a new parameter is unique
+bool Parameter::operator==( const csmp::Parameter& p ) const noexcept
+{
+    return ( name==p.name && min==p.min && max==p.max &&
+             notation==p.notation && unit==p.unit &&
+             usage==p.usage &&
+             explanation==p.explanation && reference==p.reference && key==p.key );
+}
+
+
+bool Parameter::operator!=( const csmp::Parameter& p ) const noexcept
+{
+    if ( name!=p.name )        return true;
+    if ( key!=p.key )          return true;
+    if ( min!=p.min )          return true;
+    if ( max!=p.max )          return true;
+    if ( notation!=p.notation ) return true;
+    if ( unit!=p.unit )        return true;
+    if ( usage!=p.usage )      return true;
+    if ( explanation!=p.explanation ) return true;
+    if ( reference!=p.reference )     return true;
+    return false;
+}
+
+
+
 /// checks whether the supplied value is in the range stored in the parameter data
-bool Parameter::IsWithinRange( double value ) const
+bool Parameter::IsWithinRange( double value ) const noexcept
  {
     if ( value > max || value < min ) return false;
     return true;

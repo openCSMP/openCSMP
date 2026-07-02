@@ -186,6 +186,9 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     typename std::vector<csmp::Node<dim>*>::const_iterator        NodesBegin() const noexcept;
     typename std::vector<csmp::Node<dim>*>::const_iterator        NodesEnd() const noexcept;
 
+    /// permits range loop over node pointer vector
+    std::span<Node<dim>* const> NodeSpan() const noexcept { return node_connector_; }
+
     typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesBegin() const noexcept;
     typename std::vector<csmp::Node<dim>*>::const_iterator        CornerNodesEnd() const noexcept;
 
@@ -212,8 +215,17 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     csmp::InterFace<dim>* const Neighbor( uint32_t ) const noexcept;
     
     /// on-the-fly 0..n-1 numbering stored in mutable local variable and used for computations in interfaces (displacement gradients etc.)
-    void           Idx( size_t ) const noexcept;
-    size_t         Idx() const noexcept;
+    void    Idx( size_t ) const noexcept;
+    size_t  Idx() const noexcept;
+
+    /// return a view of a node index vector
+    auto    NodeIndices() const noexcept;
+
+    /// for solution variable type in 'top_key', its offset in the global system create reduced unique elmt matrix dof vector 'eq_idx_vec' excluding Dirich constraints
+    template<class Inserter>
+    void ActiveEquationIndices( const csmp::Index& top_key,
+                                const std::vector<size_t>& DOF_indexes,
+                                size_t offset, Inserter& eq_idx_vec ) const;
 
     /// access the higher dimensional elements on either side of interface; @attention returns nullptr if outside is not present
     Element<dim>* const Parent( INTERFACE_SIDE ) const noexcept;
@@ -326,6 +338,17 @@ class InterFace : public FiniteElementPolicy<dim,InterFace>,
     friend class InterFace_Test; ///< friend declaration needed for the testing of private methods
 };
 
+
+// INLINE METHODS
+
+template<uint32_t dim>
+inline auto InterFace<dim>::NodeIndices() const noexcept
+{
+    return node_connector_
+         | std::views::transform([](const Node<dim>* n) -> size_t {
+               return n->Idx();
+           });
+}
 
 } // csmp
 

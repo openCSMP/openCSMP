@@ -23,7 +23,7 @@ class VectorVariable<1U> {
     const double&  operator()( uint32_t i ) const;
     double         operator[]( uint32_t i ) const;
     void           Component( uint32_t, double );
-    double         Component( uint32_t i ) const;
+    [[nodiscard]] double Component( uint32_t i ) const;
 
     VectorVariable   operator^( double val ) const;
 

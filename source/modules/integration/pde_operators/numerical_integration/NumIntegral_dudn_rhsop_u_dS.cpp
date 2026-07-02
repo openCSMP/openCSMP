@@ -241,7 +241,10 @@ for ( const auto& tc : transfer_coefficients_ ) {
      Ordering of nodes in the vectors is  inner face nodes, outer face nodes, and intervening element nodes
      
     @author SKM - modified from LKT's version that eliminates Dirichlet constraints from G
+    
+    TODO: use base class method for assignment
 */
+/*
 template<uint32_t dim>
 void NumIntegral_dudn_rhsop_u_dS<dim>::AssignToGlobal( const InterFace<dim>& iface,
                                                        vector<double>& rhs,
@@ -293,7 +296,7 @@ void NumIntegral_dudn_rhsop_u_dS<dim>::AssignToGlobal( const InterFace<dim>& ifa
                               "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (InterFace)
-
+*/
 
 // FOR DEBUGGING
 //cout <<"\nNumIntegral_dudn_rhsop_u_dS: on InterFace "<< e.Idx() << endl;

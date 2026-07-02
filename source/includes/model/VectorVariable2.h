@@ -23,7 +23,7 @@ class VectorVariable<2U> {
     const double&  operator()( uint32_t i ) const noexcept;
     double         operator[]( uint32_t i ) const noexcept;
     void           Component( uint32_t, double ) noexcept;
-    double         Component( uint32_t i ) const noexcept;
+    [[nodiscard]] double Component( uint32_t i ) const noexcept;
 
     VectorVariable   operator^( double val ) const noexcept;
 

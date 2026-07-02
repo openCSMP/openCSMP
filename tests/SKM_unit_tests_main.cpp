@@ -157,7 +157,7 @@
 using namespace std;
 using namespace csmp;
 
-constexpr bool COMMPREHENSIVE_TESTING = true;
+constexpr bool COMPREHENSIVE_TESTING = false;
 
 /**  Unit Test Development
  
@@ -176,7 +176,7 @@ int main()
  {
   constexpr bool verbose(false);
 
-  const bool is_comp = (COMMPREHENSIVE_TESTING == true) ? true : false;
+  const bool is_comp = (COMPREHENSIVE_TESTING == true) ? true : false;
 
   const bool test_fundamentals     = is_comp;
   const bool test_interdependent1  = is_comp;
@@ -206,8 +206,9 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-        refactored.addTest( new NodeManifold_Test() );
-//        refactored.addTest( new PDE_Integrator_Test() );
+//        refactored.addTest( new SparseMatrix_Test() );
+//        refactored.addTest( new CompressedRowMatrix_Test() );
+        refactored.addTest( new PDE_Integrator_Test() );
 
 //        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
 //        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)

@@ -15,11 +15,13 @@ public:
     explicit Gauss_Solver( Gauss_SolverSettings& settings );
     Gauss_Solver();
     virtual ~Gauss_Solver();
+    std::string Name() const override { return "Gauss_Solver"; }
+
 protected:
     virtual void SolveWithMeschach( csmp::SparseMatrix& A,
                                     std::vector<double>& b,
                                     std::vector<double>& x,
-                                    double solver_tolerance );
+                                    double solver_tolerance ) override final;
 private:
     Gauss_SolverSettings settings;
     double pivot_factor;

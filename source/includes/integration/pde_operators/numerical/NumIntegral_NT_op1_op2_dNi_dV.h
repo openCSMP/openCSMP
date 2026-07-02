@@ -30,7 +30,7 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim,CELL> {
 
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    void MultiplyWithTimeFactor( double dt ) override final;
+    void MultiplyWithTimeFactor( double dt ) noexcept override final;
   
   private:
     std::vector<double>           IPOL;

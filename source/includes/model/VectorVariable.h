@@ -99,7 +99,7 @@ class VectorVariable<3U> {
     const double&  operator()( uint32_t ) const noexcept;
     double         operator[]( uint32_t ) const noexcept;
     void           Component( uint32_t, double ) noexcept;
-    double         Component( uint32_t ) const noexcept;
+    [[nodiscard]] double Component( uint32_t ) const noexcept;
     
     // assigments
     VectorVariable&  operator=( double ) noexcept;

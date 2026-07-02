@@ -185,7 +185,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
          const double volume(e.Volume());
          // setting C to 1 and its diagonal to 2
          MathOperatorLHS<dim,CELL>::LHS = volume / 12.;
-         for ( auto f{0U}; f<(e.Nodes()*dim); f++ )
+         for ( uint32_t f{0U}; f<(e.Nodes()*dim); f++ )
            MathOperatorLHS<dim,CELL>::LHS(f,f) = volume / 6.;
       
          e.dN( B );
@@ -211,7 +211,7 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     // matrices to element - contribution matrix
     MathOperatorLHS<dim,CELL>::LHS.Zero();
 
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // the material property matrix is constructed at each integration point
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {

@@ -12,6 +12,7 @@ template<uint32_t> class PropertyDatabase;
 
 
 /** Attorney design pattern gives access to protected / private member variables and methods of PDE_Integrator */
+/*
 template<uint32_t dim>
 class PDE_Integrator_Attorney : public Attorney<class PDE_Integrator<dim>> {
 public:
@@ -23,7 +24,29 @@ public:
     using PDE_Integrator<dim>::G_;
     using PDE_Integrator<dim>::rh_;
 };
+*/
 
+template<uint32_t dim,
+         template<uint32_t> class CELLTYPE = Element, 
+         class MATRIXTYPE = CompressedRowMatrix>
+class PDE_Integrator_Attorney : public Attorney<PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>> {
+    
+    // Convenience alias to avoid repeating long template signatures
+    using TargetIntegrator = PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>;
+
+public:
+    using Attorney<TargetIntegrator>::Attorney; // Inherit Attorney constructor
+
+    // Expose member functions
+    using TargetIntegrator::Accumulate;
+    using TargetIntegrator::EstablishMatrixSetup;
+
+    // Expose member variables (operators and matrices)
+    using TargetIntegrator::lhs_operators_;
+    using TargetIntegrator::rhs_operators_;
+    using TargetIntegrator::G_;
+    using TargetIntegrator::rh_;
+};
 
 
 /** LHS operator that puts fixed values in the matrix */
@@ -32,7 +55,8 @@ class LHS_FixedValueMatrix : public MathOperatorLHS<dim> {
   public:
     LHS_FixedValueMatrix( const PropertyDatabase<dim>& p, const char* oper, const char* basic, const char* test, double value )
       : MathOperatorLHS<dim>(p,oper,basic,test), value_label_for_matrix_entry_{value} {
-         MathOperatorLHS<dim>::Name( "LHS_FixedValueMatrix", oper, basic, test );
+          MathOperatorLHS<dim>::Name( "LHS_FixedValueMatrix", oper, basic, test );
+          MathOperatorLHS<dim>::MultiplyBy(value); // sets factor_ for retrieval by MultiplyBy
     }
     virtual ~LHS_FixedValueMatrix() {}
     // use method of base class: virtual void GetOperands( const CELL& );
@@ -50,7 +74,8 @@ class RHS_FixedValueMatrix : public MathOperatorRHS<dim> {
   public:
     RHS_FixedValueMatrix( const PropertyDatabase<dim>& p, const char* oper, const char* test, double value )
      : MathOperatorRHS<dim>(p,oper,test), value_label_for_vector_entry_{value} {
-         MathOperatorRHS<dim>::Name( "RHS_FixedValueMatrix", test );
+          MathOperatorRHS<dim>::Name( "RHS_FixedValueMatrix", test );
+          MathOperatorRHS<dim>::MultiplyBy(value); // for retrieval
     }
     virtual ~RHS_FixedValueMatrix() {}
     virtual void ComputeContribution( const CELL& );
@@ -85,7 +110,7 @@ class PDE_Integrator_Test : public Test {
     void run();
 
   private:
-    const static bool verbose_ = true;
+    const static bool verbose_ = false;
 
   private:
     Model<2U>* model_{nullptr}; // any dimension is fully sufficient
@@ -100,28 +125,80 @@ class PDE_Integrator_Test : public Test {
     
     // SKM test development
     void TestAssemblyTwoScalarVariablesNoDirichlet( bool debug );
+    void TestAssemblyTwoScalarVariablesDirichlet( bool debug );
+    
     void TestAssemblyScalarAndVectorVariableNoDirichlet( bool debug );
+    void TestAssemblyScalarAndVectorVariableDirichlet( bool debug );
+    
+    /// Biot-type poromechanics (u,p) - same TINY 2D model with 2 triangles and 1 quadrilateral
+    void TestBlockStructuredCoupledFEM_AssemblyWithDirichletElimination( bool debug );
+    
+    /// Test dataset for model TINY
+    void GenerateTinyPoromechanicsTestSystem( CompressedRowMatrix& A_reduced, std::vector<double>& b_reduced );
+    void PrintTinyTestSystem( const CompressedRowMatrix& A_reduced, const std::vector<double>& b_reduced );
     
     // remaining methods from Luat
-    void Reset();
+    void ResetModelProperties();
     void TestSingleVariable() {}       // TODO: reinstate method
     void TestTwoScalarVariables() {}   // TODO: reinstate method
     void TestOutputSingleVariable() {} // TODO: reinstate method
     
     /// testing accumulation inside of the PDE_Integrator
-    template<uint32_t dim>
-    void TestMatrix( const PDE_Integrator_Attorney<dim>&, const MeshManager<dim>&,
-                     const std::set<BOX_BOUNDARY>& dirich, const VARIABLE_TYPE variable_type );
-                     
-    template<uint32_t dim>
-    void TestRHSVector( const PDE_Integrator_Attorney<dim>&,
-                        const MeshManager<dim>&,
-                        const double val,
-                        const std::set<BOX_BOUNDARY>& dirich, ///< account for eliminated degrees of freedom
-                        const VARIABLE_TYPE variable_type );
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestMatrix(const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                    const MeshManager<dim>& mesh,
+                    const std::set<BOX_BOUNDARY>& dirich,
+                    const VARIABLE_TYPE variable_type);
+    
+    /// for fixed 'val' material operators
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestRHSVector(const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                       const MeshManager<dim>& mesh,
+                       const double val,
+                       const std::set<BOX_BOUNDARY>& dirich );
 
-  };
+    /// for fixed material operators read from model using 'material operand'
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestRHSVector(const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                       const MeshManager<dim>& mesh );
 
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestMultiVariableMatrix( const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                                  const MeshManager<dim>& mesh,
+                                  const std::vector<size_t>& DOF_indexes );
+
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestMultiVariableRHSVector( const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                                     const std::map<Parameter, size_t>& test_operands,
+                                     const std::vector<size_t>& DOF_indexes,
+                                     const ModelSubDomain<dim, CELLTYPE>& );
+    template<uint32_t dim,
+             template<uint32_t> class CELLTYPE = Element,
+             class MATRIXTYPE = CompressedRowMatrix>
+    void TestPivotVector( const PDE_Integrator_Attorney<dim, CELLTYPE, MATRIXTYPE>& attorney,
+                          const MeshManager<dim>& mesh,
+                          const double mat_val,
+                          const double dirich_val,
+                          const std::set<BOX_BOUNDARY>& dirich,
+                          const VARIABLE_TYPE variable_typev );
+                       
+    /// Test whether the matrix is symmetric and likely to be positive definite (SPD)
+    void TestMatrixIsSPD( const CompressedRowMatrix& );
+    void TestMatrixIsSPD( const SparseMatrix& );
+
+ };
+     
+ 
 } // end namespace csmp
 
 

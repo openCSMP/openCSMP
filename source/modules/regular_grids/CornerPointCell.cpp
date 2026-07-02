@@ -925,7 +925,7 @@ void CornerPointCell::AddWell( std::map<std::set<size_t>,GridNode*>& additional_
         org_gn = this->GetPolygonFaceNode(well_face_org_,0);
 
 // SKM FIX:    if( ( cgn_idx != NULL_IDX ) && ( cgn_idx != org_gn->GetIdx() ) )
-    if( ( cgn_idx != UINT_MAX ) && ( cgn_idx != org_gn->GetIdx() ) )
+    if( ( cgn_idx != NULL_IDX32U ) && ( cgn_idx != org_gn->GetIdx() ) )
         addBarCell( wells_, org_gn, cgn );
 
     GridNode* dst_gn;

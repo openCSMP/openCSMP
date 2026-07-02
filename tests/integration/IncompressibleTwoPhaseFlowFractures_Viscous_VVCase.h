@@ -3,6 +3,7 @@
 
 #include "Test.h"
 #include "Index.h"
+#include "PDE_Integrator.h"
 
 namespace csmp {
 
@@ -10,7 +11,6 @@ template<uint32_t> class Model;
 template<uint32_t> class Element;
 template<uint32_t> class NodeCenteredFiniteVolumeTransport;
 template<uint32_t> class TwoPhaseModel;
-template<uint32_t,template<uint32_t> class> class PDE_Integrator;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 class SAMG_Settings;

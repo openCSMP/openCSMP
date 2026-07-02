@@ -7,6 +7,10 @@ using namespace std;
 
 namespace csmp {
 
+/**
+      To consider body forces
+      Gravity vector must be a vector property (involving g and density of rock)
+ */
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_PT_op_dV<dim,CELL>::NumIntegral_PT_op_dV( const PropertyDatabase<dim>& pref,
                                                       const char* oper, const char* test )
@@ -50,7 +54,7 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 
    BFORCE.resize( e.Nodes() * dim );
 
-   // reading the nodal "body" forces
+   // reading "body" forces from the Nodes
    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE )
      {
         vector<VectorVariable<dim> >  forces;
@@ -125,13 +129,13 @@ void NumIntegral_PT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
       {
          // watch out, this is not generic but restricted to 6-noded triangle in 2D
          const double volume_div_n(e.Volume() / static_cast<double>(e.FE()->MidSideNodes()));
-         for ( auto i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ ) 
+         for ( uint32_t i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ )
            MathOperatorRHS<dim,CELL>::RHS[i] = BFORCE[i] * volume_div_n;
      }
    else
      {
          const double volume_div_n(e.Volume() / static_cast<double>(e.Nodes()));
-         for ( auto i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ ) 
+         for ( uint32_t i{0U}; i<MathOperatorRHS<dim,CELL>::RHS.size(); i++ ) 
            MathOperatorRHS<dim,CELL>::RHS[i] = BFORCE[i] * volume_div_n;
      }
     

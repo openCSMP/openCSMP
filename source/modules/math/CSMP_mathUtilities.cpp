@@ -520,6 +520,31 @@ double secant_line( double x1, double xmin, double xmax, double (*function)( dou
 
 
 
+/**
+@addtogroup CSMPglobalFunctions
+@{
+*/
+
+void print( vector<pair<pair<uint32_t,uint32_t>,vector<bool> > >&  v )
+ {
+       cout <<"\nvector of off-diagonal elements:\n";
+       uint32_t n(0);
+       
+         for (auto it=v.begin(); it != v.end(); it++ )
+            {
+                 cout <<"\nBlock "<< n++ <<" range: "<< (*it).first.first <<" - "<< (*it).first.second << endl;
+                 cout <<"boolean vector (size="<< (*it).second.size() <<"):\n";
+                 for ( auto i=(*it).second.begin(); i!=(*it).second.end(); i++ )
+                   if ( *i ) cout <<" true  ";
+                   else  cout <<"false ";
+                   
+                cout << endl << endl;
+            }
+  }
+/**
+@}
+*/
+
 
 
 } // csmp

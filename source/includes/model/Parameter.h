@@ -25,27 +25,24 @@ namespace csmp {
 */
 struct Parameter {
     Parameter();
-    Parameter( const Parameter& );
-    ~Parameter();
-    Parameter& operator=( const Parameter& );
   
-    /// comparitor (to verify uniqueness of a new parameter definition
-    bool    operator==( const csmp::Parameter& ) const;
-    bool    operator!=( const csmp::Parameter& ) const;
+    /// comparitor to verify uniqueness of a new parameter definition
+    bool    operator==( const csmp::Parameter& ) const noexcept;
+    bool    operator!=( const csmp::Parameter& ) const noexcept;
   
     /// less-than operator so that Parameters can be stored in STL associative containers
-    bool    operator<( const csmp::Parameter& ) const;
+    bool    operator<( const csmp::Parameter& ) const noexcept;
 
     /// define a physical variable at runtime, using console input (stdin)
     void    DefineFromStdin();
   
     /// checks whether the supplied value lies within min/max defined for this parameter
-    bool    IsWithinRange( double ) const;
+    bool    IsWithinRange( double ) const noexcept;
   
     /// expected range of this parameter in the specific simulation
-    void    Range( double& vmin, double& vmax ) const;
-    double  MinValue() const { return min; }
-    double  MaxValue() const { return max; }
+    void    Range( double& vmin, double& vmax ) const noexcept;
+    double  MinValue() const  noexcept { return min; }
+    double  MaxValue() const  noexcept { return max; }
   
     /// prints parameter record to screen
     void    Out() const;

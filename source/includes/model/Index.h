@@ -106,10 +106,10 @@ struct Index {
     Index&  operator=( const csmp::Index& );
     Index&  operator=( csmp::Index&& );
 
-    bool    operator==( const csmp::Index& ) const;
-    bool    operator!=( const csmp::Index& ) const;
-    bool    operator<( const csmp::Index& ) const; 
-    bool    IsDefined() const;
+    bool    operator==( const csmp::Index& ) const noexcept;
+    bool    operator!=( const csmp::Index& ) const noexcept;
+    bool    operator<( const csmp::Index& ) const noexcept;
+    bool    IsDefined() const noexcept;
 
     void Attach( IndexTracker* indexTracker );
     void Detach();

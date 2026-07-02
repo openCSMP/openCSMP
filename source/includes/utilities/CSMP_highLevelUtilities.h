@@ -106,7 +106,7 @@ size_t removeVectorElements( std::vector<T>& toRemoveFrom, std::vector<T>& toRem
 
 /// find all possible combinations of the numbers provided in 'sequence', where 'samples' specified how many numbers shall be combined; combinations are returned into deque.
 template<typename intType>
-size_t createUniqueCombinations( std::vector<intType>& sequence, intType samples,
+size_t createUniqueCombinations( std::vector<intType>& sequence, uint32_t samples,
                                  std::deque<std::vector<intType> >& combinations );
 
 

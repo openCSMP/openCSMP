@@ -168,6 +168,8 @@ class DuneISTL_Solver : public Solver
             delete settings_;
     }
 
+   std::string Name() const override { return "DuneSTL_Solver"; }
+
     DuneISTL_Solver& operator=(const DuneISTL_Solver& solver)
     {
         if( this != &solver )

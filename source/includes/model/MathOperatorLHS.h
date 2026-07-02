@@ -5,7 +5,6 @@
 #include "DenseMatrix.h"
 #include "SparseMatrix.h"
 #include "CompressedRowMatrix.h"
-//#include "CompressedSparseRowMatrix.h"
 
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -21,6 +20,15 @@ template<uint32_t> class PropertyDatabase;
 
 /**
 @brief Base class for FE or FVM integrals for the lefthandside (matrix).
+
+@attention In a linear system A x = b, every single row of that matrix A represents one equation.
+Each equation corresponds to one specific Test Function basis.
+
+Therefore, the rows are determined by the Test Operand.
+
+The columns represent the degrees of freedom (DOF) of the unknown variable 'u''.
+These correspond to the Basic (Trial) Functions.
+Therefore, the columns are determined by the Basic Operand.
  
 @author S.K. Matthai
 @author Stephen G. Roberts
@@ -49,69 +57,70 @@ class MathOperatorLHS {
     
     MathOperatorLHS& operator=( const MathOperatorLHS& );
     
-    virtual ~MathOperatorLHS();
+    virtual ~MathOperatorLHS() = default;
     
 
     /// Operand Functions
 
-    std::string   Name() const;
-    void          Name( const char* mathoperator_name, const char* bopname, const char* topname );
-    void          Name( const char* mathoperator_name, const char* opname,  const char* bopname, const char* topname );
+    std::string   Name() const noexcept;
+    void          Name( const char* mathoperator_name, const char* bopname, const char* topname ) noexcept;
+    void          Name( const char* mathoperator_name, const char* opname,  const char* bopname, const char* topname ) noexcept;
 
     virtual void  Out() const;
 
-    const Parameter& MaterialOperand()          const;
-    const Index&  MaterialOperandKey()          const;
-    std::string   MaterialOperandName()         const;
-    VARIABLE_TYPE MaterialOperandType()         const;
-    PLACEMENT     MaterialOperandPlacement()    const;
-    uint32_t      MaterialOperandDataDepth()    const;
+    const Parameter& MaterialOperand()          const noexcept;
+    const Index&  MaterialOperandKey()          const noexcept;
+    std::string   MaterialOperandName()         const noexcept;
+    VARIABLE_TYPE MaterialOperandType()         const noexcept;
+    PLACEMENT     MaterialOperandPlacement()    const noexcept;
+    uint32_t      MaterialOperandDataDepth()    const noexcept;
 
-    const Parameter& BasicOperand()             const;
-    const Index&  BasicOperandKey()             const;
-    std::string   BasicOperandName()            const;
-    VARIABLE_TYPE BasicOperandType()            const;
-    PLACEMENT     BasicOperandPlacement()       const;
-    uint32_t      BasicOperandDataDepth()       const;
-    size_t        BasicOperandOffset()          const;
-    void          BasicOperandOffset( size_t );
+    const Parameter& BasicOperand()             const noexcept;
+    const Index&  BasicOperandKey()             const noexcept;
+    std::string   BasicOperandName()            const noexcept;
+    VARIABLE_TYPE BasicOperandType()            const noexcept;
+    PLACEMENT     BasicOperandPlacement()       const noexcept;
+    uint32_t      BasicOperandDataDepth()       const noexcept;
+    size_t        BasicOperandOffset()          const noexcept;
+    void          BasicOperandOffset( size_t ) noexcept;
 
-    const Parameter& TestOperand()              const;
-    const Index&  TestOperandKey()              const;
-    std::string   TestOperandName()             const;
-    VARIABLE_TYPE TestOperandType()             const;
-    PLACEMENT     TestOperandPlacement()        const;
-    uint32_t      TestOperandDataDepth()        const;
-    size_t        TestOperandOffset()           const;
-    void          TestOperandOffset( size_t );
+    const Parameter& TestOperand()              const noexcept;
+    const Index&  TestOperandKey()              const noexcept;
+    std::string   TestOperandName()             const noexcept;
+    VARIABLE_TYPE TestOperandType()             const noexcept;
+    PLACEMENT     TestOperandPlacement()        const noexcept;
+    uint32_t      TestOperandDataDepth()        const noexcept;
+    size_t        TestOperandOffset()           const noexcept;
+    void          TestOperandOffset( size_t ) noexcept;
 
     /// Accumulation Process Settings
 
     /// Get flags and properties
-    bool          Add()                         const;
-    bool          Subtract()                    const;
-    bool          AddLater()                    const;
-    bool          SubtractLater()               const;
-    bool          Multiply()                    const;
-    bool          LumpedFormulation()           const;
-    uint32_t      ApplicationCycle()            const;
-    uint32_t      ApplicationCycles()           const;
-    double        MultiplyBy()                  const;
-    bool          MultiplyWithTimeIncrement()   const;
-    bool          DivideByTimeIncrement()       const;
+    bool          Add()                         const noexcept;
+    bool          Subtract()                    const noexcept;
+    bool          AddLater()                    const noexcept;
+    bool          SubtractLater()               const noexcept;
+    bool          Multiply()                    const noexcept;
+    bool          LumpedFormulation()           const noexcept;
+    uint32_t      ApplicationCycle()            const noexcept;
+    uint32_t      ApplicationCycles()           const noexcept;
+    /// returns 'factor_' used for time multiplication
+    [[nodiscard]] double MultiplyBy()           const noexcept;
+    bool          MultiplyWithTimeIncrement()   const noexcept;
+    bool          DivideByTimeIncrement()       const noexcept;
 
     /// Set flags and properties
-    void          AddAccumulate();
-    void          SubtractAccumulate();
-    void          AddAccumulateLater();
-    void          SubtractAccumulateLater();
-    void          MultiplyAccumulate();
-    void          LumpedFormulation ( bool );
-    void          ApplicationCycle  ( uint32_t );
-    void          ApplicationCycles ( uint32_t );
-    void          MultiplyBy( double factor );
-    void          MultiplyWithTimeIncrement( bool multiply );
-    void          DivideByTimeIncrement( bool divide );
+    void          AddAccumulate() noexcept;
+    void          SubtractAccumulate() noexcept;
+    void          AddAccumulateLater() noexcept;
+    void          SubtractAccumulateLater() noexcept;
+    void          MultiplyAccumulate() noexcept;
+    void          LumpedFormulation ( bool ) noexcept;
+    void          ApplicationCycle  ( uint32_t ) noexcept;
+    void          ApplicationCycles ( uint32_t ) noexcept;
+    void          MultiplyBy( double factor ) noexcept;
+    void          MultiplyWithTimeIncrement( bool multiply ) noexcept;
+    void          DivideByTimeIncrement( bool divide ) noexcept;
 
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const CELL<dim>&,
@@ -129,16 +138,16 @@ class MathOperatorLHS {
     virtual void  WriteOperands( CELL<dim>& );
 
     /// multiply with time increment if this is desired
-    virtual void  MultiplyWithTimeFactor( double dt );
+    void MultiplyWithTimeFactor( double dt ) noexcept { LHS *= dt; }
 
-    /// assigment to the left hand side global matrix (after everything was calculated )
-    virtual void  AssignToGlobal( const CELL<dim>&, SparseMatrix& );
+    /// assigment to the left hand side global matrix (in case where no full elimination of Dirichlet constraints is carried out )
+    void AssignToGlobal( const CELL<dim>&, SparseMatrix& );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector
-    virtual void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     /// used by PDE_Integrator_CRM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions)
-    virtual void AssignToGlobal( const CELL<dim>&, CompressedRowMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    void AssignToGlobal( const CELL<dim>&, CompressedRowMatrix&, std::vector<double>&, const std::vector<size_t>& );
 
     virtual MathOperatorLHS<dim,CELL>* clone() const = 0;
 
@@ -172,8 +181,84 @@ class MathOperatorLHS {
     // time-dependent multipliers
     bool                                time_multiply_;
     bool                                time_divide_;
-};
 
+  private:
+
+    /**
+     * @brief Reads prescribed Dirichlet values of the basic (column) operand
+     *        into vals, sized to IDB.size() = LHS.Cols().
+     *
+     * Used by both AssignToGlobal overloads to populate the pivot vector
+     * when basic DOFs are Dirichlet-constrained.
+     *
+     * @param e        The element being processed
+     * @param n_nodes  Number of nodes on the element
+     * @param vals     Output vector, must be pre-sized to IDB.size()
+     */
+    void ReadBasicOperandValues( const CELL<dim>& e,
+                                 uint32_t         n_nodes,
+                                 vector<double>&  vals ) const
+    {
+        switch ( this->BasicOperandType() )
+        {
+            case SCALAR:
+                for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx )
+                    vals[nIdx] = e.N(nIdx)->Read( this->BasicOperandKey() );
+                break;
+
+            case VECTOR:
+            {
+                VectorVariable<dim> var;
+                for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx ) {
+                    e.N(nIdx)->Read( this->BasicOperandKey(), var );
+                    for ( uint32_t i{0U}; i < dim; ++i )
+                        vals[nIdx*dim + i] = var.Component(i);
+                }
+                break;
+            }
+
+            case TENSOR:
+            {
+                constexpr uint32_t dim2 = dim * dim;
+                TensorVariable<dim> var;
+                for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx ) {
+                    e.N(nIdx)->Read( this->BasicOperandKey(), var );
+                    for ( uint32_t i{0U}; i < dim; ++i )
+                        for ( uint32_t j{0U}; j < dim; ++j )
+                            vals[nIdx*dim2 + i*dim + j] = var.Component(i*dim + j);
+                }
+                break;
+            }
+
+            case ARRAY:
+            {
+                const auto depth( this->BasicOperandDataDepth() );
+                ArrayVariable var;
+                for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx ) {
+                    e.N(nIdx)->Read( this->BasicOperandKey(), var );
+                    for ( uint32_t i{0U}; i < depth; ++i )
+                        vals[nIdx*depth + i] = var.Component(i);
+                }
+                break;
+            }
+
+            case FLAGGEDARRAY:
+            {
+                const auto depth( this->BasicOperandDataDepth() );
+                FlaggedArrayVariable var;
+                for ( uint32_t nIdx{0U}; nIdx < n_nodes; ++nIdx ) {
+                    e.N(nIdx)->Read( this->BasicOperandKey(), var );
+                    for ( uint32_t i{0U}; i < depth; ++i )
+                        vals[nIdx*depth + i] = var.Component(i);
+                }
+                break;
+            }
+
+            default:
+              throw logic_error( "ERROR, MathOperatorLHS::ReadBasicOperandValues: Undefined basic operand variable type" );
+        }
+    }
+};
 
 
 } // csmp

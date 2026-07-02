@@ -13,6 +13,8 @@ public:
     Meschach_Solver();
     virtual ~Meschach_Solver();
 
+    std::string Name() const override { return "Meschach_Solver"; }
+
 protected:
     virtual void SolveWithMeschach( SparseMatrix& A,
                                     std::vector<double>& b,
@@ -23,7 +25,7 @@ private:
     virtual void SolveMatrixEquation( SparseMatrix& A,
                                       std::vector<double>& b,
                                       std::vector<double>& x,
-                                      size_t no_unknowns );
+                                      size_t no_unknowns ) override final;
 
     double GuessResidual( const SparseMatrix& A,
                           const std::vector<double>& b,

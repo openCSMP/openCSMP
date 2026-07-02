@@ -143,7 +143,7 @@ double SparseMatrix::At( size_t i, size_t j ) const
 
 
 
-void SparseMatrix::RemoveHalo( int nrhalo )
+void SparseMatrix::RemoveHalo( size_t nrhalo )
  {
    for ( size_t row=data_.size()-nrhalo; row!=data_.size(); row++ )
      ZeroRow(row);
@@ -167,14 +167,19 @@ void SparseMatrix::Erase()
     entries_ = 0;
  }
 
-
+/**
+      Since only non-zero elements are kept, this erases the sparse matrix.
+ */
 void SparseMatrix::Zero()
 {
     Erase();
 }
 
 
-// deletes all entries from the row
+
+/**
+      This deletes all entries from the row
+ */
 void SparseMatrix::ZeroRow( size_t row )
  {
     entries_ -= data_[row].size();
@@ -182,6 +187,10 @@ void SparseMatrix::ZeroRow( size_t row )
  }
 
 
+
+/**
+      This deletes all entries from the column
+ */
 void SparseMatrix::ZeroColumn( size_t col )
  {
     for ( auto& it : data_ ) {
@@ -875,7 +884,7 @@ void SparseMatrix::Out( long digits ) const
          return;
       }
 
-    long    prec(cout.precision(digits));
+    long   prec(cout.precision(digits));
     size_t pcols(1);
 
     cout <<"\nSparseMatrix::Out: entries (non-zero elements): "<< Entries();

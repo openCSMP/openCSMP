@@ -18,7 +18,7 @@ class TensorVariable<1U> {
     double&        operator()( uint32_t i, uint32_t j ) noexcept;
     const double&  operator()( uint32_t i, uint32_t j ) const noexcept;
     void           Component( uint32_t, double ) noexcept;
-    double         Component( uint32_t i ) const noexcept;
+    [[nodiscard]] double Component( uint32_t i ) const noexcept;
 
     TensorVariable   operator+( double val ) const noexcept;
     TensorVariable   operator-( double val ) const noexcept;

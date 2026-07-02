@@ -56,11 +56,10 @@ void DESAdvectionDiffusion2D_Example::Specifications()
 //
 // A CSMP main file that first solves the steady state pressure diffusion equation using a fully
 // implicit FE discretisation and computes the velocity field averwards. This velocity field is
-// then used to compute the advection of a non-reacting chemical species with both the
-// discrete event simulation (DES) and the time-driven simulation (TDS).
-// Their outputs are written to VTK files and and their efficiency are compared.
-// A simple quadrilateral FE mesh is generated automatically in CSMP from
-// which the Model is built.
+// then used to compute the advection of a non-reacting chemical species with both,
+// discrete event simulation (DES, asynchronous) and (standard global-CFL controlled) time-driven simulation (TDS).
+// Outputs are written to VTK files and and simulation accuracy and efficiency are compared.
+// A simple quadrilateral FE mesh is generated automatically in CSMP from which the Model is built.
 //
 // **********************************************************************************************
 
@@ -153,7 +152,7 @@ void DESAdvectionDiffusion2D_Example::Run()
     PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
-    // LHS stiffness matrix                                                         operand         basis function    test function
+    // LHS stiffness matrix                                            operand         basis function    test function
     NumIntegral_dNT_op_dN_dV<2U>  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
 
     // RHS mass matrix for integrating source term

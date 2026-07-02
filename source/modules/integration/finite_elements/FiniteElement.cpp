@@ -685,9 +685,9 @@ void  FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& 
  {
     JAC.Resize(dim,dim);
 
-    for ( auto i{0U}; i<dim; i++ ) {
+    for ( uint32_t i{0U}; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = static_cast<double>(0.0);
-        for ( auto j{0U}; j<npe; j++ )
+        for ( uint32_t j{0U}; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);
@@ -701,9 +701,9 @@ void FiniteElement::Jacobian( const vector<double>& dnr, const vector<double>& d
  {
     JAC.Resize(dim,dim);
 
-    for ( auto i{0U}; i<dim; i++ ) {
+    for ( uint32_t i{0U}; i<dim; i++ ) {
         JAC(0,i) = JAC(1,i) = JAC(2,i) = static_cast<double>(0.);
-        for ( auto j{0U}; j<npe; j++ )
+        for ( uint32_t j{0U}; j<npe; j++ )
           {
              JAC(0,i) += dnr[j] * XY(j,i);
              JAC(1,i) += dns[j] * XY(j,i);

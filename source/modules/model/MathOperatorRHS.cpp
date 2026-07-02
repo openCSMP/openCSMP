@@ -134,16 +134,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 
-template<uint32_t dim, template<uint32_t> class CELL>
-  MathOperatorRHS<dim,CELL>::~MathOperatorRHS()
-  {
-  }
-
 
   /// ===================================  Operand Functions ========================================================================
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* topname)
+  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* topname) noexcept
   {
     name_ = s;
     name_ += ": Operand: '";
@@ -153,7 +148,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* operand_name, const char* topname)
+  void MathOperatorRHS<dim,CELL>::Name(const char* s, const char* operand_name, const char* topname) noexcept
   {
     name_ = s;
     name_ += ": Operand: '";
@@ -166,7 +161,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  string  MathOperatorRHS<dim,CELL>::Name() const
+  string  MathOperatorRHS<dim,CELL>::Name() const noexcept
   {
     return name_;
   }
@@ -189,7 +184,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
   // MATERIAL PROPERTY OPERAND
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::MaterialOperand() const
+  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::MaterialOperand() const noexcept
   {
     return op;
   }
@@ -197,7 +192,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Index&   MathOperatorRHS<dim,CELL>::MaterialOperandKey() const
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::MaterialOperandKey() const noexcept
   {
     return op.key;
   }
@@ -205,7 +200,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  string  MathOperatorRHS<dim,CELL>::MaterialOperandName() const
+  string  MathOperatorRHS<dim,CELL>::MaterialOperandName() const noexcept
   {
     return op.name;
   }
@@ -214,7 +209,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::MaterialOperandType() const
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::MaterialOperandType() const noexcept
   {
     return op.key.type;
   }
@@ -223,7 +218,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() const
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() const noexcept
   {
     return op.key.place;
   }
@@ -232,7 +227,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  uint32_t   MathOperatorRHS<dim,CELL>::MaterialOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim,CELL>::MaterialOperandDataDepth() const noexcept
   {
     return op.key.dataDepth;
   }
@@ -244,7 +239,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Parameter&  MathOperatorRHS<dim,CELL>::BasicOperand() const
+  const csmp::Parameter&  MathOperatorRHS<dim,CELL>::BasicOperand() const noexcept
   {
     return top.first;
   }
@@ -253,7 +248,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Index&   MathOperatorRHS<dim,CELL>::BasicOperandKey() const
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::BasicOperandKey() const noexcept
   {
     return top.first.key;
   }
@@ -262,7 +257,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  string  MathOperatorRHS<dim,CELL>::BasicOperandName() const
+  string  MathOperatorRHS<dim,CELL>::BasicOperandName() const noexcept
   {
     return top.first.name;
   }
@@ -272,7 +267,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::BasicOperandType() const
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::BasicOperandType() const noexcept
   {
     return top.first.key.type;
   }
@@ -281,7 +276,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::BasicOperandPlacement() const
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::BasicOperandPlacement() const noexcept
   {
     return top.first.key.place;
   }
@@ -291,7 +286,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  uint32_t   MathOperatorRHS<dim,CELL>::BasicOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim,CELL>::BasicOperandDataDepth() const noexcept
   {
     return top.first.key.dataDepth;
   }
@@ -300,7 +295,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::BasicOperandOffset(size_t os)
+  void MathOperatorRHS<dim,CELL>::BasicOperandOffset(size_t os) noexcept
   {
     top.second = os;
   }
@@ -309,7 +304,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t MathOperatorRHS<dim,CELL>::BasicOperandOffset() const
+size_t MathOperatorRHS<dim,CELL>::BasicOperandOffset() const noexcept
   {
     return top.second;
   }
@@ -318,7 +313,7 @@ size_t MathOperatorRHS<dim,CELL>::BasicOperandOffset() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::TestOperand() const
+  const csmp::Parameter&   MathOperatorRHS<dim,CELL>::TestOperand() const noexcept
   {
     return top.first;
   }
@@ -327,7 +322,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  const csmp::Index&   MathOperatorRHS<dim,CELL>::TestOperandKey() const
+  const csmp::Index&   MathOperatorRHS<dim,CELL>::TestOperandKey() const noexcept
   {
     return top.first.key;
   }
@@ -335,7 +330,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  string  MathOperatorRHS<dim,CELL>::TestOperandName() const
+  string  MathOperatorRHS<dim,CELL>::TestOperandName() const noexcept
   {
     return top.first.name;
   }
@@ -344,7 +339,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::TestOperandType() const
+  csmp::VARIABLE_TYPE   MathOperatorRHS<dim,CELL>::TestOperandType() const noexcept
   {
     return top.first.key.type;
   }
@@ -353,7 +348,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::TestOperandPlacement() const
+  csmp::PLACEMENT   MathOperatorRHS<dim,CELL>::TestOperandPlacement() const noexcept
   {
     return top.first.key.place;
   }
@@ -361,7 +356,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  uint32_t   MathOperatorRHS<dim,CELL>::TestOperandDataDepth() const
+  uint32_t   MathOperatorRHS<dim,CELL>::TestOperandDataDepth() const noexcept
   {
     return top.first.key.dataDepth;
   }
@@ -369,7 +364,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::TestOperandOffset(size_t os)
+  void MathOperatorRHS<dim,CELL>::TestOperandOffset(size_t os) noexcept
   {
     top.second = os;
   }
@@ -377,7 +372,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-size_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const
+size_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const noexcept
   {
     return top.second;
   }
@@ -391,7 +386,7 @@ size_t MathOperatorRHS<dim,CELL>::TestOperandOffset() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::AddAccumulate()
+  void MathOperatorRHS<dim,CELL>::AddAccumulate() noexcept
   {
     add_accumulate_ = true;
     subtract_accumulate_ = false;
@@ -405,7 +400,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::SubtractAccumulate()
+  void MathOperatorRHS<dim,CELL>::SubtractAccumulate() noexcept
   {
     add_accumulate_ = false;
     subtract_accumulate_ = true;
@@ -419,7 +414,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::AddAccumulateLater()
+  void MathOperatorRHS<dim,CELL>::AddAccumulateLater() noexcept
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -433,7 +428,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::SubtractAccumulateLater()
+  void MathOperatorRHS<dim,CELL>::SubtractAccumulateLater() noexcept
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -447,7 +442,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::MultiplyAccumulate()
+  void MathOperatorRHS<dim,CELL>::MultiplyAccumulate() noexcept
   {
     add_accumulate_ = false;
     subtract_accumulate_ = false;
@@ -460,7 +455,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::LumpedFormulation(bool lumped)
+  void MathOperatorRHS<dim,CELL>::LumpedFormulation(bool lumped) noexcept
   {
     lump_matrices_ = lumped;
   }
@@ -469,7 +464,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void  MathOperatorRHS<dim,CELL>::ApplicationCycles(uint32_t c)
+  void  MathOperatorRHS<dim,CELL>::ApplicationCycles(uint32_t c) noexcept
   {
     application_cycles_ = c;
   }
@@ -478,7 +473,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void  MathOperatorRHS<dim,CELL>::ApplicationCycle(uint32_t c)
+  void  MathOperatorRHS<dim,CELL>::ApplicationCycle(uint32_t c) noexcept
   {
     application_cycle_ = c;
   }
@@ -487,7 +482,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::MultiplyBy(double integral_mult_factor)
+  void MathOperatorRHS<dim,CELL>::MultiplyBy(double integral_mult_factor) noexcept
   {
     factor_ = integral_mult_factor;
   }
@@ -495,7 +490,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement(bool multiply)
+  void MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement(bool multiply) noexcept
   {
     time_multiply_ = multiply;
   }
@@ -504,7 +499,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::DivideByTimeIncrement(bool divide)
+  void MathOperatorRHS<dim,CELL>::DivideByTimeIncrement(bool divide) noexcept
   {
     time_divide_ = divide;
   }
@@ -512,7 +507,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::Add() const
+  bool MathOperatorRHS<dim,CELL>::Add() const noexcept
   {
     return add_accumulate_;
   }
@@ -520,7 +515,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::Subtract() const
+  bool MathOperatorRHS<dim,CELL>::Subtract() const noexcept
   {
     return subtract_accumulate_;
   }
@@ -529,7 +524,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::AddLater() const
+  bool MathOperatorRHS<dim,CELL>::AddLater() const noexcept
   {
     return add_accumulate_later_;
   }
@@ -538,7 +533,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::SubtractLater() const
+  bool MathOperatorRHS<dim,CELL>::SubtractLater() const noexcept
   {
     return subtract_accumulate_later_;
   }
@@ -547,7 +542,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::Multiply() const
+  bool MathOperatorRHS<dim,CELL>::Multiply() const noexcept
   {
     return multiply_accumulate_;
   }
@@ -555,7 +550,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycles() const
+uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycles() const noexcept
   {
     return application_cycles_;
   }
@@ -563,7 +558,7 @@ uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycles() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycle() const
+uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycle() const noexcept
   {
     return application_cycle_;
   }
@@ -571,7 +566,7 @@ uint32_t  MathOperatorRHS<dim,CELL>::ApplicationCycle() const
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool  MathOperatorRHS<dim,CELL>::LumpedFormulation() const
+  bool  MathOperatorRHS<dim,CELL>::LumpedFormulation() const noexcept
   {
     return lump_matrices_;
   }
@@ -579,7 +574,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  double   MathOperatorRHS<dim,CELL>::MultiplyBy() const
+  double   MathOperatorRHS<dim,CELL>::MultiplyBy() const noexcept
   {
     return factor_;
   }
@@ -587,7 +582,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement() const
+  bool MathOperatorRHS<dim,CELL>::MultiplyWithTimeIncrement() const noexcept
   {
     return time_multiply_;
   }
@@ -595,7 +590,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::DivideByTimeIncrement() const
+  bool MathOperatorRHS<dim,CELL>::DivideByTimeIncrement() const noexcept
   {
     return time_divide_;
   }
@@ -840,7 +835,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt )
+void MathOperatorRHS<dim,CELL>::MultiplyWithTimeFactor( double dt ) noexcept
   {
     for (uint32_t i = 0; i < RHS.size(); i++)
       RHS[i] *= dt;
@@ -949,6 +944,7 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
   expanded out into the N vector. This accomodates the additional degrees of freedom
   in the global solution matrix.
 
+  @param idx Test function operand
   @param N The result is returned into the input vector. The final size
   of this vector<uint32_t> will be
 
@@ -970,7 +966,7 @@ void  MathOperatorRHS<dim,CELL>::AssignToGlobal(const CELL<dim>& e, vector<doubl
   is a vector or tensor property.
   */
 
-void transformNodeIndexVector(const csmp::Index& idx, std::vector<size_t>& N) {
+void transformNodeIndexVector(const csmp::Index& idx, std::vector<size_t>& N) noexcept {
     if (N.empty() || idx.type == SCALAR) return;
 
     const size_t num_nodes = N.size();

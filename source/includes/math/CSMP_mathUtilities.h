@@ -158,6 +158,9 @@ T lerp(const double t, T x0, T x1) {
     return (1.0-t) * x0 + t * x1;
 }
 
+/// helper for matrix indices
+void print( std::vector<std::pair<std::pair<uint32_t,uint32_t>,std::vector<bool> > >&  v );
+
 
 } // csmp
 

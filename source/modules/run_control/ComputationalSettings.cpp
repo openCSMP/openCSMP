@@ -498,7 +498,7 @@ void ComputationalSettings::Out() const
     cout <<"\ntime strategy: "<< parseTimeStrategy( time_strategy_ );
     cout <<"\nrun duration:  "<< run_duration_;
     cout <<"\noutput times:  ";
-    for ( std::set<double>::const_iterator oit=output_times_.begin();
+    for ( auto oit=output_times_.begin();
           oit!=output_times_.end(); oit++ )
         cout << (*oit) <<", ";
     cout << endl << endl;

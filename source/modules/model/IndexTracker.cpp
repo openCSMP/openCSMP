@@ -63,7 +63,7 @@ void IndexTracker::Attach( csmp::Index* newIndex, const csmp::Index* existingInd
     
       map<csmp::Index*,string>::const_iterator it = trackedIndices_.find( const_cast<csmp::Index*>(existingIndex) );
       if ( it == trackedIndices_.end() ) {
-           cerr <<"\nIndexTracker::Attach (from existing to new Index):";
+           cerr <<"\nIndexTracker::Attach (detach from existing instance to new Index instance):";
            cerr <<"\n\tpre-existing Index object is unregistered: ";
            if ( existingIndex != nullptr ) existingIndex->Out();
            cerr <<"\n\tnew Index: ";
@@ -72,7 +72,7 @@ void IndexTracker::Attach( csmp::Index* newIndex, const csmp::Index* existingInd
            ErrorHandler&  csmp_error( ErrorHandler::Instance() );
            cerr <<"\nregistered index objects:";
            Out();
-           csmp_error.Note( WARNING, "IndexTracker::Attach:", "Existing Index object could not be re-attached as it was not registered." );
+           csmp_error.Note( ERROR, "IndexTracker::Attach:", "Existing Index object could not be re-attached as it was not registered." );
         }
       else parameterName = it->second;
       Attach( newIndex, parameterName );

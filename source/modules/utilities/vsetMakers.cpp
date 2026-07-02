@@ -272,6 +272,20 @@ void create_1Square_VSet(VSet<2U>& vset, double length_of_sides, bool bSkewed )
 /**
     Model TINY, consisting of 1 line element two triangles, 1 quadrilateral and 6 face object at the box boundary.
     Model is rectangle shaped
+    
+    @code
+              [Top]            [Top]
+         0 (0,1) ------- 1 (1,1) ------- 2 (2,1)
+         |  \            |               |
+         |    \ [Elmt0]  |               |
+         |      \        |   [Elmt2]     |
+  [Left] | [Elmt1]       |               | [Right]
+         |        \      |               |
+         |          \    |               |
+         3 (0,0) ------- 4 (1,0) ------- 5 (2,0)
+              [Bottom]       [Bottom]
+    @endcode
+
 */
 ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& vset )
  {
@@ -311,7 +325,7 @@ ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& vset )
   	
   	//--------------------------NODE BOUNDARY FLAGS
     BOX_BOUNDARY B{BOTTOM}, R{RIGHT}, U{TOP}, L{LEFT};
-    vector<int8_t> bflags = { CNR1, B, CNR2, CNR3, U, CNR4 };
+    vector<int8_t> bflags = { CNR4, U, CNR3, CNR1, B, CNR2 };
     assert( bflags.size() == n_nodes );
     vset.AddBFlags( bflags.begin(), bflags.end() );
 
@@ -359,12 +373,12 @@ ModelTopology  create_SimplePolyElement2DModel( VSet<2U>& vset )
     // adding node and element numbers for comparisons
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "element number", elmt_nums );
     // node numbers
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "node number", node_nums );
     // permeability
     PropertyData perm( ELEMENT, SCALAR, 2U );

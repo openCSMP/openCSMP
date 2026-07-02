@@ -56,7 +56,7 @@ class SparseMatrix {
     colsConstIterator   RowEnd( size_t i ) const;
 
     /// zeroing out rows in the context of parallel computations
-    void      RemoveHalo( int32_t nrhalo );
+    void      RemoveHalo( size_t nrhalo );
     bool      HasEntry( size_t i, size_t j ) const { return data_[i].find(j) == data_[i].end(); }
     void      RemoveEntry( size_t, size_t );
     void      Erase();

@@ -33,9 +33,9 @@ class NumIntegral_dudn_rhsop_u_dS : public MathOperatorRHS<dim,InterFace> {
     void ComputeContribution( const InterFace<dim>& ) override final;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)
-    void AssignToGlobal( const InterFace<dim>&,
-                                 std::vector<double>& rhs,
-                                 const std::vector<size_t>& DOF_indexes ) override final;
+ //   void AssignToGlobal( const InterFace<dim>&,
+ //                                std::vector<double>& rhs,
+ //                                const std::vector<size_t>& DOF_indexes ) override final;
     
     /// adjusting the time increment in case it changes during the transient calculation
     void UpdateTimeIncrement( double dt ) { delta_t_ = dt; }

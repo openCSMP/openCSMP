@@ -3196,7 +3196,7 @@ void ModelSubDomain<dim,CELL>::InputPropertyValue( const char* input_prop,
            else if ( prop_key.place == NODE ) { // for nodes on first side of interface
                 for ( typename vector<csmp::Node<dim>*>::iterator
                       nit=node_vec_.begin(); nit!=node_vec_.end(); nit++ )
-                  writeVariableIf( (*nit), prop_key, var, DIRICH );
+                  writeVariableIf( (*nit), prop_key, var, do_not_overwrite );
              }
            else throw csmp::Exception( FATAL_ERROR, "ModelSubDomain<dim,CELL>::InputPropertyValue",
                                                     "Property placement not recognized");
@@ -6399,22 +6399,22 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
 
     // starting with region1 - assuming that no face-matching can occur at this stage
     for ( size_t i{ subdomain1.InteriorCells() }; i<subdomain1.Cells(); i++ )
-      for ( auto j{0U}; j<subdomain1.PerimeterFaces(i); j++ ) {
+      for ( uint32_t j{0U}; j<subdomain1.PerimeterFaces(i); j++ ) {
            auto pface = subdomain1.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
            assert( !subdomain1.E(i)->IsLine() );
            shared_perimeter_cells.insert( make_pair( subdomain1.E(i)->CornerNodesOfFace(pface),
-                                          make_pair( make_pair( subdomain1.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+                                          make_pair( make_pair( subdomain1.E(i), pface ), make_pair( nullptr,NULL_IDX32U) ) ) );
         }
     // for the second region2, do the same, but when matching faces are found corresponding elements and face ids are assigned to second element-face pair
     size_t n_matching_faces{0U};
     for ( size_t i{ subdomain2.InteriorCells() }; i<subdomain2.Cells(); i++ )
-      for ( auto j{0U}; j<subdomain2.PerimeterFaces(i); j++ ) {
+      for ( uint32_t j{0U}; j<subdomain2.PerimeterFaces(i); j++ ) {
            auto pface = subdomain2.PerimeterFace(i,j);
            // making a search key from the corner nodes of the face and recording the perimeter element and its face number
            assert( !subdomain2.E(i)->IsLine() );
            auto it = shared_perimeter_cells.insert( make_pair( subdomain2.E(i)->CornerNodesOfFace(pface),
-                                                    make_pair( make_pair( subdomain2.E(i), pface ), make_pair( nullptr,NULL_IDX) ) ) );
+                                                    make_pair( make_pair( subdomain2.E(i), pface ), make_pair( nullptr,NULL_IDX32U) ) ) );
            // if a matching face is found
            if ( it.second == false ) { // no new insertion could be made into map with unique keys
                 (*it.first).second.second = make_pair( subdomain2.E(i), pface );

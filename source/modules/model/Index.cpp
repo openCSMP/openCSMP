@@ -16,25 +16,24 @@ namespace csmp {
 
 /** comparator less
 
-Provides required functionality for use in an STL container.
-
-@attention Do not use this as an example for how to code
-since it deduces information at runtime which should already be
-known at compile time.
-@param i a csmp::Index
-@return true if smaller than argument
+Provides ordering required by map STL container.
 
 */
-bool Index::operator<( const csmp::Index& i ) const
- {
-    const int_type lhs( (static_cast<int_type>(type)+1) * (static_cast<int_type>(place)+1) * (index+1) * dataDepth * flagDepth
-                      * (offsetFactorCell+1) * (offsetFactorSector+1) *(flagOffset+1) );
-   
-    const int_type rhs( (static_cast<int_type>(i.type)+1) * (static_cast<int_type>(i.place)+1) * (i.index+1) * i.dataDepth * i.flagDepth
-                      * (i.offsetFactorCell+1) * (i.offsetFactorSector+1) * (i.flagOffset+1));
-   
-    return (lhs < rhs);
- }
+bool Index::operator<( const csmp::Index& i ) const noexcept
+{
+    // Lexicographic ordering — deterministic and correct
+    if ( type  != i.type  ) return type  < i.type;
+    if ( place != i.place ) return place < i.place;
+    if ( index != i.index ) return index < i.index;
+    if ( dataDepth  != i.dataDepth  ) return dataDepth  < i.dataDepth;
+    if ( flagDepth  != i.flagDepth  ) return flagDepth  < i.flagDepth;
+    if ( offsetFactorCell   != i.offsetFactorCell   )
+        return offsetFactorCell   < i.offsetFactorCell;
+    if ( offsetFactorSector != i.offsetFactorSector )
+        return offsetFactorSector < i.offsetFactorSector;
+    if ( flagOffset != i.flagOffset ) return flagOffset < i.flagOffset;
+    return false;   // equal
+}
 
 
 /**
@@ -82,7 +81,7 @@ VARIABLE_TYPE variableType( const Var& )
 Index::Index() 
   : type(SCALAR), 
     place(UNDEFINED), 
-    index(UNSPECIFIED),
+    index(std::numeric_limits<int_type>::max()),
     dataDepth(0),
     flagDepth(0),
     dataOffset(0),
@@ -173,7 +172,15 @@ Index::Index( const csmp::Index& idx )
   }
 
 
-/// move constructor that takes care of index tracker
+/**
+    Move constructor that takes care of index tracker:
+    
+    For this it follows the following steps:
+    
+    1. Register the new object (this) with the tracker using the same parameter name as idx.
+    2. Store the tracker pointer in this.
+    3. Remove idx from the tracker and null out its tracker pointer.
+ */
 Index::Index( csmp::Index&& idx )
   : type(idx.type), place(idx.place), index(idx.index),
     dataDepth(idx.dataDepth), flagDepth(idx.flagDepth), dataOffset(idx.dataOffset), flagOffset(idx.flagOffset),
@@ -206,9 +213,9 @@ Index&  Index::operator=( const csmp::Index& idx )
       flagDepth                 = idx.flagDepth;
       dataOffset                = idx.dataOffset;
       flagOffset                = idx.flagOffset;
-      offsetFactorCell       = idx.offsetFactorCell;
+      offsetFactorCell          = idx.offsetFactorCell;
       offsetFactorSector        = idx.offsetFactorSector;
-      ipFactorCell           = idx.ipFactorCell;
+      ipFactorCell              = idx.ipFactorCell;
       ipFactorSector            = idx.ipFactorSector;
       ipFactorFacet             = idx.ipFactorFacet;
       localVariables            = idx.localVariables;
@@ -227,10 +234,19 @@ Index&  Index::operator=( const csmp::Index& idx )
 
 
 
-/// move assignment operator
+
+/**
+    Move assignment operator
+    For this it follows the following steps:
+    
+    1. Register the new object (this) with the tracker using the same parameter name as idx.
+    2. Store the tracker pointer in this.
+    3. Remove idx from the tracker and null out its tracker pointer.
+*/
 Index&  Index::operator=( csmp::Index&& idx )
  {
-    assert( this != &idx );
+    // self move safety
+    if (this == &idx) return *this;
     type                      = idx.type;
     place                     = idx.place;
     index                     = idx.index;
@@ -281,9 +297,9 @@ void Index::UpdateData( const csmp::Index& idx )
         flagDepth                 = idx.flagDepth;
         dataOffset                = idx.dataOffset;
         flagOffset                = idx.flagOffset;
-        offsetFactorCell       = idx.offsetFactorCell;
+        offsetFactorCell          = idx.offsetFactorCell;
         offsetFactorSector        = idx.offsetFactorSector;
-        ipFactorCell           = idx.ipFactorCell;
+        ipFactorCell              = idx.ipFactorCell;
         ipFactorSector            = idx.ipFactorSector;
         ipFactorFacet             = idx.ipFactorFacet;
         localVariables            = idx.localVariables;
@@ -301,7 +317,7 @@ void Index::UpdateData( const csmp::Index& idx )
 @return boolean result of the comparison
 @return true if equal
 */
-bool Index::operator==( const csmp::Index& i ) const 
+bool Index::operator==( const csmp::Index& i ) const noexcept
 {
   return (  type==i.type && place==i.place && index==i.index && dataDepth==i.dataDepth && flagDepth==i.flagDepth && dataOffset==i.dataOffset 
             && flagOffset==i.flagOffset && offsetFactorCell==i.offsetFactorCell && offsetFactorSector==i.offsetFactorSector );
@@ -314,7 +330,7 @@ bool Index::operator==( const csmp::Index& i ) const
 @return boolean result of the comparison
 @return true if not equal
 */
-bool Index::operator!=( const csmp::Index& i ) const 
+bool Index::operator!=( const csmp::Index& i ) const noexcept
 {
   return ( type!=i.type || place!=i.place || index!=i.index || dataDepth!=i.dataDepth || flagDepth!=i.flagDepth || dataOffset!=i.dataOffset 
            || flagOffset!=i.flagOffset || offsetFactorCell!=i.offsetFactorCell || offsetFactorSector!=i.offsetFactorSector );
@@ -325,7 +341,7 @@ bool Index::operator!=( const csmp::Index& i ) const
 
 @return true if an index has been assigned
 */
-bool Index::IsDefined() const { return (index != UNSPECIFIED);  }
+bool Index::IsDefined() const noexcept { return (index != std::numeric_limits<int_type>::max());  }
 
 
 /// Registers an IndexTracker (does not detach from current!)

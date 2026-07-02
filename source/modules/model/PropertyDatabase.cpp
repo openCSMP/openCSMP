@@ -675,7 +675,9 @@ void PropertyDatabase<dim>::AssignVariableIndices()
  } // AssignVariableIndices
 
 
-/** Prints the Parameter records of all current physical variables to stdout. 
+
+
+/** Prints the Parameter records of all current physical variables to stdout.
 
 @section implementation Implementation
 Method calls the Out() interface of the Parameter class. 
@@ -686,7 +688,7 @@ To get full descriptions of the characteristics of all model variables.
 template<uint32_t dim>
 void PropertyDatabase<dim>::ListVariables() const 
   {
-     for ( auto& prop : propList_ )
+     for ( const auto& prop : propList_ )
        prop.second.Out();
 
   } // ListVariables
@@ -1136,21 +1138,23 @@ void PropertyDatabase<dim>::ListVariables( map<string,csmp::Index>& props ) cons
  {
     props.erase( props.begin(), props.end() );
 
-    for ( auto& prop : propList_ )
-      props[ prop.second.name ] = StorageKey( prop.second.name.c_str() );
+    for ( const auto& prop : propList_ )
+      // props[ prop.second.name ] = StorageKey( prop.second.name.c_str() );
+      props.insert( make_pair( prop.second.name, prop.second.key ) );
  }
 
 /// enlists properties with a specific placement
 template<uint32_t dim>
-uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT pl, map<string,csmp::Index>& props ) const
+uint32_t PropertyDatabase<dim>::ListVariables( PLACEMENT place, map<string,csmp::Index>& props ) const
  {
     props.clear();
 
-    for ( auto& prop : propList_ )
+    for ( const auto& prop : propList_ )
       {
-        csmp::Index key = StorageKey( prop.second.name.c_str() );
-        if( key.place == pl )
-          props[ prop.second.name ] = key;
+        assert( prop.first == prop.second.name );
+        // same as: Index key = StorageKey( prop.second.name.c_str() );
+        if ( prop.second.key.place == place )
+          props.insert( make_pair( prop.second.name, prop.second.key ) );
       }
     return static_cast<uint32_t>(props.size());
  }

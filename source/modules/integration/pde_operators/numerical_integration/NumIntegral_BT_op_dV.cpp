@@ -70,7 +70,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
 
     // mapping element-placed operand from material matrix into 1-column matrix
     if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
-         for ( auto i{0U}; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim,CELL>::MTRL[0](i,i);
+         for ( uint32_t i{0U}; i<dim; i++ ) STR(i,0) = MathOperatorRHS<dim,CELL>::MTRL[0](i,i);
          if ( dim == 2U ) STR(2,0) = MathOperatorRHS<dim,CELL>::MTRL[0](0,1);
          else { // 3D, upper diagonal elements of symmetric tensor
               STR(3,0) = MathOperatorRHS<dim,CELL>::MTRL[0](0,1); // xy 

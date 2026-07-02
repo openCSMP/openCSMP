@@ -5,6 +5,7 @@
 #include "Test.h"
 #include "ComputationalSettings.h"
 #include "ScalarVariable.h"
+#include "PDE_Integrator.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
@@ -21,8 +22,6 @@ template<uint32_t> class Model;
 template<uint32_t> class PropertyDatabase;
 template<uint32_t> class VTU_Interface;
 template<uint32_t> class CVFEM_PHX_Scheme;
-
-template<uint32_t,template<uint32_t> class> class PDE_Integrator;
 
   /** CVFEM_1D_VVCase : 1D Test Case
   =================================
@@ -57,7 +56,7 @@ class CVFEM_1D_VVCase : public Test
           CVFEM_PHX_Scheme<1U>* CVFEM_PHX = nullptr;
 
           //! Chemical diffusion operators and variables
-          std::vector<PDE_Integrator<1U, Element>*>    diffusion;
+          std::vector<PDE_Integrator<1U>*>             diffusion;
           std::vector<NumIntegral_NT_lhsop_N_dV<1U>*>  diff_cap_lhs;
           std::vector<NumIntegral_NT_op_N_dV<1U>*>     diff_cap_rhs;
           std::vector<NumIntegral_dNT_op_dN_dV<1U>*>   diffusivity;

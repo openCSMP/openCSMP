@@ -108,7 +108,7 @@ public:
   void             Component( uint32_t, double val ) noexcept { data_ = val; }
 
   /// universal accessor of CSMP variable values which works for all variable types
-  double           Component( uint32_t ) const  noexcept{ return data_; }
+  [[nodiscard]] double Component( uint32_t ) const  noexcept{ return data_; }
 
   /// returns size = number of components of the variable (=1 for scalar)
   static constexpr uint32_t Size() noexcept { return 1u; };

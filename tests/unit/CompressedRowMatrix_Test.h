@@ -23,15 +23,19 @@ namespace csmp
   class CompressedRowMatrix_Test : public Test
     {
        public:
-         explicit CompressedRowMatrix_Test( bool verbose = false,
+         explicit CompressedRowMatrix_Test( bool verbose = true,
                                             double tolerance = std::numeric_limits<double>::epsilon() * 10. )
            : tolerance_(tolerance),
               verbose_(verbose) {}
               
          virtual void run();
+         
+         void TestCRM_Multiplication();
+         
+         void Test_generateSparsityPattern();
 
     private:
-        const double tolerance_;
+        double     tolerance_;
         const bool verbose_;
   };
   /**

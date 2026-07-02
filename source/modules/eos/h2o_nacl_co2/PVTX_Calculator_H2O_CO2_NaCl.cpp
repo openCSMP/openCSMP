@@ -130,7 +130,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Node<dim>* n )
          csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too high for EOS-scheme (max pf=600bar); errors may occur");
       }
-    if ( ToC_ <= 12. ) {
+    // if ( ToC_ <= 12. ) {
+    if ( ToC_ < 10. ) {
          cerr <<"\n\t"<< ToC_;
          csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too low for EOS-scheme (min T(oc)=12); errors may occur");
@@ -479,7 +480,8 @@ SYSTEM_STATE PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate( Element<dim>* e )
          csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'fluid pressure' too high for EOS-scheme (max pf=600bar); errors may occur");
       }
-    if ( ToC_ <= 12. ) {
+    // if ( ToC_ <= 12. ) {
+    if ( ToC_ < 10. ) {
          cerr <<"\n\t"<< ToC_;
          csmp_error.Note( WARNING, "PVTX_Calculator_H2O_CO2_NaCl<dim>::Equilibrate(Node):",
                            "input 'temperature' too low for EOS-scheme (min T(oc)=12); errors may occur");

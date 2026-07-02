@@ -391,7 +391,7 @@ global coordinates as
 DN_global = DN^T J-1^T  ops J-1 DN
 */
 double IsoparametricQuadraticLineElement::dN_AtIntegrationPoint( DenseMatrix<DM_MIN>& DN,
-                                                       uint32_t gauss_point )
+                                                                 uint32_t gauss_point )
  {
      DN.Resize(dim,npe);
      

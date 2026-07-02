@@ -98,6 +98,8 @@ public:
   double  CalculateResidual( const SparseMatrix& A,
                              const std::vector<double>& b,
                              const std::vector<double>& x ) const;
+                             
+  virtual std::string Name() const = 0;
 
   virtual void InputSolverSettings( SolverSettings& settings );
   virtual SolverSettings* GetSolverSettings();

@@ -774,6 +774,95 @@ INTERFACE_SIDE  InterFace<dim>::CurrentSide() const noexcept
   return current_side_;
 }
 
+
+/**
+
+@param offset offset of test_function operand in the equation with the primary variable indicated by top_key
+Usage
+
+@code
+    std::vector<size_t> eq_idx_vec;
+
+    cell.ActiveEquationIndices(
+        DOF_indexes_,
+        prop_key,
+        offset,
+        [&](size_t e) { eq_idx_vec.push_back(e); }
+    );
+
+@endcode
+*/
+template<uint32_t dim>
+template<class Inserter>
+void InterFace<dim>::ActiveEquationIndices( const csmp::Index& top_key,
+                                            const vector<size_t>& DOF_indexes, size_t offset,
+                                            Inserter& eq_idx_vec ) const
+{
+    // MAX_LOCAL_DOF bounds our stack allocation. 
+    // 128 is sufficient for standard higher-order volumetric elements.
+    constexpr size_t MAX_LOCAL_DOF = 128; 
+    std::array<size_t, MAX_LOCAL_DOF> local_eqs;
+    size_t local_count = 0;
+
+    // Lambda to safely push to the local stack buffer
+    auto push = [&](size_t global_dof) {
+        size_t eq = DOF_indexes[global_dof];
+        if (eq != NULL_IDX) {
+            // Optional: assert(local_count < MAX_LOCAL_DOF) for debug builds
+            local_eqs[local_count++] = eq;
+        }
+    };
+    
+    // 1. Gather all equations for this element
+    for (const Node<dim>* node : node_connector_)
+    {
+        const size_t base = node->Idx();
+
+        switch (top_key.type)
+        {
+            case SCALAR:
+                push(base + offset);
+                break;
+
+            case VECTOR:
+                for (uint32_t i = 0; i < dim; ++i)
+                    push(base * dim + i + offset);
+                break;
+
+            case TENSOR:
+                for (uint32_t i = 0; i < dim; ++i)
+                    for (uint32_t j = 0; j < dim; ++j)
+                        push(base * dim * dim + i * dim + j + offset);
+                break;
+
+            case ARRAY:
+            case FLAGGEDARRAY:
+                for (uint32_t i = 0; i < top_key.dataDepth; ++i)
+                    push(base * top_key.dataDepth + i + offset);
+                break;
+        }
+    }
+    
+    // 2. Sort and deduplicate equations specific to this element
+    auto begin_it = local_eqs.begin();
+    auto end_it = begin_it + local_count;
+    
+    std::sort(begin_it, end_it);
+    auto unique_end = std::unique(begin_it, end_it);
+
+    // 3. Push the strictly unique equations to the global inserter
+    for (auto it = begin_it; it != unique_end; ++it) {
+        eq_idx_vec.push_back(*it); 
+    }
+    
+} // end ActiveEquationIndices
+
+template void InterFace<1>::ActiveEquationIndices( const csmp::Index&, const vector<size_t>&, size_t, vector<size_t>& ) const;
+template void InterFace<2>::ActiveEquationIndices( const csmp::Index&, const vector<size_t>&, size_t, vector<size_t>& ) const;
+template void InterFace<3>::ActiveEquationIndices( const csmp::Index&, const vector<size_t>&, size_t, vector<size_t>& ) const;
+
+
+
 template<uint32_t dim>
 vector<csmp::InterFace<dim>*>&  InterFace<dim>::NeighborElementVector()
 {
@@ -1054,7 +1143,7 @@ const Element<dim>*  InterFace<dim>::InterveningElement() const noexcept
 template<uint32_t dim>
 uint32_t  InterFace<dim>::InnerParentFaceID() const noexcept
 {
-  if ( innerParent_ == nullptr ) return NULL_IDX;
+  if ( innerParent_ == nullptr ) return NULL_IDX32U;
   return inner_parent_face_id_;
 }
 
@@ -1063,7 +1152,7 @@ uint32_t  InterFace<dim>::InnerParentFaceID() const noexcept
 template<uint32_t dim>
 uint32_t  InterFace<dim>::OuterParentFaceID() const noexcept
 {
-  if ( outerParent_ == nullptr ) return NULL_IDX;
+  if ( outerParent_ == nullptr ) return NULL_IDX32U;
   return outer_parent_face_id_;
 }
 

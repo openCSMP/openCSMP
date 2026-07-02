@@ -4,6 +4,7 @@
 #include "MathOperatorRHS.h"
 #include "MathOperatorLHS.h"
 #include "SparseMatrix.h"
+#include "CompressedRowMatrix.h"
 
 namespace csmp {
 
@@ -258,7 +259,7 @@ done in the following example:
 @endcode
 
 */
-template<uint32_t dim,template<uint32_t> class CELLTYPE=Element>
+template<uint32_t dim, template<uint32_t> class CELLTYPE=Element, class MATRIXTYPE=CompressedRowMatrix>
 class PDE_Integrator {
   public:
     typedef typename std::map<Parameter,size_t>::const_iterator operandsConstIterator; ///< constant iterator over solution variables
@@ -297,7 +298,6 @@ class PDE_Integrator {
     bool          Transient() const;
   
     /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
-    // TODO: do we need this method
     void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
 
     /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
@@ -342,6 +342,11 @@ class PDE_Integrator {
 
   protected:
 
+    /// returns the equation number in the reduced (Dirichlet DOF-eliminated) global system or size_t::max if 'global_dof' is none because it is a Dirichlet constraint
+    size_t EquationNumber(size_t global_dof ) const noexcept { return DOF_indexes_[global_dof]; }
+    
+    void ExpandNodeDOFs( const Node<dim>* node, const csmp::Index& top_key, size_t test_operand_offset, std::vector<size_t>& out );
+
     /// checks whether any Boundary object in the model is a surface of the computational domain
     std::list<std::string> IdentifySharedBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
 
@@ -352,7 +357,7 @@ class PDE_Integrator {
     virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  ReduceSystemSizeEliminatingEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset );
+    void  EliminateEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset );
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& );
@@ -400,18 +405,17 @@ class PDE_Integrator {
     std::map<std::string,MathOperatorRHS<dim,Face>*>      rhs_boundary_operators_;  ///< surface integrals for accumulation over boundary
     std::map<std::string,MathOperatorLHS<dim,InterFace>*> lhs_split_boundary_operators_;  ///< implicit integral coupling terms for SplitBoundary
     std::map<std::string,MathOperatorRHS<dim,InterFace>*> rhs_split_boundary_operators_;  ///< explicit integral coupling terms for SplitBoundary
-    std::map<csmp::Parameter,size_t>                      basic_operands_;
-    std::map<csmp::Parameter,size_t>                      test_operands_;           ///< dependent variables in the solved system of equations
+    std::map<csmp::Parameter,size_t>                      basic_operands_;          ///< column operators ordered alphabetical by corresponding primary variable name
+    std::map<csmp::Parameter,size_t>                      test_operands_;           ///< row operators ordered alphabetical by corresponding primary variable name
   
     std::vector<const csmp::Face<dim>*>       boundary_faces_;           ///< empty if computation applies to entire model; else Faces needed for dS integrals
     std::vector<const csmp::InterFace<dim>*>  splitboundary_interfaces_; ///< empty if computation applies to entire model; else InterFaces needed for domain coupling
 
-// TODO: must use CompressedRowMatrix
-    SparseMatrix          G_;           ///< solution matrix
+    MATRIXTYPE            G_;           ///< solution matrix
     std::vector<double>   rh_;          ///< righthand vector
     std::vector<double>   x_;           ///< solution vector
     std::vector<size_t>   DOF_indexes_; ///< indices of DOFs, but only of the non-Dirichlet dofs, size enumerated 0 - DOF-1 (including Dirich DOF)
-    std::vector<double>   pivotVector_; ///< mapping from DOFs to actual node numbers
+    std::vector<double>   pivotVector_; ///< full-system DOF (including Dirich); accumulates products of eliminated Dirichlet rows and RHS DIrich entries
 
     Solver*               solver_ = nullptr;
 
@@ -442,13 +446,52 @@ bool collectBorderFacesOfComputationRegion( const Model<dim>&, const ModelSubDom
 template<uint32_t dim>
 bool collectInterfacesInComputationRegion( const Model<dim>&, const ModelSubDomain<dim,Element>&,
                                            std::vector<const csmp::InterFace<dim>*>& splitboundary_interfaces );
- 
+
+// INLINE FUNCTIONS
+
+/// expands node indices into degrees of freedom of the solution variable in the global system
+template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
+inline void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::ExpandNodeDOFs( const Node<dim>* node,
+                                                                     const csmp::Index& top_key, ///< test operand key
+                                                                     size_t offset,
+                                                                     std::vector<size_t>& expandedDOF_vec )
+{
+    const size_t base = node->Idx();
+
+    auto push_eq = [&](size_t global_dof) {
+        const size_t eq = DOF_indexes_[global_dof];
+        if (eq != NULL_IDX)
+            expandedDOF_vec.push_back(eq);
+    };
+
+    switch (top_key.type) {
+        case SCALAR:
+             push_eq(base + offset);
+          break;
+        case VECTOR:
+             for (uint32_t i = 0; i < dim; ++i)
+                push_eq(base * dim + i + offset);
+          break;
+        case TENSOR: {
+             constexpr uint32_t dim2 = dim * dim;
+             for (uint32_t i = 0; i < dim; ++i)
+                for (uint32_t j = 0; j < dim; ++j)
+                    push_eq(base * dim2 + i * dim + j + offset);
+          break;
+        }
+        case ARRAY:
+        case FLAGGEDARRAY:
+             for ( uint32_t i = 0; i < top_key.dataDepth; ++i )
+               push_eq(base * top_key.dataDepth + i + offset);
+          break;
+        default:
+            throw std::runtime_error("PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::ExpandNodeDOFs: Unsupported variable type");
+    }
+}
+
+
 
 } // csmp
 
 #endif /* CSMP_PDE_INTEGRATOR_H */
-
-
-
-
 

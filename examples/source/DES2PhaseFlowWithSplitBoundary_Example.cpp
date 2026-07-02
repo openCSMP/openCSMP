@@ -220,13 +220,13 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
         parent_id = 1;
         auto md = (*mit);
         auto master_node = md.N(0);
-        for( auto e{0U}; e < master_node->Parents(); e++)
+        for( uint32_t e{0U}; e < master_node->Parents(); e++)
           master_node->Parent(e)->Store(key_parent, makeScalar(PLAIN, parent_id));
 
         for(size_t n=1;n<md.Branches();n++) {
           auto slave_node = md.N(n);
           parent_id++;
-          for( auto e{0U}; e < slave_node->Parents(); e++)
+          for( uint32_t e{0U}; e < slave_node->Parents(); e++)
             slave_node->Parent(e)->Store(key_parent, makeScalar(PLAIN, parent_id));
         }
       }
@@ -371,7 +371,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
           }
         }
 
-        time = static_cast<long>(model_time/day);
+        time = static_cast<size_t>(model_time/day);
         if (DES) {
           std::string runtime_file_name(model_name + "-DES_runtime_output");
           vtu.OutputDataToVTU(runtime_file_name, output_properties, "Model", time);
@@ -535,7 +535,7 @@ void DES2PhaseFlowWithSplitBoundary_Example::RunSimulation( Model<dim>& model )
         vector<double> IPOL;
         eptr->N_AtBaryCenter( IPOL );
         double ipol_sum(0.), e_sw(0.), e_sn(0.), e_muw (0.), e_mun(0.), e_rhow(0.), e_rhon(0.), e_cw(0.), e_cn(0.);
-        for ( auto i{0U}; i<nodes; ++i ) {
+        for ( uint32_t i{0U}; i<nodes; ++i ) {
           e_sw += IPOL[i] * eptr->N(i)->Read( sw_key );
           e_muw += IPOL[i] * eptr->N(i)->Read( muw_key );
           e_mun += IPOL[i] * eptr->N(i)->Read( mun_key );
@@ -907,7 +907,7 @@ void computeSpillPointSaturation( Model<dim>& model, const std::string& region_n
               // computing average dip of the lower-dim elmts making up the FV sectors
               double   avg_dip{ 0. };
               uint32_t n_surf_elmts{ 0u };
-              for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
+              for ( uint32_t i{0U}; i<(*nit)->Parents(); i++ ) {
                    if constexpr ( dim == 3U ) {
                         if ( (*nit)->Parent(i)->IsSurface() ) {
                              (*nit)->Parent(i)->Read( dip_key, dip_vec );
@@ -988,7 +988,7 @@ void lowerDimensionalLayerDiagnostics( Model<dim>& model, const string& region_n
          // -----------------------------------------------------------------------
          // computing the mininum thickness of the surface elements connected to FV
          double minimum_thickness{ 1.0e+30 }; // crazy high value
-         for ( auto i{0U}; i<(*nit)->Parents(); i++ ) {
+         for ( uint32_t i{0U}; i<(*nit)->Parents(); i++ ) {
              if constexpr ( dim == 3U ) {
                  if ( (*nit)->Parent(i)->IsSurface() )
                    minimum_thickness = min( minimum_thickness, (*nit)->Parent(i)->Read( thi_key ) );

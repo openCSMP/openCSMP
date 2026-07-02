@@ -705,7 +705,7 @@ void SAMG_Solver::SolveMatrixEquation( SparseMatrix& A,
     cout.flush();
 
     if ( settings_->UsePointBasedApproach() )
-        crmat_.InitializePointBased( A, static_cast<size_t>(new_nsys) );
+        crmat_.InitializePointBasedSAMG( A, static_cast<size_t>(new_nsys) );
     else
         crmat_.Initialize( A );
 

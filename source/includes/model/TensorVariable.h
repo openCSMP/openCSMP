@@ -114,10 +114,10 @@ public:
   const double&  operator()( uint32_t i, uint32_t j ) const noexcept;
 
   /// alternative mutator of tensor elements 0..8 accessing them sequentially row by row
-  void      Component( uint32_t, double )noexcept;
+  void      Component( uint32_t, double ) noexcept;
 
   /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
-  double    Component( uint32_t i ) const noexcept;
+  [[nodiscard]] double Component( uint32_t i ) const noexcept;
 
   /// number of entries in tensor (dim x dim = 9 in this 3D case)
   static constexpr uint32_t Size() noexcept { return 9u; };

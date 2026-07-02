@@ -24,16 +24,18 @@ with csmp::SparseMatrix, STL and according functionality
       LUdcmp_Solver();
       virtual ~LUdcmp_Solver();
 
+      std::string Name() const override { return "LUdcmp_Solver"; }
+
     protected:
       virtual void SolveMatrixEquation( SparseMatrix& A,
                                         std::vector<double>& b,
                                         std::vector<double>& x,
-                                        size_t no_unknowns );
+                                        size_t no_unknowns ) override final;
                                         
       virtual void SolveMatrixEquation( CompressedRowMatrix& A,
                                         std::vector<double>& b,
                                         std::vector<double>& x,
-                                        size_t no_unknowns );
+                                        size_t no_unknowns ) override final;
     private:
       void ludcmp( SparseMatrix& a,
                    long n,

@@ -7,13 +7,13 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/** vector solution variable: integration of 'body forces', e.g., action of gravity
+/** vector solution variable (test): integration of 'body forces', e.g., action of gravity
  */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_PT_op_dV( const PropertyDatabase<dim>&, const char* oper, const char* test );
-    ~NumIntegral_PT_op_dV() {}
+    ~NumIntegral_PT_op_dV() = default;
     
     void GetOperands( const CELL<dim>& ) override final;
  

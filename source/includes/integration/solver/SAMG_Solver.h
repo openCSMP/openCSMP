@@ -51,6 +51,8 @@ namespace csmp {
       void InputSolverSettings( SolverSettings& settings ) override final;
       SolverSettings* GetSolverSettings() override final;
 
+      std::string Name() const override { return "SAMG_Solver"; }
+
       bool Write_SAMG_TextInputFile( const char* filename ) const;
       void Write_SAMG_TextOutput( bool write );
 	    	    

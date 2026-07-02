@@ -237,7 +237,10 @@ for ( const auto& tc : transfer_coefficients_ ) {
      Ordering of nodes in the vectors is  inner face nodes, outer face nodes, and intervening element nodes
      
     @author SKM - modified from LKT's version that eliminates Dirichlet constraints from G
+    
+    @TODO: try this with the standard approach instead which has been refactored
 */
+#if 0
 template<uint32_t dim>
 void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( const InterFace<dim>& iface,
                                                                              SparseMatrix& G,
@@ -259,7 +262,7 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
     const uint32_t n_elmt_nodes2{ n_elmt_nodes * 2 };
     
     // interface nodes + intervening element
-		for ( auto i{0U}; i < n_elmt_nodes; i++ ) {
+		for ( uint32_t i{0U}; i < n_elmt_nodes; i++ ) {
          IDT[i] = iface.N(i,INSIDE)->Idx();
          IDB[i] = IDT[i];
          IDT[i+n_elmt_nodes] = iface.N(i,OUTSIDE)->Idx();
@@ -273,13 +276,13 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
     assert( this->TestOperandType() == SCALAR );
     
     // applying offset to interpolation function operand
-		for (auto i{0U}; i < IDT.size(); i++) {
+		for (uint32_t i{0U}; i < IDT.size(); i++) {
         IDT[i] += this->TestOperandOffset();
         IDT[i] = DOF_indexes[ IDT[i] ];
       }
 
     // applying offset to weighting function operand
-		for (auto i{0U}; i < IDB.size(); i++) {
+		for (uint32_t i{0U}; i < IDB.size(); i++) {
         IDB[i] += this->BasicOperandOffset();
         IDB[i] = DOF_indexes[ IDB[i] ];
       }
@@ -289,7 +292,7 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
 //  /* causes errratic values
       {
         // interface and intervening element
-        for ( auto nIdx{0U}; nIdx < n_elmt_nodes; ++nIdx ) {
+        for ( uint32_t nIdx{0U}; nIdx < n_elmt_nodes; ++nIdx ) {
              nodal_values[nIdx] = iface.N(nIdx,INSIDE)->Read(this->TestOperandKey());
              nodal_values[nIdx+n_elmt_nodes] = iface.N(nIdx,OUTSIDE)->Read(this->TestOperandKey());
              nodal_values[nIdx+n_elmt_nodes2] = iface.InterveningElement()->N(nIdx)->Read(this->TestOperandKey());
@@ -319,9 +322,9 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
     */
 		else if ( this->add_accumulate_ || this->add_accumulate_later_ )
 		{
-			for (auto i{0U}; i < this->LHS.Rows(); i++) {
+			for (uint32_t i{0U}; i < this->LHS.Rows(); i++) {
 				if ( IDT[i] != NULL_IDX ) {
-					for (auto j{0U}; j < this->LHS.Cols(); j++) {
+					for (uint32_t j{0U}; j < this->LHS.Cols(); j++) {
 						if ( IDB[j] == NULL_IDX ) {
 							pivotVector[ IDT[i] ] -= this->LHS(i,j) * nodal_values[j] * this->factor_;  // notice sign iface.N(j / this->TestOperandOffset())->Read(this->TestOperand())
 						}
@@ -336,9 +339,9 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
 		}
 		else if ( this->subtract_accumulate_ || this->subtract_accumulate_later_ )
       {
-        for ( auto i{0U}; i < this->LHS.Rows(); i++ ) {
+        for ( uint32_t i{0U}; i < this->LHS.Rows(); i++ ) {
           if ( IDT[i] != NULL_IDX ) {
-            for (auto j{0U}; j < this->LHS.Cols(); j++ ) {
+            for (uint32_t j{0U}; j < this->LHS.Cols(); j++ ) {
               if ( IDB[j] == NULL_IDX ) {
                 pivotVector[ IDT[i] ] += this->LHS(i,j) * nodal_values[j] * this->factor_;   // notice the sign LHS(i, j) * e.N(j)->Read(TestOperandKey());
               }
@@ -357,7 +360,7 @@ void NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<dim>::AssignToGlobal( con
 				                    "accumulation instructions could not be parsed.");
 
 	} // end AssignToGlobal (InterFace)
-
+#endif
 
 // FOR DEBUGGING
 //cout <<"\nNumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region: on InterFace "<< e.Idx() << endl;

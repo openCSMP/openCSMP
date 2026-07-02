@@ -157,7 +157,7 @@ void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::ComputeContribution( const CELL<di
 
 // now everything is assembled (using the  hydraulic diffusivity kappa = k / (S mu)
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double dt )
+void NumIntegral_NT_op1_op2_dNi_dV<dim,CELL>::MultiplyWithTimeFactor( double dt ) noexcept
  {
     for ( auto it=MathOperatorRHS<dim,CELL>::RHS.begin(); it!=MathOperatorRHS<dim,CELL>::RHS.end(); it++ ) {
           // not bad (no overshoot) 

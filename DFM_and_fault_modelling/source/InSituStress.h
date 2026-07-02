@@ -24,7 +24,7 @@ class InSituStress {
       /// initialization
       InSituStress( double depth, double rdensity, double overburden, double Sv, double SH, double Sh, double trend );
       InSituStress( const InSituStress& );
-      ~InSituStress() = default;
+//      ~InSituStress() = default;
   
       /// should normally be the location of the stress measurement, but can be shifted for display purposes
       void SampleLocation( double model_X_is_east, double model_Y_is_elevation, double model_Z_is_south );

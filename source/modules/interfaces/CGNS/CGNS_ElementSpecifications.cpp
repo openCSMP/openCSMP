@@ -1,6 +1,5 @@
 #include "CGNS_ElementSpecifications.h"
 
-#include <cstdio>
 /* cgnslib.h file must be located in directory specified by -I during compile: */
 #include "cgnslib.h"
 
