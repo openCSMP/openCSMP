@@ -1111,34 +1111,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::AssignEssentialConditions( const
       }
  }
 
-/*
-template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::AssignEssentialConditions( const ModelSubDomain<dim, CELLTYPE>& domain )
-//uint32_t var_size,
-//size_t offset )
-{
-    // Loop over the nodes in the subdomain using CSMP iterators
-    for ( auto& node : domain.NodeVector() ) {
-        size_t node_idx = node->Idx();
-        size_t reduced_node_pos = DOF_indexes_[node_idx];
-
-        // If this node isn't in the active mapping, skip it
-        if (reduced_node_pos == NULL_IDX) continue;
-
-        // Apply for each component/variable dimension
-        for (uint32_t i = 0; i < var_size; ++i) {
-            // Unreduced global position
-            size_t unreduced_idx = node_idx * var_size + i + offset;
-            // Reduced system position 
-            size_t reduced_idx = reduced_node_pos * var_size + i + offset;
-
-            // Secure bounds check against the reduced right-hand side vector
-            if (reduced_idx < this->rh_.size() && unreduced_idx < pivotVector_.size()) {
-                this->rh_[reduced_idx] += pivotVector_[unreduced_idx];
-            }
-        }
-    }
-}
 
 
 // ============================================================================
