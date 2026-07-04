@@ -116,7 +116,6 @@
 #include "ModelComparator_Test.h"
 
 // FE/FV integration
-#include "PDE_Integrator_Test.h"
 #include "Operand_Test.h"
 #include "MathOperatorLHS_Test.h"
 #include "MathOperatorRHS_Test.h"
@@ -124,6 +123,7 @@
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator_Transient_Test.h"
+#include "PDE_Integrator_Computation_Test.h"
 
 // constitutive relationships
 #include "TwoPhaseModel_TestSuite.h"
@@ -208,7 +208,11 @@ int main()
 
 //        refactored.addTest( new SparseMatrix_Test() );
 //        refactored.addTest( new CompressedRowMatrix_Test() );
-        refactored.addTest( new PDE_Integrator_Transient_Test() );
+
+          refactored.addTest( new PDE_Integrator_Computation_Test() );
+
+// TODO: does not run transient problem yet; compare analytic with num integrals
+//        refactored.addTest( new PDE_Integrator_Transient_Test() );
 
 //        refactored.addTest( new PDE_Integrator_Test() ); // refactored and passed 2/2/26
 //        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26

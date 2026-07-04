@@ -9,6 +9,7 @@
 #include "ANSYS_Interface.h"
 #include "variableOperations.h"
 #include "vsetMakers.h"
+#include "Exception.h"
 
 
 using namespace std;

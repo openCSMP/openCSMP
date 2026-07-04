@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Boundary.h"
 #include "SplitBoundary.h"
+#include "CSMP_highLevelUtilities.h"
 
 #ifdef _OPENMP
 #include "omp.h"

@@ -734,7 +734,25 @@ template<uint32_t dim>
 void PropertyDatabase<dim>::TextToBinaryFile( const char* property_database_textfile, bool echo_to_screen )
   {
      ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-     ifstream       ifs( property_database_textfile );
+ 
+     if ( property_database_textfile == nullptr || string(property_database_textfile).empty() )
+      {
+          csmp_error.Note( ERROR,
+              "PropertyDatabase<dim>::TextToBinaryFile",
+              "filename", "is null or empty" );
+          return;
+      }
+     std::error_code ec;
+     if ( !std::filesystem::exists(property_database_textfile, ec) )
+        {
+            csmp_error.Note( ERROR,
+                "PropertyDatabase<dim>::TextToBinaryFile",
+                property_database_textfile,
+                ("file does not exist in: " +
+                 std::filesystem::current_path().string()).c_str() );
+            return;
+        }
+     ifstream ifs( property_database_textfile );
      
      if ( !ifs.is_open() ) {
            csmp_error.Note( ERROR, "PropertyDatabase<dim>::TextToBinaryFile",

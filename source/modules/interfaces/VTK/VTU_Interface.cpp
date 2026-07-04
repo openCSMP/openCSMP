@@ -5,9 +5,15 @@
 #include "SplitBoundary.h"
 #include "Region.h"
 #include "Model.h"
+#include "Node.h"
+#include "Element.h"
+#include "Face.h"
+#include "InterFace.h"
 #include "OS_Utilities.h"
-
+#include "CSMP_highLevelUtilities.h"
+#include "PL_Utilities.h"
 #include "ErrorHandler.h"
+#include "Exception.h"
 
 using namespace std;
 
@@ -69,218 +75,158 @@ VTU_Interface<dim>::~VTU_Interface()
 // CONNECTIVITY FILES
 // -------------------
 
-/// allows to force recreation of connectivity map (FOR THE UPCOMING OUTPUT ONLY!!!)
-/**
-    @todo SKM verify this deletion process; looks like that there may be a memory leak.
-*/
 template<uint32_t dim>
-void VTU_Interface<dim>::DeleteConnectivity()
-  {
-    /// delete connectivity files for Field, Node and Element data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_.begin(); it != regionConnectivityFiles_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_.begin(); it != boundaryConnectivityFiles_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_.begin(); it != splitBoundaryConnectivityFiles_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_.clear();
+void VTU_Interface<dim>::DeleteConnectivity() noexcept
+{
+    // Field, node and element data
+    clearConnectivityMap( regionConnectivityFiles_ );
+    clearConnectivityMap( boundaryConnectivityFiles_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_ );
 
-    /// delete connectivity files for Element BaryCenters data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_bcd_.begin(); it != regionConnectivityFiles_bcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_bcd_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_bcd_.begin(); it != boundaryConnectivityFiles_bcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_bcd_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_bcd_.begin(); it != splitBoundaryConnectivityFiles_bcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_bcd_.clear();
+    // Element barycentre data
+    clearConnectivityMap( regionConnectivityFiles_bcd_ );
+    clearConnectivityMap( boundaryConnectivityFiles_bcd_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_bcd_ );
 
-    /// delete connectivity files for Regions data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_rcd_.begin(); it != regionConnectivityFiles_rcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_rcd_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_rcd_.begin(); it != boundaryConnectivityFiles_rcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_rcd_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_rcd_.begin(); it != splitBoundaryConnectivityFiles_rcd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_rcd_.clear();
+    // Region data
+    clearConnectivityMap( regionConnectivityFiles_rcd_ );
+    clearConnectivityMap( boundaryConnectivityFiles_rcd_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_rcd_ );
 
-    /// delete connectivity files for Finite Element Integration Points data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_feipsd_.begin(); it != regionConnectivityFiles_feipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_feipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_feipsd_.begin(); it != boundaryConnectivityFiles_feipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_feipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_feipsd_.begin(); it != splitBoundaryConnectivityFiles_feipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_feipsd_.clear();
+    // Finite Element integration point data
+    clearConnectivityMap( regionConnectivityFiles_feipsd_ );
+    clearConnectivityMap( boundaryConnectivityFiles_feipsd_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_feipsd_ );
 
-    /// delete connectivity files for Finite Volume Sector Integration Points data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_fvsipsd_.begin(); it != regionConnectivityFiles_fvsipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_fvsipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_fvsipsd_.begin(); it != boundaryConnectivityFiles_fvsipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_fvsipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_fvsipsd_.begin(); it != splitBoundaryConnectivityFiles_fvsipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_fvsipsd_.clear();
+    // Finite Volume sector integration point data
+    clearConnectivityMap( regionConnectivityFiles_fvsipsd_ );
+    clearConnectivityMap( boundaryConnectivityFiles_fvsipsd_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_fvsipsd_ );
 
-    /// delete connectivity files for Finite Volume Facet Integration Points data
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_fvfipsd_.begin(); it != regionConnectivityFiles_fvfipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_fvfipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_fvfipsd_.begin(); it != boundaryConnectivityFiles_fvfipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_fvfipsd_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_fvfipsd_.begin(); it != splitBoundaryConnectivityFiles_fvfipsd_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_fvfipsd_.clear();
+    // Finite Volume facet integration point data
+    clearConnectivityMap( regionConnectivityFiles_fvfipsd_ );
+    clearConnectivityMap( boundaryConnectivityFiles_fvfipsd_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_fvfipsd_ );
 
-    /// delete connectivity files of multiblock dataset
-    for( typename map<const ModelSubDomain<dim,Element>*,XML_Document*>::iterator it = regionConnectivityFiles_multiblock_.begin(); it != regionConnectivityFiles_multiblock_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    regionConnectivityFiles_multiblock_.clear();
-    for( typename map<const ModelSubDomain<dim,Face>*,XML_Document*>::iterator it = boundaryConnectivityFiles_multiblock_.begin(); it != boundaryConnectivityFiles_multiblock_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    boundaryConnectivityFiles_multiblock_.clear();
-    for( typename map<const ModelSubDomain<dim,InterFace>*,XML_Document*>::iterator it = splitBoundaryConnectivityFiles_multiblock_.begin(); it != splitBoundaryConnectivityFiles_multiblock_.end(); ++it )
-      if( it->second )
-        delete it->second;
-    splitBoundaryConnectivityFiles_multiblock_.clear();
-  }
+    // Multiblock dataset index files
+    clearConnectivityMap( regionConnectivityFiles_multiblock_ );
+    clearConnectivityMap( boundaryConnectivityFiles_multiblock_ );
+    clearConnectivityMap( splitBoundaryConnectivityFiles_multiblock_ );
+}
 
 
+// ============================================================
+// GetConnectivityMap — field, node and element data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,Element>&   )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,CELL>& )
 {
-    return regionConnectivityFiles_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_;
+    else
+        return splitBoundaryConnectivityFiles_;
 }
+
+// ============================================================
+// GetConnectivityMapBCS — element barycentre data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,Face>&   )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,CELL>& )
 {
-    return boundaryConnectivityFiles_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_bcd_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_bcd_;
+    else
+        return splitBoundaryConnectivityFiles_bcd_;
 }
+
+// ============================================================
+// GetConnectivityMapRCS — region data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMap( const ModelSubDomain<dim,InterFace>&   )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,CELL>& )
 {
-    return splitBoundaryConnectivityFiles_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_rcd_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_rcd_;
+    else
+        return splitBoundaryConnectivityFiles_rcd_;
 }
+
+// ============================================================
+// GetConnectivityMapFEIPS — finite element integration point data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,Element>&   )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,CELL>& )
 {
-    return regionConnectivityFiles_bcd_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_feipsd_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_feipsd_;
+    else
+        return splitBoundaryConnectivityFiles_feipsd_;
 }
+
+// ============================================================
+// GetConnectivityMapFVSIPS — finite volume sector integration point data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,Face>&  )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,CELL>& )
 {
-    return boundaryConnectivityFiles_bcd_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_fvsipsd_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_fvsipsd_;
+    else
+        return splitBoundaryConnectivityFiles_fvsipsd_;
 }
+
+// ============================================================
+// GetConnectivityMapFVFIPS — finite volume facet integration point data
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapBCS( const ModelSubDomain<dim,InterFace>&  )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,CELL>& )
 {
-    return splitBoundaryConnectivityFiles_bcd_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_fvfipsd_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_fvfipsd_;
+    else
+        return splitBoundaryConnectivityFiles_fvfipsd_;
 }
+
+// ============================================================
+// GetConnectivityMapMultiBlock — multiblock dataset index files
+// ============================================================
 template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,Element>&  )
+template<template <uint32_t> class CELL>
+typename VTU_Interface<dim>::template ConnectivityMap<CELL>&
+VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,CELL>& )
 {
-    return regionConnectivityFiles_rcd_;
+    if constexpr ( std::is_same_v<CELL<dim>, Element<dim>> )
+        return regionConnectivityFiles_multiblock_;
+    else if constexpr ( std::is_same_v<CELL<dim>, Face<dim>> )
+        return boundaryConnectivityFiles_multiblock_;
+    else
+        return splitBoundaryConnectivityFiles_multiblock_;
 }
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,Face>&  )
-{
-    return boundaryConnectivityFiles_rcd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapRCS( const ModelSubDomain<dim,InterFace>&  )
-{
-    return splitBoundaryConnectivityFiles_rcd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,Element>&  )
-{
-    return regionConnectivityFiles_feipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,Face>&  )
-{
-    return boundaryConnectivityFiles_feipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFEIPS( const ModelSubDomain<dim,InterFace>&  )
-{
-    return splitBoundaryConnectivityFiles_feipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,Element>&  )
-{
-    return regionConnectivityFiles_fvsipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,Face>&  )
-{
-    return boundaryConnectivityFiles_fvsipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVSIPS( const ModelSubDomain<dim,InterFace>&  )
-{
-    return splitBoundaryConnectivityFiles_fvsipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,Element>&  )
-{
-    return regionConnectivityFiles_fvfipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,Face>&  )
-{
-    return boundaryConnectivityFiles_fvfipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapFVFIPS( const ModelSubDomain<dim,InterFace>&  )
-{
-    return splitBoundaryConnectivityFiles_fvfipsd_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Element>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,Element>&  )
-{
-    return regionConnectivityFiles_multiblock_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,Face>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,Face>&  )
-{
-    return boundaryConnectivityFiles_multiblock_;
-}
-template<uint32_t dim>
-map<const ModelSubDomain<dim,InterFace>*,XML_Document*>& VTU_Interface<dim>::GetConnectivityMapMultiBlock( const ModelSubDomain<dim,InterFace>&  )
-{
-    return splitBoundaryConnectivityFiles_multiblock_;
-}
+
 
 
 
@@ -1091,44 +1037,40 @@ template bool VTU_Interface<3U>::OutputDataToVTU(const string&,const set<string>
 /// write multiblock file
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-void VTU_Interface<dim>
-::OutputMultiBlockVTU( const string& fileName,
-                       const vector<string>& fileNames,
-                       const ModelSubDomain<dim,CELL>& subDomain )
+void VTU_Interface<dim>::OutputMultiBlockVTU(
+        const string& fileName,
+        const vector<string>& fileNames,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-    /// initialize file
+    // Initialise output document from the cached header.
+    // The multiblock document is not reused between calls, so the cache
+    // serves only to provide the standard XML header consistently.
     XML_Document outputFile;
-    map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-               = GetConnectivityMapMultiBlock( subDomain );
-    outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapMultiBlock( subDomain ), subDomain );
 
-    outputFile.OpenNode( "VTKFile type=\"vtkMultiBlockDataSet\" version=\"1.0\" byte_order=\"LittleEndian\"" );
-    /// Open multiblock section
-    outputFile.OpenNode( "vtkMultiBlockDataSet");
+    // Root VTK element
+    outputFile.OpenNode(
+        "VTKFile type=\"vtkMultiBlockDataSet\" "
+        "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "vtkMultiBlockDataSet" );
     outputFile.OpenNode( "Block index=\"0\" name=\"Blocks\"" );
 
-    size_t files( fileNames.size() );
-    string stringNumber;
-    string stringCache;
-    string vtuFileName;
-    for( size_t index=0u; index<files; ++index )
+    // One DataSet entry per constituent VTU file
+    for ( size_t index = 0u; index < fileNames.size(); ++index )
     {
-        stringNumber = to_string( index );
-        vtuFileName  = fileNames[index];
-        vtuFileName += ".vtu";
-        // write DataSet section
-        stringCache = "DataSet index=\""; stringCache += stringNumber;
-        stringCache += "\" file=\""; stringCache += vtuFileName; stringCache += "\"";
-        outputFile.OpenNode( stringCache.c_str() ); stringCache.clear(); stringNumber.clear();
-        outputFile.CloseNode( "DataSet");
+        const string dataSetAttr =
+            "DataSet index=\""  + to_string( index )          + "\""
+            " file=\""          + fileNames[index] + ".vtu"   + "\"";
+
+        outputFile.OpenNode(  dataSetAttr.c_str() );
+        outputFile.CloseNode( "DataSet" );
     }
 
-    /// Close multiblock section
-    outputFile.CloseNode( "Block");
-    outputFile.CloseNode( "vtkMultiBlockDataSet");
+    outputFile.CloseNode( "Block" );
+    outputFile.CloseNode( "vtkMultiBlockDataSet" );
     outputFile.CloseNode( "VTKFile" );
 
-    /// Close file
     CloseFile( fileName, ".vtm", outputFile );
 }
 
@@ -1145,57 +1087,58 @@ template void VTU_Interface<2U>::OutputMultiBlockVTU( const string&,const vector
 template void VTU_Interface<3U>::OutputMultiBlockVTU( const string&,const vector<string>&,const ModelSubDomain<3U,InterFace>&);
 
 
-/// we dispatch the output to node and element scalar/vector/tensor/array/flagged array
+/// Dispatches output of field, node and element scalar/vector/tensor/array
+/// and flagged-array data to a single VTU file.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputFieldNodesAndElementDataToVTU( const string& fileName,
-                                       const list<Index>& fieldDataIndices,
-                                       const list<Index>& nodeIndices,
-                                       const list<Index>& elementIndices,
-                                       const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputFieldNodesAndElementDataToVTU(
+        const string&              fileName,
+        const list<Index>&         fieldDataIndices,
+        const list<Index>&         nodeIndices,
+        const list<Index>&         elementIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap = GetConnectivityMap( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMap( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// 1. Regions data
-  if( !fieldDataIndices.empty() )
-      OutputFieldDataToVTU<CELL>(outputFile, subDomain, fieldDataIndices );
+    // 1. Field data (model / region / boundary scalars, arrays, vectors, tensors)
+    if ( !fieldDataIndices.empty() )
+        OutputFieldDataToVTU<CELL>( outputFile, subDomain, fieldDataIndices );
 
-  /// 2. Nodes and Element's data
-  if( !nodeIndices.empty() || !elementIndices.empty() )
-  {
-      /// 2.1 create connectivity, open Piece section
-      EstablishConnectivityFile<CELL>( outputFile, subDomain );
+    // 2. Node and element data
+    const bool hasNodeData    = !nodeIndices.empty();
+    const bool hasElementData = !elementIndices.empty();
 
-      /// 2.2 point data arrays
-      if( !nodeIndices.empty() )
-          OutputPointDataToVTU(outputFile,subDomain,nodeIndices);
+    if ( hasNodeData || hasElementData )
+    {
+        // 2.1 Write Points, Cells connectivity — opens the Piece node
+        EstablishConnectivityFile<CELL>( outputFile, subDomain );
 
-      /// 2.3 cell data arrays
-      if( !elementIndices.empty() )
-          OutputCellDataToVTU(outputFile,subDomain,elementIndices);
+        // 2.2 Point data arrays
+        if ( hasNodeData )
+            OutputPointDataToVTU( outputFile, subDomain, nodeIndices );
 
-      /// 2.4 close Piece section
-      outputFile.CloseNode( "Piece" );
-  }
+        // 2.3 Cell data arrays
+        if ( hasElementData )
+            OutputCellDataToVTU( outputFile, subDomain, elementIndices );
 
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
+        // 2.4 Close Piece — must be called exactly once per EstablishConnectivityFile
+        outputFile.CloseNode( "Piece" );
+    }
 
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
+
 
 template bool VTU_Interface<1U>::OutputFieldNodesAndElementDataToVTU(const string&,const list<Index>&,const list<Index>&,const list<Index>&,const ModelSubDomain<1U,Element>&);
 template bool VTU_Interface<2U>::OutputFieldNodesAndElementDataToVTU(const string&,const list<Index>&,const list<Index>&,const list<Index>&,const ModelSubDomain<2U,Element>&);
@@ -1209,46 +1152,43 @@ template bool VTU_Interface<1U>::OutputFieldNodesAndElementDataToVTU(const strin
 template bool VTU_Interface<2U>::OutputFieldNodesAndElementDataToVTU(const string&,const list<Index>&,const list<Index>&,const list<Index>&,const ModelSubDomain<2U,InterFace>&);
 template bool VTU_Interface<3U>::OutputFieldNodesAndElementDataToVTU(const string&,const list<Index>&,const list<Index>&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
+
+
+/// Outputs element barycentre data as a VTK point-cloud VTU file.
+/// Each element contributes one point at its barycentre; no cell connectivity
+/// is written (NumberOfCells="0").
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputElementBarycentricDataToVTU( const string& fileName,
-                                     const list<Index>& elementMatrixIndices,
-                                     const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputElementBarycentricDataToVTU(
+        const string&              fileName,
+        const list<Index>&         elementMatrixIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMapBCS( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapBCS( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
+    // Barycentre point-cloud data
+    // Guard is required: EstablishConnectivityFileBCPC opens the Piece node,
+    // so CloseNode("Piece") must only be called when it was opened.
+    if ( !elementMatrixIndices.empty() )
+    {
+        // Opens Piece node — must be closed below
+        EstablishConnectivityFileBCPC<CELL>( outputFile, subDomain );
+        OutputPointDataToVTU( outputFile, subDomain, elementMatrixIndices );
+        outputFile.CloseNode( "Piece" ); // closes node opened by EstablishConnectivityFileBCPC
+    }
 
-  /// 1. Cell centers data
-  if( !elementMatrixIndices.empty() )
-  {
-      /// 1.1 create connectivity, open Piece section
-      EstablishConnectivityFileBCPC<CELL>( outputFile, subDomain );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-      /// 1.2 point data arrays
-      OutputPointDataToVTU(outputFile,subDomain,elementMatrixIndices);
-
-      /// 1.3 close Piece section
-      outputFile.CloseNode( "Piece" );
-  }
-
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
-
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
-
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
 
 template bool VTU_Interface<1U>::OutputElementBarycentricDataToVTU(const string&,const list<Index>&,const ModelSubDomain<1U,Element>&);
@@ -1264,47 +1204,43 @@ template bool VTU_Interface<2U>::OutputElementBarycentricDataToVTU(const string&
 template bool VTU_Interface<3U>::OutputElementBarycentricDataToVTU(const string&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
+/// Outputs region-placed data as a single-point VTU file.
+/// Each region contributes one point at its geometric centre; no mesh
+/// connectivity is written beyond a single VTK_POLY_VERTEX cell.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputRegionDataToVTU( const string& fileName,
-                         const list<Index>& regionIndices,
-                         const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputRegionDataToVTU(
+        const string&              fileName,
+        const list<Index>&         regionIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMapRCS( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapRCS( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
-
-  /// 1. Region's data
-  if( !regionIndices.empty() )
+    // Region centre point-cloud data.
+    // Guard is required: EstablishConnectivityFileRPC opens the Piece node,
+    // so CloseNode("Piece") must only be called when it was opened.
+    if ( !regionIndices.empty() )
     {
-      /// 1.1 create connectivity, open Piece section
-      EstablishConnectivityFileRPC<CELL>( outputFile, subDomain );
-
-      /// 1.2 point data arrays
-      if( !regionIndices.empty() )
-          OutputPointDataToVTU(outputFile,subDomain,regionIndices);
-
-      /// 1.1. close Piece section
-      outputFile.CloseNode( "Piece" );
+        // Opens Piece node — must be closed below
+        EstablishConnectivityFileRPC<CELL>( outputFile, subDomain );
+        OutputPointDataToVTU( outputFile, subDomain, regionIndices );
+        outputFile.CloseNode( "Piece" ); // closes node opened by EstablishConnectivityFileRPC
     }
 
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
-
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
 
 template bool VTU_Interface<1U>::OutputRegionDataToVTU(const string&,const list<Index>&,const ModelSubDomain<1U,Element>&);
@@ -1320,46 +1256,43 @@ template bool VTU_Interface<2U>::OutputRegionDataToVTU(const string&,const list<
 template bool VTU_Interface<3U>::OutputRegionDataToVTU(const string&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
+/// Outputs finite element integration point data as a VTK point-cloud VTU file.
+/// Each integration point of each element in the subdomain contributes one point;
+/// no cell connectivity is written beyond a single VTK_POLY_VERTEX cell.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputFiniteElementIntegrationPointsDataToVTU( const string& fileName,
-                   const list<Index>& feipIndices,
-                   const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputFiniteElementIntegrationPointsDataToVTU(
+        const string&              fileName,
+        const list<Index>&         feipIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMapFEIPS( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapFEIPS( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
+    // Finite element integration point data.
+    // Guard is required: EstablishConnectivityFileFEIP opens the Piece node,
+    // so CloseNode("Piece") must only be called when it was opened.
+    if ( !feipIndices.empty() )
+    {
+        // Opens Piece node — must be closed below
+        EstablishConnectivityFileFEIP<CELL>( outputFile, subDomain );
+        OutputPointDataToVTU( outputFile, subDomain, feipIndices );
+        outputFile.CloseNode( "Piece" ); // closes node opened by EstablishConnectivityFileFEIP
+    }
 
-  /// 1. Finite Element Integration Points
-  if( !feipIndices.empty() )
-  {
-      /// 1.1 create connectivity, open Piece section
-      EstablishConnectivityFileFEIP<CELL>( outputFile, subDomain );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-      /// 1.2 point data arrays
-      OutputPointDataToVTU(outputFile,subDomain,feipIndices);
-
-      /// 1.3 close Piece section
-      outputFile.CloseNode( "Piece" );
-  }
-
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
-
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
-
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
 
 template bool VTU_Interface<1U>::OutputFiniteElementIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<1U,Element>&);
@@ -1375,46 +1308,43 @@ template bool VTU_Interface<2U>::OutputFiniteElementIntegrationPointsDataToVTU(c
 template bool VTU_Interface<3U>::OutputFiniteElementIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
+/// Outputs finite volume sector integration point data as a VTK point-cloud VTU file.
+/// Each sector integration point of each element in the subdomain contributes one point;
+/// no cell connectivity is written beyond a single VTK_POLY_VERTEX cell.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputFiniteVolumeSectorIntegrationPointsDataToVTU( const string& fileName,
-                   const list<Index>& fvsipIndices,
-                   const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(
+        const string&              fileName,
+        const list<Index>&         fvsipIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMapFVSIPS( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapFVSIPS( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
+    // Finite volume sector integration point data.
+    // Guard is required: EstablishConnectivityFileFVSIP opens the Piece node,
+    // so CloseNode("Piece") must only be called when it was opened.
+    if ( !fvsipIndices.empty() )
+    {
+        // Opens Piece node — must be closed below
+        EstablishConnectivityFileFVSIP<CELL>( outputFile, subDomain );
+        OutputPointDataToVTU( outputFile, subDomain, fvsipIndices );
+        outputFile.CloseNode( "Piece" ); // closes node opened by EstablishConnectivityFileFVSIP
+    }
 
-  /// 1. Finite Volume Sector Integration Points
-  if( !fvsipIndices.empty() )
-  {
-      /// 1.1 create connectivity, open Piece section
-      EstablishConnectivityFileFVSIP<CELL>( outputFile, subDomain );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-      /// 1.2 point data arrays
-      OutputPointDataToVTU(outputFile,subDomain,fvsipIndices);
-
-      /// 1.3 close Piece section
-      outputFile.CloseNode( "Piece" );
-  }
-
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
-
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
-
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
 
 template bool VTU_Interface<1U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<1U,Element>&);
@@ -1430,46 +1360,43 @@ template bool VTU_Interface<2U>::OutputFiniteVolumeSectorIntegrationPointsDataTo
 template bool VTU_Interface<3U>::OutputFiniteVolumeSectorIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<3U,InterFace>&);
 
 
+
+
+/// Outputs finite volume facet integration point data as a VTK point-cloud VTU file.
+/// Each facet integration point of each element in the subdomain contributes one point;
+/// no cell connectivity is written beyond a single VTK_POLY_VERTEX cell.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>
-::OutputFiniteVolumeFacetIntegrationPointsDataToVTU( const string& fileName,
-                   const list<Index>& fvfipIndices,
-                   const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(
+        const string&              fileName,
+        const list<Index>&         fvfipIndices,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  /// initialize file
-  XML_Document outputFile;
-  map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap
-             = GetConnectivityMapFVFIPS( subDomain );
-  outputFile = *ConnectivityFile<CELL>( connectivityMap, subDomain );
+    // Initialise output document from the cached header
+    XML_Document outputFile;
+    outputFile = *ConnectivityFile<CELL>(
+                     GetConnectivityMapFVFIPS( subDomain ), subDomain );
 
-  /// Open VTKFile section
-  outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "VTKFile type=\"UnstructuredGrid\" "
+                         "version=\"1.0\" byte_order=\"LittleEndian\"" );
+    outputFile.OpenNode( "UnstructuredGrid" );
 
-  /// Open UnstructuredGrid section
-  outputFile.OpenNode( "UnstructuredGrid" );
+    // Finite volume facet integration point data.
+    // Guard is required: EstablishConnectivityFileFVFIP opens the Piece node,
+    // so CloseNode("Piece") must only be called when it was opened.
+    if ( !fvfipIndices.empty() )
+    {
+        // Opens Piece node — must be closed below
+        EstablishConnectivityFileFVFIP<CELL>( outputFile, subDomain );
+        OutputPointDataToVTU( outputFile, subDomain, fvfipIndices );
+        outputFile.CloseNode( "Piece" ); // closes node opened by EstablishConnectivityFileFVFIP
+    }
 
-  /// 1. Finite Volume Facet Integration Points
-  if( !fvfipIndices.empty() )
-  {
-      /// 1.1 create connectivity, open Piece section
-      EstablishConnectivityFileFVFIP<CELL>( outputFile, subDomain );
+    outputFile.CloseNode( "UnstructuredGrid" );
+    outputFile.CloseNode( "VTKFile" );
 
-      /// 1.2 point data arrays
-      OutputPointDataToVTU(outputFile,subDomain,fvfipIndices);
-
-      /// 1.3 close Piece section
-      outputFile.CloseNode( "Piece" );
-  }
-
-  /// Close UnstructuredGrid section
-  outputFile.CloseNode( "UnstructuredGrid" );
-  outputFile.CloseNode( "VTKFile" );
-
-  /// Close file
-  CloseFile( fileName, ".vtu", outputFile );
-
-  return true;
+    CloseFile( fileName, ".vtu", outputFile );
+    return true;
 }
 
 template bool VTU_Interface<1U>::OutputFiniteVolumeFacetIntegrationPointsDataToVTU(const string&,const list<Index>&,const ModelSubDomain<1U,Element>&);
@@ -2853,84 +2780,104 @@ template void VTU_Interface<3U>::WriteElementDataArrayScalarFlaggedArray(const I
 // CONNECTIVITY
 // ----------------
 
+// ============================================================
+// findConnectivityFile
+// Returns a non-owning raw pointer to the cached XML_Document
+// for the given subdomain, or nullptr if not yet cached.
+// ============================================================
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-XML_Document* VTU_Interface<dim>::findConnectivityFile( map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,CELL>& subDomain )
+XML_Document* VTU_Interface<dim>::findConnectivityFile(
+        ConnectivityMap<CELL>&              connectivityMap,
+        const ModelSubDomain<dim,CELL>&     subDomain )
 {
-  typename map<const ModelSubDomain<dim,CELL>*,XML_Document*>::const_iterator connectivityEntry( connectivityMap.find( &subDomain ) );
-  if( connectivityEntry != connectivityMap.end() )
-    return connectivityEntry->second;
-  return NULL;
+    const auto it = connectivityMap.find( &subDomain );
+    if ( it != connectivityMap.end() )
+        return it->second.get();    // non-owning observer; map retains ownership
+    return nullptr;
 }
-template XML_Document* VTU_Interface<1U>::findConnectivityFile<Element>(map<const ModelSubDomain<1U,Element>*,XML_Document*>&,const ModelSubDomain<1U,Element>&);
-template XML_Document* VTU_Interface<2U>::findConnectivityFile<Element>(map<const ModelSubDomain<2U,Element>*,XML_Document*>&,const ModelSubDomain<2U,Element>&);
-template XML_Document* VTU_Interface<3U>::findConnectivityFile<Element>(map<const ModelSubDomain<3U,Element>*,XML_Document*>&,const ModelSubDomain<3U,Element>&);
 
-template XML_Document* VTU_Interface<1U>::findConnectivityFile<Face>(map<const ModelSubDomain<1U,Face>*,XML_Document*>&,const ModelSubDomain<1U,Face>&);
-template XML_Document* VTU_Interface<2U>::findConnectivityFile<Face>(map<const ModelSubDomain<2U,Face>*,XML_Document*>&,const ModelSubDomain<2U,Face>&);
-template XML_Document* VTU_Interface<3U>::findConnectivityFile<Face>(map<const ModelSubDomain<3U,Face>*,XML_Document*>&,const ModelSubDomain<3U,Face>&);
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<Element>  (VTU_Interface<1U>::ConnectivityMap<Element>&,   const ModelSubDomain<1U,Element>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<Element>  (VTU_Interface<2U>::ConnectivityMap<Element>&,   const ModelSubDomain<2U,Element>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<Element>  (VTU_Interface<3U>::ConnectivityMap<Element>&,   const ModelSubDomain<3U,Element>&);
 
-template XML_Document* VTU_Interface<1U>::findConnectivityFile<InterFace>(map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,const ModelSubDomain<1U,InterFace>&);
-template XML_Document* VTU_Interface<2U>::findConnectivityFile<InterFace>(map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,const ModelSubDomain<2U,InterFace>&);
-template XML_Document* VTU_Interface<3U>::findConnectivityFile<InterFace>(map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,const ModelSubDomain<3U,InterFace>&);
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<Face>     (VTU_Interface<1U>::ConnectivityMap<Face>&,      const ModelSubDomain<1U,Face>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<Face>     (VTU_Interface<2U>::ConnectivityMap<Face>&,      const ModelSubDomain<2U,Face>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<Face>     (VTU_Interface<3U>::ConnectivityMap<Face>&,      const ModelSubDomain<3U,Face>&);
 
+template XML_Document* VTU_Interface<1U>::findConnectivityFile<InterFace>(VTU_Interface<1U>::ConnectivityMap<InterFace>&, const ModelSubDomain<1U,InterFace>&);
+template XML_Document* VTU_Interface<2U>::findConnectivityFile<InterFace>(VTU_Interface<2U>::ConnectivityMap<InterFace>&, const ModelSubDomain<2U,InterFace>&);
+template XML_Document* VTU_Interface<3U>::findConnectivityFile<InterFace>(VTU_Interface<3U>::ConnectivityMap<InterFace>&, const ModelSubDomain<3U,InterFace>&);
+
+
+// ============================================================
+// insertConnectivityFile
+// Takes ownership of newConnectivityFile and stores it in the map.
+// Returns true if insertion succeeded (map::emplace guarantee).
+// ============================================================
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-bool VTU_Interface<dim>::insertConnectivityFile( map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap,
-                                                 XML_Document* newConnectivityFile, const ModelSubDomain<dim,CELL>& subDomain )
+bool VTU_Interface<dim>::insertConnectivityFile(
+        ConnectivityMap<CELL>&              connectivityMap,
+        std::unique_ptr<XML_Document>       newConnectivityFile,
+        const ModelSubDomain<dim,CELL>&     subDomain )
 {
-  connectivityMap.insert( make_pair( &subDomain, newConnectivityFile ) );
-  return true;
+    const auto result = connectivityMap.emplace(
+                            &subDomain, std::move( newConnectivityFile ) );
+    return result.second;   // true if inserted, false if key already existed
 }
 
-template bool VTU_Interface<1U>::insertConnectivityFile(map<const ModelSubDomain<1U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,Element>&);
-template bool VTU_Interface<2U>::insertConnectivityFile(map<const ModelSubDomain<2U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,Element>&);
-template bool VTU_Interface<3U>::insertConnectivityFile(map<const ModelSubDomain<3U,Element>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,Element>&);
+template bool VTU_Interface<1U>::insertConnectivityFile<Element>  (VTU_Interface<1U>::ConnectivityMap<Element>&,   std::unique_ptr<XML_Document>, const ModelSubDomain<1U,Element>&);
+template bool VTU_Interface<2U>::insertConnectivityFile<Element>  (VTU_Interface<2U>::ConnectivityMap<Element>&,   std::unique_ptr<XML_Document>, const ModelSubDomain<2U,Element>&);
+template bool VTU_Interface<3U>::insertConnectivityFile<Element>  (VTU_Interface<3U>::ConnectivityMap<Element>&,   std::unique_ptr<XML_Document>, const ModelSubDomain<3U,Element>&);
 
-template bool VTU_Interface<1U>::insertConnectivityFile(map<const ModelSubDomain<1U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,Face>&);
-template bool VTU_Interface<2U>::insertConnectivityFile(map<const ModelSubDomain<2U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,Face>&);
-template bool VTU_Interface<3U>::insertConnectivityFile(map<const ModelSubDomain<3U,Face>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,Face>&);
+template bool VTU_Interface<1U>::insertConnectivityFile<Face>     (VTU_Interface<1U>::ConnectivityMap<Face>&,      std::unique_ptr<XML_Document>, const ModelSubDomain<1U,Face>&);
+template bool VTU_Interface<2U>::insertConnectivityFile<Face>     (VTU_Interface<2U>::ConnectivityMap<Face>&,      std::unique_ptr<XML_Document>, const ModelSubDomain<2U,Face>&);
+template bool VTU_Interface<3U>::insertConnectivityFile<Face>     (VTU_Interface<3U>::ConnectivityMap<Face>&,      std::unique_ptr<XML_Document>, const ModelSubDomain<3U,Face>&);
 
-template bool VTU_Interface<1U>::insertConnectivityFile(map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<1U,InterFace>&);
-template bool VTU_Interface<2U>::insertConnectivityFile(map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<2U,InterFace>&);
-template bool VTU_Interface<3U>::insertConnectivityFile(map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,XML_Document*,const ModelSubDomain<3U,InterFace>&);
+template bool VTU_Interface<1U>::insertConnectivityFile<InterFace>(VTU_Interface<1U>::ConnectivityMap<InterFace>&, std::unique_ptr<XML_Document>, const ModelSubDomain<1U,InterFace>&);
+template bool VTU_Interface<2U>::insertConnectivityFile<InterFace>(VTU_Interface<2U>::ConnectivityMap<InterFace>&, std::unique_ptr<XML_Document>, const ModelSubDomain<2U,InterFace>&);
+template bool VTU_Interface<3U>::insertConnectivityFile<InterFace>(VTU_Interface<3U>::ConnectivityMap<InterFace>&, std::unique_ptr<XML_Document>, const ModelSubDomain<3U,InterFace>&);
 
 
-/// returns a pointer to the regions connectivity file. creates one if not existing yet
+
+
+/// Returns a non-owning raw pointer to the cached connectivity document for
+// the given subdomain, creating and caching it if it does not yet exist.
+// Ownership of the document remains with the connectivity map throughout.
 template<uint32_t dim>
 template<template <uint32_t> class CELL>
-XML_Document* VTU_Interface<dim>::ConnectivityFile( map<const ModelSubDomain<dim,CELL>*,XML_Document*>& connectivityMap, const ModelSubDomain<dim,CELL>& subDomain )
+XML_Document* VTU_Interface<dim>::ConnectivityFile(
+        ConnectivityMap<CELL>&          connectivityMap,
+        const ModelSubDomain<dim,CELL>& subDomain )
 {
-  // looks for corresponding entry for region parameter
-  XML_Document* connectivityFile( findConnectivityFile( connectivityMap, subDomain ) );
+    // Return cached document if one already exists for this subdomain
+    XML_Document* existing = findConnectivityFile( connectivityMap, subDomain );
+    if ( existing )
+        return existing;
 
-  // if there's already an entry, return the connectivity file ptr
-  if( connectivityFile )
-    return connectivityFile;
+    // No cached document yet — allocate one and write the standard header
+    auto newDoc = std::make_unique<XML_Document>();
+    EstablishConnectivityFileHeader( *newDoc );
 
-  // if not, we go on and create one
-  XML_Document* newConnectivityFile( new XML_Document );
+    // Save a non-owning observer before transferring ownership to the map
+    XML_Document* observer = newDoc.get();
+    insertConnectivityFile( connectivityMap, std::move( newDoc ), subDomain );
 
-  EstablishConnectivityFileHeader( *newConnectivityFile );
-
-  // create an entry for region with connectivity file ptr
-  insertConnectivityFile( connectivityMap, newConnectivityFile, subDomain );
-
-  // and return ptr
-  return newConnectivityFile;
+    return observer;
 }
 
-template XML_Document* VTU_Interface<1U>::ConnectivityFile(map<const ModelSubDomain<1U,Element>*,XML_Document*>&,const ModelSubDomain<1U,Element>&);
-template XML_Document* VTU_Interface<2U>::ConnectivityFile(map<const ModelSubDomain<2U,Element>*,XML_Document*>&,const ModelSubDomain<2U,Element>&);
-template XML_Document* VTU_Interface<3U>::ConnectivityFile(map<const ModelSubDomain<3U,Element>*,XML_Document*>&,const ModelSubDomain<3U,Element>&);
+template XML_Document* VTU_Interface<1U>::ConnectivityFile<Element>  (VTU_Interface<1U>::ConnectivityMap<Element>&,   const ModelSubDomain<1U,Element>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile<Element>  (VTU_Interface<2U>::ConnectivityMap<Element>&,   const ModelSubDomain<2U,Element>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile<Element>  (VTU_Interface<3U>::ConnectivityMap<Element>&,   const ModelSubDomain<3U,Element>&);
 
-template XML_Document* VTU_Interface<1U>::ConnectivityFile(map<const ModelSubDomain<1U,Face>*,XML_Document*>&,const ModelSubDomain<1U,Face>&);
-template XML_Document* VTU_Interface<2U>::ConnectivityFile(map<const ModelSubDomain<2U,Face>*,XML_Document*>&,const ModelSubDomain<2U,Face>&);
-template XML_Document* VTU_Interface<3U>::ConnectivityFile(map<const ModelSubDomain<3U,Face>*,XML_Document*>&,const ModelSubDomain<3U,Face>&);
+template XML_Document* VTU_Interface<1U>::ConnectivityFile<Face>     (VTU_Interface<1U>::ConnectivityMap<Face>&,      const ModelSubDomain<1U,Face>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile<Face>     (VTU_Interface<2U>::ConnectivityMap<Face>&,      const ModelSubDomain<2U,Face>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile<Face>     (VTU_Interface<3U>::ConnectivityMap<Face>&,      const ModelSubDomain<3U,Face>&);
 
-template XML_Document* VTU_Interface<1U>::ConnectivityFile(map<const ModelSubDomain<1U,InterFace>*,XML_Document*>&,const ModelSubDomain<1U,InterFace>&);
-template XML_Document* VTU_Interface<2U>::ConnectivityFile(map<const ModelSubDomain<2U,InterFace>*,XML_Document*>&,const ModelSubDomain<2U,InterFace>&);
-template XML_Document* VTU_Interface<3U>::ConnectivityFile(map<const ModelSubDomain<3U,InterFace>*,XML_Document*>&,const ModelSubDomain<3U,InterFace>&);
+template XML_Document* VTU_Interface<1U>::ConnectivityFile<InterFace>(VTU_Interface<1U>::ConnectivityMap<InterFace>&, const ModelSubDomain<1U,InterFace>&);
+template XML_Document* VTU_Interface<2U>::ConnectivityFile<InterFace>(VTU_Interface<2U>::ConnectivityMap<InterFace>&, const ModelSubDomain<2U,InterFace>&);
+template XML_Document* VTU_Interface<3U>::ConnectivityFile<InterFace>(VTU_Interface<3U>::ConnectivityMap<InterFace>&, const ModelSubDomain<3U,InterFace>&);
 
 
 

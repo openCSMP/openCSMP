@@ -2,6 +2,7 @@
 #define XML_DOCUMENT_H
 
 #include <string>
+#include <vector>
 
 namespace csmp {
 
@@ -53,9 +54,9 @@ protected:
   void WriteToData( const char* content ) { data_ += content; }
 
 private:
-  std::string data_;                ///< stl string to hold document data
-  std::string sCache_;              ///< working string
-  size_t currentLevel_;             ///< current level of indentation/node
+  std::vector<std::string> nodeStack_; ///< to make sure that open nodes are closed again
+  std::string data_;                   ///< stl string to hold document data
+  size_t currentLevel_;                ///< current level of indentation/node
 };
 
 } // csmp

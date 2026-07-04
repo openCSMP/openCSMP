@@ -6,6 +6,7 @@
 #include "VTU_Interface.h"
 #include "vsetMakers.h"
 #include "CSMP_mathUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 #include "CSMP_physical_constants.h"
 #include "meshManagementUtilities.h"
 #include "compareFloats.h"

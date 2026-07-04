@@ -146,7 +146,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                                                         const char* volume_flux,
                                                         const char* nodal_velocity,
                                                         const char* nodal_pore_velocity,
-                                                        const char* nodal_volume_flux)
+                                                        const char* nodal_volume_flux )
 
   : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     PF_(3),
@@ -253,7 +253,7 @@ VelocityAndVolumeFlux<dim,CELL>::VelocityAndVolumeFlux( const Model<dim>& sg,
                                                         const char* volume_flux,
                                                         const char* nodal_velocity,
                                                         const char* nodal_pore_velocity,
-                                                        const char* nodal_volume_flux)
+                                                        const char* nodal_volume_flux )
   : MathOperatorLHS<dim,CELL>(sg.Database(),oper,basic,test),
     PF_(3),
     VELOFLUX_(dim+1),

@@ -2,10 +2,8 @@
 #define GENERIC_2P2D_IMPES_SIMULATOR_H
 
 #include "CSMP_definitions.h"
-#include "VTK_Interface.h"
-#include "VTU_Interface.h"
-#include "CSMP_definitions.h"
 #include "IMPES_SimulatorKeys.h"
+#include "PDE_Integrator.h"
 #include "ComputationalSettings.h"
 
 namespace csmp {
@@ -19,6 +17,8 @@ template<uint32_t> class ControlVolumeElement;
 template<uint32_t> class TwoPhaseElementBasedTransport;
 template<uint32_t> class TwoPhaseModel;
 template<uint32_t> class PropertyHandle;
+
+template<uint32_t> class VTU_Interface;
 
 class Generic2P2D_IMPES_Simulator
 {
@@ -73,7 +73,6 @@ private:
 
     std::string                                     modelName_;
     Model<2U>*                                      reservoirModel_;
-    VTK_Interface<2U>                               vtkOutput_;
     VTU_Interface<2U>*                              vtuOutput_;
 
     ComputationalSettings                           runSettings_;

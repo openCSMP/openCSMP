@@ -7,6 +7,7 @@
 #include "PointSource_rhsop.h"
 #include "NumIntegral_dNT_op_dN_dV.h"
 #include "NumIntegral_NT_op_N_dV.h"
+#include "PL_Utilities.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"

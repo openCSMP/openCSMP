@@ -676,7 +676,7 @@ bool PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EstablishMatrixSetup( const ModelS
           }
         return false;
      }
-
+   else gref.RenumberNodes();
 
    // -------------------------------------------
    // 1. determine basic sizes for G, x, rh

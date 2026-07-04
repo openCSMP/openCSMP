@@ -15,6 +15,8 @@
 #include "TransportModel.h"
 #include "ModelTime.h"
 #include "SignalHandler.h"
+#include "VTK_Interface.h"
+#include "VTU_Interface.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -528,18 +530,18 @@ void Generic2P2D_IMPES_Simulator::OutputToVTK( double time_unit )
 
     if ( first_time )
     {
-        for (std::set<std::string>::const_iterator sit = setup_.OutputOnceBegin(); sit != setup_.OutputOnceEnd(); ++sit)
+        for ( auto sit = setup_.OutputOnceBegin(); sit != setup_.OutputOnceEnd(); ++sit)
         {
-            vtkOutput_.OutputDataToVTK(*reservoirModel_, (*sit).c_str(), (*sit).c_str(), tstep);
+            VTK_Interface<2>().OutputDataToVTK(*reservoirModel_, (*sit).c_str(), (*sit).c_str(), tstep);
         }
         
         first_time = false;
         
     }
 
-    for (std::set<std::string>::const_iterator sit = setup_.OutputAlwaysBegin(); sit != setup_.OutputAlwaysEnd(); ++sit)
+    for ( auto sit = setup_.OutputAlwaysBegin(); sit != setup_.OutputAlwaysEnd(); ++sit)
     {
-        vtkOutput_.OutputDataToVTK(*reservoirModel_, (*sit).c_str(), (*sit).c_str(), tstep);
+        VTK_Interface<2>().OutputDataToVTK(*reservoirModel_, (*sit).c_str(), (*sit).c_str(), tstep);
     }
 
 

@@ -76,6 +76,9 @@ class BoundaryInterface {
     /// checks whether name contains the strings BOUNDARY or any of the predefined boundary names
     bool IsBoundaryName( const std::string& regionName ) const;
     
+    /// if boundary exists and there is no boundary with 'new name', converts boundary name from old to new name
+    bool RenameBoundary( const std::string& old_name, const std::string& new_name );
+    
     /// checks whether the model contains the BOX_BOUNDARY=equivalent boundaries TOP, BOTTOM etc.
     bool BoxShaped() const;
 

@@ -9,6 +9,7 @@
 #include "ModelTopology.h"
 #include "InputDataManager.h"
 #include "compareFloats.h"
+#include "Exception.h"
 
 using namespace std;
 

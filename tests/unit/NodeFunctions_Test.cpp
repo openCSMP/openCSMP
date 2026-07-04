@@ -11,6 +11,7 @@
 #include "meshManagementUtilities.h"
 #include "vsetMakers.h"
 #include "VTU_Interface.h"
+#include "Model.h"
 #include "Region.h"
 #include "Element.h"
 #include "compareFloats.h"

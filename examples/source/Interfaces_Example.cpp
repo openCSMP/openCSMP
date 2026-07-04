@@ -15,6 +15,7 @@ using namespace std::filesystem;
 #include "EclipseModel.h"
 #include "IntrepidInterface.h"
 #include "RhinoSurfaceReader.h"
+#include "Exception.h"
 
 #include "Standard_IO_Handler.h"
 #include "VTU_Interface.h"

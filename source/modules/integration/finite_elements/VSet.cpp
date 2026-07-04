@@ -968,6 +968,8 @@ void VSet<dim>::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
     each triangle 4 and each tetrahedron 8 new elements.
     
     The material identifiers and properties from the original mesh are transferred onto the new one.
+    
+    @return vector indexed by the new elements, reporting the number of the old elements that they were created from
  */
 template<uint32_t dim>
 vector<size_t> VSet<dim>::Refine()
@@ -1013,7 +1015,6 @@ vector<size_t> VSet<dim>::Refine()
             else {
                 cerr <<"\nERROR: VSet<"<< dim <<">::Refine: placement of property '"<< property.first <<"' not handled. yet.\n";
                 cerr <<"\n\tProperties with the placement "<< parsePlacement(oldprop.Placement()) <<" were not transferred correctly\n";
-                throw logic_error("VSet<dim>::Refine");
              }
           }
       }

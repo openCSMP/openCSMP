@@ -1,6 +1,9 @@
 #include "XML_Document.h"
 
 #include <fstream>
+#include <cassert>
+
+using namespace std;
 
 namespace csmp {
 
@@ -15,14 +18,22 @@ XML_Document::XML_Document()
 /// opens a new xml node with name and label/settings
 void XML_Document::OpenNode( const char* nodeLabel )
 {
+  // extract tag name (everything before first space or end)
+  std::string label( nodeLabel );
+  nodeStack_.push_back( label.substr( 0, label.find(' ') ) );
+
   // setting current line indentation
   BringToLevel();
 
   // establishing content
-  sCache_.clear(); sCache_ += "<"; sCache_ += nodeLabel; sCache_ += ">\n";
+  string tag;
+  tag.reserve( std::strlen(nodeLabel) + 3 );
+  tag += "<";
+  tag += nodeLabel;
+  tag += ">\n";
 
   // writing content
-  WriteToData( sCache_.c_str() ); sCache_.clear();
+  WriteToData( tag.c_str() );
 
   // updating indentation level
   Up();
@@ -32,6 +43,9 @@ void XML_Document::OpenNode( const char* nodeLabel )
 /// closes given node
 void XML_Document::CloseNode( const char* nodeName )
 {
+  assert( !nodeStack_.empty() && nodeStack_.back() == nodeName );
+  nodeStack_.pop_back();
+
   // updating indentation level
   Down();
 
@@ -39,10 +53,14 @@ void XML_Document::CloseNode( const char* nodeName )
   BringToLevel();
 
   // establishing content
-  sCache_.clear(); sCache_ += "</"; sCache_ += nodeName; sCache_ += ">\n";
+  string tag;
+  tag.reserve( std::strlen(nodeName) + 3 );
+  tag += "</";
+  tag += nodeName;
+  tag += ">\n";
 
   // writing content
-  WriteToData( sCache_.c_str() ); sCache_.clear();
+  WriteToData( tag.c_str() );
 }
 
 
@@ -50,8 +68,12 @@ void XML_Document::CloseNode( const char* nodeName )
 void XML_Document::AddComment( const char* comment )
 {
   BringToLevel();
-  sCache_.clear(); sCache_ += "<!--\n"; sCache_ += comment; sCache_ += "\n-->\n\n";
-  WriteToData( sCache_.c_str() ); sCache_.clear();
+  string tag;
+  tag.reserve( std::strlen(comment) + 3 );
+  tag += "<!--\n";
+  tag += comment;
+  tag += "\n-->\n\n";
+  WriteToData( tag.c_str() );
 }
 
 
@@ -59,8 +81,12 @@ void XML_Document::AddComment( const char* comment )
 void XML_Document::AddInfo( const char* info )
 {
   BringToLevel();
-  sCache_.clear(); sCache_ += "<\?"; sCache_ += info; sCache_ += "\?>\n\n";
-  WriteToData( sCache_.c_str() ); sCache_.clear();
+  string tag;
+  tag.reserve( std::strlen(info) + 3 );
+  tag += "<?";
+  tag += info;
+  tag += "?>";
+  WriteToData( tag.c_str() );
 }
 
 
@@ -75,7 +101,7 @@ void XML_Document::InsertData( const char* data )
 bool XML_Document::WriteToFile( const char* fileName ) const
 {
   // open file to output to
-  std::fstream xmlFile;
+  std::ofstream xmlFile;
   xmlFile.open ( fileName, std::fstream::out );
 
   // return false if failed
@@ -85,10 +111,7 @@ bool XML_Document::WriteToFile( const char* fileName ) const
   // writing data to file
   xmlFile << data_;
 
-  // closing xml file
-  xmlFile.close();
-
-  return true;
+  return xmlFile.good();
 }
 
 

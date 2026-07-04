@@ -9,6 +9,7 @@
 #include "Region.h"
 #include "Element.h"
 #include "Node.h"
+#include "PropertyHandle.h"
 #include "ErrorHandler.h"
 #include "MechanicalProperties.h"
 #include "FaultFlowPropertyCalculator.h"
@@ -20,6 +21,7 @@
 #include "Standard_IO_Handler.h"
 #include "InputDataManager.h"
 #include "fracturePropertyModelling.h"
+#include "CSMP_highLevelUtilities.h"
 #include "compareFloats.h"
 #include "geometricCalculations.h"
 

@@ -248,6 +248,50 @@ bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::IsBoundaryName( const string& regi
 
 
 
+    /// if boundary exists and there is no boundary with 'new name', converts boundary name from old to new name
+template<uint32_t dim, template<uint32_t> class BOUNDARY_COMPLEX>
+bool BoundaryInterface<dim,BOUNDARY_COMPLEX>::RenameBoundary( const std::string& old_name, const std::string& new_name )
+ {
+    BOUNDARY_COMPLEX<dim>& boundaryComplex( static_cast<BOUNDARY_COMPLEX<dim>& >(*this) );
+
+    if ( boundaryComplex.Boundaries() == 0 || !boundaryComplex.ContainsBoundary(old_name) ) {
+         ErrorHandler::Instance().Note( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::RenameBoundary:",
+                                        old_name, "boundary does not exist; no changes made." );
+         return false;
+      }
+    if ( !IsBoundaryName(new_name) ) {
+         ErrorHandler::Instance().Note( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::RenameBoundary:",
+                                        new_name, "does not contain string 'BOUNDARY' used to distinguish boundaries; review issue" );
+      }
+    if ( boundaryComplex.ContainsBoundary(new_name) ) {
+         ErrorHandler::Instance().Note( WARNING, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::RenameBoundary:",
+                                        new_name, "boundary already exists; name could not be changed to new name." );
+         return false;
+      }
+ 
+     // Rename boundary "old_name" to "new_name" lambda
+    auto rename_boundary = [&]( map<string,csmp::Boundary<dim>>& boundaries, const string& old_name, const string& new_name )
+    {
+        auto handle = boundaries.extract(old_name);
+        if ( handle.empty() ) throw std::invalid_argument( "rename_boundary lambda: '" + old_name + "' not found.");
+        handle.key() = new_name;
+        // moving boundary to new place
+        boundaries.insert(std::move(handle));
+    };
+
+    // renaming the boundary
+    rename_boundary( boundaryMap_, old_name, new_name );
+    
+    // assigning new name to underlying model subdomain
+    csmp::Boundary<dim>& renamed_subdomain = boundaryComplex.Boundary(new_name);
+    renamed_subdomain.Name( new_name );
+
+    return true;
+ }
+
+
+
+
 /**
      LOCAL METHOD (not known beyond this compilation unit)
  

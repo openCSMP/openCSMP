@@ -7,6 +7,7 @@
 //
 
 #include "meshManagementUtilities.h"
+#include "CSMP_highLevelUtilities.h"
 #include "ModelTopology.h"
 #include "MeshManager.h"
 #include "MeshPatch.h"

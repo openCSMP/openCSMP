@@ -5,6 +5,7 @@
 #include "Boundary.h"
 #include "SplitBoundary.h"
 #include "NodeManifoldManager.h"
+#include "Exception.h"
 
 #include "VTU_Interface.h"
 

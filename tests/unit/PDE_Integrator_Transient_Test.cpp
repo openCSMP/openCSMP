@@ -11,14 +11,20 @@
 
 // the FE algorithm
 #include "PDE_Integrator.h"
-#include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
+// for comparison between analytic and numeric integration
 #include "Integral_NT_op_N_dV.h"
 #include "Integral_NT_lhsop_N_dV.h"
 #include "Integral_dNT_op_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Solver.h"
+#include "SAMG_Settings.h"
+#else
 #include "LinearSolver.h"
+#endif
 
 // output interfaces
 #include "VTK_Interface.h"
@@ -27,8 +33,6 @@
 // utility functions
 #include "CSMP_highLevelUtilities.h"
 #include "ConstantFactor.h"
-
-#include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
 #include "NumIntegral_NT_op_N_dV.h"
@@ -84,10 +88,6 @@ void PDE_Integrator_Transient_Test::run()
         p_ref, "conductivity", "permeability", 0.001);
     model.Apply(conductivity);
 
-    const Index conductKey = p_ref.StorageKey("conductivity");
-    for ( auto eIter=region.CellsBegin(); eIter!=region.CellsEnd(); ++eIter )
-        (*eIter)->Store(conductKey, makeScalar(DIRICH, 1.0));
-
     // -----------------------------------------------------------------------
     // 4. PDE operators
     // -----------------------------------------------------------------------
@@ -110,8 +110,7 @@ void PDE_Integrator_Transient_Test::run()
     source_term.LumpedFormulation(true);
     source_term.AddAccumulateLater();
 
-    VelocityAndVolumeFlux<2U> velo(
-        model, "conductivity", "porosity", "fluid pressure", true);
+    VelocityAndVolumeFlux<2U> velo( model, "conductivity", "porosity", "fluid pressure", true );
 
     // -----------------------------------------------------------------------
     // 5. Single PDE_Integrator — accessed via attorney
@@ -251,7 +250,7 @@ void PDE_Integrator_Transient_Test::TestSteadyState( PDE_Integrator_Attorney1<2U
     attorney.OutputResults( region );
                            
     // 9. Calculation of result-dependent properties
-//    attorney.PostProcess( region );
+    attorney.PostProcess( region );
 
     // Check solution is linear between boundary values
     const Index pKey = model.Database().StorageKey("fluid pressure");
