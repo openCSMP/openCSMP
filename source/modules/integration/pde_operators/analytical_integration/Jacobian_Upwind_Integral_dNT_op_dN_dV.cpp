@@ -124,7 +124,7 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const
     // generate delta vector
     // * can be replaced by STL algorithm
     vector<double>  delta_up(e.Nodes());
-    for (auto i = 0; i < e.Nodes(); ++i) {
+    for ( uint32_t i = 0; i < e.Nodes(); ++i) {
       delta_up[i] = el_d_upwind[i]() - el_upwind[i]();
     }
     
@@ -159,44 +159,6 @@ void Jacobian_Upwind_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const
     // analytical integration over area / volume for linear triangle 
     // and tetrahedron elements, respectively
     MathOperatorLHS<dim,CELL>::LHS *= e.Volume() * prefactor_/delta_;
-    
-    /*
-    double fac_upwind;
-    
-    // loop over j to get an column in the element tangent stiffness matrix
-    for (size_t j = 0; j < e.Nodes(); ++j) {
-      for (auto i = 0; i < e.Nodes(); ++i) {
-        for (size_t k = 0; k < e.Nodes(); ++k) {
-          if (i != k) {
-            fac_upwind = 0.0;
-            const double decision = DNT(i, k)*(el_trigger[k]() - el_trigger[i]());
-            if (decision > 0) {
-              if (i == j) fac_upwind = el_d_upwind[i]() - el_upwind[i]();
-            }
-    			  else if (decision < 0) {
-    			    if (k == j) fac_upwind = el_d_upwind[k]() - el_upwind[k]();
-    			  }
-    			  else {
-    			    if (i == j) fac_upwind = 0.5*(el_d_upwind[i]() - el_upwind[i]());
-    			    else if (k == j) fac_upwind = 0.5*(el_d_upwind[k]() - el_upwind[k]());
-    			  }
-    			  // off diagonal contribution
-    			  MathOperatorLHS<dim>::LHS(i, j) += fac_upwind*DNT(i, k)*el_test_orig[k](); 
-    			  // diagonal contribution
-    			  MathOperatorLHS<dim>::LHS(i, j) -= fac_upwind*DNT(i, k)*el_test_orig[i]();
-          } // end if (i != k)
-        }
-      }
-    }
-    
-
-    // analytical integration over area / volume for linear triangle 
-    // and tetrahedron elements, respectively
-    MathOperatorLHS<dim>::LHS *= e.Volume() * prefactor_/delta_;
-  */
-
-   // cout <<"\nElement: "<< e.Idx();
-   // MathOperatorLHS<dim>::LHS.Out();
 
 } // end ComputeContribution
 

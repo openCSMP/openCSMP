@@ -8,16 +8,17 @@ Linear Solvers Interface
 */
 // define CSMP_DEFAULT_LINEAR_SOLVER by the priority order
 
-#define CSMP_DEFAULT_LINEAR_SOLVER csmp::EigenSolver   // csmp::LUdcmp_Solver
+#define CSMP_DEFAULT_LINEAR_SOLVER csmp::EigenSolver
 #define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::SolverSettings
-#include "EigenSolver.h" // LUdcmp_Solver.h"
+#include "EigenSolver.h"
 
-#ifdef CSMP_WITH_MESCHACH
+#ifdef CSMP_WITH_PETSC_SOLVER
 #undef CSMP_DEFAULT_LINEAR_SOLVER
 #undef CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS
-#define CSMP_DEFAULT_LINEAR_SOLVER csmp::Gauss_Solver
-#define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::Gauss_SolverSettings
-#include "Gauss_Solver.h"
+#define CSMP_DEFAULT_LINEAR_SOLVER csmp::PETSc_Solver
+#define CSMP_DEFAULT_LINEAR_SOLVER_SETTINGS csmp::PETSc_Settings
+#include "PETSc_Settings.h"
+#include "PETSc_Solver.h"
 #endif
 
 #ifdef CSMP_WITH_DUNE_ISTL

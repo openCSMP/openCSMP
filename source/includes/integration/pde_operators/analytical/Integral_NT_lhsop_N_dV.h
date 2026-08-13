@@ -22,7 +22,8 @@ class Integral_NT_lhsop_N_dV : public MathOperatorLHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    Integral_NT_lhsop_N_dV<dim,CELL>* clone() const override final { return new Integral_NT_lhsop_N_dV<dim,CELL> (*this); }
+    Integral_NT_lhsop_N_dV<dim,CELL>* clone() const override final
+      { return new Integral_NT_lhsop_N_dV<dim,CELL> (*this); }
 
   private:
     double scalar_value_;

@@ -5,194 +5,270 @@ using namespace std;
 
 namespace csmp {
 
+// ============================================================================
+// BinaryFileSectionWrite
+// ============================================================================
+
 BinaryFileSectionWrite::BinaryFileSectionWrite( std::fstream& fp, const char* header )
-	: fp_(fp)
+    : fp_( fp )
 {
-    char hdr[CSMP_BINARY_FILE_HDR_SIZE] = {};  // Zero-initialize the header array
+    // Fix #3: guard against headers that would overflow the fixed buffer,
+    // leaving no room for the null terminator.
+    const size_t hdrlen = std::strlen( header );
+    if ( hdrlen >= CSMP_BINARY_FILE_HDR_SIZE ) {
+        throw std::invalid_argument(
+            "BinaryFileSectionWrite: header '" + std::string(header) +
+            "' is " + std::to_string(hdrlen) +
+            " characters, which exceeds the maximum of " +
+            std::to_string(CSMP_BINARY_FILE_HDR_SIZE - 1) + "." );
+    }
 
-    size_t hdrlen = std::strlen(header);
-    assert(hdrlen <= sizeof(hdr));  // Assert that the header length fits
+    // Zero-fill so the full fixed-width tag is always written cleanly.
+    char hdr[CSMP_BINARY_FILE_HDR_SIZE] = {};
+    std::memcpy( hdr, header, hdrlen ); // null terminator already in place via zero-fill
 
-    // Copy the header into the hdr array, respecting the size
-    // Use C++17's std::min for safer size comparison
-    std::memcpy(hdr, header, std::min(hdrlen, sizeof(hdr)));
+    fp_.write( hdr, sizeof(hdr) );
 
-    // Write the entire hdr buffer to the file
-    fp_.write(hdr, sizeof(hdr));
-
-    if (!fp) {
-        throw std::runtime_error("BinaryFileSectionWrite::BinaryFileSectionWrite: Error occurred while writing data tag to file");
+    if ( !fp_ ) {
+        throw std::runtime_error(
+            "BinaryFileSectionWrite: failed to write section tag '" +
+            std::string(header) + "' to file." );
     }
 }
 
+
+// ============================================================================
+// BinaryFileSectionRead
+// ============================================================================
 
 BinaryFileSectionRead::BinaryFileSectionRead( std::fstream& fp, const char* header )
-	: fp_(fp)
+    : fp_( fp )
 {
-    char readhdr[CSMP_BINARY_FILE_HDR_SIZE] = {};  // Zero-initialize the buffer
-    const size_t hdrlen = std::strlen(header);
-    
-    // Ensure the provided header length doesn't exceed the buffer size
-    assert(hdrlen <= CSMP_BINARY_FILE_HDR_SIZE);
+    // Fix #3/#12: hdr_ is now a local variable — it is only needed for the
+    // comparison and does not need to be a class member.
+    const size_t hdrlen = std::strlen( header );
+    if ( hdrlen >= CSMP_BINARY_FILE_HDR_SIZE ) {
+        throw std::invalid_argument(
+            "BinaryFileSectionRead: expected header '" + std::string(header) +
+            "' is " + std::to_string(hdrlen) +
+            " characters, which exceeds the maximum of " +
+            std::to_string(CSMP_BINARY_FILE_HDR_SIZE - 1) + "." );
+    }
 
-    // Zero-initialize and copy the header using C++17 features
-    std::memset(hdr_, 0, sizeof(hdr_));
-    std::memcpy(hdr_, header, std::min(hdrlen, CSMP_BINARY_FILE_HDR_SIZE ) );
+    char expected[CSMP_BINARY_FILE_HDR_SIZE] = {};
+    std::memcpy( expected, header, hdrlen );
 
-    // Read from the file into the buffer
-    fp_.read(readhdr, CSMP_BINARY_FILE_HDR_SIZE);
+    char actual[CSMP_BINARY_FILE_HDR_SIZE] = {};
+    fp_.read( actual, sizeof(actual) );
 
-    // Compare the headers, and if they don't match, throw an exception
-    if (std::memcmp(hdr_, readhdr, CSMP_BINARY_FILE_HDR_SIZE) != 0) {
-        if ( errno != 0 ) std::cout << "\n\t" << std::strerror(errno) << std::endl;
-        throw std::runtime_error("Binary file entry appears to be corrupt");
+    if ( !fp_ ) {
+        throw std::runtime_error(
+            "BinaryFileSectionRead: failed to read section tag from file "
+            "(expected '" + std::string(header) + "')." );
+    }
+
+    if ( std::memcmp( expected, actual, CSMP_BINARY_FILE_HDR_SIZE ) != 0 ) {
+        // Include both tags in the message to make misalignment easy to diagnose.
+        const std::string actual_str( actual,
+            std::min( std::strlen(actual), CSMP_BINARY_FILE_HDR_SIZE - 1 ) );
+        if ( errno != 0 )
+            std::cerr << "\n\tSystem error: " << std::strerror(errno) << "\n";
+        throw std::runtime_error(
+            "BinaryFileSectionRead: section tag mismatch — "
+            "expected '" + std::string(header) +
+            "', found '"  + actual_str +
+            "'. File may be corrupt or the read position is misaligned." );
     }
 }
 
 
+// ============================================================================
+// readContainerSize
+// ============================================================================
 
-/**
-     Reads the size record, returning how many elements the current record contains/
-     
-     If the size cannot be parsed or a numbe larger than can be contained in an unsigned 32-bit integer, a range error is thrown.
-*/
 size_t readContainerSize( std::fstream& fp )
- {
+{
     assert( fp.is_open() );
-    size_t elements(0U);
-    
-    if ( !fp.read(reinterpret_cast<char*>(&elements), sizeof(size_t) ) )
-      {
-        std::cerr << "\nreadContainerSize: ERROR: could not read record length." << std::endl;
-        return elements;
-      }
-    if ( elements == numeric_limits<size_t>::max() ) {
-         std::cerr <<"\n\t"<<"apparent size of container that shall be read: "<< elements << std::endl;
-         throw csmp::Exception( ERROR, "readContainerSize:",
-                               "number not initialised or too large to fit into 'size_t aka STL container::size_type.");
-      }
-    return elements;
- }
+
+    size_t n = 0;
+    fp.read( reinterpret_cast<char*>(&n), sizeof(size_t) );
+
+    // Fix #7: distinguish a failed read from a legitimate zero.
+    if ( !fp ) {
+        throw std::runtime_error(
+            "readContainerSize: failed to read element count from file — "
+            "the file may be truncated or the read position is misaligned." );
+    }
+
+    // A value of max() is used as a sentinel for an uninitialised record,
+    // which indicates the writing code failed to populate the size field.
+    if ( n == std::numeric_limits<size_t>::max() ) {
+        throw std::runtime_error(
+            "readContainerSize: element count is SIZE_MAX, which is the "
+            "uninitialised sentinel value — the file record was not written "
+            "correctly." );
+    }
+
+    return n;
+}
 
 
-
+// ============================================================================
+// binaryFileWrite / binaryFileRead — const char*
+// ============================================================================
 
 bool binaryFileWrite( fstream& fp, const char* str )
 {
-  if ( str == nullptr )
-    std::cerr <<"\nbinaryFileWrite: WARNING: string is nullptr."<< std::endl;
-  
-	if (!fp.is_open()) {
-		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;
-		return false;
-	}
-	// writing the size of the object
-	const size_t  characters = strlen(str);
-	fp.write( reinterpret_cast<const char*>(&characters), sizeof(size_t) );
-  
-  if ( characters > LONG_MAX ) throw out_of_range("binaryFileWrite( fstream&, const char* ): number of characters in string exceeds LONG_MAX");
+    // Fix #5: nullptr check must prevent further execution.
+    if ( str == nullptr ) {
+        std::cerr << "\nbinaryFileWrite(const char*): ERROR: string pointer is null.\n";
+        return false;
+    }
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(const char*): ERROR: file stream is not open.\n";
+        return false;
+    }
 
-	// writing the character string
-	fp.write( str, static_cast<long>(characters) );
+    const size_t n = std::strlen( str );
 
-	return true;
+    // Fix #6/#13: validate against streamsize max before writing anything.
+    if ( n > static_cast<size_t>( std::numeric_limits<std::streamsize>::max() ) ) {
+        throw std::out_of_range(
+            "binaryFileWrite(const char*): string length " + std::to_string(n) +
+            " exceeds the maximum writable size of " +
+            std::to_string( std::numeric_limits<std::streamsize>::max() ) + "." );
+    }
+
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    if ( n > 0 )
+        fp.write( str, static_cast<std::streamsize>(n) );
+
+    if ( !fp ) {
+        throw std::runtime_error(
+            "binaryFileWrite(const char*): write failed after " +
+            std::to_string(n) + " characters." );
+    }
+    return true;
 }
-
 
 
 bool binaryFileRead( fstream& fp, char str[] )
 {
-	if (!fp.is_open()) {
-		cerr << "\nbinaryFileRead(char[]): ERROR: invalid file pointer." << endl;
-		return false;
-	}
-	// read size of the record and assert this 
-  size_t  characters{0u};
-	char    buf[INFO_STRING];
-
-	if ( !fp.read( reinterpret_cast<char*>(&characters), sizeof(size_t) ) )
-    {
-      cerr << "\nbinaryFileRead(char[]): ERROR: could not read string length." << endl;
-      return false;
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(char[]): ERROR: file stream is not open.\n";
+        return false;
     }
 
-	if (characters > INFO_STRING)
-		throw csmp::Exception( ERROR, "binaryFileRead", "too many characters in input string" );
-
-	// reading the character string
-	fp.read( reinterpret_cast<char*>(buf), static_cast<long>(characters) );
-	if ( static_cast<long>(characters) != fp.gcount() )
-    {
-      cerr << "\nbinaryFileRead(char[]) ERROR: incorrect number of characters were read: ";
-      cerr << "\nIndicated number: " << characters << ", actual number read: " << strlen(buf) << endl;
-      return false;
+    size_t n = 0;
+    if ( !fp.read( reinterpret_cast<char*>(&n), sizeof(size_t) ) ) {
+        std::cerr << "\nbinaryFileRead(char[]): ERROR: could not read string length.\n";
+        return false;
     }
-	// null terminate string and copy to 'str' argument
-	buf[characters] = '\0';
-  strcpy(str, buf);
 
-  if (!fp) throw std::runtime_error("binaryFileRead: Error occurred while reading from file");
+    // Fix #4: use >= to leave room for the null terminator.
+    if ( n >= INFO_STRING ) {
+        throw std::runtime_error(
+            "binaryFileRead(char[]): string length " + std::to_string(n) +
+            " would overflow the fixed buffer of size " +
+            std::to_string(INFO_STRING) + " (including null terminator)." );
+    }
 
-	return true;
+    // Fix #13: validate against streamsize max.
+    if ( n > static_cast<size_t>( std::numeric_limits<std::streamsize>::max() ) ) {
+        throw std::out_of_range(
+            "binaryFileRead(char[]): string length " + std::to_string(n) +
+            " exceeds the maximum readable size." );
+    }
+
+    char buf[INFO_STRING] = {};
+    fp.read( buf, static_cast<std::streamsize>(n) );
+
+    if ( static_cast<size_t>( fp.gcount() ) != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(char[]): truncated read — expected " +
+            std::to_string(n) + " characters, got " +
+            std::to_string( fp.gcount() ) + "." );
+    }
+
+    buf[n] = '\0';
+    std::strcpy( str, buf );
+    return true;
 }
 
 
+// ============================================================================
+// binaryFileWrite / binaryFileRead — std::string
+// ============================================================================
 
 bool binaryFileWrite( fstream& fp, const std::string& str )
 {
-  if ( str.empty() )
-    std::cerr <<"\nbinaryFileWrite (string): WARNING: string is empty."<< std::endl;
-  
-	if (!fp.is_open()) {
-		cout << "\nbinaryFileWrite (const char*): ERROR: invalid file pointer." << endl;
-		return false;
-	}
-	// writing the size of the object
-	const size_t  characters = str.size();
-	fp.write( reinterpret_cast<const char*>(&characters), sizeof(size_t) );
-  
-  if ( characters > LONG_MAX ) throw out_of_range("binaryFileWrite( fstream&, const std::string& ): number of characters in string exceeds LONG_MAX");
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(string): ERROR: file stream is not open.\n";
+        return false;
+    }
 
-	// writing the character string (since C++1.7 string is guaranteed to be contiguous in memory)
-	fp.write( str.data(), static_cast<long>(characters) );
+    const size_t n = str.size();
 
-  if (!fp) throw std::runtime_error("binaryFileWrite: Error occurred while writing string to file");
+    // Fix #6/#13: validate before writing anything.
+    if ( n > static_cast<size_t>( std::numeric_limits<std::streamsize>::max() ) ) {
+        throw std::out_of_range(
+            "binaryFileWrite(string): string length " + std::to_string(n) +
+            " exceeds the maximum writable size of " +
+            std::to_string( std::numeric_limits<std::streamsize>::max() ) + "." );
+    }
 
-	return true;
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    // std::string is guaranteed contiguous since C++11.
+    if ( n > 0 )
+        fp.write( str.data(), static_cast<std::streamsize>(n) );
+
+    if ( !fp ) {
+        throw std::runtime_error(
+            "binaryFileWrite(string): write failed after " +
+            std::to_string(n) + " characters." );
+    }
+    return true;
 }
-
 
 
 bool binaryFileRead( fstream& fp, string& str )
 {
-	if (!fp.is_open()) {
-		cerr << "\nbinaryFileRead(char[]): ERROR: invalid file pointer." << endl;
-		return false;
-	}
-	// read size of the string
-  size_t  characters{0u};
-	if ( !fp.read( reinterpret_cast<char*>(&characters), sizeof(size_t) ) )
-    {
-      cerr << "\nbinaryFileRead(string): ERROR: could not read string length." << endl;
-      return false;
-    }
-  str.clear();
-  str.resize( characters, '\0' );
-  
-  if ( characters > LONG_MAX ) throw out_of_range("binaryFileRead( fstream& fp, string& str ): string has more characters than LONG_MAX");
-
-	// reading the character string
-	fp.read( reinterpret_cast<char*>(str.data()), static_cast<long>(characters) );
-	if ( static_cast<long>(characters) != fp.gcount() )
-    {
-      cerr << "\nbinaryFileRead(string) ERROR: incorrect number of characters were read: ";
-      cerr << "\nIndicated number: " << characters << ", actual number read: " << str.size() << endl;
-      return false;
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(string): ERROR: file stream is not open.\n";
+        return false;
     }
 
-	 return true;
+    size_t n = 0;
+    if ( !fp.read( reinterpret_cast<char*>(&n), sizeof(size_t) ) ) {
+        std::cerr << "\nbinaryFileRead(string): ERROR: could not read string length.\n";
+        return false;
+    }
+
+    // Fix #13: validate against streamsize max.
+    if ( n > static_cast<size_t>( std::numeric_limits<std::streamsize>::max() ) ) {
+        throw std::out_of_range(
+            "binaryFileRead(string): string length " + std::to_string(n) +
+            " exceeds the maximum readable size of " +
+            std::to_string( std::numeric_limits<std::streamsize>::max() ) + "." );
+    }
+
+    str.clear();
+    if ( n == 0 ) return true;
+
+    str.resize( n );
+    // std::string is guaranteed contiguous since C++11.
+    fp.read( reinterpret_cast<char*>( str.data() ),
+             static_cast<std::streamsize>(n) );
+
+    if ( static_cast<size_t>( fp.gcount() ) != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(string): truncated read — expected " +
+            std::to_string(n) + " characters, got " +
+            std::to_string( fp.gcount() ) + "." );
+    }
+
+    return true;
 }
 
+} // namespace csmp
 
-
-} // end namespace csmp

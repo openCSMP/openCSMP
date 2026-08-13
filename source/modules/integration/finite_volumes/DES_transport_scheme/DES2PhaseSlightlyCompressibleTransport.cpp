@@ -3480,8 +3480,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::ComputeSteadySt
     CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
-    NumIntegral_dNT_op_dN_dV<dim>  conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim> elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
     //NumIntegral_NT_op_N_dS<dim,Face>     influx( this->sg_.Database(), "boundary influx", "fluid pressure" );
     //influx.LumpedFormulation(true);
@@ -3548,8 +3548,8 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
     // PDE_Integrator<dim,NimbleRegion>  steady_pressure(linear_solver);
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
-    NumIntegral_dNT_op_dN_dV<dim>   conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim>     elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>   conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim>  elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
     //NumIntegral_NT_op_N_dS<dim,Face>     influx( this->sg_.Database(), "boundary influx", "fluid pressure" );
     //influx.LumpedFormulation(true);
@@ -3617,10 +3617,10 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
 //    PDE_Integrator<dim,NimbleRegion>  transient_pressure(linear_solver);
     PDE_Integrator<dim,Element>  transient_pressure(linear_solver);
 #endif
-    NumIntegral_dNT_op_dN_dV<dim> conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim> conductance( this->sg_.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
     NumIntegral_NT_lhsop_N_dV<dim> capacitance_lhs( this->sg_.Database(), "total system compressibility", "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim> capacitance_rhs( this->sg_.Database(), "total system compressibility", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim> elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim> capacitance_rhs( this->sg_.Database(), "total system compressibility", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim> elmt_volume_source( this->sg_.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim> nodal_volume_source( this->sg_.Database(), "nodal fluid volume source", "fluid pressure" );
 
     capacitance_lhs.MultiplyWithTimeIncrement( true );

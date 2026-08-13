@@ -35,13 +35,6 @@ NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_mixed_op_dN_NT
 {
     MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV", oper, basic, test );
     
-    // resize material property matrix 
-    if ( dim == 3 ) {
-         typename vector<DenseMatrix<DM_MIN> >::iterator  it;
-         for ( it=MathOperatorLHS<dim,CELL>::MTRL.begin();
-               it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
-      }
-      
     if ( emulti_key.place != ELEMENT and emulti_key.place != REGION )
       throw csmp::Exception( ERROR,  "NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim>::(constructor)", 
                              emultiplier, "must be an element- or region based variable." );
@@ -251,7 +244,7 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( cons
     //    element property. In this case the material property matrix can
     //    be used as is.
     // ------------------------------------------------------------------
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // 1. Compute "diffusion" matrix DNT_K_DN_DV
          // -----------------------------------------
@@ -281,9 +274,9 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( cons
          // 2. Compute "velocity" 'v' matrix NT3 NTNTNT_V at integration point
          // ------------------------------------------------------------------
          VIP.Zero();
-         for ( auto j{0U}; j<dim; j++ ) {
+         for ( uint32_t j{0U}; j<dim; j++ ) {
               //                                x,y,z-component  d/dx,y,z  grad_prop at node
-              for ( auto k{0U}; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
+              for ( uint32_t k{0U}; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k];
               if ( with_gravity && j == xyz-1 )       VIP(j,j) -=  gravity * RDENS[i]; 
 
               // multiply with interpolated scalar nodal multiplier
@@ -319,20 +312,20 @@ void NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( co
          ScalarVariable  sc;
          e.Read( emulti_key, sc );
          MULT.Zero();
-         for ( auto i{0U}; i<dim; i++ ) MULT(i,i) = sc();
+         for ( uint32_t i{0U}; i<dim; i++ ) MULT(i,i) = sc();
       }
     else if ( emulti_key.type == VECTOR ) {
          VectorVariable<dim>  vc;
          e.Read( emulti_key, vc );
          MULT.Zero();
-         for ( auto i{0U}; i<dim; i++ ) MULT(i,i) = vc[i];
+         for ( uint32_t i{0U}; i<dim; i++ ) MULT(i,i) = vc[i];
       }
     else // TENSOR
       {
          TensorVariable<dim>  ts;
          e.Read( emulti_key, ts );
-         for ( auto i{0U}; i<dim; i++ )
-           for ( auto j{0U}; j<dim; j++ ) MULT(i,j) = ts(i,j);
+         for ( uint32_t i{0U}; i<dim; i++ )
+           for ( uint32_t j{0U}; j<dim; j++ ) MULT(i,j) = ts(i,j);
       }
       
  } // end ReadElementMultiplier

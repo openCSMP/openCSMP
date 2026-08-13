@@ -21,8 +21,8 @@ class NumIntegral_dNT_mixed_op_dN_dV : public MathOperatorLHS<dim,CELL> {
     void ComputeContribution( const CELL<dim>& ) override final;
 
   private:
-    DenseMatrix<DM_MIN>     B, BT, NVAL;
-    Index                   nkey; ///< nodal multiplier for operand
+    DenseMatrix<DM_MIN>   B, BT;
+    Index                 nkey; ///< nodal multiplier for operand
     std::vector<double>   ip_nmult;
 };
 

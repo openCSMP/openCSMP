@@ -50,10 +50,10 @@ void BoundaryInterface_Test::run()
 
       const Region<3>& model_domain = model.Region("Model");
       set<TOPOTYPE> B_flags_model_before = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
-      _test( B_flags_model_before.size() == 6 ); // mesh vertex, exterior points, lines & surfaces and interior lines and surfaces
+      _test( B_flags_model_before.size() == 7 ); // mesh vertex, exterior points, lines & surfaces and interior lines and surfaces
       const Region<3>& fault = model.Region("NORMAL_FAULT");
       set<TOPOTYPE> B_flags_before = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
-      _test( B_flags_before.size() == 2 ); // INTERIOR_SURFACE and INTERIOR_LINE
+      _test( B_flags_before.size() == 4 ); // INTERIOR_SURFACE and INTERIOR_LINE, PERIMETER_LINE
 
       // testing VData::InitialiseTopoTypes()
       if ( verbose_ ) {
@@ -61,7 +61,8 @@ void BoundaryInterface_Test::run()
           TopoTypeToVTU( model, "NORMAL_FAULT" );
         }
 
-      initialise_BREP_TopologyFlags( model ); // defined in Model
+      initialise_BREP_TopologyFlags( model ); // function defined in Model
+ //     initialise_BREP_TopologyFlags_vs2<3>( model ); // Claude refactor, still gives wrong results
 
       set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
       set<TOPOTYPE> B_flags_model_after = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
@@ -295,7 +296,7 @@ void BoundaryInterface_Test::TestBoxShapedModel()
       
       const Region<3>& model_domain = model.Region("Model");
       set<TOPOTYPE> B_flags_model = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
-      _test( B_flags_model.size() == 4 );
+      _test( B_flags_model.size() == 4 ); // mesh vertex, exterior point, line and surface
       
       if ( verbose_ ) cout <<"\nBoundaryInterface_Test::TestBoxShapedModel: done."<< endl;
 

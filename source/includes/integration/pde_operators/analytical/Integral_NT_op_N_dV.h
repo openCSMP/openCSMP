@@ -21,7 +21,8 @@ class Integral_NT_op_N_dV : public MathOperatorRHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    Integral_NT_op_N_dV<dim,CELL>* clone() const override final { return new Integral_NT_op_N_dV<dim,CELL> (*this); }
+    Integral_NT_op_N_dV<dim,CELL>* clone() const override final
+      { return new Integral_NT_op_N_dV<dim,CELL> (*this); }
     
   private:
     DenseMatrix<DM_MIN>  INN;

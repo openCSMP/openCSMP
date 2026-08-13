@@ -57,7 +57,7 @@ class SparseMatrix {
 
     /// zeroing out rows in the context of parallel computations
     void      RemoveHalo( size_t nrhalo );
-    bool      HasEntry( size_t i, size_t j ) const { return data_[i].find(j) == data_[i].end(); }
+    bool      HasEntry( size_t i, size_t j ) const noexcept { return data_[i].find(j) != data_[i].end(); }
     void      RemoveEntry( size_t, size_t );
     void      Erase();
     void      Zero();

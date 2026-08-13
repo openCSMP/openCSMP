@@ -28,20 +28,24 @@ class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim,CELL> {
 
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    void PlaneStress();
+    /// switch from default plane strain to plane stress
+    void PlaneStress() noexcept { plane_strain_ = false; }
     
     NumIntegral_BT_D_op_dV<dim,CELL>* clone() const override final { return new NumIntegral_BT_D_op_dV<dim,CELL> (*this); }
     
   private:  
-    csmp::Index                       nu_key_;    ///< Poisson's ratio
-    csmp::Index                       Y_key_;     ///< Young's modulus
-    std::vector<DenseMatrix<DM_MIN> > E_;         ///< Young's modulus
-    std::vector<DenseMatrix<DM_MIN> > nu_;        ///< variable in which Poisson's ratio will be stored
-    bool                              plane_strain_;
-    DenseMatrix<DM_MIN>               D, B, BT, TEMP, STR;  // material property matrix, stiffness matrix
-    ScalarVariable                    sc_;
-    VectorVariable<dim>               vc_;
-    TensorVariable<dim>               ts_;
+    csmp::Index         nu_key_; ///< Poisson's ratio
+    csmp::Index         E_key_;  ///< Young's modulus
+    std::vector<double> E_;      ///< Young's modulus
+    std::vector<double> nu_;     ///< variable in which Poisson's ratio will be stored
+    bool                plane_strain_;
+    DenseMatrix<DM_MIN> B_;
+    static constexpr auto MATDIM = (dim == 3) ? DM6 : DM3;
+    std::vector<std::array<double,MATDIM>> initial_strains_;
+    DenseMatrix<MATDIM> D_;
+    ScalarVariable      sc_;
+    VectorVariable<dim> vc_;
+    TensorVariable<dim> ts_;
 };
 
 

@@ -5,248 +5,6 @@ using namespace std;
 
 namespace csmp {
 
-
-TensorVariable<3U>::TensorVariable() noexcept
-  : flag{ { ANY,ANY,ANY } },
-    data{ { {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() },
-            {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() },
-            {numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN(),numeric_limits<double>::quiet_NaN() } } }
-{
-}
-
-
-
-
-
-
-/**
-initialises variable as diagonal isotropic tensor with flag and value
-SKM 17/6/2015
-*/
-TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f, double val ) noexcept
-  : flag{ { f,f,f } },
-    data{ { {val,0.,0.},
-            {0.,val,0.},
-            {0.,0.,val} } }
-{
-}
-
-// ******************************************************************************************
-//
-//            INLINE METHODS START HERE
-//
-// ******************************************************************************************
-
-
-double& TensorVariable<3U>::operator()( uint32_t i, uint32_t j ) noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    cerr << "\nTensorVariable<3U>::operator(): row access violation, i=" << i << endl;
-    return data[0][0] = numeric_limits<double>::signaling_NaN();
-  }
-  if ( j >= 3U ) {
-    cerr << "\nTensorVariable<3U>::operator(): column access violation, j=" << j << endl;
-    return data[0][0] = numeric_limits<double>::signaling_NaN();
-  }
-#endif
-  return data[i][j];
-}
-
-
-
-
-const double& TensorVariable<3U>::operator()( uint32_t i, uint32_t j ) const noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    cerr << "\nTensorVariable<3U>::operator(): row access violation, i=" << i << endl;
-    return data[0][0];
-  }
-  if ( j >= 3U ) {
-    cerr << "\nTensorVariable<3U>::operator(): column access violation, j=" << j << endl;
-    return data[0][0];
-  }
-#endif
-  return data[i][j];
-}
-
-
-
-void TensorVariable<3U>::Component( uint32_t i, double val ) noexcept
-{
-    assert(i < Size());          // Size() should be 9
-    data[i / 3][i % 3] = val;    // row = i/3 , column = i%3
-}
-
-
-
-
-double TensorVariable<3U>::Component( uint32_t i ) const noexcept
-{
-  assert( i < Size() );
-  return data[i / 3][i % 3];
-}
-
-
-
-
-VARIABLE_FLAG& TensorVariable<3U>::Flag( uint32_t i )
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    cerr << "\nTensorVariable<3U>::Flag(): diagonal access violation, i=" << i << endl;
-    return flag[0];
-  }
-#endif
-  return flag[i];
-}
-
-
-
-VARIABLE_FLAG  TensorVariable<3U>::Flag( uint32_t i ) const noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    cerr << "\nTensorVariable<3U>::Flag(): diagonal access violation, i=" << i << endl;
-    return flag[0];
-  }
-#endif
-  return flag[i];
-}
-
-
-
-
-bool TensorVariable<3U>::EigenValues( VectorVariable<3U>& Ev ) const
-{
-  return EigenValuesPositiveDefiniteSymmetricMatrix( Ev( 0 ), Ev( 1 ), Ev( 2 ) );
-}
-
-
-bool TensorVariable<3U>::EigenValues( vector<double>& Ev ) const
-{
-  return EigenValuesPositiveDefiniteSymmetricMatrix( Ev[0], Ev[1], Ev[2] );
-}
-
-
-
-
-
-
-double TensorVariable<3U>::Trace() const noexcept
-{
-  return data[0][0] + data[1][1] + data[2][2];
-}
-
-
-
-void TensorVariable<3U>::AssignToRow( uint32_t iRow, VectorVariable<3U>& vc ) noexcept
-{
-  if ( iRow == 0U )
-    flag[0U] = vc.Flag( 0U );
-  else if ( iRow == 1U )
-    flag[1U] = vc.Flag( 1U );
-  else
-    flag[2U] = vc.Flag( 2U );
-
-  data[iRow][0U] = vc[0U];
-  data[iRow][1U] = vc[1U];
-  data[iRow][2U] = vc[2U];
-}
-
-
-void TensorVariable<3U>::AssignToColumn( uint32_t iCol, VectorVariable<3U>& vc ) noexcept
-{
-  if ( iCol == 0U )
-    flag[0U] = vc.Flag( 0U );
-  else if ( iCol == 1U )
-    flag[1U] = vc.Flag( 1U );
-  else
-    flag[2U] = vc.Flag( 2U );
-
-  data[0U][iCol] = vc[0U];
-  data[1U][iCol] = vc[1U];
-  data[2U][iCol] = vc[2U];
-}
-
-
-
-
-VectorVariable<3U> TensorVariable<3U>::Row( uint32_t iRow ) const
-{
-  return VectorVariable<3U>( flag[iRow], flag[iRow], flag[iRow],
-                             data[iRow][0U], data[iRow][1U], data[iRow][2U] );
-}
-
-
-VectorVariable<3U> TensorVariable<3U>::Column( uint32_t iCol ) const
-{
-  return VectorVariable<3U>( flag[iCol], flag[iCol], flag[iCol],
-                             data[0U][iCol], data[1U][iCol], data[2U][iCol] );
-}
-
-
-bool  TensorVariable<3U>::operator==( const TensorVariable<3U>& ts ) const noexcept
-{
-  return (data == ts.data && flag == ts.flag);
-}
-
-
-bool  TensorVariable<3U>::operator!=( const TensorVariable<3U>& t ) const noexcept
-{
-  return !(*this == t);
-}
-
-
-/// to achieve reasonable ordering in associative STL containers
-bool  TensorVariable<3U>::operator<( const TensorVariable<3U>& t ) const noexcept
-{
-  return (this < &t);
-}
-
-bool TensorVariable<3U>::Out( fstream& fp ) const
-{
-  const int32_t flag_0( this->flag[0] );
-  const int32_t flag_1( this->flag[1] );
-  const int32_t flag_2( this->flag[2] );
-  const size_t flag_size = sizeof( int32_t );
-  fp.write( (char*)&flag_0, flag_size );
-  fp.write( (char*)&flag_1, flag_size );
-  fp.write( (char*)&flag_2, flag_size );
-  const size_t data_size = sizeof( double );
-  fp.write( (char*)&this->data[0][0], data_size );
-  fp.write( (char*)&this->data[1][0], data_size );
-  fp.write( (char*)&this->data[2][0], data_size );
-  fp.write( (char*)&this->data[0][1], data_size );
-  fp.write( (char*)&this->data[1][1], data_size );
-  fp.write( (char*)&this->data[2][1], data_size );
-  fp.write( (char*)&this->data[0][2], data_size );
-  fp.write( (char*)&this->data[1][2], data_size );
-  fp.write( (char*)&this->data[2][2], data_size );
-  return true;
-}
-
-bool TensorVariable<3U>::In( fstream& fp )
-{
-  const size_t flag_size = sizeof( int32_t );
-  fp.read( (char*)&this->flag[0], flag_size );
-  fp.read( (char*)&this->flag[1], flag_size );
-  fp.read( (char*)&this->flag[2], flag_size );
-  const size_t data_size = sizeof( double );
-  fp.read( (char*)&this->data[0][0], data_size );
-  fp.read( (char*)&this->data[1][0], data_size );
-  fp.read( (char*)&this->data[2][0], data_size );
-  fp.read( (char*)&this->data[0][1], data_size );
-  fp.read( (char*)&this->data[1][1], data_size );
-  fp.read( (char*)&this->data[2][1], data_size );
-  fp.read( (char*)&this->data[0][2], data_size );
-  fp.read( (char*)&this->data[1][2], data_size );
-  fp.read( (char*)&this->data[2][2], data_size );
-  return true;
-}
-
-
 /// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
 TensorVariable<2U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
                                double v11, double v12,
@@ -256,683 +14,10 @@ TensorVariable<2U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2,
 }
 
 
-/// fastest way to insert a tensor into an STL container; tensor only has flags for diagonal elements
-TensorVariable<3U> makeTensor( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
-                               double v11, double v12, double v13,
-                               double v21, double v22, double v23,
-                               double v31, double v32, double v33 ) noexcept
-{
-  return TensorVariable<3U>( f1, f2, f3, v11, v12, v13, v21, v22, v23, v31, v32, v33 );
-}
 
-
-
-
-TensorVariable<3U>::TensorVariable( VARIABLE_FLAG f,
-                                    double v11, double v12, double v13,
-                                    double v21, double v22, double v23,
-                                    double v31, double v32, double v33 ) noexcept
-  : flag{ { f,f,f } },
-    data{ { {v11,v12,v13},{v21,v22,v23},{v31,v32,v33} } }
-{
-}
-
-
-
-TensorVariable<3U>::TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG f22, const VARIABLE_FLAG f33,
-                                    const double  v11, const double  v12, const double  v13,
-                                    const double  v21, const double  v22, const double  v23,
-                                    const double  v31, const double  v32, const double  v33 ) noexcept
-  : flag{ { f11,f22,f33 } },
-    data{ { {v11,v12,v13},{v21,v22,v23},{v31,v32,v33} } }
-{
-}
-
-
-
-// here the flag of the lefthand tensor-variable is sustained
-
-TensorVariable<3U>  TensorVariable<3U>::operator+( const TensorVariable<3U>& t ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    t.data[0][0] + data[0][0], t.data[0][1] + data[0][1], t.data[0][2] + data[0][2],
-                    t.data[1][0] + data[1][0], t.data[1][1] + data[1][1], t.data[1][2] + data[1][2],
-                    t.data[2][0] + data[2][0], t.data[2][1] + data[2][1], t.data[2][2] + data[2][2] );
-}
-
-
-
-TensorVariable<3U>  TensorVariable<3U>::operator-( const TensorVariable<3U>& t ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[0][0] - t.data[0][0], data[0][1] - t.data[0][1], data[0][2] - t.data[0][2],
-                    data[1][0] - t.data[1][0], data[1][1] - t.data[1][1], data[1][2] - t.data[1][2],
-                    data[2][0] - t.data[2][0], data[2][1] - t.data[2][1], data[2][2] - t.data[2][2] );
-}
-
-
-TensorVariable<3U>  TensorVariable<3U>::operator+( double val ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[0][0] + val, data[0][1] + val, data[0][2] + val,
-                    data[1][0] + val, data[1][1] + val, data[1][2] + val,
-                    data[2][0] + val, data[2][1] + val, data[2][2] + val );
-}
-
-
-
-TensorVariable<3U>  TensorVariable<3U>::operator-( double val ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[0][0] - val, data[0][1] - val, data[0][2] - val,
-                    data[1][0] - val, data[1][1] - val, data[1][2] - val,
-                    data[2][0] - val, data[2][1] - val, data[2][2] - val );
-}
-
-
-
-TensorVariable<3U>  TensorVariable<3U>::operator*( double val ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[0][0] * val, data[0][1] * val, data[0][2] * val,
-                    data[1][0] * val, data[1][1] * val, data[1][2] * val,
-                    data[2][0] * val, data[2][1] * val, data[2][2] * val );
-}
-
-
-
-TensorVariable<3U>  TensorVariable<3U>::operator/( double val ) const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[0][0] / val, data[0][1] / val, data[0][2] / val,
-                    data[1][0] / val, data[1][1] / val, data[1][2] / val,
-                    data[2][0] / val, data[2][1] / val, data[2][2] / val );
-}
-
-
-// matrix vector multiplication: v = M * v
-/// @test tested: O.K. SKM 29-9-2001
-
-VectorVariable<3U>  TensorVariable<3U>::operator*( const VectorVariable<3U>& vc ) const noexcept
-{
-  VectorVariable<3U> temp( vc.Flag( 0 ), vc.Flag( 1 ), vc.Flag( 2 ),
-                           data[0][0] * vc[0] + data[0][1] * vc[1] + data[0][2] * vc[2],
-                           data[1][0] * vc[0] + data[1][1] * vc[1] + data[1][2] * vc[2],
-                           data[2][0] * vc[0] + data[2][1] * vc[1] + data[2][2] * vc[2] );
-  return temp;
-}
-
-Point<3U>  TensorVariable<3U>::operator*( const Point<3U>& v ) const noexcept
-{
-  return Point<3U>(
-    data[0][0] * v[0] + data[0][1] * v[1] + data[0][2] * v[2],
-    data[1][0] * v[0] + data[1][1] * v[1] + data[1][2] * v[2],
-    data[2][0] * v[0] + data[2][1] * v[1] + data[2][2] * v[2] );
-}
-
-
-
-// re-tested: SKM 29-9-2001
-TensorVariable<3U> TensorVariable<3U>::Adjoint() const noexcept
-{
-  return TensorVariable( flag[0], flag[1], flag[2],
-                    data[1][1] * data[2][2] - data[1][2] * data[2][1],
-                    -data[1][0] * data[2][2] + data[1][2] * data[2][0],
-                    data[1][0] * data[2][1] - data[2][0] * data[1][1],
-                    -data[0][1] * data[2][2] + data[0][2] * data[2][1],
-                    data[0][0] * data[2][2] - data[0][2] * data[2][0],
-                    -data[0][0] * data[2][1] + data[0][1] * data[2][0],
-                    data[0][1] * data[1][2] - data[0][2] * data[1][1],
-                    -data[0][0] * data[1][2] + data[0][2] * data[1][0],
-                    data[0][0] * data[1][1] - data[0][1] * data[1][0] );
-}
-
-
-
-/// @test tested: O.K.
-TensorVariable<3U>  TensorVariable<3U>::operator*( const TensorVariable<3U>& ts ) const noexcept
-{
-  TensorVariable<3U> temp;
-
-  // Unrolled loop(i...3,j...3), expression: data[i][j] = ts.data[j][j]
-  // row 0
-  temp.data[0][0] = data[0][0] * ts.data[0][0] + data[0][1] * ts.data[1][0] + data[0][2] * ts.data[2][0];
-  temp.data[0][1] = data[0][0] * ts.data[0][1] + data[0][1] * ts.data[1][1] + data[0][2] * ts.data[2][1];
-  temp.data[0][2] = data[0][0] * ts.data[0][2] + data[0][1] * ts.data[1][2] + data[0][2] * ts.data[2][2];
-  // row 1
-  temp.data[1][0] = data[1][0] * ts.data[0][0] + data[1][1] * ts.data[1][0] + data[1][2] * ts.data[2][0];
-  temp.data[1][1] = data[1][0] * ts.data[0][1] + data[1][1] * ts.data[1][1] + data[1][2] * ts.data[2][1];
-  temp.data[1][2] = data[1][0] * ts.data[0][2] + data[1][1] * ts.data[1][2] + data[1][2] * ts.data[2][2];
-  // row 2
-  temp.data[2][0] = data[2][0] * ts.data[0][0] + data[2][1] * ts.data[1][0] + data[2][2] * ts.data[2][0];
-  temp.data[2][1] = data[2][0] * ts.data[0][1] + data[2][1] * ts.data[1][1] + data[2][2] * ts.data[2][1];
-  temp.data[2][2] = data[2][0] * ts.data[0][2] + data[2][1] * ts.data[1][2] + data[2][2] * ts.data[2][2];
-
-  temp.flag[0] = flag[0];
-  temp.flag[1] = flag[1];
-  temp.flag[2] = flag[2];
-
-  return temp;
-}
-
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator+=( const ScalarVariable& sc ) noexcept
-{
-  data[0][0] += sc();
-  data[0][1] += sc();
-  data[1][0] += sc();
-  data[1][1] += sc();
-  data[0][2] += sc();
-  data[1][2] += sc();
-  data[2][0] += sc();
-  data[2][1] += sc();
-  data[2][2] += sc();
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator-=( const ScalarVariable& sc ) noexcept
-{
-  data[0][0] -= sc();
-  data[0][1] -= sc();
-  data[1][0] -= sc();
-  data[1][1] -= sc();
-  data[0][2] -= sc();
-  data[1][2] -= sc();
-  data[2][0] -= sc();
-  data[2][1] -= sc();
-  data[2][2] -= sc();
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator*=( const ScalarVariable& sc ) noexcept
-{
-  data[0][0] *= sc();
-  data[0][1] *= sc();
-  data[1][0] *= sc();
-  data[1][1] *= sc();
-  data[0][2] *= sc();
-  data[1][2] *= sc();
-  data[2][0] *= sc();
-  data[2][1] *= sc();
-  data[2][2] *= sc();
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator/=( const ScalarVariable& sc ) noexcept
-{
-  data[0][0] /= sc();
-  data[0][1] /= sc();
-  data[1][0] /= sc();
-  data[1][1] /= sc();
-  data[0][2] /= sc();
-  data[1][2] /= sc();
-  data[2][0] /= sc();
-  data[2][1] /= sc();
-  data[2][2] /= sc();
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator+=( const TensorVariable<3U>& ts ) noexcept
-{
-  data[0][0] += ts.data[0][0];
-  data[0][1] += ts.data[0][1];
-  data[1][0] += ts.data[1][0];
-  data[1][1] += ts.data[1][1];
-  data[0][2] += ts.data[0][2];
-  data[1][2] += ts.data[1][2];
-  data[2][0] += ts.data[2][0];
-  data[2][1] += ts.data[2][1];
-  data[2][2] += ts.data[2][2];
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator-=( const TensorVariable<3U>& ts ) noexcept
-{
-  data[0][0] -= ts.data[0][0];
-  data[0][1] -= ts.data[0][1];
-  data[1][0] -= ts.data[1][0];
-  data[1][1] -= ts.data[1][1];
-  data[0][2] -= ts.data[0][2];
-  data[1][2] -= ts.data[1][2];
-  data[2][0] -= ts.data[2][0];
-  data[2][1] -= ts.data[2][1];
-  data[2][2] -= ts.data[2][2];
-
-  return *this;
-}
-
-
-/// element by element division
-TensorVariable<3U>&  TensorVariable<3U>::operator/=( const TensorVariable<3U>& ts ) noexcept
-{
-  data[0][0] /= ts.data[0][0];
-  data[0][1] /= ts.data[0][1];
-  data[1][0] /= ts.data[1][0];
-  data[1][1] /= ts.data[1][1];
-  data[0][2] /= ts.data[0][2];
-  data[1][2] /= ts.data[1][2];
-  data[2][0] /= ts.data[2][0];
-  data[2][1] /= ts.data[2][1];
-  data[2][2] /= ts.data[2][2];
-
-  return *this;
-}
-
-
-
-/// element by element division
-TensorVariable<3U>  TensorVariable<3U>::operator/( const TensorVariable<3U>& ts ) const noexcept
-{
-  TensorVariable  temp;
-
-  temp.data[0][0] = data[0][0] / ts.data[0][0];
-  temp.data[0][1] = data[0][1] / ts.data[0][1];
-  temp.data[1][0] = data[1][0] / ts.data[1][0];
-  temp.data[1][1] = data[1][1] / ts.data[1][1];
-  temp.data[0][2] = data[0][2] / ts.data[0][2];
-  temp.data[1][2] = data[1][2] / ts.data[1][2];
-  temp.data[2][0] = data[2][0] / ts.data[2][0];
-  temp.data[2][1] = data[2][1] / ts.data[2][1];
-  temp.data[2][2] = data[2][2] / ts.data[2][2];
-
-  temp.flag[0] = flag[0];
-  temp.flag[1] = flag[1];
-  temp.flag[2] = flag[2];
-
-  return temp;
-}
-
-
-
-/// matrix multiplication
-TensorVariable<3U>&  TensorVariable<3U>::operator*=( const TensorVariable<3U>& ts ) noexcept
-{
-  TensorVariable<3U> temp;
-
-  // Unrolled loop(i...3,j...3), expression: data[i][j] = ts.data[j][j]
-  // row 0
-  temp.data[0][0] = data[0][0] * ts.data[0][0] + data[0][1] * ts.data[1][0] + data[0][2] * ts.data[2][0];
-  temp.data[0][1] = data[0][0] * ts.data[0][1] + data[0][1] * ts.data[1][1] + data[0][2] * ts.data[2][1];
-  temp.data[0][2] = data[0][0] * ts.data[0][2] + data[0][1] * ts.data[1][2] + data[0][2] * ts.data[2][2];
-  // row 1
-  temp.data[1][0] = data[1][0] * ts.data[0][0] + data[1][1] * ts.data[1][0] + data[1][2] * ts.data[2][0];
-  temp.data[1][1] = data[1][0] * ts.data[0][1] + data[1][1] * ts.data[1][1] + data[1][2] * ts.data[2][1];
-  temp.data[1][2] = data[1][0] * ts.data[0][2] + data[1][1] * ts.data[1][2] + data[1][2] * ts.data[2][2];
-  // row 2
-  temp.data[2][0] = data[2][0] * ts.data[0][0] + data[2][1] * ts.data[1][0] + data[2][2] * ts.data[2][0];
-  temp.data[2][1] = data[2][0] * ts.data[0][1] + data[2][1] * ts.data[1][1] + data[2][2] * ts.data[2][1];
-  temp.data[2][2] = data[2][0] * ts.data[0][2] + data[2][1] * ts.data[1][2] + data[2][2] * ts.data[2][2];
-
-  temp.flag[0] = flag[0];
-  temp.flag[1] = flag[1];
-  temp.flag[2] = flag[2];
-
-  return *this = std::move( temp );
-}
-
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator+=( double val ) noexcept
-{
-  data[0][0] += val;
-  data[0][1] += val;
-  data[1][0] += val;
-  data[1][1] += val;
-  data[0][2] += val;
-  data[1][2] += val;
-  data[2][0] += val;
-  data[2][1] += val;
-  data[2][2] += val;
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator-=( double val ) noexcept
-{
-  data[0][0] -= val;
-  data[0][1] -= val;
-  data[1][0] -= val;
-  data[1][1] -= val;
-  data[0][2] -= val;
-  data[1][2] -= val;
-  data[2][0] -= val;
-  data[2][1] -= val;
-  data[2][2] -= val;
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator*=( double val ) noexcept
-{
-  data[0][0] *= val;
-  data[0][1] *= val;
-  data[1][0] *= val;
-  data[1][1] *= val;
-  data[0][2] *= val;
-  data[1][2] *= val;
-  data[2][0] *= val;
-  data[2][1] *= val;
-  data[2][2] *= val;
-
-  return *this;
-}
-
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator/=( double val ) noexcept
-{
-  data[0][0] /= val;
-  data[0][1] /= val;
-  data[1][0] /= val;
-  data[1][1] /= val;
-  data[0][2] /= val;
-  data[1][2] /= val;
-  data[2][0] /= val;
-  data[2][1] /= val;
-  data[2][2] /= val;
-
-  return *this;
-}
-
-
-// --------------------
-// ASSIGNMENT OPERATORS
-// --------------------
-
-
-TensorVariable<3U>&  TensorVariable<3U>::operator=( double val ) noexcept
-{
-  data[0][0] = val;
-  data[0][1] = val;
-  data[1][0] = val;
-  data[1][1] = val;
-  data[0][2] = val;
-  data[1][2] = val;
-  data[2][0] = val;
-  data[2][1] = val;
-  data[2][2] = val;
-
-  return *this;
-}
-
-
-// the flag is adopted from the scalar variable
-
-TensorVariable<3U>&  TensorVariable<3U>::operator=( const ScalarVariable& sc ) noexcept
-{
-  flag[0] = flag[1] = flag[2] = sc.Flag();
-
-  data[0][0] = sc();
-  data[0][1] = sc();
-  data[1][0] = sc();
-  data[1][1] = sc();
-  data[0][2] = sc();
-  data[1][2] = sc();
-  data[2][0] = sc();
-  data[2][1] = sc();
-  data[2][2] = sc();
-
-  return *this;
-}
-
-
-/// writes vector into the diagonal of the zero'd tensor
-TensorVariable<3U>&  TensorVariable<3U>::operator=( const VectorVariable<3U>& vc ) noexcept
-{
-  flag[0] = vc.Flag( 0 );
-  flag[1] = vc.Flag( 1 );
-  flag[2] = vc.Flag( 2 );
-
-  data[0][0] = vc( 0 );
-  data[0][1] = static_cast<double>(0.0);
-  data[1][0] = static_cast<double>(0.0);
-  data[1][1] = vc( 1 );
-  data[0][2] = static_cast<double>(0.0);
-  data[1][2] = static_cast<double>(0.0);
-  data[2][0] = static_cast<double>(0.0);
-  data[2][1] = static_cast<double>(0.0);
-  data[2][2] = vc( 2 );
-
-  return *this;
-}
-
-
-
-
-
-
-
-
-// -------
-// METHODS
-// -------
-
-/// @test tested: O.K.
-
-void TensorVariable<3U>::Identity() noexcept
-{
-  data[0][0] = static_cast<double>(1.0);
-  data[0][1] = static_cast<double>(0.0);
-  data[0][2] = static_cast<double>(0.0);
-
-  data[1][0] = static_cast<double>(0.0);
-  data[1][1] = static_cast<double>(1.0);
-  data[1][2] = static_cast<double>(0.0);
-
-  data[2][0] = static_cast<double>(0.0);
-  data[2][1] = static_cast<double>(0.0);
-  data[2][2] = static_cast<double>(1.0);
-}
-
-
-
-void TensorVariable<3U>::DiagonalValues( double f_00, double f_11, double f_22 ) noexcept
-{
-  data[0][0] = f_00;
-  data[1][1] = f_11;
-  data[2][2] = f_22;
-}
-
-
-
-void TensorVariable<3U>::DiagonalValues( const vector<double>& vecDiags ) noexcept
-{
-  data[0][0] = vecDiags[0];
-  data[1][1] = vecDiags[1];
-  data[2][2] = vecDiags[2];
-}
-
-
-
-void TensorVariable<3U>::DiagonalValues( const VectorVariable<3U>& vecDiags ) noexcept
-{
-  data[0][0] = vecDiags[0];
-  data[1][1] = vecDiags[1];
-  data[2][2] = vecDiags[2];
-  flag[0] = vecDiags.Flag( 0 );
-  flag[1] = vecDiags.Flag( 1 );
-  flag[2] = vecDiags.Flag( 2 );
-}
-
-
-/// @test tested: O.K.
-
-TensorVariable<3U>  TensorVariable<3U>::Transposed() const noexcept
-{
-  return ( TensorVariable( flag[0], flag[1], flag[2],
-            data[0][0], data[1][0], data[2][0],
-            data[0][1], data[1][1], data[2][1],
-            data[0][2], data[1][2], data[2][2] ) );
-}
-
-
-// re-tested: SKM 29-9-2001
-/// @test tested: O.K.
-
-double TensorVariable<3U>::Determinant() const noexcept
-{
-  double det = data[0][0] * (data[1][1] * data[2][2] - data[2][1] * data[1][2]);
-  det -= data[0][1] * (data[1][0] * data[2][2] - data[2][0] * data[1][2]);
-  det += data[0][2] * (data[1][0] * data[2][1] - data[2][0] * data[1][1]);
-
-  return det;
-}
-
-
-// re-tested: SKM 29-9-2001
-/// @test tested: O.K.
-
-TensorVariable<3U> TensorVariable<3U>::Inverse() const noexcept
-{
-  double  det = Determinant();
-
-  if ( det == static_cast<double>(0.) ) {
-    cerr << "\nTensorVariable<dim>::Inverse: Determinant = 0" << endl;
-    return TensorVariable<3U>();
-  }
-
-  det = 1. / det;
-
-  // A^-1 = (1 / det A) B^T
-  return TensorVariable( flag[0], flag[1], flag[2],
-                         // B00 
-                         det * (data[1][1] * data[2][2] - data[1][2] * data[2][1]),
-                         // B10
-                         det * (-data[0][1] * data[2][2] + data[0][2] * data[2][1]),
-                         // B20
-                         det * (data[0][1] * data[1][2] - data[0][2] * data[1][1]),
-                         // B01
-                         det * (-data[1][0] * data[2][2] + data[1][2] * data[2][0]),
-                         // B11
-                         det * (data[0][0] * data[2][2] - data[0][2] * data[2][0]),
-                         // B21
-                         det * (-data[0][0] * data[1][2] + data[0][2] * data[1][0]),
-                         // B02
-                         det * (data[1][0] * data[2][1] - data[2][0] * data[1][1]),
-                         // B12
-                         det * (-data[0][0] * data[2][1] + data[0][1] * data[2][0]),
-                         // B22
-                         det * (data[0][0] * data[1][1] - data[0][1] * data[1][0]) );
-}
-
-
-
-
-
-/// @test re-tested: SKM 29-9-2001
-
-double  TensorVariable<3U>::MinElement() const noexcept
-{
-  double me = data[0][0];
-
-  if ( data[0][1] < me ) me = data[0][1];
-  if ( data[1][0] < me ) me = data[1][0];
-  if ( data[1][1] < me ) me = data[1][1];
-  if ( data[0][2] < me ) me = data[0][2];
-  if ( data[1][2] < me ) me = data[1][2];
-  if ( data[2][0] < me ) me = data[2][0];
-  if ( data[2][1] < me ) me = data[2][1];
-  if ( data[2][2] < me ) me = data[2][2];
-
-  return me;
-}
-
-
-/// @test re-tested: SKM 29-9-2001
-
-double  TensorVariable<3U>::MaxElement() const noexcept
-{
-  double me = data[0][0];
-
-  if ( data[0][1] > me ) me = data[0][1];
-  if ( data[1][0] > me ) me = data[1][0];
-  if ( data[1][1] > me ) me = data[1][1];
-  if ( data[0][2] > me ) me = data[0][2];
-  if ( data[1][2] > me ) me = data[1][2];
-  if ( data[2][0] > me ) me = data[2][0];
-  if ( data[2][1] > me ) me = data[2][1];
-  if ( data[2][2] > me ) me = data[2][2];
-
-  return me;
-}
-
-
-
-/**
-    Assumes that tensor is diagonal, checking its Eigen values.
-    
-    @test re-tested: SKM 29-9-2001
-*/
-bool  TensorVariable<3U>::IsWithinRange( double vmin, double vmax ) const noexcept
-{
-  if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
-  //if ( data[0][1] < vmin || data[0][1] > vmax ) return false;
-  //if ( data[0][2] < vmin || data[0][2] > vmax ) return false;
-  //if ( data[1][0] < vmin || data[1][0] > vmax ) return false; 
-  if ( data[1][1] < vmin || data[1][1] > vmax ) return false;
-  //if ( data[1][2] < vmin || data[1][2] > vmax ) return false; 
-  //if ( data[2][0] < vmin || data[2][0] > vmax ) return false;
-  //if ( data[2][1] < vmin || data[2][1] > vmax ) return false;
-  if ( data[2][2] < vmin || data[2][2] > vmax ) return false;
-
-  return true;
-}
-
-
-/**
-    Checks only the diagonal.
-*/
-bool  TensorVariable<3U>::Has_NaN_Values() const noexcept {
-   if ( isnan(data[0][0]) ) return true;
-   if ( isnan(data[1][1]) ) return true;
-   if ( isnan(data[2][2]) ) return true;
-   return false;
-}
-
-
-
-
-/// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
-VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariable<3U>& ts ) noexcept
-{
-  return VectorVariable<3U>( vc.Flag( 0 ), vc.Flag( 1 ), vc.Flag( 2 ),
-                             ts( 0, 0 ) * vc[0] + ts( 1, 0 ) * vc[1] + ts( 2, 0 ) * vc[2],
-                             ts( 0, 1 ) * vc[0] + ts( 1, 1 ) * vc[1] + ts( 2, 1 ) * vc[2],
-                             ts( 0, 2 ) * vc[0] + ts( 1, 2 ) * vc[1] + ts( 2, 2 ) * vc[2] );
-}
-
-/// vector-matrix multiplication: v^T = (v^T * A)^T = A^T v
-Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts ) noexcept
-{
-  return Point<3u>(
-    ts( 0, 0 ) * vc[0] + ts( 1, 0 ) * vc[1] + ts( 2, 0 ) * vc[2],
-    ts( 0, 1 ) * vc[0] + ts( 1, 1 ) * vc[1] + ts( 2, 1 ) * vc[2],
-    ts( 0, 2 ) * vc[0] + ts( 1, 2 ) * vc[1] + ts( 2, 2 ) * vc[2] );
-}
-
-
+// ============================================================================
+//  Interactive I/O
+// ============================================================================
 
 template<uint32_t dim>
 ostream&  operator<<( ostream& stream, const TensorVariable<dim>& o )
@@ -1000,6 +85,49 @@ void  TensorVariable<3U>::Out() const
 } // end Out
 
 
+
+// ============================================================================
+//  Binary I/O
+// ============================================================================
+
+bool TensorVariable<3U>::Out( fstream& fp ) const
+{
+    const size_t flag_size = sizeof(int32_t);
+    const size_t data_size = sizeof(double);
+    const int32_t f0( flag[0] ), f1( flag[1] ), f2( flag[2] );
+    fp.write( reinterpret_cast<const char*>( &f0 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &f1 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &f2 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &data[0][0] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[1][0] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[2][0] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[0][1] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[1][1] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[2][1] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[0][2] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[1][2] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[2][2] ), data_size );
+    return true;
+}
+
+bool TensorVariable<3U>::In( fstream& fp )
+{
+    const size_t flag_size = sizeof(int32_t);
+    const size_t data_size = sizeof(double);
+    fp.read( reinterpret_cast<char*>( &flag[0] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &flag[1] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &flag[2] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &data[0][0] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[1][0] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[2][0] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[0][1] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[1][1] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[2][1] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[0][2] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[1][2] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[2][2] ), data_size );
+    return true;
+}
 
 
 
@@ -1138,357 +266,490 @@ bool TensorVariable<3U>::Eigen( VectorVariable<3U>& evals, TensorVariable<3U>& e
   @author Lukas Mosser?
 
   */
-bool TensorVariable<3U>::EigenNonSymmetric( VectorVariable<3U>& eigenVals,
-                                            TensorVariable<3U>& eigenVecs ) const
+bool TensorVariable<3U>::EigenSymmetric( VectorVariable<3U>& eigenVals,
+                                         TensorVariable<3U>& eigenVecs ) const
 {
-  const int n = 3;
-  double V[n][n], d[n], e[n];
+    // This method implements the Householder tridiagonalisation + symmetric
+    // tridiagonal QL algorithm.  It requires the input tensor to be symmetric.
+    // Non-diagonal elements are symmetrised by averaging before processing.
+    //
+    // Eigenvalues are returned in descending order (largest to smallest),
+    // consistent with EigenValuesPositiveDefiniteSymmetricMatrix.
+    //
+    // Source: Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
+    // Auto. Comp., Vol.ii-Linear Algebra (EISPACK).
 
-  for ( uint32_t i = 0; i<n; i++ )
-    for ( uint32_t j = 0; j<n; j++ )
-      V[i][j] = (*this)(i, j);
+    constexpr int n = 3;
+    double V[3][3], d[3], e[3];
 
-  // Symmetric Householder reduction to tridiagonal form.
-  //  This is derived from the Algol procedures tred2 by
-  //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
-  //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
-  //  Fortran subroutine in EISPACK.
-  for ( int j = 0; j < n; j++ ) {
-    d[j] = V[n - 1][j];
-  }
+    // Copy tensor into V, symmetrising off-diagonal elements.
+    for ( uint32_t i = 0; i < n; ++i )
+        for ( uint32_t j = 0; j < n; ++j )
+            V[i][j] = ( (*this)(i,j) + (*this)(j,i) ) / 2.0;
 
-  // Householder reduction to tridiagonal form.
+    // ------------------------------------------------------------------
+    //  Symmetric Householder reduction to tridiagonal form.
+    // ------------------------------------------------------------------
+    for ( int j = 0; j < n; ++j )
+        d[j] = V[n-1][j];
 
-  for ( int i = n - 1; i > 0; i-- ) {
+    for ( int i = n-1; i > 0; --i )
+    {
+        double scale = 0.0;
+        double h     = 0.0;
 
-    // Scale to avoid under/overflow.
+        for ( int k = 0; k < i; ++k )
+            scale += std::fabs( d[k] );
 
-    double scale = 0.0;
-    double h = 0.0;
-    for ( int k = 0; k < i; k++ ) {
-      scale = scale + fabs( d[k] );
-    }
-    if ( scale == 0.0 ) {
-      e[i] = d[i - 1];
-      for ( int j = 0; j < i; j++ ) {
-        d[j] = V[i - 1][j];
-        V[i][j] = 0.0;
-        V[j][i] = 0.0;
-      }
-    }
-    else {
-
-      // Generate Householder vector.
-
-      for ( int k = 0; k < i; k++ ) {
-        d[k] /= scale;
-        h += d[k] * d[k];
-      }
-      double f = d[i - 1];
-      double g = sqrt( h );
-      if ( f > 0 ) {
-        g = -g;
-      }
-      e[i] = scale * g;
-      h = h - f * g;
-      d[i - 1] = f - g;
-      for ( int j = 0; j < i; j++ ) {
-        e[j] = 0.0;
-      }
-
-      // Apply similarity transformation to remaining columns.
-
-      for ( int j = 0; j < i; j++ ) {
-        f = d[j];
-        V[j][i] = f;
-        g = e[j] + V[j][j] * f;
-        for ( int k = j + 1; k <= i - 1; k++ ) {
-          g += V[k][j] * d[k];
-          e[k] += V[k][j] * f;
+        if ( scale == 0.0 )
+        {
+            e[i] = d[i-1];
+            for ( int j = 0; j < i; ++j )
+            {
+                d[j]    = V[i-1][j];
+                V[i][j] = 0.0;
+                V[j][i] = 0.0;
+            }
         }
-        e[j] = g;
-      }
-      f = 0.0;
-      for ( int j = 0; j < i; j++ ) {
-        e[j] /= h;
-        f += e[j] * d[j];
-      }
-      double hh = f / (h + h);
-      for ( int j = 0; j < i; j++ ) {
-        e[j] -= hh * d[j];
-      }
-      for ( int j = 0; j < i; j++ ) {
-        f = d[j];
-        g = e[j];
-        for ( int k = j; k <= i - 1; k++ ) {
-          V[k][j] -= (f * e[k] + g * d[k]);
+        else
+        {
+            for ( int k = 0; k < i; ++k )
+            {
+                d[k] /= scale;
+                h    += d[k] * d[k];
+            }
+            double f = d[i-1];
+            double g = std::sqrt( h );
+            if ( f > 0.0 ) g = -g;
+            e[i]    = scale * g;
+            h       = h - f * g;
+            d[i-1]  = f - g;
+
+            for ( int j = 0; j < i; ++j )
+                e[j] = 0.0;
+
+            for ( int j = 0; j < i; ++j )
+            {
+                f       = d[j];
+                V[j][i] = f;
+                g       = e[j] + V[j][j] * f;
+                for ( int k = j+1; k <= i-1; ++k )
+                {
+                    g    += V[k][j] * d[k];
+                    e[k] += V[k][j] * f;
+                }
+                e[j] = g;
+            }
+
+            f = 0.0;
+            for ( int j = 0; j < i; ++j )
+            {
+                e[j] /= h;
+                f    += e[j] * d[j];
+            }
+            double hh = f / ( h + h );
+            for ( int j = 0; j < i; ++j )
+                e[j] -= hh * d[j];
+
+            for ( int j = 0; j < i; ++j )
+            {
+                f = d[j];
+                g = e[j];
+                for ( int k = j; k <= i-1; ++k )
+                    V[k][j] -= ( f * e[k] + g * d[k] );
+                d[j]    = V[i-1][j];
+                V[i][j] = 0.0;
+            }
         }
-        d[j] = V[i - 1][j];
-        V[i][j] = 0.0;
-      }
+        d[i] = h;
     }
-    d[i] = h;
-  }
 
-  // Accumulate transformations.
-
-  for ( int i = 0; i < n - 1; i++ ) {
-    V[n - 1][i] = V[i][i];
-    V[i][i] = 1.0;
-    double h = d[i + 1];
-    if ( h != 0.0 ) {
-      for ( int k = 0; k <= i; k++ ) {
-        d[k] = V[k][i + 1] / h;
-      }
-      for ( int j = 0; j <= i; j++ ) {
-        double g = 0.0;
-        for ( int k = 0; k <= i; k++ ) {
-          g += V[k][i + 1] * V[k][j];
+    // ------------------------------------------------------------------
+    //  Accumulate transformations.
+    // ------------------------------------------------------------------
+    for ( int i = 0; i < n-1; ++i )
+    {
+        V[n-1][i] = V[i][i];
+        V[i][i]   = 1.0;
+        double h  = d[i+1];
+        if ( h != 0.0 )
+        {
+            for ( int k = 0; k <= i; ++k )
+                d[k] = V[k][i+1] / h;
+            for ( int j = 0; j <= i; ++j )
+            {
+                double g = 0.0;
+                for ( int k = 0; k <= i; ++k )
+                    g += V[k][i+1] * V[k][j];
+                for ( int k = 0; k <= i; ++k )
+                    V[k][j] -= g * d[k];
+            }
         }
-        for ( int k = 0; k <= i; k++ ) {
-          V[k][j] -= g * d[k];
+        for ( int k = 0; k <= i; ++k )
+            V[k][i+1] = 0.0;
+    }
+    for ( int j = 0; j < n; ++j )
+    {
+        d[j]        = V[n-1][j];
+        V[n-1][j]   = 0.0;
+    }
+    V[n-1][n-1] = 1.0;
+    e[0]        = 0.0;
+
+    // ------------------------------------------------------------------
+    //  Symmetric tridiagonal QL algorithm.
+    // ------------------------------------------------------------------
+    for ( int i = 1; i < n; ++i )
+        e[i-1] = e[i];
+    e[n-1] = 0.0;
+
+    double f    = 0.0;
+    double tst1 = 0.0;
+    const double eps = std::numeric_limits<double>::epsilon();
+
+    for ( int l = 0; l < n; ++l )
+    {
+        tst1 = std::max( tst1, std::fabs( d[l] ) + std::fabs( e[l] ) );
+
+        // Find small subdiagonal element.
+        int m = l;
+        while ( m < n )
+        {
+            if ( std::fabs( e[m] ) <= eps * tst1 ) break;
+            ++m;
         }
-      }
-    }
-    for ( int k = 0; k <= i; k++ ) {
-      V[k][i + 1] = 0.0;
-    }
-  }
-  for ( int j = 0; j < n; j++ ) {
-    d[j] = V[n - 1][j];
-    V[n - 1][j] = 0.0;
-  }
-  V[n - 1][n - 1] = 1.0;
-  e[0] = 0.0;
 
-  // Symmetric tridiagonal QL algorithm.
-  //  This is derived from the Algol procedures tql2, by
-  //  Bowdler, Martin, Reinsch, and Wilkinson, Handbook for
-  //  Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
-  //  Fortran subroutine in EISPACK.
+        if ( m > l )
+        {
+            int iter = 0;
+            do
+            {
+                ++iter;
 
-  for ( int i = 1; i < n; i++ ) {
-    e[i - 1] = e[i];
-  }
-  e[n - 1] = 0.0;
+                // Compute implicit shift.
+                double g  = d[l];
+                double p  = ( d[l+1] - g ) / ( 2.0 * e[l] );
+                double r  = std::sqrt( p*p + 1.0 );
+                if ( p < 0.0 ) r = -r;
+                d[l]      = e[l] / ( p + r );
+                d[l+1]    = e[l] * ( p + r );
+                double dl1 = d[l+1];
+                double h   = g - d[l];
+                for ( int i = l+2; i < n; ++i )
+                    d[i] -= h;
+                f += h;
 
-  double f = 0.0;
-  double tst1 = 0.0;
-  double eps = pow( 2.0, -52.0 );
-  for ( int l = 0; l < n; l++ ) {
+                // Implicit QL transformation.
+                p          = d[m];
+                double c   = 1.0;
+                double c2  = c;
+                double c3  = c;
+                double el1 = e[l+1];
+                double s   = 0.0;
+                double s2  = 0.0;
 
-    // Find small subdiagonal element
+                for ( int i = m-1; i >= l; --i )
+                {
+                    c3          = c2;
+                    c2          = c;
+                    s2          = s;
+                    g           = c * e[i];
+                    h           = c * p;
+                    r           = std::sqrt( p*p + e[i]*e[i] );
+                    e[i+1]      = s * r;
+                    s           = e[i] / r;
+                    c           = p / r;
+                    p           = c * d[i] - s * g;
+                    d[i+1]      = h + s * ( c * g + s * d[i] );
 
-    tst1 = max( tst1, fabs( d[l] ) + fabs( e[l] ) );
-    int m = l;
-    while ( m < n ) {
-      if ( fabs( e[m] ) <= eps*tst1 ) {
-        break;
-      }
-      m++;
-    }
+                    for ( int k = 0; k < n; ++k )
+                    {
+                        h           = V[k][i+1];
+                        V[k][i+1]   = s * V[k][i] + c * h;
+                        V[k][i]     = c * V[k][i] - s * h;
+                    }
+                }
+                p    = -s * s2 * c3 * el1 * e[l] / dl1;
+                e[l] = s * p;
+                d[l] = c * p;
 
-    // If m == l, d[l] is an eigenvalue,
-    // otherwise, iterate.
-
-    if ( m > l ) {
-      int iter = 0;
-      do {
-        iter = iter + 1;  // (Could check iteration count here.)
-
-                          // Compute implicit shift
-
-        double g = d[l];
-        double p = (d[l + 1] - g) / (2.0 * e[l]);
-        double r = sqrt( p*p + 1.0 );
-        if ( p < 0 ) {
-          r = -r;
+            } while ( std::fabs( e[l] ) > eps * tst1 );
         }
-        d[l] = e[l] / (p + r);
-        d[l + 1] = e[l] * (p + r);
-        double dl1 = d[l + 1];
-        double h = g - d[l];
-        for ( int i = l + 2; i < n; i++ ) {
-          d[i] -= h;
+        d[l] += f;
+        e[l]  = 0.0;
+    }
+
+    // ------------------------------------------------------------------
+    //  Sort eigenvalues and eigenvectors in descending order.
+    //  (Consistent with EigenValuesPositiveDefiniteSymmetricMatrix.)
+    // ------------------------------------------------------------------
+    for ( int i = 0; i < n-1; ++i )
+    {
+        int    k = i;
+        double p = d[i];
+        for ( int j = i+1; j < n; ++j )
+        {
+            if ( d[j] > p )   // > for descending (was < in original)
+            {
+                k = j;
+                p = d[j];
+            }
         }
-        f = f + h;
-
-        // Implicit QL transformation.
-
-        p = d[m];
-        double c = 1.0;
-        double c2 = c;
-        double c3 = c;
-        double el1 = e[l + 1];
-        double s = 0.0;
-        double s2 = 0.0;
-        for ( int i = m - 1; i >= l; i-- ) {
-          c3 = c2;
-          c2 = c;
-          s2 = s;
-          g = c * e[i];
-          h = c * p;
-          r = sqrt( p*p + e[i] * e[i] );
-          e[i + 1] = s * r;
-          s = e[i] / r;
-          c = p / r;
-          p = c * d[i] - s * g;
-          d[i + 1] = h + s * (c * g + s * d[i]);
-
-          // Accumulate transformation.
-
-          for ( int k = 0; k < n; k++ ) {
-            h = V[k][i + 1];
-            V[k][i + 1] = s * V[k][i] + c * h;
-            V[k][i] = c * V[k][i] - s * h;
-          }
+        if ( k != i )
+        {
+            d[k] = d[i];
+            d[i] = p;
+            for ( int j = 0; j < n; ++j )
+            {
+                p       = V[j][i];
+                V[j][i] = V[j][k];
+                V[j][k] = p;
+            }
         }
-        p = -s * s2 * c3 * el1 * e[l] / dl1;
-        e[l] = s * p;
-        d[l] = c * p;
-
-        // Check for convergence.
-
-      } while ( fabs( e[l] ) > eps*tst1 );
     }
-    d[l] = d[l] + f;
-    e[l] = 0.0;
-  }
 
-  // Sort eigenvalues and corresponding vectors.
-
-  for ( int i = 0; i < n - 1; i++ ) {
-    int k = i;
-    double p = d[i];
-    for ( int j = i + 1; j < n; j++ ) {
-      if ( d[j] < p ) {
-        k = j;
-        p = d[j];
-      }
+    // ------------------------------------------------------------------
+    //  Copy results into output variables.
+    // ------------------------------------------------------------------
+    for ( uint32_t i = 0; i < n; ++i )
+    {
+        eigenVals(i) = d[i];
+        for ( uint32_t j = 0; j < n; ++j )
+            eigenVecs(i,j) = V[i][j];
     }
-    if ( k != i ) {
-      d[k] = d[i];
-      d[i] = p;
-      for ( int j = 0; j < n; j++ ) {
-        p = V[j][i];
-        V[j][i] = V[j][k];
-        V[j][k] = p;
-      }
-    }
-  }
 
-  for ( uint32_t i = 0; i<n; i++ )
-  {
-    for ( uint32_t j = 0; j<n; j++ )
-      eigenVecs( i, j ) = V[i][j];
-    eigenVals( i ) = d[i];
-  }
-
-  return true;
+    return true;
 }
+
+
+
+
+/**
+Computes eigenvalues and eigenvectors for a weakly non-symmetric 3D tensor.
+
+A weakly non-symmetric tensor is one whose skew-symmetric part is small
+relative to its symmetric part — for example a permeability or stress tensor
+that has accumulated small numerical asymmetries during computation.
+
+@section method Method
+
+The tensor A is decomposed into its symmetric part S and skew-symmetric
+part W:
+
+    S = (A + A^T) / 2
+    W = (A - A^T) / 2
+
+Eigenvalues and eigenvectors are computed from S using the Householder
+tridiagonalisation + symmetric tridiagonal QL algorithm (EigenSymmetric).
+
+The Frobenius norm of W relative to S is computed as the asymmetry measure:
+
+    asymmetry = ||W||_F / ||S||_F
+
+If this ratio exceeds @p tolerance the method returns false and issues a
+WARNING, indicating that the non-symmetric part is too large for the
+symmetric approximation to be reliable.  The eigenvalues are still written
+to the output arguments so the caller can inspect them, but they should be
+treated with caution.
+
+Eigenvalues are returned in descending order (largest to smallest),
+consistent with EigenValuesPositiveDefiniteSymmetricMatrix and
+EigenSymmetric.
+
+@param eigenVals   Output: eigenvalues in descending order.
+@param eigenVecs   Output: corresponding eigenvectors as columns.
+@param tolerance   Maximum permitted ratio ||W||_F / ||S||_F.
+                   Default is 1e-6.  Increase for more permissive checks.
+
+@return true  if the asymmetry ratio is within tolerance.
+        false if the asymmetry ratio exceeds tolerance (result unreliable).
+*/
+bool TensorVariable<3U>::EigenWeaklyNonSymmetric( VectorVariable<3U>& eigenVals, TensorVariable<3U>& eigenVecs, double tolerance ) const
+{
+    constexpr int n = 3;
+
+    // ------------------------------------------------------------------
+    //  Decompose into symmetric (S) and skew-symmetric (W) parts.
+    // ------------------------------------------------------------------
+    double S[3][3], W[3][3];
+
+    for ( uint32_t i = 0; i < n; ++i )
+        for ( uint32_t j = 0; j < n; ++j )
+        {
+            S[i][j] = ( (*this)(i,j) + (*this)(j,i) ) / 2.0;
+            W[i][j] = ( (*this)(i,j) - (*this)(j,i) ) / 2.0;
+        }
+
+    // ------------------------------------------------------------------
+    //  Compute Frobenius norms of S and W.
+    //  ||A||_F = sqrt( sum_ij a_ij^2 )
+    // ------------------------------------------------------------------
+    double normS = 0.0;
+    double normW = 0.0;
+
+    for ( int i = 0; i < n; ++i )
+        for ( int j = 0; j < n; ++j )
+        {
+            normS += S[i][j] * S[i][j];
+            normW += W[i][j] * W[i][j];
+        }
+    normS = std::sqrt( normS );
+    normW = std::sqrt( normW );
+
+    // ------------------------------------------------------------------
+    //  Check asymmetry ratio.
+    //  If normS is effectively zero the tensor is purely skew-symmetric
+    //  (all eigenvalues are zero) — handle as a special case.
+    // ------------------------------------------------------------------
+    const double asymmetry = ( normS > std::numeric_limits<double>::epsilon() )
+                             ? normW / normS
+                             : normW;
+
+    bool within_tolerance = ( asymmetry <= tolerance );
+
+    if ( !within_tolerance )
+    {
+        ErrorHandler::Instance().Note( WARNING,
+            "TensorVariable<3U>::EigenWeaklyNonSymmetric",
+            ( string("Asymmetry ratio ||W||_F / ||S||_F = ")
+              + std::to_string( asymmetry )
+              + " exceeds tolerance "
+              + std::to_string( tolerance )
+              + ". Eigenvalues computed from symmetric part only "
+              + "and may not be representative of the full tensor."
+            ).c_str() );
+    }
+
+    // ------------------------------------------------------------------
+    //  Build a TensorVariable from S and delegate to EigenSymmetric.
+    // ------------------------------------------------------------------
+    TensorVariable<3U> symTensor;
+    for ( uint32_t i = 0; i < n; ++i )
+        for ( uint32_t j = 0; j < n; ++j )
+            symTensor(i,j) = S[i][j];
+
+    symTensor.EigenSymmetric( eigenVals, eigenVecs );
+
+    return within_tolerance;
+}
+
+
+
 
 
 /**
 
-Code revision by Hossein Ageshlui (Nov. 2015), fixing several errors:
-
-Previous code included two functions for eigenvalue calculation, using basically the same code,
-one outputing eigenvalues as a vector and the other one as an object of the class VectorVariable<3U>&.
-
-To shorten the code and to not to cause any issues with previously written code,
-this new function has been added which calculates eigenvalues as scalar variables.
-
-The old functions now only call this new function and output the eigenvalues as a vector or as an object of a VectorVariable.
-The new code also sorts the eigenvalues in descending order.
-
-Also all the pow (1./3.) calls are replaced with cbrt(). The pow (1./.3) does not produce a result when used with negative values and it is slow.
-The source for solving the cubic equation is: http://mathworld.wolfram.com/CubicFormula.html
+Computes the Eigen values for a positive definite symmetric matrix.
+A source for solving the cubic equation is: http://mathworld.wolfram.com/CubicFormula.html
 
 */
-bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0, double& eigenValue1, double& eigenValue2 ) const
+bool TensorVariable<3U>::EigenValuesPositiveDefiniteSymmetricMatrix(
+    double& eigenValue0,
+    double& eigenValue1,
+    double& eigenValue2 ) const
 {
-  const double PI( 3.14159265358979323846 );
+    constexpr double PI = 3.14159265358979323846;
 
-  //HA: The tensor is expected to be symmetric. However, The symmetry of the matrix is ensured by averaging non diagonal elements.
-  const double f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
-  const double f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
-  const double f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
+    const double f_0_1 = ( data[1][0] + data[0][1] ) / 2.0;
+    const double f_0_2 = ( data[2][0] + data[0][2] ) / 2.0;
+    const double f_1_2 = ( data[1][2] + data[2][1] ) / 2.0;
 
-                                                          // a0, a1 and a2 are coefficients of cubic equation " x^3 + a2 * x^2 + a1 * x + a0 = 0". The roots of this equation are 
-                                                          // the Eigen values of the tensor
-  const double a2 = -(data[0][0] + data[1][1] + data[2][2]);
-  const double a1 = -(f_0_1 * f_0_1 + f_0_2 * f_0_2 +
-                         f_1_2 * f_1_2 - data[0][0] * data[1][1] -
-                         data[0][0] * data[2][2] - data[1][1] * data[2][2]);
-  const double a0 = -(data[0][0] * data[1][1] * data[2][2] -
-                         data[0][0] * f_1_2 * f_1_2 -
-                         f_0_1 * f_0_1 * data[2][2] +
-                         f_0_1 * f_0_2 * f_1_2 +
-                         f_0_2  * f_0_1 * f_1_2 -
-                         f_0_2 * f_0_2 * data[1][1]);
-  const double R = (9 * a2 * a1 - 27 * a0 - 2 * a2 * a2 * a2) / 54.0;
-  const double Q = (3 * a1 - a2 * a2) / 9.0;
-  const double D = Q * Q * Q + R * R;
+    const double a2 = -( data[0][0] + data[1][1] + data[2][2] );
 
-  if ( D > 0. ) // One real root and pair of complex conjugate roots
-  {
-    /*
-    HA. This check will never be used since the stress tensor is symmetric. Hence:
-    (1) A has exactly n(not necessarily distinct) eigenvalues.
-    (2) Sets of n eigenvectors exist for each of eigenvalues, and they are mututally orthogonal.
-    */
-    double m = R + sqrt( D );
-    double n = R - sqrt( D );
-    m = (m > 0) ? cbrt( m ) : -1 * cbrt( -1 * m );
-    n = (n > 0) ? cbrt( n ) : -1 * cbrt( -1 * n );
-    eigenValue0 = m + n - a2 / 3.0;
+    const double a1 = -( f_0_1 * f_0_1
+                       + f_0_2 * f_0_2
+                       + f_1_2 * f_1_2
+                       - data[0][0] * data[1][1]
+                       - data[0][0] * data[2][2]
+                       - data[1][1] * data[2][2] );
 
-    //csmp_error.Note( WARNING, "TensorVariable::EigenValues(double,double,double):",
-    //                  "found complex conjugate roots when calculating the eigenvalues of a tensor.");
-    return false;
-  }
+    const double a0 = -( data[0][0] * data[1][1] * data[2][2]
+                       - data[0][0] * f_1_2 * f_1_2
+                       - f_0_1 * f_0_1 * data[2][2]
+                       + f_0_1 * f_0_2 * f_1_2
+                       + f_0_2 * f_0_1 * f_1_2
+                       - f_0_2 * f_0_2 * data[1][1] );
 
-  if ( fabs( D ) <= numeric_limits<double>::epsilon() ) // The equation has three real roots, at least two of them are equal
-  {
+    const double Q = ( 3.0 * a1 - a2 * a2 ) / 9.0;
+    const double R = ( 9.0 * a2 * a1 - 27.0 * a0 - 2.0 * a2 * a2 * a2 ) / 54.0;
+    const double D = Q * Q * Q + R * R;
 
-    eigenValue0 = 2 * cbrt( R ) - a2 / 3.0;
-    eigenValue1 = eigenValue2 = -1 * cbrt( R ) - a2 / 3.0;
+    // ------------------------------------------------------------------
+    //  Tolerance for branch selection.
+    //
+    //  D = Q^3 + R^2 suffers catastrophic cancellation when the two
+    //  terms are nearly equal in magnitude (repeated eigenvalue case).
+    //  We classify D as zero when |D| is small relative to the scale
+    //  of the terms that compose it, using sqrt(epsilon) as the
+    //  relative tolerance to give a wide enough band.
+    // ------------------------------------------------------------------
+    const double D_scale = std::fabs( Q * Q * Q ) + std::fabs( R * R );
+    const double D_tol   = D_scale
+                         * std::sqrt( std::numeric_limits<double>::epsilon() );
 
-    if ( eigenValue0 < eigenValue1 ) // to return the roots in descending order
+    auto sortDescending = []( double& v0, double& v1, double& v2 )
     {
-      double temp = eigenValue0;
-      eigenValue0 = eigenValue1;
-      eigenValue2 = temp;
-    }
-  }
+        if ( v1 > v0 ) std::swap( v0, v1 );
+        if ( v2 > v1 ) std::swap( v1, v2 );
+        if ( v1 > v0 ) std::swap( v0, v1 );
+    };
 
-  if ( D < 0. ) // The equation has three real roots
-  {
-    double teta = acos( R / (abs( Q ) * sqrt( -1 * Q )) );
-    eigenValue0 = 2 * sqrt( -1 * Q ) * cos( teta / 3.0 ) - a2 / 3.0;
-    eigenValue1 = 2 * sqrt( -1 * Q ) * cos( teta / 3.0 + 120.0 / 180.0 * PI ) - a2 / 3.0;
-    eigenValue2 = 2 * sqrt( -1 * Q ) * cos( teta / 3.0 + 240.0 / 180.0 * PI ) - a2 / 3.0;
+    if ( D > D_tol )
+    {
+        // ------------------------------------------------------------------
+        //  One real root and a pair of complex conjugate roots.
+        //  For a symmetric matrix this should not occur; return false.
+        // ------------------------------------------------------------------
+        double m = R + std::sqrt( D );
+        double n = R - std::sqrt( D );
+        m = ( m >= 0.0 ) ?  cbrt(  m ) : -cbrt( -m );
+        n = ( n >= 0.0 ) ?  cbrt(  n ) : -cbrt( -n );
+        eigenValue0 = m + n - a2 / 3.0;
+        eigenValue1 = eigenValue2 = 0.0;
+        return false;
+    }
+    else if ( std::fabs( D ) <= D_tol )
+    {
+        // ------------------------------------------------------------------
+        //  Three real roots, at least two equal.
+        // ------------------------------------------------------------------
+        eigenValue0 =  2.0 * cbrt( R ) - a2 / 3.0;
+        eigenValue1 = -cbrt( R ) - a2 / 3.0;
+        eigenValue2 = eigenValue1;
+        sortDescending( eigenValue0, eigenValue1, eigenValue2 );
+        return true;
+    }
+    else
+    {
+        // ------------------------------------------------------------------
+        //  Three distinct real roots  (D < -D_tol).
+        // ------------------------------------------------------------------
+        const double sqrtNegQ = std::sqrt( -Q );
+        const double denom    = sqrtNegQ * sqrtNegQ * sqrtNegQ;
 
-    // returns the roots in descending order
-    if ( eigenValue2 > eigenValue1 ) {
-      double temp = eigenValue1;
-      eigenValue1 = eigenValue2;
-      eigenValue2 = temp;
+        // Guard against domain error in acos due to rounding.
+        const double cosArg = std::max( -1.0,
+                              std::min(  1.0, R / denom ) );
+        const double theta  = std::acos( cosArg );
+        const double two    = 2.0 * sqrtNegQ;
+
+        eigenValue0 = two * std::cos( theta / 3.0 )
+                    - a2 / 3.0;
+        eigenValue1 = two * std::cos( theta / 3.0 + 2.0 * PI / 3.0 )
+                    - a2 / 3.0;
+        eigenValue2 = two * std::cos( theta / 3.0 + 4.0 * PI / 3.0 )
+                    - a2 / 3.0;
+
+        sortDescending( eigenValue0, eigenValue1, eigenValue2 );
+        return true;
     }
-    else if ( eigenValue1 > eigenValue0 ) {
-      double temp = eigenValue0;
-      eigenValue0 = eigenValue1;
-      eigenValue1 = temp;
-    }
-  }
-  return true;
 }
 
 
 
-template ostream&  operator<<( ostream& stream, const TensorVariable<1U>& o );
-template ostream&  operator<<( ostream& stream, const TensorVariable<2U>& o );
-template ostream&  operator<<( ostream& stream, const TensorVariable<3U>& o );
+template ostream&  operator<<( ostream&, const TensorVariable<1U>& );
+template ostream&  operator<<( ostream&, const TensorVariable<2U>& );
+template ostream&  operator<<( ostream&, const TensorVariable<3U>& );
 
 } // end namespace csmp
 

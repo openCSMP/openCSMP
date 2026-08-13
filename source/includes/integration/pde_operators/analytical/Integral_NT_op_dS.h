@@ -19,9 +19,11 @@ class Integral_NT_op_dS : public MathOperatorRHS<dim,Face> {
     Integral_NT_op_dS( const PropertyDatabase<dim>&, const char* oper, const char* test );
     
     void GetOperands( const Face<dim>& ) override final;
-
     void ComputeContribution( const Face<dim>& ) override final;
-  
+
+     virtual Integral_NT_op_dS<dim,CELL>* clone() const override final
+        { return new Integral_NT_op_dS<dim,CELL> (*this); }
+
   private:
     ScalarVariable        sc;
     VectorVariable<dim>   vc, vc2, pvc;

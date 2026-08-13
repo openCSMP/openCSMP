@@ -21,7 +21,10 @@ class Integral_NT_M_dV_Triangle : public MathOperatorRHS<dim,CELL> {
     
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
-  
+
+     virtual Integral_NT_M_dV_Triangle<dim,CELL>* clone() const override final
+        { return new Integral_NT_M_dV_Triangle<dim,CELL> (*this); }
+
   private:
     std::vector<ScalarVariable > NPROP;
     double                       vol_div3;

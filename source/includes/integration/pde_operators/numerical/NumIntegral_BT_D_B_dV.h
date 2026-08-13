@@ -29,14 +29,17 @@ class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim,CELL> {
     
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    void PlaneStress( bool yes_no=true ); ///< default is plane strain
+    ///< relevant only in 2D; the default is plane strain
+    void PlaneStress( bool yes_no=true );
   ///
     NumIntegral_BT_D_B_dV<dim,CELL>* clone() const override final { return new NumIntegral_BT_D_B_dV<dim,CELL> (*this); }
     
   private:
     csmp::Index          nu_key_;   ///< Poisson's ratio
     std::vector<double>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
-    DenseMatrix<DM_MIN>  D, B, BT;  ///< material property matrix
+    DenseMatrix<DM_MIN>  B, BT;  ///< material property matrix
+    static constexpr auto MATDIM = (dim == 3) ? DM6 : DM3;
+    DenseMatrix<MATDIM>  D;
     bool                 plane_strain_;
 };
 

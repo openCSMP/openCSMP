@@ -7,7 +7,7 @@
 #include "Boundary.h"
 #include "meshManagementUtilities.h"
 #include "PL_Utilities.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "PointSource_rhsop.h"
 #include "PDE_Integrator.h"
@@ -31,7 +31,7 @@ SteadyStateDiffusor<dim, CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
    PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
 		conductance_(sg.Database(), diffusivity, diffusing_variable, diffusing_variable),
-		source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable)),
+		source_(new NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable)),
 		nodal_source_(0),
 		gravity_(0),
 		grad_multiplier_(1.),
@@ -98,7 +98,7 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
    PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_( new NumIntegral_NT_op_N_dV<dim,CELLTYPE>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
+   source_( new NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>( sg.Database(), spatial_source_variable, diffusing_variable ) ),
    nodal_source_(0),
    gravity_(0),
    grad_multiplier_(1.),
@@ -167,7 +167,7 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
    PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(new PointSource_rhsop<dim,CELLTYPE>(sg.Database(), point_source_variable, diffusing_variable) ),
    gravity_(0),
    grad_multiplier_(1.),
@@ -306,7 +306,7 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
    PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
    gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),
@@ -386,7 +386,7 @@ SteadyStateDiffusor<dim,CELLTYPE>::SteadyStateDiffusor( Model<dim>& sg,
    PDE_Integrator<dim,CELLTYPE>( solver_ ),
 #endif
    conductance_( sg.Database(), lhs_diffusivity, diffusing_variable, diffusing_variable ),
-   source_(new NumIntegral_NT_op_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
+   source_(new NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>(sg.Database(), spatial_source_variable, diffusing_variable) ),
    nodal_source_(0),
    gravity_(new NumIntegral_dNT_op_dV<dim,CELLTYPE>(sg.Database(), gradient_variable, diffusing_variable) ),
    grad_multiplier_(gradient_multiplier),

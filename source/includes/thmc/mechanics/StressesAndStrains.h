@@ -47,12 +47,11 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
                 means_key_, dilat_key_,                    ///< mean stress (scalar), dilatation (scalar)
                 shear_key_;                                ///< maximum shear stress (scalar)
 
-    DenseMatrix<DM_MIN>                   DISPL_,
-                                          STRESS_, STRAIN_,
-                                          EGP_, SGP_, PEGP_, PSGP_;
-    std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double>                   IPSTRAIN_, IPSTRESS_,
-                                          NSTRAIN_,  NSTRESS_, 
+    DenseMatrix<DM_MIN>             DISPL_, EGP_;
+    DenseMatrix<DM6>                STRESS_, STRAIN_, SGP_, PEGP_, PSGP_;
+    std::vector<DenseMatrix<DM6> >  STIFF_;
+    std::vector<double>             IPSTRAIN_, IPSTRESS_,
+                                    NSTRAIN_,  NSTRESS_, 
                                           eps_, sigma_, sum_;
     TensorVariable<3U>                    ts_, evecs_;
     TensorVariable<3U>                    IP_STRAIN_TENSOR_;   ///< for averaging of integration point variables to barycentre

@@ -22,8 +22,8 @@
 
 // finite elements
 #include "PDE_Integrator.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "PointSource_rhsop.h"
@@ -175,7 +175,7 @@ void Geothermal_Example::Run()
   //! computation of initial steady-state fluid pressure
   PDE_Integrator<DIM,Element>  steady_state_pressure( solver );
 
-  NumIntegral_dNT_op_dN_dV<DIM>    p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<DIM>    p_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
   // replace if you want to work with fluid sources and sinks
   NumIntegral_SetRHS_to_Zero<DIM>  zero_fluid_src( pd_ref, "fluid pressure" );
 
@@ -189,13 +189,13 @@ void Geothermal_Example::Run()
   //! finite element computation of transient pressure
   PDE_Integrator<DIM,Element>  transient_pressure( solver );
 
-  NumIntegral_dNT_op_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<DIM>  pt_conductance( pd_ref, "mass conductivity", "fluid pressure", "fluid pressure" );
   pt_conductance.MultiplyWithTimeIncrement( true );
 
   NumIntegral_NT_lhsop_N_dV<DIM> pt_capacitance_lhs( pd_ref, "total compressibility", "fluid pressure", "fluid pressure" );
   pt_capacitance_lhs.LumpedFormulation( true );
 
-  NumIntegral_NT_op_N_dV<DIM>    pt_capacitance_rhs( pd_ref, "total compressibility", "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<DIM> pt_capacitance_rhs( pd_ref, "total compressibility", "fluid pressure" );
   pt_capacitance_rhs.LumpedFormulation( true );
 
   //! nodal fluid volume source for mass correction term
@@ -215,13 +215,13 @@ void Geothermal_Example::Run()
   //! transient thermal diffusion
   PDE_Integrator<DIM,Element>  temperature_diffusion( solver );
 
-  NumIntegral_dNT_op_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
+  NumIntegral_dNT_lhsop_dN_dV<DIM>   t_conductance( pd_ref, "thermal conductivity", "temperature", "temperature" );
 
   NumIntegral_NT_lhsop_N_dV<DIM>  t_capacitance_lhs( pd_ref, "total heat capacity", "temperature", "temperature" );
   t_capacitance_lhs.LumpedFormulation( true );
   t_capacitance_lhs.MultiplyWithTimeIncrement( true );
 
-  NumIntegral_NT_op_N_dV<DIM>  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" );
+  NumIntegral_NT_rhsop_N_dV<DIM>  t_capacitance_rhs( pd_ref, "total heat capacity", "temperature" );
   t_capacitance_rhs.LumpedFormulation(true); //added
   t_capacitance_rhs.MultiplyWithTimeIncrement( true );
 

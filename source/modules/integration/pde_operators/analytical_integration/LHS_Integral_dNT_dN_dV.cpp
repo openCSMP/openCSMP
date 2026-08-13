@@ -41,7 +41,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void LHS_Integral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // this integral is only for analytically integrated finite elements
-    assert( e.FE()->UsesLocalCoordinates() == false );
+    assert( e.UsesLocalCoordinates() == false );
    
     e.dN( DN );
     // transpose the shape function derivative matrix

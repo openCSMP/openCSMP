@@ -43,17 +43,17 @@ class NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> 
     void ReadElementMultiplier( const CELL<dim>&,
                                 DenseMatrix<DM_MIN>& MULT );
     
-    DenseMatrix<DM_MIN>               DN, DNT, ///< derivatives of basis functions
-                                      VIP,     ///< 'v' (velocity) vector<double> variable
-                                      EMULT;   ///< element based multiplier for 'v'
-    typename std::vector<double>      IPOL;    ///< basis function values (at integration point)
-    typename std::vector<DenseMatrix<DM_MIN> >  NT3; ///< IPOL at integration points stored in columns of matrix NTNTNT
-    typename std::vector<double>      NMULT,   ///< node based scalar multiplier for 'v'
-                                      NGRAD,   ///< variable to compute gradient of for calculation of 'v'
-                                      RDENS;   ///< relative density if so specified
+    DenseMatrix<DM_MIN>                DN, DNT, ///< derivatives of basis functions
+                                       VIP,     ///< 'v' (velocity) vector<double> variable
+                                       EMULT;   ///< element based multiplier for 'v'
+    std::vector<double>                IPOL;    ///< basis function values (at integration point)
+    std::vector<DenseMatrix<DM_MIN> >  NT3; ///< IPOL at integration points stored in columns of matrix NTNTNT
+    std::vector<double>                NMULT,   ///< node based scalar multiplier for 'v'
+                                       NGRAD,   ///< variable to compute gradient of for calculation of 'v'
+                                       RDENS;   ///< relative density if so specified
                     
-    typename std::vector<ScalarVariable >  sc_prop_vec, ///< vector<double> to read node properties into
-                                           rrho_vec;
+    std::vector<ScalarVariable >  sc_prop_vec, ///< vector<double> to read node properties into
+                                  rrho_vec;
          
     csmp::Index     grad_key,    ///< key to variable to compute gradient of for calculation of 'v'
                     emulti_key,  ///< key to element based multiplier for 'v'

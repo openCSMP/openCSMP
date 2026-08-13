@@ -22,6 +22,7 @@ class NumIntegral_op_NT_N_dV : public MathOperatorRHS<dim,CELL> {
     NumIntegral_op_NT_N_dV( const PropertyDatabase<dim>&,
                             const char* oper, const char* test );
 
+    void GetOperands( const CELL<dim>& ) override final { /* do not load any data */ }
     void ComputeContribution( const CELL<dim>& ) override final;
     
   private:

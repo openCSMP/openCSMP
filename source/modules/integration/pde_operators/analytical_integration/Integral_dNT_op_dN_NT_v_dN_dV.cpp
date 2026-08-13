@@ -125,12 +125,12 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL<di
     // --------------------------------------
     VXYZ /= nodes;
     
-    for ( auto i{0U}; i<nodes; i++ )
-      for ( auto j{0U}; j<nodes; j++ ) {
+    for ( uint32_t i{0U}; i<nodes; i++ )
+      for ( uint32_t j{0U}; j<nodes; j++ ) {
            MathOperatorLHS<dim,CELL>::LHS(i,j)   += B(0,j) * VXYZ[0];
-           if ( dim != 1U ) 
+           if constexpr ( dim != 1U )
              MathOperatorLHS<dim,CELL>::LHS(i,j) += B(1,j) * VXYZ[1];
-           if ( dim == 3U ) 
+           if constexpr ( dim == 3U ) 
              MathOperatorLHS<dim,CELL>::LHS(i,j) += B(2,j) * VXYZ[2];
         }    
 

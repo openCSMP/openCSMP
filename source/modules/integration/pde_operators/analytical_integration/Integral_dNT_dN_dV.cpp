@@ -40,7 +40,7 @@ void Integral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     
     // setting up the unity vector
     UNITY.Resize(e.Nodes(),1);
-    UNITY = 1.;
+    UNITY.FillCol( 0, 1. );// = 1.0;
 
     // calculate the element contribution to RHS (lumping into vector format)
     DNT *= MathOperatorRHS<dim,CELL>::MTRL[0];
@@ -51,7 +51,7 @@ void Integral_dNT_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     double volume = e.Volume();
     
     MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
-    for ( auto i{0U}; i<e.Nodes(); i++ )
+    for ( uint32_t i{0U}; i<e.Nodes(); i++ )
       MathOperatorRHS<dim,CELL>::RHS[i] = DNT(i,0) * volume;
 
 } // end ComputeContribution

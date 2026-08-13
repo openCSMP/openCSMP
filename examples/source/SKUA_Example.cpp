@@ -29,9 +29,9 @@
 // PDE operators building the FE algorithm
 #include "Integral_NT_op_N_dV.h"
 #include "Integral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 // -------------------------------------------
 
@@ -364,16 +364,16 @@ static void RunTutorial1OnSetUpModel( Model<3U>& model ) {
     PDE_Integrator<3U,Element>  fluid_pressure(solver);
 
     // LHS stiffness matrix                              operand         basis function    test function
-    NumIntegral_dNT_op_dN_dV<3U>  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<3U>  stiffness_matrix( p_ref, "conductivity", "fluid pressure", "fluid pressure" );
 
     // LHS mass matrix
     NumIntegral_NT_lhsop_N_dV<3U> mass_matrix_lhs( p_ref, "compressibility", "fluid pressure", "fluid pressure" );
 
     // RHS mass vector
-    NumIntegral_NT_op_N_dV<3U>    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U>    mass_matrix_rhs( p_ref, "compressibility", "fluid pressure" );
 
     // RHS mass vector for integrating source term
-    NumIntegral_NT_op_N_dV<3U>    source_term( p_ref, "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U>    source_term( p_ref, "fluid volume source", "fluid pressure" );
 
     // mass matrices for dp/dt term must be divided by time increment
     mass_matrix_lhs.MultiplyWithTimeIncrement(true);

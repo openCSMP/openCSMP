@@ -21,10 +21,10 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim,CELL> {
   public:
     NumIntegral_NT_op1_op2_dNi_dV( const PropertyDatabase<dim>&,
-                                   const char* oper,          // e.g., fluid density
-                                   const char* mtrl1,         // e.g., storativity
-                                   const char* mtrl2,         // e.g., conductivity
-                                   const char* test );        // e.g., fluid pressure
+                                   const char* oper,          ///< e.g., fluid density
+                                   const char* mtrl1,         ///< e.g., storativity
+                                   const char* mtrl2,         ///< e.g., conductivity
+                                   const char* test );        ///< e.g., fluid pressure
     
     void GetOperands( const CELL<dim>& ) override final;
 
@@ -37,7 +37,7 @@ class NumIntegral_NT_op1_op2_dNi_dV : public MathOperatorRHS<dim,CELL> {
     DenseMatrix<DM_MIN>           DN;
     csmp::Index                   mtrl1_key, mtrl2_key;
     ScalarVariable                oper_eprop, mtrl1_prop, mtrl2_prop;
-    const double                  gravity;   // acceleration of gravity
+    const double                  gravity;   ///< acceleration of gravity
     const uint32_t                xyz; // 1=x, 2=y
     std::vector<ScalarVariable >  oper_nprop;
 };

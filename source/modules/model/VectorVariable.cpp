@@ -1,851 +1,231 @@
+// VectorVariable.cpp
+
 #include "VectorVariable.h"
+
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 namespace csmp {
 
+// ============================================================================
+//  makeVector with std::vector arguments — cannot be inline because
+//  it uses assert which may not be available in all header contexts.
+// ============================================================================
 
-VectorVariable<3U>::VectorVariable() noexcept
-  : flag{ { ANY,ANY,ANY } },
-  data{ { std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN(),std::numeric_limits<double>::quiet_NaN() } }
+VectorVariable<3U> makeVector(
+    const std::vector<VARIABLE_FLAG>& flags,
+    const std::vector<double>&        vals ) noexcept
 {
+    assert( flags.size() == 3U );
+    assert( vals.size()  == 3U );
+    return VectorVariable<3U>( flags[0], flags[1], flags[2],
+                               vals[0],  vals[1],  vals[2] );
 }
 
+// ============================================================================
+//  Flip — kept in .cpp because it constructs a local temporary with
+//  swapped indices which is clearer to read outside the header.
+// ============================================================================
 
-
-
-
-VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f, double val ) noexcept
-  : flag{ { f,f,f } },
-  data{ { val,val,val } }
+VectorVariable<3U> VectorVariable<3U>::Flip() noexcept
 {
+    VectorVariable<3U> temp;
+    temp.flag[0] = flag[2];
+    temp.flag[1] = flag[1];
+    temp.flag[2] = flag[0];
+    temp.data[0] = data[2];
+    temp.data[1] = data[1];
+    temp.data[2] = data[0];
+    return temp;
 }
 
+// ============================================================================
+//  AngleTo — kept in .cpp due to multiple branches and trig call.
+// ============================================================================
 
-
-
-VectorVariable<3U>::VectorVariable( VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
-                                    double  val1, double  val2, double  val3 ) noexcept
-  : flag{ { f1,f2,f3 } },
-  data{ { val1,val2,val3 } }
+double VectorVariable<3U>::AngleTo(
+    const VectorVariable<3U>& v ) const noexcept
 {
+    const double ab = data[0]*v.data[0] + data[1]*v.data[1] + data[2]*v.data[2];
+    const double denom = std::sqrt(
+        ( data[0]*data[0]   + data[1]*data[1]   + data[2]*data[2] ) *
+        ( v.data[0]*v.data[0] + v.data[1]*v.data[1] + v.data[2]*v.data[2] ) );
+
+    if ( denom == 0.0 ) return 90.0;
+
+    const double cos_angle = ab / denom;
+    if ( cos_angle >  1.0 ) return   0.0;
+    if ( cos_angle < -1.0 ) return 180.0;
+
+    return ( 180.0 / 3.14159265358979323846 ) * std::acos( cos_angle );
 }
 
+// ============================================================================
+//  Binary operators — 1D and 2D (kept in .cpp since 1D/2D types are
+//  defined in VectorVariable1.h / VectorVariable2.h which are included
+//  by the header but whose inline definitions live in their own files)
+// ============================================================================
 
+VectorVariable<1U> operator+( const VectorVariable<1U>& a, double b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) + b ); }
 
+VectorVariable<1U> operator-( const VectorVariable<1U>& a, double b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) - b ); }
 
-// 1D specializations
-VectorVariable<1U> makeVector( VARIABLE_FLAG fx, double vx ) noexcept
-{
-  return VectorVariable<1U>( fx, vx );
-}
+VectorVariable<1U> operator*( const VectorVariable<1U>& a, double b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) * b ); }
 
-// 2D specializations
-VectorVariable<2U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, double vx, double vy ) noexcept
-{
-  return VectorVariable<2U>( fx, fy, vx, vy );
-}
+VectorVariable<1U> operator/( const VectorVariable<1U>& a, double b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) / b ); }
 
+VectorVariable<2U> operator+( const VectorVariable<2U>& a, double b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)+b, a(1)+b ); }
 
-// 3D specializations
+VectorVariable<2U> operator-( const VectorVariable<2U>& a, double b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)-b, a(1)-b ); }
 
-VectorVariable<3U> makeVector( VARIABLE_FLAG fx, VARIABLE_FLAG fy, VARIABLE_FLAG fz, double vx, double vy, double vz ) noexcept
-{
-  return VectorVariable<3U>( fx, fy, fz, vx, vy, vz );
-}
+VectorVariable<2U> operator*( const VectorVariable<2U>& a, double b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)*b, a(1)*b ); }
 
-VectorVariable<3U> makeVector( const std::array<VARIABLE_FLAG, 3U>& flags, const std::array<double, 3U>& vals ) noexcept
-{
-  return VectorVariable<3U>( flags[0], flags[1], flags[2], vals[0], vals[1], vals[2] );
-}
+VectorVariable<2U> operator/( const VectorVariable<2U>& a, double b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)/b, a(1)/b ); }
 
-VectorVariable<3U> makeVector( const std::vector<VARIABLE_FLAG>& flags, const std::vector<double>& vals ) noexcept
-{
-  assert( flags.size() == 3U );
-  assert( vals.size() == 3U );
-  return VectorVariable<3U>( flags[0], flags[1], flags[2], vals[0], vals[1], vals[2] );
-}
+// ============================================================================
+//  Binary operators — ScalarVariable (1D and 2D)
+// ============================================================================
 
+VectorVariable<1U> operator+( const VectorVariable<1U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) + b() ); }
 
+VectorVariable<1U> operator-( const VectorVariable<1U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) - b() ); }
 
-double& VectorVariable<3U>::operator()( uint32_t i ) noexcept
-{
-#ifdef NDEBUG 
-  if ( i >= 3U ) {
-    std::cerr << "\nVectorVariable<3U>::operator(): vector access violation, i=" << i << std::endl;
-    return data[0];
-  }
-#endif
-  return data[i];
-}
+VectorVariable<1U> operator*( const VectorVariable<1U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) * b() ); }
 
-const double& VectorVariable<3U>::operator()( uint32_t i ) const noexcept
-{
-#ifdef NDEBUG 
-  if ( i >= 3U ) {
-    std::cerr << "\nVectorVariable<3U>::operator() const: vector access violation, i=" << i << std::endl;
-    return data[0];
-  }
-#endif
-  return data[i];
-}
+VectorVariable<1U> operator/( const VectorVariable<1U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<1U>( a.Flag(0), a(0) / b() ); }
 
+VectorVariable<2U> operator+( const VectorVariable<2U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)+b(), a(1)+b() ); }
 
-double  VectorVariable<3U>::operator[]( uint32_t i ) const noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    std::cerr << "\nVectorVariable<3U>::operator[]: vector access violation, i=" << i << std::endl;
-    return data[0];
-  }
-#endif
-  return data[i];
-}
+VectorVariable<2U> operator-( const VectorVariable<2U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)-b(), a(1)-b() ); }
 
+VectorVariable<2U> operator*( const VectorVariable<2U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)*b(), a(1)*b() ); }
 
+VectorVariable<2U> operator/( const VectorVariable<2U>& a, const ScalarVariable& b ) noexcept
+{ return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0)/b(), a(1)/b() ); }
 
-void  VectorVariable<3U>::Component( uint32_t i, double val ) noexcept
-{
-  assert( i < 3U );
-  data[i] = val;
-}
+// ============================================================================
+//  Point op VectorVariable (1D and 2D)
+// ============================================================================
 
+Point<1U> operator+( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+{ return Point<1U>( p[0] + vc[0] ); }
 
+Point<1U> operator-( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+{ return Point<1U>( p[0] - vc[0] ); }
 
+Point<1U> operator*( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+{ return Point<1U>( p[0] * vc[0] ); }
 
-double  VectorVariable<3U>::Component( uint32_t i ) const noexcept
-{
-  assert( i < 3U );
-  return data[i];
-}
+Point<1U> operator/( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+{ return Point<1U>( p[0] / vc[0] ); }
 
+Point<2U> operator+( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
+{ return Point<2U>( p[0]+vc[0], p[1]+vc[1] ); }
 
+Point<2U> operator-( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
+{ return Point<2U>( p[0]-vc[0], p[1]-vc[1] ); }
 
+Point<2U> operator*( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
+{ return Point<2U>( p[0]*vc[0], p[1]*vc[1] ); }
 
-VARIABLE_FLAG&  VectorVariable<3U>::Flag( uint32_t i ) noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    std::cerr << "\nVectorVariable<3U>::Flag(): access violation, i=" << i << std::endl;
-    return flag[0];
-  }
-#endif
-  return flag[i];
-}
+Point<2U> operator/( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
+{ return Point<2U>( p[0]/vc[0], p[1]/vc[1] ); }
 
-
-VARIABLE_FLAG   VectorVariable<3U>::Flag( uint32_t i ) const noexcept
-{
-#ifndef NDEBUG 
-  if ( i >= 3U ) {
-    std::cerr << "\nVectorVariable<3U>::Flag(): access violation, i=" << i << std::endl;
-    return flag[0];
-  }
-#endif
-  return flag[i];
-}
-
-
-
-
-VectorVariable<3U>::VectorVariable( const std::vector<double>& v ) noexcept
-  : flag{ { ANY,ANY,ANY } },
-  data{ { v[0],v[1],v[2] } }
-{
-}
-
-
-VectorVariable<3U>::VectorVariable( const csmp::Point<3U>& p ) noexcept
-  : flag{ { ANY,ANY,ANY } },
-  data{ { p[0],p[1],p[2] } }
-{
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator+=( double val ) noexcept
-{
-  data[0] += val;
-  data[1] += val;
-  data[2] += val;
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator-=( double val ) noexcept
-{
-  data[0] -= val;
-  data[1] -= val;
-  data[2] -= val;
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator*=( double val ) noexcept
-{
-  data[0] *= val;
-  data[1] *= val;
-  data[2] *= val;
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator/=( double val ) noexcept
-{
-  data[0] /= val;
-  data[1] /= val;
-  data[2] /= val;
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator+=( const ScalarVariable& sc ) noexcept
-{
-  data[0] += sc();
-  data[1] += sc();
-  data[2] += sc();
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator-=( const ScalarVariable& sc ) noexcept
-{
-  data[0] -= sc();
-  data[1] -= sc();
-  data[2] -= sc();
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator*=( const ScalarVariable& sc ) noexcept
-{
-  data[0] *= sc();
-  data[1] *= sc();
-  data[2] *= sc();
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator/=( const ScalarVariable& sc ) noexcept
-{
-  data[0] /= sc();
-  data[1] /= sc();
-  data[2] /= sc();
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator+=( const VectorVariable<3U>& v ) noexcept
-{
-  data[0] += v.data[0];
-  data[1] += v.data[1];
-  data[2] += v.data[2];
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator-=( const VectorVariable<3U>& v ) noexcept
-{
-  data[0] -= v.data[0];
-  data[1] -= v.data[1];
-  data[2] -= v.data[2];
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator*=( const VectorVariable<3U>& v ) noexcept
-{
-  data[0] *= v.data[0];
-  data[1] *= v.data[1];
-  data[2] *= v.data[2];
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator/=( const VectorVariable<3U>& v ) noexcept
-{
-  data[0] /= v.data[0];
-  data[1] /= v.data[1];
-  data[2] /= v.data[2];
-
-  return *this;
-}
-
-
-
-
-// --------------------
-// ASSIGNMENT OPERATORS
-// --------------------
-
-VectorVariable<3U>&  VectorVariable<3U>::operator=( double val ) noexcept
-{
-  data[0] = val;
-  data[1] = val;
-  data[2] = val;
-
-  return *this;
-}
-
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator=( const ScalarVariable& sc ) noexcept
-{
-  flag[0] = flag[1] = flag[2] = sc.Flag();
-  data[0] = data[1] = data[2] = sc();
-
-  return *this;
-}
-
-
-
-VectorVariable<3U>&  VectorVariable<3U>::operator=( const csmp::Point<3U>& pt ) noexcept
-{
-  data[0] = pt[0];
-  data[1] = pt[1];
-  data[2] = pt[2];
-
-  return *this;
-}
-
-// using the comparitor of the standard array
-bool VectorVariable<3U>::operator==( const VectorVariable<3U>& v ) const noexcept
-{
-  return(flag == v.flag && data == v.data);
-}
-
-
-bool VectorVariable<3U>::operator!=( const VectorVariable<3U>& v ) const noexcept
-{
-  return(flag != v.flag || data != v.data);
-}
-
-
-/// compare the length of two vectors
-bool VectorVariable<3U>::operator<( const VectorVariable<3U>& v ) const noexcept
-{
-  return (this < &v);
-}
-
-
-
-// -------
-// METHODS
-// -------
-
-/// normalize L2
-
-void VectorVariable<3U>::EuclideanNormalize() noexcept
-{
-  const double fNorm( std::sqrt( data[0] * data[0] + data[1] * data[1] + data[2] * data[2] ) );
-
-  if ( fNorm == 0. ) return; //added AP
-
-  data[0] /= fNorm;
-  data[1] /= fNorm;
-  data[2] /= fNorm;
-}
-
-
-double VectorVariable<3U>::DotProduct( const csmp::Point<3U>& p ) const noexcept
-{
-  return data[0] * p[0] + data[1] * p[1] + data[2] * p[2];
-}
-
-double VectorVariable<3U>::DotProduct( const VectorVariable& v ) const noexcept
-{
-  return data[0] * v[0] + data[1] * v[1] + data[2] * v[2];
-}
-
-VectorVariable<3U> VectorVariable<3U>::CrossProduct( const csmp::Point<3U>& p ) const noexcept
-{
-  return VectorVariable<3U>( flag[0], flag[1], flag[2],
-                             data[1] * p[2] - data[2] * p[1],
-                             data[2] * p[0] - data[0] * p[2],
-                             data[0] * p[1] - data[1] * p[0] );
-}
-
-VectorVariable<3U> VectorVariable<3U>::CrossProduct( const VectorVariable& v ) const noexcept
-{
-  return VectorVariable<3U>( flag[0], flag[1], flag[2],
-                             data[1] * v[2] - data[2] * v[1],
-                             data[2] * v[0] - data[0] * v[2],
-                             data[0] * v[1] - data[1] * v[0] );
-}
-
-double  VectorVariable<3U>::Length() const noexcept
-{
-  return std::hypot( data[0], data[1], data[2] );
-}
-
-
-
-Point<3U>  VectorVariable<3U>::P() const noexcept
-{
-  return csmp::Point<3U>( data[0], data[1], data[2] );
-}
-
-
-bool  VectorVariable<3U>::IsWithinRange( double vmin, double vmax ) const noexcept
-{
-  if ( data[0] < vmin || data[0] > vmax ) return false;
-  if ( data[1] < vmin || data[1] > vmax ) return false;
-  if ( data[2] < vmin || data[2] > vmax ) return false;
-
-  return true;
-}
-
-
-
-  /// tests whether variable contains NaN value(s)
-bool  VectorVariable<3U>::Has_NaN_Values() const noexcept {
-   if ( isnan(data[0]) ) return true;
-   if ( isnan(data[1]) ) return true;
-   if ( isnan(data[2]) ) return true;
-   return false;
-}
-
-
+// ============================================================================
+//  Binary I/O
+// ============================================================================
 
 bool VectorVariable<3U>::Out( std::fstream& fp ) const
 {
-  const int32_t flag_0( this->flag[0] );
-  const int32_t flag_1( this->flag[1] );
-  const int32_t flag_2( this->flag[2] );
-  const size_t flag_size = sizeof( int32_t );
-  fp.write( (char*)&flag_0, flag_size );
-  fp.write( (char*)&flag_1, flag_size );
-  fp.write( (char*)&flag_2, flag_size );
-  const size_t data_size = sizeof( double );
-  fp.write( (char*)&this->data[0], data_size );
-  fp.write( (char*)&this->data[1], data_size );
-  fp.write( (char*)&this->data[2], data_size );
-  return true;
+    const size_t flag_size = sizeof(int32_t);
+    const size_t data_size = sizeof(double);
+    const int32_t f0(flag[0]), f1(flag[1]), f2(flag[2]);
+    fp.write( reinterpret_cast<const char*>( &f0 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &f1 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &f2 ), flag_size );
+    fp.write( reinterpret_cast<const char*>( &data[0] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[1] ), data_size );
+    fp.write( reinterpret_cast<const char*>( &data[2] ), data_size );
+    return true;
 }
 
 bool VectorVariable<3U>::In( std::fstream& fp )
 {
-  const size_t flag_size = sizeof( int32_t );
-  fp.read( (char*)&this->flag[0], flag_size );
-  fp.read( (char*)&this->flag[1], flag_size );
-  fp.read( (char*)&this->flag[2], flag_size );
-  const size_t data_size = sizeof( double );
-  fp.read( (char*)&this->data[0], data_size );
-  fp.read( (char*)&this->data[1], data_size );
-  fp.read( (char*)&this->data[2], data_size );
-  return true;
+    const size_t flag_size = sizeof(int32_t);
+    const size_t data_size = sizeof(double);
+    fp.read( reinterpret_cast<char*>( &flag[0] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &flag[1] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &flag[2] ), flag_size );
+    fp.read( reinterpret_cast<char*>( &data[0] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[1] ), data_size );
+    fp.read( reinterpret_cast<char*>( &data[2] ), data_size );
+    return true;
 }
 
-/// operators with Points
-// 1D
+// ============================================================================
+//  Interactive I/O
+// ============================================================================
 
-Point<1U> operator+( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+void VectorVariable<3U>::In()
 {
-  return Point<1U>( p[0] + vc[0] );
+    string status;
+    for ( uint32_t i = 0; i < 3U; ++i )
+    {
+        if      ( i == 0 ) cout << "\nEnter status for x-component: ";
+        else if ( i == 1 ) cout << "\nEnter status for y-component: ";
+        else               cout << "\nEnter status for z-component: ";
+        cout.flush();
+        cin >> status;
+        flag[i] = parseStatus( status.c_str() );
+    }
+    cout << "\nEnter 3 vector elements: ";
+    cout.flush();
+    for ( uint32_t i = 0; i < 3U; ++i ) cin >> data[i];
 }
 
-
-Point<1U> operator-( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
+void VectorVariable<3U>::Out() const noexcept
 {
-  return Point<1U>( p[0] - vc[0] );
+    cout << "\nStatus:\n";
+    for ( uint32_t i = 0; i < 3U; ++i )
+        cout << parseStatus( flag[i] ) << "\t\t";
+    cout << "\nValues:\n";
+    for ( uint32_t i = 0; i < 3U; ++i )
+        cout << data[i] << "\t\t";
+    cout << "\n";
 }
 
-
-Point<1U> operator*( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
-{
-  return Point<1U>( p[0] * vc[0] );
-}
-
-
-Point<1U> operator/( const Point<1U>& p, const VectorVariable<1U>& vc ) noexcept
-{
-  return Point<1U>( p[0] / vc[0] );
-}
-
-// 2D
-
-Point<2U> operator+( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
-{
-  return Point<2U>( p[0] + vc[0], p[1] + vc[1] );
-}
-
-
-Point<2U> operator-( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
-{
-  return Point<2U>( p[0] - vc[0], p[1] - vc[1] );
-}
-
-
-Point<2U> operator*( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
-{
-  return Point<2U>( p[0] * vc[0], p[1] * vc[1] );
-}
-
-
-Point<2U> operator/( const Point<2U>& p, const VectorVariable<2U>& vc ) noexcept
-{
-  return Point<2U>( p[0] / vc[0], p[1] / vc[1] );
-}
-
-// 3D
-
-Point<3U> operator+( const Point<3U>& p, const VectorVariable<3U>& vc ) noexcept
-{
-  return Point<3U>( p[0] + vc[0], p[1] + vc[1], p[2] + vc[2] );
-}
-
-
-Point<3U> operator-( const Point<3U>& p, const VectorVariable<3U>& vc ) noexcept
-{
-  return Point<3U>( p[0] - vc[0], p[1] - vc[1], p[2] - vc[2] );
-}
-
-
-Point<3U> operator*( const Point<3U>& p, const VectorVariable<3U>& vc ) noexcept
-{
-  return Point<3U>( p[0] * vc[0], p[1] * vc[1], p[2] * vc[2] );
-}
-
-
-Point<3U> operator/( const Point<3U>& p, const VectorVariable<3U>& vc ) noexcept
-{
-  return Point<3U>( p[0] / vc[0], p[1] / vc[1], p[2] / vc[2] );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator+( const VectorVariable<3U>& v ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] + v.data[0], data[1] + v.data[1], data[2] + v.data[2] );
-}
-
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator-( const VectorVariable<3U>& v ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] - v.data[0], data[1] - v.data[1], data[2] - v.data[2] );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator*( const VectorVariable<3U>& v ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] * v.data[0], data[1] * v.data[1], data[2] * v.data[2] );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator/( const VectorVariable<3U>& v ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[0] / v.data[0], data[1] / v.data[1], data[2] / v.data[2] );
-}
-
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::operator^( double val ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    std::pow( data[0], val ), std::pow( data[1], val ), std::pow( data[2], val ) );
-}
-
-
-
-
-/// cross product ' % ' of two vectors
-VectorVariable<3U>  VectorVariable<3U>::operator%( const VectorVariable<3U>& v ) const noexcept
-{
-  return VectorVariable( flag[0], flag[1], flag[2],
-                    data[1] * v.data[2] - v.data[1] * data[2],
-                    -(data[0] * v.data[2] - v.data[0] * data[2]),
-                    data[0] * v.data[1] - v.data[0] * data[1] );
-}
-
-
-
-
-/// return angle in degrees
-double  VectorVariable<3U>::AngleTo( const VectorVariable<3U>& v ) const noexcept
-{
-  double ab = data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2];
-  double a_dot_b = std::sqrt( (data[0] * data[0] + data[1] * data[1] + data[2] * data[2]) *
-                                (v.data[0] * v.data[0] + v.data[1] * v.data[1] + v.data[2] * v.data[2]) );
-  // a b
-  // ---
-  double cos_angle = ab / a_dot_b;
-
-  // if zero intercept
-  if ( cos_angle == 0.0 ) return  90.0;
-  // if outside of range of 'acos' function
-  if ( cos_angle >  1.0 ) return   0.0;
-  if ( cos_angle < -1.0 ) return 180.0;
-
-  return (static_cast<double>(180.) / static_cast<double>(3.14159265358979324)) * std::acos( cos_angle );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::Flip() noexcept
-{
-  VectorVariable<3U>  temp;
-
-  temp.flag[0] = flag[2];
-  temp.flag[2] = flag[0];
-  temp.flag[1] = flag[1];
-  temp.data[0] = data[2];
-  temp.data[2] = data[0];
-  temp.data[1] = data[1];
-
-  return temp;
-}
-
-
-/// Multiplies by negative unity vector
-void  VectorVariable<3U>::Invert() noexcept
-{
-  data[0] *= -1.;
-  data[1] *= -1.;
-  data[2] *= -1.;
-}
-
-
-
-
-/// projects this vector variable onto the supplied vector v and returns the projection vector
-
-VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const std::vector<double>& v ) const noexcept
-{
-  double ratio( (data[0] * v[0] + data[1] * v[1] + data[2] * v[2]) / (v[0] * v[0] + v[1] * v[1] + v[2] * v[2]) );
-
-  return VectorVariable<3U>( flag[0], flag[1], flag[2], v[0] * ratio, v[1] * ratio, v[2] * ratio );
-}
-
-
-
-VectorVariable<3U>  VectorVariable<3U>::ProjectOnto( const VectorVariable<3U>& v ) const noexcept
-{
-  double ratio( (data[0] * v.data[0] + data[1] * v.data[1] + data[2] * v.data[2]) /
-                  (v.data[0] * v.data[0] + v.data[1] * v.data[1] + v.data[2] * v.data[2]) );
-
-  return VectorVariable<3U>( flag[0], flag[1], flag[2],
-                    v.data[0] * ratio, v.data[1] * ratio, v.data[2] * ratio );
-}
-
-
+// ============================================================================
+//  Stream output operator (template — explicit instantiations)
+// ============================================================================
 
 template<uint32_t dim>
-ostream&  operator<<( ostream& stream, const VectorVariable<dim>& o )
+ostream& operator<<( ostream& stream, const VectorVariable<dim>& o )
 {
-  for ( auto i{0U}; i<dim; i++ )
-    stream << o[i] << " (" << parseStatus( o.Flag( i ) ) << ") ";
-
-  return stream;
+    for ( uint32_t i = 0; i < dim; ++i )
+        stream << o[i] << " (" << parseStatus( o.Flag(i) ) << ") ";
+    return stream;
 }
 
+template ostream& operator<< <1U>( ostream&, const VectorVariable<1U>& );
+template ostream& operator<< <2U>( ostream&, const VectorVariable<2U>& );
+template ostream& operator<< <3U>( ostream&, const VectorVariable<3U>& );
 
-
-void  VectorVariable<3U>::In()
-{
-  string  status;
-
-  for ( uint32_t i{0u}; i<3U; i++ ) {
-    if ( i == 0 )      cout << "\nEnter status for x-component of variable: ";
-    else if ( i == 1 ) cout << "\nEnter status for y-component of variable: ";
-    else               cout << "\nEnter status for z-component of variable: ";
-    cout.flush();
-    cin >> status;
-    flag[i] = parseStatus( status.c_str() );
-  }
-
-  cout << "\nEnter 3 vector elements: ";
-  cout.flush();
-  for ( uint32_t i{0u}; i<3U; i++ ) cin >> data[i];
-
-} // end In
-
-
-
-void  VectorVariable<3U>::Out() const noexcept
-{
-  cout << "\nStatus: " << endl;
-  for ( uint32_t i{0u}; i<3U; i++ )
-    cout << parseStatus( flag[i] ) << "\t\t";
-  cout << endl;
-  for ( uint32_t i{0u}; i<3U; i++ ) cout << data[i] << "\t\t";
-  cout << endl;
-
-} // end Out
-
-
-// =======================================================================
-// Binary operators (SKM 31/5/2025)
-// =======================================================================
-
-// interaction with double
-
-VectorVariable<1U> operator+( const VectorVariable<1U>& a, double b ) noexcept {
-  return VectorVariable<1U>( a.Flag(0), a(0) + b );
-}
-
-VectorVariable<1U> operator-(const VectorVariable<1U>& a, double b) noexcept {
-    return VectorVariable<1U>(a.Flag(0), a(0) - b);
-}
-
-VectorVariable<1U> operator*(const VectorVariable<1U>& a, double b) noexcept {
-    return VectorVariable<1U>(a.Flag(0), a(0) * b);
-}
-
-VectorVariable<1U> operator/(const VectorVariable<1U>& a, double b) noexcept {
-    return VectorVariable<1U>(a.Flag(0), a(0) / b);
-}
-
-
-// 2D
-VectorVariable<2U> operator+(const VectorVariable<2U>& a, double b) noexcept {
-    return VectorVariable<2U>(
-        a.Flag(0), a.Flag(1),
-        a(0) + b, a(1) + b
-    );
-}
-
-VectorVariable<2U> operator-(const VectorVariable<2U>& a, double b) noexcept {
-    return VectorVariable<2U>(
-        a.Flag(0), a.Flag(1),
-        a(0) - b, a(1) - b
-    );
-}
-
-VectorVariable<2U> operator*(const VectorVariable<2U>& a, double b) noexcept {
-    return VectorVariable<2U>(
-        a.Flag(0), a.Flag(1),
-        a(0) * b, a(1) * b
-    );
-}
-
-VectorVariable<2U> operator/(const VectorVariable<2U>& a, double b) noexcept {
-    return VectorVariable<2U>(
-        a.Flag(0), a.Flag(1),
-        a(0) / b, a(1) / b
-    );
-}
-
-// 3D
-VectorVariable<3U> operator+(const VectorVariable<3U>& a, double b) noexcept {
-    return VectorVariable<3U>(
-        a.Flag(0), a.Flag(1), a.Flag(2),
-        a(0) + b, a(1) + b, a(2) + b
-    );
-}
-
-VectorVariable<3U> operator-(const VectorVariable<3U>& a, double b) noexcept {
-    return VectorVariable<3U>(
-        a.Flag(0), a.Flag(1), a.Flag(2),
-        a(0) - b, a(1) - b, a(2) - b
-    );
-}
-
-VectorVariable<3U> operator*(const VectorVariable<3U>& a, double b) noexcept {
-    return VectorVariable<3U>(
-        a.Flag(0), a.Flag(1), a.Flag(2),
-        a(0) * b, a(1) * b, a(2) * b
-    );
-}
-
-VectorVariable<3U> operator/(const VectorVariable<3U>& a, double b) noexcept {
-    return VectorVariable<3U>(
-        a.Flag(0), a.Flag(1), a.Flag(2),
-        a(0) / b, a(1) / b, a(2) / b
-    );
-}
-
-// ScalarVariable
-
-// 2D
-VectorVariable<2U> operator+(const VectorVariable<2U>& a, const ScalarVariable& b ) noexcept {
-    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) + b(), a(1) + b()
-    );
-}
-
-VectorVariable<2U> operator-(const VectorVariable<2U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) - b(), a(1) - b()
-    );
-}
-
-VectorVariable<2U> operator*(const VectorVariable<2U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) * b(), a(1) * b()
-    );
-}
-
-VectorVariable<2U> operator/(const VectorVariable<2U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<2U>( a.Flag(0), a.Flag(1), a(0) / b(), a(1) / b()
-    );
-}
-
-// 3D
-VectorVariable<3U> operator+(const VectorVariable<3U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) + b(), a(1) + b(), a(2) + b()
-    );
-}
-
-VectorVariable<3U> operator-(const VectorVariable<3U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) - b(), a(1) - b(), a(2) - b()
-    );
-}
-
-VectorVariable<3U> operator*(const VectorVariable<3U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) * b(), a(1) * b(), a(2) * b()
-    );
-}
-
-VectorVariable<3U> operator/(const VectorVariable<3U>& a, const ScalarVariable& b) noexcept {
-    return VectorVariable<3U>( a.Flag(0), a.Flag(1), a.Flag(2), a(0) / b(), a(1) / b(), a(2) / b()
-    );
-}
-
-
-template ostream&  operator<< <1U>(ostream& stream, const VectorVariable<1U>& o);
-template ostream&  operator<< <2U>(ostream& stream, const VectorVariable<2U>& o);
-template ostream&  operator<< <3U>(ostream& stream, const VectorVariable<3U>& o);
-
-} // end namespace csmp
+} // namespace csmp
 

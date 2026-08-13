@@ -1,7 +1,6 @@
 #ifndef CSMP_FINITE_ELEMENT_H
 #define CSMP_FINITE_ELEMENT_H
 
-#include <vector>
 #include "CSMP_global_enumerations.h"
 #include "DenseMatrix.h"
 
@@ -153,6 +152,9 @@ class FiniteElement {
                    uint32_t order_of_shape_functions );
     
     virtual ~FiniteElement() = default;
+
+    // constant uses in determining th fixed maximum size of matrices in the accumulation process
+    static constexpr int MAX_ELEMENT_NODES = 27;
 
    /// assigns integer value used to avoid repeating the same operation
     void           CurrentID( size_t id ) noexcept;
@@ -334,18 +336,15 @@ class FiniteElement {
     /// returns the determinant of the member Jacobian matrix JAC that must have been initialised before
     virtual   double  JacobianDeterminant();
 	
-    /// initialises interpolation function product matrix N^T x N for analytically integrated elements
+    /// initialises interpolation function product matrix N^T x N for analytically integrated elements; not CONST because computes volume
     virtual   void    IntegralNN( DenseMatrix<DM_MIN>& );
   
     /// initialises interpolation function derivatives product matrix DN^T x DN for element where derivatives are constant
-    virtual   void    IntegraldNdN( DenseMatrix<DM_MIN>& );
+    virtual   void    IntegraldNdN( DenseMatrix<DM_MIN>& ) const;
     
-    // local interpolation functions in elements that use a local coordinate system (r,s,t), use PhysicalToParametric() to transform coordinates (iterative process)
-
-    // from Hani Akbari: for analytic integration
-    virtual   void    Integral_dNT_K_dN( DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K );
+    // Hani Akbari: for analytic integration
+    virtual   void    Integral_dNT_K_dN( DenseMatrix<DM_MIN>& M, DenseMatrix<DM3>& K_material_property_matrix ) const;
   
-
     /// 1D element interpolation functions N(r)
     virtual void  Nr(  double r, std::vector<double>& NRST ) const;
 

@@ -8,7 +8,7 @@ using namespace std;
 
 namespace csmp {
 
-/** basic and test variable exchanged so that the line is indicated by the basic variable (as it is
+/** basic and test variable exchanged so that the row in the matrix is indicated by the basic variable (as it is
     for the lhs operators)
 */
 template<uint32_t dim, template<uint32_t> class CELL>
@@ -97,12 +97,12 @@ void Integral_var_NT_rhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>&
     DenseMatrix< DM_MIN> mat;
     e.IntegralNN(mat);
     
-    for (auto i = 0; i < e.Nodes(); ++i) {
-      for (auto k = 0; k < e.Nodes(); ++k) {
+    for (uint32_t i = 0; i < e.Nodes(); ++i) {
+      for (uint32_t k = 0; k < e.Nodes(); ++k) {
         MathOperatorRHS<dim,CELL>::RHS[i] += mat(i, k) * vvar_[k]();
       }
     }
-    for (auto i = 0; i < e.Nodes(); ++i) {
+    for (uint32_t i = 0; i < e.Nodes(); ++i) {
       MathOperatorRHS<dim,CELL>::RHS[i] *= op_() * prefactor_ * basic_var_[i]();
     }
   }
@@ -130,11 +130,11 @@ void Integral_var_NT_rhsop_N_dV<dim,CELL>::ComputeIntegral( const CELL<dim>& e )
   elMat(2, 1) = elMat(1, 2);
   elMat(2, 2) = 2.0*vvar_[0]() + 2.0*vvar_[1]() + 6.0*vvar_[2]();
   
-  for (auto i = 0; i < e.Nodes(); i++) 
-    for (auto j = 0; j < e.Nodes(); j++) 
+  for (uint32_t i = 0; i < e.Nodes(); i++) 
+    for (uint32_t j = 0; j < e.Nodes(); j++) 
       MathOperatorRHS<dim,CELL>::RHS[i] += elMat(i,j) * basic_var_[j]();
   
-  for (auto i = 0; i < e.Nodes(); ++i) {
+  for (uint32_t i = 0; i < e.Nodes(); ++i) {
     MathOperatorRHS<dim,CELL>::RHS[i] *= e.Volume() * prefactor_ * op_() / 60.;
   }
 }

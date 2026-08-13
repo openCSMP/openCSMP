@@ -28,7 +28,8 @@ class Integral_NT_op_dNi_dV : public MathOperatorRHS<dim,CELL> {
     /// in stead of MultiplyWithTimeIncrement() since that would multiply whole contribution
     void MaterialPropertyTimeMultiplier( double time_increment );
 
-    Integral_NT_op_dNi_dV<dim,CELL>* clone() const override final { return new Integral_NT_op_dNi_dV<dim,CELL> (*this); }
+    Integral_NT_op_dNi_dV<dim,CELL>* clone() const override final
+      { return new Integral_NT_op_dNi_dV<dim,CELL> (*this); }
   
   private:
     std::vector<double>         IPOL;

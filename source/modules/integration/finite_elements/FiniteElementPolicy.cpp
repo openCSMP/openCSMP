@@ -265,7 +265,7 @@ void FiniteElementPolicy<dim,CELL>::N_AtBaryCenter( vector<double>& Nn ) const
 
 // DERIVATIVES OF SHAPE FUNCTIONS AT DIFFERENT POINTS
 template<uint32_t dim, template<uint32_t> class CELL>
-void FiniteElementPolicy<dim, CELL>::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const
+void FiniteElementPolicy<dim, CELL>::Integral_dNT_K_dN( DenseMatrix<DM_MIN>& M, DenseMatrix<DM3>& K ) const
 {
 	assert(fptr_ != nullptr);
 	CoordinateMatrix();
@@ -635,7 +635,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     // simple averaging of integration point properties
     if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
        const auto n_integration_points(IntegrationPoints());
-       for ( auto i{0U}; i < n_integration_points; i++ ) {
+       for ( uint32_t i{0U}; i < n_integration_points; i++ ) {
             var += eptr->Read( i, idx );
          }
        var /= static_cast<double>(fptr_->IntegrationPoints());
@@ -643,7 +643,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     }
     if ( idx.place == SECTOR_INTEGRATION_POINT ) {
        const auto n_sector_integration_points(eptr->FV()->Sectors());
-       for ( auto i{0U}; i < n_sector_integration_points; i++ ) {
+       for ( uint32_t i{0U}; i < n_sector_integration_points; i++ ) {
             var += eptr->Read( i, 0U, idx );
          }
        var /= static_cast<double>(n_sector_integration_points);
@@ -654,7 +654,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtBaryCenter( const csmp::Ind
     fptr_->N_AtBaryCenter( fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ ) {
+    for ( uint32_t i{0U}; i<n_nodes; i++ ) {
        var += eptr->N(i)->Read( idx ) * fptr_->NRST[i];
     }
     
@@ -706,7 +706,7 @@ void FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csmp:
     fptr_->N_AtIntegrationPoint( ip, fptr_->NRST );
 
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ )
+    for ( uint32_t i{0U}; i<n_nodes; i++ )
     {
        eptr->N(i)->Read( idx, temp );
        var += temp * fptr_->NRST[i];
@@ -741,7 +741,7 @@ double FiniteElementPolicy<dim,CELL>::PropertyValueAtIntegrationPoint( const csm
 
     double  var(0.);
     const auto  n_nodes(fptr_->Nodes());
-    for ( auto i{0U}; i<n_nodes; i++ )
+    for ( uint32_t i{0U}; i<n_nodes; i++ )
       var += fptr_->NRST[i] * eptr->N(i)->Read( idx );
 
    return var;

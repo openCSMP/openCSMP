@@ -5,8 +5,8 @@
 #include "ANSYS_Model3D.h"
 #include "PropertyHandle.h"
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
 
@@ -130,7 +130,7 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       // laplacian matrix [L] on the left-hand side
       NumIntegral_dNT_dN_dV<dim>   laplacian( model.Database(), "parabolic function", "parabolic function" );
       // source vector {q} on the right-hand side = 1
-      NumIntegral_NT_op_N_dV<dim>  rhs( model.Database(), "source term", "parabolic function" );
+      NumIntegral_NT_rhsop_N_dV<dim>  rhs( model.Database(), "source term", "parabolic function" );
       parabolic_profile.Add( &laplacian );
       parabolic_profile.Add( &rhs );
 
@@ -184,9 +184,9 @@ void StokesDiscrepancyMeasureQuadratic_Example::Run()
       PDE_Integrator<dim,Element>  steady_state_pressure( solver );
 #endif
 
-      NumIntegral_dNT_op_dN_dV<dim>  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
+      NumIntegral_dNT_lhsop_dN_dV<dim>  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
       // source vector {q} on the right-hand side = 0
-      NumIntegral_NT_op_N_dV<dim>    fsrc( model.Database(), "fluid volume source", "fluid pressure" );
+      NumIntegral_NT_rhsop_N_dV<dim> fsrc( model.Database(), "fluid volume source", "fluid pressure" );
       steady_state_pressure.Add( &flow_resistance );
       steady_state_pressure.Add( &fsrc );
 

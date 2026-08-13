@@ -27,7 +27,7 @@ Meschach matrix into which the result is returned.
 */
 void planeStressMatrix( double E,  // Young's modulus,
                         double nu, // Poisson's ratio 
-                        DenseMatrix<DM_MIN>& D )
+                        DenseMatrix<DM3>& D )
  {
     D.Resize(3,3);
     D.Zero();
@@ -47,7 +47,7 @@ void planeStressMatrix( double E,  // Young's modulus,
     stiffness form: to compute stresses from strains
 
 */
-void planeStrainMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
+void planeStrainMatrix( double E, double nu, DenseMatrix<DM3>& D )
  {
     D.Resize(3,3);
     D.Zero();
@@ -96,7 +96,7 @@ void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
     
     see also AFEM.Ch09, p. 9-14
 */
-void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
+void stiffnessMatrix( double E, double nu, DenseMatrix<DM6>& D )
  {
     D.Resize(6,6);
     assert( nu < 0.5 );
@@ -116,7 +116,7 @@ void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D )
 
 
 /// 1D linear bar
-void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length )
+void stiffnessMatrix( double E, DenseMatrix<DM6>& D, double length )
   {
     D.Resize(2,2);
     D.Zero(); 
@@ -136,7 +136,7 @@ void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length )
 */
 void planeStressMatrix( const vector<ScalarVariable >& E, 
                         const vector<ScalarVariable >& nu, 
-                        vector<DenseMatrix<DM_MIN> >& D )
+                        vector<DenseMatrix<DM3> >& D )
  {
     if ( E.empty() or E.size() != nu.size() ) {
          cout <<"\nplaneStressMatrix: input data vectors are empty or do not match in size. ";
@@ -145,7 +145,7 @@ void planeStressMatrix( const vector<ScalarVariable >& E,
       }
     D.resize(E.size());
     vector<ScalarVariable>::const_iterator  Eit(E.begin()), nit(nu.begin());
-    vector<DenseMatrix<DM_MIN> >::iterator  Dit(D.begin());
+    vector<DenseMatrix<DM3> >::iterator  Dit(D.begin());
     while( Eit != E.end() ) {
          planeStressMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;
@@ -165,7 +165,7 @@ void planeStressMatrix( const vector<ScalarVariable >& E,
 */
 void planeStrainMatrix( const vector<ScalarVariable >& E,
                         const vector<ScalarVariable >& nu, 
-                        vector<DenseMatrix<DM_MIN> >& D )
+                        vector<DenseMatrix<DM3> >& D )
  {
     if ( E.empty() or E.size() != nu.size() ) {
          cout <<"\nplaneStrainMatrix: input data vectors are empty or do not match in size. ";
@@ -174,7 +174,7 @@ void planeStrainMatrix( const vector<ScalarVariable >& E,
       }
     D.resize(E.size());
     vector<ScalarVariable >::const_iterator  Eit(E.begin()), nit(nu.begin());
-    vector<DenseMatrix<DM_MIN> >::iterator   Dit(D.begin());
+    vector<DenseMatrix<DM3> >::iterator   Dit(D.begin());
     while( Eit != E.end() ) {
          planeStrainMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;
@@ -196,7 +196,7 @@ void planeStrainMatrix( const vector<ScalarVariable >& E,
 */
 void stiffnessMatrix( const vector<ScalarVariable >& E, 
                       const vector<ScalarVariable >& nu, 
-                      vector<DenseMatrix<DM_MIN> >& D )
+                      vector<DenseMatrix<DM6> >& D )
  {
     if ( E.empty() or E.size() != nu.size() ) {
          cerr <<"\nstiffnessMatrix: input data vectors are empty or do not match in size. ";
@@ -206,7 +206,7 @@ void stiffnessMatrix( const vector<ScalarVariable >& E,
     // stiffness matrix
     D.resize(E.size());
     vector<ScalarVariable >::const_iterator  Eit(E.begin()), nit(nu.begin());
-    vector<DenseMatrix<DM_MIN> >::iterator   Dit(D.begin());
+    vector<DenseMatrix<DM6> >::iterator   Dit(D.begin());
     while( Eit != E.end() ) {
          stiffnessMatrix( (*Eit)(), (*nit)(), (*Dit) );
          Eit++;

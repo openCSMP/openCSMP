@@ -23,6 +23,7 @@
 #include "VTK_Type.h"
 #include "VSet.h"
 #include "CSMP_ElementSpecifications.h"
+#include "ArrayVariable.h"
 #include "ModelTopology.h" // to form regions from 'region id' code in VTU file
 #include "ErrorHandler.h"
 

@@ -77,25 +77,26 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
 
     // if the agregated finite element is a simplex, the Jacobian and element-interpolation derivative matrix is constant throughout it
     const bool is_simplex_element_type(e.FE()->IsSimplex() && e.Interpolation() == 1);
-    double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( MathOperatorRHS<dim,CELL>::DERIV ) : 0.;
+    double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( DERIV_ ) : 0.;
 
+    vector<double> IPOL;
     for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
-         if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( MathOperatorRHS<dim,CELL>::DERIV, i );
+         if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( DERIV_, i );
          double grad_op(0.);
          const size_t nodes(e.Nodes());
          for ( uint32_t j{0U}; j<nodes; ++j )
-           grad_op += MathOperatorRHS<dim,CELL>::DERIV(xyz_,j) * op_vec_[j]();
+           grad_op += DERIV_(xyz_,j) * op_vec_[j]();
         
          // integration
-         e.N_AtIntegrationPoint( i, MathOperatorRHS<dim,CELL>::IPOL );
+         e.N_AtIntegrationPoint( i, IPOL );
          for ( uint32_t k=0; k<nodes; ++k )
-           MathOperatorRHS<dim,CELL>::IPOL[k] *= grad_op * det * e.WeightAtIntegrationPoint(i);
+           IPOL[k] *= grad_op * det * e.WeightAtIntegrationPoint(i);
 
          // RHS vector for accumulation
          for ( uint32_t k=0; k<nodes; ++k )
-           MathOperatorRHS<dim,CELL>::RHS[k] += MathOperatorRHS<dim,CELL>::IPOL[k];
+           MathOperatorRHS<dim,CELL>::RHS[k] += IPOL[k];
       }
 
 } // end ComputeContribution

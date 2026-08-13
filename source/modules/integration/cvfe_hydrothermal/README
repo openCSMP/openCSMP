@@ -1,8 +1,0 @@
-February 2015
-
-Control_volume_fe_hyrothermal will be a temporrary directory in
-trunk/source_code_development to aid the porting and testing of Philipp Weis'
-control volume finite element scheme plus Thomas Driesner's related equation
-of state classes.
-
-Please do NOT modify without checking with Philipp or Thomas first!

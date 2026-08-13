@@ -2,7 +2,7 @@
 #define STEADY_STATE_DIFFUSOR_H
 
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Solver.h"
@@ -17,7 +17,7 @@ namespace csmp {
 template<uint32_t> class Model;
 template<uint32_t> class Element;
 
-template<uint32_t dim,template<uint32_t> class> class NumIntegral_NT_op_N_dV;
+template<uint32_t dim,template<uint32_t> class> class NumIntegral_NT_rhsop_N_dV;
 template<uint32_t dim,template<uint32_t> class> class PointSource_rhsop;
 template<uint32_t dim,template<uint32_t> class> class NumIntegral_dNT_op_dV;
 
@@ -81,10 +81,10 @@ class SteadyStateDiffusor : public PDE_Integrator<dim,CELLTYPE> {
 #endif
     
   protected:
-    NumIntegral_dNT_op_dN_dV<dim,CELLTYPE>   conductance_;
-    NumIntegral_NT_op_N_dV<dim,CELLTYPE>*    source_;
-    PointSource_rhsop<dim,CELLTYPE>*         nodal_source_;
-    NumIntegral_dNT_op_dV<dim,CELLTYPE>*     gravity_;
+    NumIntegral_dNT_lhsop_dN_dV<dim,CELLTYPE> conductance_;
+    NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>*  source_ = nullptr;
+    PointSource_rhsop<dim,CELLTYPE>*          nodal_source_;
+    NumIntegral_dNT_op_dV<dim,CELLTYPE>*      gravity_ = nullptr;
 
 #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings  settings_;

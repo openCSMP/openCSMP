@@ -8,114 +8,180 @@ using namespace std;
 
 namespace csmp {
 
-
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_lhsop_N_dV<dim,CELL>::NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>& pref,
-                                                               const char* oper,
-                                                               const char* basic,
-                                                               const char* test )
-  : MathOperatorLHS<dim,CELL>(pref,oper,basic,test),
-    TEMP(3,3)
+                                                                const char* oper,
+                                                                const char* basic,
+                                                                const char* test )
+  : MathOperatorLHS<dim,CELL>( pref, oper, basic, test ),
+    op_( 1U, 1.0 )
  {
-    MathOperatorLHS<dim,CELL>::Name("NumIntegral_NT_lhsop_N_dV", oper, basic, test );
-    
+    MathOperatorLHS<dim,CELL>::Name( "NumIntegral_NT_lhsop_N_dV", oper, basic, test );
+
     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
-                      oper, "Operand must be a scalar property." );
+      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)",
+                             oper, "Material operand must be a scalar property." );
 
     if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE ||
-         MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
-                      test, "Dependent variable must be a scalar property placed on the nodes." );
-                   
+         MathOperatorLHS<dim,CELL>::TestOperandType()      != SCALAR )
+      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)",
+                             test, "Test operand must be a scalar property placed on the nodes." );
+
     if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE ||
-         MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)", 
-                      basic, "Weighting variable must be a scalar property placed on the nodes." );
- }
+         MathOperatorLHS<dim,CELL>::BasicOperandType()      != SCALAR )
+      throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV<dim>::(constructor)",
+                             basic, "Basic operand must be a scalar property placed on the nodes." );
 
-
-
-
-
+ } // end constructor
 
 
 /**
- 
-Computes the volume (area) integral over the testfunction products 
-multiplied with the Operand. As an example the capacitance matrix, C,
-may be used which is usually based on the storativity, S:  
+Reads the scalar material operand into the local vector op_.
+For element/face/region placement a single value is stored.
+For node or integration point placement one value per integration
+point is stored, interpolated to the integration points via
+PropertyAtIntegrationPoint.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+void NumIntegral_NT_lhsop_N_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
+ {
+    switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+      {
+        case ELEMENT:
+        case FACE:
+        case REGION:
+          op_.resize( 1U );
+          op_[0U] = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
+          break;
 
-C[n x n] = w(i) * { N[n x 1] * S[1 x 1] * N[1 x n] * |J[dim x dim]| } 
+        case ELEMENT_INTEGRATION_POINT:
+        case FACE_INTEGRATION_POINT:
+          {
+            const auto n_ip{ e.IntegrationPoints() };
+            op_.resize( n_ip );
+            for ( uint32_t i{0U}; i < n_ip; ++i )
+              op_[i] = e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
+          }
+          break;
 
-see, for instance, J.Istock p. 132.  
+        case NODE:
+          {
+            const auto n_ip{ e.IntegrationPoints() };
+            op_.resize( n_ip );
+            for ( uint32_t i{0U}; i < n_ip; ++i )
+              {
+                op_[i] = e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i );
+              }
+          }
+          break;
+
+        default:
+          throw csmp::Exception( FATAL_ERROR, "NumIntegral_NT_lhsop_N_dV::GetOperands",
+                                 "Unsupported material operand placement." );
+      }
+
+ } // end GetOperands
+
+
+/**
+Computes the volume integral of the capacitance matrix:
+
+  C[n x n] = integral( N^T * op * N ) dV
+
+In the lumped formulation a diagonal matrix is produced.
+In the consistent formulation the full mass matrix is assembled.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
- {
-    // this integral is only for numerically integrated isoparametric finite elements
+{
     assert( e.FE()->Isoparametric() == true );
 
-    MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
+    const uint32_t n_nodes{    e.Nodes()             };
+    const uint32_t n_ipoints{  e.IntegrationPoints() };
+
+    // Initialize and clear the LHS matrix container
+    MathOperatorLHS<dim,CELL>::LHS.Resize( n_nodes, n_nodes );
     MathOperatorLHS<dim,CELL>::LHS.Zero();
 
+    const bool piecewise_constant( op_.size() == 1U );
+    const bool node_placed( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE );
+
+    // ------------------------------------------------------------------
+    // 1. LUMPED FORMULATION — Diagonal Matrix
+    // ------------------------------------------------------------------
     if ( MathOperatorLHS<dim,CELL>::LumpedFormulation() )
-      {
-         const double volume = e.Volume();
+    {
+        const double share( e.Volume() / static_cast<double>(n_nodes) );
 
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
-              MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == FACE ||
-              MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == INTER_FACE)
-           {
-            for ( uint32_t j{0U}; j<e.Nodes(); j++ )
-                this->LHS(j,j) = (this->MTRL[0](0,0)*volume) / static_cast<double>(e.Nodes());
-           }
-         else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE ||
-                   MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
-           {
-            for ( uint32_t j{0U}; j<e.Nodes(); j++ )
-                this->LHS(j,j) = (this->MTRL[j](0,0)*volume) / static_cast<double>(e.Nodes());
-           }
-      }  
+        if ( piecewise_constant )
+        {
+            const double val( op_[0U] * share );
+            for ( uint32_t j{0U}; j < n_nodes; ++j )
+                MathOperatorLHS<dim,CELL>::LHS(j, j) = val;
+        }
+        else if ( node_placed )
+        {
+            for ( uint32_t j{0U}; j < n_nodes; ++j )
+                MathOperatorLHS<dim,CELL>::LHS(j, j) = op_[j] * share;
+        }
+        else 
+        {
+            // Integration point placement — average over integration points
+            double op_avg{0.0};
+            for ( uint32_t i{0U}; i < n_ipoints; ++i )
+                op_avg += op_[i];
+            op_avg /= static_cast<double>(n_ipoints);
+            
+            const double val( op_avg * share );
+            for ( uint32_t j{0U}; j < n_nodes; ++j )
+                MathOperatorLHS<dim,CELL>::LHS(j, j) = val;
+        }
+        return;
+    }
 
-    // consistent formulation
-    else 
-      {
-         TEMP.Resize( e.Nodes(), e.Nodes() );    
+    // ------------------------------------------------------------------
+    // 2. CONSISTENT FORMULATION — Full Matrix (Direct O(n²) Accumulation)
+    // ------------------------------------------------------------------
+    // Note: `is_simplex` shortcut is removed. Triangles and Tetrahedra
+    // loop through their full quadrature rules to accurately integrate N_j * N_k.
+    
+    for ( uint32_t i{0U}; i < n_ipoints; ++i )
+    {
+        e.N_AtIntegrationPoint( i, e.FE()->NRST );
+        const double detJ( e.det_J_AtIntegrationPoint(i) );
+        const double w(    e.WeightAtIntegrationPoint(i)  );
 
-         // consistent formulation
-         for ( uint32_t i{0}; i < e.FE()->IntegrationPoints(); i++ )
-           {
-              e.N_AtIntegrationPoint( i, e.FE()->NRST );
-              const double det = e.det_J_AtIntegrationPoint( i );
-                   
-              for ( uint32_t j{0U}; j<e.Nodes(); j++ )
-                for ( uint32_t k{0U}; k<e.Nodes(); k++ )
-                  {
-                    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
-                         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == FACE ||
-                         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == INTER_FACE)
-                      TEMP(j,k) = e.FE()->NRST[j] * MathOperatorLHS<dim,CELL>::MTRL[0](0,0) * e.FE()->NRST[k];
-                    else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE ||
-                              MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT)
-                      TEMP(j,k) = e.FE()->NRST[j] * MathOperatorLHS<dim,CELL>::MTRL[i](0,0) * e.FE()->NRST[k];
-                    //else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
-                      //TEMP(j,k) = e.FE()->NRST[j] * MathOperatorLHS<dim>::MTRL[i](0,0) * e.FE()->NRST[k];
+        double op_val{0.0};
+        if ( piecewise_constant )
+        {
+            op_val = op_[0U];
+        }
+        else if ( node_placed )
+        {
+            for ( uint32_t j{0U}; j < n_nodes; ++j )
+                op_val += e.FE()->NRST[j] * op_[j];
+        }
+        else
+        {
+            op_val = op_[i];
+        }
 
-                  }
-             
-              TEMP *= (det * e.WeightAtIntegrationPoint(i));
-             
-              MathOperatorLHS<dim,CELL>::LHS += TEMP;
-           }
-      } 
+        // Combine the integration scaling factors outside the inner loops
+        const double dV_scaled = detJ * w * op_val;
+
+        // Compute the outer product directly into the LHS matrix.
+        // This avoids creating any temporary matrix objects or heap allocations.
+        for ( uint32_t j{0U}; j < n_nodes; ++j )
+        {
+            const double NJ_dV = e.FE()->NRST[j] * dV_scaled;
+            for ( uint32_t k{0U}; k < n_nodes; ++k )
+            {
+                MathOperatorLHS<dim,CELL>::LHS(j, k) += NJ_dV * e.FE()->NRST[k];
+            }
+        }
+    }
 
 } // end ComputeContribution
-
-//cout <<"\nElement "<< e.Idx() <<": NumIntegral_NT_lhsop_N_dV="<< endl;
-//MathOperatorLHS<dim>::LHS.Out();
-
-
 
 template class NumIntegral_NT_lhsop_N_dV<1U,Element>;
 template class NumIntegral_NT_lhsop_N_dV<2U,Element>;
@@ -129,4 +195,5 @@ template class NumIntegral_NT_lhsop_N_dV<1U,InterFace>;
 template class NumIntegral_NT_lhsop_N_dV<2U,InterFace>;
 template class NumIntegral_NT_lhsop_N_dV<3U,InterFace>;
 
-} // csmp
+} // namespace csmp
+

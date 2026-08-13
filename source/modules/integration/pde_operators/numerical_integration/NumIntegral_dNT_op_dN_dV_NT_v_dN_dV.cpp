@@ -35,13 +35,6 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
 {
     MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
     
-    // resize material property matrix 
-    if constexpr ( dim == 3U )
-      {
-         for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
-               it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
-      }
-      
     if ( emulti_key.place != ELEMENT and emulti_key.place != REGION )
       throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       emultiplier, "must be an element- or group-based variable." );
@@ -96,13 +89,6 @@ NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV_NT_v_dN_
 {
     MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_dV_NT_v_dN_dV", oper, basic, test );
     
-    // resize material property matrix 
-    if constexpr ( dim == 3U )
-      {
-         for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
-               it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
-      }
-
     if ( emulti_key.place != ELEMENT )
       throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim>::(constructor)", 
                       emultiplier, "must be an element-based variable." );
@@ -174,7 +160,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
       }
     else // if a nodal variable is dealt with
       {
-         if ( e.FE()->IntegrationPoints() == 0 ) 
+         if ( e.IntegrationPoints() == 0 )
            throw csmp::Exception( FATAL_ERROR, "MathOperatorLHS<dim>::GetOperands", 
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
@@ -190,26 +176,26 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
     
     // 3. if body force operand 'gravity' was specified
     // -------------------------------------------------
-    uint32_t  j;
     if ( with_gravity ) {
          e.NodePropertyVector( rrho_key, rrho_vec );
-         RDENS.resize(e.FE()->IntegrationPoints());
+         RDENS.resize(e.IntegrationPoints());
          fill( RDENS.begin(), RDENS.end(), 0. );
       }
 
     // 4. read node multiplier variable which must be a scalar
     // -------------------------------------------------------
+    uint32_t  j;
     e.NodePropertyVector( nmulti_key, sc_prop_vec );
-    NMULT.resize(e.FE()->IntegrationPoints());
-    NT3.resize(e.FE()->IntegrationPoints());
+    NMULT.resize(e.IntegrationPoints());
+    NT3.resize(e.IntegrationPoints());
 
-    for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          NT3[i].Resize(e.Nodes(),dim);
          for ( NMULT[i]=0., j=0u; j<e.Nodes(); j++ )
            {
               // initializing vector of NT3 matrices at integration points
-              for ( auto k=0u; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
+              for ( uint32_t k=0u; k<dim; k++ ) NT3[i](j,k) = IPOL[j];
               // interpolating NMULT to the integration points
               NMULT[i] += sc_prop_vec[j]() * IPOL[j];
               // gravity operand if so specified
@@ -221,7 +207,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>
     // -------------------------------------------------
     NGRAD.resize(e.Nodes());
     e.NodePropertyVector( grad_key, sc_prop_vec );
-    for ( auto i{0U}; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
+    for ( uint32_t i{0U}; i<e.Nodes(); i++ ) NGRAD[i] = sc_prop_vec[i]();
     
 } // end GetOperands
 
@@ -311,7 +297,7 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ComputeContribution( const C
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const CELL<dim>& e,
-                                                                           DenseMatrix<DM_MIN>& MULT )
+                                                                           DenseMatrix<dim>& MULT )
  {
     MULT.Resize(dim,dim);
  
@@ -319,20 +305,20 @@ void NumIntegral_dNT_op_dN_dV_NT_v_dN_dV<dim,CELL>::ReadElementMultiplier( const
          ScalarVariable  sc;
          e.Read( emulti_key, sc );
          MULT.Zero();
-         for ( auto i{0U}; i<dim; i++ ) MULT(i,i) = sc();
+         for ( uint32_t i{0U}; i<dim; i++ ) MULT(i,i) = sc();
       }
     else if ( emulti_key.type == VECTOR ) {
          VectorVariable<dim>  vc;
          e.Read( emulti_key, vc );
          MULT.Zero();
-         for ( auto i{0U}; i<dim; i++ ) MULT(i,i) = vc[i];
+         for ( uint32_t i{0U}; i<dim; i++ ) MULT(i,i) = vc[i];
       }
     else // TENSOR
       {
          TensorVariable<dim>  ts;
          e.Read( emulti_key, ts );
-         for ( auto i{0U}; i<dim; i++ )
-           for ( auto j{0U}; j<dim; j++ ) MULT(i,j) = ts(i,j);
+         for ( uint32_t i{0U}; i<dim; i++ )
+           for ( uint32_t j{0U}; j<dim; j++ ) MULT(i,j) = ts(i,j);
       }
       
  } // end ReadElementMultiplier

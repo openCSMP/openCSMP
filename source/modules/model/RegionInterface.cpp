@@ -2770,26 +2770,12 @@ size_t RegionInterface<dim, REGION_COMPLEX>::SharedPerimeterFaces( const char* r
 template<uint32_t dim, template<uint32_t> class REGION_COMPLEX>
 void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
  {
-     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
      const REGION_COMPLEX<dim>& regionComplex( static_cast<const REGION_COMPLEX<dim>& >(*this) );
      csmp::Region<dim>&  model_domain = RegionInterface<dim,REGION_COMPLEX>::Region("Model");
 
-     // the model region is affected by any changes, does it need to be updated?
-     // (detects element removal only of 'nullptr' objects have been inserted into cell_vector)
-     /*
-     size_t n_cells_changed = model_domain.RebuildCellAndPerimeterFaceVector();
-     size_t n_nodes_changed = model_domain.RebuildNodeVector();
-     
-     if ( n_cells_changed == 0 && n_nodes_changed ) {
-          csmp_error.Note( INFO, "RegionInterface<dim,REGION_COMPLEX>::UpdateRegions:",
-                          "Not even the region 'Model' changed. No updates needed to be made." );
-          return;
-       }
-     */
-     
      // 1. rebuilding the region 'Model'
      // --------------------------------
+     // the model region is affected by any changes, so it needs to be updated
      if ( model_domain.NeedsRebuild() ) {
           RemoveRegion("Model");
           const bool is_unique = ( distance(UniqueRegionsBegin(), UniqueRegionsEnd()) > 0 ) ? false : true;
@@ -2803,7 +2789,7 @@ void RegionInterface<dim, REGION_COMPLEX>::UpdateRegions()
        if ( (*rit).second.NeedsRebuild() && (*rit).first != "Model" ) {
              auto crit = regionTraits_.find( (*rit).first );
              PropertyConstraints region_traits = ( crit == regionTraits_.end() )
-                                                    ? PropertyConstraints(regionComplex.Database(),"permeability", 1e-21,1e-5) : (*crit).second;
+                                               ? PropertyConstraints(regionComplex.Database(),"permeability", 1e-21,1e-5) : (*crit).second;
                                                     
              (*rit).second.UpdateCellMembershipApplyingConstraints( model_domain.CellsBegin(), model_domain.CellsEnd(), region_traits );
              

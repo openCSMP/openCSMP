@@ -9,8 +9,8 @@
 #include "Standard_IO_Handler.h"
 
 // PDE Operators
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
 // Interrelations
@@ -133,8 +133,8 @@ void RhinoMesh_Example::Run()
       PDE_Integrator<3U,Element>  steady_state_pressure(solver);
       #endif
 
-      NumIntegral_dNT_op_dN_dV<3U>  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-      NumIntegral_NT_op_N_dV<3U>    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
+      NumIntegral_dNT_lhsop_dN_dV<3U>  conductance0( model3D.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+      NumIntegral_NT_rhsop_N_dV<3U>    source0( model3D.Database(), "fluid volume source", "fluid pressure" );
       VelocityAndVolumeFlux<3U>     postpro0( model3D, "conductivity", "porosity", "fluid pressure" );
 
       steady_state_pressure.Add( &conductance0 );

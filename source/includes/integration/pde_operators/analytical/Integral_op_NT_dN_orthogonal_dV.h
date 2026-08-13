@@ -18,10 +18,13 @@ class Integral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
 
+    Integral_op_NT_dN_orthogonal_dV<dim,CELL>* clone() const override final
+      { return new Integral_op_NT_dN_orthogonal_dV<dim,CELL> (*this); }
+
   private:
-    DenseMatrix<DM_MIN>  M, DNORTHO, NT; 
-    std::vector<double>         NPROP, IPOL, UNITY, RES;
-    const double                zero, one;
+    DenseMatrix<DM_MIN>     M, DNORTHO, NT;
+    std::vector<double>     NPROP, IPOL, UNITY, RES;
+    static constexpr double zero=0., one=1.;
 };
 
 } // csmp

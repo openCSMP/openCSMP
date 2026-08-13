@@ -22,7 +22,10 @@ class Upwind_Integral_dNT_rhsop_g_dV : public MathOperatorRHS<dim,CELL> {
     void ComputeContribution( const CELL<dim>& ) override final;
     
     void SpatialDerivative( uint32_t xyz=2 );
-  
+
+     Upwind_Integral_dNT_rhsop_g_dV<dim,CELL>* clone() const override final
+      { return new Upwind_Integral_dNT_rhsop_g_dV<dim,CELL> (*this); }
+
   private:
     DenseMatrix<DM_MIN>  DN, DNT, coords;
     const double         gravity;   // acceleration of gravity

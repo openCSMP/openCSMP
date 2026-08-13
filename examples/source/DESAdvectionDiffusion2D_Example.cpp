@@ -7,8 +7,8 @@
 #include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
 // DES algorithms
@@ -153,10 +153,10 @@ void DESAdvectionDiffusion2D_Example::Run()
 #endif
 
     // LHS stiffness matrix                                            operand         basis function    test function
-    NumIntegral_dNT_op_dN_dV<2U>  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<2U>  stiffness_matrix( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
 
     // RHS mass matrix for integrating source term
-    NumIntegral_NT_op_N_dV<2U>    source_term( model.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U> source_term( model.Database(), "fluid volume source", "fluid pressure" );
 
     // use lumped formulation for all mass matrices (i.e., diagonalise matrices)
     source_term.LumpedFormulation(true);

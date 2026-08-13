@@ -35,9 +35,9 @@
 #include "ConstantFactor.h"
 
 // PDE operators building the FE algorithm
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 
 // FE grid generation
@@ -49,6 +49,10 @@ namespace csmp {
 
 void PDE_Integrator_Transient_Test::run()
 {
+#ifdef CSMP_WITH_PETSC_SOLVER
+      PetscInitializeNoArguments();
+#endif
+
     // -----------------------------------------------------------------------
     // 1. Mesh and model setup
     // -----------------------------------------------------------------------
@@ -97,10 +101,10 @@ void PDE_Integrator_Transient_Test::run()
     NumIntegral_NT_lhsop_N_dV<2U> mass_matrix_lhs(
         p_ref, "compressibility", "fluid pressure", "fluid pressure");
 
-    NumIntegral_NT_op_N_dV<2U> mass_matrix_rhs(
+    NumIntegral_NT_rhsop_N_dV<2U> mass_matrix_rhs(
         p_ref, "compressibility", "fluid pressure");
 
-    NumIntegral_NT_op_N_dV<2U> source_term(
+    NumIntegral_NT_rhsop_N_dV<2U> source_term(
         p_ref, "fluid volume source", "fluid pressure");
 
     mass_matrix_lhs.MultiplyWithTimeIncrement(true);
@@ -220,6 +224,10 @@ void PDE_Integrator_Transient_Test::run()
     vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 0);
 
     cout << "\nPDE_Integrator_Transient_Test: all tests passed.\n";
+
+#ifdef CSMP_WITH_PETSC_SOLVER
+    PetscFinalize();
+#endif
 
 } // end run
 

@@ -2,11 +2,10 @@
 #define TRANSIENT_DIFFUSOR_H
 
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "PointSource_rhsop.h"
-#include "NumIntegral_NT_op_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -98,10 +97,10 @@ class TransientDiffusor : public PDE_Integrator<dim,CELLTYPE> {
 
   protected:
 
-    NumIntegral_dNT_op_dN_dV<dim,CELLTYPE>   conductance_;
-    NumIntegral_NT_op_N_dV<dim,CELLTYPE>*    source_;
+    NumIntegral_dNT_lhsop_dN_dV<dim,CELLTYPE>   conductance_;
+    NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>* source_;
     NumIntegral_NT_lhsop_N_dV<dim,CELLTYPE>  capacitance_lhs_;
-    NumIntegral_NT_op_N_dV<dim,CELLTYPE>     capacitance_rhs_;
+    NumIntegral_NT_rhsop_N_dV<dim,CELLTYPE>  capacitance_rhs_;
     PointSource_rhsop<dim,CELLTYPE>*         nodal_source_;
     NumIntegral_dNT_op_dV<dim,CELLTYPE>*     gravity_;
 

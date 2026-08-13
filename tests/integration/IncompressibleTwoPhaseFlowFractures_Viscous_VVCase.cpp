@@ -31,8 +31,8 @@
 
 #include "VelocityAndVolumeFlux.h"
 #include "SteadyStateDiffusor.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 
 //Two Phase Models
 #include "TwoPhaseModel.h"
@@ -616,9 +616,9 @@ void IncompressibleTwoPhaseFlowFractures_Viscous_VVCase<dim>::run()
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
     //LHS:
-    NumIntegral_dNT_op_dN_dV<dim>  conductance( model_->Database(), total_mobility_.c_str(), fluid_pressure_.c_str(),fluid_pressure_.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  conductance( model_->Database(), total_mobility_.c_str(), fluid_pressure_.c_str(),fluid_pressure_.c_str() );
     //RHS:
-    NumIntegral_NT_op_N_dV<dim>    src( model_->Database(),  fluid_volume_source_.c_str(), fluid_pressure_.c_str() );
+    NumIntegral_NT_rhsop_N_dV<dim>    src( model_->Database(),  fluid_volume_source_.c_str(), fluid_pressure_.c_str() );
 
 	// operation to compute velocity
     VelocityAndVolumeFlux<dim>  velo( *model_,

@@ -23,8 +23,8 @@
 #endif
 
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
 #include "ExplicitTransport.h"
@@ -208,10 +208,10 @@ void  ExplicitTransport_Test::DivergenceFreeTotalVelocityField( double delta_pf 
 #endif
     PDE_Integrator<3U,Element>  fluid_pressure( solver );
 
-    NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
-    NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<3U>  conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U> source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
   /// @todo influx surface integral: NumIntegral_NT_op_N_dS<2U>   influx( model.Database(), "influx", "fluid pressure" );
-    VelocityAndVolumeFlux<3U>    velocity( *model_ptr_,  "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<3U>     velocity( *model_ptr_,  "conductivity", "porosity", "fluid pressure", false );
 
     // add PDE_Operators and post-processor to the FE Algorithm
     fluid_pressure.Add( &conductance );

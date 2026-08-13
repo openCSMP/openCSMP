@@ -7,8 +7,8 @@
 #include "CSMP_highLevelUtilities.h"
 #include "PropertyHandle.h"
 
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "LinearSolver.h"
 
@@ -131,8 +131,8 @@ void TemperatureDensityPressure_Example::Run()
     PDE_Integrator<1U,Element>  temperature( solver );
     #endif
 
-    NumIntegral_dNT_op_dN_dV<1U>  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );
-    NumIntegral_NT_op_N_dV<1U>    energy_source( model.Database(), "energy source", "temperature" );
+    NumIntegral_dNT_lhsop_dN_dV<1U>  temperature_conductance( model.Database(), "thermal conductivity",  "temperature", "temperature" );
+    NumIntegral_NT_rhsop_N_dV<1U> energy_source( model.Database(), "energy source", "temperature" );
 
     temperature.Add( &temperature_conductance );
     temperature.Add( &energy_source );
@@ -175,7 +175,7 @@ void TemperatureDensityPressure_Example::Run()
     PDE_Integrator<1U,Element>  hydrostatic_pressure(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U>  hydrostatic_conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
 
     cout <<"\nmain: enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
     double acc_gravity(9.81);

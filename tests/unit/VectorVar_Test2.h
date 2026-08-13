@@ -27,7 +27,8 @@ class VectorVariable_Test2 : public Test
 	void Equality_Operator2();
 	void Ampersand_Operator2();
 	void LessThan_Operator2();
-	void Power_Operator2();
+  void Pow_Function2();      ///< Tests Pow(double) — replaces removed operator^
+  void Invert_Function2();   ///< Tests Invert() — was missing from original
 	void CrossProduct_Operator2();
 	void Zero_Function2();
 	void Average_Function2();

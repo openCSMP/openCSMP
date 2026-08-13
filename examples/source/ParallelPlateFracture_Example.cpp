@@ -13,8 +13,8 @@
 #include "VTK_Interface.h"
 
 // fluid pressure algorithm and velocity computation
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
 
@@ -211,9 +211,9 @@ void ParallelPlateFracture_Example::Run()
 #endif
 
     // conductance matrix [K] on the left-hand side
-    NumIntegral_dNT_op_dN_dV<2U> conductance( model->Database(),"conductivity","fluid pressure","fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<2U> conductance( model->Database(),"conductivity","fluid pressure","fluid pressure" );
     // source vector {Q} on the right-hand side
-    NumIntegral_NT_op_N_dV<2U>   source( model->Database(),"fluid volume source","fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U>   source( model->Database(),"fluid volume source","fluid pressure" );
     // post-processing operation to compute flow velocities
     VelocityAndVolumeFlux<2U>    velocity( *model, "conductivity","porosity","fluid pressure", false );
 

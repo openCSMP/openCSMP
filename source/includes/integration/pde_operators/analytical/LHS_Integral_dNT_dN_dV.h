@@ -21,11 +21,12 @@ class LHS_Integral_dNT_dN_dV : public MathOperatorLHS<dim,CELL> {
                             const char* basic,
                             const char* test );
   
-    /// @note  to do here since there is no material operand
+    /// @note  enforce here that there is no material operand
     void GetOperands( const CELL<dim>& ) override final {}
     void ComputeContribution( const CELL<dim>& ) override final;
   
-    LHS_Integral_dNT_dN_dV<dim,CELL>* clone() const override final { return new LHS_Integral_dNT_dN_dV<dim,CELL> (*this); }
+    LHS_Integral_dNT_dN_dV<dim,CELL>* clone() const override final
+        { return new LHS_Integral_dNT_dN_dV<dim,CELL> (*this); }
   
   private:
     DenseMatrix<DM_MIN>          DN, DNT;

@@ -27,11 +27,6 @@ NumIntegral_NT_op_N_dS<dim>::NumIntegral_NT_op_N_dS( const PropertyDatabase<dim>
          MathOperatorRHS<dim,Face>::TestOperandType() != SCALAR )
       throw csmp::Exception( ERROR, "NumIntegral_NT_op_N_dS<dim>::(constructor)", 
                              test, "Operand (test) must be a scalar property placed on the nodes." );
-
-    // resize material property matrix 
-    for ( typename vector<DenseMatrix<DM_MIN> >::iterator
-          it=MathOperatorRHS<dim,Face>::MTRL.begin(); it!=MathOperatorRHS<dim,Face>::MTRL.end(); it++ )
-      (*it).Resize(dim,dim);
 }
 
 
@@ -85,7 +80,7 @@ void NumIntegral_NT_op_N_dS<dim>::ComputeContribution( const Face<dim>& e )
          RHS_TEMP.Resize(e.Nodes(), e.Nodes());
          RHS_TEMP.Zero();
             
-         for ( uint32_t i{0U}; i < e.FE()->IntegrationPoints(); i++ )
+         for ( uint32_t i{0U}; i < e.IntegrationPoints(); i++ )
            {
               e.N_AtIntegrationPoint( i, e.FE()->NRST );
               const double det(e.det_J_AtIntegrationPoint( i ));
@@ -93,6 +88,7 @@ void NumIntegral_NT_op_N_dS<dim>::ComputeContribution( const Face<dim>& e )
               NT.Resize(e.Nodes(),1U);
               if ( MathOperatorRHS<dim,Face>::MaterialOperandPlacement() == ELEMENT or
                    MathOperatorRHS<dim,Face>::MaterialOperandPlacement() == REGION  or
+                   MathOperatorRHS<dim,Face>::MaterialOperandPlacement() == INTER_FACE or
                    MathOperatorRHS<dim,Face>::MaterialOperandPlacement() == FACE )
                 for ( uint32_t j{0U}; j<e.Nodes(); j++ ) NT(j,0U) = this->MTRL[0](0,0) * e.FE()->NRST[j];
               else // node or integration point                               ^^^

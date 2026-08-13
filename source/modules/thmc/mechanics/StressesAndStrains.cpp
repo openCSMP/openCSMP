@@ -40,7 +40,7 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
     strain_key_(sg.Database().StorageKey("strain")),
     stress_key_(sg.Database().StorageKey("stress")),
     DISPL_(3*3,1), 
-    STIFF_(1,DenseMatrix<DM_MIN>(6,6)), EGP_(6,1), SGP_(6,1),
+    STIFF_(1,DenseMatrix<DM6>(6,6)), EGP_(6,1), SGP_(6,1),
     STRAIN_(6,3), 
     STRESS_(6,3),
     IPSTRAIN_(3*6), // 6 strain components
@@ -340,7 +340,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
 
              // inserting strains and stresses sequentially into temporary 
              // STL vectors
-             for ( auto k=0; k<components_; k++ ) {
+             for ( uint32_t k=0; k<components_; k++ ) {
                   IPSTRAIN_[ i*components_ + k ] = EGP_(k,0);
                   IPSTRESS_[ i*components_ + k ] = SGP_(k,0);
                }
@@ -357,10 +357,10 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRAIN_, NSTRAIN_ );
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRESS_, NSTRESS_ );
          
-             for ( auto i{0U}; i<e.Nodes(); i++ )
+             for ( uint32_t i{0U}; i<e.Nodes(); i++ )
                {
                   // extracting the nodal strain and stress components
-                  for ( auto k=0; k<components_; k++ ) {
+                  for ( uint32_t k=0; k<components_; k++ ) {
                        eps_[k]   = NSTRAIN_[ i*components_ + k ];
                        sigma_[k] = NSTRESS_[ i*components_ + k ];
                     }
@@ -382,11 +382,11 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
         STRAIN_.Resize(components_,e.Nodes());
         STRESS_.Resize(components_,e.Nodes());
 
-        for ( auto i{0U}; i<e.Nodes(); i++ ) {
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( auto j{0U}; j<components_; j++ )
+               for ( uint32_t j{0U}; j<components_; j++ )
                  {  
                     // averaging strain components
                     double sum(0.);
@@ -574,7 +574,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
     // only once the strains and stresses have been computed, these can be output to Model<3U> 
     if ( MathOperatorLHS<3U,Element>::ApplicationCycle() == 2 ) 
       {
-         for ( auto i{0}; i<e.Nodes(); i++ )
+         for ( uint32_t i{0}; i<e.Nodes(); i++ )
            // doing this operation only once per node
            if ( !node_output_[ e.N(i)->Idx() ] )
              {

@@ -42,7 +42,7 @@ class BoundaryInterface_Test : public Test {
     void TestBoundaryAndTopoTypeIdentifiers( Model<3U>& );
 
   private:
-    const static bool verbose_ = false; ///< turn off to supress output of files etc.
+    const static bool verbose_ = true; ///< turn off to supress output of files etc.
 };
 
 

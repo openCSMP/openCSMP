@@ -208,6 +208,18 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
         dataBounds[cycle1][nipCycles2].first  = dataOffset+(cycle1+1)*ipCycle1DataOffset;
         dataBounds[cycle1][nipCycles2].second = dataOffset+(cycle1+1)*ipCycle1DataOffset;
     }
+    assert( nipCycles1 > 0
+        && "LocalVariableStorage::AddProperty: nipCycles1 is zero. "
+           "This means containerIPCycles returned a zero first cycle count "
+           "for the property being added. "
+           "For SECTOR_INTEGRATION_POINT and FACET_INTEGRATION_POINT "
+           "placements, the element sector/facet counts must be non-zero "
+           "at the time CreateProperty is called. "
+           "Check that the Index was constructed with correct ipFactorSector "
+           "and offsetFactorSector values, and that the mesh has been fully "
+           "initialised before creating sector or facet integration point "
+           "properties." );
+
     dataBounds[nipCycles1-1][nipCycles2].first  = dataSize;
     dataBounds[nipCycles1-1][nipCycles2].second = dataSize;
 
@@ -222,6 +234,11 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
         flagBounds[cycle1][nipCycles2].first  = flagOffset+(cycle1+1)*ipCycle1FlagOffset;
         flagBounds[cycle1][nipCycles2].second = flagOffset+(cycle1+1)*ipCycle1FlagOffset;
     }
+
+    assert( nipCycles1 > 0
+        && "LocalVariableStorage::AddProperty: nipCycles1 is zero "
+           "for flagBounds. Same root cause as dataBounds assert above." );
+
     flagBounds[nipCycles1-1][nipCycles2].first  = flagSize;
     flagBounds[nipCycles1-1][nipCycles2].second = flagSize;
 

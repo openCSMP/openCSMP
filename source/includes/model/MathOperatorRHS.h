@@ -136,7 +136,7 @@ class MathOperatorRHS {
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const CELL<dim>&,
                                               const csmp::Index&,
-                                              uint32_t ip, DenseMatrix<DM_MIN>& );
+                                              uint32_t ip, DenseMatrix<dim>& mtrl );
 
     /// getting data from the Element, Face, InterFace
     virtual void  GetOperands( const CELL<dim>& );
@@ -159,20 +159,16 @@ class MathOperatorRHS {
     virtual MathOperatorRHS<dim,CELL>* clone() const = 0;
 
   protected:
-    std::string                         name_;               ///< name of operator
+    std::string                   name_;               ///< name of operator
 
-    Parameter                           op;                  ///< material property operand
-    std::pair<Parameter, size_t>        top;                 ///< test function operand
+    Parameter                      op;                  ///< material property operand
+    std::pair<Parameter, size_t>   top;                 ///< test function operand
 
-    std::vector<double>                 RHS;                 ///< solution vector<double> to be accumulated
+  // TODO: remove these non members to avoid race conditions during parallel accumulation
+    std::vector<DenseMatrix<dim> > MTRL;                ///< material property matrix(es) needed for PDE operand
+    std::vector<double>            RHS;                 ///< righthand vector<double> to be accumulated
 
-    std::vector<DenseMatrix<DM_MIN> >   MTRL;                ///< material property matrix(es) needed for PDE operand
-  
-  // TODO: remove these non parallelisable members
-    DenseMatrix<DM_MIN>                 DERIV;               ///< shape function derivative matrix
-    std::vector<double>                 IPOL;                ///< shape function vector
-
-    double                              factor_;             ///< constant factor
+    double                         factor_;             ///< constant factor
 
     /// specifies accumulation procedure
     bool        add_accumulate_;

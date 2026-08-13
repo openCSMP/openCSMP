@@ -31,7 +31,7 @@ class LinearCuboid final : public FiniteElement {
     virtual void       N_AtGlobalPoint(std::vector<double>& M, const std::vector<double>& xyz);
     virtual void       N_AtBaryCenter(std::vector<double>& M);
     virtual void       IntegralNN(DenseMatrix<DM_MIN>& N);
-    virtual void       IntegraldNdN(DenseMatrix<DM_MIN>& DN);
+    virtual void       IntegraldNdN(DenseMatrix<DM_MIN>& DN) const;
     virtual double     dN_At(DenseMatrix<DM_MIN>& B, const std::vector<double>& xyz);
 
     virtual CSMP_FEM_TYPE  ElementTypeOfSegment( uint32_t) const { return LINEAR_BAR; };
@@ -39,12 +39,14 @@ class LinearCuboid final : public FiniteElement {
     // void TestElementIntegrals(DenseMatrix<DM_MIN>& XY);
     
   private:
-    void dN_Partial_At(std::vector<double>& V, const std::vector<double>& xyz, uint32_t partial);
+    double ConstVolume() const;
+    void dN_Partial_At( double vol, std::vector<double>& V, const std::vector<double>& xyz, uint32_t partial) const;
+    
     void MidSideNodes(std::vector<uint32_t>& ids) const;
-    void CenterOfFacePoints(DenseMatrix<DM12>& XF);
-    void MidSegmentPoints(DenseMatrix<DM12>& XS);
-    DenseMatrix<DM12> M1_, M2_, M3_; // Auxiliary Dense Matrix
-    std::vector<double> V_; // Auxiliary vector
+    void CenterOfFacePoints(DenseMatrix<DM_MIN>& XF) const;
+    void MidSegmentPoints(DenseMatrix<DM_MIN>& XS) const;
+    mutable DenseMatrix<DM_MIN> M1_, M2_, M3_; // Auxiliary Dense Matrix
+    mutable std::vector<double> V_; // Auxiliary vector
 };
 
 } // end csmp

@@ -2,7 +2,7 @@
 #define PRESSURE_SOLVER_H
 
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "PointSource_rhsop.h"
 
@@ -35,10 +35,10 @@ class PressureSolver : public PDE_Integrator<dim,CELL>
 #else
       CSMP_DEFAULT_LINEAR_SOLVER  solver_;
 #endif
-      NumIntegral_dNT_op_dN_dV<dim,CELL>  total_mobility_;
-      NumIntegral_dNT_op_dV<dim,CELL>     gravity_term_,
-                                          capillary_term_;
-      PointSource_rhsop<dim,CELL>         nodal_source_;
+      NumIntegral_dNT_lhsop_dN_dV<dim,CELL>  total_mobility_;
+      NumIntegral_dNT_op_dV<dim,CELL>        gravity_term_,
+                                             capillary_term_;
+      PointSource_rhsop<dim,CELL>            nodal_source_;
   };
 
 } // end csmp

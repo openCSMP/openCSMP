@@ -47,8 +47,8 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U,Element> {
     void PrincipalStrainsAndStresses( bool yes_no );
     StressesAndStrains<2U>* clone() const override final { return new StressesAndStrains<2U> (*this); }
   protected:
-    std::vector<ScalarVariable >      youngs_, pratio_;
-    std::vector<DenseMatrix<DM_MIN> >  STIFF_;
+    std::vector<ScalarVariable >    youngs_, pratio_;
+    std::vector<DenseMatrix<DM3> >  STIFF_;
 
   private:
     const uint32_t  components_;  /// < stress strain components
@@ -59,25 +59,23 @@ class StressesAndStrains<2U> : public MathOperatorLHS<2U,Element> {
                pstrain_key_, pstress_key_,                ///< principal strains / stresses (Eigenvalues)
                means_key_, dilat_key_;                    ///< scalar variables
 
-    DenseMatrix<DM_MIN>     DISPL_,
-                            STRESS_, STRAIN_,
-                            EGP_, SGP_, PEGP_, PSGP_,
-                            PR_, EIG_;
-    
-    std::vector<double>   EVAL_;
-    std::vector<double>   IPSTRAIN_, IPSTRESS_,
-                            NSTRAIN_,  NSTRESS_,
-                            eps_, sigma_, sum_;
-    TensorVariable<2U>      ts_;
-    VectorVariable<2U>      vc_;
-    ScalarVariable          sc_;
-    VectorVariable<2U>      evals_;
-    TensorVariable<2U>      evecs_;
+    DenseMatrix<DM_MIN>  DISPL_, STRESS_, STRAIN_, 
+                         PEGP_, PSGP_, EGP_;
+    DenseMatrix<DM3>     SGP_, PR_, EIG_;
+    std::vector<double>  EVAL_;
+    std::vector<double>  IPSTRAIN_, IPSTRESS_,
+                         NSTRAIN_,  NSTRESS_,
+                         eps_, sigma_, sum_;
+    TensorVariable<2U>   ts_;
+    VectorVariable<2U>   vc_;
+    ScalarVariable       sc_;
+    VectorVariable<2U>   evals_;
+    TensorVariable<2U>   evecs_;
     
     bool  plane_strain_, verbose_, principal_e_and_sigma_;
   
     std::vector<std::deque<std::vector<double> > >  temp_strains_,
-                                                      temp_stresses_;
+                                                    temp_stresses_;
     // to prevent duplicate node output
     std::vector<bool>  node_output_;
 };

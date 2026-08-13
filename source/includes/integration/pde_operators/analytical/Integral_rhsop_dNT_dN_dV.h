@@ -18,8 +18,10 @@ class Integral_rhsop_dNT_dN_dV : public MathOperatorRHS<dim,CELL> {
                               double prefactor=1. );
 
     void GetOperands( const CELL<dim>& ) override final;
-    
     void ComputeContribution( const CELL<dim>& ) override final;
+
+    Integral_rhsop_dNT_dN_dV<dim,CELL>* clone() const override final
+      { return new Integral_rhsop_dNT_dN_dV<dim,CELL> (*this); }
 
   private:
     DenseMatrix<DM_MIN> DN, DNT;

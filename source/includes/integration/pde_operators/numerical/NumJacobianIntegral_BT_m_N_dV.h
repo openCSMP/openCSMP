@@ -33,7 +33,7 @@ namespace csmp {
    @attention USE SUBTRACT_ACCUMULATE for pore pressure and stress to get effective stress
  **/
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumJacobianIntegral_BT_m_N_dV : public MathOperatorLHS<dim, CELL>
+class NumJacobianIntegral_BT_m_N_dV final : public MathOperatorLHS<dim, CELL>
 {
 public:
     NumJacobianIntegral_BT_m_N_dV( const PropertyDatabase<dim>& pref,
@@ -41,8 +41,8 @@ public:
                                    const char* basic,  // pore pressure (scalar, NODE)
                                    const char* test ); // displacement (vector, NODE)
 
-    void GetOperands( const CELL<dim>& e ) override;
-    void ComputeContribution( const CELL<dim>& e ) override;
+    void GetOperands( const CELL<dim>& e ) override final;
+    void ComputeContribution( const CELL<dim>& e ) override final;
 
     NumJacobianIntegral_BT_m_N_dV<dim,CELL>* clone() const override { return new NumJacobianIntegral_BT_m_N_dV<dim,CELL> (*this); }
 

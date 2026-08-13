@@ -96,8 +96,8 @@ protected:
   void SetStream( std::ostream *ostream ) { ostream_ = ostream; }
 
 static std::string GetExampleFileName(const char* path);
-  static void CreateWorkingDirectoryAndCopyInputModelFiles(std::string& example_name, std::string& model_name,
-                                                    std::string& variable_file, std::string config_file = "");
+  static void CreateWorkingDirectoryAndCopyInputModelFiles( const std::string& example_name, const std::string& model_name,
+                                                            const std::string& variable_file, std::string config_file ="" );
 public:
   // DB
   std::list<std::string>::const_iterator GetDescriptionsBegin();

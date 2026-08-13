@@ -26,7 +26,8 @@ class Integral_dNT_dN_dV : public MathOperatorRHS<dim,CELL> {
 
     void ComputeContribution( const CELL<dim>& )  override final;
   
-    virtual Integral_dNT_dN_dV<dim,CELL>* clone() const override final { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
+    virtual Integral_dNT_dN_dV<dim,CELL>* clone() const override final
+       { return new Integral_dNT_dN_dV<dim,CELL> (*this); }
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, UNITY; 

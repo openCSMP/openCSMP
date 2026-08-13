@@ -19,8 +19,8 @@ class IsoparametricLinearPyramid_Test : public Test {
   public:
     virtual void run() override;
     
-    Element<3> CreateLocalCoordinatePyramidElement( int n_integration_points=1 );
-    Element<3> CreateDistortedPyramidElement(  int n_integration_points=1 );
+    Element<3> CreateLocalCoordinatePyramidElement( uint32_t n_integration_points=1 );
+    Element<3> CreateDistortedPyramidElement(  uint32_t n_integration_points=1 );
     
     bool InterpolationFunctionAtIntegrationPointsTest();
     bool SumOfInterpolationFunctionTest(); // at integration points

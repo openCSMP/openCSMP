@@ -930,6 +930,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        
        // Non-unique Region 'Model'
        // -------------------------
+       model_domain.RenumberNodes();
        _test( model_domain.Empty() == false );
        _test( model_domain.Nodes() == 35 );
        _test( model_domain.InteriorNodes() == 4 );

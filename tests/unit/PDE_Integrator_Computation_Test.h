@@ -85,7 +85,7 @@ class PDE_Integrator_Computation_Test : public Test {
     void TestSteadyState_PressureDiffusionAndFlow();
 
     /// Basic steady-state test including post-processing
-    void TestTransient_PressureDiffusionAndFlow(); // { /* TODO: implement */ }
+    double TestTransient_PressureDiffusionAndFlow(); 
 
     Model<3>* model_ptr_ = nullptr;
                       

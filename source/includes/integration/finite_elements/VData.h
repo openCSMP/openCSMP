@@ -325,6 +325,12 @@ class VData {
     /// initialises the TOPOTYPE flags, indicating which elements of the model boundary representation the node forms part of / represents
     void   InitialiseNodeTopologyIdentifiers();
     
+    /// Initialises TOPOTYPE flags for a 2D VSet. @see explanations in InitialiseNodeTopologyIdentifiers_Claude
+    void InitialiseNodeTopologyIdentifiers2D() { InitialiseNodeTopologyIdentifiers_Claude<2>(); }
+
+    /// Initialises TOPOTYPE flags for a 3D VSet. @see InitialiseNodeTopologyIdentifiers_Claude
+    void InitialiseNodeTopologyIdentifiers3D() { InitialiseNodeTopologyIdentifiers_Claude<3>(); }
+    
     /// eliminate nodes that are not connected to any element, face or interface; report whether there were any
     bool DetectAndEliminateOrphanNodes( bool eliminate_orphan_nodes=true );
 
@@ -363,6 +369,10 @@ class VData {
     
     /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
     size_t SwitchCornerTriangles2D();
+    
+    /// implementation of the BREP node topology flagging method
+    template<uint32_t dim>
+    void InitialiseNodeTopologyIdentifiers_Claude();
     
     /// eliminates the elements that are not contained in  'old_and_new_elmt_ids' from the VSet, returning mapping of old to new node idx (0..n-1)
     void ReduceTo( const std::map<size_t,size_t>& old_and_new_elmt_ids, std::map<size_t,size_t>& o_n_node_ids );

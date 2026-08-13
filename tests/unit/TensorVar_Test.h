@@ -1,5 +1,5 @@
-#ifndef CSMP_TENSORVARTEST_H
-#define CSMP_TENSORVARTEST_H
+#ifndef CSMP_TENSOR_VARIABLE_TEST_H
+#define CSMP_TENSOR_VARIABLE_TEST_H
 
 #include "TensorVariable.h"
 #include "Test.h"
@@ -14,7 +14,9 @@ class TensorVariable_Test : public Test
   public:
   TensorVariable_Test();
   ~TensorVariable_Test();
-	void run(); // runs all the tests for the class (register other methods)
+  
+	void run();
+  
 	void Assignment_Operator();
 	void Addition_Operator();
 	void Subtraction_Operator();
@@ -47,9 +49,15 @@ class TensorVariable_Test : public Test
 	void LessThan_Operator();
 	void Row_Function();
 	void Column_Function();
+  void TestEigenMethods();
+  // --- squaring methods ---
+  void HadamardSquared_Function();   ///< Tests HadamardSquared() — component-wise T_ij^2
+  void MatrixSquared_Function();     ///< Tests MatrixSquared() — matrix product T*T
+  void DoubleContraction_Function(); ///< Tests DoubleContraction() — scalar T:T
   
   private:
-  double fTolerance;
+    static constexpr double fTolerance = 1.0e-5;
+    static constexpr bool   verbose_   = true;
   
 }; //end class
 

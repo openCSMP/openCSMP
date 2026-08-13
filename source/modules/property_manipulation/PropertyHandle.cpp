@@ -1,4179 +1,1959 @@
 #include "PropertyHandle.h"
+
 #include "FEM_Data.h"
 #include "TensorVariable.h"
+#include "VectorVariable.h"
 #include "Node.h"
 #include "Face.h"
 #include "InterFace.h"
 #include "Element.h"
 #include "Region.h"
+#include "Boundary.h"
+#include "SplitBoundary.h"
+#include "ModelSubDomain.h"
 #include "Model.h"
 #include "Exception.h"
 #include "ErrorHandler.h"
+#include "TextInterface.h"
+
+#include <algorithm>
+#include <cctype>
+#include <cmath>
+#include <fstream>
+#include <iostream>
+#include <string>
 
 using namespace std;
 
 namespace csmp {
 
-/**
- 
-Constructor associates a distributed physical variable with the
-constructed PropertyHandle. If the variable already exists in the 
-PropertyDatabase, the new PropertyHandle will be a handle to it. If the 
-variable name is not known to the PropertyDatabase, it will be registered
-as a new variable and property storage will be allocated accordingly
-by the MemoryManager. 
-
-@section arguments Input Arguments
-
-There are four constructor arguments. The first is a reference to the 
-current Model, the second is the variable name, and the remaining
-two arguments specify the variable type and placement, respectively.
-These last two arguments have the default values SCALAR, and NODE. 
-If the variable type or placement differs from these values, they must be
-specified. If a new variable shall be created the 
-user must specify its type and placement. 
-
-@section implementation Implementation 
-
-The constructor initializes the output variable flag to PLAIN and requests 
-the csmp::Index for the associated variable from the PropertyDatabase. It 
-prompts the creation of a new variable if the property does not already 
-exist. 
-*/
-template<uint32_t dim>
-PropertyHandle<dim>::PropertyHandle( Model<dim>& sg, 
-                                     const char*   var_name, 
-                                     VARIABLE_TYPE ptype, 
-                                     PLACEMENT     place,
-                                     uint32_t      psize )
- : model_domain(sg),
-   group(sg.Region("Model")),
-   group_name("Model"),
-   flag_output(ANY),
-   var_name(var_name)
- {
-    if ( place == BOUNDARY )
-      throw Exception( ERROR, "PropertyHandle<dim>(constructor)",
-                       var_name, "Property handles cannot handle BOUNDARY properties" );
-
-    // if the variable exists the Operand is associated with it
-    if ( sg.Database().IsDefined( var_name ) ) 
-      {
-         csmp::Index  key = sg.Database().StorageKey( var_name );
-         if ( ptype != SCALAR && key.type != ptype ) {
-              cout <<"\nPropertyHandle<"<< dim <<">(constructor): ";
-              cout <<"Type of existing variable is different from what you have anticipated: ";
-              sg.Database().FlushToScreen( var_name ); 
-           }
-         if ( place != NODE && key.place != place ) {
-              cout <<"\nPropertyHandle<"<< dim <<">(constructor): ";
-              cout <<"Placement of existing variable is different from what you have anticipated: ";
-              sg.Database().FlushToScreen( var_name ); 
-           }
-         new_variable_created = false;
-      }
-    else { // a new variable is created 
-         sg.CreateProperty( var_name, var_name, "SI", ptype, place, psize );
-         new_variable_created = true;
-      }
-      
-    key_ = sg.Database().StorageKey(var_name);
-      
- } // end
-
-
-
-
-
-
+// ============================================================================
+//  Shared constructor body
+// ============================================================================
 
 template<uint32_t dim>
-PropertyHandle<dim>::PropertyHandle( Model<dim>& sg, 
-                                     const char*   group,
-                                     const char*   var_name, 
-                                     VARIABLE_TYPE ptype, 
-                                     PLACEMENT     place,
-                                     uint32_t      psize )
- : model_domain(sg),
-   group(sg.Region(group)),
-   group_name(group),
-   flag_output(ANY),
-   var_name(var_name)
- {
-    if ( place == BOUNDARY )
-      throw Exception( ERROR, "PropertyHandle<dim>(constructor)",
-                       var_name, "Property handles cannot handle BOUNDARY properties" );
-
-    // if the variable exists the Operand is associated with it
-    if ( sg.Database().IsDefined( var_name ) ) 
-      {
-         csmp::Index  key = sg.Database().StorageKey( var_name );
-         if ( ptype != SCALAR && key.type != ptype ) {
-              cout <<"\nPropertyHandle<"<< dim <<">(constructor): ";
-              cout <<"Type of existing variable is different from what you have anticipated: ";
-              sg.Database().FlushToScreen( var_name ); 
-           }
-         if ( place != NODE && key.place != place ) {
-              cout <<"\nPropertyHandle<"<< dim <<">(constructor): ";
-              cout <<"Placement of existing variable is different from what you have anticipated: ";
-              sg.Database().FlushToScreen( var_name ); 
-           }
-         new_variable_created = false;
-      }
-    else { // a new variable is created 
-         sg.CreateProperty( var_name, var_name, "SI", ptype, place, psize );
-         new_variable_created = true;
-      }
-
-    key_ = sg.Database().StorageKey(var_name);
-
- } // end ct
-
-
-
-
-/** A copy-constructed PropertyHandle is associated exactly with the same variable as its input argument.
-*/
-template<uint32_t dim>
-PropertyHandle<dim>::PropertyHandle( const PropertyHandle<dim>& op )
- : model_domain(op.model_domain),
-   group_name(op.group_name),
-   group(op.group),
-   var_name(op.var_name),
-   key_(op.key_),
-   flag_output(op.flag_output),
-   new_variable_created(op.new_variable_created)
+void PropertyHandle<dim>::Initialise( const char*   subdomain_name,
+                                        const char*   var_name,
+                                        VARIABLE_TYPE type,
+                                        PLACEMENT     place,
+                                        uint32_t      vsize )
 {
+    subdomain_name_    = subdomain_name;
+    region_            = nullptr;
+    boundary_          = nullptr;
+    split_boundary_    = nullptr;
+    is_split_boundary_ = false;
+
+    if ( model_.ContainsRegion( subdomain_name ) )
+    {
+        region_ = &model_.Region( subdomain_name );
+    }
+    else if ( model_.ContainsBoundary( subdomain_name ) )
+    {
+        boundary_ = &model_.Boundary( subdomain_name );
+    }
+    else if ( model_.ContainsSplitBoundary( subdomain_name ) )
+    {
+        split_boundary_    = &model_.SplitBoundary( subdomain_name );
+        is_split_boundary_ = true;
+    }
+
+    if ( place == BOUNDARY )
+        throw Exception( ERROR,
+            "PropertyHandle::Initialise", var_name,
+            "Use FACE or INTER_FACE placement rather than BOUNDARY." );
+
+    // ------------------------------------------------------------------
+    //  Finite-volume placements require the FV stencils to be
+    //  initialised before any FV property can be created. The sector
+    //  and facet counts on each element are set during
+    //  InstantiateFiniteVolumes() — if this has not been called,
+    //  Element::Sectors() and Element::Facets() return 0, which causes
+    //  AddProperty to crash with an out-of-bounds access in
+    //  LocalVariableStorage.
+    //
+    //  We call InstantiateFiniteVolumes() automatically here so that
+    //  the user does not need to remember to call it before constructing
+    //  a PropertyHandle for a FV placement.
+    // ------------------------------------------------------------------
+    const bool isFVPlacement =
+        ( place == SECTOR_INTEGRATION_POINT              ||
+          place == FACET_INTEGRATION_POINT               ||
+          place == FACE_SECTOR_INTEGRATION_POINT         ||
+          place == FACE_FACET_INTEGRATION_POINT          ||
+          place == INTER_FACE_SECTOR_INTEGRATION_POINT   ||
+          place == INTER_FACE_FACET_INTEGRATION_POINT    );
+
+    if ( isFVPlacement )
+    {
+        bool fv_initialised = false;
+        WithSubdomain( [&]( auto& sd )
+        {
+            if ( !sd.CellVector().empty() )
+                fv_initialised = ( sd.CellVector().front()->Sectors() > 0 );
+        });
+
+        if ( !fv_initialised )
+        {
+            cerr << "\nPropertyHandle::Initialise: '"
+                 << var_name
+                 << "' requires finite-volume stencils. "
+                    "Calling model_.InstantiateFiniteVolumes() automatically.\n";
+            model_.InstantiateFiniteVolumes();
+        }
+    }
+
+    var_name_ = var_name;
+
+    if ( model_.Database().IsDefined( var_name ) )
+    {
+        const csmp::Index existing = model_.Database().StorageKey( var_name );
+
+        if ( type != SCALAR && existing.type != type )
+            cerr << "\nPropertyHandle: type of existing variable '"
+                 << var_name << "' differs from requested type.\n";
+
+        if ( place != NODE && existing.place != place )
+            cerr << "\nPropertyHandle: placement of existing variable '"
+                 << var_name << "' differs from requested placement.\n";
+
+        owns_variable_ = false;
+    }
+    else
+    {
+        model_.CreateProperty( var_name, var_name, "SI", type, place, vsize );
+        owns_variable_ = true;
+    }
+
+    key_ = model_.Database().StorageKey( var_name );
+}
+
+
+
+
+// ============================================================================
+//  Constructors / destructor
+// ============================================================================
+
+template<uint32_t dim>
+PropertyHandle<dim>::PropertyHandle( Model<dim>&   model,
+                                        const char*   var_name,
+                                        VARIABLE_TYPE type,
+                                        PLACEMENT     place,
+                                        uint32_t      vsize )
+    : model_( model ),
+      region_( nullptr ),
+      boundary_( nullptr ),
+      split_boundary_( nullptr ),
+      is_split_boundary_( false ),
+      flag_output_( ANY ),
+      owns_variable_( false )
+{
+    Initialise( "Model", var_name, type, place, vsize );
+}
+
+
+
+template<uint32_t dim>
+PropertyHandle<dim>::PropertyHandle( Model<dim>&   model,
+                                        const char*   subdomain_name,
+                                        const char*   var_name,
+                                        VARIABLE_TYPE type,
+                                        PLACEMENT     place,
+                                        uint32_t      vsize )
+    : model_( model ),
+      region_( nullptr ),
+      boundary_( nullptr ),
+      split_boundary_( nullptr ),
+      is_split_boundary_( false ),
+      flag_output_( ANY ),
+      owns_variable_( false )
+{
+    Initialise( subdomain_name, var_name, type, place, vsize );
+}
+
+
+
+
+template<uint32_t dim>
+PropertyHandle<dim>::PropertyHandle( const PropertyHandle<dim>& other )
+    : model_( other.model_ ),
+      region_( other.region_ ),
+      boundary_( other.boundary_ ),
+      split_boundary_( other.split_boundary_ ),
+      subdomain_name_( other.subdomain_name_ ),
+      is_split_boundary_( other.is_split_boundary_ ),
+      var_name_( other.var_name_ ),
+      key_( other.key_ ),
+      flag_output_( other.flag_output_ ),
+      owns_variable_( false )
+{
+}
+
+
+
+template<uint32_t dim>
+PropertyHandle<dim>::~PropertyHandle()
+{
+    if ( owns_variable_ &&
+         model_.Database().IsDefined( var_name_.c_str() ) )
+        model_.DeleteProperty( var_name_.c_str() );
+}
+
+// ============================================================================
+//  Queries
+// ============================================================================
+
+template<uint32_t dim>
+const char* PropertyHandle<dim>::VariableName() const
+{
+    return var_name_.c_str();
+}
+
+template<uint32_t dim>
+const csmp::Index& PropertyHandle<dim>::Key() const
+{
+    return key_;
+}
+
+template<uint32_t dim>
+VARIABLE_FLAG PropertyHandle<dim>::OutputCondition() const
+{
+    return flag_output_;
+}
+
+template<uint32_t dim>
+void PropertyHandle<dim>::OutputCondition( VARIABLE_FLAG c )
+{
+    flag_output_ = c;
+}
+
+
+
+template<uint32_t dim>
+void PropertyHandle<dim>::Range( double& omin, double& omax ) const
+{
+    model_.MinMaxOf( var_name_.c_str(), omin, omax );
+}
+
+
+
+
+template<uint32_t dim>
+bool PropertyHandle<dim>::IsWithinRange() const
+{
+    double pmin, pmax;
+    model_.Database().RangeOf( var_name_.c_str(), pmin, pmax );
+
+    // ------------------------------------------------------------------
+    //  NODE placement on SplitBoundary — handled separately for all
+    //  types because SplitBoundary has no NodeVector().
+    // ------------------------------------------------------------------
+    if ( key_.place == NODE && is_split_boundary_ )
+    {
+        bool in_range = true;
+        bool warned   = false;
+
+        std::unordered_set<Node<dim>*> visited;
+        for ( auto& ifit : split_boundary_->CellVector() )
+            for ( uint32_t i = 0; i < ifit->FE()->Nodes(); ++i )
+            {
+                auto checkNode = [&]( Node<dim>* nd ) -> bool
+                {
+                    if ( !visited.insert( nd ).second ) return true;
+
+                    switch ( key_.type )
+                    {
+                        case SCALAR:
+                        {
+                            double sc = nd->Read( key_ );
+                            return ( sc >= pmin && sc <= pmax );
+                        }
+                        case VECTOR:
+                        {
+                            VectorVariable<dim> vc;
+                            nd->Read( key_, vc );
+                            const double len = vc.Length();
+                            return ( len >= pmin && len <= pmax );
+                        }
+                        case TENSOR:
+                        {
+                            TensorVariable<dim> ts;
+                            nd->Read( key_, ts );
+                            if constexpr ( dim == 1 )
+                                return ( ts(0,0) >= pmin && ts(0,0) <= pmax );
+                            else if constexpr ( dim == 2 )
+                            {
+                                for ( uint32_t ii = 0; ii < 2; ++ii )
+                                    for ( uint32_t j = 0; j < 2; ++j )
+                                        if ( ts(ii,j) < pmin || ts(ii,j) > pmax )
+                                            return false;
+                                return true;
+                            }
+                            else
+                            {
+                                double e0, e1, e2;
+                                if ( !ts.EigenValuesPositiveDefiniteSymmetricMatrix(
+                                         e0, e1, e2 ) )
+                                {
+                                    if ( !warned )
+                                    {
+                                        ErrorHandler::Instance().Note( WARNING,
+                                            "PropertyHandle3::IsWithinRange",
+                                            ( string("Tensor variable '")
+                                              + var_name_
+                                              + "' is not symmetric positive "
+                                              + "definite at one or more "
+                                              + "SplitBoundary nodes." ).c_str() );
+                                        warned = true;
+                                    }
+                                    return true;
+                                }
+                                if ( e0 < pmin || e0 > pmax ) return false;
+                                if ( e2 < pmin || e2 > pmax ) return false;
+                                return true;
+                            }
+                        }
+                        case ARRAY:
+                        {
+                            ArrayVariable av;
+                            nd->Read( key_, av );
+                            return av.IsWithinRange( pmin, pmax );
+                        }
+                        case FLAGGEDARRAY:
+                        {
+                            FlaggedArrayVariable fav;
+                            nd->Read( key_, fav );
+                            return fav.IsWithinRange( pmin, pmax );
+                        }
+                        default:
+                            return true;
+                    }
+                };
+
+                for ( auto side : { INSIDE, OUTSIDE } )
+                {
+                    if ( !checkNode( ifit->N( i, side ) ) )
+                    {
+                        in_range = false;
+                        goto done_splitboundary_node;
+                    }
+                }
+                if ( ifit->HasInterveningElement() )
+                {
+                    if ( !checkNode( ifit->N( i, MIDDLE ) ) )
+                    {
+                        in_range = false;
+                        goto done_splitboundary_node;
+                    }
+                }
+            }
+        done_splitboundary_node:
+        return in_range;
+    }
+
+    // ------------------------------------------------------------------
+    //  All other placements and subdomains.
+    // ------------------------------------------------------------------
+    switch ( key_.type )
+    {
+        case SCALAR:
+        {
+            double omin, omax;
+            WithSubdomain( [&]( auto& sd )
+            {
+                sd.MinMaxOf( var_name_.c_str(), omin, omax );
+            });
+            return ( omin >= pmin && omax <= pmax );
+        }
+
+        case VECTOR:
+        {
+            double omin, omax;
+            WithSubdomain( [&]( auto& sd )
+            {
+                sd.MinMaxOf( var_name_.c_str(), omin, omax );
+            });
+            return ( omin >= pmin && omax <= pmax );
+        }
+
+        case TENSOR:
+        {
+            if constexpr ( dim == 1 )
+            {
+                double omin, omax;
+                WithSubdomain( [&]( auto& sd )
+                {
+                    sd.MinMaxOf( var_name_.c_str(), omin, omax );
+                });
+                return ( omin >= pmin && omax <= pmax );
+            }
+            else if constexpr ( dim == 2 )
+            {
+                double omin, omax;
+                WithSubdomain( [&]( auto& sd )
+                {
+                    sd.MinMaxOf( var_name_.c_str(), omin, omax );
+                });
+                return ( omin >= pmin && omax <= pmax );
+            }
+            else
+            {
+                TensorVariable<dim> ts;
+                bool warned   = false;
+                bool in_range = true;
+
+                auto checkTensor = [&]( TensorVariable<dim>& t ) -> bool
+                {
+                    double e0, e1, e2;
+                    if ( !t.EigenValuesPositiveDefiniteSymmetricMatrix(
+                             e0, e1, e2 ) )
+                    {
+                        if ( !warned )
+                        {
+                            ErrorHandler::Instance().Note( WARNING,
+                                "PropertyHandle3::IsWithinRange",
+                                ( string("Tensor variable '")
+                                  + var_name_
+                                  + "' is not symmetric positive definite "
+                                  + "at one or more points; eigenvalue "
+                                  + "range check skipped for those points."
+                                ).c_str() );
+                            warned = true;
+                        }
+                        return true;
+                    }
+                    if ( e0 < pmin || e0 > pmax ) return false;
+                    if ( e2 < pmin || e2 > pmax ) return false;
+                    return true;
+                };
+
+                switch ( key_.place )
+                {
+                    case NODE:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            for ( auto& nit : sd.NodeVector() )
+                            {
+                                nit->Read( key_, ts );
+                                if ( !checkTensor( ts ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                        });
+                        break;
+
+                    case ELEMENT:
+                    case FACE:
+                    case INTER_FACE:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            for ( auto& cit : sd.CellVector() )
+                            {
+                                cit->Read( key_, ts );
+                                if ( !checkTensor( ts ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                        });
+                        break;
+
+                    case ELEMENT_INTEGRATION_POINT:
+                    case FACE_INTEGRATION_POINT:
+                    case INTER_FACE_INTEGRATION_POINT:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            for ( auto& cit : sd.CellVector() )
+                                for ( uint32_t ip = 0;
+                                      ip < cit->IntegrationPoints(); ++ip )
+                                {
+                                    cit->Read( ip, key_, ts );
+                                    if ( !checkTensor( ts ) )
+                                    {
+                                        in_range = false;
+                                        return;
+                                    }
+                                }
+                        });
+                        break;
+
+                    case SECTOR_INTEGRATION_POINT:
+                    case FACE_SECTOR_INTEGRATION_POINT:
+                    case INTER_FACE_SECTOR_INTEGRATION_POINT:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            for ( auto& cit : sd.CellVector() )
+                                for ( uint32_t s = 0;
+                                      s < cit->Sectors(); ++s )
+                                {
+                                    cit->Read( s, 0U, key_, ts );
+                                    if ( !checkTensor( ts ) )
+                                    {
+                                        in_range = false;
+                                        return;
+                                    }
+                                }
+                        });
+                        break;
+
+                    case FACET_INTEGRATION_POINT:
+                    case FACE_FACET_INTEGRATION_POINT:
+                    case INTER_FACE_FACET_INTEGRATION_POINT:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            for ( auto& cit : sd.CellVector() )
+                                for ( uint32_t fac = 0;
+                                      fac < cit->Facets(); ++fac )
+                                {
+                                    cit->Read( fac, 0U, key_, ts );
+                                    if ( !checkTensor( ts ) )
+                                    {
+                                        in_range = false;
+                                        return;
+                                    }
+                                }
+                        });
+                        break;
+
+                    case REGION:
+                        WithSubdomain( [&]( auto& sd )
+                        {
+                            sd.Read( key_, ts );
+                            if ( !checkTensor( ts ) )
+                                in_range = false;
+                        });
+                        break;
+
+                    default:
+                        return true;
+                }
+                return in_range;
+            }
+        }
+
+        // ------------------------------------------------------------------
+        //  ARRAY: use ArrayVariable::IsWithinRange(pmin,pmax) which checks
+        //  the min and max element values against the registered range.
+        // ------------------------------------------------------------------
+        case ARRAY:
+        {
+            bool in_range = true;
+            ArrayVariable av;
+
+            switch ( key_.place )
+            {
+                case NODE:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& nit : sd.NodeVector() )
+                        {
+                            nit->Read( key_, av );
+                            if ( !av.IsWithinRange( pmin, pmax ) )
+                            {
+                                in_range = false;
+                                return;
+                            }
+                        }
+                    });
+                    break;
+
+                case ELEMENT:
+                case FACE:
+                case INTER_FACE:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                        {
+                            cit->Read( key_, av );
+                            if ( !av.IsWithinRange( pmin, pmax ) )
+                            {
+                                in_range = false;
+                                return;
+                            }
+                        }
+                    });
+                    break;
+
+                case ELEMENT_INTEGRATION_POINT:
+                case FACE_INTEGRATION_POINT:
+                case INTER_FACE_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t ip = 0;
+                                  ip < cit->IntegrationPoints(); ++ip )
+                            {
+                                cit->Read( ip, key_, av );
+                                if ( !av.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case SECTOR_INTEGRATION_POINT:
+                case FACE_SECTOR_INTEGRATION_POINT:
+                case INTER_FACE_SECTOR_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t s = 0; s < cit->Sectors(); ++s )
+                            {
+                                cit->Read( s, 0U, key_, av );
+                                if ( !av.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case FACET_INTEGRATION_POINT:
+                case FACE_FACET_INTEGRATION_POINT:
+                case INTER_FACE_FACET_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t fac = 0; fac < cit->Facets(); ++fac )
+                            {
+                                cit->Read( fac, 0U, key_, av );
+                                if ( !av.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case REGION:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        sd.Read( key_, av );
+                        if ( !av.IsWithinRange( pmin, pmax ) )
+                            in_range = false;
+                    });
+                    break;
+
+                default:
+                    return true;
+            }
+            return in_range;
+        }
+
+        // ------------------------------------------------------------------
+        //  FLAGGEDARRAY: use FlaggedArrayVariable::IsWithinRange(pmin,pmax)
+        //  which checks all elements regardless of their flags.
+        // ------------------------------------------------------------------
+        case FLAGGEDARRAY:
+        {
+            bool in_range = true;
+            FlaggedArrayVariable fav;
+
+            switch ( key_.place )
+            {
+                case NODE:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& nit : sd.NodeVector() )
+                        {
+                            nit->Read( key_, fav );
+                            if ( !fav.IsWithinRange( pmin, pmax ) )
+                            {
+                                in_range = false;
+                                return;
+                            }
+                        }
+                    });
+                    break;
+
+                case ELEMENT:
+                case FACE:
+                case INTER_FACE:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                        {
+                            cit->Read( key_, fav );
+                            if ( !fav.IsWithinRange( pmin, pmax ) )
+                            {
+                                in_range = false;
+                                return;
+                            }
+                        }
+                    });
+                    break;
+
+                case ELEMENT_INTEGRATION_POINT:
+                case FACE_INTEGRATION_POINT:
+                case INTER_FACE_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t ip = 0;
+                                  ip < cit->IntegrationPoints(); ++ip )
+                            {
+                                cit->Read( ip, key_, fav );
+                                if ( !fav.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case SECTOR_INTEGRATION_POINT:
+                case FACE_SECTOR_INTEGRATION_POINT:
+                case INTER_FACE_SECTOR_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t s = 0; s < cit->Sectors(); ++s )
+                            {
+                                cit->Read( s, 0U, key_, fav );
+                                if ( !fav.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case FACET_INTEGRATION_POINT:
+                case FACE_FACET_INTEGRATION_POINT:
+                case INTER_FACE_FACET_INTEGRATION_POINT:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        for ( auto& cit : sd.CellVector() )
+                            for ( uint32_t fac = 0; fac < cit->Facets(); ++fac )
+                            {
+                                cit->Read( fac, 0U, key_, fav );
+                                if ( !fav.IsWithinRange( pmin, pmax ) )
+                                {
+                                    in_range = false;
+                                    return;
+                                }
+                            }
+                    });
+                    break;
+
+                case REGION:
+                    WithSubdomain( [&]( auto& sd )
+                    {
+                        sd.Read( key_, fav );
+                        if ( !fav.IsWithinRange( pmin, pmax ) )
+                            in_range = false;
+                    });
+                    break;
+
+                default:
+                    return true;
+            }
+            return in_range;
+        }
+
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle3::IsWithinRange",
+                var_name_.c_str(),
+                "Unrecognised variable type." );
+    }
 }
 
 
 
 
 
-/**
-
-The destructor of a PropertyHandle linked to dynamically created variable,
-will prompt the PropertyDatabase to delete the variable entry and call the
-MemoryManager to delete the storage which was allocated for that 
-variable. 
-*/
-template<uint32_t dim>
-PropertyHandle<dim>::~PropertyHandle()
- {
-    if ( new_variable_created ) 
-      model_domain.DeleteProperty( var_name.c_str() );
-    
- } // end destructor
-
-
-
-
-
-/** Returns the storage specification of the variable which is associated with the csmp::Operand into a corresponding structure.
-*/    
-template<uint32_t dim>
-const csmp::Index&  PropertyHandle<dim>::Key() const { 
-    return key_;
- }
+// ============================================================================
+//  Interpolate
+// ============================================================================
 
 template<uint32_t dim>
-const char*  PropertyHandle<dim>::VariableName() const
- { return var_name.c_str(); }
+void PropertyHandle<dim>::Interpolate( const char* src_name,
+                                         const char* dst_name,
+                                         PLACEMENT   src,
+                                         PLACEMENT   dst )
+{
+    // ------------------------------------------------------------------
+    //  SplitBoundary: only non-node interpolation paths are supported.
+    //  InterpolateNodeToCellProperty and
+    //  InterpolateNodeToIntegrationPointProperty are deleted on
+    //  SplitBoundary, and extrapolation to nodes is not available
+    //  because SplitBoundary has no NodeVector().
+    // ------------------------------------------------------------------
+    if ( is_split_boundary_ )
+    {
+        if ( src == NODE || dst == NODE )
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::Interpolate",
+                src_name,
+                ( std::string(
+                    "Interpolation involving NODE placement is not "
+                    "supported for SplitBoundary. "
+                    "InterpolateNodeToCellProperty and "
+                    "InterpolateNodeToIntegrationPointProperty are "
+                    "deleted on SplitBoundary, and extrapolation to "
+                    "nodes is not available because SplitBoundary has "
+                    "no NodeVector(). "
+                    "Each InterFace has two distinct node sets: INSIDE "
+                    "nodes belonging to Parent(INSIDE) and OUTSIDE nodes "
+                    "belonging to Parent(OUTSIDE). "
+                    "Use SplitBoundary::InsideNodes() or "
+                    "SplitBoundary::OutsideNodes() to obtain the node "
+                    "vector for the appropriate side, then use "
+                    "InterFace::Parent(INSIDE) or "
+                    "InterFace::Parent(OUTSIDE) with the finite element "
+                    "interpolation machinery directly." )
+                ).c_str() );
+
+        if      ( dst == INTER_FACE &&
+                  src == INTER_FACE_INTEGRATION_POINT )
+            split_boundary_->InterpolateIntegrationPointToCellProperty(
+                src_name, dst_name );
+        else if ( dst == INTER_FACE_INTEGRATION_POINT &&
+                  src == INTER_FACE )
+            split_boundary_->ExtrapolateCellToIntegrationPointProperty(
+                src_name, dst_name );
+        else if ( dst == INTER_FACE_FACET_INTEGRATION_POINT &&
+                  src == INTER_FACE )
+            split_boundary_->ExtrapolateCellToFacetIntegrationPointProperty(
+                src_name, dst_name );
+        else
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::Interpolate",
+                src_name,
+                ( std::string(
+                    "No interpolation path exists between the two "
+                    "placements for SplitBoundary. "
+                    "Supported paths are: "
+                    "INTER_FACE <-> INTER_FACE_INTEGRATION_POINT and "
+                    "INTER_FACE -> INTER_FACE_FACET_INTEGRATION_POINT." )
+                ).c_str() );
+        return;
+    }
+
+    // ------------------------------------------------------------------
+    //  Region and Boundary: dispatch directly to region_ or boundary_
+    //  to avoid instantiating deleted SplitBoundary methods through
+    //  the WithSubdomain generic lambda.
+    // ------------------------------------------------------------------
+    auto interpolateOn = [&]( auto& sd )
+    {
+        if      ( dst == ELEMENT && src == NODE )
+            sd.InterpolateNodeToCellProperty( src_name, dst_name );
+        else if ( dst == NODE && src == ELEMENT )
+            sd.ExtrapolateCellToNodeProperty( src_name, dst_name );
+        else if ( dst == ELEMENT_INTEGRATION_POINT && src == NODE )
+            sd.InterpolateNodeToIntegrationPointProperty( src_name, dst_name );
+        else if ( dst == NODE && src == ELEMENT_INTEGRATION_POINT )
+            sd.ExtrapolateIntegrationPointToNodeProperty( src_name, dst_name );
+        else if ( dst == ELEMENT && src == ELEMENT_INTEGRATION_POINT )
+            sd.InterpolateIntegrationPointToCellProperty( src_name, dst_name );
+        else if ( dst == ELEMENT_INTEGRATION_POINT && src == ELEMENT )
+            sd.ExtrapolateCellToIntegrationPointProperty( src_name, dst_name );
+        else if ( dst == FACET_INTEGRATION_POINT && src == ELEMENT )
+            sd.ExtrapolateCellToFacetIntegrationPointProperty( src_name, dst_name );
+        // FACE placements
+        else if ( dst == FACE && src == NODE )
+            sd.InterpolateNodeToCellProperty( src_name, dst_name );
+        else if ( dst == NODE && src == FACE )
+            sd.ExtrapolateCellToNodeProperty( src_name, dst_name );
+        else if ( dst == FACE_INTEGRATION_POINT && src == NODE )
+            sd.InterpolateNodeToIntegrationPointProperty( src_name, dst_name );
+        else if ( dst == NODE && src == FACE_INTEGRATION_POINT )
+            sd.ExtrapolateIntegrationPointToNodeProperty( src_name, dst_name );
+        else if ( dst == FACE && src == FACE_INTEGRATION_POINT )
+            sd.InterpolateIntegrationPointToCellProperty( src_name, dst_name );
+        else if ( dst == FACE_INTEGRATION_POINT && src == FACE )
+            sd.ExtrapolateCellToIntegrationPointProperty( src_name, dst_name );
+        else if ( dst == FACE_FACET_INTEGRATION_POINT && src == FACE )
+            sd.ExtrapolateCellToFacetIntegrationPointProperty( src_name, dst_name );
+        else
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::Interpolate",
+                src_name,
+                "No interpolation path exists between the two placements." );
+    };
+
+    if      ( region_   ) interpolateOn( *region_ );
+    else if ( boundary_ ) interpolateOn( *boundary_ );
+}
 
 
-/**
 
-OutputCondition() returns  the VARIABLE_FLAG flag which the
-distributed physical variable which is associated with the PropertyHandle
-must have in order to allow modification by the PropertyHandle. 
 
-@return The flag that the physical variables flag must correspond to if the
-variable shall be modified.
 
-@section application Application 
+// ============================================================================
+//  Cross-type assignment helpers
+// ============================================================================
 
-Since each CSMP scalar, vector, or tensor variable has a single or a set
-of flags which indicate to the solver whether it may modify or use this 
-variable instance as a constraint, the same rule applies to PropertyHandles.
-Thus, only if the output flag matches the local flag of the distributed
-variable, it will modify the latter. Accordingly, the variable flag may
-be used to protect certain variable values from modification by 
-PropertyHandles.*/    
 template<uint32_t dim>
-VARIABLE_FLAG  PropertyHandle<dim>::OutputCondition() const { return flag_output; }
-    
-    
-/**
+void PropertyHandle<dim>::AssignVectorLengthToScalar(
+    const csmp::Index& rkey )
+{
+    VectorVariable<dim> vc;
 
-OutputCondition() assigns the VARIABLE_FLAG flag which the
-distributed physical variable which is associated with the PropertyHandle
-must have in order to allow modification by the PropertyHandle. 
+    auto store = [&]( auto* pt )
+    {
+        pt->Read( rkey, vc );
+        pt->Store( key_, makeScalar( flag_output_, vc.Length() ) );
+    };
 
-@param c The flag which the output flag shall be changed into.
-
-@attention The flag of the physical variables flag must correspond,
-else the variable is not modified.
-
-@section application Application 
-
-Since each CSMP scalar, vector, or tensor variable has a single or a set
-of flags which indicate to the solver whether it may modify or use this 
-variable instance as a constraint, the same rule applies to PropertyHandles.
-Thus, only if the output flag matches the local flag of the distributed
-variable, it will modify the latter. Accordingly, the variable flag may
-be used to protect certain variable values from modification by 
-PropertyHandles. 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::OutputCondition( VARIABLE_FLAG c ) { flag_output=c; }
-
-
-
-
-   
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const PropertyHandle& op )
- {
-    if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
-                      VariableName(), "Property handles are associated with different model subdomains" );
- 
-    if ( &op != this ) {
-         // key is not touched, thus placement and variable type must remain
-         // the same as well and all other variables are retained
-         if ( group_name != op.group_name )
-           throw csmp::Exception( WARNING, "PropertyHandle<dim>::operator=", 
-                          "operands have different targets using that of the assigned operand"  );
-         group_name = op.group_name; 
- 
-          if ( var_name != op.var_name ) {
-               throw csmp::Exception( WARNING, "PropertyHandle<dim>::operator=", 
-                              "target operands have different names, no assignment was made"  );
-               return *this;
+    switch ( key_.place )
+    {
+        case NODE:
+            if ( !is_split_boundary_ )
+            {
+                WithSubdomain( [&]( auto& sd )
+                {
+                    for ( auto& nit : sd.NodeVector() )
+                        if ( nit->Status( key_ ) == flag_output_ )
+                            store( nit );
+                });
             }
-    
-       VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-       TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-       csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
-       csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
-    
-       // these combinations of properties are not possible   
-       if ( key.place != opkey.place )
-         throw Exception( ERROR, "PropertyHandle<dim>::operator=(PropertyHandle)",
-                          VariableName(), "the property that shall be assigned must have the same placement as this one" );
-       
-        switch( key.type ) {
-	         case SCALAR: 
-	              switch( key.place ) {
-	                   case NODE:
-	                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-	                          if ( (*nit)->Status( key ) == flag_output ) 
-	                            (*nit)->Store( key, makeScalar( flag_output, (*nit)->Read( opkey )) );
-	                     break;
-	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-	                            if ( (*eit)->Status( i, key ) == flag_output ) 
-	                              (*eit)->Store( i, key, makeScalar( flag_output, (*eit)->Read( i, opkey )) );
-	                     break;
-	                   case ELEMENT:        
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                          if ( (*eit)->Status( key ) == flag_output ) 
-	                            (*eit)->Store( key, makeScalar( flag_output, (*eit)->Read( opkey )) );
-	                      break;
-	                   case REGION:        
-                          if ( group.Status( key ) == flag_output ) 
-                            group.Store( key, makeScalar( flag_output, group.Read( opkey )) );
-	                      break;
-	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                              "BOUNDARY and MODEL properties are not handled by this class yet."  );
-	                }
-	           break;
-	         case VECTOR: 
-	              switch( key.place )
-	                {
-	                   case NODE:
-	                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-	                            {
-	                               (*nit)->Read( opkey, vc );	                          
-	                               (*nit)->Store( key, vc );
-	                            }
-	                     break;
-	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-	                          if ( (*eit)->Status( i, key ) == flag_output ) {
-	                               (*eit)->Read( i, opkey, vc );	                          
-	                               (*eit)->Store( i, key, vc );
-	                            }
-	                     break;
-	                   case ELEMENT:        
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                            {
-	                               (*eit)->Read( opkey, vc );	                          
-	                               (*eit)->Store( key, vc );
-	                            }
-	                      break;
-	                   case REGION:        
-                          if ( group.Status( key ) == flag_output ) { 
-                               group.Read( opkey, vc );
-	                             group.Store( key, vc );
-                            }     
-	                      break;
-	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                              "BOUNDARY and MODEL properties are not handled by this class yet."  );
-	                }
-	           break;
-	         case TENSOR: 
-	              switch( key.place )
-	                {
-	                   case NODE:
-	                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-	                            {
-	                               (*nit)->Read( opkey, ts );	                          
-	                               (*nit)->Store( key, ts );
-	                            }
-	                     break;
-	                   case ELEMENT_INTEGRATION_POINT:
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-  	                            {
-  	                               (*eit)->Read( i, opkey, ts );	                          
-  	                               (*eit)->Store( i, key, ts );
-  	                            }
-	                     break;
-	                   case ELEMENT:        
-	                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-	                            {
-	                               (*eit)->Read( opkey, ts );	                          
-	                               (*eit)->Store( key, ts );
-	                            }
-	                      break;
-	                   case REGION:        
-                            { 
-                               group.Read( opkey, ts );
-	                             group.Store( key, ts );
-                            }     
-	                      break;
-	                   default:
-                         throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                              "BOUNDARY and MODEL properties are not handled by this class yet."  );
-	                }
-	            break;
-	          default:
-              throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                             "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-          }
-      }
-    IsWithinRange();
-
-    return *this;
- }
-
-
-
-
-
-
-/**
- 
-Assigns the value of its argument to the physical variable associated
-with the PropertyHandle at where the variable has a flag which is equal
-to the output flag. 
-
-@section arguments Input Arguments
-
-Variables of the types double, ScalarVariable, VectorVariable, or
-TensorVariable may be assigned. 
-
-@return The assignment returns the value into the PropertyHandle to the left of the
-equal sign. The original values are overwritten irrespective of their
-original flag.  
-
-@section implementation Implementation 
-
-The assigment operator relies on the overloaded operators of the basic
-CSMP variables (scalar, vector, and tensor) to perform the assignments. 
-
-In the special case, where an assignment of a vector to a scalar is 
-attempted, the length of the vector will be assigned. 
-
-The attempt to assign a tensor to a vector is undefined and 
-will therefore provoke an error. 
-
-If a tensor shall be assigned to a scalar, the determinant of the tensor
-will be assigned. 
-
-@section application Application 
-
-To write PropertyHandle expressions like: 
-
-@code
-csp_specific_op = 12.5;
-@endcode
-
-@section messages Messages 
-
-Undefined assigments, like that of a tensor to a vector will invoke
-error messages. Because these are special operations, if the length of
-a vector or the determinant of a tensor is assigned to a scalar,
-a warning will be issued which specifies the type of assignment made. 
-*/
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( double val )
- {
-    switch( key_.type )
-      {
-         case SCALAR: {
-              ScalarVariable  sc(flag_output,val);
-              switch( key_.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          (*nit)->Store( key_, sc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            (*eit)->Store( i, key_, sc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          (*eit)->Store( key_, sc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-             }
-           break;
-         case VECTOR: {
-              VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-              vc = val;
-              switch( key_.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          (*nit)->Store( key_, vc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            (*eit)->Store( i, key_, vc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          (*eit)->Store( key_, vc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-             }
-           break;
-         case TENSOR: {
-              TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-              ts = val;  
-              switch( key_.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          (*nit)->Store( key_, ts );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            (*eit)->Store( i, key_, ts );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          (*eit)->Store( key_, ts );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-              }
+            else
+            {
+                std::unordered_set<Node<dim>*> visited;
+                for ( auto& ifit : split_boundary_->CellVector() )
+                    for ( uint32_t i = 0; i < ifit->FE()->Nodes(); ++i )
+                    {
+                        for ( auto side : { INSIDE, OUTSIDE } )
+                        {
+                            auto* nd = ifit->N( i, side );
+                            if ( visited.insert( nd ).second &&
+                                 nd->Status( key_ ) == flag_output_ )
+                                store( nd );
+                        }
+                        if ( ifit->HasInterveningElement() )
+                        {
+                            auto* nd = ifit->N( i, MIDDLE );
+                            if ( visited.insert( nd ).second &&
+                                 nd->Status( key_ ) == flag_output_ )
+                                store( nd );
+                        }
+                    }
+            }
             break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
- }
 
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const ScalarVariable& s )
- {
-
-    ScalarVariable                         sc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-    sc = s;
-    vc = s;
-    ts = s;
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          (*nit)->Store( key, vc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, vc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          (*eit)->Store( key, vc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          (*nit)->Store( key, ts );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            (*eit)->Store( i, key, ts );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          (*eit)->Store( key, ts );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
+        case ELEMENT:
+        case FACE:
+        case INTER_FACE:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    if ( cit->Status( key_ ) == flag_output_ )
+                        store( cit );
+            });
             break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
- }
 
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const VectorVariable<dim>& vc )
- {
-    ScalarVariable  sc(flag_output,vc.Length());
-
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              cout <<"\nPropertyHandle::operator=: Assigning vector length to scalar !"<< endl;
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: {
-              VectorVariable<dim>  temp;
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ ) {
-                             (*nit)->Read( key, temp );
-                             for ( auto j{0U}; j<dim; j++ )
-                               if ( (*nit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
-                             (*nit)->Store( key, temp );
-                          }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ ) {
-                               (*eit)->Read( i, key, temp );
-                               for ( auto j{0U}; j<dim; j++ )
-                                 if ( (*eit)->Status(i, key, j ) == flag_output ) temp(j) = vc[j];
-                               (*eit)->Store( i, key, vc );
-                            }
-                            
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ ) {
-                             (*eit)->Read( key, temp );
-                             for ( auto j{0U}; j<dim; j++ )
-                               if ( (*eit)->Status( key, j ) == flag_output ) temp(j) = vc[j];
-                             (*eit)->Store( key, vc );
-                          }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-             }
-           break;
-         case TENSOR: 
-              cout <<"\nPropertyHandle::operator=: No rule exists to assign 'vector' to 'tensor'. ";
-              cout <<"No assignments were made."<< endl;
+        case ELEMENT_INTEGRATION_POINT:
+        case FACE_INTEGRATION_POINT:
+        case INTER_FACE_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t ip = 0; ip < cit->IntegrationPoints(); ++ip )
+                        if ( cit->Status( ip, key_ ) == flag_output_ )
+                        {
+                            cit->Read( ip, rkey, vc );
+                            cit->Store( ip, key_,
+                                makeScalar( flag_output_, vc.Length() ) );
+                        }
+            });
             break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
- }
 
-
-/**
-    Assigns the values of the tensor variable to the distributed property.
-*/
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const TensorVariable<dim>& ts )
- {
-    ScalarVariable  sc(flag_output,strtod("NAN",NULL));
-    sc() = ts.Determinant();
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR:
-              cout <<"\nPropertyHandle::operator=: Assigning determinant of tensor variable to scalar."<< endl; 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output ) (*nit)->Store( key, sc );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) (*eit)->Store( i, key, sc );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) (*eit)->Store( key, sc );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              cout <<"\nPropertyHandle::operator=: No rule was supplied to assign tensor to vector. "; 
-              cout <<"Nothing was done."<< endl; 
-           break;
-         case TENSOR: 
-              // NB: using only the status of the first diagonal element of the tensor
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key, 0 ) == flag_output ) (*nit)->Store( key, ts );
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key, 0 ) == flag_output ) (*eit)->Store( i, key, ts );
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key, 0 ) == flag_output ) (*eit)->Store( key, ts );
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
+        case SECTOR_INTEGRATION_POINT:
+        case FACE_SECTOR_INTEGRATION_POINT:
+        case INTER_FACE_SECTOR_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t s = 0; s < cit->Sectors(); ++s )
+                        if ( cit->Status( s, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( s, 0U, rkey, vc );
+                            cit->Store( s, 0U, key_,
+                                makeScalar( flag_output_, vc.Length() ) );
+                        }
+            });
             break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
- }
 
-
-
-
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<VectorVariable<dim> >& vc ) 
- {
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    if ( key.type != VECTOR ) {
-         throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of vectors )", 
-                                    "Type mismatch; PropertyHandle does not contain vectors" );
-      }
-    switch ( key.place ) {
-         case NODE: 
-              if ( group.Nodes() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
-                                             "vector size does not match number of Nodes" ); 
-           break;
-         case ELEMENT_INTEGRATION_POINT:
-              if ( group.IntegrationPoints() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
-                                             "vector size does not match number of IntegrationPoints" ); 
-           break;
-         case ELEMENT:
-              if ( group.Cells() != vc.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of vectors )",
-                                             "vector size does not match number of Elements" ); 
+        case FACET_INTEGRATION_POINT:
+        case FACE_FACET_INTEGRATION_POINT:
+        case INTER_FACE_FACET_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t fac = 0; fac < cit->Facets(); ++fac )
+                        if ( cit->Status( fac, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( fac, 0U, rkey, vc );
+                            cit->Store( fac, 0U, key_,
+                                makeScalar( flag_output_, vc.Length() ) );
+                        }
+            });
             break;
-         default:
-             throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                  "REGION and MODEL properties are not handled by this class yet."  );
-      }
-  
-    FEM_Data<VectorVariable<dim> >  var_data( key.place, vc );
 
-    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
-      
-    return *this; 
-
- } // end operator
-
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator=( const std::vector<TensorVariable<dim> >& ts ) 
- {
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    if ( key.type != TENSOR ) {
-         throw csmp::Exception( ERROR, "PropertyHandle<dim>::operator=( vector of tensors )", 
-                                    "Type mismatch; PropertyHandle does not contain tensors" );
-      }
-    switch ( key.place ) {
-         case NODE: 
-              if ( group.Nodes() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
-                                             "vector size does not match number of Nodes" ); 
-           break;
-         case ELEMENT_INTEGRATION_POINT:
-              if ( group.IntegrationPoints() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
-                                             "vector size does not match number of IntegrationPoints" ); 
-           break;
-         case ELEMENT:
-              if ( group.Cells() != ts.size() )
-                throw csmp::Exception( FATAL_ERROR, "PropertyHandle<dim>::operator=( vector of tensors )",
-                                             "vector size does not match number of Elements" ); 
+        case REGION:
+            WithSubdomain( [&]( auto& sd )
+            {
+                if ( sd.Status( key_ ) == flag_output_ )
+                    store( &sd );
+            });
             break;
-         default:
-             throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                  "REGION and MODEL properties are not handled by this class yet."  );
-      }
-  
-    FEM_Data<TensorVariable<dim> >  var_data( key.place, ts );
 
-    model_domain.InputVariableFrom( model_domain.Database().Name(key), var_data );
-      
-    return *this; 
-
- } // end operator
-
-
-
-
-
-
-
-/**
- 
-The operators '+=', '-=', '*=', and '/=' perform combined arithmetic and
-assignment operations but avoid the generation of temporary variables as
-would be generated, if the operatios were performed separately. 
-
-@param val The argument to the right of the combined operators must be a floating point
-value. 
-
-@return The floating point value on the right modifies the PropertyHandle value on
-the left according to the arithmetic operator used.
-
-@section implementation Implementation 
-
-The operators are based on the overloaded operators of the CSP basic 
-variables, the ScalarVariable, VectorVariable, and TensorVariable. 
-
-@section application Application 
-
-To add a floating point value to, subtract from, multiply, or divide by the 
-physical variable which is associated with the PropertyHandle, write
-expressions like: 
-
-@code
-my_operand += 5.2;
-@endcode
- */
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( double val )
- {
-    ScalarVariable                         sc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    VectorVariable<dim>                     vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    TensorVariable<dim>                     ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-    uint32_t i, j;
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() += val;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key, sc );
-                                 sc() += val;
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() += val;
-                               (*eit)->Store( key, sc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) += val;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i) += val;
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                  case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) += val;
-                               (*eit)->Store( key, vc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) += val;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) += val;
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) += val;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    
-    return *this;
-
- } // end +=
-
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( double val )
- {
-    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-    uint32_t  i, j;
-    csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() -= val;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key, sc );
-                                 sc() -= val;
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() -= val;
-                               (*eit)->Store( key, sc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) -= val;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i) -= val;
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) -= val;
-                               (*eit)->Store( key, vc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) -= val;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) -= val;
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) -= val;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
-
- } // end -=
-
-
-
-/**
-    Where the variable is flagged that the output flag, the default value of which is ANY,
-    its value is multiplied by the argument value.
-*/
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( double val )
- {
-    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());
-    uint32_t  i, j;
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() *= val;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key, sc );
-                                 sc() *= val;
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() *= val;
-                               (*eit)->Store( key, sc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) *= val;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i) *= val;
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) *= val;
-                               (*eit)->Store( key, vc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) *= val;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) *= val;
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) *= val;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
-
- } // end *=
-
-
-
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( double val )
- {
-    ScalarVariable      sc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    VectorVariable<dim>  vc(flag_output,std::numeric_limits<double>::quiet_NaN());
-    TensorVariable<dim>  ts(flag_output,std::numeric_limits<double>::quiet_NaN());   
-    uint32_t  i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() /= val;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key, sc );
-                                 sc() /= val;
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() /= val;
-                               (*eit)->Store( key, sc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case VECTOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) /= val;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i) /= val;
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i) /= val;
-                               (*eit)->Store( key, vc );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR: 
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) /= val;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) /= val;
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ ) for ( j=0; j<dim; j++ ) ts(i,j) /= val;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-      }
-    IsWithinRange();
-    return *this;
-
- } // end operator/=
-
-
-
-
-/**
- 
-The operators '+=', '-=', '*=', and '/=' perform combined arithmetic and
-assignment operations involving two PropertyHandles but avoid the generation 
-of temporary variables as would be generated, if the operatios were 
-performed separately. 
-
-@param op The argument to the right of the combined operators must be a
-PropertyHandle.
-
-@return The value of the physical variable of the PropertyHandle on the right modifies
-the PropertyHandle value on the left according to the arithmetic operator
-used. 
-
-@section implementation Implementation 
-
-The operators are based on the overloaded operators of the CSP basic 
-variables, the ScalarVariable, VectorVariable, and TensorVariable. 
-
-@section application Application 
-
-To add a floating point value to, subtract from, multiply, or divide by the 
-physical variable which is associated with the PropertyHandle, write
-expressions like: 
-
-@code
-my_operand += 5.2;
-@endcode
-
-@section messages Messages 
-
-Operations involving variables of different type or different placement 
-cannot be performed. In this case an error will be reported. 
-*/
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator+=( const PropertyHandle<dim>& op )
- {
-    if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator+=(PropertyHandle)",
-                      VariableName(), "Property handles are associated with different model subdomains" );
-
-    const csmp::Index  key   = model_domain.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
- 
-    if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
-                                "Nothing was done.");
-         return *this;
-      }
-
-    ScalarVariable       sc1, sc2;
-    VectorVariable<dim>  vc1, vc2;
-    TensorVariable<dim>  ts1, ts2;
-
-    if (key.place == opkey.place)
-      switch( opkey.type )
-      {
-         case SCALAR:    
-              switch( opkey.place )
-              {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                            {
-                               (*nit)->Read( key,    sc1 );
-                               (*nit)->Read( opkey, sc2 );
-                               sc1 += sc2;
-                               (*nit)->Store( key, sc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key,    sc1 );
-                                 (*eit)->Read( i, opkey, sc2 );
-                                 sc1 += sc2;
-                                 (*eit)->Store( i, key, sc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key,    sc1 );
-                               (*eit)->Read( opkey, sc2 );
-                               sc1 += sc2;
-                               (*eit)->Store( key, sc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-               }
-            break;
-         case VECTOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc1 );
-                               (*nit)->Read( opkey, vc2 );
-                               vc1 += vc2;
-                               (*nit)->Store( key, vc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc1 );
-                                 (*eit)->Read( i, opkey, vc2 );
-                                 vc1 += vc2;
-                                 (*eit)->Store( i, key, vc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc1 );
-                               (*eit)->Read( opkey, vc2 );
-                               vc1 += vc2;
-                               (*eit)->Store( key, vc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-              break;
-         case TENSOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts1 );
-                               (*nit)->Read( opkey, ts2 );
-                               ts1 += ts2;
-                               (*nit)->Store( key, ts1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts1 );
-                                 (*eit)->Read( i, opkey, ts2 );
-                                 ts1 += ts2;
-                                 (*eit)->Store( i, key, ts1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts1 );
-                               (*eit)->Read( opkey, ts2 );
-                               ts1 += ts2;
-                               (*eit)->Store( key, ts1 );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-              break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       }
-
-    else if (key.place == ELEMENT && opkey.place == NODE)
-    {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempElementVariable;
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::AssignVectorLengthToScalar",
+                var_name_.c_str(), "Unsupported placement." );
     }
-    else if (key.place == NODE && opkey.place == ELEMENT)
+}
+
+
+
+
+template<uint32_t dim>
+void PropertyHandle<dim>::AssignTensorDetToScalar(
+    const csmp::Index& rkey )
+{
+    TensorVariable<dim> ts;
+
+    auto store = [&]( auto* pt )
     {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempNodeVariable;
+        pt->Read( rkey, ts );
+        pt->Store( key_, makeScalar( flag_output_, ts.Determinant() ) );
+    };
+
+    switch ( key_.place )
+    {
+        case NODE:
+            if ( !is_split_boundary_ )
+            {
+                WithSubdomain( [&]( auto& sd )
+                {
+                    for ( auto& nit : sd.NodeVector() )
+                        if ( nit->Status( key_ ) == flag_output_ )
+                            store( nit );
+                });
+            }
+            else
+            {
+                std::unordered_set<Node<dim>*> visited;
+                for ( auto& ifit : split_boundary_->CellVector() )
+                    for ( uint32_t i = 0; i < ifit->FE()->Nodes(); ++i )
+                    {
+                        for ( auto side : { INSIDE, OUTSIDE } )
+                        {
+                            auto* nd = ifit->N( i, side );
+                            if ( visited.insert( nd ).second &&
+                                 nd->Status( key_ ) == flag_output_ )
+                                store( nd );
+                        }
+                        if ( ifit->HasInterveningElement() )
+                        {
+                            auto* nd = ifit->N( i, MIDDLE );
+                            if ( visited.insert( nd ).second &&
+                                 nd->Status( key_ ) == flag_output_ )
+                                store( nd );
+                        }
+                    }
+            }
+            break;
+
+        case ELEMENT:
+        case FACE:
+        case INTER_FACE:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    if ( cit->Status( key_ ) == flag_output_ )
+                        store( cit );
+            });
+            break;
+
+        case ELEMENT_INTEGRATION_POINT:
+        case FACE_INTEGRATION_POINT:
+        case INTER_FACE_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t ip = 0; ip < cit->IntegrationPoints(); ++ip )
+                        if ( cit->Status( ip, key_ ) == flag_output_ )
+                        {
+                            cit->Read( ip, rkey, ts );
+                            cit->Store( ip, key_,
+                                makeScalar( flag_output_, ts.Determinant() ) );
+                        }
+            });
+            break;
+
+        case SECTOR_INTEGRATION_POINT:
+        case FACE_SECTOR_INTEGRATION_POINT:
+        case INTER_FACE_SECTOR_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t s = 0; s < cit->Sectors(); ++s )
+                        if ( cit->Status( s, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( s, 0U, rkey, ts );
+                            cit->Store( s, 0U, key_,
+                                makeScalar( flag_output_, ts.Determinant() ) );
+                        }
+            });
+            break;
+
+        case FACET_INTEGRATION_POINT:
+        case FACE_FACET_INTEGRATION_POINT:
+        case INTER_FACE_FACET_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t fac = 0; fac < cit->Facets(); ++fac )
+                        if ( cit->Status( fac, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( fac, 0U, rkey, ts );
+                            cit->Store( fac, 0U, key_,
+                                makeScalar( flag_output_, ts.Determinant() ) );
+                        }
+            });
+            break;
+
+        case REGION:
+            WithSubdomain( [&]( auto& sd )
+            {
+                if ( sd.Status( key_ ) == flag_output_ )
+                    store( &sd );
+            });
+            break;
+
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::AssignTensorDetToScalar",
+                var_name_.c_str(), "Unsupported placement." );
     }
-    else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
+}
+
+
+
+template<uint32_t dim>
+void PropertyHandle<dim>::AssignFlaggedArrayToArray( const csmp::Index& rkey )
+{
+    ArrayVariable        av;
+    FlaggedArrayVariable fav;
+
+    switch ( key_.place )
     {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempNodeVariable;
+        case NODE:
+            if ( !is_split_boundary_ )
+            {
+                WithSubdomain( [&]( auto& sd )
+                {
+                    for ( auto& nit : sd.NodeVector() )
+                        if ( nit->Status( key_ ) == flag_output_ )
+                        {
+                            nit->Read( rkey, fav );
+                            nit->Read( key_, av );
+                            av.CopyValuesOnly( fav );
+                            nit->Store( key_, av );
+                        }
+                });
+            }
+            else
+            {
+                std::unordered_set<Node<dim>*> visited;
+                for ( auto& ifit : split_boundary_->CellVector() )
+                    for ( uint32_t i = 0; i < ifit->FE()->Nodes(); ++i )
+                        for ( auto side : { INSIDE, OUTSIDE } )
+                        {
+                            auto* nd = ifit->N( i, side );
+                            if ( visited.insert( nd ).second &&
+                                 nd->Status( key_ ) == flag_output_ )
+                            {
+                                nd->Read( rkey, fav );
+                                nd->Read( key_, av );
+                                av.CopyValuesOnly( fav );
+                                nd->Store( key_, av );
+                            }
+                        }
+            }
+            break;
+
+        case ELEMENT:
+        case FACE:
+        case INTER_FACE:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    if ( cit->Status( key_ ) == flag_output_ )
+                    {
+                        cit->Read( rkey, fav );
+                        cit->Read( key_, av );
+                        av.CopyValuesOnly( fav );
+                        cit->Store( key_, av );
+                    }
+            });
+            break;
+
+        case ELEMENT_INTEGRATION_POINT:
+        case FACE_INTEGRATION_POINT:
+        case INTER_FACE_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t ip = 0; ip < cit->IntegrationPoints(); ++ip )
+                        if ( cit->Status( ip, key_ ) == flag_output_ )
+                        {
+                            cit->Read( ip, rkey, fav );
+                            cit->Read( ip, key_, av );
+                            av.CopyValuesOnly( fav );
+                            cit->Store( ip, key_, av );
+                        }
+            });
+            break;
+
+        case SECTOR_INTEGRATION_POINT:
+        case FACE_SECTOR_INTEGRATION_POINT:
+        case INTER_FACE_SECTOR_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t s = 0; s < cit->Sectors(); ++s )
+                        if ( cit->Status( s, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( s, 0U, rkey, fav );
+                            cit->Read( s, 0U, key_, av );
+                            av.CopyValuesOnly( fav );
+                            cit->Store( s, 0U, key_, av );
+                        }
+            });
+            break;
+
+        case FACET_INTEGRATION_POINT:
+        case FACE_FACET_INTEGRATION_POINT:
+        case INTER_FACE_FACET_INTEGRATION_POINT:
+            WithSubdomain( [&]( auto& sd )
+            {
+                for ( auto& cit : sd.CellVector() )
+                    for ( uint32_t fac = 0; fac < cit->Facets(); ++fac )
+                        if ( cit->Status( fac, 0U, key_ ) == flag_output_ )
+                        {
+                            cit->Read( fac, 0U, rkey, fav );
+                            cit->Read( fac, 0U, key_, av );
+                            av.CopyValuesOnly( fav );
+                            cit->Store( fac, 0U, key_, av );
+                        }
+            });
+            break;
+
+        case REGION:
+            WithSubdomain( [&]( auto& sd )
+            {
+                if ( sd.Status( key_ ) == flag_output_ )
+                {
+                    sd.Read( rkey, fav );
+                    sd.Read( key_, av );
+                    av.CopyValuesOnly( fav );
+                    sd.Store( key_, av );
+                }
+            });
+            break;
+
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle3::AssignFlaggedArrayToArray",
+                var_name_.c_str(), "Unsupported placement." );
     }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
+}
+
+
+
+// ============================================================================
+//  operator= (PropertyHandle)
+// ============================================================================
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const PropertyHandle<dim>& other )
+{
+    if ( this == &other )
+        return *this;
+
+    const bool same_subdomain = ( subdomain_name_ == other.subdomain_name_ );
+    const bool other_is_model = ( other.subdomain_name_ == "Model" );
+    const bool this_is_model  = ( subdomain_name_ == "Model" );
+
+    if ( !same_subdomain && !other_is_model )
     {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempIPVariable;
+        if ( this_is_model )
+            throw Exception( ERROR,
+                "PropertyHandle::operator=(PropertyHandle)",
+                var_name_.c_str(),
+                ( string("Cannot assign sub-domain variable '")
+                  + other.var_name_ + "' (sub-domain '"
+                  + other.subdomain_name_
+                  + "') into whole-model variable '"
+                  + var_name_
+                  + "': only part of the model would be overwritten. "
+                  + "If this is intended, construct a whole-model handle "
+                  + "for the source variable and assign from that."
+                ).c_str() );
+        else
+            throw Exception( ERROR,
+                "PropertyHandle::operator=(PropertyHandle)",
+                var_name_.c_str(),
+                ( string("Cannot assign between two different sub-domains: '")
+                  + other.subdomain_name_ + "' -> '"
+                  + subdomain_name_ + "'. "
+                  + "Overlap between non-Model sub-domains is undefined."
+                ).c_str() );
     }
-    else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
+
+    if ( !same_subdomain && other_is_model )
     {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempElementVariable;
+        // Cross-subdomain assignment from whole model into a sub-domain
+        // is only valid for NODE placement. FACE and INTER_FACE placements
+        // exist exclusively on Boundary and SplitBoundary respectively.
+        // ELEMENT and integration point placements exist exclusively on
+        // Region. There is no meaningful cross-entity assignment between
+        // these placement types.
+        if ( key_.place != NODE || other.key_.place != NODE )
+            throw Exception( ERROR,
+                "PropertyHandle::operator=(PropertyHandle)",
+                var_name_.c_str(),
+                ( string("Cross-subdomain assignment from whole-model variable '")
+                  + other.var_name_
+                  + "' into sub-domain variable '"
+                  + var_name_
+                  + "' is only supported for NODE placement. "
+                  + "FACE placement exists exclusively on Boundary subdomains. "
+                  + "INTER_FACE placement exists exclusively on SplitBoundary "
+                  + "subdomains. "
+                  + "ELEMENT and integration point placements exist exclusively "
+                  + "on Region subdomains. "
+                  + "Source placement: "
+                  + std::to_string( static_cast<int>( other.key_.place ) )
+                  + ", destination placement: "
+                  + std::to_string( static_cast<int>( key_.place ) )
+                  + "."
+                ).c_str() );
     }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
+
+    if ( key_.type != other.key_.type )
     {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempIPVariable;
-    }
-    else if (key.place == FACET_INTEGRATION_POINT && opkey.place == ELEMENT)
+    const bool this_is_array  = ( key_.type == ARRAY ||
+                                   key_.type == FLAGGEDARRAY );
+    const bool other_is_array = ( other.key_.type == ARRAY ||
+                                   other.key_.type == FLAGGEDARRAY );
+
+    // ------------------------------------------------------------------
+    //  Array types are not interoperable with scalar/vector/tensor.
+    // ------------------------------------------------------------------
+    if ( this_is_array != other_is_array )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle3::operator=(PropertyHandle3)",
+            var_name_.c_str(),
+            ( string("Cannot assign between array and non-array "
+                      "variable types. "
+                      "Source type: ")
+              + std::to_string( static_cast<int>( other.key_.type ) )
+              + ", destination type: "
+              + std::to_string( static_cast<int>( key_.type ) )
+            ).c_str() );
+
+    // ------------------------------------------------------------------
+    //  ARRAY = FLAGGEDARRAY: copy values, discard per-element flags.
+    // ------------------------------------------------------------------
+    if ( key_.type == ARRAY && other.key_.type == FLAGGEDARRAY )
     {
-        PropertyHandle<dim> tempFIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToFacetIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) += tempFIPVariable;
-    }
-    else
-    {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "This placement combination has not been implemented yet",
-                                      "Nothing was done.");
+        cerr << "\nPropertyHandle3::operator=: "
+                "assigning FlaggedArrayVariable values to ArrayVariable "
+                "(per-element flags discarded).\n";
+
+        static std::atomic<uint32_t> tmp_counter_af{0};
+        const string tmp_name = var_name_
+                              + "__ph3_tmp_"
+                              + std::to_string( tmp_counter_af.fetch_add(1) );
+
+        const PLACEMENT dst     = key_.place;
+        const PLACEMENT src     = other.key_.place;
+        const bool needs_interp = ( dst != src );
+
+        if ( needs_interp )
+        {
+            uint32_t array_size = 1U;
+            WithSubdomain( [&]( auto& sd )
+            {
+                if ( !sd.CellVector().empty() )
+                {
+                    FlaggedArrayVariable fav;
+                    sd.CellVector().front()->Read( other.key_, fav );
+                    array_size = fav.Size();
+                }
+            });
+            model_.CreateProperty( tmp_name.c_str(), tmp_name.c_str(),
+                                   "SI", FLAGGEDARRAY, dst, array_size );
+        }
+
+        const char* rhs_name = needs_interp ? tmp_name.c_str()
+                                            : other.VariableName();
+        try
+        {
+            if ( needs_interp )
+                Interpolate( other.VariableName(), rhs_name, src, dst );
+            const csmp::Index rkey =
+                model_.Database().StorageKey( rhs_name );
+            AssignFlaggedArrayToArray( rkey );
+        }
+        catch ( ... )
+        {
+            if ( needs_interp )
+                model_.DeleteProperty( tmp_name.c_str() );
+            throw;
+        }
+        if ( needs_interp )
+            model_.DeleteProperty( tmp_name.c_str() );
+
+        IsWithinRange();
         return *this;
     }
 
-    IsWithinRange();
-    return *this;
- 
- } // end operator+=
- 
+    // ------------------------------------------------------------------
+    //  FLAGGEDARRAY = ARRAY: copy values, set all flags to flag_output_.
+    // ------------------------------------------------------------------
+    if ( key_.type == FLAGGEDARRAY && other.key_.type == ARRAY )
+    {
+        cerr << "\nPropertyHandle3::operator=: "
+                "assigning ArrayVariable values to FlaggedArrayVariable "
+                "(all element flags set to OutputCondition()).\n";
 
+        static std::atomic<uint32_t> tmp_counter_fa{0};
+        const string tmp_name = var_name_
+                              + "__ph3_tmp_"
+                              + std::to_string( tmp_counter_fa.fetch_add(1) );
 
-template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator-=( const PropertyHandle<dim>& op )
- {
-     if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator-=(PropertyHandle)",
-                      VariableName(), "Property handles are associated with different model subdomains" );
+        const PLACEMENT dst     = key_.place;
+        const PLACEMENT src     = other.key_.place;
+        const bool needs_interp = ( dst != src );
 
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
-
-    if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
-                                "Nothing was done.");
-         return *this;
-      }
-    ScalarVariable                          sc1, sc2;
-    VectorVariable<dim>                     vc1, vc2;
-    TensorVariable<dim>                     ts1, ts2;
-
-    if (key.place == opkey.place)
-      switch( opkey.type )
-      {
-         case SCALAR:
-              switch( opkey.place )
+        if ( needs_interp )
+        {
+            uint32_t array_size = 1U;
+            WithSubdomain( [&]( auto& sd )
+            {
+                if ( !sd.CellVector().empty() )
                 {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key,    sc1 );
-                               (*nit)->Read( opkey, sc2 );
-                               sc1 -= sc2;
-                               (*nit)->Store( key, sc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,    sc1 );
-                                 (*eit)->Read( i, opkey, sc2 );
-                                 sc1 -= sc2;
-                                 (*eit)->Store( i, key, sc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key,    sc1 );
-                               (*eit)->Read( opkey, sc2 );
-                               sc1 -= sc2;
-                               (*eit)->Store( key, sc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
+                    ArrayVariable av;
+                    sd.CellVector().front()->Read( other.key_, av );
+                    array_size = av.Size();
                 }
-            break;
-         case VECTOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc1 );
-                               (*nit)->Read( opkey, vc2 );
-                               vc1 -= vc2;
-                               (*nit)->Store( key, vc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc1 );
-                                 (*eit)->Read( i, opkey, vc2 );
-                                 vc1 -= vc2;
-                                 (*eit)->Store( i, key, vc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc1 );
-                               (*eit)->Read( opkey, vc2 );
-                               vc1 -= vc2;
-                               (*eit)->Store( key, vc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts1 );
-                               (*nit)->Read( opkey, ts2 );
-                               ts1 -= ts2;
-                               (*nit)->Store( key, ts1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts1 );
-                                 (*eit)->Read( i, opkey, ts2 );
-                                 ts1 -= ts2;
-                                 (*eit)->Store( i, key, ts1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts1 );
-                               (*eit)->Read( opkey, ts2 );
-                               ts1 -= ts2;
-                               (*eit)->Store( key, ts1 );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       }
-    else if (key.place == ELEMENT && opkey.place == NODE)
-    {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempElementVariable;
-    }
-    else if (key.place == NODE && opkey.place == ELEMENT)
-    {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempNodeVariable;
-    }
-    else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
-    {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempNodeVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempIPVariable;
-    }
-    else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
-    {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempElementVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) -= tempIPVariable;
-    }
-    else
-    {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator-=", "This placement combination has not been implemented yet",
-                                      "Nothing was done.");
+            });
+            model_.CreateProperty( tmp_name.c_str(), tmp_name.c_str(),
+                                   "SI", ARRAY, dst, array_size );
+        }
+
+        const char* rhs_name = needs_interp ? tmp_name.c_str()
+                                            : other.VariableName();
+        try
+        {
+            if ( needs_interp )
+                Interpolate( other.VariableName(), rhs_name, src, dst );
+            const csmp::Index rkey =
+                model_.Database().StorageKey( rhs_name );
+            AssignFlaggedArrayToArray( rkey );
+        }
+        catch ( ... )
+        {
+            if ( needs_interp )
+                model_.DeleteProperty( tmp_name.c_str() );
+            throw;
+        }
+        if ( needs_interp )
+            model_.DeleteProperty( tmp_name.c_str() );
+
+        IsWithinRange();
         return *this;
     }
 
+    // ------------------------------------------------------------------
+    //  SCALAR = VECTOR (length) or SCALAR = TENSOR (determinant).
+    // ------------------------------------------------------------------
+    static std::atomic<uint32_t> tmp_counter{0};
+    const string tmp_name = var_name_
+                          + "__ph3_tmp_"
+                          + std::to_string( tmp_counter.fetch_add(1) );
+
+    const PLACEMENT dst     = key_.place;
+    const PLACEMENT src     = other.key_.place;
+    const bool needs_interp = ( dst != src );
+
+    if ( needs_interp )
+        model_.CreateProperty( tmp_name.c_str(), tmp_name.c_str(), "SI",
+                               other.key_.type, dst, 1U );
+
+    const char* rhs_name = needs_interp ? tmp_name.c_str()
+                                        : other.VariableName();
+    try
+    {
+        if ( needs_interp )
+            Interpolate( other.VariableName(), rhs_name, src, dst );
+
+        const csmp::Index rkey =
+            model_.Database().StorageKey( rhs_name );
+
+        if ( key_.type == SCALAR && other.key_.type == VECTOR )
+        {
+            cerr << "\nPropertyHandle3::operator=: "
+                    "assigning vector length to scalar.\n";
+            AssignVectorLengthToScalar( rkey );
+        }
+        else if ( key_.type == SCALAR && other.key_.type == TENSOR )
+        {
+            cerr << "\nPropertyHandle3::operator=: "
+                    "assigning tensor determinant to scalar.\n";
+            AssignTensorDetToScalar( rkey );
+        }
+        else
+        {
+            if ( needs_interp )
+                model_.DeleteProperty( tmp_name.c_str() );
+            throw csmp::Exception( ERROR,
+                "PropertyHandle3::operator=(PropertyHandle3)",
+                var_name_.c_str(),
+                "No rule exists to assign between these variable types." );
+        }
+    }
+    catch ( ... )
+    {
+        if ( needs_interp )
+            model_.DeleteProperty( tmp_name.c_str() );
+        throw;
+    }
+    if ( needs_interp )
+        model_.DeleteProperty( tmp_name.c_str() );
+
     IsWithinRange();
     return *this;
- 
- } // end operator-=
- 
+}
+
+    return ApplyBinaryOpAligned( other,
+        []( double& a,                       double b )                { a = b; },
+        []( VectorVariable<dim>& a,  const VectorVariable<dim>& b )   { a = b; },
+        []( TensorVariable<dim>& a,  const TensorVariable<dim>& b )   { a = b; } );
+}
+
+// ============================================================================
+//  operator= (uniform value / typed variable)
+// ============================================================================
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const ScalarVariable& s )
+{
+    const double val = s();
+    ApplyByType(
+        [val]( double& sc )              { sc = val; },
+        [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) = val; },
+        [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                               for ( uint32_t j=0; j<dim; ++j ) ts(i,j) = val; }
+    );
+    IsWithinRange();
+    return *this;
+}
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const VectorVariable<dim>& v )
+{
+    switch ( key_.type )
+    {
+        case SCALAR:
+        {
+            const double len = v.Length();
+            cerr << "\nPropertyHandle::operator=(VectorVariable): "
+                    "assigning vector length to scalar.\n";
+            ApplyScalar( [len]( double& sc ) { sc = len; } );
+            break;
+        }
+        case VECTOR:
+            ApplyVector( [&v]( VectorVariable<dim>& vc )
+            {
+                for ( uint32_t j = 0; j < dim; ++j ) vc(j) = v[j];
+            });
+            break;
+        case TENSOR:
+            cerr << "\nPropertyHandle::operator=(VectorVariable): "
+                    "no rule to assign vector to tensor; nothing done.\n";
+            break;
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::operator=(VectorVariable)",
+                var_name_.c_str(), "Unknown variable type." );
+    }
+    IsWithinRange();
+    return *this;
+}
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const TensorVariable<dim>& t )
+{
+    switch ( key_.type )
+    {
+        case SCALAR:
+        {
+            const double det = t.Determinant();
+            cerr << "\nPropertyHandle::operator=(TensorVariable): "
+                    "assigning determinant to scalar.\n";
+            ApplyScalar( [det]( double& sc ) { sc = det; } );
+            break;
+        }
+        case VECTOR:
+            cerr << "\nPropertyHandle::operator=(TensorVariable): "
+                    "no rule to assign tensor to vector; nothing done.\n";
+            break;
+        case TENSOR:
+            ApplyTensor( [&t]( TensorVariable<dim>& ts )
+            {
+                for ( uint32_t i = 0; i < dim; ++i )
+                    for ( uint32_t j = 0; j < dim; ++j )
+                        ts(i,j) = t(i,j);
+            });
+            break;
+        default:
+            throw csmp::Exception( ERROR,
+                "PropertyHandle::operator=(TensorVariable)",
+                var_name_.c_str(), "Unknown variable type." );
+    }
+    IsWithinRange();
+    return *this;
+}
+
 
 
 template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator*=( const PropertyHandle<dim>& op )
- {
-    if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator*=(PropertyHandle)",
-                      VariableName(), "Property handles are associated with different model subdomains" );
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const std::vector<VectorVariable<dim>>& vc )
+{
+    if ( key_.type != VECTOR )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle::operator=(vector<VectorVariable>)",
+            var_name_.c_str(),
+            "Type mismatch: handle does not hold a VECTOR variable." );
 
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
+    FEM_Data<VectorVariable<dim>> var_data( key_.place, vc );
+    model_.InputVariableFrom( model_.Database().Name( key_ ), var_data );
+    return *this;
+}
 
-    ScalarVariable                     sc1, sc2;
-    VectorVariable<dim>                     vc1, vc2;
-    TensorVariable<dim>                     ts1, ts2;
 
-    if (key.place == opkey.place)
-      switch( opkey.type )
-      {
-         case SCALAR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key,    sc1 );
-                               (*nit)->Read( opkey, sc2 );
-                               sc1 *= sc2;
-                               (*nit)->Store( key, sc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,    sc1 );
-                                 (*eit)->Read( i, opkey, sc2 );
-                                 sc1 *= sc2;
-                                 (*eit)->Store( i, key, sc1 );
-                              }
-                     break;
-                   case ELEMENT:  
-                     if( key.type == opkey.type )
-                     {
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key,    sc1 );
-                               (*eit)->Read( opkey, sc2 );
-                               sc1 *= sc2;
-                               (*eit)->Store( key, sc1 );
-                           }
-                     }
-                     else if( key.type == VECTOR && opkey.type == SCALAR )
-                     {
-                       for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ ) // no flag manipulations for props of diff type
-                         {
-                           (*eit)->Read( key,    vc1 );
-                           (*eit)->Read( opkey,  sc1 );
-                           vc1 *= sc1;
-                           (*eit)->Store( key, vc1 );
-                         }
-                     }
-                     else
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(*=)", "Type combination not implemented"  );
-                     break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc1 );
-                               (*nit)->Read( opkey, vc2 );
-                               vc1 *= vc2;
-                               (*nit)->Store( key, vc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc1 );
-                                 (*eit)->Read( i, opkey, vc2 );
-                                 vc1 *= vc2;
-                                 (*eit)->Store( i, key, vc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc1 );
-                               (*eit)->Read( opkey, vc2 );
-                               vc1 *= vc2;
-                               (*eit)->Store( key, vc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts1 );
-                               (*nit)->Read( opkey, ts2 );
-                               ts1 *= ts2;
-                               (*nit)->Store( key, ts1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts1 );
-                                 (*eit)->Read( i, opkey, ts2 );
-                                 ts1 *= ts2;
-                                 (*eit)->Store( i, key, ts1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts1 );
-                               (*eit)->Read( opkey, ts2 );
-                               ts1 *= ts2;
-                               (*eit)->Store( key, ts1 );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       }
-    else if (key.place == ELEMENT && opkey.place == NODE)
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const std::vector<TensorVariable<dim>>& ts )
+{
+    if ( key_.type != TENSOR )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle::operator=(vector<TensorVariable>)",
+            var_name_.c_str(),
+            "Type mismatch: handle does not hold a TENSOR variable." );
+
+    FEM_Data<TensorVariable<dim>> var_data( key_.place, ts );
+    model_.InputVariableFrom( model_.Database().Name( key_ ), var_data );
+    return *this;
+}
+
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const ArrayVariable& av )
+{
+    if ( key_.type != ARRAY )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle3::operator=(ArrayVariable)",
+            var_name_.c_str(),
+            "Type mismatch: handle does not hold an ARRAY variable." );
+
+    ApplyArray( [&av]( ArrayVariable& dest )
     {
-       PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), opkey.type, key.place );
-       group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
-       (*this) *= tempElementVariable;
+        dest = av;
+    });
+    IsWithinRange();
+    return *this;
+}
+
+
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( const FlaggedArrayVariable& fav )
+{
+    if ( key_.type != FLAGGEDARRAY )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle3::operator=(FlaggedArrayVariable)",
+            var_name_.c_str(),
+            "Type mismatch: handle does not hold a FLAGGEDARRAY variable." );
+
+    ApplyFlaggedArray( [&fav]( FlaggedArrayVariable& dest )
+    {
+        dest = fav;
+    });
+    IsWithinRange();
+    return *this;
+}
+
+
+// for array types
+template<uint32_t dim>
+PropertyHandle<dim>& PropertyHandle<dim>::operator=( double val )
+{
+    if ( key_.type == ARRAY )
+    {
+        ApplyArray( [val]( ArrayVariable& av )
+        {
+            av = val;  // ArrayVariable::operator=(double) sets all elements
+        });
     }
-    else if (key.place == NODE && opkey.place == ELEMENT) // P. Lang EDIT
+    else if ( key_.type == FLAGGEDARRAY )
     {
-        string opVarName(  op.VariableName() );
-        PropertyHandle<dim> tempNodeVariable( model_domain, (opVarName + "_temp").c_str(), opkey.type, key.place );
-        group.ExtrapolateCellToNodeProperty( op.VariableName(), (opVarName + "_temp").c_str() );
-        (*this) *= tempNodeVariable;
-    }
-    else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT) /// @todo (1-F) key.type, key.place should be opkey.type, key.place
-    {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) *= tempNodeVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) *= tempIPVariable;
-    }
-    else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
-    {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) *= tempElementVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) *= tempIPVariable;
+        ApplyFlaggedArray( [val, this]( FlaggedArrayVariable& fav )
+        {
+            ApplyToFlaggedElements( fav, flag_output_,
+                [val]( double& x ) { x = val; } );
+        });
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator*=", "This placement combination has not been implemented yet",
-                                      "Nothing was done.");
-        return *this;
+        ApplyByType(
+            [val]( double& sc )              { sc = val; },
+            [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) = val; },
+            [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                                   for ( uint32_t j=0; j<dim; ++j ) ts(i,j) = val; }
+        );
     }
-
     IsWithinRange();
     return *this;
- 
- } // end operator*=
- 
+}
 
+
+
+// ============================================================================
+//  Scalar compound assignment  (+=, -=, *=, /=  with double)
+// ============================================================================
 
 template<uint32_t dim>
-PropertyHandle<dim>&  PropertyHandle<dim>::operator/=( const PropertyHandle<dim>& op )
- {
-    if ( group_name != op.group_name )
-      throw Exception( ERROR, "PropertyHandle<dim>::operator/=(PropertyHandle)",
-                      VariableName(), "Property handles are associated with different model subdomains" );
-
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    const csmp::Index  opkey = model_domain.Database().StorageKey( op.VariableName() );
-
-    if ( key.type  != opkey.type ) {
-         throw csmp::Exception( ERROR, "PropertyHandle::operator+=", "Operands are not of the same type",
-                                "Nothing was done.");
-         return *this;
-      }
-
-    ScalarVariable                     sc1, sc2;
-    VectorVariable<dim>                     vc1, vc2;
-    TensorVariable<dim>                     ts1, ts2;
-
-    if (key.place == opkey.place)
-      switch( opkey.type )
-      {
-         case SCALAR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key,    sc1 );
-                               (*nit)->Read( opkey, sc2 );
-                               sc1 /= sc2;
-                               (*nit)->Store( key, sc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,    sc1 );
-                                 (*eit)->Read( i, opkey, sc2 );
-                                 sc1 /= sc2;
-                                 (*eit)->Store( i, key, sc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key,    sc1 );
-                               (*eit)->Read( opkey, sc2 );
-                               sc1 /= sc2;
-                               (*eit)->Store( key, sc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc1 );
-                               (*nit)->Read( opkey, vc2 );
-                               vc1 /= vc2;
-                               (*nit)->Store( key, vc1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc1 );
-                                 (*eit)->Read( i, opkey, vc2 );
-                                 vc1 /= vc2;
-                                 (*eit)->Store( i, key, vc1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc1 );
-                               (*eit)->Read( opkey, vc2 );
-                               vc1 /= vc2;
-                               (*eit)->Store( key, vc1 );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( opkey.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts1 );
-                               (*nit)->Read( opkey, ts2 );
-                               ts1 /= ts2;
-                               (*nit)->Store( key, ts1 );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts1 );
-                                 (*eit)->Read( i, opkey, ts2 );
-                                 ts1 /= ts2;
-                                 (*eit)->Store( i, key, ts1 );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts1 );
-                               (*eit)->Read( opkey, ts2 );
-                               ts1 /= ts2;
-                               (*eit)->Store( key, ts1 );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       }
-    else if (key.place == ELEMENT && opkey.place == NODE)
+PropertyHandle<dim>& PropertyHandle<dim>::operator+=( double val )
+{
+    if ( key_.type == ARRAY )
     {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToCellProperty(op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempElementVariable;
+        ApplyArray( [val]( ArrayVariable& av ) { av += val; });
     }
-    else if (key.place == NODE && opkey.place == ELEMENT)
+    else if ( key_.type == FLAGGEDARRAY )
     {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempNodeVariable;
-    }
-    else if (key.place == NODE && opkey.place == ELEMENT_INTEGRATION_POINT)
-    {
-        PropertyHandle<dim> tempNodeVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateIntegrationPointToNodeProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempNodeVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == NODE)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateNodeToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempIPVariable;
-    }
-    else if (key.place == ELEMENT && opkey.place == ELEMENT_INTEGRATION_POINT)
-    {
-        PropertyHandle<dim> tempElementVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.InterpolateIntegrationPointToCellProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempElementVariable;
-    }
-    else if (key.place == ELEMENT_INTEGRATION_POINT && opkey.place == ELEMENT)
-    {
-        PropertyHandle<dim> tempIPVariable( model_domain, ( var_name + "_temp").c_str(), key.type, key.place );
-        group.ExtrapolateCellToIntegrationPointProperty( op.VariableName(), (var_name + "_temp").c_str() );
-        (*this) /= tempIPVariable;
+        ApplyFlaggedArray( [val, this]( FlaggedArrayVariable& fav )
+        {
+            ApplyToFlaggedElements( fav, flag_output_,
+                [val]( double& x ) { x += val; } );
+        });
     }
     else
     {
-        throw csmp::Exception( ERROR, "PropertyHandle::operator/=", "This placement combination has not been implemented yet",
-                                      "Nothing was done.");
-        return *this;
+        ApplyByType(
+            [val]( double& sc )              { sc += val; },
+            [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) += val; },
+            [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                                   for ( uint32_t j=0; j<dim; ++j ) ts(i,j) += val; }
+        );
     }
-
     IsWithinRange();
     return *this;
- 
- } // end operator/=
- 
+}
 
 
-/**
- 
-Multiplies the physical variable which is associated with the PropertyHandle
-by itself. If this variable is vector, or a tensor, the corresponding 
-vector or matrix products will be assigned, respectively. 
-
-@section implementation Implementation 
-
-The method relies on the interface of the CSP basic variables 
-ScalarVariable, VectorVariable, and TensorVariable. 
-
-@section application Application 
-
-Apart from offering an efficient way to raise variable values to 
-the power of 2, Squared() implements vector and matrix multiplication
-for vector and tensor variables, respectively. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Squared()
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc *= sc;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,  sc );
-                                 sc *= sc;
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc *= sc;
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               vc *= vc;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 vc *= vc;
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               vc *= vc;
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               ts *= ts;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 ts *= ts;
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               ts *= ts;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
+PropertyHandle<dim>& PropertyHandle<dim>::operator-=( double val )
+{
+    if ( key_.type == ARRAY )
+    {
+        ApplyArray( [val]( ArrayVariable& av ) { av -= val; });
+    }
+    else if ( key_.type == FLAGGEDARRAY )
+    {
+        ApplyFlaggedArray( [val, this]( FlaggedArrayVariable& fav )
+        {
+            ApplyToFlaggedElements( fav, flag_output_,
+                [val]( double& x ) { x -= val; } );
+        });
+    }
+    else
+    {
+      ApplyByType(
+          [val]( double& sc )              { sc -= val; },
+          [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) -= val; },
+          [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                                 for ( uint32_t j=0; j<dim; ++j ) ts(i,j) -= val; }
+      );
+    }
     IsWithinRange();
- } // end Squared
+    return *this;
+}
 
 
 
-
-/**
- 
-Takes the square root of the values of the physical variable which is
-associated with the PropertyHandle. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Sqrt()
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = sqrt( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,  sc );
-                                 sc() = sqrt( sc() );
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = sqrt( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=sqrt( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=sqrt( vc(i) );
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=sqrt( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = sqrt( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = sqrt( ts(i,j) );
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = sqrt( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
+PropertyHandle<dim>& PropertyHandle<dim>::operator*=( double val )
+{
+    if ( key_.type == ARRAY )
+    {
+        ApplyArray( [val]( ArrayVariable& av ) { av *= val; });
+    }
+    else if ( key_.type == FLAGGEDARRAY )
+    {
+        ApplyFlaggedArray( [val, this]( FlaggedArrayVariable& fav )
+        {
+            ApplyToFlaggedElements( fav, flag_output_,
+                [val]( double& x ) { x *= val; } );
+        });
+    }
+    else
+    {
+      ApplyByType(
+          [val]( double& sc )              { sc *= val; },
+          [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) *= val; },
+          [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                                 for ( uint32_t j=0; j<dim; ++j ) ts(i,j) *= val; }
+      );
+    }
     IsWithinRange();
-    
- } // end Sqrt
+    return *this;
+}
 
 
 
-/**
- 
-
-Calculates the natural logarithm (base 2) of each component of the
-CSP basic variable which is associated with the PropertyHandle. 
-
-@section messages Messages 
-
-Since the method cannot take the natural logarithm of 0 or a negative 
-number, variables with such a value are not modified. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Ln()
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t  i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+PropertyHandle<dim>& PropertyHandle<dim>::operator/=( double val )
+{
+    if ( val == 0.0 )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle::operator/=(double)",
+            var_name_.c_str(),
+            "Division by zero." );
 
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc() = log( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,  sc );
-                                 if ( sc() > 0.0 ) sc() = log( sc() );
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc() = log( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) 
-                                 if ( vc(i) > 0.0 ) vc(i)=log( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( i=0; i<dim; i++ ) 
-                                   if ( vc(i) > 0. ) vc(i)=log( vc(i) );
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ )
-                                 if ( vc(i) > 0.0 ) vc(i)=log( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   if ( ts(i,j) > 0.0 ) ts(i,j) = log( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( i=0; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     if ( ts(i,j) > 0.0 ) ts(i,j) = log( ts(i,j) );
-                                 (*eit)->Store( i, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   if ( ts(i,j) > 0.0 ) ts(i,j) = log( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
+    if ( key_.type == ARRAY )
+    {
+        ApplyArray( [val]( ArrayVariable& av ) { av /= val; });
+    }
+    else if ( key_.type == FLAGGEDARRAY )
+    {
+        ApplyFlaggedArray( [val, this]( FlaggedArrayVariable& fav )
+        {
+            ApplyToFlaggedElements( fav, flag_output_,
+                [val]( double& x ) { x /= val; } );
+        });
+    }
+    else
+    {
+      ApplyByType(
+          [val]( double& sc )              { sc /= val; },
+          [val]( VectorVariable<dim>& vc ) { for ( uint32_t j=0; j<dim; ++j ) vc(j) /= val; },
+          [val]( TensorVariable<dim>& ts ) { for ( uint32_t i=0; i<dim; ++i )
+                                                 for ( uint32_t j=0; j<dim; ++j ) ts(i,j) /= val; }
+      );
+    }
     IsWithinRange();
- } // end ln
- 
- 
+    return *this;
+}
 
-/**
- 
-Calculates the decadic logarithm (base 10) of each component of the
-CSP basic variable which is associated with the PropertyHandle. 
+// ============================================================================
+//  PropertyHandle compound assignment  (+=, -=, *=, /=)
+// ============================================================================
 
-@section messages Messages 
-
-Since the method cannot take the logarithm of 0 or a negative 
-number, variables with such a value are not modified. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Log10()
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+PropertyHandle<dim>& PropertyHandle<dim>::operator+=(
+    const PropertyHandle<dim>& o )
+{
+    return ApplyBinaryOpAligned( o,
+        []( double& a, double b )                                  { a += b; },
+        []( VectorVariable<dim>& a, const VectorVariable<dim>& b ) { a += b; },
+        []( TensorVariable<dim>& a, const TensorVariable<dim>& b ) { a += b; } );
+}
 
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc() = log10( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                            if ( (*eit)->Status( i, key ) == flag_output ) 
-                              {
-                                 (*eit)->Read( i, key,  sc );
-                                 if ( sc() > 0.0 ) sc() = log10( sc() );
-                                 (*eit)->Store( i, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               if ( sc() > 0.0 ) sc() = log10( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( auto i{0U}; i<dim; i++ )
-                                 if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
-                              {
-                                 (*eit)->Read( i, key, vc );
-                                 for ( auto j{0U}; j<dim; j++ )
-                                   if ( vc(j) > 0.0 ) vc(j)=log10( vc(j) );
-                                 (*eit)->Store( i, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( auto i{0U}; i<dim; i++ )
-                                 if ( vc(i) > 0.0 ) vc(i)=log10( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( auto i{0U}; i<dim; i++ )
-                                 for ( auto j{0U}; j<dim; j++ )
-                                   if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( auto i{0U}; i<dim; i++ )
-                                   for ( auto j{0U}; j<dim; j++ )
-                                     if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( auto i{0U}; i<dim; i++ )
-                                 for ( auto j{0U}; j<dim; j++ )
-                                   if ( ts(i,j) > 0.0 ) ts(i,j) = log10( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                            
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
-
-Calculates E raised to the power of each component of the physical
-variable associated with the PropertyHandle. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Exp()
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+PropertyHandle<dim>& PropertyHandle<dim>::operator-=(
+    const PropertyHandle<dim>& o )
+{
+    return ApplyBinaryOpAligned( o,
+        []( double& a, double b )                                  { a -= b; },
+        []( VectorVariable<dim>& a, const VectorVariable<dim>& b ) { a -= b; },
+        []( TensorVariable<dim>& a, const TensorVariable<dim>& b ) { a -= b; } );
+}
 
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = exp( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = exp( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = exp( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=exp( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=exp( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=exp( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = exp( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = exp( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = exp( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
- 
-Raises each component of the CSP basic variable associated with the
-PropertyHandle to the power of its first argument. 
-
-@param raised_to The power to which the variable shall be raised.
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Pow( double raised_to )
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+PropertyHandle<dim>& PropertyHandle<dim>::operator*=(
+    const PropertyHandle<dim>& o )
+{
+    return ApplyBinaryOpAligned( o,
+        []( double& a, double b )                                  { a *= b; },
+        []( VectorVariable<dim>& a, const VectorVariable<dim>& b ) { a *= b; },
+        []( TensorVariable<dim>& a, const TensorVariable<dim>& b ) { a *= b; } );
+}
 
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = pow( sc(), raised_to );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = pow( sc(), raised_to );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = pow( sc(), raised_to );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=pow( vc(i), raised_to );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=pow( vc(i), raised_to );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=pow( vc(i), raised_to );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = pow( ts(i,j), raised_to );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = pow( ts(i,j), raised_to );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = pow( ts(i,j), raised_to );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
- 
-Replaces each NAN (not a number) value of the physical variable which is
-associated with the PropertyHandle with the supplied floating point 
-argument. 
-
-@param with The floating point number with which NAN values shall be replaced.
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::ZapNAN( double with )
- {
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
+PropertyHandle<dim>& PropertyHandle<dim>::operator/=(
+    const PropertyHandle<dim>& o )
+{
+    return ApplyBinaryOpAligned( o,
+        []( double& a, double b )                                  { a /= b; },
+        []( VectorVariable<dim>& a, const VectorVariable<dim>& b ) { a /= b; },
+        []( TensorVariable<dim>& a, const TensorVariable<dim>& b ) { a /= b; } );
+}
 
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               if ( isnan(sc()) ) sc() = with;
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 if ( isnan(sc()) ) sc() = with;
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               if ( isnan(sc()) ) sc() = with;
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) 
-                                 if ( isnan(sc()) ) vc(i) = with;
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) 
-                                   if ( isnan(vc(i)) ) vc(i) = with;
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) 
-                                 if ( isnan(vc(i)) ) vc(i) = with;
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   if ( isnan(ts(i,j)) ) ts(i,j) = with;
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     if ( isnan(ts(i,j)) ) ts(i,j) = with;
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   if ( isnan(ts(i,j)) ) ts(i,j) = with;
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
+// ============================================================================
+//  Output
+// ============================================================================
 
-
-
-/**
- 
-Returns the sin of the physical variable component value which must be in
-radians. A radian (rad) is defined as the ratio of the corresponding
-arc length to the radius of the circle. Thus, 1 radian = 57.2958o and 
-the angle in rad is (grad * pi) / 180. 
-
-@section messages Messages 
-
-It is tested whether the input variable is in the legitimate range of zero 
-to 2 Pi. If not, an error message is returned and no calculation is
-performed. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Sin()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    
-    double        omin, omax;
-    Range( omin, omax );
-    if ( omin < 0.0 || omax > (3.1415927*2.0) )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Sin", "Operand value not in range of 0 to 2 Pi",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = sin( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = sin( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = sin( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=sin( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=sin( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=sin( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = sin( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = sin( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = sin( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
+void PropertyHandle<dim>::Out() const
+{
+    cout << "\nPropertyHandle('" << subdomain_name_ << "')::Out:\n";
+    cout << "  Variable : " << var_name_ << "\n";
+    cout << "  Condition: " << parseStatus( flag_output_ ) << "\n";
+    WithSubdomain( [&]( auto& sd )
+    {
+        sd.OutputVariableToScreen( var_name_.c_str() );
+    });
+}
 
 
 
-/**
- 
-Returns the cos of the physical variable component value which must be in
-radians. A radian (rad) is defined as the ratio of the corresponding
-arc length to the radius of the circle. Thus, 1 radian = 57.2958o and 
-the angle in rad is (grad * pi) / 180. 
-
-@section messages Messages 
-
-It is tested whether the input variable is in the legitimate range of zero 
-to 2 Pi. If not, an error message is returned and no calculation is
-performed. 
-*/
 template<uint32_t dim>
-void  PropertyHandle<dim>::Cos()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    double                             omin, omax;
-    Range( omin, omax );
-    if ( omin < 0.0 || omax > (3.1415927*2.0) )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Cos", "Operand value not in range of 0 to 2 Pi",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = cos( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = cos( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = cos( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=cos( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=cos( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=cos( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = cos( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = cos( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = cos( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
- 
-Returns the tan of the physical variable component value which must be in
-radians. A radian (rad) is defined as the ratio of the corresponding
-arc length to the radius of the circle. Thus, 1 radian = 57.2958o and 
-the angle in rad is (grad * pi) / 180. 
-
-@section messages Messages 
-
-It is tested whether the input variable is in the legitimate range of zero 
-to 2 Pi. If not, an error message is returned and no calculation is
-performed. 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Tan()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t     i, j;
-    double                             omin, omax;
-    Range( omin, omax );
-    if ( omin < 0.0 || omax > (3.1415927*2.0) )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Tan", "Operand value not in range of 0 to 2 Pi",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = tan( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = tan( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = tan( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=tan( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=tan( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=tan( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = tan( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = tan( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = tan( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
- 
-Returns the arc cos of the physical variable component value. This value
-must be between -1 and 1. 
-
-@section messages Messages 
-
-If the physical variable component value is not within a range between
--1 and 1, an error will be reported.
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Acos()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t i, j;
-    double                             omin, omax;
-    Range( omin, omax );
-    if ( omin < -1.0 || omax > 1.0 )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Acos", "Operand value not in range of -1 to 1",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = acos( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = acos( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = acos( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=acos( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=acos( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=acos( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = acos( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = acos( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = acos( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-/**
- 
-Returns the arc sin of the physical variable component value. This value
-must be between -1 and 1. 
-
-@section messages Messages 
-
-If the physical variable component value is not within a range between
--1 and 1, an error will be reported. 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Asin()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t   i, j;
-    double                             omin, omax;
-    Range( omin, omax );
-    if ( omin < -1.0 || omax > 1.0 )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Asin", "Operand value not in range of -1 to 1",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = asin( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = asin( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = asin( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=asin( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for (auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=asin( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=asin( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = asin( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = asin( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = asin( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end ln
- 
- 
-
-
-
-
-/**
- 
-Returns the arc tan of the physical variable component value. This value
-must be between -1 and 1. 
-
-@section messages Messages 
-
-If the physical variable component value is not within a range between
--1 and 1, an error will be reported. 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Atan()
- {
-    const csmp::Index  key = model_domain.Database().StorageKey( var_name.c_str() );
-    ScalarVariable                          sc;
-    VectorVariable<dim>                      vc;
-    TensorVariable<dim>                      ts;
-    uint32_t i, j;
-    double                             omin, omax;
-    Range( omin, omax );
-    if ( omin < -1.0 || omax > 1.0 )
-      {
-         throw csmp::Exception( ERROR, "PropertyHandle::Atan", "Operand value not in range of -1 to 1",
-                                "Nothing was done.");
-         return;
-      }
-
-    switch( key.type )
-      {
-         case SCALAR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                          if ( (*nit)->Status( key ) == flag_output )
-                            {
-                               (*nit)->Read( key, sc );
-                               sc() = atan( sc() );
-                               (*nit)->Store( key, sc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                            if ( (*eit)->Status( ip, key ) == flag_output )
-                              {
-                                 (*eit)->Read( ip, key,  sc );
-                                 sc() = atan( sc() );
-                                 (*eit)->Store( ip, key, sc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          if ( (*eit)->Status( key ) == flag_output ) 
-                            {
-                               (*eit)->Read( key, sc );
-                               sc() = atan( sc() );
-                               (*eit)->Store( key, sc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-         case VECTOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=atan( vc(i) );
-                               (*nit)->Store( key, vc );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, vc );
-                                 for ( i=0; i<dim; i++ ) vc(i)=atan( vc(i) );
-                                 (*eit)->Store( ip, key, vc );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, vc );
-                               for ( i=0; i<dim; i++ ) vc(i)=atan( vc(i) );
-                               (*eit)->Store( key, vc );
-                           }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-           break;
-         case TENSOR:
-              switch( key.place )
-                {
-                   case NODE:
-                        for ( auto nit=group.NodesBegin(); nit!=group.NodesEnd(); nit++ )
-                           {
-                               (*nit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = atan( ts(i,j) );
-                               (*nit)->Store( key, ts );
-                            }
-                     break;
-                   case ELEMENT_INTEGRATION_POINT:
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                          for ( auto ip{0}; ip<(*eit)->IntegrationPoints(); ip++ )
-                              {
-                                 (*eit)->Read( ip, key, ts );
-                                 for ( i=0; i<dim; i++ )
-                                   for ( j=0; j<dim; j++ )
-                                     ts(i,j) = atan( ts(i,j) );
-                                 (*eit)->Store( ip, key, ts );
-                              }
-                     break;
-                   case ELEMENT:        
-                        for ( auto eit=group.CellsBegin(); eit!=group.CellsEnd(); eit++ )
-                            {
-                               (*eit)->Read( key, ts );
-                               for ( i=0; i<dim; i++ )
-                                 for ( j=0; j<dim; j++ )
-                                   ts(i,j) = atan( ts(i,j) );
-                               (*eit)->Store( key, ts );
-                            }
-                      break;
-                   default:
-                       throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                            "REGION and MODEL properties are not handled by this class yet."  );
-                }
-            break;
-          default:
-            throw csmp::Exception( ERROR, "PropertyHandle<dim>::(method)", 
-                           "property type could not be resolved (valid options are: SCALAR, VECTOR or TENSOR)"  );
-       } 
-    IsWithinRange();
- } // end Atan
- 
- 
-
-
-
-/**
- 
-Performs a range check for the physical variable which is associated
-with the PropertyHandle. 
-
-Range() will return the minimum and the maximum value of the physical 
-variable which is associated with the PropertyHandle into its first and its
-second argument. 
-
-@section implementation Implementation 
-
-Range() calls the MinMaxOf() interface of the Model. 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Range( double& omin, double& omax ) const
- {
-    model_domain.MinMaxOf( var_name.c_str(), omin, omax );
- }
-
-
-
-
-
-/**
- 
-Tests whether the physical variable which is associated with the
-PropertyHandle has a value which complies with the legitimate range defined
-in the PropertyDatabase object. 
-
-If the variable was defined at runtime, it is tested against a default 
-range from -1.0e+30 to 1.0e+30. 
-
-@return IsWithinRange() returns the boolean variable 'true' if the variable
-values lie within the expected range.
-
-@section implementation Implementation 
-
-sWithinRange() compares the actual value range of the variable with 
-that specified in the PropertyDatabase. 
-
-@section application Application 
-
-If so desired by the user, IsWithinRange() will be applied after each 
-operation on a PropertyHandle. 
-*/
-template<uint32_t dim>
-bool  PropertyHandle<dim>::IsWithinRange() const
- {
-    if ( key_.type == TENSOR ) {
-         ErrorHandler&  csmp_error(ErrorHandler::Instance());
-         csmp_error.Note( WARNING, "PropertyHandle<dim>::IsWithinRange:",
-                           "cannot return range of arbitrary tensors for which Eigenvalues cannot be found.");
-         return true;
-      }
-    double  omin, omax, pmin, pmax;
-    group.MinMaxOf( var_name.c_str(), omin, omax );
-    model_domain.Database().RangeOf(  var_name.c_str(), pmin, pmax );
-    if ( omin >= pmin && omax <= pmax ) return true;
-
-    return false;
- }
-
-
-
-/**
- 
-The standard CSP object interface Out() will print the state of the
-PropertyHandle to stdout. This output comprises the name of the physical
-variable which is associated with the PropertyHandle, the output flag,
-and the values of the distributed physical variable. 
-
-@section implementation Implementation 
-
-The method Out() uses the Model method OutputVariableToScreen() to
-print the variable values. 
-*/ 
-template<uint32_t dim>
-void  PropertyHandle<dim>::Out() const 
- {
-    cout <<"\nPropertyHandle('"<< group_name <<"')::Out: "<< endl;
-    cout <<"Physical variable: "<< var_name << endl;
-    cout <<"flag_output:         "<< parseStatus(flag_output) << endl;
-    group.OutputVariableToScreen( var_name.c_str() );
-
- } // end Out
-
-
-
-
-/**
- 
-The CSP object interface Out() will print the values of the PropertyHandle
-associated variable to a textfile. 
-
-@param text_file_name The name of the textfile is supplied as first argument to Out(). 
-
-@section implementation Implementation 
-
-Out() relies on the Model method OutputDataAsTextColumns() in the 
-creation of the output textfile.  
-
-@section application Application 
-
-To save a PropertyHandle temporary variable to file. 
-
-@section messages Messages 
-
-Refer to the documentation of the Model to learn about the 
-footprint of OutputDataAsTextColumns(). 
-*/
-template<uint32_t dim>
-void  PropertyHandle<dim>::Out( const char* text_file_name ) const
- {
-    ofstream  ofs(text_file_name);
- 
-    ofs <<"\nPropertyHandle::Out: "<< endl;
-    ofs <<"Physical variable: "<< var_name << endl;
-    ofs <<"flag_output:         "<< parseStatus(flag_output) << endl;
-
- } // end Out
-
-
+void PropertyHandle<dim>::Out( const char* filename ) const
+{
+    ofstream ofs( filename );
+    if ( !ofs )
+        throw csmp::Exception( ERROR,
+            "PropertyHandle::Out(filename)",
+            var_name_.c_str(),
+            "Could not open output file." );
+
+    ofs << "PropertyHandle('" << subdomain_name_ << "')::Out\n";
+    ofs << "Variable : " << var_name_ << "\n";
+    ofs << "Condition: " << parseStatus( flag_output_ ) << "\n";
+    ofs.close();
+
+    TextInterface().OutputDataAsTextColumns(
+        subdomain_name_.c_str(), model_, filename, var_name_.c_str() );
+}
+
+
+
+// ============================================================================
+//  Explicit instantiations
+// ============================================================================
 
 template class PropertyHandle<1U>;
 template class PropertyHandle<2U>;
 template class PropertyHandle<3U>;
 
-
-} // end namespace csmp
-
-
-
-
-
-
-
+} // namespace csmp
 

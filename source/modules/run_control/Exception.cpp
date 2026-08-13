@@ -1,115 +1,90 @@
-#include <iostream>
+// Exception.cpp
+
 #include "Exception.h"
+#include <iostream>
 
 using namespace std;
 
 namespace csmp {
 
-Exception::Exception()
- : csmp_exception_(ERROR),
-   originator_("probably ErrorHandler"),
-   message_("unspecified")
- {
- }
-
-
-Exception::Exception( CSMP_MESSAGE err, 
-                      const string& orig,
-                      const string& msg )
- : csmp_exception_(err),
-   originator_(orig),
-   message_(msg)
- {
-#ifndef NDEBUG 
-    Out();
-    cout <<"\nHit return to continue."<< endl;
-    getchar();
+Exception::Exception( CSMP_MESSAGE     severity,
+                      const string&    orig,
+                      const string&    msg )
+    : csmp_exception_( severity ),
+      originator_( orig ),
+      message_( msg )
+{
+#ifndef NDEBUG
+    DebugOutput();
 #endif
- }
+}
 
-
-Exception::Exception( CSMP_MESSAGE err, 
-                      const string& orig,
-                      const string& param,
-                      const string& msg )
- : csmp_exception_(err),
-   originator_(orig),
-   message_(param)
- {
-    message_ += "  ";
-    message_ += msg;
-#ifndef NDEBUG 
-    Out();
-    cout <<"\nHit return to continue."<< endl;
-    getchar();
+Exception::Exception( CSMP_MESSAGE     severity,
+                      const string&    orig,
+                      const string&    param,
+                      const string&    msg )
+    : csmp_exception_( severity ),
+      originator_( orig ),
+      message_( param + "  " + msg )
+{
+#ifndef NDEBUG
+    DebugOutput();
 #endif
- }
+}
 
-
-Exception::Exception( const Exception& excp )
- {
-    *this = excp;
- }
- 
- 
-Exception& Exception::operator=( const Exception& excp )
- {
-    if ( &excp != this ) {
-         csmp_exception_ = excp.csmp_exception_;
-         originator_     = excp.originator_;
-         message_        = excp.message_;
-      }
-    return *this;
- }        
-
-
-string   Exception::What()  const
- {
-    return message_;
- }
-
-
-string   Exception::Originator()  const
- {
-    return originator_;
- }
- 
- 
-CSMP_MESSAGE  Exception::Message() const
- {
-    return csmp_exception_;
- }
-
-
-const char* Exception::what() const throw()
-  {
+const char* Exception::what() const noexcept
+{
     return message_.c_str();
-  }
+}
 
+string Exception::What() const noexcept
+{
+    return message_;
+}
 
-void Exception::Out() const
- {
-    cout <<"\n"<< string(parseMessage(csmp_exception_)) <<": "<< originator_ << endl;
-    cout << message_ << endl;
- }
+string Exception::Originator() const noexcept
+{
+    return originator_;
+}
 
-Exception::~Exception() throw()
-  {
+CSMP_MESSAGE Exception::Message() const noexcept
+{
+    return csmp_exception_;
+}
 
-  }
+void Exception::Out() const noexcept
+{
+    cout << "\n" << parseMessage( csmp_exception_ )
+         << ": " << originator_ << "\n"
+         << message_ << "\n";
+}
 
+void Exception::DebugOutput() const
+{
+    Out();
+    // In debug builds, pause only for ERROR and FATAL_ERROR to avoid
+    // interrupting normal WARNING flow in automated tests.
+    if ( csmp_exception_ == ERROR || csmp_exception_ == FATAL_ERROR )
+    {
+#ifdef CSMP_MANUAL_TESTING
+        cout << "\nHit return to continue." << endl;
+        getchar();
+#endif
+    }
+}
 
-std::string  parseMessage( CSMP_MESSAGE msg )
- {
-     if ( msg == INFO ) return string("INFO");
-     if ( msg == EXCEPTION ) return string("EXCEPTION");
-     if ( msg == WARNING ) return string("WARNING");
-     if ( msg == ERROR ) return string("ERROR");
-     if ( msg == FATAL_ERROR ) return string("FATAL_ERROR");
-     
-     return string("parseMessage(CSMP_MESSAGE): cannot parse message.");
- }
+string parseMessage( CSMP_MESSAGE msg ) noexcept
+{
+    switch ( msg )
+    {
+        case INFO:        return "INFO";
+        case WARNING:     return "WARNING";
+        case ERROR:       return "ERROR";
+        case FATAL_ERROR: return "FATAL_ERROR";
+        case EXCEPTION:
+        default:          return "EXCEPTION";
+    }
+}
 
+} // namespace csmp
 
-
-} // end namespace csmp 

@@ -1,4 +1,5 @@
 #include "PropertyData.h"
+
 #include "VectorVariable.h"
 #include "TensorVariable.h"
 #include "binaryReadWrite.h"
@@ -10,717 +11,273 @@ using namespace std;
 
 namespace csmp {
 
-// helper template functions
+// ============================================================================
+// Constructor
+// ============================================================================
 
-// classic way
-uint32_t flagOffset( VARIABLE_TYPE type, uint32_t spatial_dimension, uint32_t array_length ) {
-    if ( type == SCALAR or type == ARRAY ) return 1U;
-    if ( type == VECTOR or type == TENSOR ) return spatial_dimension;
-    // flagged array
-    return array_length;
- }
-
-uint32_t valueOffset( VARIABLE_TYPE type, uint32_t spatial_dimension, uint32_t array_length ) {
-    if ( type == SCALAR ) return 1U;
-    if ( type == VECTOR ) return spatial_dimension;
-    if ( type == TENSOR ) return spatial_dimension * spatial_dimension;
-    // array and flagged array
-    return array_length;
- }
-
-// for flags
-/// for all variable types
-template<VARIABLE_TYPE,uint32_t=1U> uint32_t flagStride( uint32_t array_length );
-
-// full specialisations
-template<> uint32_t flagStride<SCALAR>( uint32_t ) { return 1U; }
-
-template<> uint32_t flagStride<ARRAY>( uint32_t ) { return 1U; }
-template<> uint32_t flagStride<FLAGGEDARRAY>( uint32_t array_length ) { return array_length; }
-
-template<> uint32_t flagStride<VECTOR>( uint32_t ) { return 1U; }
-template<> uint32_t flagStride<VECTOR,2U>( uint32_t ) { return 2U; }
-template<> uint32_t flagStride<VECTOR,3U>( uint32_t ) { return 3U; }
-
-template<> uint32_t flagStride<TENSOR>( uint32_t ) { return 1U; }
-template<> uint32_t flagStride<TENSOR,2U>( uint32_t ) { return 2U; }
-template<> uint32_t flagStride<TENSOR,3U>( uint32_t ) { return 3U; }
-
-// for data values
-template<VARIABLE_TYPE,uint32_t=1U> uint32_t dataStride( uint32_t array_length );
-
-// full specialisations
-template<> uint32_t dataStride<SCALAR>( uint32_t ) { return 1U; }
-template<> uint32_t dataStride<ARRAY>( uint32_t array_length ) { return array_length; }
-template<> uint32_t dataStride<FLAGGEDARRAY>( uint32_t array_length ) { return array_length; }
-
-template<> uint32_t dataStride<VECTOR>( uint32_t ) { return 1U; }
-template<> uint32_t dataStride<VECTOR,2U>( uint32_t ) { return 2U; }
-template<> uint32_t dataStride<VECTOR,3U>( uint32_t) { return 3U; }
-
-template<> uint32_t dataStride<TENSOR>( uint32_t ) { return 1U; }
-template<> uint32_t dataStride<TENSOR,2U>( uint32_t ) { return 4U; }
-template<> uint32_t dataStride<TENSOR,3U>( uint32_t ) { return 9U; }
+PropertyData::PropertyData( PLACEMENT     place,
+                             VARIABLE_TYPE type,
+                             uint32_t      spatial_dimension,
+                             uint32_t      array_length )
+    : place_      ( place ),
+      type_       ( type ),
+      dim_        ( spatial_dimension ),
+      flag_stride_( flagOffset( type, spatial_dimension, array_length ) ),
+      data_stride_( valueOffset( type, spatial_dimension, array_length ) )
+{}
 
 
-/**
-*/
-PropertyData::PropertyData( PLACEMENT place, VARIABLE_TYPE type, uint32_t spatial_dimension, uint32_t array_length )
- : place_(place),
-   type_(type),
-   dim_(spatial_dimension),
-   flag_stride_( flagOffset( type, spatial_dimension, array_length ) ),
-   data_stride_( valueOffset( type, spatial_dimension, array_length ) )
- {
- } 
+// ============================================================================
+// PushBackFrom
+// ============================================================================
 
+void PropertyData::PushBackFrom( const PropertyData& prop, size_t nth_value )
+{
+    assert( place_       == prop.place_ );
+    assert( type_        == prop.type_ );
+    assert( dim_         == prop.dim_ );
+    assert( flag_stride_ == prop.flag_stride_ );
+    assert( data_stride_ == prop.data_stride_ );
 
+    for ( uint32_t i = 0U; i < flag_stride_; ++i )
+        flags_.push_back( prop.flags_[ nth_value * flag_stride_ + i ] );
 
-
-// ACCESSORS AND MUTATORS
-
-void PropertyData::PushBack( VARIABLE_FLAG flag ) { flags_.push_back( flag ); }
-
-void PropertyData::PushBack( double val ) { data_.push_back( val ); }
-
-
-void PropertyData::PushBackFrom( const PropertyData& prop, size_t nth_value ) {
-  assert( place_ == prop.place_ );
-  assert( type_ == prop.type_ );
-  assert( dim_ == prop.dim_ );
-  assert( flag_stride_ == prop.flag_stride_ );
-  assert( data_stride_ == prop.data_stride_ );
-
-  for (auto i = 0; i < flag_stride_; ++i) {
-    flags_.push_back(prop.flags_[nth_value * flag_stride_ + i]);
-  }
-  for (auto i = 0; i < data_stride_; ++i) {
-    data_.push_back(prop.data_[nth_value * data_stride_ + i]);
-  }
+    for ( uint32_t i = 0U; i < data_stride_; ++i )
+        data_.push_back( prop.data_[ nth_value * data_stride_ + i ] );
 }
 
 
-/// scalars
-VARIABLE_FLAG& PropertyData::Flag( size_t nth_value ) {
-     assert( Type() == SCALAR );
-     assert( !flags_.empty() );
-     assert( nth_value < flags_.size() );
-     return flags_[nth_value];
-  }
-  
+// ============================================================================
+// ReduceTo
+// ============================================================================
 
-/// scalars
-VARIABLE_FLAG  PropertyData::Flag( size_t nth_value ) const {
-     assert( Type() == SCALAR );
-     assert( !flags_.empty() );
-     assert( nth_value < flags_.size() );
-     return flags_[nth_value];
-  }
-  
-  
-/// set flags: vectors and array variables
-VARIABLE_FLAG& PropertyData::Flag( size_t nth_value, uint32_t ith_dim ) {
-    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
-    assert( !flags_.empty() );
-    assert( nth_value < flags_.size() );
-    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim == 0) or (Type() == FLAGGEDARRAY && ith_dim < flag_stride_) );
-    return flags_[ nth_value * flag_stride_ + ith_dim ];
-  }
-
-
-/// read flags: vectors and array variables
-VARIABLE_FLAG PropertyData::Flag( size_t nth_value, uint32_t ith_dim ) const {
-    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
-    assert( !flags_.empty() );
-    assert( nth_value < flags_.size() );
-    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim == 0) or (Type() == FLAGGEDARRAY && ith_dim < flag_stride_) );
-    return flags_[ nth_value * flag_stride_ + ith_dim ];
- }
-  
-  
-/// tensors
-VARIABLE_FLAG& PropertyData::Flag( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) {
-     assert( Type() == TENSOR );
-     assert( !flags_.empty() );
-     assert( nth_value < flags_.size() );
-     assert( ith_row <= dim_ );
-     assert( jth_col <= dim_ );
-     assert( jth_col == ith_row );
-// since only 3 values are stored and i==j on the diagonal, only j is used
-//     return flags_[ nth_value * flag_stride_ + ith_row * dim_ + jth_col ];
-     return flags_[ nth_value * flag_stride_ + jth_col ];
- }
-
-/// tensors (only their diagonal elements have flags)
-VARIABLE_FLAG PropertyData::Flag( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) const {
-     assert( Type() == TENSOR );
-     assert( !flags_.empty() );
-     assert( nth_value < flags_.size() );
-     assert( ith_row <= dim_ );
-     assert( jth_col <= dim_ );
-     assert( jth_col == ith_row );
-// since only 3 values are stored and i==j on the diagonal, only j is used
-//     return flags_[ nth_value * flag_stride_ + ith_row * dim_ + jth_col ];
-     return flags_[ nth_value * flag_stride_ + jth_col ];
- }
-
-
-
-/// scalars
-double& PropertyData::Value( size_t nth_value ) {
-    assert( Type() == SCALAR );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    return data_[nth_value];
- }
- 
- 
-double  PropertyData::Value( size_t nth_value ) const {
-    assert( Type() == SCALAR );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    return data_[nth_value];
- }
- 
- 
-/// assign values: vectors and array variables
-double& PropertyData::Value( size_t nth_value, uint32_t ith_dim ) {
-    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim <= data_stride_) or (Type() == FLAGGEDARRAY && ith_dim <= data_stride_) );
-    return data_[ nth_value * data_stride_ + ith_dim ];
- }
- 
-/// retrieve values: vectors and array variables
-double  PropertyData::Value( size_t nth_value, uint32_t ith_dim ) const {
-    assert( Type() == VECTOR or Type() == ARRAY or Type() == FLAGGEDARRAY );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    assert( (Type() == VECTOR && ith_dim <= dim_) or (Type() == ARRAY && ith_dim <= data_stride_) or (Type() == FLAGGEDARRAY && ith_dim <= data_stride_) );
-    return data_[ nth_value * data_stride_ + ith_dim ];
- }
-
- 
-/// tensors
-double& PropertyData::Value( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) {
-    assert( Type() == TENSOR );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    assert( ith_row <= dim_ );
-    assert( jth_col <= dim_ );
-    return data_[ nth_value * data_stride_ + ith_row * dim_ + jth_col ];
- }
- 
- 
-double  PropertyData::Value( size_t nth_value, uint32_t ith_row, uint32_t jth_col ) const {
-    assert( Type() == TENSOR );
-    assert( !data_.empty() );
-    assert( nth_value < data_.size() );
-    assert( ith_row <= dim_ );
-    assert( jth_col <= dim_ );
-    return data_[ nth_value * data_stride_ + ith_row * dim_ + jth_col ];
- }
-
-
-
-/**
-    you may only reset using a key of the same  (i.e., ELEMENT )
-*/
-void PropertyData::Clear()
- {
-    flags_.clear();
-    data_.clear();
- } 
-
-
-/**
-     reserves storage for n-objects as opposed to determining the 
-     size of the sheer storage which is what the Reserve() method
-     with 2 arguments does.
-*/
-void PropertyData::Reserve( size_t n_objects )
- {
-    flags_.reserve( n_objects * flag_stride_ );
-    data_.reserve( n_objects * data_stride_ );
- }
-
-
-/** 
-    if extra values are created they will be initialised to ANY and not-a-number (NaN)
-*/
-void PropertyData::Reserve( size_t flag_capacity, size_t value_capacity )
- {
-    flags_.reserve( flag_capacity );
-    data_.reserve( value_capacity );
- }
-
-
-
-/**
-     reserves storage for n-objects as opposed to determining the 
-     size of the sheer storage which is what the Reserve() method
-     with 2 arguments does.
-*/
-void PropertyData::Resize( size_t n_objects )
- {
-    flags_.resize( n_objects * flag_stride_, ANY );
-    data_.resize( n_objects * data_stride_, std::numeric_limits<double>::quiet_NaN() );
- }
-
-
-/**
-    if extra values are created they will be initialised to ANY and not-a-number (NaN)
-*/
-void PropertyData::Resize( size_t n_flags, size_t n_values )
- {
-    flags_.resize( n_flags, ANY );
-    data_.resize( n_values, std::numeric_limits<double>::quiet_NaN() );
- }
-
-
-/**
-     keeps only those values with the indices stored in the map
-
-     indices are assumed to range between 0..n-1
-*/
 void PropertyData::ReduceTo( const map<size_t,size_t>& o_n_elmt_ids )
- {
-    if ( o_n_elmt_ids.empty() ) { 
-         cerr <<"\nPropertyData::ReduceTo: Supplied map is empty. "<< std::endl;
-         cerr <<" Therefore the PropertyData will be emptied."<< std::endl;
-         Clear();
-         return;
-      }
-   
-    // complex operation that must proceed from the first to the last element
-    // because the variables were written into one-dimensional array
-   
-    // values
-    vector<VARIABLE_FLAG>  new_flags( o_n_elmt_ids.size() * flag_stride_ );
-    vector<double>       new_data( o_n_elmt_ids.size() * data_stride_ );
-   
-    if ( type_ == SCALAR or type_ == ARRAY ) {
-         for ( map<size_t,size_t>::const_iterator
-               it=o_n_elmt_ids.begin(); it!=o_n_elmt_ids.end(); it++ ) {
-              new_flags[ (*it).second ] = flags_[ (*it).first ];
-              new_data[ (*it).second ]  = data_[ (*it).first ];
-           }
-      }
-    else if ( type_ == VECTOR or type_ == FLAGGEDARRAY ) {
-             for ( map<size_t,size_t>::const_iterator
-                  it=o_n_elmt_ids.begin(); it!=o_n_elmt_ids.end(); it++ ) {
-                // flag and data stride are the same
-                assert( flag_stride_ == data_stride_ );
-                for ( auto i{0U}; i<data_stride_; ++i ) {
-                     new_flags[ (*it).second + i ] = flags_[ (*it).first + i ];
-                     new_data[ (*it).second + i ] = data_[ (*it).first + i ];
-                  }
+{
+    if ( o_n_elmt_ids.empty() ) {
+        cerr << "\nPropertyData::ReduceTo: supplied map is empty"
+                " — container will be cleared.\n";
+        Clear();
+        return;
+    }
+
+    vector<VARIABLE_FLAG> new_flags( o_n_elmt_ids.size() * flag_stride_ );
+    vector<double>        new_data ( o_n_elmt_ids.size() * data_stride_ );
+
+    if ( type_ == SCALAR || type_ == ARRAY ) {
+        // SCALAR: flag_stride_ == data_stride_ == 1.
+        // ARRAY:  flag_stride_ == 1, data_stride_ == array_length.
+        for ( const auto& [old_idx, new_idx] : o_n_elmt_ids ) {
+            new_flags[ new_idx ] = flags_[ old_idx ];
+            for ( uint32_t i = 0U; i < data_stride_; ++i )
+                new_data[ new_idx * data_stride_ + i ] =
+                    data_[ old_idx * data_stride_ + i ];
+        }
+    }
+    else if ( type_ == VECTOR ) {
+        // flag_stride_ == data_stride_ == dim_
+        for ( const auto& [old_idx, new_idx] : o_n_elmt_ids ) {
+            for ( uint32_t i = 0U; i < data_stride_; ++i ) {
+                new_flags[ new_idx * flag_stride_ + i ] =
+                    flags_[ old_idx * flag_stride_ + i ];
+                new_data [ new_idx * data_stride_ + i ] =
+                    data_ [ old_idx * data_stride_ + i ];
             }
-       }
+        }
+    }
+    else if ( type_ == FLAGGEDARRAY ) {
+        // flag_stride_ == data_stride_ == array_length
+        for ( const auto& [old_idx, new_idx] : o_n_elmt_ids ) {
+            for ( uint32_t i = 0U; i < data_stride_; ++i ) {
+                new_flags[ new_idx * flag_stride_ + i ] =
+                    flags_[ old_idx * flag_stride_ + i ];
+                new_data [ new_idx * data_stride_ + i ] =
+                    data_ [ old_idx * data_stride_ + i ];
+            }
+        }
+    }
     else if ( type_ == TENSOR ) {
-             for ( map<size_t,size_t>::const_iterator
-                  it=o_n_elmt_ids.begin(); it!=o_n_elmt_ids.end(); it++ ) {
-                // the flags have to be handled differently than the values
-                for ( auto i{0U}; i<flag_stride_; ++i ) {
-                     new_flags[ (*it).second + i ] = flags_[ (*it).first + i ];
-                  }
-                for ( auto i{0U}; i<data_stride_; ++i ) {
-                     new_data[ (*it).second + i ] = data_[ (*it).first + i ];
-                  }
-            }
-       }
-   
-    // resetting the containers
-    flags_ = new_flags;
-    data_  = new_data;
-    // trimming excess storage
+        // flag_stride_ == dim_, data_stride_ == dim_ * dim_
+        for ( const auto& [old_idx, new_idx] : o_n_elmt_ids ) {
+            for ( uint32_t i = 0U; i < flag_stride_; ++i )
+                new_flags[ new_idx * flag_stride_ + i ] =
+                    flags_[ old_idx * flag_stride_ + i ];
+            for ( uint32_t i = 0U; i < data_stride_; ++i )
+                new_data [ new_idx * data_stride_ + i ] =
+                    data_ [ old_idx * data_stride_ + i ];
+        }
+    }
+
+    flags_ = std::move( new_flags );
+    data_  = std::move( new_data );
+
+    // Release excess capacity.
     vector<VARIABLE_FLAG>( flags_ ).swap( flags_ );
     vector<double>( data_ ).swap( data_ );
-
- } // end ReduceTo
- 
- 
-
-
-void  PropertyData::MinMaxOf( double& tmin, double& tmax ) const
-{
-    tmin = (*min_element( data_.begin(), data_.end() ));
-    tmax = (*max_element( data_.begin(), data_.end() ));
 }
 
 
-// O.K.
+// ============================================================================
+// ScaleRangeTo
+// ============================================================================
+
 void PropertyData::ScaleRangeTo( double tmin, double tmax )
- {
-    double  old_min, old_max;
+{
+    double old_min, old_max;
     MinMaxOf( old_min, old_max );
 
-    // test whether we are already O.K.
-    if ( fabs(fabs(tmax) - fabs(old_max)) < numeric_limits<double>::epsilon() &&
-         fabs(fabs(tmin) - fabs(old_min)) < numeric_limits<double>::epsilon() )
-      return;
-  
-    const double  old_range = old_max - old_min;
-    const double  new_range = tmax - tmin;
+    // Already within tolerance — nothing to do.
+    if ( fabs( fabs(tmax) - fabs(old_max) ) < numeric_limits<double>::epsilon() &&
+         fabs( fabs(tmin) - fabs(old_min) ) < numeric_limits<double>::epsilon() )
+        return;
+
+    const double old_range = old_max - old_min;
+    const double new_range = tmax - tmin;
 
     transform( data_.begin(), data_.end(), data_.begin(),
-              [tmin,tmax,old_min,old_range,new_range](double val)
-               { return tmin + ((val - old_min)/old_range) * new_range; } );
+               [tmin, old_min, old_range, new_range]( double val ) noexcept {
+                   return tmin + ( (val - old_min) / old_range ) * new_range;
+               } );
 
-    // testing for correctness
+    // Epsilon-based post-check — avoids fragile exact equality after
+    // floating-point arithmetic.
     double new_min, new_max;
     MinMaxOf( new_min, new_max );
-    if ( new_min != tmin || new_max != tmax ) {
-         cout <<"\nPropertyData<T>::ScaleRangeTo: Scaling failed."<< endl;
-         Out();
-         throw range_error("PropertyData<T>::ScaleRangeTo");
-      }
-
- } // end ScaleRangeTo 
-
-
-
-/**
-    Adds offset to all data values in the container
- 
-    TODO: make sure that this is done only where it makes sense!
-*/
-void PropertyData::OffsetRangeBy( double offset )
- {
-    transform( data_.begin(), data_.end(), data_.begin(), [offset](double val){ return val + offset; } );
-
- } // end OffsetRangeBy 
+    const double tol = fabs( new_range ) * numeric_limits<double>::epsilon() * 10.0;
+    if ( fabs( new_min - tmin ) > tol || fabs( new_max - tmax ) > tol ) {
+        cout << "\nPropertyData::ScaleRangeTo: scaling failed.\n";
+        Out();
+        throw range_error( "PropertyData::ScaleRangeTo" );
+    }
+}
 
 
+// ============================================================================
+// OutBinary
+// ============================================================================
 
-/**
-    Applies any kind of function with the syntax  double f(double) to
-    the double entries of the stored data.
-    
-    TODO: make sure that this is done only where it makes sense!
-*/
-void PropertyData::TransformValues( double (*f)(double) )
- {
-     transform( data_.begin(), data_.end(), data_.begin(), (*f) );
- }
-
-
-
-
-/**
- @fn  void PropertyData::OutBinary( fstream& fp ) const
-
- @brief Out binary. 
- 
-    const PLACEMENT             place_;        ///< placement of variable
-    const VARIABLE_TYPE         type_;         ///< any of scalar..flagged array
-    const size_t                dim_;          ///< spatial dimension 
-    const size_t                flag_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
-    const size_t                data_stride_;  ///< variable to variable offset (e.g. dim in a vector var)
-    std::vector<VARIABLE_FLAG>  flags_;        ///< variable flags
-    std::vector<double>       data_;         ///< variable values
-
- */
 bool PropertyData::OutBinary( fstream& fp ) const
- {
-     // writing the variable placement
-     int8_t  var_placement = static_cast<int8_t>(place_);
-     fp.write( reinterpret_cast<const char*>(&var_placement), sizeof(int8_t));
+{
+    const int8_t  var_placement   = static_cast<int8_t> ( place_       );
+    const int8_t  var_type        = static_cast<int8_t> ( type_        );
+    const int32_t var_dim         = static_cast<int32_t>( dim_         );
+    const int32_t var_flag_stride = static_cast<int32_t>( flag_stride_ );
+    const int32_t var_data_stride = static_cast<int32_t>( data_stride_ );
 
-     // writing the variable type
-     int8_t  var_type = static_cast<int8_t>(type_);
-     fp.write( reinterpret_cast<const char*>(&var_type), sizeof(int8_t));
+    fp.write( reinterpret_cast<const char*>(&var_placement),   sizeof(int8_t)  );
+    fp.write( reinterpret_cast<const char*>(&var_type),        sizeof(int8_t)  );
+    fp.write( reinterpret_cast<const char*>(&var_dim),         sizeof(int32_t) );
+    fp.write( reinterpret_cast<const char*>(&var_flag_stride), sizeof(int32_t) );
+    fp.write( reinterpret_cast<const char*>(&var_data_stride), sizeof(int32_t) );
 
-     // writing the spatial dimension
-     int32_t  var_dim = static_cast<int32_t>(dim_);
-     fp.write( reinterpret_cast<const char*>(&var_dim), sizeof(int32_t));
+    // Convert VARIABLE_FLAG -> int8_t for compact binary storage.
+    vector<int8_t> flags;
+    flags.reserve( flags_.size() );
+    transform( flags_.begin(), flags_.end(), back_inserter( flags ),
+               []( VARIABLE_FLAG f ) noexcept -> int8_t {
+                   return static_cast<int8_t>( f );
+               } );
 
-     // writing the flag stride
-     int32_t  var_flag_stride = static_cast<int32_t>(flag_stride_);
-     fp.write( reinterpret_cast<const char*>(&var_flag_stride), sizeof(int32_t));
+    const bool ok_flags = binaryFileWrite( fp, flags );
+    const bool ok_data  = binaryFileWrite( fp, data_ );
 
-     // writing the data stride
-     int32_t  var_data_stride = static_cast<int32_t>(data_stride_);
-     fp.write( reinterpret_cast<const char*>(&var_data_stride), sizeof(int32_t));
-   
-     // writing the number of records followed by flag values
-     std::vector<int8_t>  flags; //VARIABLE_FLAG
-     std::transform( flags_.begin(), flags_.end(), back_inserter( flags ), []( VARIABLE_FLAG flag ) -> int8_t { return flag; } );
+    return ok_flags && ok_data;
+}
 
-     // recording potentially negative writes
-     bool successfull_flag_write = binaryFileWrite( fp, flags );
-     bool successfull_data_write = binaryFileWrite( fp, data_ );
-   
-     return ( successfull_flag_write && successfull_flag_write );
- }
- 
 
-/**
-    Reads PropertyData record written by PropertyData:OutBinary() and returns an initialised data object.
+// ============================================================================
+// inBinaryPropertyData
+// ============================================================================
 
-    Not a class member, this method constructs right-sized propery data container and returns it
-    as an rvalue using the move constructor.
-*/
 PropertyData inBinaryPropertyData( fstream& fp )
- {
-     // reading the variable placement
-     int8_t  var_placement(UNSPECIFIED);
-     fp.read( reinterpret_cast<char*>(&var_placement), sizeof(int8_t));
-     //assert( place_ == static_cast<PLACEMENT>(var_placement) );
+{
+    int8_t  var_placement  ( UNSPECIFIED );
+    int8_t  var_type       ( UNSPECIFIED );
+    int32_t var_dim        ( 0 );
+    int32_t var_flag_stride( 0 );
+    int32_t var_data_stride( 0 );
 
-     // reading the variable type
-     int8_t  var_type(UNSPECIFIED);
-     fp.read( reinterpret_cast<char*>(&var_type), sizeof(int8_t));
-     //assert( type_ == static_cast<VARIABLE_TYPE>(var_type) );
+    fp.read( reinterpret_cast<char*>(&var_placement),   sizeof(int8_t)  );
+    fp.read( reinterpret_cast<char*>(&var_type),        sizeof(int8_t)  );
+    fp.read( reinterpret_cast<char*>(&var_dim),         sizeof(int32_t) );
+    fp.read( reinterpret_cast<char*>(&var_flag_stride), sizeof(int32_t) );
+    fp.read( reinterpret_cast<char*>(&var_data_stride), sizeof(int32_t) );
 
-     // reading the spatial dimension
-     int32_t  var_dim(UNSPECIFIED);
-     fp.read( reinterpret_cast<char*>(&var_dim), sizeof(int32_t));
-     //assert( dim_ == static_cast<uint32_t>(var_dim) );
+    const VARIABLE_TYPE vtype = static_cast<VARIABLE_TYPE>( var_type );
 
-     // reading the flag stride
-     int32_t  var_flag_stride(UNSPECIFIED);
-     fp.read( reinterpret_cast<char*>(&var_flag_stride), sizeof(int32_t));
-     //assert( flag_stride_ == static_cast<uint32_t>(var_flag_stride) );
+    // Array length is encoded as the data stride for array types.
+    const uint32_t array_length =
+        ( vtype == ARRAY || vtype == FLAGGEDARRAY )
+        ? static_cast<uint32_t>( var_data_stride )
+        : 0U;
 
-     // reading the data stride
-     int32_t  var_data_stride(UNSPECIFIED);
-     fp.read( reinterpret_cast<char*>(&var_data_stride), sizeof(int32_t));
-     //assert( data_stride_ == static_cast<uint32_t>(var_data_stride) );
-   
-     // calculating the array length
-     uint32_t array_length = ( var_type == ARRAY or var_type == FLAGGEDARRAY ) ? array_length = var_data_stride : 0U;
-   
-     PropertyData data( static_cast<PLACEMENT>(var_placement), static_cast<VARIABLE_TYPE>(var_type), var_dim, array_length );
+    PropertyData data( static_cast<PLACEMENT>( var_placement ),
+                       vtype,
+                       static_cast<uint32_t>( var_dim ),
+                       array_length );
 
-     // reading the number of records followed by flag values
-     std::vector<int8_t> flags; //VARIABLE_FLAG
-     binaryFileRead( fp, flags );
-   
-     // reading the data values
-     std::vector<double> values;
-     binaryFileRead( fp, values );
-   
-     // pushing the data into Property record
-     std::vector<VARIABLE_FLAG>  flags_tr;
-     std::transform( flags.begin(), flags.end(), std::back_inserter( flags_tr ), []( int8_t flag ) -> VARIABLE_FLAG { return static_cast<VARIABLE_FLAG>(flag); } );
-     data.Reserve( flags_tr.size(), values.size() );
-     for ( auto it= flags_tr.begin(); it!= flags_tr.end(); ++it ) data.PushBack( (*it) );
-     for ( auto it=values.begin(); it!=values.end(); ++it ) data.PushBack( (*it) );
-   
-     return data;
- }
+    // Read raw flag bytes and value doubles from file.
+    vector<int8_t> raw_flags;
+    binaryFileRead( fp, raw_flags );
 
+    vector<double> values;
+    binaryFileRead( fp, values );
+
+    // Convert int8_t back to VARIABLE_FLAG.
+    vector<VARIABLE_FLAG> flags;
+    flags.reserve( raw_flags.size() );
+    transform( raw_flags.begin(), raw_flags.end(), back_inserter( flags ),
+               []( int8_t f ) noexcept -> VARIABLE_FLAG {
+                   return static_cast<VARIABLE_FLAG>( f );
+               } );
+
+    data.Reserve( flags.size(), values.size() );
+    for ( auto f : flags  ) data.PushBack( f );
+    for ( auto v : values ) data.PushBack( v );
+
+    return data;
+}
 
 
+// ============================================================================
+// operator==
+// ============================================================================
+
+bool PropertyData::operator==( const PropertyData& d ) const noexcept
+{
+    return place_       == d.place_
+        && type_        == d.type_
+        && dim_         == d.dim_
+        && flag_stride_ == d.flag_stride_
+        && data_stride_ == d.data_stride_
+        && flags_       == d.flags_
+        && data_        == d.data_;
+}
+
+
+// ============================================================================
+// Out
+// ============================================================================
 
 void PropertyData::Out() const
- {
-    cout <<"\nPropertyData::Out: storage for "<< data_.size()/data_stride_ <<" "<< string(parseType(type_)) <<" objects."<< endl;
-    cout <<"Data placement: "<< string(parsePlacement(place_)) << endl;
-    cout <<"Spatial dimension: "<< dim_ << endl;
-    cout <<"Flag stride:       "<< flag_stride_ << endl;
-    cout <<"Data stride:       "<< data_stride_ << endl;
-    cout <<"\nflag values:\n";
-    for ( auto i{0U}; i<flags_.size(); i++ )
-      cout << parseStatus(flags_[i]) <<" ";
-    cout << endl;
+{
+    cout << "\nPropertyData::Out: storage for "
+         << data_.size() / data_stride_ << " "
+         << string( parseType( type_ ) ) << " objects.\n"
+         << "Data placement:    " << string( parsePlacement( place_ ) ) << "\n"
+         << "Spatial dimension: " << dim_         << "\n"
+         << "Flag stride:       " << flag_stride_ << "\n"
+         << "Data stride:       " << data_stride_ << "\n";
 
-    cout <<"\nvariable component values:\n";
-    for ( auto i{0U}; i<data_.size(); i++ )
-      cout << data_[i] <<" ";
-    cout << endl;
+    cout << "\nFlag values:\n";
+    for ( auto f : flags_ )
+        cout << parseStatus( f ) << " ";
+    cout << "\n";
 
- } // end Out 
+    cout << "\nVariable component values:\n";
+    for ( auto v : data_ )
+        cout << v << " ";
+    cout << "\n";
+}
 
+} // namespace csmp
 
-
-bool  PropertyData::operator==( const PropertyData& d ) const
- {
-    if ( !(place_       == d.place_) ) return false;
-    if ( !(type_        == d.type_) ) return false;
-    if ( !(dim_         == d.dim_) ) return false;
-    if ( !(flag_stride_ == d.flag_stride_) ) return false;
-    if ( !(data_stride_ == d.data_stride_) ) return false;
-    if ( !(flags_       == d.flags_) ) return false;
-    if ( !(data_        == d.data_) ) return false;
-    return true;
- }
-
-// PUSH BACK
-
-void pushBack( PropertyData& data, const ScalarVariable& sc ) {
-    assert( data.Type() == SCALAR );
-    data.PushBack( sc.Flag() );
-    data.PushBack( sc() );
- }
-  
-  
-void pushBack( PropertyData& data, const ArrayVariable& ar ) {
-    assert( data.Type() == ARRAY );
-    data.PushBack( ar.Flag() );
-    for ( auto i{0U}; i<ar.Size(); ++i )
-      data.PushBack( ar[i] );
- }
- 
- 
-void pushBack( PropertyData& data, const FlaggedArrayVariable& fa ) {
-    assert( data.Type() == FLAGGEDARRAY );
-    for ( auto i{0U}; i<fa.Size(); ++i ) {
-         data.PushBack( fa.Flag(i) );
-         data.PushBack( fa[i] );
-      }
- }
-
-
-template<uint32_t dim>
-void pushBack( PropertyData& data, const VectorVariable<dim>& vc ) {
-    assert( data.Type() == VECTOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         data.PushBack( vc.Flag(i) );
-         data.PushBack( vc[i] );
-      }
- }
- 
-template void pushBack( PropertyData& data, const VectorVariable<1U>& vc );
-template void pushBack( PropertyData& data, const VectorVariable<2U>& vc );
-template void pushBack( PropertyData& data, const VectorVariable<3U>& vc );
- 
-template<uint32_t dim>
-void pushBack( PropertyData& data, const TensorVariable<dim>& ts ) {
-    assert( data.Type() == TENSOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         data.PushBack( ts.Flag(i) );
-         for ( auto j{0U}; j<dim; ++j )
-           data.PushBack( ts(i,j) );
-      }
- }
-
-template void pushBack( PropertyData& data, const TensorVariable<1U>& vc );
-template void pushBack( PropertyData& data, const TensorVariable<2U>& vc );
-template void pushBack( PropertyData& data, const TensorVariable<3U>& vc );
-
-// READ AND STORE FUNCTIONS
-
-template<>
-void store( PropertyData& data, size_t position, const ScalarVariable& sc ) {
-    assert( data.Type() == SCALAR );
-    data.Flag( position )  = sc.Flag();
-    data.Value( position ) = sc();
- }
-
-template<>
-void store( PropertyData& data, size_t position, const ArrayVariable& ary ) {
-    assert( data.Type() == ARRAY );
-    data.Flag( position, 0U ) = ary.Flag();
-    const size_t array_size(ary.Size());
-    for ( auto i{0U}; i<array_size; ++i )
-      data.Value( position * array_size + i ) = ary[i];
- }
-
-template<>
-void store( PropertyData& data, size_t position, const FlaggedArrayVariable& ary ) {
-    assert( data.Type() == FLAGGEDARRAY );
-    const size_t array_size(ary.Size());
-    for ( auto i{0U}; i<array_size; ++i ) {
-         data.Flag( position * array_size + i  ) = ary.Flag(i);
-         data.Value( position * array_size + i ) = ary[i];
-      }
- }
-
-template<uint32_t dim>
-void store( PropertyData& data, size_t position, const VectorVariable<dim>& vc ) {
-    assert( data.Type() == VECTOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         data.Flag( position, i )  = vc.Flag(i);
-         data.Value( position, i ) = vc[i];
-      }
- }
-
-template void store( PropertyData&, size_t, const VectorVariable<1U>& );
-template void store( PropertyData&, size_t, const VectorVariable<2U>& );
-template void store( PropertyData&, size_t, const VectorVariable<3U>& );
-
-
-template<uint32_t dim>
-void store( PropertyData& data, size_t position, const TensorVariable<dim>& ts ) {
-    assert( data.Type() == TENSOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         data.Flag( position, i, i ) = ts.Flag(i);
-         for ( auto j{0U}; j<dim; ++j )
-           data.Value( position, i, j ) = ts(i,j);
-      }
- }
-
-template void store( PropertyData&, size_t, const TensorVariable<1U>& );
-template void store( PropertyData&, size_t, const TensorVariable<2U>& );
-template void store( PropertyData&, size_t, const TensorVariable<3U>& );
-
-
-// READING PROPERTY DATA
-
-template<>
-void read( const PropertyData& data, size_t position, ScalarVariable& sc ) {
-    assert( data.Type() == SCALAR );
-    sc.Flag() = data.Flag( position );
-    sc()      = data.Value( position );
- }
-
-template<>
-void read( const PropertyData& data, size_t position, ArrayVariable& ary ) {
-    assert( data.Type() == ARRAY );
-    ary.Flag() = data.Flag( position, 0U );
-    const auto array_size(data.Components());
-    ary.Resize(array_size);
-    for ( auto i{0U}; i<array_size; ++i )
-      ary(i) = data.Value( position, i );
- }
-
-template<>
-void read( const PropertyData& data, size_t position, FlaggedArrayVariable& ary ) {
-    assert( data.Type() == FLAGGEDARRAY );
-    const auto array_size(data.Components());
-    ary.Resize(array_size);
-    for ( auto i{0U}; i<array_size; ++i ) {
-         ary.Flag(i) = data.Flag( position, i );
-         ary(i) = data.Value( position, i );
-      }
- }
-
-template<uint32_t dim>
-void read( const PropertyData& data, size_t position, VectorVariable<dim>& vc ) {
-    assert( data.Type() == VECTOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         vc.Flag(i) = data.Flag( position, i );
-         vc(i) = data.Value( position, i );
-      }
- }
-
-template void read( const PropertyData&, size_t, VectorVariable<1U>& );
-template void read( const PropertyData&, size_t, VectorVariable<2U>& );
-template void read( const PropertyData&, size_t, VectorVariable<3U>& );
-
-
-template<uint32_t dim>
-void read( const PropertyData& data, size_t position, TensorVariable<dim>& ts ) {
-    assert( data.Type() == TENSOR );
-    assert( data.Dim() == dim );
-    for ( auto i{0U}; i<dim; ++i ) {
-         ts.Flag(i) = data.Flag( position, i, i );
-         for ( auto j{0U}; j<dim; ++j )
-           ts(i,j) = data.Value( position, i, j );
-      }
- }
-
-template void read( const PropertyData&, size_t, TensorVariable<1U>& );
-template void read( const PropertyData&, size_t, TensorVariable<2U>& );
-template void read( const PropertyData&, size_t, TensorVariable<3U>& );
-
-
-} // end namespace csmp

@@ -126,7 +126,7 @@ class MathOperatorLHS {
     void          PropertyAtIntegrationPoint( const CELL<dim>&,
                                               const csmp::Index&,
                                               uint32_t ip,
-                                              DenseMatrix<DM_MIN>& );
+                                              DenseMatrix<dim>& );
                                               
     /// getting data from the Element, Face, InterFace
     virtual void  GetOperands( const CELL<dim>& );
@@ -153,34 +153,34 @@ class MathOperatorLHS {
 
   protected:
 
-    /// prevent default construction
+    /// prevent default construction, yet set defaults when used
     MathOperatorLHS();
 
-    std::string                         name_;   ///< name of operator
+    std::string                      name_;   ///< name of operator
 
-    Parameter                           op;      ///< material property operand
-    std::pair<Parameter, size_t>        bop;     ///< basic function operand and calculation offset
-    std::pair<Parameter, size_t>        top;     ///< test function operand and calculation offset
+    Parameter                        op;      ///< material property operand
+    std::pair<Parameter, size_t>     bop;     ///< basic function operand and calculation offset
+    std::pair<Parameter, size_t>     top;     ///< test function operand and calculation offset
 
-    DenseMatrix<DM_MIN>                 LHS;     ///< solution matrix to be accumulated
+    DenseMatrix<DM_MIN>              LHS;     ///< solution matrix to be accumulated
+    DenseMatrix<DM_MIN>              DERIV;   ///< shape function derivative matrix TODO: not thread safe
+    std::vector<double>              IPOL;    ///< shape function vector
 
-    std::vector<DenseMatrix<DM_MIN> >   MTRL;    ///< material property matrix(es) needed for PDE operand
-    DenseMatrix<DM_MIN>                 DERIV;   ///< shape function derivative matrix
-    std::vector<double>                 IPOL;    ///< shape function vector
-    double                              factor_; ///< constant scaling factor
+    std::vector<DenseMatrix<dim> >   MTRL;    ///< material property matrix(es) needed for PDE operand
+    double                           factor_; ///< constant scaling factor
 
     // constraints on the accumulation procedure
-    bool                                add_accumulate_;
-    bool                                subtract_accumulate_;
-    bool                                add_accumulate_later_;
-    bool                                subtract_accumulate_later_;
-    bool                                multiply_accumulate_;
-    bool                                lump_matrices_;
-    uint32_t                            application_cycles_;
-    uint32_t                            application_cycle_;
+    bool                             add_accumulate_;
+    bool                             subtract_accumulate_;
+    bool                             add_accumulate_later_;
+    bool                             subtract_accumulate_later_;
+    bool                             multiply_accumulate_;
+    bool                             lump_matrices_;
+    uint32_t                         application_cycles_;
+    uint32_t                         application_cycle_;
     // time-dependent multipliers
-    bool                                time_multiply_;
-    bool                                time_divide_;
+    bool                             time_multiply_;
+    bool                             time_divide_;
 
   private:
 

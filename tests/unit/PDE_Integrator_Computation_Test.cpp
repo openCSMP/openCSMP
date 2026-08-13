@@ -20,9 +20,9 @@
 #include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
@@ -73,8 +73,6 @@ void PDE_Integrator_Computation_Test::run()
        model_ptr_->FormRegionFrom( "skewed-elements", skewed_elmts.begin(), skewed_elmts.end() );
        vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_input" ).c_str(),
                                    input_props, string("skewed-elements"), 0 );
-      
-//       model_ptr_->Region("Model").UpdateMemberIndexes();
     }
   
     // -----------------------------------------------------------------------
@@ -102,19 +100,22 @@ void PDE_Integrator_Computation_Test::run()
     // -----------------------------------------------------------------------
 
     // --- Steady state solution test ---
-    TestSteadyState_PressureDiffusionAndFlow();
+//    TestSteadyState_PressureDiffusionAndFlow();
 
     list<string> output_props = {"fluid pressure","velocity","volume flux"};
-    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), 0 );
-    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), 0 );
+//    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), 0 );
+//    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), 0 );
 
     // TODO: test that the solution is divergence free for source=0
     
     // TODO: test performance for quadratic elements and ones with VECTOR and TENSOR properties
 
-    // TODO: use solution from 1 to run second test
-    // TestTransient_PressureDiffusionAndFlow();
- 
+    // --- Transient solution test ---
+    double time_interval_tested = TestTransient_PressureDiffusionAndFlow();
+
+    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), static_cast<long>(time_interval_tested) );
+    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), static_cast<long>(time_interval_tested) );
+
     cout << "\nPDE_Integrator_Computation_Test: all tests run.\n";
 
 } // end run
@@ -147,6 +148,7 @@ Model<3U>* PDE_Integrator_Computation_Test::BuildFracBoxModel3D()
       Model<3> model( subdivision_in_regions, vset, "CSMP-1phase-variables.txt", use_regions_file );
 //      Model<3> model( refined_linear_topo, refined_lin_mesh, "CSMP-1phase-variables.txt", use_regions_file );
       model.Name( (model_name + "_PDE_Integrator_Computation_Test").c_str() );
+      printModelDimensions(model);
 
       // renaming the boundaries
       model.RenameBoundary( "BOUNDARY1", "LEFT" );
@@ -173,6 +175,8 @@ Model<3U>* PDE_Integrator_Computation_Test::BuildFracBoxModel3D()
 Model<3U>* PDE_Integrator_Computation_Test::BuildAnsysModel3D( const std::string& model_name )
  {
     ANSYS_Model3D model( model_name.c_str(), model_name.c_str(), "CSMP-1phase-variables.txt", true );
+    printModelDimensions(model);
+
     model.OutputToBinaryFile( (model_name + "_PDE_Integrator_Computation_Test").c_str() );
     
     model_ptr_ = new Model<3U>( model_name + "_PDE_Integrator_Computation_Test" );
@@ -189,10 +193,11 @@ void PDE_Integrator_Computation_Test::AssignProperties_PressureDiffusionAndFlow(
     // setting up necessary variables
     model_ptr_->InputPropertyValue( "permeability", makeScalar( PLAIN, 1.0e-14 ) );
     model_ptr_->InputPropertyValue( "porosity", makeScalar( PLAIN, 0.25 ) );
-    model_ptr_->InputPropertyValue( "fluid volume source", makeScalar( PLAIN, 0. ) );
+    model_ptr_->InputPropertyValue( "fluid volume source", makeScalar( PLAIN, 0.0 ) );
     model_ptr_->InputPropertyValue( "velocity", makeVector( ANY, ANY, ANY, 0., 0., 0. ) );
     model_ptr_->InputPropertyValue( "pore velocity", makeVector( ANY, ANY, ANY, 0., 0., 0. )  );
     model_ptr_->InputPropertyValue( "volume flux", makeScalar( PLAIN, 0. ) );
+    model_ptr_->InputPropertyValue( "storativity", makeScalar( PLAIN, 1.0e-8 ) );
  }
  
  
@@ -251,19 +256,19 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
   // -----------------------------------------------------------------------
   // 4. PDE operators
   // -----------------------------------------------------------------------
-  NumIntegral_dNT_op_dN_dV<3>  stiffness_matrix( model_ptr_->Database(), "conductivity", "fluid pressure", "fluid pressure");
+  NumIntegral_dNT_lhsop_dN_dV<3>  stiffness_matrix( model_ptr_->Database(), "conductivity", "fluid pressure", "fluid pressure");
 
-  NumIntegral_NT_op_N_dV<3> source_term( model_ptr_->Database(), "fluid volume source", "fluid pressure");
+  NumIntegral_NT_rhsop_N_dV<3> source_term( model_ptr_->Database(), "fluid volume source", "fluid pressure");
 
   VelocityAndVolumeFlux<3>  velo( *model_ptr_, "conductivity", "porosity", "fluid pressure", false );
 
   // -----------------------------------------------------------------------
   // 5. Single PDE_Integrator — setup and computation
   // -----------------------------------------------------------------------
-  // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
   PDE_Integrator<3,Element> pde_integrator;
 #ifdef CSMP_WITH_SAMG_SOLVER
-  SAMG_Solver  samg_solver;
+  SAMG_Settings settings;
+  SAMG_Solver   samg_solver( &settings );
   pde_integrator.SetSolver( samg_solver );
 #else
   CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
@@ -274,13 +279,56 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
   pde_integrator.Add(&source_term);
   pde_integrator.AddPostProcess(&velo);
 
-  // computation performance test
-  // ----------------------------
-  auto t0 = chrono::high_resolution_clock::now();
-  model_ptr_->Apply( pde_integrator );
-  auto t1 = chrono::high_resolution_clock::now();
-  cout <<"\n\t"<<"TestSteadyState_PressureDiffusionAndFlow: Time to solution: "<< chrono::duration_cast<chrono::milliseconds>(t1-t0).count() << " milliseconds." << endl;
+  // -------------------------------------------------------------------
+  // Robust performance measurement
+  // -------------------------------------------------------------------
+  {
+      // 1. Warm-up pass — populates caches, triggers frequency scaling,
+      //    runs any lazy initialisations inside Apply.
+      //    Not measured.
+      model_ptr_->Apply( pde_integrator );
 
+      // turning excessive diagnostic and output off, speeding up SAMG so that accumulation plays a bigger role in test
+#ifdef CSMP_WITH_SAMG_SOLVER
+      settings.Set_iout1( 0 );
+      settings.Set_iout2( 0 );
+      settings.Set_idmp( -1 );
+#endif
+      // 2. Repeated measurements (30 is minimum to achieve some reproducibility)
+      constexpr int RUNS = 30;
+      std::vector<double> times_ms;
+      times_ms.reserve( RUNS );
+
+      for ( int run = 0; run < RUNS; ++run )
+      {
+          auto t0 = std::chrono::high_resolution_clock::now();
+          model_ptr_->Apply( pde_integrator );
+          // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+          auto t1 = std::chrono::high_resolution_clock::now();
+
+          times_ms.push_back(
+              std::chrono::duration<double, std::milli>( t1 - t0 ).count() );
+      }
+
+      // 3. Statistics
+      const double mean = std::accumulate( times_ms.begin(),
+                                           times_ms.end(), 0.0 ) / RUNS;
+
+      const double sq_sum = std::inner_product( times_ms.begin(),
+                                                 times_ms.end(),
+                                                 times_ms.begin(), 0.0 );
+      const double stddev = std::sqrt( sq_sum / RUNS - mean * mean );
+
+      const double best  = *std::min_element( times_ms.begin(), times_ms.end() );
+      const double worst = *std::max_element( times_ms.begin(), times_ms.end() );
+
+      std::cout << "\nTestSteadyState_PressureDiffusionAndFlow performance ("
+                << RUNS << " runs, Release build):\n"
+                << "\t best   : " << best   << " ms\n"
+                << "\t worst  : " << worst  << " ms\n"
+                << "\t mean   : " << mean   << " ms\n"
+                << "\t std dev: " << stddev << " ms\n";
+  }
   // -----------------------------------------------------------------------
   // 12. VTK output (non-critical, just verify no crash)
   // -----------------------------------------------------------------------
@@ -292,63 +340,149 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
 
 
 
-
-void PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow()
+/*
+    Averages the time spent on each step of a pressure diffusion run with 30 steps and reports the result.
+    A final snapshot of the pressure distribution and the other features with flux down to ~zero once
+    equilibrium is reached is also output
+    
+    returns final time reached
+*/
+double PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow()
 {
     // -----------------------------------------------------------------------
-    // 4. PDE operators
+    // 1. PDE operators for initial steady-state pressure computation
     // -----------------------------------------------------------------------
-    NumIntegral_dNT_dN_dV<3> stiffness_matrix( model_ptr_->Database(), "fluid pressure", "fluid pressure");
+    NumIntegral_dNT_dN_dV<3>    stiffness_matrix( model_ptr_->Database(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3>   source_term(      model_ptr_->Database(), "fluid volume source", "fluid pressure" );
+    VelocityAndVolumeFlux<3>    velo( *model_ptr_, "conductivity", "porosity", "fluid pressure", false );
 
-    NumIntegral_NT_lhsop_N_dV<3> mass_matrix_lhs( model_ptr_->Database(), "compressibility", "fluid pressure", "fluid pressure");
+    // 1.1 Setting up PDE_Integrator and computation
+    // -----------------------------------------------------------------------
+    {
+        PDE_Integrator<3,Element> pde_integrator;
 
-    NumIntegral_NT_op_N_dV<3> mass_matrix_rhs( model_ptr_->Database(), "compressibility", "fluid pressure");
+    #ifdef CSMP_WITH_SAMG_SOLVER
+        SAMG_Settings settings;
+        SAMG_Solver   samg_solver( &settings );
+        pde_integrator.SetSolver( samg_solver );
+    #else
+        CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+        pde_integrator.SetSolver( linear_solver );
+    #endif
 
-    NumIntegral_NT_op_N_dV<3> source_term( model_ptr_->Database(), "fluid volume source", "fluid pressure");
+        pde_integrator.Add( &stiffness_matrix );
+        pde_integrator.Add( &source_term      );
+        pde_integrator.AddPostProcess( &velo  );
 
-    mass_matrix_lhs.MultiplyWithTimeIncrement(true);
-    mass_matrix_rhs.MultiplyWithTimeIncrement(true);
-    mass_matrix_lhs.LumpedFormulation(true);
-    mass_matrix_rhs.LumpedFormulation(true);
-    source_term.LumpedFormulation(true);
+        model_ptr_->Apply( pde_integrator );
+    }
+    
+
+    // -----------------------------------------------------------------------
+    // 2. PDE operators for transient computation
+    // -----------------------------------------------------------------------
+    // ([C] + dt[K]){p}t+dt = [C]{p}t + dt{Q}t+dt
+    NumIntegral_NT_lhsop_N_dV<3> mass_matrix_lhs( model_ptr_->Database(), "storativity", "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3> mass_matrix_rhs( model_ptr_->Database(), "storativity", "fluid pressure" );
+
+    mass_matrix_lhs.MultiplyWithTimeIncrement( true );
+    mass_matrix_rhs.MultiplyWithTimeIncrement( true );
+    mass_matrix_lhs.LumpedFormulation( true );
+    mass_matrix_rhs.LumpedFormulation( true );
+    source_term.LumpedFormulation( true );
     source_term.AddAccumulateLater();
 
-    VelocityAndVolumeFlux<3> velo( *model_ptr_, "conductivity", "porosity", "fluid pressure", false );
-
-    // -----------------------------------------------------------------------
-    // 5. Single PDE_Integrator — accessed via attorney
-    // -----------------------------------------------------------------------
-    // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
     PDE_Integrator<3,Element> pde_integrator;
-  #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Solver  samg_solver;
+
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    SAMG_Solver   samg_solver( &settings );
     pde_integrator.SetSolver( samg_solver );
-  #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
     pde_integrator.SetSolver( linear_solver );
-  #endif
+#endif
 
-    pde_integrator.Add(&stiffness_matrix);
-    pde_integrator.Add(&source_term);
-    pde_integrator.Add(&mass_matrix_lhs);
-    pde_integrator.Add(&mass_matrix_rhs);
-    pde_integrator.AddPostProcess(&velo);
+    pde_integrator.Add( &stiffness_matrix );
+    pde_integrator.Add( &source_term      );
+    pde_integrator.Add( &mass_matrix_lhs );
+    pde_integrator.Add( &mass_matrix_rhs );
+    pde_integrator.AddPostProcess( &velo  );
 
-    const double hour(3600.0);
-    const double dt(2.0 * hour);
-    pde_integrator.TimeIncrement(1.0 / dt);
-
+#ifdef CSMP_WITH_SAMG_SOLVER
+    settings.Set_iout1(   0       );
+    settings.Set_iout2(   0       );
+    settings.Set_idmp(   -1       );
+//    settings.Set_iswit(   4       );  // reuse solver setup from last call
+    settings.Set_itypu(   0       );  // use solution from last step as initial guess
+//    settings.Set_rel_eps( 1.0e-14 );  // relative tolerance
+#endif
 
     // -----------------------------------------------------------------------
-    // 12. VTK output (non-critical, just verify no crash)
+    // 8. Timestepping with performance measurement
     // -----------------------------------------------------------------------
-   list<string> output_props = {"fluid pressure","velocity","volume flux"};
-   VTU_Interface<3> vtu_output( *model_ptr_ );
-   vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), 0 );
+    constexpr int    N_STEPS{ 30 };
+    constexpr double DT_INITIAL{ 0.001 };
+    constexpr double DT_GROWTH{  1.1 };
 
-   cout << "\nTransient_PressureDiffusionAndFlow: all tests run.\n";
+    std::vector<double> times_ms;
+    times_ms.reserve( N_STEPS );
 
-} // end Transient_PressureDiffusionAndFlow
+    double dt(       DT_INITIAL );
+    double duration( 0.0        );
+
+    // drop pressure on the left boundary to atmospheric
+    model_ptr_->Boundary("LEFT").InputPropertyValue(
+        "fluid pressure", makeScalar( DIRICH, 100325. ) );
+
+
+    for ( int tstep{1}; tstep <= N_STEPS; ++tstep )
+      {
+        pde_integrator.TimeIncrement( 1.0 / dt );
+
+        const auto t0 = std::chrono::high_resolution_clock::now();
+        model_ptr_->Apply( pde_integrator );
+        const auto t1 = std::chrono::high_resolution_clock::now();
+
+        times_ms.push_back(
+            std::chrono::duration<double, std::milli>( t1 - t0 ).count() );
+
+        duration += dt;
+        dt       *= DT_GROWTH;
+      }
+
+    // -----------------------------------------------------------------------
+    // 9. Statistics over all timesteps
+    // -----------------------------------------------------------------------
+    const double mean = std::accumulate( times_ms.begin(),
+                                         times_ms.end(), 0.0 )
+                        / static_cast<double>( N_STEPS );
+
+    const double sq_sum = std::inner_product( times_ms.begin(),
+                                              times_ms.end(),
+                                              times_ms.begin(), 0.0 );
+    const double stddev = std::sqrt( sq_sum / static_cast<double>( N_STEPS )
+                                     - mean * mean );
+
+    const double best  = *std::min_element( times_ms.begin(), times_ms.end() );
+    const double worst = *std::max_element( times_ms.begin(), times_ms.end() );
+
+    std::cout << "\nTestTransient_PressureDiffusionAndFlow performance ("
+              << N_STEPS << " timesteps, Release build):\n"
+              << "\t best   : " << best   << " ms\n"
+              << "\t worst  : " << worst  << " ms\n"
+              << "\t mean   : " << mean   << " ms\n"
+              << "\t std dev: " << stddev << " ms\n"
+              << "\t total  : " << std::accumulate( times_ms.begin(),
+                                                    times_ms.end(), 0.0 )
+              << " ms\n"
+              << "\t duration simulated: " << duration << " s\n";
+
+    std::cout << "\nTestTransient_PressureDiffusionAndFlow: all tests passed.\n";
+    
+    return duration;
+
+} // end TestTransient_PressureDiffusionAndFlow
 
 
 /*

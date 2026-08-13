@@ -10,7 +10,7 @@ using namespace std;
 
 namespace csmp {
 
-LinearRectangle::LinearRectangle( uint32_t dims) :FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
+LinearRectangle::LinearRectangle( uint32_t dims) : FiniteElement(LINEAR_RECTANGLE, false, false, 1U)
 	{
 		dim = dims;       /**< spatial dimension of element */
 		itp = 1;       /**< degree of interpolation */
@@ -34,15 +34,15 @@ LinearRectangle::LinearRectangle( uint32_t dims) :FiniteElement(LINEAR_RECTANGLE
 
 
 
-	void LinearRectangle::IntegralNN(DenseMatrix<DM_MIN>& M)
+void LinearRectangle::IntegralNN( DenseMatrix<DM_MIN>& M )
 	{
 		double vol = Volume();
 		V_ = { vol / 9.,  -vol / 18.,  vol / 36., -vol / 18.,
-			-vol / 18.,  vol / 9.,  -vol / 18.,  vol / 36.,
-			vol / 36., -vol / 18.,  vol / 9.,  -vol / 18.,
-			-vol / 18.,  vol / 36., -vol / 18.,  vol / 9. };
+			    -vol / 18.,  vol / 9.,  -vol / 18.,  vol / 36.,
+			     vol / 36., -vol / 18.,  vol / 9.,  -vol / 18.,
+			    -vol / 18.,  vol / 36., -vol / 18.,  vol / 9. };
 		uint32_t k(0);
-		for (auto i = 0; i < 4; ++i)
+		for ( uint32_t i = 0; i < 4; ++i)
 			for ( uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[k++];
 	}
@@ -50,13 +50,13 @@ LinearRectangle::LinearRectangle( uint32_t dims) :FiniteElement(LINEAR_RECTANGLE
 
 void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 	{
-		if (dim == 2) { Nrs(M, XY, xyz); return; }
+		if (dim == 2) { nrs(M, XY, xyz); return; }
 		uint32_t r = 0, s = 1; // Nodes on xy-plane
 		if ((XY(0, 0) == XY(1, 0)) && (XY(1, 0) == XY(2, 0))) { r = 1; s = 2; } // nodes on yz-plane
 		else if ((XY(0, 1) == XY(1, 1)) && (XY(1, 1) == XY(2, 1))) { r = 0; s = 2; } // nodes on xz-plane
 		M1_.Resize(npe, 2);
-		for (auto i = 0; i < npe; ++i) { M1_(i, 0) = XY(i, r); M1_(i, 1) = XY(i, s); }
-		Nrs(M, M1_, { xyz[r],xyz[s] });
+		for ( uint32_t i = 0; i < npe; ++i) { M1_(i, 0) = XY(i, r); M1_(i, 1) = XY(i, s); }
+		nrs(M, M1_, { xyz[r],xyz[s] });
 	}
 
 	// dN returns dN at barcy center of the element (Stephan's opinion)
@@ -78,16 +78,16 @@ void LinearRectangle::N(std::vector<double>& M, const std::vector<double>& xyz)
 
 		DN.Resize(dim, npe);
 		DN.Zero();
-		for (auto i : { r , s })
+		for ( uint32_t  i : { r , s })
 			for ( uint32_t j = 0; j < npe; ++j)
 				DN(i, j) = V_[indV++];
 	}
 
 
-void LinearRectangle::CornerNodes(std::vector<uint32_t>& ids) const { ids = { 0, 1, 2, 3 }; }
+void LinearRectangle::CornerNodes(std::vector<uint32_t>& ids) const noexcept { ids = { 0, 1, 2, 3 }; }
 
 
-void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids) const
+void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& snids) const noexcept
 	{
 		snids.resize(2);
 		if (segm_id == 0) {
@@ -114,7 +114,7 @@ void LinearRectangle::NodesOfSegment( uint32_t segm_id, std::vector<uint32_t>& s
 
 
 
-vector<uint32_t>  LinearRectangle::NodesOfFace( uint32_t face_id ) const
+vector<uint32_t>  LinearRectangle::NodesOfFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return vector<uint32_t>{0,1};
@@ -127,7 +127,7 @@ vector<uint32_t>  LinearRectangle::NodesOfFace( uint32_t face_id ) const
  }
 
 
-vector<uint32_t>  LinearRectangle::CornerNodesOfFace( uint32_t face_id ) const
+vector<uint32_t>  LinearRectangle::CornerNodesOfFace( uint32_t face_id ) const noexcept
  {
 		switch (face_id) {
         case 0: return vector<uint32_t>{0,1};
@@ -141,7 +141,7 @@ vector<uint32_t>  LinearRectangle::CornerNodesOfFace( uint32_t face_id ) const
 
 
 
-vector<uint32_t>  LinearRectangle::NodesConnectedTo( uint32_t node_id ) const
+vector<uint32_t>  LinearRectangle::NodesConnectedTo( uint32_t node_id ) const noexcept
   {
 		switch ( node_id ) {
         // local corner node numbers are returned in ascending order
@@ -157,7 +157,7 @@ vector<uint32_t>  LinearRectangle::NodesConnectedTo( uint32_t node_id ) const
 
 
 
-void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K)
+void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM3>& K) const noexcept
 	{
 		uint32_t r = 0, s = 1; // Nodes on xy-plane
 		if (dim == 3) {
@@ -178,23 +178,27 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 
 		uint32_t vind = 0;
 		M.Resize(4, 4);
-		for (auto i = 0; i < 4; ++i)
+		for ( uint32_t i = 0; i < 4; ++i)
 			for ( uint32_t j = 0; j < 4; ++j)
 				M(i, j) = V_[vind++];
 	}
 
-	void LinearRectangle::Nrs(std::vector<double>& M, DenseMatrix<DM_MIN>& RS, const std::vector<double>& rs)
+
+
+	void LinearRectangle::nrs(std::vector<double>& M, DenseMatrix<DM_MIN>& RS, const std::vector<double>& rs)
 	{
-		double vol = (RS(1, 0) - RS(0, 0))*(RS(3, 1) - RS(0, 1));
+		const double vol = (RS(1, 0) - RS(0, 0))*(RS(3, 1) - RS(0, 1));
 		if (vol < 0) { cout << "\n negative vol Rectangle\n"; getchar(); }
 		M.resize(4);
 		M = { +vol*(rs[0] - RS(2, 0))*(rs[1] - RS(2, 1)),
-			  -vol*(rs[0] - RS(3, 0))*(rs[1] - RS(3, 1)),
-			  +vol*(rs[0] - RS(0, 0))*(rs[1] - RS(0, 1)),
-			  -vol*(rs[0] - RS(1, 0))*(rs[1] - RS(1, 1)) };
+			    -vol*(rs[0] - RS(3, 0))*(rs[1] - RS(3, 1)),
+			    +vol*(rs[0] - RS(0, 0))*(rs[1] - RS(0, 1)),
+			    -vol*(rs[0] - RS(1, 0))*(rs[1] - RS(1, 1)) };
 	}
 	
-	void LinearRectangle::N_AtBaryCenter(std::vector<double>& M) 
+ 
+ 
+	void LinearRectangle::N_AtBaryCenter(std::vector<double>& M)
 	{
 		if (dim == 3) {
 			N(M, { 0.5*(XY(2,0) + XY(0,0)), 0.5*(XY(2,1) + XY(0,1)), 0.5*(XY(2,2) + XY(0,2)) });
@@ -203,7 +207,9 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 		N(M, { 0.5*(XY(2,0) + XY(0,0)), 0.5*(XY(2,1) + XY(0,1)) });
 	}
 
-	double LinearRectangle::Volume() 
+
+
+	double LinearRectangle::Volume()
 	{ 
 		if (dim == 2) return (XY(1, 0) - XY(0, 0)) * (XY(3, 1) - XY(0, 1)); 
 
@@ -218,6 +224,8 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 		return std::sqrt((X1*X1 + Y1*Y1 + Z1*Z1)*(X2*X2 + Y2*Y2 + Z2*Z2));
 	}
 
+
+
 	void LinearRectangle::EdgeLengths(std::vector<double>& vec)
 	{
 		double L0 = sqrt((XY(0, 0) - XY(1, 0))*(XY(0, 0) - XY(1, 0)) 
@@ -230,6 +238,8 @@ void LinearRectangle::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_M
 
 		vec = {L0 , L1, L0, L1};
 	}
+
+
 
 vector<double> LinearRectangle::UnitNormal() const
 	{

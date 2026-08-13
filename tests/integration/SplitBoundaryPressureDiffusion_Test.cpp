@@ -12,14 +12,14 @@
 #include "Model.h"
 #include "Boundary.h"
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "VelocityAndVolumeFlux.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
+#include "VelocityAndVolumeFlux.h"
 // LHS version
-#include "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h"
+//#include "NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region.h"
 // RHS version
-#include "NumIntegral_dudn_rhsop_u_dS.h"
+//#include "NumIntegral_dudn_rhsop_u_dS.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -130,10 +130,10 @@ void SplitBoundaryPressureDiffusion_Test::run()
    
     // steady state part of the pressure diffusion PDE
     // -----------------------------------------------
-    NumIntegral_dNT_op_dN_dV<3U> conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
-    NumIntegral_NT_op_N_dV<3U>   source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<3U>  conductance( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U> source( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
   /// @todo influx surface integral: NumIntegral_NT_op_N_dS<2U>   influx( model.Database(), "influx", "fluid pressure" );
-    VelocityAndVolumeFlux<3U>    velocity( *model_ptr_,  "conductivity", "porosity", "fluid pressure", false );
+    VelocityAndVolumeFlux<3U>      velocity( *model_ptr_,  "conductivity", "porosity", "fluid pressure", false );
 
     // add PDE_Operators and post-processor to the FE Algorithm
     fluid_pressure.Add( &conductance );
@@ -150,7 +150,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     capacitance_lhs.MultiplyWithTimeIncrement(true);
 
     // right-hand side capacitance matrix [C] at current pressure
-    NumIntegral_NT_op_N_dV<3U>    capacitance_rhs( model_ptr_->Database(),
+    NumIntegral_NT_rhsop_N_dV<3U>    capacitance_rhs( model_ptr_->Database(),
                                                    "storativity",  "fluid pressure" );
     capacitance_rhs.LumpedFormulation(true);
     capacitance_rhs.MultiplyWithTimeIncrement(true);
@@ -158,7 +158,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     // source term {Q} at  dt + delta  needs to be accumulated later
     source.AddAccumulateLater();
     source.LumpedFormulation(true);
-        
+/*
     // interface transfer modelled with LHS integral
     NumIntegral_dudn_op_u_dS_InterFace_w_dimM1_Region<3U>  iface_transferLHS( *model_ptr_,
                                                                              "conductivity",
@@ -168,7 +168,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     // interface transfer modelled with RHS integral
     NumIntegral_dudn_rhsop_u_dS<3U>  iface_transferRHS( *model_ptr_, "fracture conductivity", "conductivity", "fluid pressure" );
     iface_transferRHS.AddAccumulateLater();
-    
+*/
     
 
     // coupling across the sides of the splitboundary
@@ -181,7 +181,7 @@ void SplitBoundaryPressureDiffusion_Test::run()
     fluid_pressure.Add( &capacitance_lhs );
     fluid_pressure.Add( &capacitance_rhs );
     fluid_pressure.Add( &source );
-    fluid_pressure.AddSplitBoundaryIntegral( &iface_transferRHS );
+//    fluid_pressure.AddSplitBoundaryIntegral( &iface_transferRHS );
     fluid_pressure.AddPostProcess( &velocity );
 
 
@@ -201,15 +201,15 @@ void SplitBoundaryPressureDiffusion_Test::run()
     while ( model_time <= maxtime )
       {
         cout << "\n\n\nmain: COMPUTING TIMESTEP " << timestep << endl;
-        iface_transferLHS.UpdateTimeIncrement( time_increment );
-        iface_transferRHS.UpdateTimeIncrement( time_increment );
+//        iface_transferLHS.UpdateTimeIncrement( time_increment );
+//        iface_transferRHS.UpdateTimeIncrement( time_increment );
 
         // transient pressure
         fluid_pressure.TimeIncrement( 1. / time_increment ); // see equation above
 //        fluid_pressure.IntegrateOver( *model_ptr_, fracture ); // model_domain );
         fluid_pressure.IntegrateOver( *model_ptr_, model_domain );
-        iface_transferLHS.ResetMinMaxTransferTerms();
-        iface_transferRHS.ResetMinMaxTransferTerms();
+//        iface_transferLHS.ResetMinMaxTransferTerms();
+//        iface_transferRHS.ResetMinMaxTransferTerms();
 
         // output variables to file and screen
         printRangeOfVariable( *model_ptr_, "fluid pressure" );

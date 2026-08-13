@@ -128,7 +128,7 @@ bool openFile( FileStream& fs, const std::string& fname, const std::vector<std::
   if ( !fs.is_open() )
   {
     const size_t extensions( file_extensions.size() );
-    for ( auto i = 1; i < extensions; i++ )
+    for ( size_t i = 1; i < extensions; i++ )
     {
       strcpy( filename, fname.c_str() );
       strcat( filename, file_extensions[i].c_str() );
@@ -2977,11 +2977,12 @@ bool readRegionPropertyValues( Model<dim>& model,
         TensorVariable<dim> eigVecs;
 
         // Check that minimum and maximum eigenvalues are in range
-        if ( !ts.EigenNonSymmetric( eigVals, eigVecs ) ) {
+        const double tolerance{ 0.002 };
+        if ( !ts.EigenWeaklyNonSymmetric( eigVals, eigVecs, tolerance ) ) {
           csmp_error.Note( FATAL_ERROR, "readRegionPropertyValues",
                              "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }
-        for ( auto i = 0; i < dim; ++i ) {
+        for ( uint32_t i = 0; i < dim; ++i ) {
           double  val = eigVals( i );
           model.Database().CheckRange( prop_name.c_str(), val );
         }
@@ -3167,7 +3168,8 @@ bool readDefaultPropertyValues( Model<dim>& model,
         TensorVariable<dim> eigVecs;
 
         // Check that minimum and maximum eigenvalues are in range
-        if ( !ts.EigenNonSymmetric( eigVals, eigVecs ) ) {
+        constexpr double max_non_symmetric_part{ 0.001 };
+        if ( !ts.EigenWeaklyNonSymmetric( eigVals, eigVecs, max_non_symmetric_part ) ) {
           error_handler.Note( FATAL_ERROR, "readDefaultPropertyValues",
                                 "Cannot eigendecompose the tensor for property", prop_name.c_str() );
         }

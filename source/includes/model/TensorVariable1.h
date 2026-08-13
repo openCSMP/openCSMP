@@ -74,8 +74,8 @@ class TensorVariable<1U> {
     TensorVariable   Inverse()     const noexcept;
     TensorVariable   Transposed()  const noexcept;
     bool 		  	     EigenValues( VectorVariable<1U>& vecEigenvalues ) const;
-    bool             Eigen( VectorVariable<1U>& vvEigenvalues, TensorVariable<1U>& tvEigenvectors, bool bNormalize ) const;
-    bool             EigenNonSymmetric( VectorVariable<1U>& eigenVals, TensorVariable<1U>& eigenVecs ) const;
+    bool             Eigen( VectorVariable<1U>& vvEigenvalues, TensorVariable<1U>& tvEigenvectors, bool normalize_Eigen_vectors ) const;
+    bool             EigenWeaklyNonSymmetric( VectorVariable<1U>& eigenVals, TensorVariable<1U>& eigenVecs, double tolerance ) const;
     void             AssignToRow( uint32_t, VectorVariable<1U>& vc ) noexcept;
     void             AssignToColumn( uint32_t, VectorVariable<1U>& vc ) noexcept;
 

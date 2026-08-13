@@ -138,7 +138,7 @@ void ErrorHandler::WriteErrorsToFile( const char* err_file )
     issueing a fatal (program terminating) error.
 */
 size_t ErrorHandler::MaximumNumberOfErrors() const
- { return error_limit_; }
+ { return static_cast<size_t>(error_limit_); }
 
 
 
@@ -270,7 +270,7 @@ void ErrorHandler::Note( CSMP_MESSAGE err_type,
         if ( err_type == INFO ) cout <<"\n"<< message << endl;
         else cout <<"\n"<< message << endl; 
         cout.flush();
-#ifndef NDEBUG 
+#ifdef CSMP_MANUAL_TESTING 
         if ( err_type != WARNING && err_type != INFO ) {
              cerr <<"\nErrorHandler: ";
              if ( Standard_IO_Handler().YesNo("\tDo you want to continue") == false )
@@ -285,7 +285,6 @@ void ErrorHandler::Note( CSMP_MESSAGE err_type,
    }
 
  } // end Note
-
 
 
 /**

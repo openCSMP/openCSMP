@@ -359,7 +359,7 @@ void spreadPropertiesOfInitialisedCellsAcross( typename vector<Element<dim>*>::i
                        BOX_BOUNDARY new_node_bound = (*it)->N(n_new)->AtBoundary();
                        //Getting all potential nodes and their box boundaries
                        std::multimap<BOX_BOUNDARY,Node<dim>*> potential_nodes;
-                       for (auto n_found = 0; n_found < found_el->Nodes(); ++n_found){
+                       for ( uint32_t n_found = 0; n_found < found_el->Nodes(); ++n_found){
                            Node<dim>* potential_node = found_el->N(n_found);             //getting potential node from initialized element
                            //if node is also within an unitialized elm (then its closest)
                            if ( std::find(closest_nodes.begin(), closest_nodes.end(), potential_node) != closest_nodes.end() ){

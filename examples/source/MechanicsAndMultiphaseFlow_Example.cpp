@@ -35,8 +35,8 @@
 #include "PT_op.h"
 #include "StressesAndStrains2.h"
 
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "VelocityAndVolumeFlux.h"
 

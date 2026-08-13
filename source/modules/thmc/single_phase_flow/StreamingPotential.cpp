@@ -3,7 +3,7 @@
 #include "Region.h"
 #include "Model.h"
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "PropertyDatabase.h"
 
@@ -86,12 +86,12 @@ void StreamingPotential<dim>::EvaluatePotential( Model<dim>& sg,
     PDE_Integrator<dim,Element>  streaming_potential;
     //streaming_potential.IncreaseMultiGridVectorStorage( 10 );
   
-    NumIntegral_dNT_op_dN_dV<dim>     lap2( sg.Database(),
+    NumIntegral_dNT_lhsop_dN_dV<dim>     lap2( sg.Database(),
                                             "one coefficient",
                                             potential,
                                             potential );
                                             
-    NumIntegral_DNT_rhsop_DN_dV<dim>  c_lap2p( sg.Database(),
+    NumIntegral_dNT_rhsop_dN_dV<dim>  c_lap2p( sg.Database(),
                                               "coupling coefficient",
                                               "fluid pressure",
                                                potential );

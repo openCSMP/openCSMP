@@ -29,17 +29,10 @@ using namespace std;
 namespace csmp {
 
 /// resets model properties before test
-void TwoPhaseModel_TestSuite::free()
+TwoPhaseModel_TestSuite::~TwoPhaseModel_TestSuite()
 {
-	if( !free_  )
-	{
-		if( rock_model_ != NULL )
-			delete rock_model_;
-		if( fracture_rock_model_ != NULL )
-			delete fracture_rock_model_;
-		free_ = true;
-	}
-
+   delete rock_model_;
+   delete fracture_rock_model_;
 }
 
 
@@ -51,13 +44,14 @@ void TwoPhaseModel_TestSuite::AssignSaturationValues( Model<1U>* model )
     Region<1>&  sg(model->Region("Model"));
     csmp::Index     satw_key = model->Database().StorageKey("saturation water");
     csmp::Index     satn_key = model->Database().StorageKey("saturation oil");
-    const double  sat_incr(1./model->Mesh().Nodes());
+    const double  sat_incr(1. / static_cast<double>(model->Mesh().Nodes()) );
     ScalarVariable  saturation;
+    
     // generating a range of saturation values for water and oil
-    for ( vector<Node<1U>*>::const_iterator
-          it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
+    sg.RenumberNodes();
+    for ( auto it=sg.NodesBegin(); it!=sg.NodesEnd(); it++ )
       {
-         saturation() = 0. + sat_incr * (*it)->Idx();
+         saturation() = 0. + sat_incr * static_cast<double>((*it)->Idx());
          (*it)->Store( satw_key, saturation );
          saturation = 1. - saturation;
          (*it)->Store( satn_key, saturation );

@@ -84,15 +84,36 @@ The expanded matrix is returned into the input matrix.
 
 @section application Application
 
-To pre-process DN matrices in multi-DOF computations.  
+Converts (global) interpolation function derivative matrix into form where it
+can be multiplied, for instance, with a 2DOF material property matrix or
+for computation of 2D stiffness matrix. <p>
+
+Original B:<p>
+<pre>
+    | dN0dx dN1dx ... dN(nodes)dx |
+B =    | dN0dy dN1dy ... dN(nodes)dy |
+
+</pre> 
+
+Transformed B (see Zienkiewicz Vol.1 p. 48, eq. 3.10b):<P>
+<pre>
+   | dN0dx   0   dN1dx  ...     dN(nodes)dx   0   |
+B = |   0   dN0dy   0    ...   0     dN(nodes)dy        |
+   | dN0dy dN0dx dN1dy  ... dN5dy dN(nodes)dx |
+</pre>
+
+    @param B The shape function derivative matrix DN for 1 degree of freedom per node.
+
+    The expanded matrix is returned into the input matrix.
 
     @test OK SKM refactored and retested 2/12/2014
 */
-void dN_To2DOF(uint32_t nodes, DenseMatrix<DM_MIN>& B)
+void dN_To2DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B ) noexcept
 {
-    assert(B.Cols() == nodes);
+    assert( B.Cols() == nodes );
 
     const uint32_t total_cols = nodes * 2;
+    assert( DM_MIN >= total_cols );
 
     // 1. Expand the matrix structure
     // Since stride is adjusted, Row 0 and Row 1 data now occupy the 
@@ -135,10 +156,12 @@ void dN_To2DOF(uint32_t nodes, DenseMatrix<DM_MIN>& B)
     
     @test OK SKM retested 2/12/2014
 */
-void dN_To3DOF(uint32_t nodes, DenseMatrix<DM_MIN>& B)
+void dN_To3DOF( uint32_t nodes, DenseMatrix<DM_MIN>& B ) noexcept
 {
-    assert(static_cast<uint32_t>(B.Cols()) == nodes);
+    assert( B.Cols() == nodes );
+
     const uint32_t total_cols = nodes * 3U;
+    assert( DM_MIN >= total_cols );
 
     // 1. Expand matrix to 6 rows and 3*nodes columns
     B.Resize(6, total_cols);

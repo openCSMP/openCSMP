@@ -22,6 +22,9 @@ class Upwind_Integral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
     void ComputeContribution( const CELL<dim>& ) override final;
     void GetOperands( const CELL<dim>& ) override final;
 
+     Upwind_Integral_dNT_op_dN_dV<dim,CELL>* clone() const override final
+      { return new Upwind_Integral_dNT_op_dN_dV<dim,CELL> (*this); }
+
   private:
     DenseMatrix<DM_MIN>  DN, DNT;
     

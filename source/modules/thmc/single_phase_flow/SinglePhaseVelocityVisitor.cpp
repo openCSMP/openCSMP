@@ -149,11 +149,11 @@ SinglePhaseVelocityVisitor<dim,CELL>::SinglePhaseVelocityVisitor(Model<dim>& mod
 template<uint32_t dim, template<uint32_t> class CELL>
 void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
 {
-    std::vector<ScalarVariable >           PF, RHO;
-    std::vector<DenseMatrix<DM_MIN> >      MTRL(1);// fluid pressure
-    ScalarVariable                phi, flux, rho;
-    VectorVariable<dim>           velo,ivelo;
-    DenseMatrix<DM_MIN>           DERIV;
+    std::vector<ScalarVariable >    PF, RHO;
+    std::vector<DenseMatrix<dim> >  MTRL(1);// fluid pressure
+    ScalarVariable                  phi, flux, rho;
+    VectorVariable<dim>             velo,ivelo;
+    DenseMatrix<DM_MIN>             DERIV;
     e->NodePropertyVector(fpres_key_, PF );
 
     // fluid density if needed

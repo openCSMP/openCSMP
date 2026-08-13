@@ -28,17 +28,17 @@ the arrays it creates for node acccess are too large.
 
 */
 StressesAndStrainsIP3D::StressesAndStrainsIP3D( const Model<3U>& sg,
-                                                          const char* oper,
-                                                          const char* basic,
-                                                          const char* test,
-                                                          bool  principal_vectors,
-                                                          bool geomechanics )
+                                                const char* oper,
+                                                const char* basic,
+                                                const char* test,
+                                                bool  principal_vectors,
+                                                bool geomechanics )
   : MathOperatorLHS<3U>(sg.Database(),oper,basic,test),
     strain_key_(sg.Database().StorageKey("strain")),
     stress_key_(sg.Database().StorageKey("stress")),
     DISPL_(3*3,1), 
-    STIFF_(1,DenseMatrix<DM_MIN>(6,6)), EGP_(6,1), SGP_(6,1),
-    STRAIN_(6,3), 
+    STIFF_(1,DenseMatrix<DM6>(6,6)), EGP_(6,1), SGP_(6,1),
+    STRAIN_(6,3),
     STRESS_(6,3),
     IPSTRAIN_(3*6), // 6 strain components
     IPSTRESS_(3*6), // 6 stress components

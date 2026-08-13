@@ -32,10 +32,10 @@
 // finite elements
 #include "PDE_Integrator.h"
 // left-handside
-#include "NumIntegral_dNT_op_dN_dV.h"  // mobility matrix
+#include "NumIntegral_dNT_lhsop_dN_dV.h"  // mobility matrix
 #include "NumIntegral_NT_lhsop_N_dV.h"
 // righthand side
-#include "NumIntegral_NT_op_N_dV.h"    // mass matrix
+#include "NumIntegral_NT_rhsop_N_dV.h"    // mass matrix
 #include "NumIntegral_dNT_op_dV.h"     // gravity term
 #include "NumIntegral_NT_op_N_dS.h"
 #include "PointSource_rhsop.h"
@@ -149,9 +149,9 @@ namespace csmp {
       PDE_Integrator<DIM,Element>  heat_conductor(solver);
       #endif
     
-      NumIntegral_dNT_op_dN_dV<DIM> conductance( model->Database(), "thermal conductivity", "temperature", "temperature");
-      NumIntegral_NT_op_N_dV<DIM>  heat_source( model->Database(), "heat source", "temperature" );
-      NumIntegral_NT_op_N_dS<DIM>  basal_hfu( model->Database(), "basal heat flow", "temperature" );
+      NumIntegral_dNT_lhsop_dN_dV<DIM>   conductance( model->Database(), "thermal conductivity", "temperature", "temperature");
+      NumIntegral_NT_rhsop_N_dV<DIM>  heat_source( model->Database(), "heat source", "temperature" );
+      NumIntegral_NT_op_N_dS<DIM>     basal_hfu( model->Database(), "basal heat flow", "temperature" );
        
       heat_conductor.Add( &conductance );
       heat_conductor.Add( &heat_source );
@@ -173,7 +173,7 @@ namespace csmp {
       #else
       PDE_Integrator<DIM,Element>     steady_state_pressure( solver );
       #endif
-      NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
+      NumIntegral_dNT_lhsop_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
       NumIntegral_dNT_op_dV<DIM>     gravity( model->Database(), "gravity term times density", "fluid pressure" );
 
       steady_state_pressure.Add( &p_conductance );                           
@@ -217,12 +217,12 @@ namespace csmp {
     CSMP_DEFAULT_LINEAR_SOLVER   solver;
     PDE_Integrator<DIM,Element>  transient_pressure(solver);
     #endif
-    NumIntegral_dNT_op_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<DIM>  p_conductance( model->Database(), "mass conductivity", "fluid pressure", "fluid pressure" );
 
     NumIntegral_dNT_op_dV<DIM>     gravity( model->Database(), "gravity term times density", "fluid pressure" );
     gravity.AddAccumulateLater();
     gravity.MultiplyWithTimeIncrement(true);
-    NumIntegral_NT_op_N_dV<DIM>    element_fluid_source( model->Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<DIM>    element_fluid_source( model->Database(), "fluid volume source", "fluid pressure" );
     element_fluid_source.AddAccumulateLater();
     // to account for absolute nodal fluid contributions due to PVT property effects
     PointSource_rhsop<DIM>         node_total_source( model->Database(), "nodal fluid volume source", "fluid pressure" );
@@ -230,7 +230,7 @@ namespace csmp {
     node_total_source.LumpedFormulation( true );
     node_total_source.AddAccumulateLater();
 
-    NumIntegral_NT_op_N_dV<DIM>    storage_rhs( model->Database(), "total compressibility", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<DIM>    storage_rhs( model->Database(), "total compressibility", "fluid pressure" );
     storage_rhs.LumpedFormulation(true);
     storage_rhs.MultiplyWithTimeIncrement(true);
 
@@ -254,8 +254,8 @@ namespace csmp {
     CSMP_DEFAULT_LINEAR_SOLVER   solver2;
     PDE_Integrator<DIM,Element>  transient_temperature(solver2);
     #endif
-    NumIntegral_dNT_op_dN_dV<DIM>  T_conductance( model->Database(), "thermal conductivity", "temperature", "temperature" );
-    NumIntegral_NT_op_N_dV<DIM>    heat_source( model->Database(), "heat source", "temperature" );
+    NumIntegral_dNT_lhsop_dN_dV<DIM>  T_conductance( model->Database(), "thermal conductivity", "temperature", "temperature" );
+    NumIntegral_NT_rhsop_N_dV<DIM>    heat_source( model->Database(), "heat source", "temperature" );
     heat_source.AddAccumulateLater();
 
     PointSource_rhsop<DIM>         node_heat_source( model->Database(), "nodal heat source", "temperature" );
@@ -263,7 +263,7 @@ namespace csmp {
     node_heat_source.MultiplyWithTimeIncrement(false);
     node_heat_source.LumpedFormulation( true );
     
-    NumIntegral_NT_op_N_dV<DIM>    thermal_capacitance_rhs( model->Database(), "total heat capacity", "temperature" );
+    NumIntegral_NT_rhsop_N_dV<DIM>    thermal_capacitance_rhs( model->Database(), "total heat capacity", "temperature" );
     thermal_capacitance_rhs.LumpedFormulation(true);
     thermal_capacitance_rhs.MultiplyWithTimeIncrement(true);
 

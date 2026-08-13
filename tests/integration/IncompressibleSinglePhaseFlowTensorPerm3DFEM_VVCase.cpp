@@ -6,8 +6,8 @@
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"
 #include "PointSource_rhsop.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
 #include "SAMG_Settings.h"
@@ -113,11 +113,11 @@ void IncompressibleSinglePhaseFlowTensorPerm3DFEM_VVCase::run()
 
     PDE_Integrator<DIM,Element> pressure_diffusion( solver );
 
-    NumIntegral_dNT_op_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
+    NumIntegral_dNT_lhsop_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
     printRangeOfVariable(model,"fluid pressure");
     printRangeOfVariable(model,"fluid volume source");
     printRangeOfVariable(model,"mobility");
-    NumIntegral_NT_op_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
 
     //Assemble the integrator
     pressure_diffusion.Add( &stiffness );

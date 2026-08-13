@@ -31,7 +31,7 @@ bool IsoparametricLinearPyramid_Test::SumOfInterpolationFunctionTest() // at int
  }
  
  
-Element<3U> IsoparametricLinearPyramid_Test::CreateLocalCoordinatePyramidElement( int n_integration_points )
+Element<3U> IsoparametricLinearPyramid_Test::CreateLocalCoordinatePyramidElement( uint32_t n_integration_points )
  {
     // creating a pyramid with the same coordinates as in parametric space
     static IsoparametricLinearPyramid pyra( n_integration_points );
@@ -78,7 +78,7 @@ Element<3U> IsoparametricLinearPyramid_Test::CreateLocalCoordinatePyramidElement
         
         volumer = 833.3333333333333
 */
-Element<3U> IsoparametricLinearPyramid_Test::CreateDistortedPyramidElement( int n_integration_points )
+Element<3U> IsoparametricLinearPyramid_Test::CreateDistortedPyramidElement( uint32_t n_integration_points )
  {
     // creating a pyramid with the same coordinates as in parametric space
     static IsoparametricLinearPyramid pyra( n_integration_points );
@@ -138,7 +138,7 @@ bool IsoparametricLinearPyramid_Test::InterpolationFunctionAtIntegrationPointsTe
                                            {0.033333333333, 0.122008467929, 0.455341801262, 0.122008467929, 0.267307929547},
                                            {0.122008467929, 0.033333333333, 0.122008467929, 0.455341801262, 0.267307929547} };
      vector<double> nrst(5,0.);
-     for ( int i{0}; i<elmt.Nodes(); ++i ) {
+     for ( uint32_t i{0}; i<elmt.Nodes(); ++i ) {
           elmt.N_AtIntegrationPoint( i, nrst );
           // testing the value of each interpolation function at each integration point
           _test( approximatelyEqual( nrst[0], qpoint_vals[i][0]) );
@@ -262,3 +262,4 @@ bool IsoparametricLinearPyramid_Test::Volume_Test()
 
 
 } // end csmp
+

@@ -39,7 +39,7 @@ ToDo: List:
 
 #include "DenseMatrix.h"
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "PDE_Integrator.h"
 

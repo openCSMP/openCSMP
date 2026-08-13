@@ -15,7 +15,9 @@ namespace csmp
       public:
         explicit DenseMatrix_Test( bool verbose=false );
         ~DenseMatrix_Test();
+        
         virtual void run();
+        
         DenseMatrix<4> A;
         DenseMatrix<4> ResA;
         DenseMatrix<4> B;
@@ -45,6 +47,11 @@ namespace csmp
         Point<3> Point3U;
 
         std::vector<double> x, y, sol_y, solB, solD;
+        
+    private:
+         
+        /// checks non-symmetric matrices, runtime dimension mismatches, matrix state,  and branch coverage (1D-3D)
+        void CornerCases_Test();
       
         const bool verbose_;
     };

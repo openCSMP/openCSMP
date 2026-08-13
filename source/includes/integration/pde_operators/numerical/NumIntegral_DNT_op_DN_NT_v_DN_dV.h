@@ -9,9 +9,9 @@ template<uint32_t> class Element;
 
 /// advection-dispersion integral, see Istok (1989), use to obtain steady-state solutions for small Peclet number flows
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim,CELL> {
+class NumIntegral_dNT_op_dN_NT_v_dN_dV final : public MathOperatorLHS<dim,CELL> {
   public:
-    NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>&, 
+    NumIntegral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>&, 
                                       const char* diffusion_oper,   ///< element prop, for instance thermal conductivity
                                       const char* advection_oper,   ///< element prop, for instance heat transport velocity
                                       const char* basic,            ///< e.g., fluid pressure
@@ -20,7 +20,7 @@ class NumIntegral_DNT_op_DN_NT_v_DN_dV : public MathOperatorLHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
 
-    NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>* clone() const override final { return new NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>(*this); }
+    NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
 
   private:
     DenseMatrix<DM_MIN>  DN, DNT, VIP, NT3;

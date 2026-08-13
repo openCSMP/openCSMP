@@ -4,7 +4,7 @@
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 // INTERFACE
 
@@ -14,6 +14,7 @@ ExampleSuite::ExampleSuite( const string &title, ostream *ostream )
     ostream_( ostream )
 {
 }
+
 
 /// start the stdIO interface
 void ExampleSuite::Run()
@@ -25,6 +26,7 @@ void ExampleSuite::Run()
   cout.flush();
   UIMenu();
 }
+
 
 /// clear suite of all examples, calls their destructors
 void ExampleSuite::Free()
@@ -230,7 +232,7 @@ int ExampleSuite::ChooseExample( const std::vector<Example*>* examples ) const
 {
   *ostream_ << "\n\nPlease enter example number(-1 to get back): ";
   size_t examplesCount( examples->size() );
-  auto exampleIndex( ChoiceWithinRange( -1, examplesCount ) );
+  auto exampleIndex( ChoiceWithinRange( -1, static_cast<long>(examplesCount) ) );
   return exampleIndex;
 }
 
@@ -249,7 +251,7 @@ bool ExampleSuite::ChooseExampleAction() const
 map<string,vector<Example*>* >::const_iterator ExampleSuite::ChooseCategory() const
 {
   *ostream_ << "\n\nChoose example by category or type 'q' to quit: ";
-  int categoryIndex( ChoiceWithinRange( 1, categories_.size() ) );
+  int categoryIndex( ChoiceWithinRange( 1, static_cast<long>(categories_.size()) ) );
 
   // quit
   if( categoryIndex == -1 )
@@ -268,7 +270,7 @@ map<string,vector<Example*>* >::const_iterator ExampleSuite::ChooseCategory() co
 
 
 /// assure that user choice is within range, otherwise reprompt
-int ExampleSuite::ChoiceWithinRange( double min, double max ) const
+int ExampleSuite::ChoiceWithinRange( long min, long max ) const
 {
   string input;
   int choice;

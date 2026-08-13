@@ -647,9 +647,11 @@ inline bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) co
  {
     assert( nptr != nullptr );
 
+    // perimeter nodes first
     if ( binary_search( next(node_vec_.begin(), static_cast<long>(InteriorNodes())), node_vec_.end(), nptr ) )
        return true;
 
+    // interior nodes next
     if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), static_cast<long>(InteriorNodes())), nptr ) )
        return true;
 

@@ -208,9 +208,11 @@ void SparseMatrix::ZeroColumn( size_t col )
 */
 void SparseMatrix::Assign( size_t i, size_t j, double val )
  {
-    // ignoring zero values
-    if ( !(val != 0.) ) return;
-    
+    // removing zeroed values
+    if ( !(val != 0.) ) {
+         RemoveEntry( i, j );
+         return;
+      }    
     if ( i >= data_.size() ) {
          cerr <<"\nSparseMatrix::Assign("<< i <<","<< j <<"): ";
          cerr <<"Row index out of range."<< endl;

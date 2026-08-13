@@ -8,8 +8,8 @@
 #include "AccumulationSpeedProfiling_Test.h"
 #include "Model.h"
 #include "ANSYS_Model3D.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
 #include <Eigen/Dense>
@@ -71,7 +71,7 @@ void AccumulationSpeedProfiling_Test::AccumulateIntegralOnPolyhedralMesh()
 
     // create some common PDE operators for testing
     // --------------------------------------------
-    NumIntegral_dNT_op_dN_dV<3U> lap( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<3U> lap( model_ptr_->Database(), "conductivity", "fluid pressure",  "fluid pressure" );
 
     // 1. accumulating into the sparse matrix 'G'
     // ------------------------------------------
@@ -101,7 +101,7 @@ void AccumulationSpeedProfiling_Test::AccumulateIntegralOnPolyhedralMesh()
               
     // 2. accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
-    NumIntegral_NT_op_N_dV<3U>   src( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U>   src( model_ptr_->Database(),  "fluid volume source", "fluid pressure" );
     vector<double> rhs( model_domain.Nodes(), 0. );
 
     // accumulating of mass matrix

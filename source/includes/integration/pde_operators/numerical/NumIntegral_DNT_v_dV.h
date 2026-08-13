@@ -1,5 +1,5 @@
-#ifndef NumIntegral_DNT_v_dV_h
-#define NumIntegral_DNT_v_dV_h
+#ifndef CSMP_NUM_INTEGRAL_DNT_V_DV_H
+#define CSMP_NUM_INTEGRAL_DNT_V_DV_H
 
 #include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
@@ -15,9 +15,9 @@ template<uint32_t> class Element;
 
 /// for instance for calculation of hydrostatic gradient
 template<uint32_t dim, template<uint32_t> class CELL>
-class NumIntegral_DNT_v_dV : public MathOperatorRHS<dim,CELL> {
+class NumIntegral_dNT_v_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_DNT_v_dV( const PropertyDatabase<dim>&, 
+    NumIntegral_dNT_v_dV( const PropertyDatabase<dim>&, 
                           const char* oper,                  // e.g., Darcy velocity
                           const char* r_factor,
                           const char* dens,                  // e.g., fluid density

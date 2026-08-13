@@ -77,11 +77,11 @@ void Integral_var_NT_lhsop_N_dV<dim,CELL>::ComputeContribution( const CELL<dim>&
     MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim,CELL>::LHS.Zero();
   
-    DenseMatrix< DM_MIN> mat;
+    DenseMatrix<DM_MIN> mat;
     e.IntegralNN(mat);
     
-    for (auto i = 0; i < e.Nodes(); ++i) {
-      for (auto k = 0; k < e.Nodes(); ++k) {
+    for (uint32_t i = 0; i < e.Nodes(); ++i) {
+      for (uint32_t k = 0; k < e.Nodes(); ++k) {
         MathOperatorLHS<dim,CELL>::LHS(i, i) += mat(i, k) * vvar_[k]();
       }
     }

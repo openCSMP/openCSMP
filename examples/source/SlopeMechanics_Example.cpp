@@ -9,8 +9,8 @@
 #include "SlopeMechanics_Example.h"
 #include "compareFloats.h"
 #include "ANSYS_Model2D.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "PDE_Integrator.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
@@ -177,7 +177,7 @@ void SlopeMechanics_Example::Run()
 
   PDE_Integrator<DIM,Element>  hydrostatic_pressure( solver );
 
-  NumIntegral_dNT_op_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
+  NumIntegral_dNT_lhsop_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
                                                          "conductivity",
                                                          "fluid pressure", "fluid pressure" );
 

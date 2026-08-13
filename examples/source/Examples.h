@@ -69,6 +69,6 @@
 #include "PressureDependentBlackOilProperties_Example.h"
 #include "RegionMonitor_Example.h"
 #include "Tractions_Example.h"
-//#include "FieldVariable_Example.h"
+#include "PETSc_Example.h"
 
 #endif

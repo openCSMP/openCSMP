@@ -11,6 +11,7 @@
 #include "PolygonGrid.h"
 #include "VSet.h"
 #include "ModelTopology.h"
+#include "ArrayVariable.h"
 
 
 #include "IsoparametricLinearHexahedron.h"

@@ -218,8 +218,8 @@ instantiation of some PDE operators as first step:
   // compute steady-state fluid pressure from [K]{p} = {q}
   PDE_Integrator<2U>  fluid_pressure;
 
-  NumIntegral_dNT_op_dN_dV<2U>  conductance( example_model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-  NumIntegral_NT_op_N_dV<2U>    source( example_model.Database(), "fluid volume source", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<2U>  conductance( example_model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<2U> source( example_model.Database(), "fluid volume source", "fluid pressure" );
   VelocityAndVolumeFlux<2U>     velo( example_model, "conductivity", "porosity", "fluid pressure", true );
 
   fluid_pressure.Add( &conductance );

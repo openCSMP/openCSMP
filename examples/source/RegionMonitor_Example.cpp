@@ -24,11 +24,10 @@
 
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"  // conductance matrix (LHS)
-#include "NumIntegral_NT_op_N_dV.h"    // fluid volume source
+#include "NumIntegral_dNT_lhsop_dN_dV.h"  // conductance matrix (LHS)
+#include "NumIntegral_NT_rhsop_N_dV.h"    // fluid volume source
 #include "NumIntegral_NT_op_N_dS.h"    // boundary integral
 #include "NumIntegral_NT_lhsop_N_dV.h" // capacitance matrix LHS
-#include "NumIntegral_NT_op_N_dV.h"    // capacitance matrix (lumped) RHS
 
 #include "VelocityAndVolumeFlux.h"     // post-processing of Darcy velocity
 
@@ -107,16 +106,16 @@ void RegionMonitor_Example::Run()
   transient_pressure.SetSolver( linear_solver );
 #endif
 
-  NumIntegral_dNT_op_dN_dV<dim> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<dim> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                             conductance.MultiplyWithTimeIncrement(true);
 
   NumIntegral_NT_lhsop_N_dV<dim> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                              capacitance_lhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<dim> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<dim> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                           capacitance_rhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<dim> source( model.Database(), "fluid volume source",  "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<dim> source( model.Database(), "fluid volume source",  "fluid pressure" );
                                           source.MultiplyWithTimeIncrement(true);
                                           source.AddAccumulateLater();
                                           source.LumpedFormulation(true);

@@ -66,7 +66,7 @@ class FiniteElementPolicy {
     void    N_AtIntegrationPoint( uint32_t ipoint, std::vector<double>& N ) const;
 
     /// first (constant) derivatives of linear interpolation functions of analytically integrated simplex
-    void	  Integral_dNT_K_dN(DenseMatrix<DM_MIN>& M, DenseMatrix<DM_MIN>& K) const;
+    void	  Integral_dNT_K_dN( DenseMatrix<DM_MIN>& M, DenseMatrix<DM3>& MTRL ) const;
 
 	  void    dN( DenseMatrix<DM_MIN>& ) const;
   

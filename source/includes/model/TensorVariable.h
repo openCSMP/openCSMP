@@ -9,294 +9,1091 @@
 namespace csmp {
 
 /**
-@brief full 3D specialisation of the TensorVariable class template
+@brief Full 3D specialisation of the TensorVariable class template.
 
 @author S.K. Matthai
 @author Stephen G. Roberts
 @date 2001
+@author (refactored) 2024
 
 @section motivation Motivation
 
-Template specialization implementing optimized tensors in CSP. Depending
-on the spatial dimension of the model, tensor variables are either
-2 x 2 or 3 x 3 matrices. Each value is associated with a flag which
-can be set to indicate to finite-element computations that the
-corresponding degree of freedom is enabled or restricted.
+Template specialisation implementing optimised 3×3 tensors in CSMP.
+Each diagonal element is associated with a VARIABLE_FLAG which can
+indicate to finite-element computations that the corresponding degree
+of freedom is enabled or restricted.
 
+@section squaring Squaring operations
 
-@section functionality Functionality
+Three distinct squaring operations are provided to avoid ambiguity:
 
-Apart from the standard constructors with a default where all elements
-are initialized to NaN (not-a-number) and the flags are set to plain,
-assignment is defined to allow the storage of tensors in STL containers.
-Ordering using STL's less() is facilitated through an operator<() that
-compares the determinants of matrices. All costly operations like
-this are unrolled.
-
-TensorVariable implements typical accessors, mutators for tensor elements
-and operations on entire tensors. To get at element 1,2 of 3D tensor, ts,
-use ts(1,2), for instance.
-
-Value-by-value operations such as matrix addition, subtraction, division
-are implemented by the operators +, -, /. operator*() assumes different
-meanings dependent on the type of its arguments. Thus, tensors can be
-multiplied with scalars, vectors, and tensors to produce the standard
-results expected for matrix algebra. Other matrix algebraic
-operations include finding the Transposed(), Determinant(), Inverse(),
-Identity(), and Adjoint() matrices.
-
-The *= operator will always produce a temporary matrix. Therefore,
-* should be preferred if the result is to be assigned to a new variable.
-
-Assignent of a vector to a tensor is done by placing the vector in the
-tensors diagonal and zeroing its off-diagonal elements.
-
-Matrices can be input and output via the console, using the In() and
-Out() member functions.
-
-
-@section motivation Motivation
-
-Part of a consistent framework for physical variables for which there
-exist overloaded operators so that vector-matrix multiplications and
-other operations can be written in a straight forward way.
-
+  Squared()       — component-wise (Hadamard): T_ij^2
+  MatrixSquared() — matrix product: result_ij = sum_k T_ik * T_kj
+  DoubleContraction() — scalar T:T = sum_ij T_ij^2 (Frobenius norm squared)
 
 @section implementation Implementation
 
-Using the template specialization mechanism of C++. Specializations
-exist only for the 2 and 3D cases. These are declared in this (3D)
-and the header file 'TensorVariable2.h' (2D), respectively.
-
-
-@section examples Application Examples
-
-To diagonalize a tensor variable, one could write:
-
-@code
-VectorVariable<double,2> vc(PLAIN,PLAIN,1,1);
-TensorVariable<double,2> ts;
-
-ts.Identity();
-vc = ts * vc;
-
-vc.Out();
-@endcode
-
-@todo (2-D) Const/Non const access operator convention not consistent with VectorVariable/ArrayVariable
+Using the template specialisation mechanism of C++. Specialisations
+exist for the 1D, 2D, and 3D cases. All performance-critical methods
+are inlined with unrolled loops.
 */
 template<>
-class TensorVariable<3U> {
+class TensorVariable<3U>
+{
 public:
-  static constexpr VARIABLE_TYPE VariableType = TENSOR;
+    static constexpr VARIABLE_TYPE VariableType = TENSOR;
 
-  TensorVariable()  noexcept;
+    // -----------------------------------------------------------------------
+    // Construction
+    // -----------------------------------------------------------------------
 
-  /// creates isotropic diagonal tensor with diagonal elements equal to supplied value
-  TensorVariable( VARIABLE_FLAG flag, double val ) noexcept;
+    /** Default constructor: all elements NaN, all flags ANY. */
+    TensorVariable() noexcept;
 
-  /// full initialisation where all diagonal elements have the same flag
-  TensorVariable( VARIABLE_FLAG f,
-                  double v11, double v12, double v13,
-                  double v21, double v22, double v23,
-                  double v31, double v32, double v33 ) noexcept;
+    /**
+    Constructs an isotropic diagonal tensor with all diagonal elements
+    equal to @p val and all flags equal to @p flag. Off-diagonal
+    elements are zero.
+    */
+    TensorVariable( VARIABLE_FLAG flag, double val ) noexcept;
 
-  /// full initialisation
-  TensorVariable( const VARIABLE_FLAG f11, const VARIABLE_FLAG f22, const VARIABLE_FLAG f33,
-                  const double  v11, const double  v12, const double  v13,
-                  const double  v21, const double  v22, const double  v23,
-                  const double  v31, const double  v32, const double  v33 ) noexcept;
+    /**
+    Full initialisation with a single flag for all diagonal elements.
+    */
+    TensorVariable( VARIABLE_FLAG f,
+                    double v11, double v12, double v13,
+                    double v21, double v22, double v23,
+                    double v31, double v32, double v33 ) noexcept;
 
-  /// read/write access to the elements of the tensor
-  double&        operator()( uint32_t i, uint32_t j ) noexcept;
+    /**
+    Full initialisation with independent flags for each diagonal element.
+    */
+    TensorVariable( VARIABLE_FLAG f11, VARIABLE_FLAG f22, VARIABLE_FLAG f33,
+                    double v11, double v12, double v13,
+                    double v21, double v22, double v23,
+                    double v31, double v32, double v33 ) noexcept;
 
-  /// read-only access to the elements of the tensor
-  const double&  operator()( uint32_t i, uint32_t j ) const noexcept;
+    // -----------------------------------------------------------------------
+    // Element access
+    // -----------------------------------------------------------------------
 
-  /// alternative mutator of tensor elements 0..8 accessing them sequentially row by row
-  void      Component( uint32_t, double ) noexcept;
+    /** Read/write access to element (i,j). */
+    double&       operator()( uint32_t i, uint32_t j )       noexcept;
 
-  /// alternative accessor of tensor elements 0..8 accessing them sequentially row by row
-  [[nodiscard]] double Component( uint32_t i ) const noexcept;
+    /** Read-only access to element (i,j). */
+    const double& operator()( uint32_t i, uint32_t j ) const noexcept;
 
-  /// number of entries in tensor (dim x dim = 9 in this 3D case)
-  static constexpr uint32_t Size() noexcept { return 9u; };
+    /**
+    Alternative mutator: accesses elements 0..8 sequentially row by row.
+    Element k maps to row k/3, column k%3.
+    */
+    void   Component( uint32_t k, double val ) noexcept;
 
-  /// assigns second argument to all elements of the tensor, first argument is not used; @todo remove
-  void Resize( uint32_t, double newValue = std::numeric_limits<double>::quiet_NaN() );
+    /**
+    Alternative accessor: accesses elements 0..8 sequentially row by row.
+    */
+    [[nodiscard]] double Component( uint32_t k ) const noexcept;
 
-  TensorVariable   operator+( double val ) const noexcept;
-  TensorVariable   operator-( double val ) const noexcept;
-  TensorVariable   operator*( double val ) const noexcept;
-  TensorVariable   operator/( double val ) const noexcept;
+    /** Number of entries in the tensor (3×3 = 9). */
+    static constexpr uint32_t Size() noexcept { return 9U; }
 
-  TensorVariable&  operator+=( double val ) noexcept;
-  TensorVariable&  operator-=( double val ) noexcept;
-  TensorVariable&  operator*=( double val ) noexcept;
-  TensorVariable&  operator/=( double val ) noexcept;
+    /**
+    Sets all elements to @p newValue. The first argument is unused
+    (retained for interface compatibility with other variable types).
+    */
+    void Resize( uint32_t, double newValue =
+                     std::numeric_limits<double>::quiet_NaN() ) noexcept;
 
-  TensorVariable&  operator+=( const ScalarVariable& ) noexcept;
-  TensorVariable&  operator-=( const ScalarVariable& ) noexcept;
-  TensorVariable&  operator*=( const ScalarVariable& ) noexcept;
-  TensorVariable&  operator/=( const ScalarVariable& ) noexcept;
-  TensorVariable   operator+( const TensorVariable& ) const noexcept;
-  TensorVariable   operator-( const TensorVariable& ) const noexcept;
-  TensorVariable   operator*( const TensorVariable& ) const noexcept;
+    // -----------------------------------------------------------------------
+    // Arithmetic — returning new tensor (flags from *this)
+    // -----------------------------------------------------------------------
 
-  /// (A x) matrix-vector multiplication -> vector (v treated as column vector)
-  VectorVariable<3U>  operator*( const VectorVariable<3U>& ) const noexcept;
+    TensorVariable operator+( double val )              const noexcept;
+    TensorVariable operator-( double val )              const noexcept;
+    TensorVariable operator*( double val )              const noexcept;
+    TensorVariable operator/( double val )              const noexcept;
 
-  /// (A x) matrix-vector multiplication -> vector (v treated as column vector)
-  Point<3U>  operator*( const Point<3U>& ) const noexcept;
+    /** Element-by-element addition. */
+    TensorVariable operator+( const TensorVariable& )   const noexcept;
 
-  /// value by value division of the elements of the tensor with another one
-  TensorVariable   operator/( const TensorVariable& ) const noexcept;
+    /** Element-by-element subtraction. */
+    TensorVariable operator-( const TensorVariable& )   const noexcept;
 
-  /// value by value addition of the elements of the tensors
-  TensorVariable&  operator+=( const TensorVariable& ) noexcept;
+    /**
+    Matrix multiplication: result_ij = sum_k this_ik * ts_kj.
+    Uses unrolled loops for performance.
+    */
+    TensorVariable operator*( const TensorVariable& )   const noexcept;
 
-  /// value by value subtraction from the lh-tensor by the rh tensor
-  TensorVariable&  operator-=( const TensorVariable& ) noexcept;
+    /** Matrix-vector multiplication: result = this * vc (column vector). */
+    VectorVariable<3U> operator*( const VectorVariable<3U>& ) const noexcept;
 
-  /// value by value division of the elements of the lh-tensor by those of the righthand tensor
-  TensorVariable&  operator/=( const TensorVariable& ) noexcept;
+    /** Matrix-point multiplication: result = this * v. */
+    Point<3U>          operator*( const Point<3U>& )           const noexcept;
 
-  /// matrix multiplication -> matrix (A.rows, B.cols); creates temporary tensor, avoid this using 'operator*()'
-  TensorVariable&  operator*=( const TensorVariable& ) noexcept;
+    /** Element-by-element division. */
+    TensorVariable operator/( const TensorVariable& )   const noexcept;
 
-  /// sets all ij values to val or sc
-  TensorVariable&  operator=( double val ) noexcept;
+    // -----------------------------------------------------------------------
+    // Compound assignment
+    // -----------------------------------------------------------------------
 
-  /// sets all ii values to sc (value and flags of diagonal elements)
-  TensorVariable&  operator=( const ScalarVariable& ) noexcept;
+    TensorVariable& operator+=( double val )            noexcept;
+    TensorVariable& operator-=( double val )            noexcept;
+    TensorVariable& operator*=( double val )            noexcept;
+    TensorVariable& operator/=( double val )            noexcept;
 
-  /// assigns vector to diagonal elements of tensor, off-diagonal elements are set to zero
-  TensorVariable&  operator=( const VectorVariable<3U>& ) noexcept;
+    TensorVariable& operator+=( const ScalarVariable& ) noexcept;
+    TensorVariable& operator-=( const ScalarVariable& ) noexcept;
+    TensorVariable& operator*=( const ScalarVariable& ) noexcept;
+    TensorVariable& operator/=( const ScalarVariable& ) noexcept;
 
-  /// element-by-element comparison of ij values
-  bool             operator==( const TensorVariable& ) const noexcept;
+    /** Element-by-element addition in place. */
+    TensorVariable& operator+=( const TensorVariable& ) noexcept;
 
-  /// element-by-element comparison of ij values
-  bool             operator!=( const TensorVariable& ) const noexcept;
+    /** Element-by-element subtraction in place. */
+    TensorVariable& operator-=( const TensorVariable& ) noexcept;
 
-  /// comparison of the determinants of the tensors
-  bool             operator<( const TensorVariable& ) const noexcept;
+    /** Element-by-element division in place. */
+    TensorVariable& operator/=( const TensorVariable& ) noexcept;
 
-  /// compares the individual elements of the tensor with the ranges specified in PropertyDatabase file
-  bool             IsWithinRange( double vmin, double vmax ) const noexcept;
-  
-  bool             Has_NaN_Values() const noexcept;
+    /**
+    Matrix multiplication in place: this = this * ts.
+    Creates a temporary tensor internally.
+    Prefer operator*() when assigning to a new variable.
+    */
+    TensorVariable& operator*=( const TensorVariable& ) noexcept;
 
+    // -----------------------------------------------------------------------
+    // Assignment
+    // -----------------------------------------------------------------------
 
-  /// returns the flag of the diagonal tensor element of choice
-  VARIABLE_FLAG    Flag( uint32_t i = 0 ) const noexcept;
+    /** Sets all elements to @p val. Flags are not modified. */
+    TensorVariable& operator=( double val )                    noexcept;
 
-  /// returns smallest element in tensor (this is zero if the tensor is diagonal)
-  double           MinElement() const noexcept;
+    /**
+    Sets all elements to the scalar value and all flags to the
+    scalar's flag.
+    */
+    TensorVariable& operator=( const ScalarVariable& )         noexcept;
 
-  /// returns largest element in tensor
-  double           MaxElement() const noexcept;
+    /**
+    Assigns the vector to the diagonal elements of the tensor.
+    Off-diagonal elements are set to zero. Flags are taken from
+    the vector components.
+    */
+    TensorVariable& operator=( const VectorVariable<3U>& )     noexcept;
 
-  double           Determinant() const noexcept;
+    // -----------------------------------------------------------------------
+    // Comparison
+    // -----------------------------------------------------------------------
 
-  /// returns the sum of the diagonal values of the tensor
-  double           Trace() const noexcept;
+    /** Element-by-element equality of values and flags. */
+    bool operator==( const TensorVariable& ) const noexcept;
 
-  /// returns the conjugate transpose of the tensor (commonly denoted M^(H))
-  TensorVariable   Adjoint() const noexcept;
+    /** Element-by-element inequality. */
+    bool operator!=( const TensorVariable& ) const noexcept;
 
-  /// returns a tensor the product of which with the original tensor gives the identity matrix
-  TensorVariable   Inverse() const noexcept;
+    /**
+    Ordering by pointer address — satisfies strict weak ordering for
+    use in STL associative containers. Does not compare values.
+    */
+    bool operator<( const TensorVariable& )  const noexcept;
 
-  /// returns the transposed of the tensor into a new tensor variable
-  TensorVariable   Transposed()  const noexcept;
+    // -----------------------------------------------------------------------
+    // Squaring operations (three distinct semantics)
+    // -----------------------------------------------------------------------
 
-  /// assuming that the tensor is symmetric and positive definite, method returns its sorted Eigen values (largest to smallest)
-  bool             EigenValuesPositiveDefiniteSymmetricMatrix( double& eigenValue0,
-                                                               double& eigenValue1,
-                                                               double& eigenValue2 ) const;
+    /**
+    Component-wise (Hadamard) squaring in place: T_ij = T_ij^2.
+    This is NOT the matrix product. Use MatrixSquared() for T*T.
+    */
+    TensorVariable& HadamardSquared() noexcept;
 
-  /// alternative Eigen decomposition that should also work for non-symmetric matrices
-  bool              EigenNonSymmetric( VectorVariable<3U>& eigenVals, TensorVariable<3U>& eigenVecs ) const;
+    /**
+    Matrix product of this tensor with itself in place:
+    result_ij = sum_k T_ik * T_kj.
+    Equivalent to *this = *this * *this.
+    Use HadamardSquared() for component-wise squaring.
+    */
+    TensorVariable& MatrixSquared() noexcept;
 
-  /// assuming that the tensor is symmetric and positive definite, its Eigenvalues are returned into the supplied VectorVariable
-  bool              EigenValues( VectorVariable<3U>& vecEigenvalues ) const;
+    /**
+    Double contraction T:T = sum_ij T_ij^2.
+    Returns the Frobenius norm squared as a scalar.
+    This is a reduction — the tensor itself is not modified.
+    */
+    [[nodiscard]] double DoubleContraction() const noexcept;
 
-  /// assuming that the tensor is symmetric and positive definite, its Eigenvalues are returned into the supplied STL vector
-  bool              EigenValues( std::vector<double>& vecEigenvalues ) const;
+    // -----------------------------------------------------------------------
+    // Queries
+    // -----------------------------------------------------------------------
 
-  /// assuming that the tensor is symmetric and positive definite, method returns Eigenvalues and vectors that can be normalised to 1
-  bool              Eigen( VectorVariable<3U>& vvEigenvalues, TensorVariable<3U>& tvEigenvectors, bool bNormalize ) const;
+    /**
+    Returns the flag of diagonal element @p i (0, 1, or 2).
+    Const version.
+    */
+    VARIABLE_FLAG  Flag( uint32_t i = 0 ) const noexcept;
 
-  /// assigns diagonal values to tensor (off-diagonal elements are not touched)
-  void              DiagonalValues( double f_00, double f_11, double f_22 ) noexcept;
+    /**
+    Returns a reference to the flag of diagonal element @p i.
+    Non-const version.
+    */
+    VARIABLE_FLAG& Flag( uint32_t i = 0 )       noexcept;
 
-  /// assigns diagonal values to tensor from STL vector
-  void              DiagonalValues( const std::vector<double>& ) noexcept;
+    /**
+    Returns true if all diagonal elements lie within [@p vmin, @p vmax].
+    Off-diagonal elements are not checked (assumes diagonal dominance).
+    */
+    bool IsWithinRange( double vmin, double vmax ) const noexcept;
 
-  /// assigns diagonal values to tensor
-  void              DiagonalValues( const VectorVariable<3U>& ) noexcept;
+    /**
+    Returns true if any diagonal element is NaN.
+    Off-diagonal elements are not checked.
+    */
+    bool Has_NaN_Values() const noexcept;
 
-  /// assigns vector variable to row i of the tensor
-  void              AssignToRow( uint32_t i, VectorVariable<3U>& ) noexcept;
+    /** Returns the smallest element in the tensor. */
+    double MinElement() const noexcept;
 
-  /// assigns vector variable to column j of the tensor
-  void              AssignToColumn( uint32_t j, VectorVariable<3U>& ) noexcept;
+    /** Returns the largest element in the tensor. */
+    double MaxElement() const noexcept;
 
-  /// returns row iRow into the argument VectorVariable
-  VectorVariable<3U> Row( uint32_t iRow ) const;
+    /** Returns the determinant of the tensor. */
+    double Determinant() const noexcept;
 
-  /// returns column iCol into the argument VectorVariable
-  VectorVariable<3U> Column( uint32_t iCol ) const;
+    /** Returns the trace (sum of diagonal elements). */
+    double Trace() const noexcept;
 
-  /// accessor/mutator of the flags of the diagonal elements of the tensor
-  VARIABLE_FLAG&    Flag( uint32_t i = 0 );
+    // -----------------------------------------------------------------------
+    // Matrix operations
+    // -----------------------------------------------------------------------
 
-  /// converts tensor into identity matrix
-  void              Identity() noexcept;
+    /** Returns the adjoint (classical adjugate) matrix. */
+    TensorVariable Adjoint()    const noexcept;
 
-  /// prompts user to initialise the tensor from the command line
-  void              In();
+    /**
+    Returns the inverse of the tensor.
+    Prints a warning and returns a NaN tensor if the determinant is zero.
+    */
+    TensorVariable Inverse()    const noexcept;
 
-  /// prints the tensor to the command line
-  void              Out() const;
+    /** Returns the transpose of the tensor. */
+    TensorVariable Transposed() const noexcept;
 
-  /// reads the tensor from the supplied input file
-  bool              In( std::fstream& fp );
+    /** Converts this tensor to the identity matrix. */
+    void Identity() noexcept;
 
-  /// writes the tensor to the supplied output file
-  bool              Out( std::fstream& fp ) const;
+    // -----------------------------------------------------------------------
+    // Diagonal operations
+    // -----------------------------------------------------------------------
+
+    /** Assigns @p f_00, @p f_11, @p f_22 to the diagonal elements. */
+    void DiagonalValues( double f_00, double f_11, double f_22 ) noexcept;
+
+    /** Assigns the first three elements of @p v to the diagonal. */
+    void DiagonalValues( const std::vector<double>& v ) noexcept;
+
+    /** Assigns the vector components to the diagonal. Flags are also copied. */
+    void DiagonalValues( const VectorVariable<3U>& v ) noexcept;
+
+    /** Assigns the vector to row @p i of the tensor. */
+    void AssignToRow(    uint32_t i, VectorVariable<3U>& v ) noexcept;
+
+    /** Assigns the vector to column @p j of the tensor. */
+    void AssignToColumn( uint32_t j, VectorVariable<3U>& v ) noexcept;
+
+    /** Returns row @p iRow as a VectorVariable. */
+    VectorVariable<3U> Row(    uint32_t iRow ) const;
+
+    /** Returns column @p iCol as a VectorVariable. */
+    VectorVariable<3U> Column( uint32_t iCol ) const;
+
+    // -----------------------------------------------------------------------
+    // Eigenvalue / eigenvector methods
+    // -----------------------------------------------------------------------
+
+    /**
+    Computes eigenvalues for a symmetric positive definite tensor using
+    Cardano's formula. Returns eigenvalues in descending order.
+    Returns false if the discriminant is positive (complex roots —
+    should not occur for a symmetric matrix).
+    */
+    bool EigenValuesPositiveDefiniteSymmetricMatrix(
+             double& eigenValue0,
+             double& eigenValue1,
+             double& eigenValue2 ) const;
+
+    /**
+    Delegates to EigenValuesPositiveDefiniteSymmetricMatrix.
+    Returns eigenvalues into @p vecEigenvalues.
+    */
+    bool EigenValues( VectorVariable<3U>& vecEigenvalues ) const;
+
+    /**
+    Delegates to EigenValuesPositiveDefiniteSymmetricMatrix.
+    Returns eigenvalues into @p vecEigenvalues.
+    */
+    bool EigenValues( std::vector<double>& vecEigenvalues ) const;
+
+    /**
+    Computes eigenvalues and eigenvectors for a symmetric tensor using
+    Householder tridiagonalisation + symmetric tridiagonal QL algorithm.
+    Off-diagonal elements are symmetrised by averaging.
+    Eigenvalues are returned in descending order.
+    Eigenvectors are stored as columns of @p eigenVecs.
+    */
+    bool EigenSymmetric( VectorVariable<3U>& eigenVals,
+                         TensorVariable<3U>& eigenVecs ) const;
+
+    /**
+    Computes eigenvalues and eigenvectors for a weakly non-symmetric
+    tensor by decomposing into symmetric and skew-symmetric parts.
+    Returns true if ||W||_F / ||S||_F <= @p tolerance.
+    Returns false and issues WARNING if asymmetry exceeds tolerance.
+
+    @param tolerance  Maximum permitted asymmetry ratio. Default 1e-6.
+    */
+    bool EigenWeaklyNonSymmetric( VectorVariable<3U>& eigenVals,
+                                  TensorVariable<3U>& eigenVecs,
+                                  double              tolerance = 1.0e-6 ) const;
+
+    /**
+    Computes eigenvalues and eigenvectors assuming the tensor is
+    symmetric, using Cardano's formula for eigenvalues and
+    LU-backsubstitution for eigenvectors.
+    If @p bNormalize is true, eigenvectors are normalised to unit length.
+    Returns false if the matrix rank is zero.
+    */
+    bool Eigen( VectorVariable<3U>& evals,
+                TensorVariable<3U>& evecs,
+                bool                bNormalize ) const;
+
+    // -----------------------------------------------------------------------
+    // I/O
+    // -----------------------------------------------------------------------
+
+    /** Prompts the user to enter tensor values from the command line. */
+    void In();
+
+    /** Prints the tensor to stdout. */
+    void Out() const;
+
+    /** Reads the tensor from a binary file stream. */
+    bool In(  std::fstream& fp );
+
+    /** Writes the tensor to a binary file stream. */
+    bool Out( std::fstream& fp ) const;
 
 private:
-  std::array<VARIABLE_FLAG, 3U>           flag;
-  std::array<std::array<double, 3U>, 3U>  data;
+    std::array<VARIABLE_FLAG, 3U>           flag;
+    std::array<std::array<double, 3U>, 3U>  data;
 };
 
 
-/// (x^T A)^T = A^T x  (vector - matrix multiplication -> vector(A.cols))
-VectorVariable<3U>  operator*( const VectorVariable<3U>& vc, const TensorVariable<3U>& ts ) noexcept;
+// ============================================================================
+//  Free functions
+// ============================================================================
 
-/// (x^T A)^T = A^T x  (vector - matrix multiplication -> vector(A.cols))
-Point<3U>  operator*( const Point<3U>& vc, const TensorVariable<3U>& ts ) noexcept;
+/**
+Vector-matrix multiplication: result = vc^T * ts
+(equivalent to ts^T * vc as a column vector).
+*/
+VectorVariable<3U> operator*( const VectorVariable<3U>& vc,
+                               const TensorVariable<3U>& ts ) noexcept;
 
+/** Point-matrix multiplication. */
+Point<3U> operator*( const Point<3U>& vc,
+                     const TensorVariable<3U>& ts ) noexcept;
 
-/// ostream operator for exporting the tensor to cout or file streams
+/** Stream output operator. */
 template<uint32_t dim>
-std::ostream&  operator<<( std::ostream& stream, const TensorVariable<dim>& o );
+std::ostream& operator<<( std::ostream& stream,
+                           const TensorVariable<dim>& o );
 
-
-/// fastest way to insert a tensor into an STL container
+/** Factory function for 2D tensors. */
 TensorVariable<2U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG,
                                double, double,
                                double, double ) noexcept;
 
+/** Factory function for 3D tensors. */
 TensorVariable<3U> makeTensor( VARIABLE_FLAG, VARIABLE_FLAG, VARIABLE_FLAG,
                                double, double, double,
                                double, double, double,
                                double, double, double ) noexcept;
 
 
-} // csmp 
+// ============================================================================
+//  Inline definitions
+// ============================================================================
 
+inline TensorVariable<3U>::TensorVariable() noexcept
+    : flag{ { ANY, ANY, ANY } },
+      data{ { { std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN() },
+              { std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN() },
+              { std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN(),
+                std::numeric_limits<double>::quiet_NaN() } } }
+{}
+
+inline TensorVariable<3U>::TensorVariable(
+    VARIABLE_FLAG f, double val ) noexcept
+    : flag{ { f, f, f } },
+      data{ { { val, 0., 0. },
+              { 0., val, 0. },
+              { 0., 0., val } } }
+{}
+
+inline TensorVariable<3U>::TensorVariable(
+    VARIABLE_FLAG f,
+    double v11, double v12, double v13,
+    double v21, double v22, double v23,
+    double v31, double v32, double v33 ) noexcept
+    : flag{ { f, f, f } },
+      data{ { { v11, v12, v13 },
+              { v21, v22, v23 },
+              { v31, v32, v33 } } }
+{}
+
+inline TensorVariable<3U>::TensorVariable(
+    VARIABLE_FLAG f11, VARIABLE_FLAG f22, VARIABLE_FLAG f33,
+    double v11, double v12, double v13,
+    double v21, double v22, double v23,
+    double v31, double v32, double v33 ) noexcept
+    : flag{ { f11, f22, f33 } },
+      data{ { { v11, v12, v13 },
+              { v21, v22, v23 },
+              { v31, v32, v33 } } }
+{}
+
+inline double& TensorVariable<3U>::operator()(
+    uint32_t i, uint32_t j ) noexcept
+{
+#ifndef NDEBUG
+    if ( i >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::operator(): row violation i="
+                  << i << "\n";
+        return data[0][0];
+    }
+    if ( j >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::operator(): col violation j="
+                  << j << "\n";
+        return data[0][0];
+    }
 #endif
+    return data[i][j];
+}
+
+inline const double& TensorVariable<3U>::operator()(
+    uint32_t i, uint32_t j ) const noexcept
+{
+#ifndef NDEBUG
+    if ( i >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::operator(): row violation i="
+                  << i << "\n";
+        return data[0][0];
+    }
+    if ( j >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::operator(): col violation j="
+                  << j << "\n";
+        return data[0][0];
+    }
+#endif
+    return data[i][j];
+}
+
+inline void TensorVariable<3U>::Component(
+    uint32_t k, double val ) noexcept
+{
+    assert( k < Size() );
+    data[k / 3][k % 3] = val;
+}
+
+inline double TensorVariable<3U>::Component( uint32_t k ) const noexcept
+{
+    assert( k < Size() );
+    return data[k / 3][k % 3];
+}
+
+inline void TensorVariable<3U>::Resize(
+    uint32_t, double newValue ) noexcept
+{
+    data[0][0] = data[0][1] = data[0][2] =
+    data[1][0] = data[1][1] = data[1][2] =
+    data[2][0] = data[2][1] = data[2][2] = newValue;
+}
+
+inline VARIABLE_FLAG TensorVariable<3U>::Flag( uint32_t i ) const noexcept
+{
+#ifndef NDEBUG
+    if ( i >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::Flag(): violation i=" << i << "\n";
+        return flag[0];
+    }
+#endif
+    return flag[i];
+}
+
+inline VARIABLE_FLAG& TensorVariable<3U>::Flag( uint32_t i ) noexcept
+{
+#ifndef NDEBUG
+    if ( i >= 3U ) {
+        std::cerr << "\nTensorVariable<3U>::Flag(): violation i=" << i << "\n";
+        return flag[0];
+    }
+#endif
+    return flag[i];
+}
+
+inline bool TensorVariable<3U>::IsWithinRange(
+    double vmin, double vmax ) const noexcept
+{
+    if ( data[0][0] < vmin || data[0][0] > vmax ) return false;
+    if ( data[1][1] < vmin || data[1][1] > vmax ) return false;
+    if ( data[2][2] < vmin || data[2][2] > vmax ) return false;
+    return true;
+}
+
+inline bool TensorVariable<3U>::Has_NaN_Values() const noexcept
+{
+    return std::isnan( data[0][0] ) ||
+           std::isnan( data[1][1] ) ||
+           std::isnan( data[2][2] );
+}
+
+inline double TensorVariable<3U>::Trace() const noexcept
+{
+    return data[0][0] + data[1][1] + data[2][2];
+}
+
+inline double TensorVariable<3U>::Determinant() const noexcept
+{
+    double det =  data[0][0] * ( data[1][1] * data[2][2]
+                               - data[2][1] * data[1][2] );
+    det        -= data[0][1] * ( data[1][0] * data[2][2]
+                               - data[2][0] * data[1][2] );
+    det        += data[0][2] * ( data[1][0] * data[2][1]
+                               - data[2][0] * data[1][1] );
+    return det;
+}
+
+inline bool TensorVariable<3U>::operator==(
+    const TensorVariable<3U>& ts ) const noexcept
+{
+    return ( data == ts.data && flag == ts.flag );
+}
+
+inline bool TensorVariable<3U>::operator!=(
+    const TensorVariable<3U>& ts ) const noexcept
+{
+    return !( *this == ts );
+}
+
+inline bool TensorVariable<3U>::operator<(
+    const TensorVariable<3U>& t ) const noexcept
+{
+    return ( this < &t );
+}
+
+// -----------------------------------------------------------------------
+//  Squaring operations
+// -----------------------------------------------------------------------
+
+inline TensorVariable<3U>& TensorVariable<3U>::HadamardSquared() noexcept
+{
+    data[0][0] *= data[0][0];
+    data[0][1] *= data[0][1];
+    data[0][2] *= data[0][2];
+    data[1][0] *= data[1][0];
+    data[1][1] *= data[1][1];
+    data[1][2] *= data[1][2];
+    data[2][0] *= data[2][0];
+    data[2][1] *= data[2][1];
+    data[2][2] *= data[2][2];
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::MatrixSquared() noexcept
+{
+    return *this *= *this;
+}
+
+inline double TensorVariable<3U>::DoubleContraction() const noexcept
+{
+    return data[0][0]*data[0][0] + data[0][1]*data[0][1] + data[0][2]*data[0][2]
+         + data[1][0]*data[1][0] + data[1][1]*data[1][1] + data[1][2]*data[1][2]
+         + data[2][0]*data[2][0] + data[2][1]*data[2][1] + data[2][2]*data[2][2];
+}
+
+// -----------------------------------------------------------------------
+//  Arithmetic — returning new tensor
+// -----------------------------------------------------------------------
+
+inline TensorVariable<3U> TensorVariable<3U>::operator+(
+    double val ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]+val, data[0][1]+val, data[0][2]+val,
+        data[1][0]+val, data[1][1]+val, data[1][2]+val,
+        data[2][0]+val, data[2][1]+val, data[2][2]+val );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator-(
+    double val ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]-val, data[0][1]-val, data[0][2]-val,
+        data[1][0]-val, data[1][1]-val, data[1][2]-val,
+        data[2][0]-val, data[2][1]-val, data[2][2]-val );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator*(
+    double val ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]*val, data[0][1]*val, data[0][2]*val,
+        data[1][0]*val, data[1][1]*val, data[1][2]*val,
+        data[2][0]*val, data[2][1]*val, data[2][2]*val );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator/(
+    double val ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]/val, data[0][1]/val, data[0][2]/val,
+        data[1][0]/val, data[1][1]/val, data[1][2]/val,
+        data[2][0]/val, data[2][1]/val, data[2][2]/val );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator+(
+    const TensorVariable<3U>& t ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]+t.data[0][0], data[0][1]+t.data[0][1], data[0][2]+t.data[0][2],
+        data[1][0]+t.data[1][0], data[1][1]+t.data[1][1], data[1][2]+t.data[1][2],
+        data[2][0]+t.data[2][0], data[2][1]+t.data[2][1], data[2][2]+t.data[2][2] );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator-(
+    const TensorVariable<3U>& t ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]-t.data[0][0], data[0][1]-t.data[0][1], data[0][2]-t.data[0][2],
+        data[1][0]-t.data[1][0], data[1][1]-t.data[1][1], data[1][2]-t.data[1][2],
+        data[2][0]-t.data[2][0], data[2][1]-t.data[2][1], data[2][2]-t.data[2][2] );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator/(
+    const TensorVariable<3U>& ts ) const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0]/ts.data[0][0], data[0][1]/ts.data[0][1], data[0][2]/ts.data[0][2],
+        data[1][0]/ts.data[1][0], data[1][1]/ts.data[1][1], data[1][2]/ts.data[1][2],
+        data[2][0]/ts.data[2][0], data[2][1]/ts.data[2][1], data[2][2]/ts.data[2][2] );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::operator*(
+    const TensorVariable<3U>& ts ) const noexcept
+{
+    TensorVariable<3U> temp;
+    // Unrolled matrix multiplication — row 0
+    temp.data[0][0] = data[0][0]*ts.data[0][0] + data[0][1]*ts.data[1][0] + data[0][2]*ts.data[2][0];
+    temp.data[0][1] = data[0][0]*ts.data[0][1] + data[0][1]*ts.data[1][1] + data[0][2]*ts.data[2][1];
+    temp.data[0][2] = data[0][0]*ts.data[0][2] + data[0][1]*ts.data[1][2] + data[0][2]*ts.data[2][2];
+    // row 1
+    temp.data[1][0] = data[1][0]*ts.data[0][0] + data[1][1]*ts.data[1][0] + data[1][2]*ts.data[2][0];
+    temp.data[1][1] = data[1][0]*ts.data[0][1] + data[1][1]*ts.data[1][1] + data[1][2]*ts.data[2][1];
+    temp.data[1][2] = data[1][0]*ts.data[0][2] + data[1][1]*ts.data[1][2] + data[1][2]*ts.data[2][2];
+    // row 2
+    temp.data[2][0] = data[2][0]*ts.data[0][0] + data[2][1]*ts.data[1][0] + data[2][2]*ts.data[2][0];
+    temp.data[2][1] = data[2][0]*ts.data[0][1] + data[2][1]*ts.data[1][1] + data[2][2]*ts.data[2][1];
+    temp.data[2][2] = data[2][0]*ts.data[0][2] + data[2][1]*ts.data[1][2] + data[2][2]*ts.data[2][2];
+    temp.flag[0] = flag[0];
+    temp.flag[1] = flag[1];
+    temp.flag[2] = flag[2];
+    return temp;
+}
+
+inline VectorVariable<3U> TensorVariable<3U>::operator*(
+    const VectorVariable<3U>& vc ) const noexcept
+{
+    return VectorVariable<3U>( vc.Flag(0), vc.Flag(1), vc.Flag(2),
+        data[0][0]*vc[0] + data[0][1]*vc[1] + data[0][2]*vc[2],
+        data[1][0]*vc[0] + data[1][1]*vc[1] + data[1][2]*vc[2],
+        data[2][0]*vc[0] + data[2][1]*vc[1] + data[2][2]*vc[2] );
+}
+
+inline Point<3U> TensorVariable<3U>::operator*(
+    const Point<3U>& v ) const noexcept
+{
+    return Point<3U>(
+        data[0][0]*v[0] + data[0][1]*v[1] + data[0][2]*v[2],
+        data[1][0]*v[0] + data[1][1]*v[1] + data[1][2]*v[2],
+        data[2][0]*v[0] + data[2][1]*v[1] + data[2][2]*v[2] );
+}
+
+// -----------------------------------------------------------------------
+//  Compound assignment
+// -----------------------------------------------------------------------
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator+=(
+    double val ) noexcept
+{
+    data[0][0]+=val; data[0][1]+=val; data[0][2]+=val;
+    data[1][0]+=val; data[1][1]+=val; data[1][2]+=val;
+    data[2][0]+=val; data[2][1]+=val; data[2][2]+=val;
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator-=(
+    double val ) noexcept
+{
+    data[0][0]-=val; data[0][1]-=val; data[0][2]-=val;
+    data[1][0]-=val; data[1][1]-=val; data[1][2]-=val;
+    data[2][0]-=val; data[2][1]-=val; data[2][2]-=val;
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator*=(
+    double val ) noexcept
+{
+    data[0][0]*=val; data[0][1]*=val; data[0][2]*=val;
+    data[1][0]*=val; data[1][1]*=val; data[1][2]*=val;
+    data[2][0]*=val; data[2][1]*=val; data[2][2]*=val;
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator/=(
+    double val ) noexcept
+{
+    data[0][0]/=val; data[0][1]/=val; data[0][2]/=val;
+    data[1][0]/=val; data[1][1]/=val; data[1][2]/=val;
+    data[2][0]/=val; data[2][1]/=val; data[2][2]/=val;
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator+=(
+    const ScalarVariable& sc ) noexcept
+{
+    data[0][0]+=sc(); data[0][1]+=sc(); data[0][2]+=sc();
+    data[1][0]+=sc(); data[1][1]+=sc(); data[1][2]+=sc();
+    data[2][0]+=sc(); data[2][1]+=sc(); data[2][2]+=sc();
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator-=(
+    const ScalarVariable& sc ) noexcept
+{
+    data[0][0]-=sc(); data[0][1]-=sc(); data[0][2]-=sc();
+    data[1][0]-=sc(); data[1][1]-=sc(); data[1][2]-=sc();
+    data[2][0]-=sc(); data[2][1]-=sc(); data[2][2]-=sc();
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator*=(
+    const ScalarVariable& sc ) noexcept
+{
+    data[0][0]*=sc(); data[0][1]*=sc(); data[0][2]*=sc();
+    data[1][0]*=sc(); data[1][1]*=sc(); data[1][2]*=sc();
+    data[2][0]*=sc(); data[2][1]*=sc(); data[2][2]*=sc();
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator/=(
+    const ScalarVariable& sc ) noexcept
+{
+    data[0][0]/=sc(); data[0][1]/=sc(); data[0][2]/=sc();
+    data[1][0]/=sc(); data[1][1]/=sc(); data[1][2]/=sc();
+    data[2][0]/=sc(); data[2][1]/=sc(); data[2][2]/=sc();
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator+=(
+    const TensorVariable<3U>& ts ) noexcept
+{
+    data[0][0]+=ts.data[0][0]; data[0][1]+=ts.data[0][1]; data[0][2]+=ts.data[0][2];
+    data[1][0]+=ts.data[1][0]; data[1][1]+=ts.data[1][1]; data[1][2]+=ts.data[1][2];
+    data[2][0]+=ts.data[2][0]; data[2][1]+=ts.data[2][1]; data[2][2]+=ts.data[2][2];
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator-=(
+    const TensorVariable<3U>& ts ) noexcept
+{
+    data[0][0]-=ts.data[0][0]; data[0][1]-=ts.data[0][1]; data[0][2]-=ts.data[0][2];
+    data[1][0]-=ts.data[1][0]; data[1][1]-=ts.data[1][1]; data[1][2]-=ts.data[1][2];
+    data[2][0]-=ts.data[2][0]; data[2][1]-=ts.data[2][1]; data[2][2]-=ts.data[2][2];
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator/=(
+    const TensorVariable<3U>& ts ) noexcept
+{
+    data[0][0]/=ts.data[0][0]; data[0][1]/=ts.data[0][1]; data[0][2]/=ts.data[0][2];
+    data[1][0]/=ts.data[1][0]; data[1][1]/=ts.data[1][1]; data[1][2]/=ts.data[1][2];
+    data[2][0]/=ts.data[2][0]; data[2][1]/=ts.data[2][1]; data[2][2]/=ts.data[2][2];
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator*=(
+    const TensorVariable<3U>& ts ) noexcept
+{
+    TensorVariable<3U> temp;
+    // Unrolled matrix multiplication — row 0
+    temp.data[0][0] = data[0][0]*ts.data[0][0] + data[0][1]*ts.data[1][0] + data[0][2]*ts.data[2][0];
+    temp.data[0][1] = data[0][0]*ts.data[0][1] + data[0][1]*ts.data[1][1] + data[0][2]*ts.data[2][1];
+    temp.data[0][2] = data[0][0]*ts.data[0][2] + data[0][1]*ts.data[1][2] + data[0][2]*ts.data[2][2];
+    // row 1
+    temp.data[1][0] = data[1][0]*ts.data[0][0] + data[1][1]*ts.data[1][0] + data[1][2]*ts.data[2][0];
+    temp.data[1][1] = data[1][0]*ts.data[0][1] + data[1][1]*ts.data[1][1] + data[1][2]*ts.data[2][1];
+    temp.data[1][2] = data[1][0]*ts.data[0][2] + data[1][1]*ts.data[1][2] + data[1][2]*ts.data[2][2];
+    // row 2
+    temp.data[2][0] = data[2][0]*ts.data[0][0] + data[2][1]*ts.data[1][0] + data[2][2]*ts.data[2][0];
+    temp.data[2][1] = data[2][0]*ts.data[0][1] + data[2][1]*ts.data[1][1] + data[2][2]*ts.data[2][1];
+    temp.data[2][2] = data[2][0]*ts.data[0][2] + data[2][1]*ts.data[1][2] + data[2][2]*ts.data[2][2];
+    temp.flag[0] = flag[0];
+    temp.flag[1] = flag[1];
+    temp.flag[2] = flag[2];
+    return *this = std::move( temp );
+}
+
+// -----------------------------------------------------------------------
+//  Assignment
+// -----------------------------------------------------------------------
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator=(
+    double val ) noexcept
+{
+    data[0][0]=val; data[0][1]=val; data[0][2]=val;
+    data[1][0]=val; data[1][1]=val; data[1][2]=val;
+    data[2][0]=val; data[2][1]=val; data[2][2]=val;
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator=(
+    const ScalarVariable& sc ) noexcept
+{
+    flag[0] = flag[1] = flag[2] = sc.Flag();
+    data[0][0]=sc(); data[0][1]=sc(); data[0][2]=sc();
+    data[1][0]=sc(); data[1][1]=sc(); data[1][2]=sc();
+    data[2][0]=sc(); data[2][1]=sc(); data[2][2]=sc();
+    return *this;
+}
+
+inline TensorVariable<3U>& TensorVariable<3U>::operator=(
+    const VectorVariable<3U>& vc ) noexcept
+{
+    flag[0] = vc.Flag(0);
+    flag[1] = vc.Flag(1);
+    flag[2] = vc.Flag(2);
+    data[0][0] = vc(0); data[0][1] = 0.0;   data[0][2] = 0.0;
+    data[1][0] = 0.0;   data[1][1] = vc(1); data[1][2] = 0.0;
+    data[2][0] = 0.0;   data[2][1] = 0.0;   data[2][2] = vc(2);
+    return *this;
+}
+
+// -----------------------------------------------------------------------
+//  Matrix operations
+// -----------------------------------------------------------------------
+
+inline void TensorVariable<3U>::Identity() noexcept
+{
+    data[0][0] = 1.0; data[0][1] = 0.0; data[0][2] = 0.0;
+    data[1][0] = 0.0; data[1][1] = 1.0; data[1][2] = 0.0;
+    data[2][0] = 0.0; data[2][1] = 0.0; data[2][2] = 1.0;
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::Transposed() const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+        data[0][0], data[1][0], data[2][0],
+        data[0][1], data[1][1], data[2][1],
+        data[0][2], data[1][2], data[2][2] );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::Adjoint() const noexcept
+{
+    return TensorVariable( flag[0], flag[1], flag[2],
+         data[1][1]*data[2][2] - data[1][2]*data[2][1],
+        -data[1][0]*data[2][2] + data[1][2]*data[2][0],
+         data[1][0]*data[2][1] - data[2][0]*data[1][1],
+        -data[0][1]*data[2][2] + data[0][2]*data[2][1],
+         data[0][0]*data[2][2] - data[0][2]*data[2][0],
+        -data[0][0]*data[2][1] + data[0][1]*data[2][0],
+         data[0][1]*data[1][2] - data[0][2]*data[1][1],
+        -data[0][0]*data[1][2] + data[0][2]*data[1][0],
+         data[0][0]*data[1][1] - data[0][1]*data[1][0] );
+}
+
+inline TensorVariable<3U> TensorVariable<3U>::Inverse() const noexcept
+{
+    double det = Determinant();
+    if ( det == 0.0 )
+    {
+        std::cerr << "\nTensorVariable<3U>::Inverse: Determinant = 0\n";
+        return TensorVariable<3U>();
+    }
+    det = 1.0 / det;
+    return TensorVariable( flag[0], flag[1], flag[2],
+        det * ( data[1][1]*data[2][2] - data[1][2]*data[2][1] ),
+        det * (-data[0][1]*data[2][2] + data[0][2]*data[2][1] ),
+        det * ( data[0][1]*data[1][2] - data[0][2]*data[1][1] ),
+        det * (-data[1][0]*data[2][2] + data[1][2]*data[2][0] ),
+        det * ( data[0][0]*data[2][2] - data[0][2]*data[2][0] ),
+        det * (-data[0][0]*data[1][2] + data[0][2]*data[1][0] ),
+        det * ( data[1][0]*data[2][1] - data[2][0]*data[1][1] ),
+        det * (-data[0][0]*data[2][1] + data[0][1]*data[2][0] ),
+        det * ( data[0][0]*data[1][1] - data[0][1]*data[1][0] ) );
+}
+
+inline double TensorVariable<3U>::MinElement() const noexcept
+{
+    double me = data[0][0];
+    if ( data[0][1] < me ) me = data[0][1];
+    if ( data[1][0] < me ) me = data[1][0];
+    if ( data[1][1] < me ) me = data[1][1];
+    if ( data[0][2] < me ) me = data[0][2];
+    if ( data[1][2] < me ) me = data[1][2];
+    if ( data[2][0] < me ) me = data[2][0];
+    if ( data[2][1] < me ) me = data[2][1];
+    if ( data[2][2] < me ) me = data[2][2];
+    return me;
+}
+
+inline double TensorVariable<3U>::MaxElement() const noexcept
+{
+    double me = data[0][0];
+    if ( data[0][1] > me ) me = data[0][1];
+    if ( data[1][0] > me ) me = data[1][0];
+    if ( data[1][1] > me ) me = data[1][1];
+    if ( data[0][2] > me ) me = data[0][2];
+    if ( data[1][2] > me ) me = data[1][2];
+    if ( data[2][0] > me ) me = data[2][0];
+    if ( data[2][1] > me ) me = data[2][1];
+    if ( data[2][2] > me ) me = data[2][2];
+    return me;
+}
+
+// -----------------------------------------------------------------------
+//  Diagonal operations
+// -----------------------------------------------------------------------
+
+inline void TensorVariable<3U>::DiagonalValues(
+    double f_00, double f_11, double f_22 ) noexcept
+{
+    data[0][0] = f_00;
+    data[1][1] = f_11;
+    data[2][2] = f_22;
+}
+
+inline void TensorVariable<3U>::DiagonalValues(
+    const std::vector<double>& v ) noexcept
+{
+    data[0][0] = v[0];
+    data[1][1] = v[1];
+    data[2][2] = v[2];
+}
+
+inline void TensorVariable<3U>::DiagonalValues(
+    const VectorVariable<3U>& v ) noexcept
+{
+    data[0][0] = v[0];
+    data[1][1] = v[1];
+    data[2][2] = v[2];
+    flag[0] = v.Flag(0);
+    flag[1] = v.Flag(1);
+    flag[2] = v.Flag(2);
+}
+
+inline void TensorVariable<3U>::AssignToRow(
+    uint32_t iRow, VectorVariable<3U>& vc ) noexcept
+{
+    if      ( iRow == 0U ) flag[0] = vc.Flag(0);
+    else if ( iRow == 1U ) flag[1] = vc.Flag(1);
+    else                   flag[2] = vc.Flag(2);
+    data[iRow][0] = vc[0];
+    data[iRow][1] = vc[1];
+    data[iRow][2] = vc[2];
+}
+
+inline void TensorVariable<3U>::AssignToColumn(
+    uint32_t iCol, VectorVariable<3U>& vc ) noexcept
+{
+    if      ( iCol == 0U ) flag[0] = vc.Flag(0);
+    else if ( iCol == 1U ) flag[1] = vc.Flag(1);
+    else                   flag[2] = vc.Flag(2);
+    data[0][iCol] = vc[0];
+    data[1][iCol] = vc[1];
+    data[2][iCol] = vc[2];
+}
+
+inline VectorVariable<3U> TensorVariable<3U>::Row(
+    uint32_t iRow ) const
+{
+    return VectorVariable<3U>( flag[iRow], flag[iRow], flag[iRow],
+                               data[iRow][0], data[iRow][1], data[iRow][2] );
+}
+
+inline VectorVariable<3U> TensorVariable<3U>::Column(
+    uint32_t iCol ) const
+{
+    return VectorVariable<3U>( flag[iCol], flag[iCol], flag[iCol],
+                               data[0][iCol], data[1][iCol], data[2][iCol] );
+}
+
+inline bool TensorVariable<3U>::EigenValues(
+    VectorVariable<3U>& ev ) const
+{
+    return EigenValuesPositiveDefiniteSymmetricMatrix( ev(0), ev(1), ev(2) );
+}
+
+inline bool TensorVariable<3U>::EigenValues(
+    std::vector<double>& ev ) const
+{
+    return EigenValuesPositiveDefiniteSymmetricMatrix( ev[0], ev[1], ev[2] );
+}
+
+// -----------------------------------------------------------------------
+//  Free function inline definitions
+// -----------------------------------------------------------------------
+
+inline VectorVariable<3U> operator*(
+    const VectorVariable<3U>& vc,
+    const TensorVariable<3U>& ts ) noexcept
+{
+    return VectorVariable<3U>( vc.Flag(0), vc.Flag(1), vc.Flag(2),
+        ts(0,0)*vc[0] + ts(1,0)*vc[1] + ts(2,0)*vc[2],
+        ts(0,1)*vc[0] + ts(1,1)*vc[1] + ts(2,1)*vc[2],
+        ts(0,2)*vc[0] + ts(1,2)*vc[1] + ts(2,2)*vc[2] );
+}
+
+inline Point<3U> operator*(
+    const Point<3U>& v,
+    const TensorVariable<3U>& ts ) noexcept
+{
+    return Point<3U>(
+        ts(0,0)*v[0] + ts(1,0)*v[1] + ts(2,0)*v[2],
+        ts(0,1)*v[0] + ts(1,1)*v[1] + ts(2,1)*v[2],
+        ts(0,2)*v[0] + ts(1,2)*v[1] + ts(2,2)*v[2] );
+}
+
+inline TensorVariable<3U> makeTensor(
+    VARIABLE_FLAG f1, VARIABLE_FLAG f2, VARIABLE_FLAG f3,
+    double v11, double v12, double v13,
+    double v21, double v22, double v23,
+    double v31, double v32, double v33 ) noexcept
+{
+    return TensorVariable<3U>( f1, f2, f3,
+                               v11, v12, v13,
+                               v21, v22, v23,
+                               v31, v32, v33 );
+}
+
+} // namespace csmp
+
+#endif // CSMP_TENSOR_VARIABLE_H
 

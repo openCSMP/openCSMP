@@ -14,14 +14,6 @@ NumIntegral_op_NT_N_dV<dim,CELL>::NumIntegral_op_NT_N_dV( const PropertyDatabase
  {
     MathOperatorRHS<dim,CELL>::Name("NumIntegral_op_NT_N_dV", oper, test );
 
-    // resize material property matrix 
-    if ( dim == 3 ) 
-      {
-         typename vector<DenseMatrix<DM_MIN> >::iterator  it;
-         for ( it=MathOperatorRHS<dim,CELL>::MTRL.begin(); 
-               it!=MathOperatorRHS<dim,CELL>::MTRL.end(); it++ ) (*it).Resize(3,3);
-      }
-
     // anisotropy can only be considered if there are multiple degrees of freedom per node
     if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR ) nodal_degrees_of_freedom = dim;
     if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR && 

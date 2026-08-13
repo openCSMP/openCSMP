@@ -16,8 +16,8 @@
 
 // PDE operators building the FE algorithm
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "NumIntegral_SetRHS_to_One.h"
 
@@ -132,7 +132,7 @@ void PoreRadiusAnd_Pc_Example::Run()
   PDE_Integrator<DIM,Element>  parabolic_profile(solver);
 
   NumIntegral_dNT_dN_dV<DIM>   laplacian( p_ref, "parabolic function", "parabolic function" );
-  NumIntegral_NT_op_N_dV<DIM>  rhs( p_ref, "one", "parabolic function" );
+  NumIntegral_NT_rhsop_N_dV<DIM>  rhs( p_ref, "one", "parabolic function" );
 
   parabolic_profile.Add( &laplacian );
   parabolic_profile.Add( &rhs );           // End the numIntegration
@@ -222,7 +222,7 @@ void PoreRadiusAnd_Pc_Example::Run()
   vtk_output.OutputDataToVTK( model, void_space.c_str(), "fluid_pressure", "fluid pressure", 0L, true );
 
   PDE_Integrator<DIM,Element>      fluid_pressure(solver);
-  NumIntegral_dNT_op_dN_dV<DIM>    conductance(  p_ref, "conductivity", "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<DIM>    conductance(  p_ref, "conductivity", "fluid pressure", "fluid pressure" );
   NumIntegral_SetRHS_to_Zero<DIM>  rhs0(  p_ref, "fluid pressure" );
   fluid_pressure.Add( &conductance );
   fluid_pressure.Add( &rhs0 );

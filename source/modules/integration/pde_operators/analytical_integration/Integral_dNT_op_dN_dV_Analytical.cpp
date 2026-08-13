@@ -44,7 +44,11 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void Integral_dNT_op_dN_dV_Analytical<dim, CELL>::ComputeContribution( const CELL<dim>& e )
   {
     MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(), e.Nodes());
-    e.Integral_dNT_K_dN(MathOperatorLHS<dim,CELL>::LHS , MathOperatorLHS<dim,CELL>::MTRL[0]);
+    DenseMatrix<DM3> TMP(dim,dim);
+    for ( uint32_t i{0}; i<dim; ++i )
+      for ( uint32_t j{0}; j<dim; ++j )
+        TMP(i,j) = MathOperatorLHS<dim,CELL>::MTRL[0](i,j);
+    e.Integral_dNT_K_dN( MathOperatorLHS<dim,CELL>::LHS, TMP );
   }
 
 

@@ -20,7 +20,10 @@ class Upwind_Integral_dNT_rhsop_dN_dV : public MathOperatorRHS<dim,CELL> {
     
     void GetOperands( const CELL<dim>& )  override final;
     void ComputeContribution( const CELL<dim>& ) override final;
-  
+
+     Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL>* clone() const override final
+      { return new Upwind_Integral_dNT_rhsop_dN_dV<dim,CELL> (*this); }
+
   private:
     DenseMatrix<DM_MIN>  DN, DNT;
     Parameter basic_;

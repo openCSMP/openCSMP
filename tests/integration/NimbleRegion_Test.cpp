@@ -15,10 +15,10 @@
 #include "LinearSolver.h"
 #endif
 
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "compute2PhaseMobilityAtBaryCenter.h"
 
 // FV algorithms

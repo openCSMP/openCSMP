@@ -339,19 +339,21 @@ bool   FiniteElementManager::ContainsElementType( CSMP_FEM_TYPE e_type ) const
  }
  
  
-
+/**
+      Assumes that simplex elements: Tetrahedron, Triangle and Line are always defined.
+ */
 void  FiniteElementManager::CurrentElementTypes( std::list<CSMP_FEM_TYPE>& etypes ) const
  {
     etypes.erase( etypes.begin(), etypes.end() );
     if ( dimensions == 3U ) {
-	    etypes.push_back( hexa_ptr->ElementType() );
-	    if ( pyra_ptr ) etypes.push_back( pyra_ptr->ElementType() );
-	    if ( pris_ptr ) etypes.push_back( pris_ptr->ElementType() );
-	    etypes.push_back( tetr_ptr->ElementType() );
+        etypes.push_back( hexa_ptr->ElementType() );
+        if ( pyra_ptr ) etypes.push_back( pyra_ptr->ElementType() );
+        if ( pris_ptr ) etypes.push_back( pris_ptr->ElementType() );
+        etypes.push_back( tetr_ptr->ElementType() );
       }
     if ( dimensions == 2U || dimensions == 3U ) {
-	    etypes.push_back( quad_ptr->ElementType() );
-	    etypes.push_back( tria_ptr->ElementType() );
+        etypes.push_back( tria_ptr->ElementType() );
+        if ( quad_ptr ) etypes.push_back( quad_ptr->ElementType() );
       }
     etypes.push_back( line_ptr->ElementType() );
  }

@@ -44,25 +44,24 @@ class StressesAndStrainsIP3D : public MathOperatorLHS<3,Element> {
                 means_key_, dilat_key_,                    ///< mean stress (scalar), dilatation (scalar)
                 shear_key_;                                ///< maximum shear stress (scalar)
 
-    DenseMatrix<DM_MIN>                   DISPL_,
-                                          STRESS_, STRAIN_,
-                                          EGP_, SGP_, PEGP_, PSGP_;
-    std::vector<DenseMatrix<DM_MIN> >     STIFF_;
-    std::vector<double>                   IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
-                                          NSTRAIN_,  NSTRESS_, 
-                                          eps_, sigma_, sum_;
-    TensorVariable<3U>                    ts_, evecs_;
-    TensorVariable<3U>                    IP_STRAIN_TENSOR_;   ///< for averaging of integration point variables to barycentre
-    TensorVariable<3U>                    IP_STRESS_TENSOR_;   ///< for averaging of integration point variables to barycentre
-    VectorVariable<3U>                    vc_, evals_;         ///< some universally useful vector variable,  eigen values
-    VectorVariable<3U>                    IP_e1_, IP_e2_, IP_e3_,
-                                          IP_s1_, IP_s2_, IP_s3_;
-    ScalarVariable                        sc_;
-    std::vector<ScalarVariable>           youngs_, pratio_;
-    std::vector<VectorVariable<3U> >      NVAR_;              ///< temporary container for nodal displacements
-    bool                                  verbose_,
-                                          principal_e_and_sigma_,
-                                          geomechanics_conventions_; ///< as opposed to civil engineering where tensile stresses are positive 
+    DenseMatrix<DM_MIN>                DISPL_, STRESS_, STRAIN_, EGP_;
+    DenseMatrix<DM6>                   SGP_, PEGP_, PSGP_;
+    std::vector<DenseMatrix<DM6> >     STIFF_;
+    std::vector<double>                IPSTRAIN_, IPSTRESS_, ///< stresses and strains at the element integration points
+                                       NSTRAIN_,  NSTRESS_,
+                                       eps_, sigma_, sum_;
+    TensorVariable<3U>                 ts_, evecs_;
+    TensorVariable<3U>                 IP_STRAIN_TENSOR_;   ///< for averaging of integration point variables to barycentre
+    TensorVariable<3U>                 IP_STRESS_TENSOR_;   ///< for averaging of integration point variables to barycentre
+    VectorVariable<3U>                 vc_, evals_;         ///< some universally useful vector variable,  eigen values
+    VectorVariable<3U>                 IP_e1_, IP_e2_, IP_e3_,
+                                       IP_s1_, IP_s2_, IP_s3_;
+    ScalarVariable                     sc_;
+    std::vector<ScalarVariable>        youngs_, pratio_;
+    std::vector<VectorVariable<3U> >   NVAR_;              ///< temporary container for nodal displacements
+    bool                               verbose_,
+                                       principal_e_and_sigma_,
+                                       geomechanics_conventions_; ///< as opposed to civil engineering where tensile stresses are positive 
 };
 
 } // csmp

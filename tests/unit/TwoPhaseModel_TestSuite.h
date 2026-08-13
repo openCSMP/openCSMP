@@ -13,9 +13,9 @@ class TwoPhaseModel_TestSuite : public Test
 {
 public:
   TwoPhaseModel_TestSuite( TestSuite& suite ) : suite_(suite), free_(true) {}
-  virtual ~TwoPhaseModel_TestSuite() { free(); }
+  virtual ~TwoPhaseModel_TestSuite();
+  
   virtual void run();
-  void free();
 
 private:
   void AssignSaturationValues( Model<1U>* );
@@ -23,8 +23,8 @@ private:
   TestSuite&  suite_;
   bool        free_;
 
-  Model<1U>*  rock_model_;
-  Model<1U>*  fracture_rock_model_;
+  Model<1U>*  rock_model_          = nullptr;
+  Model<1U>*  fracture_rock_model_ = nullptr;
 
 };
 

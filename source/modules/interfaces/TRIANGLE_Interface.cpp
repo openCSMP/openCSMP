@@ -1188,19 +1188,19 @@ void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
          int corner_assignments_made{0};
          for ( auto& it : bflags )
            {
-              if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) ) {
+              if ( approximatelyEqual( x[ it.first-1 ], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps ) ) {
                    it.second = CNR1; // CNR_MIN;
                    corner_assignments_made++;
                 }
-              else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) ) {
+              else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps ) ) {
                    it.second = CNR2; // CNR_MIN_MAXX;
                    corner_assignments_made++;
                 }
-              else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) ) {
+              else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps ) ) {
                    it.second = CNR3; // CNR_MAX;
                    corner_assignments_made++;
                 }
-              else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps) ) {
+              else if ( approximatelyEqual( x[ it.first-1 ], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps) ) {
                    it.second = CNR4; // CNR_MIN_MAXXZ;
                    corner_assignments_made++;
                 }
@@ -1213,22 +1213,21 @@ void TRIANGLE_Interface::FlagCornerNodes( map<size_t,int8_t>& bflags,
      // three dimensional models
      for ( auto& it : bflags )
        {
-throw logic_error("TRIANGLE_Interface::FlagCornerNodes: this code must consider z dimension; not debugged yet");
-          if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
+          if ( approximatelyEqual( x[ it.first -1], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps ) )
             it.second = CNR_MIN;
-          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps ) )
             it.second = CNR_MAX;
-          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps ) )
             it.second = CNR_X;
-          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps) )
             it.second = CNR_XZ;
-          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymin, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymin, eps ) )
             it.second = CNR_Z;
-          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps ) )
             it.second = CNR_Y;
-          else if ( approximatelyEqual( x[ it.first ], *xmax, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmax, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps ) )
             it.second = CNR_XZ;
-          else if ( approximatelyEqual( x[ it.first ], *xmin, eps ) && approximatelyEqual( y[ it.first ], *ymax, eps ) )
+          else if ( approximatelyEqual( x[ it.first-1 ], *xmin, eps ) && approximatelyEqual( y[ it.first-1 ], *ymax, eps ) )
             it.second = CNR_YZ;
        }    
  

@@ -12,8 +12,8 @@
 #include "VTK_Interface.h"
 
 // fluid pressure algorithm and velocity computation
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
@@ -165,8 +165,8 @@ void TransientPressure_Example::Run()
   JPEG_RegionInterface  jpg_output( model, "fault zone" );
 
   const double day(86400.);  // 1 year in seconds
-  double       maxtime(20. * day), time_increment(0.5 * day), well_pressure;
-  size_t       timestep(1), save_counter(1), save_frequency;
+  double maxtime(20. * day), time_increment(0.5 * day), well_pressure;
+  long   timestep(1), save_counter(1), save_frequency;
   cout << "\nEnter after how many steps you would like to save the results (1 = every step) " << endl;
   cin  >> save_frequency;
 
@@ -195,19 +195,19 @@ void TransientPressure_Example::Run()
   transient_pressure.SetSolver( linear_solver );
 #endif
 
-  NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<2U> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                             conductance.MultiplyWithTimeIncrement(true);
 
   NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
-                                             capacitance_lhs.LumpedFormulation(true);
+                                                 capacitance_lhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
-                                          capacitance_rhs.LumpedFormulation(true);
+  NumIntegral_NT_rhsop_N_dV<2U> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+                                                 capacitance_rhs.LumpedFormulation(true);
 
-  NumIntegral_NT_op_N_dV<2U> source( model.Database(), "fluid volume source",  "fluid pressure" );
-                                          source.MultiplyWithTimeIncrement(true);
-                                          source.AddAccumulateLater();
-                                          source.LumpedFormulation(true);
+  NumIntegral_NT_rhsop_N_dV<2U> source( model.Database(), "fluid volume source",  "fluid pressure" );
+                                        source.MultiplyWithTimeIncrement(true);
+                                        source.AddAccumulateLater();
+                                        source.LumpedFormulation(true);
 
   VelocityAndVolumeFlux<2U>  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 

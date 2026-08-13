@@ -5,8 +5,8 @@
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"
 #include "PointSource_rhsop.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "PL_Utilities.h"
 
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -120,16 +120,16 @@ void IncompressibleSinglePhaseFlowFEM_VVCase::run()
   PDE_Integrator<DIM,Element> pressure_diffusion(solver);
 
   /*some old code
-  NumIntegral_dNT_op_dN_dV<DIM,Element<DIM> >  steady_conductance( p_ref, "conductivity", "hydrostatic pressure", "hydrostatic pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<DIM,Element<DIM> >  steady_conductance( p_ref, "conductivity", "hydrostatic pressure", "hydrostatic pressure" );
   NumIntegral_NT_op_dNi_dV<DIM,Element<DIM> >  gravity( p_ref, "element fluid density", "conductivity", "hydrostatic pressure" );
-  NumIntegral_NT_op_N_dV<DIM,Element<DIM> >    fluid_src( p_ref,  "fluid volume source", "hydrostatic pressure" );
+  NumIntegral_NT_rhsop_N_dV<DIM,Element<DIM> >    fluid_src( p_ref,  "fluid volume source", "hydrostatic pressure" );
   */
 
-  NumIntegral_dNT_op_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
+  NumIntegral_dNT_lhsop_dN_dV<DIM> stiffness( model.Database(), "mobility", "fluid pressure",  "fluid pressure");
   printRangeOfVariable(model,"fluid pressure");
   printRangeOfVariable(model,"fluid volume source");
   printRangeOfVariable(model,"mobility");
-  NumIntegral_NT_op_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<DIM> fluid_src( model.Database(),  "fluid volume source", "fluid pressure" );
   //Assemble the integrator
   pressure_diffusion.Add( &stiffness );
   pressure_diffusion.Add( &fluid_src );

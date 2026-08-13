@@ -20,9 +20,7 @@ Integral_op_NT_dN_orthogonal_dV<dim,CELL>::Integral_op_NT_dN_orthogonal_dV(
     IPOL(3),
     NT(3,dim),
     UNITY(3),
-    RES(3),
-    zero(0.),
-    one(1.)
+    RES(3)
 {
     MathOperatorRHS<dim,CELL>::Name("Integral_op_NT_dN_orthogonal_dV", oper, test );
     
@@ -56,7 +54,7 @@ void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL<dim>& e 
 
     // read node variable which must be a scalar
     NPROP.resize( e.Nodes() );
-    for ( auto i{0U}; i<e.Nodes(); i++ )
+    for ( uint32_t i{0U}; i<e.Nodes(); i++ )
       NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
     
 } // end GetOperands
@@ -98,8 +96,8 @@ void Integral_op_NT_dN_orthogonal_dV<dim,CELL>::ComputeContribution( const CELL<
     // ------------------------------------------------------------------
      // interpolating basic property to integration points
      e.N_AtBaryCenter( IPOL );
-     for ( auto j{0U}; j<e.Nodes(); j++ )
-       for ( auto k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
+     for ( uint32_t j{0U}; j<e.Nodes(); j++ )
+       for ( uint32_t k=0; k<dim; k++ ) NT(j,k) = IPOL[j] * NPROP[j];
        
      // global intpol. function derivative matrix and determinant of Jacobian matrix
      const double volume(e.Volume());

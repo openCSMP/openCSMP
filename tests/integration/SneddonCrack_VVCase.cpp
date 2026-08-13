@@ -23,10 +23,10 @@
 
 //Numerical Integrals Lubricaiton Equation
 #include "NumIntegral_dNT_mixed_op_dN_dV.h"           // to interpolate the aperture
-#include "NumIntegral_dNT_op_dN_dV.h"                 // to interpolate the aperture cubed  (try with quadratic base functions...)
+#include "NumIntegral_dNT_lhsop_dN_dV.h"                 // to interpolate the aperture cubed  (try with quadratic base functions...)
 #include "NumIntegral_NT_lhsop_N_dV.h"                // Mass Matrix LHS
 #include "NumIntegral_SetRHS_to_Zero.h"               // Zero right hand side
-#include "NumIntegral_NT_op_N_dV.h"                   // Lumped Mass Matrix RHS or Source term with AccumulateLater()
+#include "NumIntegral_NT_rhsop_N_dV.h"                // Lumped Mass Matrix RHS or Source term with AccumulateLater()
 #include "NumIntegral_PT_op_dV.h"
 #include "PT_op.h"                                    //b force num int
 

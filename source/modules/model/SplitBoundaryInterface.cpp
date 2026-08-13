@@ -1354,16 +1354,11 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
          
 
 
-
-
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 2. Preprocessing to FaceConstructionData and getting MeshManager object to create InterFace objects for all elements in lower-dim region
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     //  2.1 creating the required objects
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // disconnecting any equidimensional elements surrounding the element patch even if it will not be deleted
-    updateHaloElementConnectivity<dim>( subdomain.CellVector().begin(), subdomain.CellVector().end() );
-    
     const size_t                       new_interfaces_required(subdomain.Cells());
     vector<FaceConstructionData<dim>>  iface_construction_vector;
     iface_construction_vector.reserve(new_interfaces_required);
@@ -1405,30 +1400,31 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     set<size_t>     region_material_ids;   // needed for selective rebuilding of regions with OUTSIDE elements (vector is configured by MeshManager)
     set<Node<dim>*> extra_perimeter_nodes; // hopefully there are none
 
+    // disconnecting any equidimensional elements surrounding the element patch even if it will not be deleted
+    updateHaloElementConnectivity<dim>( subdomain.CellVector().begin(), subdomain.CellVector().end() );
     // Creating interfaces for the entire input region, considering its perimeter to avoid node duplication where it terminates inside another region
     // split boundary intersections are also handled .... Hopefully
-    vector<InterFace<dim>*> iface_vector = model.Mesh().ReplaceElementsByInterFaces( model.Database(),
+    vector<InterFace<dim>*> iface_vector = model.Mesh().ReplaceElementsByInterFaces( model.Database(), // <<<<<<< INTERFACE CREATION
                                                              iface_construction_vector.begin(),
                                                              iface_construction_vector.end(),
                                                              subdomain.PerimeterNodesBegin(),
                                                              subdomain.NodesEnd(),
                                                              extra_perimeter_nodes, // will contain old perim-node - manifold node pairs (only need the manifold node).
                                                              region_material_ids,
-                                                             retain_elmts_as_intervening_elements );
+                                                             retain_elmts_as_intervening_elements ); // <<<<<<<<<< KEEP ORIGINAL ELEMENTS
 
     assert(iface_vector.size() == iface_construction_vector.size());
     assert( (*iface_vector.begin())->InnerParent() == iface_construction_vector.begin()->InnerElement()) ;
     assert( (*iface_vector.back()).InnerParent() == iface_construction_vector.back().InnerElement()) ;
     
-    // while the new interfaces were already connected with one another by ReplaceElementsByInterFaces this deals with their neighborhood
+    // while the new interfaces were already connected with one another by ReplaceElementsByInterFaces this updates their neighborhood
     model.Mesh().UpdateConnectivity( iface_vector.begin(), iface_vector.end() );
-    if ( retain_elmts_as_intervening_elements )
-      model.Mesh().template BuildConnectivity<Element>( subdomain.CellsBegin(), subdomain.CellsEnd() );
-
+    // TOPOTYPE perimeter flagging is not done at this stage because the interfaces have to be partitioned
+    // into Split(sub)Boundaries first
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 3. Determine number of splitboundary segments (sub-boundaries) that the new splitboundary will consist of.
-    //    The output of this step will be a map of FaceConstructionData in which the names of the new boundary segments are the keys.
+    // 3. Determine number of mesh patches that will be turned into new splitboundary objects.
+    //    The output of this step will be a map of FaceConstructionData in which the names of new Split(sub)boundaries are the keys.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 3.2 creating labeled boundary patches from the interface-defining data
     // ----------------------------------------------------------------------
@@ -1437,7 +1433,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     for ( const auto& it : patch_names )
       patch_numbers.insert( make_pair( it.second, static_cast<uint32_t>(it.first) ) );
 
-    // 3.2.2 building new map where the patch faces are organised by patch names
+    // 3.2.2 building new map of InterFace objects grouped by patch names
     map<string,vector<InterFace<dim>*>>  patch_data;
     vector<InterFace<dim>*>              empty_vec;
     for (const auto& val: patch_names | views::values)
@@ -1465,6 +1461,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 4. Creating SplitBoundary objects for each of the mesh patches established above
     // ----------------------------------------------------------------------------------------------------------------------------------------------
+    // (the interfaces are already connected but this step identifies patch interior and perimeters)
     for ( long i{0U}; i < static_cast<long>(patch_names.size()); ++i )
       AddSplitBoundary( patch_names[i].c_str(), patch_data[ patch_names[i] ].begin(), patch_data[ patch_names[i] ].end() );
       
@@ -1474,7 +1471,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
 #endif
 
     // ----------------------------------------------------------------------------------------------------------------------------------------------
-    // 5. Removing lower-dimensional input region (their elements were already removed above).
+    // 5. Removing lower-dimensional input region if so requested.
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     const bool remove_elmts{ !retain_elmts_as_intervening_elements };
     // disconnecting the intervening element pointers in the new SplitBoundary from them elements that will be deleted
@@ -1484,9 +1481,9 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
               for ( auto& it : split_boundary.CellVector() )
                  it->UnAssignInterveningElement();
            }
+         // removing the elements and the region that contained them
+         model.RemoveRegion( dim_1_region, remove_elmts );
       }
-    // removing the elements and the region that contained them
-    model.RemoveRegion( dim_1_region, remove_elmts );
 
 #ifdef DEBUG
     if ( remove_elmts ) cout << "\n\t\t"<<"Removed "<< n_original_elmts - model.Mesh().Elements()  <<" elements from the mesh."<< endl;

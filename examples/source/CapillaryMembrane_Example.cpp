@@ -724,8 +724,8 @@ void CapillaryMembrane_Example::ComputeSteadyStatePressure(
     CSMP_DEFAULT_LINEAR_SOLVER  solver;
     PDE_Integrator<3U,Element>  steady_pressure( solver );
 
-    NumIntegral_dNT_op_dN_dV<3U>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<3U>    elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<3U>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<3U>    elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( mdl.Database(), "nodal fluid volume source", "fluid pressure" );
     steady_pressure.Add( &conductance );
     steady_pressure.Add( &elmt_volume_source );

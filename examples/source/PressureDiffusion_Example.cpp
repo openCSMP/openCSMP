@@ -13,8 +13,8 @@
 #include "VTK_Interface.h"
 
 // fluid pressure algorithm and velocity computation
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
@@ -165,8 +165,8 @@ void PressureDiffusion_Example::Run()
     PDE_Integrator<2U,Element>  fluid_pressure(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U> conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
-    NumIntegral_NT_op_N_dV<2U>   source( model.Database(),  "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<2U> conductance( model.Database(), "conductivity", "fluid pressure",  "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U>   source( model.Database(),  "fluid volume source", "fluid pressure" );
   /// @todo influx surface integral: NumIntegral_NT_op_N_dS<2U>   influx( model.Database(), "influx", "fluid pressure" );
     VelocityAndVolumeFlux<2U>    velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 
@@ -258,7 +258,7 @@ void PressureDiffusion_Example::Run()
                                                    capacitance_lhs.MultiplyWithTimeIncrement(true);
 
     // right-hand side capacitance matrix [C] at current pressure
-    NumIntegral_NT_op_N_dV<2U>    capacitance_rhs( model.Database(),
+    NumIntegral_NT_rhsop_N_dV<2U>    capacitance_rhs( model.Database(),
                                                    "storativity",  "fluid pressure" );
                                                    capacitance_rhs.LumpedFormulation(true);
                                                    capacitance_rhs.MultiplyWithTimeIncrement(true);

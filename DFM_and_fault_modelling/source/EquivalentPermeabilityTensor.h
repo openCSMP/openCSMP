@@ -1,35 +1,35 @@
-#ifndef EQUIVALENTPERMEABILITYTENSOR_H
-#define EQUIVALENTPERMEABILITYTENSOR_H
+#ifndef EQUIVALENT_PERMEABILITY_TENSOR_H
+#define EQUIVALENT_PERMEABILITY_TENSOR_H
 
 #include "CSMP_definitions.h"
-#include "Matrix.h"
-
-// Model
-#include "RegionInterface.h"
-
-// PDE solution framework
-#include "SAMG_Settings.h"
-#include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#ifdef CSMP_WITH_SAMG
+#include SAMG_Settings.h"
+#endif
 
 namespace csmp {
 
+class Matrix;
+class CompressedRowMatrix;
 template<uint32_t> class Model;
+template<uint32_t> class Element;
+
+template<uint32_t, template<uint32_t> class, class> class PDE_Integrator;
+
 
 template<uint32_t dim>
 class EquivalentPermeabilityTensor
 {
 public:
-    EquivalentPermeabilityTensor( Model<dim>& );
-    ~EquivalentPermeabilityTensor();
+    explicit EquivalentPermeabilityTensor( Model<dim>& );
   
     void InitializeViscosity( double vis_val );
 
     void ConstantViscosity( bool vis_flag );
 
     /// initialize random sampling parameters
-    void InitializeRandomSampling( size_t no_bins = 50, size_t max_no_sample = 20, size_t min_no_elements = 100, double sample_size_reducing_factor = -1. );
+    void InitializeRandomSampling( size_t no_bins = 50, size_t max_no_sample = 20,
+                                   size_t min_no_elements = 100,
+                                   double sample_size_reducing_factor = -1. );
 
     void ComputeModelVelocityAndPressureGradient( Model<dim>& );
 
@@ -64,10 +64,16 @@ public:
     void Left2RightFlow( Model<dim>& );
     void Bottom2TopFlow( Model<dim>& );
     void Back2FrontFlow( Model<dim>& );
-    void PressureField ( Model<dim>&, const std::string, PDE_Integrator<dim,Element>& );
-    void VelocityAndPressureGradientField( Model<dim>&, const Index&, VectorVariable<dim>&, const Index&, VectorVariable<dim>&, const Index& );
+    
+    void PressureField( Model<dim>&, const std::string& pressureVariable,
+                        PDE_Integrator<dim,Element,CompressedRowMatrix>& );
+    
+    void VelocityAndPressureGradientField( Model<dim>&, const Index&, VectorVariable<dim>&,
+                                           const Index&, VectorVariable<dim>&, const Index& );
+                                           
     void SolveOverdeterminedSystem( const Matrix&, const std::vector<double>&, std::vector<double>& );
     void VelocityAndPressureGradientVolumeAverage( const Model<dim>&, const std::string regionName);
+    
     /// if viscosity varies across the domain of interest
     void ViscosityVolumeAverage( const Model<dim>&, const std::string regionName );
     void ComputeTensor();
@@ -77,7 +83,7 @@ public:
 
     void InitializeIndexKeys( Model<dim>& );
 
-	void InitializeTransmissivity(Model<dim>&, const std::string regionName);
+	void InitializeTransmissivity( Model<dim>&, const std::string regionName );
   
  private:
     VectorVariable<dim> velocity_left2right_;
@@ -129,11 +135,12 @@ private:
     std::string tensor_file_name_;
 	  std::string statistics_file_name_;
   
- // SKM FIX: use encapsulation! - this is C++
  private:
     std::set<int32_t>  fracture_elmt_indices_, matrix_elmt_indices_;
-    SAMG_Settings      settings_;
     bool               const_viscosity_;
+#ifdef CSMP_WITH_SAMG
+    SAMG_Settings      samg_settings_;
+#endif
 };
 
 } // end csmp

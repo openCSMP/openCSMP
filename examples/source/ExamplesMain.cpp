@@ -22,6 +22,10 @@ int main()
 #endif
  {
     try {
+     // if PETSc is chosen as the default linear solver
+#ifdef CSMP_WITH_PETSC_SOLVER
+      PetscInitializeNoArguments();
+#endif
       // instantiating suite
       ExampleSuite examplesSuite( "Open-CSMP++ EXAMPLES", &cout );
 
@@ -43,6 +47,9 @@ int main()
             examplesSuite.RegisterExample( new StokesDiscrepancyMeasureQuadratic_Example() );
             examplesSuite.RegisterExample( new TimeSteppingApproaches_Example() );
             examplesSuite.RegisterExample( new PoreRadiusAnd_Pc_Example() );
+#if defined(CSMP_WITH_PETSC_SOLVER)
+            examplesSuite.RegisterExample( new PETSc_Example() );
+#endif
 
       // SOFTWARE INTERFACES
             // interfaces with other software tools
@@ -67,7 +74,6 @@ int main()
             examplesSuite.RegisterExample( new RegionProperties_Example() );
             examplesSuite.RegisterExample( new RegionMonitor_Example() );
             examplesSuite.RegisterExample( new StatisticalAnalyzer_Example() );
-//            examplesSuite.RegisterExample( new FieldVariable_Example() );
 
       // SIMULATION OF PHYSICAL PROCESSES
             examplesSuite.RegisterExample( new PressureDiffusion_Example() );
@@ -160,6 +166,10 @@ int main()
 #ifndef NDEBUG
     cout <<"\nHit return to end program."<< endl;
     getchar();
+#endif
+
+#ifdef CSMP_WITH_PETSC_SOLVER
+    PetscFinalize();
 #endif
 
     return 0;

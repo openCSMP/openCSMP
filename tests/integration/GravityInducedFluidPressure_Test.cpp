@@ -19,7 +19,7 @@
 #include "EOS_CO2H2ONaCl_Spycher2004.h"
 
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 #include "LinearSolver.h"
@@ -514,7 +514,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator( double
     GaussJordan_Solver         GJ_solver;
     PDE_Integrator<1U,Element>  hydrostatic_pressure(GJ_solver);
   
-    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
     const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
     const double    acc_gravity(model1D_->Read(g_key));
@@ -564,7 +564,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator_CRM( do
     GaussJordan_Solver          GJ_solver;
     PDE_Integrator<1U,Element>  hydrostatic_pressure(GJ_solver);
  
-    NumIntegral_dNT_op_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U>  hydrostatic_conductance( model1D_->Database(), "total mobility permeability product",  "fluid pressure", "fluid pressure" );
 
     const csmp::Index g_key(model1D_->Database().StorageKey("acceleration gravity"));
     const double    acc_gravity(model1D_->Read(g_key));
@@ -615,7 +615,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2Pressure_PDE_Integrator2( doubl
     const size_t                   dim(1U);
     GaussJordan_Solver             GJ_solver;
     PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
-    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model1D_->Database(), "total mobility permeability product", "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  p_conductance( model1D_->Database(), "total mobility permeability product", "fluid pressure", "fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model1D_->Database(), "gravity term", "fluid pressure" );
 
     hydrostatic_pressure.Add( &p_conductance );
@@ -680,7 +680,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver             GJ_solver;
     PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
-    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
     hydrostatic_pressure.Add( &p_conductance );
@@ -778,7 +778,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     // --------------------------------------------------------------------------------------------
     GaussJordan_Solver             GJ_solver;
     PDE_Integrator<dim,Element>    hydrostatic_pressure(GJ_solver);
-    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
     hydrostatic_pressure.Add( &p_conductance );
@@ -901,7 +901,7 @@ void GravityInducedFluidPressure_Test::ComputeCO2PressureFromReducedPressure_PDE
     CSMP_DEFAULT_LINEAR_SOLVER     solver;
 #endif
     PDE_Integrator<dim,Element>    hydrostatic_pressure(solver);
-    NumIntegral_dNT_op_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  p_conductance( model->Database(), "total mobility permeability product", "reduced fluid pressure", "reduced fluid pressure" );
     NumIntegral_dNT_op_dV<dim>     gravity( model->Database(), "gravity term", "reduced fluid pressure" );
 
     hydrostatic_pressure.Add( &p_conductance );

@@ -74,7 +74,7 @@ StressesAndStrains<2U>::StressesAndStrains( const Model<2U> & sg,
     strain_key_(sg.Database().StorageKey("strain")),
     stress_key_(sg.Database().StorageKey("stress")),
     DISPL_(3*2,1), 
-    STIFF_(1,DenseMatrix<DM_MIN>(3,3)), EGP_(3,1), SGP_(3,1),
+    STIFF_(1,DenseMatrix<DM3>(3,3)), EGP_(3,1), SGP_(3,1),
     STRAIN_(3,3), 
     STRESS_(3,3),
     IPSTRAIN_(3*3), // 3 strain components
@@ -394,7 +394,7 @@ void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
         
         // 1.1 Computing the strains at the integration points
         // ---------------------------------------------------
-        for ( auto i{0U}; i<e.IntegrationPoints(); i++ ) {
+        for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
              //  getting DN matrices at the node points
             (e).dN_AtIntegrationPoint( EGP_, i, 2U );
              
@@ -418,7 +418,7 @@ void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
 
              // inserting strains and stresses sequentially into temporary 
              // STL vectors
-             for ( auto k=0; k<components_; k++ ) {
+             for ( uint32_t k=0; k<components_; k++ ) {
                   IPSTRAIN_[ i * components_ + k ] = EGP_(k,0);
                   IPSTRESS_[ i * components_ + k ] = SGP_(k,0);
                }
@@ -436,8 +436,8 @@ void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
              e.ExtrapolateIntegrationPointVariableToNodes( components_, IPSTRESS_, NSTRESS_ );
      
              // extracting the nodal strain and stress components
-             for ( auto i{0U}; i<e.Nodes(); i++ ) {
-                  for ( auto k=0; k<components_; k++ ) {
+             for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
+                  for ( uint32_t k=0; k<components_; k++ ) {
                        eps_[k]   = NSTRAIN_[ i * components_ + k ];
                        sigma_[k] = NSTRESS_[ i * components_ + k ];
                     }
@@ -459,24 +459,22 @@ void StressesAndStrains<2U>::ComputeContribution( const Element<2U>& e )
         STRAIN_.Resize(components_,e.Nodes());
         STRESS_.Resize(components_,e.Nodes());
 
-        for ( auto i{0U}; i<e.Nodes(); i++ ) {
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
-               for ( auto j{0U}; j<components_; j++ )
+               for ( uint32_t j{0U}; j<components_; j++ )
                  {  
                     // averaging strain components
                     double sum(0.);
-                    for ( deque<vector<double> >::const_iterator 
-                          lit=temp_strains_[ e.N(i)->Idx() ].begin();
+                    for ( auto lit=temp_strains_[ e.N(i)->Idx() ].begin();
                           lit!=temp_strains_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
                     sum /= static_cast<double>(temp_strains_[ e.N(i)->Idx() ].size());
                     STRAIN_(j,i) = sum;
 
                     // averaging stress components
                     sum = 0.;
-                    for ( deque<vector<double> >::const_iterator
-                          lit=temp_stresses_[ e.N(i)->Idx() ].begin();
+                    for ( auto lit=temp_stresses_[ e.N(i)->Idx() ].begin();
                           lit!=temp_stresses_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
                     sum /= static_cast<double>(temp_stresses_[ e.N(i)->Idx() ].size());
                     STRESS_(j,i) = sum;
@@ -566,7 +564,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
     // only once the strains and stresses have been computed, these can be output to Model<2U> 
     if ( MathOperatorLHS<2U>::ApplicationCycle() == 2U ) 
       {
-         for ( auto i{0U}; i<e.Nodes(); i++ )
+         for ( uint32_t i{0U}; i<e.Nodes(); i++ )
            // doing this operation only once per node
            if ( !node_output_[ e.N(i)->Idx()] )
              {

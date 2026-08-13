@@ -15,9 +15,9 @@
 #include "InputDataManager.h"
 
 // PDE Operators
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 #include "NumIntegral_op_NT_dN_orthogonal_dV.h"
 #include "LinearSolver.h"
@@ -164,8 +164,8 @@ void StreamFunction_Example::Run()
    PDE_Integrator<2U,Element>  fluid_pressure(solver);
    #endif
 
-   NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
-   NumIntegral_NT_op_N_dV<2U>    source( model.Database(), "fluid volume source", "fluid pressure" );
+   NumIntegral_dNT_lhsop_dN_dV<2U>  conductance( model.Database(), "conductivity",   "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_rhsop_N_dV<2U> source( model.Database(), "fluid volume source", "fluid pressure" );
    VelocityAndVolumeFlux<2U>     velo( model, "conductivity", "porosity", "fluid pressure" );
 
    fluid_pressure.Add( &conductance );
@@ -548,7 +548,7 @@ void StreamFunction_Example::computeStreamFunction( Model<2U>& sg,
     PDE_Integrator<2U,Element>  stream_function(linear_solver);
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U>  conductance( sg.Database(),
+    NumIntegral_dNT_lhsop_dN_dV<2U>  conductance( sg.Database(),
                                                         "resistivity", stream_func_var, stream_func_var );
 
 // RENAME THIS OPERATOR into NumIntegral_NT_op_dN_orthogonal_dV

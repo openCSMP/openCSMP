@@ -91,11 +91,10 @@ can be modeled.
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
-    // this integral is only for numerically integrated isoparametric finite elements
-    assert( e.FE()->Isoparametric() == true );
-
     // only if the property is an element property  something is done here
     if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
+         E_.resize(1);
+         nu_.resize(1);
          // we made sure that youngs modulus is a scalar and has the same placement as Poisson's ratio
          E_[0]  = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
          nu_[0] = e.Read( nu_key_ );
@@ -113,15 +112,15 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
        }
     else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )
       {
-         ScalarVariable sc;
+        const size_t ipoints(e.IntegrationPoints());
+        E_.resize(ipoints);
+        nu_.resize(ipoints);
          for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ ) {
-             e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i, sc );
-             E_[i] = sc();
-             e.PropertyValueAtIntegrationPoint( nu_key_, i, sc );
-             nu_[i] = sc();
+             E_[i] = e.PropertyValueAtIntegrationPoint( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), i );
+             nu_[i] = e.PropertyValueAtIntegrationPoint( nu_key_, i );
           }
       }
-     else throw csmp::Exception( WARNING, "umIntegral_BT_D_B_dV<dim,CELL>::GetOperands",
+     else throw csmp::Exception( WARNING, "NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands",
                                  MathOperatorLHS<dim,CELL>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
       
 } // end GetOperands
@@ -155,105 +154,104 @@ In linear elasticity computations.
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_BT_D_B_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
-    // initialize output matrix
+    // initialise output matrix
     MathOperatorLHS<dim,CELL>::LHS.Resize( dim*e.Nodes(), dim*e.Nodes() );
-
-    // compute the material property matrix based on element properties
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
-         if ( dim == 2 ) {
-              // assuming isotropic Young's modulus 
-              if ( plane_strain_ ) 
-                planeStrainMatrix( E_[0], nu_[0], D );
-              else                
-                planeStressMatrix( E_[0], nu_[0], D );
-           }
-         else if( dim == 3)   
-           stiffnessMatrix( E_[0], nu_[0], D );
-         else if( dim == 1 )
-           {
-              stiffnessMatrix( E_[0],  D, e.Volume() );
-              MathOperatorLHS<dim,CELL>::LHS = D;
-              return;
-           }
-
-      }
-      
-    // analytical integration
-    // -----------------------------
-    if ( !e.FE()->UsesLocalCoordinates() )
-      {
-         const double volume(e.Volume());
-         // setting C to 1 and its diagonal to 2
-         MathOperatorLHS<dim,CELL>::LHS = volume / 12.;
-         for ( uint32_t f{0U}; f<(e.Nodes()*dim); f++ )
-           MathOperatorLHS<dim,CELL>::LHS(f,f) = volume / 6.;
-      
-         e.dN( B );
-         dN_To2DOF( e.Nodes(), B );
-      
-         // transposing B -> BT  O.K.
-         B.Transposed( BT );
-
-         // multiplying BT(12x3) D(3x3) B(2x6) -> (12x12)  O.K.
-         BT  *= D;
-         BT  *= B;
-         
-         // creating the integrated output matrix
-         MathOperatorLHS<dim,CELL>::LHS *= BT;
-          
-         return;
-      } 
-
-    // numerical integration: 
-    // ----------------------
-    // looping over the 3 Gauss points calculating matrix products
-    // and applying uniform weights (1/3) before adding integrated 
-    // matrices to element - contribution matrix
     MathOperatorLHS<dim,CELL>::LHS.Zero();
 
-    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
+    // detect simplex elements (linear triangles/tetrahedra) where B is constant
+    // and dN only needs to be evaluated once at the barycentre
+    const bool is_simplex( e.FE()->IsSimplex() && e.Interpolation() == 1 );
+
+    // build material property matrix D for element-constant properties
+    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
       {
-         // the material property matrix is constructed at each integration point
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ) {
-              if ( dim == 2 ) {
-                   // assuming isotropic Young's modulus 
-                   if ( plane_strain_ ) 
-                     planeStrainMatrix( E_[i], nu_[i], D );
-                   else                
-                     planeStressMatrix( E_[i], nu_[i], D );
-                }
-              else   stiffnessMatrix( E_[i], nu_[i], D );
-           }
-
-         // getting global intpol. function derivative matrix and determinant of
-         // byproduct Jacobian matrix (B is already in global coordinates)
-         double detJ = e.dN_AtIntegrationPoint( B, i, dim );
-
-         if ( detJ <= 0. ) {
-              cerr <<"\n\tElement "<< e.Idx() <<": determinant of Jacobian at Gauss point "<< i <<": "<< detJ << endl;
-              throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::ComputeContribution",
-                             "Jacobian transformation failed. Element nodes are perhaps not numbered correctly.");
-           }
-
-         // transposing B -> BT  O.K. (since matrix multiplication is associative)
-         B.Transposed( BT );
-
-         // multiply BT(12x3) D(3x3) 
-         BT *= D;
-
-         // multiplying BT'(12x3) B(3x12) -> RES(12x12)  O.K.
-         BT *= B;
-
-         // multiplying with determinant and weights
-         BT *= e.WeightAtIntegrationPoint(i) * detJ; 
-         
-         // accumulating ME Gauss point integral contributions into element 
-         // contribution to global conductance matrix
-         MathOperatorLHS<dim,CELL>::LHS += BT;
+        if constexpr ( dim == 1U ) {
+            // in 1D, the stiffness reduces to Young's modulus
+            MathOperatorLHS<dim,CELL>::LHS.AssignToDiagonal( E_[0U] );
+            return;
+          }
+        else if constexpr ( dim == 2U ) {
+            if ( plane_strain_ ) planeStrainMatrix( E_[0U], nu_[0U], D );
+            else                 planeStressMatrix( E_[0U], nu_[0U], D );
+          }
+        else stiffnessMatrix( E_[0U], nu_[0U], D );
       }
 
-} // end ComputeContribution
+    // for simplex elements B is constant — evaluate dN once at the barycentre
+    if ( is_simplex )
+      {
+        // build D at integration point 0 for spatially varying properties
+        if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ||
+             MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )
+          {
+            if constexpr ( dim == 1U ) {
+                MathOperatorLHS<dim,CELL>::LHS.AssignToDiagonal( E_[0U] );
+                return;
+              }
+            else if constexpr ( dim == 2U ) {
+                if ( plane_strain_ ) planeStrainMatrix( E_[0U], nu_[0U], D );
+                else                 planeStressMatrix( E_[0U], nu_[0U], D );
+              }
+            else stiffnessMatrix( E_[0U], nu_[0U], D );
+          }
 
+        const double detJ = e.dN_AtBaryCenter( B, dim );
+        if ( detJ <= 0.0 )
+          {
+            cerr <<"\n\tElement "<< e.Idx() <<": determinant of Jacobian at barycentre: "<< detJ << endl;
+            throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::ComputeContribution",
+                                   "Jacobian transformation failed. Element nodes are perhaps not numbered correctly." );
+          }
+
+        B.Transposed( BT );
+        BT *= D;
+        BT *= B;
+        BT *= e.Volume();
+
+        MathOperatorLHS<dim,CELL>::LHS = BT;
+        return;
+      }
+
+    // numerical integration over Gauss points for non-simplex isoparametric elements
+    for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
+      {
+        // rebuild D at each integration point if properties vary spatially
+        if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ||
+             MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == NODE )
+          {
+            if constexpr ( dim == 1U ) {
+                MathOperatorLHS<dim,CELL>::LHS.AssignToDiagonal( E_[i] );
+                return;
+              }
+            else if constexpr ( dim == 2U ) {
+                if ( plane_strain_ ) planeStrainMatrix( E_[i], nu_[i], D );
+                else                 planeStressMatrix( E_[i], nu_[i], D );
+              }
+            else stiffnessMatrix( E_[i], nu_[i], D );
+          }
+
+        const double detJ = e.dN_AtIntegrationPoint( B, i, dim );
+        if ( detJ <= 0.0 )
+          {
+            cerr <<"\n\tElement "<< e.Idx() <<": determinant of Jacobian at Gauss point "<< i
+                 <<": "<< detJ << endl;
+            throw csmp::Exception( FATAL_ERROR, "NumIntegral_BT_D_B_dV<dim>::ComputeContribution",
+                                   "Jacobian transformation failed. Element nodes are perhaps not numbered correctly." );
+          }
+
+        // BT(dim*nodes x 3) = B^T
+        B.Transposed( BT );
+
+        // BT(dim*nodes x 3) * D(3x3) * B(3 x dim*nodes) -> BT(dim*nodes x dim*nodes)
+        BT *= D;
+        BT *= B;
+        BT *= e.WeightAtIntegrationPoint(i) * detJ;
+
+        // accumulate Gauss point contribution into element stiffness matrix
+        MathOperatorLHS<dim,CELL>::LHS += BT;
+      }
+
+ } // end ComputeContribution
 
 template class NumIntegral_BT_D_B_dV<1U,Element>;
 template class NumIntegral_BT_D_B_dV<2U,Element>;

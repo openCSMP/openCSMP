@@ -32,7 +32,11 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		Isoparametric(false);
 	}
 
-	 double LinearCuboid::Volume()
+   double LinearCuboid::Volume()
+   {
+     return (XY(5, 0) - XY(3, 0))*(XY(5, 1) - XY(3, 1))*(XY(5, 2) - XY(3, 2));
+   }
+	 double LinearCuboid::ConstVolume() const
 	 {
 		 return (XY(5, 0) - XY(3, 0))*(XY(5, 1) - XY(3, 1))*(XY(5, 2) - XY(3, 2));
 	 }
@@ -58,22 +62,22 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	     We use the values of shape functions at nodes, mid-sigments, face center and barycenter.
 	 */
 	void LinearCuboid::IntegralNN(DenseMatrix<DM_MIN>& V) {
-		DenseMatrix<DM12>& X = M1_, VS = M2_, VF = M3_;
+		DenseMatrix<DM_MIN>& X = M1_, VS = M2_, VF = M3_;
 
 		MidSegmentPoints(X); // mide-sigments
 		// VS : Values of Shapes at mid-sigments (X)
 		VS.Resize(12, 8);
-		for (auto i = 0; i < 12; ++i) {
+		for (uint32_t i = 0; i < 12; ++i) {
 			N(V_, { X(i,0),X(i,1),X(i,2) });
-			for (auto j = 0; j < 8; ++j) VS(i, j) = V_[j];
+			for (uint32_t j = 0; j < 8; ++j) VS(i, j) = V_[j];
 		}
 
 		CenterOfFacePoints(X); // center of each face 
 		// VF : Values of Shapes at center of faces
 		VF.Resize(6, 8);
-		for (auto i = 0; i < 6; ++i) {
+		for (uint32_t i = 0; i < 6; ++i) {
 			N(V_, { X(i,0),X(i,1),X(i,2) });
-			for (auto j = 0; j < 8; ++j) VF(i, j) = V_[j];
+			for (uint32_t j = 0; j < 8; ++j) VF(i, j) = V_[j];
 		}
 
 		// M : Values of Shapes at center of element
@@ -83,62 +87,66 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		//--- Computing integral N_i*N_j
 		double vol = Volume();
 		V.Resize(8, 8);
-		for (auto i = 0; i < 8 ; ++i)
-			for (auto j = i; j < 8; ++j) {
+		for (uint32_t i = 0; i < 8 ; ++i)
+			for (uint32_t j = i; j < 8; ++j) {
 				double sum = 64*M[i]*M[j]; // for center
 				// if (i == j) sum += 1; // for nodes ! We add a for loop instead of this if
-				for (auto k = 0; k < 12; ++k) sum += 4 * VS(k, i)*VS(k, j); // for mid-segment
-				for (auto k = 0; k < 6; ++k) sum += 16 * VF(k, i)*VF(k, j); // for center of face
+				for (uint32_t k = 0; k < 12; ++k) sum += 4 * VS(k, i)*VS(k, j); // for mid-segment
+				for (uint32_t k = 0; k < 6; ++k) sum += 16 * VF(k, i)*VF(k, j); // for center of face
 				V(i, j) = sum*vol/216;
 				V(j, i) = V(i,j);
 			}
-		for (auto i = 0; i < 8; ++i) V(i, i) += vol/216; // if(i==j)
-	}
+		for (uint32_t i = 0; i < 8; ++i) V(i, i) += vol/216; // if(i==j)
+    
+	} // end
 
-	void LinearCuboid::IntegraldNdN(DenseMatrix<DM_MIN>& V)
+
+
+
+	void LinearCuboid::IntegraldNdN(DenseMatrix<DM_MIN>& V) const
 	{
-		for (auto partial=0; partial < 3; ++partial)
+    double vol = ConstVolume();
+		for (uint32_t partial=0; partial < 3; ++partial)
 		{
-			DenseMatrix<DM12>& X = M1_, DS = M2_, DF = M3_;
+			DenseMatrix<DM_MIN>& X = M1_, DS = M2_, DF = M3_;
 		
 			MidSegmentPoints(X); // mide-sigments.
 			// DS = Values of Partial Shapes at mid-sigments
 			DS.Resize(12, 8);
-			for (auto i = 0; i < 12; ++i) {
-				dN_Partial_At(V_, { X(i,0),X(i,1),X(i,2) }, partial);
-				for (auto j = 0; j < 8; ++j) DS(i, j) = V_[j];
+			for (uint32_t i = 0; i < 12; ++i) {
+				dN_Partial_At( vol, V_, { X(i,0),X(i,1),X(i,2) }, partial);
+				for (uint32_t j = 0; j < 8; ++j) DS(i, j) = V_[j];
 			}
 
 			CenterOfFacePoints(X); // center of each face 
 			// DF = Values of Partial Shapes at center of faces
 			DF.Resize(6, 8);
-			for (auto i = 0; i < 6; ++i) {
-				dN_Partial_At(V_, { X(i,0), X(i,1), X(i,2) }, partial);
-				for (auto j = 0; j < 8; ++j) DF(i, j) = V_[j];
+			for (uint32_t i = 0; i < 6; ++i) {
+				dN_Partial_At(vol, V_, { X(i,0), X(i,1), X(i,2) }, partial);
+				for (uint32_t j = 0; j < 8; ++j) DF(i, j) = V_[j];
 			}
 
 			// DN = Values of Partial Shapes at Nodes
-			DenseMatrix<DM12>& DN = M1_;
+			DenseMatrix<DM_MIN>& DN = M1_;
 			DN.Resize(8, 8);
-			for (auto i = 0; i < 8; ++i) {
-				dN_Partial_At(V_ , { XY(i,0), XY(i,1), XY(i,2) }, partial);
-				for (auto j = 0; j < 8; ++j) DN(i, j) = V_[j];
+			for (uint32_t i = 0; i < 8; ++i) {
+				dN_Partial_At( vol, V_ , { XY(i,0), XY(i,1), XY(i,2) }, partial);
+				for (uint32_t j = 0; j < 8; ++j) DN(i, j) = V_[j];
 			}		
 
 			// M = Values of Partial Shapes at center of element
-			vector<double>& M = V_;
-			dN_Partial_At(M, { 0.5*(XY(3,0) + XY(5, 0)), 0.5*(XY(3,1) + XY(5, 1)), 0.5*(XY(3,2) + XY(5, 2)) }, partial);
+			auto& M = V_;
+			dN_Partial_At( vol, M, { 0.5*(XY(3,0) + XY(5, 0)), 0.5*(XY(3,1) + XY(5, 1)), 0.5*(XY(3,2) + XY(5, 2)) }, partial);
 
 			//--- Computing integral grad N_i dot grad N_j
 			V.Resize(8, 8);
 			V.Zero();
-			double vol = Volume();
-			for (auto i = 0; i < 8; ++i)
-				for (auto j = i; j < 8; ++j) {
+			for (uint32_t i = 0; i < 8; ++i)
+				for (uint32_t j = i; j < 8; ++j) {
 					double sum = 64 * M[i] * M[j]; // for center
-					for (auto k = 0; k < 8; ++k) sum += DN(k, i)*DN(k, j); // for nodes
-					for (auto k = 0; k < 12; ++k) sum += 4 * DS(k, i)*DS(k, j); // for mid-segment
-					for (auto k = 0; k < 6; ++k) sum += 16 * DF(k, i)*DF(k, j); // for center of face
+					for (uint32_t k = 0; k < 8; ++k) sum += DN(k, i)*DN(k, j); // for nodes
+					for (uint32_t k = 0; k < 12; ++k) sum += 4 * DS(k, i)*DS(k, j); // for mid-segment
+					for (uint32_t k = 0; k < 6; ++k) sum += 16 * DF(k, i)*DF(k, j); // for center of face
 					V(i, j) += sum*vol/216;
 					V(j, i) = V(i,j);
 				}
@@ -152,7 +160,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 	void LinearCuboid::N(std::vector<double>& N, const std::vector<double>& xyz) 
 	{
 		double vol = Volume();
-		for(auto i = 0; i < 8; ++i)
+		for(uint32_t i = 0; i < 8; ++i)
 			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
 		// 0->6 1->(-7) 2->4 3->(-5)
 		N[0] =  V_[6]; N[6] = -V_[0];
@@ -171,7 +179,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		// xyz Center of cuboid or center of gravity
 		double xyz[] = { 0.5*(XY(3, 0) + XY(5, 0)), 0.5*(XY(3, 1) + XY(5, 1)), 0.5*(XY(3, 2) + XY(5, 2)) };
 		double vol = Volume();
-		for (auto i = 0; i<8; ++i)
+		for (uint32_t i = 0; i<8; ++i)
 			V_[i] = (xyz[0] - XY(i, 0))*(xyz[1] - XY(i, 1))*(xyz[2] - XY(i, 2)) / vol;
 		N.resize(8);
 		// 0->6 1->(-7) 2->4 3->(-5)
@@ -192,7 +200,7 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 		DN.Resize(3, 8); //DN_size = dim x npe
 		const double vol = Volume(), sgn[] = {1.,-1.,-1.,1.,1.,-1.,-1.,1.};
 		uint32_t ind[] = {6,7,4,5,2,3,0,1};
-		for (auto k = 0; k < 8; ++k) {
+		for (uint32_t k = 0; k < 8; ++k) {
 			DN(0, k) = sgn[k]*(xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
 			DN(1, k) = sgn[k]*(xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
 			DN(2, k) = sgn[k]*(xyz[0] - XY(ind[k], 0))*(xyz[1] - XY(ind[k], 1)) / vol;
@@ -211,17 +219,16 @@ LinearCuboid::LinearCuboid() : FiniteElement(LINEAR_CUBOID,false,false,1U), V_(8
 */
 
 
-void LinearCuboid::dN_Partial_At(vector<double>& DN, const vector<double>& xyz, uint32_t partial )
+void LinearCuboid::dN_Partial_At( double vol, vector<double>& DN, const vector<double>& xyz, uint32_t partial ) const
 	{
-		const double     vol = Volume();
     constexpr double sgn[] = { 1.,-1.,-1.,1.,1.,-1.,-1.,1. };
 		constexpr uint32_t ind[] = { 6,7,4,5,2,3,0,1 };
 		switch (partial) {
-			case 0:	for (auto k = 0; k < 8; ++k)
+			case 0:	for (uint32_t k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[1] - XY(ind[k], 1))*(xyz[2] - XY(ind[k], 2)) / vol;
-			case 1: for (auto k = 0; k < 8; ++k)
+			case 1: for (uint32_t k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[2] - XY(ind[k], 2)) / vol;
-			case 2: for (auto k = 0; k < 8; ++k)
+			case 2: for (uint32_t k = 0; k < 8; ++k)
 						DN[k] = sgn[k] * (xyz[0] - XY(ind[k], 0))*(xyz[1] - XY(ind[k], 1)) / vol;
 		}	
 	}
@@ -236,10 +243,10 @@ void LinearCuboid::MidSideNodes(std::vector<uint32_t>& ids) const
 
 
 // mid-sigments by averaging of corresponding nodes
-void LinearCuboid::MidSegmentPoints(DenseMatrix<DM12>& XS)
+void LinearCuboid::MidSegmentPoints(DenseMatrix<DM_MIN>& XS) const
 	{
 		XS.Resize(12, 3); // 12 npe , 3 coordinates
-		for (auto i = 0; i < 3; ++i) {
+		for (uint32_t i = 0; i < 3; ++i) {
 			XS(0, i) = 0.5*(XY(0, i) + XY(1, i));
 			XS(1, i) = 0.5*(XY(1, i) + XY(2, i));
 			XS(2, i) = 0.5*(XY(2, i) + XY(3, i));
@@ -258,10 +265,10 @@ void LinearCuboid::MidSegmentPoints(DenseMatrix<DM12>& XS)
 
 
 //center of each face by average of mid-sigments
-void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM12>& XF)
+void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM_MIN>& XF) const
 	{
 		XF.Resize(6, 3); // 6 number of faces, 3 coordinates
-		for (auto i = 0; i < 3; ++i) {
+		for (uint32_t i = 0; i < 3; ++i) {
 			XF(0, i) = 0.5*(XY(0, i) + XY(2, i));
 			XF(1, i) = 0.5*(XY(0, i) + XY(5, i));
 			XF(2, i) = 0.5*(XY(1, i) + XY(6, i));
@@ -272,7 +279,7 @@ void LinearCuboid::CenterOfFacePoints(DenseMatrix<DM12>& XF)
 	}
 
 	/** for cuboid and with standard ordering */
-void LinearCuboid::EdgeLengths(std::vector<double>& v )
+void LinearCuboid::EdgeLengths( std::vector<double>& v )
 	{
 		const double dx = XY(5, 0) - XY(3, 0);
 		const double dy = XY(5, 1) - XY(3, 1);

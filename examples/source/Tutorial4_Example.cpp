@@ -8,9 +8,9 @@
 #include "PDE_Integrator.h"
 
 // PDE operators building the FE algorithm
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_dNi_dV_sc.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
 #include "NumIntegral_NT_op_N_dS.h"
 
@@ -164,12 +164,12 @@ void Tutorial4_Example::Run()
   const PropertyDatabase<2U>& p_ref(model.Database());
 
   // LHS operators                                        operand       basic function      test function
-  NumIntegral_dNT_op_dN_dV<2U>  viscosity_matr_x( p_ref, "viscosity", "nodal velocity x", "nodal velocity x" );
+  NumIntegral_dNT_lhsop_dN_dV<2U>  viscosity_matr_x( p_ref, "viscosity", "nodal velocity x", "nodal velocity x" );
   NumIntegral_NT_dNi_dV_sc<2U>  gradient_x( p_ref, "zero", "fluid pressure", "nodal velocity x" );
   gradient_x.SpatialDerivative( X_DIRECTION );
   gradient_x.MultiplyBy( -1.0 );
 
-  NumIntegral_dNT_op_dN_dV<2U>  viscosity_matr_y( p_ref, "viscosity", "nodal velocity y", "nodal velocity y" );
+  NumIntegral_dNT_lhsop_dN_dV<2U>  viscosity_matr_y( p_ref, "viscosity", "nodal velocity y", "nodal velocity y" );
   NumIntegral_NT_dNi_dV_sc<2U>  gradient_y( p_ref, "zero", "fluid pressure", "nodal velocity y" );
   gradient_y.SpatialDerivative( Y_DIRECTION );
   gradient_y.MultiplyBy( -1.0 );
@@ -183,14 +183,14 @@ void Tutorial4_Example::Run()
   divergence_y.SpatialDerivative( Y_DIRECTION );
   divergence_y.Transposed();
 
-  NumIntegral_dNT_op_dN_dV<2U>  stab_matrix( p_ref, "stabilization parameter", "fluid pressure", "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<2U>  stab_matrix( p_ref, "stabilization parameter", "fluid pressure", "fluid pressure" );
 
   // RHS operators                                  operand               test function
   NumIntegral_NT_op_N_dS<2U> extpressure_x( p_ref, "Neumann traction x", "nodal velocity x" );
   NumIntegral_NT_op_N_dS<2U> extpressure_y( p_ref, "Neumann traction y", "nodal velocity y" );
 
-  // RHS operators                           operand   test function
-  NumIntegral_NT_op_N_dV<2U>  dummy( p_ref, "zero", "fluid pressure" );
+  // RHS operators                            operand   test function
+  NumIntegral_NT_rhsop_N_dV<2U>  dummy( p_ref, "zero", "fluid pressure" );
 
   // add each PDE Operator to the FE algorithm
 

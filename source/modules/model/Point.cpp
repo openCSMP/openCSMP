@@ -55,30 +55,6 @@ ostream&  operator<<( ostream& stream, const Point<3U>& pt )
  }
 
 
-
-// ---------------------------------------------------------------------------
-
-// MEMBER DEFINITIONS
-
-// ---------------------------------------------------------------------------
-
-/*
-template<uint32_t dim>
-double& Point<dim>::operator[]( uint32_t i)
- {
-    return xyz_[i];
- }
- 
- 
-template<uint32_t dim>
-double Point<dim>::operator[]( uint32_t i) const
- {
-    return xyz_[i];
- }
-*/
-
-
-
 // ----------------------------------------------------------------------------
 //
 //  1D SPECIALIZATION
@@ -126,7 +102,7 @@ void Point<1U>::Set( const vector<double>& v )
  }
 
 
-Point<1U>& Point<1U>::operator=( double val )
+Point<1U>& Point<1U>::operator=( double val ) noexcept
  {
     x_ = val;
     return *this;
@@ -309,162 +285,6 @@ void Point<1U>::Out() const
 //
 // ----------------------------------------------------------------------------
 
-Point<2U>::Point(double val) noexcept
- : x_(val), y_(val)
- {
- }
-
-Point<2U>::Point( double px, double py ) noexcept : x_(px), y_(py)
- {
- }
-
-Point<2U>::Point( const vector<double>& v )
- : x_(v[0]), y_(v[1])
- {
- }
-
-double& Point<2U>::operator[]( uint32_t i )
- {
-    return (i == 0U) ? x_ : y_;
- }
-
-const double& Point<2U>::operator[]( uint32_t i ) const
- {
-    return (i == 0U) ? x_ : y_;
- }
-
-
-void Point<2U>::Set( const array<double,2U>& v ) noexcept
- {
-    x_ = v[0];
-    y_ = v[1];
- }
-
-
-void Point<2U>::Set( const vector<double>& v )
- {
-    assert( v.size() == 2U );
-    x_ = v[0];
-    y_ = v[1];
- }
-
-
-void Point<2U>::Set( double px, double py ) noexcept
- {
-    x_ = px;
-    y_ = py;
- }
-
-
-Point<2U>& Point<2U>::operator=( double val )
- {
-    x_ = val;
-    y_ = val;
-    return *this;
- }
-    
-
-Point<2U>  Point<2U>::operator+( const Point<2U>& pt ) const noexcept
- {
-    return (Point<2U>(x_ + pt.x_,y_ + pt.y_));
- }
-
-Point<2U>  Point<2U>::operator-( const Point<2U>& pt ) const noexcept
- {
-    return (Point<2U>(x_ - pt.x_,y_ - pt.y_));
- }
-
-Point<2U> Point<2U>::operator*( const Point<2U>& pt ) const noexcept
- {
-    return (Point<2U>(x_ * pt.x_,y_ * pt.y_));
- }
-
-Point<2U>  Point<2U>::operator/( const Point<2U>& pt ) const noexcept
- {
-    return (Point<2U>(x_ / pt.x_,y_ / pt.y_));
- }
-    
-
-Point<2U>  Point<2U>::operator+( double val ) const noexcept
- {
-    return (Point<2U>(x_ + val, y_ + val));
- }
-
-Point<2U>  Point<2U>::operator-( double val ) const noexcept
- {
-    return (Point<2U>(x_ - val, y_ - val));
- }
-
-Point<2U>  Point<2U>::operator*( double val ) const noexcept
- {
-    return (Point<2U>(x_ * val, y_ * val));
- }
-
-Point<2U>  Point<2U>::operator/( double val ) const noexcept
- {
-    return (Point<2U>(x_ / val, y_ / val));
- }
-
-
-
-Point<2U>& Point<2U>::operator+=( const Point<2U>& pt ) noexcept
- {
-    x_ += pt.x_;
-    y_ += pt.y_;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator-=( const Point<2U>& pt ) noexcept
- {
-    x_ -= pt.x_;
-    y_ -= pt.y_;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator*=( const Point<2U>& pt ) noexcept
- {
-    x_ *= pt.x_;
-    y_ *= pt.y_;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator/=( const Point<2U>& pt ) noexcept
- {
-    x_ /= pt.x_;
-    y_ /= pt.y_;
-    return *this;
- }
- 
-
-Point<2U>& Point<2U>::operator+=( double val ) noexcept
- {
-    x_ += val;
-    y_ += val;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator-=( double val ) noexcept
- {
-    x_ -= val;
-    y_ -= val;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator*=( double val ) noexcept
- {
-    x_ *= val;
-    y_ *= val;
-    return *this;
- }
-
-Point<2U>& Point<2U>::operator/=( double val ) noexcept
- {
-    x_ /= val;
-    y_ /= val;
-    return *this;
- }
- 
-
 bool Point<2U>::operator==( const Point<2U>& pt ) const noexcept
  {
     return essentiallyEqual(x_,pt.x_) && essentiallyEqual(y_,pt.y_);
@@ -475,28 +295,11 @@ bool Point<2U>::operator!=( const Point<2U>& pt ) const noexcept
     return !(*this == pt);
  }
 
-// see M. J. Lazlo, Computational Geometry & Computer Graphics in C++, 1996, p. 75
-bool Point<2U>::operator<( const Point<2U>& pt )  const noexcept
- {
-    return (( x_ < pt.x_ ) || (( x_ == pt.x_ ) && ( y_ < pt.y_ )));
- }
-
-bool Point<2U>::operator>( const Point<2U>& pt )  const noexcept
- {
-    return (( x_ > pt.x_ ) || (( x_ == pt.x_ ) && ( y_ > pt.y_ )));
- }
-
-
 double  Point<2U>::Length() const noexcept
  {
     return hypot( x_, y_ );
  }
-
-double  Point<2U>::SquaredLength() const noexcept
- {
-    return x_*x_ + y_*y_;
- }
-
+ 
 
 void Point<2U>::NormalizeLengthTo( double len ) noexcept
  {
@@ -525,13 +328,6 @@ bool Point<2U>::IsBetween( const Point<2U>& pt1, const Point<2U>& pt2 ) noexcept
 }
 
 
-vector<double> Point<2U>::Coordinates() const noexcept
- {
-    return vector<double>{x_,y_};
- }
-
-
-
 void Point<2U>::Out() const
  {
     cout <<"\nPoint<"<< 2U;
@@ -541,190 +337,11 @@ void Point<2U>::Out() const
 
 
 
-
-
-
 // ----------------------------------------------------------------------------
 //
 //  3D SPECIALIZATION
 //
 // ----------------------------------------------------------------------------
-
-Point<3U>::Point( double val )
- : x_(val), y_(val), z_(val)
- {
- }
-
-Point<3U>::Point( double px, double py, double pz ) noexcept : x_(px), y_(py), z_(pz)
- {
- }
-
-
-Point<3U>::Point( const array<double,3U>& v ) noexcept
- : x_(v[0]), y_(v[1]), z_(v[2])
- {
- }
-
-
-Point<3U>::Point( const vector<double>& v )
- : x_(v[0]), y_(v[1]), z_(v[2])
- {
- }
-
-
-double& Point<3U>::operator[]( uint32_t i )
- {
-    return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
- }
-
-const double& Point<3U>::operator[]( uint32_t i ) const
- {
-    return ((i==0U) ? x_ : ((i==1U) ? y_ : z_));
- }
-
-
-void Point<3U>::Set( const array<double,3U>& v ) noexcept
- {
-    x_ = v[0];
-    y_ = v[1];
-    z_ = v[2];
- }
-
-
-void Point<3U>::Set( const vector<double>& v )
- {
-    assert( v.size() == 3U );
-    x_ = v[0];
-    y_ = v[1];
-    z_ = v[2];
- }
-
-
-void Point<3U>::Set( double px, double py, double pz ) noexcept
- {
-    x_ = px;
-    y_ = py;
-    z_ = pz;
- }
-
-
-
-Point<3U>& Point<3U>::operator=( double val )
- {
-    x_ = val;
-    y_ = val;
-    z_ = val;
-    return *this;
- }
-    
-
-Point<3U>  Point<3U>::operator+( const Point<3U>& pt ) const noexcept
- {
-    return (Point<3U>(x_ + pt.x_, y_ + pt.y_, z_ + pt.z_));
- }
-
-Point<3U>  Point<3U>::operator-( const Point<3U>& pt ) const noexcept
- {
-    return (Point<3U>(x_ - pt.x_,y_ - pt.y_, z_ - pt.z_));
- }
-
-Point<3U>  Point<3U>::operator*( const Point<3U>& pt ) const noexcept
- {
-    return (Point<3U>(x_ * pt.x_,y_ * pt.y_, z_ * pt.z_));
- }
-
-Point<3U>  Point<3U>::operator/( const Point<3U>& pt ) const noexcept
- {
-    return (Point<3U>(x_ / pt.x_,y_ / pt.y_, z_ / pt.z_));
- }
-    
-
-Point<3U>  Point<3U>::operator+( double val ) const noexcept
- {
-    return (Point<3U>(x_ + val, y_ + val, z_ + val));
- }
-
-Point<3U>  Point<3U>::operator-( double val ) const noexcept
- {
-    return (Point<3U>(x_ - val, y_ - val, z_ - val));
- }
-
-Point<3U>  Point<3U>::operator*( double val ) const noexcept
- {
-    return (Point<3U>(x_ * val, y_ * val, z_ * val));
- }
-
-Point<3U>  Point<3U>::operator/( double val ) const noexcept
- {
-    return (Point<3U>(x_ / val, y_ / val, z_ / val));
- }
-
-
-Point<3U>& Point<3U>::operator+=( const Point<3U>& pt ) noexcept
- {
-    x_ += pt.x_;
-    y_ += pt.y_;
-    z_ += pt.z_;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator-=( const Point<3U>& pt ) noexcept
- {
-    x_ -= pt.x_;
-    y_ -= pt.y_;
-    z_ -= pt.z_;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator*=( const Point<3U>& pt ) noexcept
- {
-    x_ *= pt.x_;
-    y_ *= pt.y_;
-    z_ *= pt.z_;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator/=( const Point<3U>& pt ) noexcept
- {
-    x_ /= pt.x_;
-    y_ /= pt.y_;
-    z_ /= pt.z_;
-    return *this;
- }
- 
-
-Point<3U>& Point<3U>::operator+=( double val ) noexcept
- {
-    x_ += val;
-    y_ += val;
-    z_ += val;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator-=( double val ) noexcept
- {
-    x_ -= val;
-    y_ -= val;
-    z_ -= val;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator*=( double val ) noexcept
- {
-    x_ *= val;
-    y_ *= val;
-    z_ *= val;
-    return *this;
- }
-
-Point<3U>& Point<3U>::operator/=( double val ) noexcept
- {
-    x_ /= val;
-    y_ /= val;
-    z_ /= val;
-    return *this;
- }
- 
 
 bool Point<3U>::operator==( const Point<3U>& pt ) const noexcept
  {
@@ -769,11 +386,6 @@ double  Point<3U>::Length() const noexcept
     return hypot( x_ , y_, z_ );
  }
 
-double  Point<3U>::SquaredLength() const noexcept
- {
-    return x_ * x_ + y_ * y_ + z_ * z_;
- }
-
 
 void Point<3U>::NormalizeLengthTo( double len ) noexcept
  {
@@ -796,20 +408,6 @@ bool Point<3U>::CoincidesWithWithinTolerance( const Point<3U>& pt,
  }
 
 
-bool Point<3U>::IsBetween( const Point<3U>& pt1, const Point<3U>& pt2 ) noexcept
- {
-    if ( (x_ > pt1.x_) && (y_ > pt1.y_) && (z_ > pt1.z_) && (x_ < pt2.x_) && (y_ < pt2.y_) && (z_ < pt2.z_) ) return true;
-    return false;
-}
-
-
-vector<double> Point<3U>::Coordinates() const
- {
-    return vector<double>{x_,y_,z_};
- }
-
-
-
 void Point<3U>::Out() const
  {
     cout <<"\nPoint<"<< 3U;
@@ -820,45 +418,6 @@ void Point<3U>::Out() const
 
 
 
-
-
-// -------------------------------------------------------------------------------
-//
-//    GENERIC INLINE FUNCTIONS
-//
-// -------------------------------------------------------------------------------
-/*
-template<uint32_t dim>
-Point<dim>::Point()
- {
-    static_assert( dim <= 3, "Point<dim>::Point: default constructor: wrong template parameter value" );
- }
-
-template<uint32_t dim>
-double  Point<dim>::DistanceTo( const Point& pt ) const
- {
-    return Point<dim>( pt - *this ).Length();
- }
-
-template<uint32_t dim>
-Point<dim> operator-( double val, const Point<dim>& pt )
- {
-    Point<dim> temp(val);
-    return (temp - pt);
- } 
-
-template<uint32_t dim>
-Point<dim> operator+( double val, const Point<dim>& pt )
- {
-    return (pt + val);
- } 
-  
-template<uint32_t dim>
-Point<dim> operator*( double val, const Point<dim>& pt )
- {
-    return (pt * val);
- }   
-*/
 
 // 1D
 
@@ -877,69 +436,11 @@ Point<1U> operator*( double val, const Point<1U>& pt ) noexcept
     return (Point<1U>( pt.x_ * val ));
  }   
 
-// 2D
-
-Point<2U> operator-( double val, const Point<2U>& pt ) noexcept
- {
-    return (Point<2U>( val - pt.x_, val - pt.y_ ));
- }   
-
-Point<2U> operator+( double val, const Point<2U>& pt ) noexcept
- {
-    return (Point<2U>( pt.x_ + val, pt.y_ + val ));
- }   
-
-Point<2U> operator*( double val, const Point<2U>& pt ) noexcept
- {
-    return (Point<2U>( pt.x_ * val, pt.y_ * val ));
- }   
- 
-// 3D
-
-Point<3U> operator-( double val, const Point<3U>& pt ) noexcept
- {
-    return (Point<3U>( val - pt.x_, val - pt.y_, val - pt.z_ ));
- }   
-
-Point<3U> operator+( double val, const Point<3U>& pt ) noexcept
- {
-    return (Point<3U>( pt.x_ + val, pt.y_ + val, pt.z_ + val ));
- }   
-
-Point<3U> operator*( double val, const Point<3U>& pt ) noexcept
- {
-    return (Point<3U>( pt.x_ * val, pt.y_ * val, pt.z_ * val ));
- }   
-
-
-template<uint32_t dim>
-Point<dim>  midPoint( const Point<dim>& p1, const Point<dim>& p2 ) noexcept
- { 
-    return (Point<dim>( p1 + p2 ) / 2.);
- }
-
-template Point<1U>  midPoint( const Point<1U>&, const Point<1U>& );
-template Point<2U>  midPoint( const Point<2U>&, const Point<2U>& );
-template Point<3U>  midPoint( const Point<3U>&, const Point<3U>& );
-
-
-
 // dot = scalar product
 double dotProduct( const Point<1U>& p1, const Point<1U>& p2 ) noexcept
   {
     return p1[0U] * p2[0U];
   }
-
-double dotProduct( const Point<2U>& p1, const Point<2U>& p2 ) noexcept
-  {
-    return p1[0U] * p2[0U] + p1[1U] * p2[1U];
-  }
-
-double dotProduct( const Point<3U>& p1, const Point<3U>& p2 ) noexcept
-  {
-    return p1[0U] * p2[0U] + p1[1U] * p2[1U] + p1[2U] * p2[2U];
-  }
- 
 
 Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 ) noexcept
   {
@@ -950,9 +451,7 @@ Point<1U> crossProduct( const Point<1U>& p1, const Point<1U>& p2 ) noexcept
 double distance( const Point<1U>& a, const Point<1U>& b ) noexcept {
      return fabs( b[0] - a[0] );
   }
-double distance( const Point<2U>& a, const Point<2U>& b ) noexcept {
-     return hypot( a[0]-b[0], a[1]-b[1] );
-  }
+
 double distance( const Point<3U>& a, const Point<3U>& b ) noexcept {
      // hypot(hypot(x1-x2,y1-y2),z1-z2) avoids potential roundoff-related degeneracy after squaring
      return hypot(hypot(a[0]-b[0],a[1]-b[1]),a[2]-b[2]);
@@ -1007,34 +506,7 @@ double exteriorProductLength( const Point<3u>& p1, const Point<3u>& p2 ) noexcep
 }
 
 
-/** crossProduct(2D)
 
-Watch out in 2D the cross product is not uniquely defined:
-
-CrossProductAnalog1(U,V)=(U.x*V.y-U.y*V.x)  is a scalar!
-CrossProductAnalog2(U)=(U.y, -U.x)
-(yes, second analog takes only one argument, and return orthogonal vector :)
-First analog makes some physical and geometrical sense, 
-second analog comes from "determinant rule", for determinant of 2x2 matrix,
-
-|A B|
-|C D| = AD-BC 
-
-To avoid ambiguities, NAN is returned in the second component of Point.
-
-*/
-Point<2U> crossProduct( const Point<2U>& p1, const Point<2U>& p2 ) noexcept
-  {
-     return (Point<2U>( p1[0U] * p2[1U] - p2[0U] * p1[1U], numeric_limits<double>::quiet_NaN() ));
-  }
-
- // tested: SKM O.K.
-Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 ) noexcept
-  {
-     return (Point<3U>( p1[1U] * p2[2U] - p1[2U] * p2[1U],
-                                 p1[2U] * p2[0U] - p1[0U] * p2[2U],
-                                 p1[0U] * p2[1U] - p1[1U] * p2[0U] ));
-  }
 
 
 // ----------------------------------------------------------------------------------------
@@ -1042,6 +514,7 @@ Point<3U> crossProduct( const Point<3U>& p1, const Point<3U>& p2 ) noexcept
 // operators and other functions involving points
 //
 // ----------------------------------------------------------------------------------------
+
 template<uint32_t dim>
 Point<dim> crossProduct( const Point<dim>&, const Point<dim>& ) noexcept
   {
@@ -1091,6 +564,13 @@ double angleBetweenEdges( const pair<Point<dim>,Point<dim> >& edge1, const pair<
 template double angleBetweenEdges( const pair<Point<2>,Point<2> >&, const pair<Point<2>,Point<2> >& );
 template double angleBetweenEdges( const pair<Point<3>,Point<3> >&, const pair<Point<3>,Point<3> >& );
 
+// checks
+
+static_assert( std::is_move_constructible_v<csmp::Point<2U>> );
+static_assert( std::is_move_assignable_v<csmp::Point<2U>>    );
+
+static_assert( std::is_move_constructible_v<csmp::Point<3U>> );
+static_assert( std::is_move_assignable_v<csmp::Point<3U>>    );
 
 
 } // end namespace csmp

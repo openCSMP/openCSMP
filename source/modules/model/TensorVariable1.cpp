@@ -465,9 +465,11 @@ bool  TensorVariable<1U>::Eigen( VectorVariable<1U>& vvEigenvalues,
     tvEigenvectors = bNormalize ? 1. : data;
     return true;
  }
-
-bool TensorVariable<1U>::EigenNonSymmetric( VectorVariable<1U>& eigenVals,
-                                            TensorVariable<1U>& eigenVecs ) const
+ 
+ 
+// dummy function, normalises Eigen vectors
+bool TensorVariable<1U>::EigenWeaklyNonSymmetric( VectorVariable<1U>& eigenVals,
+                                                  TensorVariable<1U>& eigenVecs, double ) const
 {
     eigenVals = data;
     eigenVecs = 1.;

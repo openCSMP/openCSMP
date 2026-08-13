@@ -459,7 +459,7 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL<dim>& e )
       }
     else if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
       {
-         for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+         for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
 	          if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
 	               MathOperatorLHS<dim,CELL>::MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim,
 	                                                    e.Read( i, MathOperatorLHS<dim,CELL>::MaterialOperandKey() ) );
@@ -478,13 +478,13 @@ void VelocityAndVolumeFlux<dim,CELL>::GetOperands( const CELL<dim>& e )
       }
     else // if a nodal variable is dealt with
       {
-         if ( e.FE()->IntegrationPoints() == 0U ) 
+         if ( e.IntegrationPoints() == 0U )
            throw csmp::Exception( FATAL_ERROR, "VelocityAndVolumeFlux<dim>::GetOperands", 
                                         "The current finite element has no integration points",
                                         "Therefore nodal properties cannot be integrated.");
       
-         for ( auto i=0U; i<e.FE()->IntegrationPoints(); i++ )
-           {   
+         for ( uint32_t i=0U; i<e.IntegrationPoints(); i++ )
+           {
               MathOperatorLHS<dim,CELL>::MTRL[i].Resize(dim,dim);
               MathOperatorLHS<dim,CELL>::MTRL[i].Zero();
               MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e,
@@ -684,7 +684,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ComputeContribution( const CELL<dim>& e )
    //    -------------------------------------------
    if ( MathOperatorLHS<dim,CELL>::ApplicationCycle() == 2 && nodal_averaging_ ) {
         RESULT_.Resize(components_,static_cast<uint32_t>(e.Nodes()));
-        for ( auto i{0U}; i<e.Nodes(); i++ ) {
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
           // duplicate calculations are avoided via the boolean vector
           if ( !node_output_[ e.N(i)->Idx() ] )
             {
@@ -777,7 +777,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ExtractVelocity( const DenseMatrix<DM_MIN>
                                                        uint32_t        col,
                                                        VectorVariable<dim>& vc )
  {
-    for ( auto i{0U}; i<dim; i++ ) vc(i) = INP(i,col);
+    for ( uint32_t i{0U}; i<dim; i++ ) vc(i) = INP(i,col);
  }
 
 
@@ -801,7 +801,7 @@ void VelocityAndVolumeFlux<dim,CELL>::ExtractInterstitialVelocity( const DenseMa
                                                                    uint32_t col,
                                                                    VectorVariable<dim>& vc )
  {
-    for ( auto i{0U}; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
+    for ( uint32_t i{0U}; i<dim; i++ ) vc(i) = INP(i+dim+1,col);
  }
  
 

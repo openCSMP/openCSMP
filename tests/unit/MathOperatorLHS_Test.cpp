@@ -1,6 +1,6 @@
 #include "MathOperatorLHS_Test.h"
 
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_dNT_dN_dV.h"
 
 using namespace std;
@@ -53,13 +53,13 @@ void MathOperatorLHS_Test::run()
 void MathOperatorLHS_Test::MathOperatorLHS_Ctor()
 {
     NumIntegral_dNT_dN_dV<1U> MOLHS1( database_, "fluid pressure", "hydrostatic pressure" );
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
     csmp::Index ph_key = database_.StorageKey("hydrostatic pressure");
     csmp::Index pf_key = database_.StorageKey("fluid pressure");
     csmp::Index perm_key = database_.StorageKey("permeability");
 
     _test( MOLHS1.Name() == "NumIntegral_dNT_dN_dV: Operand: 'fluid pressure', 'hydrostatic pressure" );
-    _test( MOLHS2.Name() == "NumIntegral_dNT_op_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
+    _test( MOLHS2.Name() == "NumIntegral_dNT_lhsop_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
 
     _test( MOLHS2.MaterialOperandName() == "permeability" );
 
@@ -92,7 +92,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_CopyCtor()
     csmp::Index pf_key = database_.StorageKey(bop1.c_str());
     csmp::Index ph_key = database_.StorageKey(top1.c_str());
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS1( database_, op1.c_str(), bop1.c_str(), top1.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS1( database_, op1.c_str(), bop1.c_str(), top1.c_str() );
     
     MOLHS1.Name("MOLHS1", bop1.c_str(), top1.c_str());
     MOLHS1.AddAccumulate();
@@ -105,7 +105,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_CopyCtor()
     MOLHS1.BasicOperandOffset(basic_offset);
     MOLHS1.TestOperandOffset(test_offset);
 
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2(MOLHS1);
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2(MOLHS1);
     
     _test( MOLHS2.Name() == MOLHS1.Name() );
     _test( MOLHS2.MaterialOperandName() == op1 );
@@ -152,8 +152,8 @@ void MathOperatorLHS_Test::MathOperatorLHS_Equal()
     csmp::Index ph_key = database_.StorageKey(top1.c_str());
     
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS1( database_, op1.c_str(), bop1.c_str(), top1.c_str() );
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, op2.c_str(), bop2.c_str(), top2.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS1( database_, op1.c_str(), bop1.c_str(), top1.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, op2.c_str(), bop2.c_str(), top2.c_str() );
     
     MOLHS1.Name("MOLHS1", bop1.c_str(), top1.c_str());
     MOLHS1.AddAccumulate();
@@ -195,11 +195,11 @@ void MathOperatorLHS_Test::MathOperatorLHS_Name()
     string bop("fluid pressure");
     string top("hydrostatic pressure");
 
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS1( database_, op.c_str(), bop.c_str(), top.c_str() );
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS1( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, op.c_str(), bop.c_str(), top.c_str() );
     
-    _test( MOLHS1.Name() == "NumIntegral_dNT_op_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
-    _test( MOLHS2.Name() == "NumIntegral_dNT_op_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
+    _test( MOLHS1.Name() == "NumIntegral_dNT_lhsop_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
+    _test( MOLHS2.Name() == "NumIntegral_dNT_lhsop_dN_dV: Operand: 'permeability', 'fluid pressure', 'hydrostatic pressure" );
     
     MOLHS1.Name("MOLHS1", bop.c_str(), top.c_str());
     MOLHS2.Name("MOLHS2", op.c_str(), bop.c_str(), top.c_str());
@@ -229,7 +229,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_Name()
 
 void MathOperatorLHS_Test::MathOperatorLHS_OperandName()
 {
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
 
     _test( MOLHS2.MaterialOperandName() == "permeability" );
 
@@ -239,7 +239,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_OperandName()
 void MathOperatorLHS_Test::MathOperatorLHS_BasicOperandName()
 {
     NumIntegral_dNT_dN_dV<1U> MOLHS1( database_, "fluid pressure", "hydrostatic pressure" );
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
 
     _test( MOLHS1.BasicOperandName() == "fluid pressure" );
     _test( MOLHS2.BasicOperandName() == "fluid pressure" );
@@ -250,7 +250,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_BasicOperandName()
 void MathOperatorLHS_Test::MathOperatorLHS_TestFunctionName()
 {
     NumIntegral_dNT_dN_dV<1U> MOLHS1( database_, "fluid pressure", "hydrostatic pressure" );
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS2( database_, "permeability", "fluid pressure", "hydrostatic pressure" );
 
     _test( MOLHS1.TestOperandName() == "hydrostatic pressure" );
     _test( MOLHS2.TestOperandName() == "hydrostatic pressure" );
@@ -304,7 +304,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_MultiplyWithTimeIncrement()
     string top("hydrostatic pressure");
     bool time_multiply = true;
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _test( MOLHS.MultiplyWithTimeIncrement() == false );
     
@@ -322,7 +322,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_MultiplyBy()
     string top("hydrostatic pressure");
     double factor = 1.75;    
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _equal( MOLHS.MultiplyBy(), 1., fTolerance_ );
     
@@ -340,7 +340,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_LumpedFormulation()
     string top("hydrostatic pressure");
     bool lump_matrices = true;    
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _test( MOLHS.LumpedFormulation() == false );
     
@@ -359,7 +359,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_BasicOffset()
     string top("hydrostatic pressure");
     size_t basic_offset = 2U;
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _test( MOLHS.BasicOperandOffset() == 0U );
     
@@ -377,7 +377,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_TestOffset()
     string top("hydrostatic pressure");
     size_t test_offset = 3U;
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _test( MOLHS.TestOperandOffset() == 0U );
     
@@ -396,7 +396,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycles()
     string top("hydrostatic pressure");
     uint32_t application_cycles = 5U;
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
 
     _test( MOLHS.ApplicationCycles() == 1U );
     
@@ -414,7 +414,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_ApplicationCycle()
     string top("hydrostatic pressure");
     uint32_t application_cycle = 3U;
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     _test( MOLHS.ApplicationCycle() == 0U );
     
@@ -431,7 +431,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_MaterialOperand()
     string bop("fluid pressure");
     string top("hydrostatic pressure");
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     csmp::Index perm_key = database_.StorageKey(op.c_str());
     
@@ -446,7 +446,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_BasicOperand()
     string bop("fluid pressure");
     string top("hydrostatic pressure");
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     csmp::Index pf_key = database_.StorageKey(bop.c_str());
     
@@ -461,7 +461,7 @@ void MathOperatorLHS_Test::MathOperatorLHS_TestFunctionOperand()
     string bop("fluid pressure");
     string top("hydrostatic pressure");
     
-    NumIntegral_dNT_op_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
+    NumIntegral_dNT_lhsop_dN_dV<1U> MOLHS( database_, op.c_str(), bop.c_str(), top.c_str() );
     
     csmp::Index ph_key = database_.StorageKey(top.c_str());
     

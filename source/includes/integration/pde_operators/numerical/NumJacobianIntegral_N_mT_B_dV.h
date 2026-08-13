@@ -32,7 +32,7 @@ namespace csmp {
  * @attention The rows correspond to displacement DOFs (interleaved x1,y1,x2,y2,...), and the columns correspond to pressure DOFs (one per node).
  */
  template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumJacobianIntegral_N_mT_B_dV : public MathOperatorLHS<dim, CELL>
+class NumJacobianIntegral_N_mT_B_dV final : public MathOperatorLHS<dim, CELL>
 {
   public:
     NumJacobianIntegral_N_mT_B_dV( const PropertyDatabase<dim>& pref,
@@ -40,8 +40,8 @@ class NumJacobianIntegral_N_mT_B_dV : public MathOperatorLHS<dim, CELL>
                                    const char* basic,  // displacement (vector, NODE)
                                    const char* test ); // pore pressure (scalar, NODE)
 
-    void GetOperands( const CELL<dim>& e ) override;
-    void ComputeContribution( const CELL<dim>& e ) override;
+    void GetOperands( const CELL<dim>& e ) override final;
+    void ComputeContribution( const CELL<dim>& e ) override final;
 
     NumJacobianIntegral_N_mT_B_dV<dim,CELL>* clone() const override { return new NumJacobianIntegral_N_mT_B_dV<dim,CELL> (*this); }
 

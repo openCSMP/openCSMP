@@ -256,7 +256,7 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const
          // multiply  DNT . MTRL
          if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
            DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
-         else                             
+         else
            DNT *= MathOperatorLHS<dim,CELL>::MTRL[i];
 
          // multiplying DNT . DN 
@@ -275,9 +275,9 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::ComputeContribution( const
          VIP.Zero();
          econd() *= emult();
          // establish pressure gradients
-         for ( auto j{0U}; j<dim; j++ ) {
+         for ( uint32_t j{0U}; j<dim; j++ ) {
               //                                x,y,z-component  d/dx,y,z  grad_prop at node
-              for ( auto k=0; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k] * econd();
+              for ( uint32_t k=0; k<e.Nodes(); k++ ) VIP(j,j) += -DN(j,k) * NGRAD[k] * econd();
               // if gravity is turned on velocities are corrected correspondingly
               if ( with_gravity )  VIP(xyz-1,xyz-1) -= gravity * RDENS[i] * econd(); 
            }

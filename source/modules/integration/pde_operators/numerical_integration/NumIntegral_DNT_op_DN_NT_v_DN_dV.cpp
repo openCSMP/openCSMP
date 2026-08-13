@@ -1,4 +1,4 @@
-#include "NumIntegral_DNT_op_DN_NT_v_DN_dV.h"
+#include "NumIntegral_dNT_op_dN_NT_v_dN_dV.h"
 #include "PropertyDatabase.h"
 #include "Exception.h"
 #include "Element.h"
@@ -9,7 +9,7 @@ using namespace std;
 namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( const PropertyDatabase<dim>& pref,
+NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref,
                                                                          const char* diffusion_oper,   // element prop, for instance thermal conductivity
                                                                          const char* advection_oper,   // element prop, for instance heat transport velocity
                                                                          const char* basic,            // e.g., fluid pressure
@@ -22,7 +22,7 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
     VIP(dim,dim),
     NT3(3,dim)
 {
-    MathOperatorLHS<dim,CELL>::Name("NumIntegral_DNT_op_DN_NT_v_DN_dV", diffusion_oper, basic, test );
+    MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_op_dN_NT_v_dN_dV", diffusion_oper, basic, test );
     
     for ( auto it=MathOperatorLHS<dim,CELL>::MTRL.begin();
           it!=MathOperatorLHS<dim,CELL>::MTRL.end(); it++ )
@@ -30,19 +30,19 @@ NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::NumIntegral_DNT_op_DN_NT_v_DN_dV( co
       
     if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT and
          MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT_INTEGRATION_POINT )
-      throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_NT_v_dN_dV<dim>::(constructor)", 
                       diffusion_oper, "must be an element-based variable." );
 
     if ( (adv_key.place != ELEMENT or adv_key.place != ELEMENT_INTEGRATION_POINT) and adv_key.type != VECTOR )
-      throw csmp::Exception( ERROR,  "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR,  "NumIntegral_dNT_op_dN_NT_v_dN_dV<dim>::(constructor)", 
                       advection_oper, "must be an element-based vector variable." );
 
     if ( MathOperatorLHS<dim,CELL>::BasicOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_NT_v_dN_dV<dim>::(constructor)", 
                       basic, "Operand (basic) must be a scalar property placed on the nodes." );
 
     if ( MathOperatorLHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorLHS<dim,CELL>::TestOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_DNT_op_DN_NT_v_DN_dV<dim>::(constructor)", 
+      throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dN_NT_v_dN_dV<dim>::(constructor)", 
                       test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
@@ -60,7 +60,7 @@ The diffusion (op) and advection (adv) coefficients are read from the storage in
 
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
+void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
     // this integral is only for numerically integrated isoparametric finite elements
     assert( e.FE()->Isoparametric() == true );
@@ -113,7 +113,7 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::GetOperands( const CELL<dim>& e
 In linear elasticity computations.  
 */
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
+void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // initialize output matrix
     MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
@@ -182,14 +182,14 @@ void NumIntegral_DNT_op_DN_NT_v_DN_dV<dim,CELL>::ComputeContribution( const CELL
 
 
 
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Element>;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Element>;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Element>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<1U,Element>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<2U,Element>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<3U,Element>;
 
 
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<1U,Face>;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<2U,Face>;
-template class NumIntegral_DNT_op_DN_NT_v_DN_dV<3U,Face>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<1U,Face>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<2U,Face>;
+template class NumIntegral_dNT_op_dN_NT_v_dN_dV<3U,Face>;
 
 } // csmp
 

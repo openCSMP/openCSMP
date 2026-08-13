@@ -66,7 +66,7 @@ void NumIntegral_PT_op_P_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     double          det( 0.0 );
     double          volume( 0.0 ); // NT.N = element volume
     
-    UNITY = 1.0;
+    UNITY.FillCol( 0, 1. );// = 1.0;
     
     // if the property is constant over the element the lumped formulation is the
     // same as the consistent formulation, where

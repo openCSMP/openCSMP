@@ -586,9 +586,11 @@ void SparseMatrix_Test::Test_PDE_IntegratorUseCases()
     A.Assign( 2, 1, -2. );
     A.Assign( 3, 0,  1. );
     A.Assign( 3, 1,  2. );
-    // assign a zero element (should have no effect)
+    // assign zero element (must remove entry(0,3)=1
     A.Assign( 0, 3, 0. );
     _test( A.HasEntry(0,3) == false );
+    // restore entry
+    A.Assign( 0, 3, 1. );
     // make an element zero by adding a number (was -2 before)
     A.Add( 1, 2, 2. );
     _test( essentiallyEqual( A(1,2), 0. ) );

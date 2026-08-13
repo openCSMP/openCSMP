@@ -1,5 +1,5 @@
-#ifndef NumIntegral_DNT_rhsop_DN_dV_h
-#define NumIntegral_DNT_rhsop_DN_dV_h
+#ifndef NumIntegral_dNT_rhsop_dN_dV_h
+#define NumIntegral_dNT_rhsop_dN_dV_h
 
 #include "CSMP_definitions.h"
 #include "MathOperatorRHS.h"
@@ -21,13 +21,13 @@ into righthand side vector.
 
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim,CELL> {
+class NumIntegral_dNT_rhsop_dN_dV final : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& p, 
                                  const char* oper,          
                                  const char* test );       
 
-    NumIntegral_DNT_rhsop_DN_dV( const PropertyDatabase<dim>& p, 
+    NumIntegral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& p, 
                                  const char* integral_multiplier,
                                  const char* oper,          
                                  const char* test );
@@ -35,18 +35,16 @@ class NumIntegral_DNT_rhsop_DN_dV : public MathOperatorRHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
 
     void ComputeContribution( const CELL<dim>& ) override final;
-    
-    void IgnoreOperand( bool ignore );
   
-    NumIntegral_DNT_rhsop_DN_dV<dim,CELL>* clone() const override final
-      { return new NumIntegral_DNT_rhsop_DN_dV<dim,CELL> (*this); }
+    NumIntegral_dNT_rhsop_dN_dV<dim,CELL>* clone() const override final
+      { return new NumIntegral_dNT_rhsop_dN_dV<dim,CELL> (*this); }
       
   private:
-    DenseMatrix<DM_MIN>        DN, DNT, OPMAT;
+    DenseMatrix<DM_MIN>           DN, DNT, OPMAT, TEMP;
     std::vector<ScalarVariable >  noperand;
     ScalarVariable                eoperand, multiplier;
-    bool                              ignore_operand;
-    csmp::Index                         mult_key;
+    bool                          has_multiplier_;
+    csmp::Index                   mult_key;
 };
 
 

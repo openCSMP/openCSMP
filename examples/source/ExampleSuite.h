@@ -69,7 +69,7 @@ private:
   void   Initialize();
   void   CategoriesList() const;
   void   SuiteHeader() const;
-  [[nodiscard]] int ChoiceWithinRange( double min, double max ) const;
+  [[nodiscard]] int ChoiceWithinRange( long min, long max ) const;
   void   ExampleDetails( Example* example ) const;
   [[nodiscard]] bool   ChooseExampleAction() const;
   void   SortExampleVector( std::vector<Example*>& examples );

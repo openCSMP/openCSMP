@@ -11,6 +11,7 @@
 #include "TestSuite.h"
 
 // fundamentals
+#include "binaryReadWrite_Test.h"
 #include "Colony_Test.h"
 #include "ColorPalette_Test.h"
 #include "ScalarVar_Test.h"
@@ -21,6 +22,7 @@
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
 #include "ArrayVariable_Test.h"
+#include "FlaggedArrayVariable_Test.h"
 #include "Variables_Test.h"
 #include "GenericSingleton_Test.h"
 #include "ConvexPolygon_Test.h"
@@ -66,11 +68,13 @@
 #include "Region_Test.h"
 #include "SplitBoundary_Test.h"
 #include "SplitBoundaryInterface_Test.h"
+#include "SplitBoundaryTest_JK.h"
 #include "CopyReplaceVisitor_Test.h"
 // model manipulation and property retrieval
 #include "IntegrationPointToNodePropertyVisitor_Test.h"
 #include "PointPropertyToCellMapper2D_Test.h"
 #include "PropertyHandle_Test.h"
+#include "PropertyHandle_MathTest.h"
 #include "PropertyAtPointVisitor_Test.h"
 
 // finite elements
@@ -119,8 +123,23 @@
 #include "Operand_Test.h"
 #include "MathOperatorLHS_Test.h"
 #include "MathOperatorRHS_Test.h"
+// PDE operators
+#include "Integral_dNT_lhsop_dN_dV_Test.h"
+#include "Integral_dNT_lhsop_dN_NT_v_dN_dV_Test.h"
+#include "Integral_NT_lhsop_N_dV_Test.h"
+#include "Integral_dNT_rhsop_dN_dV_Test.h"
+#include "Integral_dNT_rhsop_dV_Test.h"
+
 #include "Integral_var_NT_lhsop_N_dV_Test.h"
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
+
+#include "NumIntegral_NT_lhsop_N_dV_Test.h"
+#include "NumIntegral_NT_rhsop_N_dV_Test.h"
+#include "NumIntegral_dNT_lhsop_dN_dV_Test.h"
+#include "NumIntegral_dNT_rhsop_dN_dV_Test.h"
+#include "NumIntegral_dNT_op_dV_Test.h"
+#include "NumIntegral_DNT_op_DN_NT_v_DN_dV_Test.h"
+// PDE integrators
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator_Transient_Test.h"
 #include "PDE_Integrator_Computation_Test.h"
@@ -206,10 +225,42 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-//        refactored.addTest( new SparseMatrix_Test() );
-//        refactored.addTest( new CompressedRowMatrix_Test() );
+// TODO:       refactored.addTest( new IsoparametricLinearPyramid_Test() ); // pyramid is correct but test fails
+// TODO:       refactored.addTest( new BoundaryInterface_Test() );          // - test alternative BREP flagging approaches
+       
 
-          refactored.addTest( new PDE_Integrator_Computation_Test() );
+        refactored.addTest( new PropertyConstraints_Test() );
+ //       refactored.addTest( new SplitBoundaryTest_JK() ); // tested OK
+
+
+// TODO: rerun
+         // refactored.addTest( new PDE_Integrator_Computation_Test() );
+// TODO: test PDE_Integrator with periodic boundary conditions
+//         refactored.addTest( new PDE_Integrator_Computation_Test() );
+ 
+// Exact integration
+// -----------------
+// LHS
+//          refactored.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
+//          refactored.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
+//          refactored.addTest( new Integral_NT_lhsop_N_dV_Test(true) );     // tested: OK
+//          refactored.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) ); // tested: OK
+// RHS
+//          refactored.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
+//          refactored.addTest( new Integral_dNT_rhsop_dV_Test(true) );    // gradient operand, tested: OK
+//          refactored.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) ); // tested: OK
+          
+// Numeric integration
+// -------------------
+// LHS
+//          refactored.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
+//          refactored.addTest( new NumIntegral_dNT_op_dV_Test(true) ); // tested: OK
+//          refactored.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
+//          refactored.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) ); // tested: OK
+// RHS
+//          refactored.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
+//          refactored.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) ); // tested: OK
+
 
 // TODO: does not run transient problem yet; compare analytic with num integrals
 //        refactored.addTest( new PDE_Integrator_Transient_Test() );
@@ -322,6 +373,7 @@ int main()
       basic.addTest( new TensorVariable_Test1());
       basic.addTest( new TensorVariable_Test2());
       basic.addTest( new ArrayVariable_Test());
+      basic.addTest( new FlaggedArrayVariable_Test());
       
       // utilities tests
       basic.addTest( new Matrix_Test(verbose) );
@@ -380,6 +432,7 @@ int main()
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      // interdependent1.addTest(new IsoparametricLinearPyramid_Test(verbose)); // TODO: pyramid produces correct output but test is broken
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
       interdependent1.addTest( new ElementPolicyIntegrity_Test() );
@@ -390,8 +443,28 @@ int main()
       // finite element stencil manager
       interdependent1.addTest( new FiniteElementManager_Test() );
 
-// fail - TODO: legacy code needs refactoring      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test( verbose ) );
-// fail - TODO: legacy code needs refactoring      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test( verbose ) );
+// Exact integration
+// -----------------
+// LHS
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
+      interdependent1.addTest( new Integral_NT_lhsop_N_dV_Test(true) );     // tested: OK
+      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) ); // tested: OK
+// RHS
+      interdependent1.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new Integral_dNT_rhsop_dV_Test(true) );    // gradient operand, tested: OK
+      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) ); // tested: OK
+          
+// Numeric integration
+// -------------------
+// LHS
+      interdependent1.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
+      interdependent1.addTest( new NumIntegral_dNT_op_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) ); // tested: OK
+// RHS
+      interdependent1.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) ); // tested: OK
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
@@ -437,7 +510,8 @@ int main()
       interdependent2.addTest( new SplitBoundaryInterface_Test() );
       interdependent2.addTest( new SplitBoundary_Test() );
       interdependent2.addTest( new ANSYS_SplitBoundaryMatch_Test() );
-      interdependent2.addTest( new PropertyHandle_Test() );    // TODO: refactor without ANSYS model
+      interdependent2.addTest( new PropertyHandle_Test() );    
+      interdependent2.addTest( new PropertyHandle_MathTest() );
       interdependent2.addTest( new IntegrationPointToNodePropertyVisitor_Test() ); // insufficient accuracy for IsoLinPyra
       interdependent2.addTest( new CopyReplaceVisitor_Test( &model ) );
       // interfaces

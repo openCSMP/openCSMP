@@ -9,131 +9,128 @@
 namespace csmp {
 
 /**
-@file binaryReadWrite.h
+  @file binaryReadWrite.h
+
+  @brief Binary file I/O utilities for CSMP STL containers and variables.
+
+  All write functions serialise a leading `size_t` element count followed by
+  the raw data.  All read functions expect the same layout and validate the
+  count before populating the output container.
+
+  Error handling policy
+  ---------------------
+  - A closed or invalid file stream is always a programming error: functions
+    return `false` and print a diagnostic to `std::cerr`.
+  - A corrupt record (unexpected element count, truncated read) throws
+    `std::runtime_error` so that the caller's stack is unwound cleanly.
+  - An empty container is **not** an error: zero is written/read as a valid
+    element count and the function returns `true`.
 */
 
-constexpr size_t CSMP_BINARY_FILE_HDR_SIZE(8+1); // JCK header for data record in file + null terminator
+// ============================================================================
+// Constants
+// ============================================================================
+
+/// Size of a binary section-header tag in bytes, including null terminator.
+constexpr size_t CSMP_BINARY_FILE_HDR_SIZE = 8 + 1;
+
+
+// ============================================================================
+// Section-header helpers
+// ============================================================================
 
 /**
-   Helper class for reading fixed-size strings from binary files
-   
-      defines strings that are used to read the possible datablocks that are abbreviated as
-        VSETCORD
-        VSETPELT
-        VSETPLST
-        VSETPFVT
-        VSETBFLG
-        VSETHEDR
-        VSETCONN
-        VSETFOTR
-        VSETMTRL - new for pmtrl record
-        
-     BoundaryInterface
-        BNDFHEDR - file header
-        BOUNDARY - object description
-        ONE_BDRY
-        BOUNDVAR - variable datablock
-        BNDFFOTR - file footer
- 
-    SplitBoundaryInterface
-        SBDFHEDR
-        SPLITBDRY
-        ONE_BDRY
-        SBDRYVAR
-        SBDFFOTR
+  @brief Writes a fixed-width section tag to a binary file.
 
-    RegionInterface
-        REGGHEDR
-        UNIQREGN
-        ONE_REGN
-        NONUREGN
-        MODELVARS
-        REGFFOTR
-        
-    NodeManifolds
-        NDMFHEDR
-        MANIFLDS
+  The tag is exactly CSMP_BINARY_FILE_HDR_SIZE bytes (8 characters + null).
+  Throws `std::runtime_error` if the write fails.
 */
-class BinaryFileSectionRead
-{
-  public:
-    BinaryFileSectionRead( std::fstream& fp, const char* header );
-
-  private:
-    char hdr_[CSMP_BINARY_FILE_HDR_SIZE];
-    std::fstream& fp_;
-};
-
-
-/// Helper class to write sections to a binary file
 class BinaryFileSectionWrite {
   public:
     BinaryFileSectionWrite( std::fstream& fp, const char* header );
-
   private:
     std::fstream& fp_;
 };
 
 
 /**
-@addtogroup CSMPglobalFunctions
-*/
+  @brief Reads and validates a fixed-width section tag from a binary file.
 
-/// checks whether the integer value fits within the range of a size_t  and returns it
+  Throws `std::runtime_error` if the tag does not match the expected header,
+  indicating a corrupt or misaligned file.
+*/
+class BinaryFileSectionRead {
+  public:
+    BinaryFileSectionRead( std::fstream& fp, const char* header );
+  private:
+    std::fstream& fp_;
+};
+
+
+// ============================================================================
+// Low-level size reader
+// ============================================================================
+
+/**
+  @brief Read a leading `size_t` element count from the file stream.
+
+  Throws `std::runtime_error` if the read fails or the value equals
+  `std::numeric_limits<size_t>::max()`, which is used as a sentinel for
+  an uninitialised record.
+*/
 size_t readContainerSize( std::fstream& fp );
 
-template<class T>
-bool binaryFileWrite(std::fstream& fp, const std::vector<T>& stl_ctner);
+
+// ============================================================================
+// Forward declarations (template bodies follow below)
+// ============================================================================
 
 template<class T>
-bool binaryFileRead(std::fstream& fp, std::vector<T>& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::vector<T>& c );
+
+template<class T>
+bool binaryFileRead(  std::fstream& fp, std::vector<T>& c );
 
 template<typename T>
-bool binaryFileWrite(std::fstream& fp, const std::deque<T>& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::deque<T>& c );
 
 template<typename T>
-bool binaryFileRead(std::fstream& fp, std::deque<T>& stl_ctner);
+bool binaryFileRead(  std::fstream& fp, std::deque<T>& c );
 
 template<class T>
-bool binaryFileWrite(std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T>>& c );
 
 template<class T>
-bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner);
-
-// maps
+bool binaryFileRead(  std::fstream& fp, std::deque<std::vector<T>>& c );
 
 template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::map<M, T>& c );
 
 template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::unordered_map<M, T>& c );
 
 template<class M, class T>
-bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner);
-
-// maps of vectors
+bool binaryFileRead(  std::fstream& fp, std::map<M, T>& c );
 
 template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner);
+bool binaryFileRead(  std::fstream& fp, std::unordered_map<M, T>& c );
 
 template<class M, class T>
-bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner);
+bool binaryFileWrite( std::fstream& fp, const std::map<M, std::vector<T>>& c );
+
+template<class M, class T>
+bool binaryFileRead(  std::fstream& fp, std::map<M, std::vector<T>>& c );
+
+bool binaryFileWrite( std::fstream& fp, const std::string& s );
+bool binaryFileRead(  std::fstream& fp, std::string& s );
+bool binaryFileWrite( std::fstream& fp, const char* str );
+bool binaryFileRead(  std::fstream& fp, char str[] );
 
 
-// character strings
+// ============================================================================
+// Domain variable I/O dispatch helpers
+// ============================================================================
 
-bool binaryFileWrite( std::fstream& fp, const std::string& );
-
-bool binaryFileRead( std::fstream& fp, std::string& );
-
-bool binaryFileWrite( std::fstream& fp, const char* str);
-
-bool binaryFileRead( std::fstream& fp, char str[]);
-
-
-// OUTPUT OF DISCRETISED CSMP VARIABLES TO FILE
-
-/// additions by P. Lang (2012); SKM @todo explain what this is good for
 namespace femDataOutputDispatch {
 
 template<class Var>
@@ -147,920 +144,563 @@ template<>
 inline void initVariable( csmp::Index key, FlaggedArrayVariable& var )
 { var.Resize( key.dataDepth ); }
 
-} // femDataOutputDispatch
+} // namespace femDataOutputDispatch
 
 
+// ============================================================================
+// Domain variable binary I/O
+// ============================================================================
 
-  /// domain (Model, Region...) variables binary IO
+/// Write all variables of a single type from a domain to file.
 template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
-bool variablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
+bool variablesOut( std::fstream& fp, const D& domain,
+                   const PropertyDatabase<dim>& pref, VARIABLE_TYPE vtype )
 {
-  size_t vcount( pref.VariableCount( domain.Placement(), vtype ) );
-  fp.write( (char*)&vcount, sizeof( size_t ) );
-  std::set<std::string> propList;
-  pref.ListVariables( domain.Placement(), vtype, propList );
-  for ( std::set<std::string>::const_iterator it( propList.begin() ); it != propList.end(); ++it )
-  {
-    V var;
-    Index key( pref.StorageKey( it->c_str() ) );
-    femDataOutputDispatch::initVariable( key, var );
-    domain.Read( key, var );
-    binaryFileWrite( fp, it->c_str() );
-    if ( !var.Out( fp ) )
-      return false;
-  }
-  return true;
-}
+    std::set<std::string> propList;
+    pref.ListVariables( domain.Placement(), vtype, propList );
+    const size_t vcount = propList.size();
+    fp.write( reinterpret_cast<const char*>(&vcount), sizeof(size_t) );
 
-
-template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
-bool variablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
-{
-  size_t vcount = std::numeric_limits<size_t>::max();
-  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
-  for ( size_t i( 0 ); i < vcount; ++i )
-  {
-    V var;
-    char propName[NAME_STRING];
-    binaryFileRead( fp, propName );
-    if ( pref.IsDefined( propName ) ) {
-      Index key( pref.StorageKey( propName ) );
-      femDataOutputDispatch::initVariable( key, var );
-      if ( !var.In( fp ) )
-        return false;
-      domain.Store( key, var );
-    }else{
-      if ( !var.In( fp ) )
-        return false;
+    for ( const auto& name : propList ) {
+        V var;
+        const Index key = pref.StorageKey( name.c_str() );
+        femDataOutputDispatch::initVariable( key, var );
+        domain.Read( key, var );
+        binaryFileWrite( fp, name.c_str() );
+        if ( !var.Out( fp ) ) {
+            std::cerr << "\nvariablesOut: ERROR: failed to write variable '"
+                      << name << "'.\n";
+            return false;
+        }
     }
-  }
-  return true;
+    return true;
 }
 
 
-template<class D, uint32_t dim>
-bool domainVariablesOut( std::fstream& fp, const D& domain, const PropertyDatabase<dim>& pref )
+/// Read all variables of a single type from file into a domain.
+template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
+bool variablesIn( std::fstream& fp, D& domain,
+                  const PropertyDatabase<dim>& pref, VARIABLE_TYPE )
 {
-  if ( !variablesOut<ScalarVariable>( fp, domain, pref, SCALAR ) )
-    return false;
-  if ( !variablesOut<VectorVariable<dim> >( fp, domain, pref, VECTOR ) )
-    return false;
-  if ( !variablesOut<TensorVariable<dim> >( fp, domain, pref, TENSOR ) )
-    return false;
-  if ( !variablesOut<ArrayVariable>( fp, domain, pref, ARRAY ) )
-    return false;
-  if ( !variablesOut<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY ) )
-    return false;
-  return true;
+    // Fix #10: initialise to 0, not max(); read is checked by readContainerSize.
+    const size_t vcount = readContainerSize( fp );
+
+    for ( size_t i = 0; i < vcount; ++i ) {
+        V    var;
+        char propName[NAME_STRING];
+        binaryFileRead( fp, propName );
+
+        if ( pref.IsDefined( propName ) ) {
+            const Index key = pref.StorageKey( propName );
+            femDataOutputDispatch::initVariable( key, var );
+            if ( !var.In( fp ) ) {
+                std::cerr << "\nvariablesIn: ERROR: failed to read variable '"
+                          << propName << "' (record " << i << " of " << vcount << ").\n";
+                return false;
+            }
+            domain.Store( key, var );
+        } else {
+            // Variable not in database — read and discard to keep stream aligned.
+            if ( !var.In( fp ) ) {
+                std::cerr << "\nvariablesIn: ERROR: failed to skip unknown variable '"
+                          << propName << "' (record " << i << " of " << vcount << ").\n";
+                return false;
+            }
+        }
+    }
+    return true;
 }
 
 
+/// Write all variable types from a domain to file.
 template<class D, uint32_t dim>
-bool domainVariablesIn( std::fstream& fp, D& domain, const PropertyDatabase<dim>& pref )
+bool domainVariablesOut( std::fstream& fp, const D& domain,
+                         const PropertyDatabase<dim>& pref )
 {
-  if ( !variablesIn<ScalarVariable>( fp, domain, pref, SCALAR ) )
-    return false;
-  if ( !variablesIn<VectorVariable<dim> >( fp, domain, pref, VECTOR ) )
-    return false;
-  if ( !variablesIn<TensorVariable<dim> >( fp, domain, pref, TENSOR ) )
-    return false;
-  if ( !variablesIn<ArrayVariable>( fp, domain, pref, ARRAY ) )
-    return false;
-  if ( !variablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY ) )
-    return false;
-  return true;
+    return variablesOut<ScalarVariable>      ( fp, domain, pref, SCALAR      )
+        && variablesOut<VectorVariable<dim>> ( fp, domain, pref, VECTOR      )
+        && variablesOut<TensorVariable<dim>> ( fp, domain, pref, TENSOR      )
+        && variablesOut<ArrayVariable>       ( fp, domain, pref, ARRAY       )
+        && variablesOut<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY);
+}
+
+
+/// Read all variable types from file into a domain.
+template<class D, uint32_t dim>
+bool domainVariablesIn( std::fstream& fp, D& domain,
+                        const PropertyDatabase<dim>& pref )
+{
+    return variablesIn<ScalarVariable>      ( fp, domain, pref, SCALAR      )
+        && variablesIn<VectorVariable<dim>> ( fp, domain, pref, VECTOR      )
+        && variablesIn<TensorVariable<dim>> ( fp, domain, pref, TENSOR      )
+        && variablesIn<ArrayVariable>       ( fp, domain, pref, ARRAY       )
+        && variablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY);
 }
 
 
 /**
-    selective variable reader, that extracts only those variables from file whose names are contained in the target set
-    @author SKM
-    @date 6/9/2021
- */
+  @brief Selective variable reader — reads only variables whose names appear
+         in @p selection.
+
+  Variables present in the file but absent from @p selection are read and
+  discarded so that the stream remains correctly positioned.
+
+  @author SKM
+  @date   6/9/2021
+*/
 template<class V, class D, uint32_t dim> requires CsmpVariable<dim, V>
 bool selectedVariablesIn( std::fstream& fp, D& domain,
                           const PropertyDatabase<dim>& pref,
-                          VARIABLE_TYPE, const std::set<std::string>& selection )
+                          VARIABLE_TYPE,
+                          const std::set<std::string>& selection )
 {
-  size_t vcount = std::numeric_limits<size_t>::max();
-  fp.read( reinterpret_cast<char*>(&vcount), sizeof( size_t ) );
-  for ( size_t i( 0 ); i < vcount; ++i )
-    {
-      V var;
-      char propName[NAME_STRING];
-      binaryFileRead( fp, propName );
-      if ( selection.find( propName ) != selection.end() && pref.IsDefined( propName ) ) {
-        Index key( pref.StorageKey( propName ) );
-        femDataOutputDispatch::initVariable( key, var );
-        if ( !var.In( fp ) )
-          return false;
-        domain.Store( key, var );
-      }else{
-        if ( !var.In( fp ) )
-          return false;
-      }
+    // Fix #10: use readContainerSize rather than initialising to max().
+    const size_t vcount = readContainerSize( fp );
+
+    for ( size_t i = 0; i < vcount; ++i ) {
+        V    var;
+        char propName[NAME_STRING];
+        binaryFileRead( fp, propName );
+
+        const bool wanted = selection.contains( propName )
+                         && pref.IsDefined( propName );
+
+        if ( wanted ) {
+            const Index key = pref.StorageKey( propName );
+            femDataOutputDispatch::initVariable( key, var );
+            if ( !var.In( fp ) ) {
+                std::cerr << "\nselectedVariablesIn: ERROR: failed to read variable '"
+                          << propName << "' (record " << i << " of " << vcount << ").\n";
+                return false;
+            }
+            domain.Store( key, var );
+        } else {
+            // Read and discard to keep stream aligned.
+            if ( !var.In( fp ) ) {
+                std::cerr << "\nselectedVariablesIn: ERROR: failed to skip variable '"
+                          << propName << "' (record " << i << " of " << vcount << ").\n";
+                return false;
+            }
+        }
     }
-  return true;
+    return true;
 }
 
 
-/**
-    selective variable reader, that extracts only those variables from file whose names are contained in the target set
-    @author SKM
-    @date 6/9/2021
- */
+/// Selective reader for all variable types.
 template<class D, uint32_t dim>
 bool selectedDomainVariablesIn( std::fstream& fp, D& domain,
                                 const PropertyDatabase<dim>& pref,
                                 const std::set<std::string>& selection )
 {
-  if ( !selectedVariablesIn<ScalarVariable>( fp, domain, pref, SCALAR, selection ) )
-    return false;
-  if ( !selectedVariablesIn<VectorVariable<dim> >( fp, domain, pref, VECTOR, selection ) )
-    return false;
-  if ( !selectedVariablesIn<TensorVariable<dim> >( fp, domain, pref, TENSOR, selection ) )
-    return false;
-  if ( !selectedVariablesIn<ArrayVariable>( fp, domain, pref, ARRAY, selection ) )
-    return false;
-  if ( !selectedVariablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY, selection ) )
-    return false;
-  return true;
+    return selectedVariablesIn<ScalarVariable>      ( fp, domain, pref, SCALAR,       selection )
+        && selectedVariablesIn<VectorVariable<dim>> ( fp, domain, pref, VECTOR,       selection )
+        && selectedVariablesIn<TensorVariable<dim>> ( fp, domain, pref, TENSOR,       selection )
+        && selectedVariablesIn<ArrayVariable>       ( fp, domain, pref, ARRAY,        selection )
+        && selectedVariablesIn<FlaggedArrayVariable>( fp, domain, pref, FLAGGEDARRAY, selection );
 }
 
 
-
-
-
+// ============================================================================
+// Template definitions — vector
+// ============================================================================
 
 /**
+  @brief Write a `std::vector<T>` to a binary stream.
 
-Uses the C-style fwrite() function for binary file IO to write the contents
-of an STL deque to a binary file. The data segment is preceded by an
-'unsigned long' number which determines the number of objects which are
-written to file.
+  Writes a leading `size_t` element count followed by the raw element data
+  in a single contiguous block.  An empty vector writes a zero count and
+  returns `true` — zero is a valid record size.
 
-@section arguments Input Arguments
-
-A file pointer of a binary file opened in write mode (e.g., "wb") and a
-constant reference to the STL deque which will be written to file.
-
-@return returns a boolean indicating whether all data have been
-written correctly to the file.
-
-@section implementation Implementation
-
-Uses the ANSI standard C function fwrite().
-
-@section application Application
-
-To efficiently write std:: container data to a binary file.
-
-@section messages Messages
-
-If the file pointer is invalid, method will quit, reporting an error.
+  @return `true` on success, `false` if the stream is not open.
 */
 template<class T>
-bool binaryFileWrite( std::fstream& fp, const std::vector<T>& stl_ctner )
+bool binaryFileWrite( std::fstream& fp, const std::vector<T>& c )
 {
-	const size_t	bytes = sizeof(T);
-	const size_t	elements(stl_ctner.size());
-
-  if ( stl_ctner.empty() ) {
-       std::cerr <<"\nbinaryFileWrite(vector): WARNING: container is empty."<< std::endl;
-     	 fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-       return false;
-    }
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileWrite(vector): ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-
-	// writing the size of the object
-	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-
-	// writing all elements
-  if ( elements >= 1 )
-    fp.write( reinterpret_cast<const char*>(stl_ctner.data()), static_cast<long>(bytes * elements) );
-
-	return true;
-}
-
-
-/// deque version
-template<typename T>
-bool binaryFileWrite( std::fstream& fp, const std::deque<T>& stl_ctner )
-{
-	const size_t bytes = sizeof(T);
-	const size_t elements = stl_ctner.size();
-
-  if ( stl_ctner.empty() ) {
-       std::cerr <<"\nbinaryFileWrite(deque): WARNING: container is empty."<< std::endl;
-     	 fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-       return false;
-    }
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileWrite(deque): ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-
-	// writing the size of the object
-	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-
-	// writing all elements
-  if ( elements >= 1 )
-	  for ( typename std::deque<T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
-		  fp.write(reinterpret_cast<const char*>(&(*it)), bytes);
-
-	return true;
-}
-
-
-/**
-
-Reads data from a binary file into an STL deque which is erased before
-adding the data, if it already contained any data. How many
-records are read is specified by an 'unsigned long' number which precedes
-the dataset.
-
-@section arguments Input Arguments
-
-A pointer to a binary file opened in read binary mode ("rb"), and a
-reference to an STL deque.
-
-@return returns the boolean 'true' if the number of data records
-which precedes the dataset in the file has been read correctly. If the
-file pointer is invalid or less data are read, the function returns false.
-
-@section implementation Implementation
-
-Uses the ANSI C function fread(). The deque which will hold the data
-is erased if it is not empty, and storage is reserved for the new number
-of elements which is read from file. Then the elements are read and the
-deque is returned.
-
-@section application Application
-
-Efficiently read data into STL deques.
-
-@section messages Messages
-
-The function will return false if (1) the file pointer is invalid, (2)
-the number of data records cannot be read correctly, and (3) if this
-number does not match the number of records which were actually read.
-*/
-template<class T>
-bool binaryFileRead( std::fstream& fp, std::vector<T>& stl_ctner )
-  {
-    if (!fp.is_open()) {
-        std::cerr << "\nbool binaryFileRead(vector): ERROR: invalid file pointer." << std::endl;
+    // Fix #1/#2: is_open checked first; empty container is not an error.
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(vector<T>): ERROR: file stream is not open.\n";
         return false;
-      }
-      
-    // read size of the record and check it
-    const size_t elements = readContainerSize( fp );
-    stl_ctner.resize( elements );
-   	const size_t bytes = sizeof(T);
-
-    if ( !fp.read(reinterpret_cast<char*>(stl_ctner.data()), static_cast<long>(elements * bytes) ) ) {
-        std::cerr << "\nbool binaryFileRead(vector): ERROR: reading from file."<< std::endl;
-        return false;
-      }
-      
+    }
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    if ( n > 0 )
+        fp.write( reinterpret_cast<const char*>( c.data() ),
+                  static_cast<std::streamsize>( sizeof(T) * n ) );
     return true;
-  }
+}
 
-/* OLD ONE-BY-ONE VERSION
 
-  if ( elements >= 1 ) {
-        if (!stl_ctner.empty())
-          stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-        stl_ctner.reserve(elements);
-        // writing all elements
-        for ( size_t i{0U}; i<elements; i++ ) {
-          // counting the successfully read elements
-          fp.read( reinterpret_cast<char*>(&val), bytes );
-          counter += 1;
-          stl_ctner.push_back(val);
-      }
+/**
+  @brief Read a `std::vector<T>` from a binary stream.
+
+  Clears the output container, reads the leading element count, resizes the
+  vector, then reads all elements in a single block read.
+
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if the block read is truncated.
+*/
+template<class T>
+bool binaryFileRead( std::fstream& fp, std::vector<T>& c )
+{
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(vector<T>): ERROR: file stream is not open.\n";
+        return false;
     }
+    // Fix #9: always clear before populating.
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
 
+    c.resize( n );
+    fp.read( reinterpret_cast<char*>( c.data() ),
+             static_cast<std::streamsize>( sizeof(T) * n ) );
+
+    if ( static_cast<size_t>( fp.gcount() ) != sizeof(T) * n ) {
+        throw std::runtime_error(
+            "binaryFileRead(vector<T>): truncated read — file may be corrupt. "
+            "Expected " + std::to_string( sizeof(T) * n ) +
+            " bytes, got "  + std::to_string( fp.gcount() ) + "." );
+    }
+    return true;
+}
+
+
+// ============================================================================
+// Template definitions — deque
+// ============================================================================
+
+/**
+  @brief Write a `std::deque<T>` to a binary stream.
+
+  Deque storage is not contiguous, so elements are written one at a time.
+  An empty deque writes a zero count and returns `true`.
+
+  @return `true` on success, `false` if the stream is not open.
 */
-
-
-/* ALTERNATIVE
-std::vector<uint8_t> read_vector_from_disk(std::string file_path)
-  {
-      std::ifstream instream(file_path, std::ios::in | std::ios::binary);
-      std::vector<uint8_t> data((std::istreambuf_iterator<char>(instream)), std::istreambuf_iterator<char>());
-      return data;
-  }
-*/
-
-
-
-/// deque version
 template<typename T>
-bool binaryFileRead( std::fstream& fp, std::deque<T>& stl_ctner )
+bool binaryFileWrite( std::fstream& fp, const std::deque<T>& c )
 {
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileRead: ERROR: invalid file pointer." << std::endl;
-      return false;
+    // Fix #1/#2: is_open checked first; empty container is not an error.
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(deque<T>): ERROR: file stream is not open.\n";
+        return false;
     }
-	const size_t bytes = sizeof(T);
-  size_t counter(0);
-
-	// read size of the record and assert this 
-  size_t elements = readContainerSize( fp );
-
-	// TODO: write the elements in one go, rather than one by one
-	if ( elements >= 1 )
-    {
-      if (!stl_ctner.empty())
-        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-        
-    	T val;
-      // writing all elements
-      for ( size_t i{0U}; i<elements; i++ )
-        {
-          // counting the successfully read elements
-          fp.read( reinterpret_cast<char*>(&val), bytes );
-          counter += 1;
-          stl_ctner.push_back(val);
-        }
-    }
-	if ( counter != elements )
-    {
-      std::cerr << "\nbool binaryFileRead: ERROR: incorrect number of records were read: ";
-      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-      return false;
-    }
-	return true;
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    for ( const auto& elem : c )
+        fp.write( reinterpret_cast<const char*>(&elem), sizeof(T) );
+    return true;
 }
 
 
+/**
+  @brief Read a `std::deque<T>` from a binary stream.
+
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if fewer elements than expected are read.
+*/
+template<typename T>
+bool binaryFileRead( std::fstream& fp, std::deque<T>& c )
+{
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(deque<T>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
+
+    size_t count = 0;
+    T val;
+    for ( size_t i = 0; i < n; ++i ) {
+        // Fix #15: comment corrected — this is reading, not writing.
+        fp.read( reinterpret_cast<char*>(&val), sizeof(T) );
+        if ( fp.gcount() == static_cast<std::streamsize>( sizeof(T) ) ) {
+            c.push_back( val );
+            ++count;
+        }
+    }
+    if ( count != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(deque<T>): truncated read — file may be corrupt. "
+            "Expected " + std::to_string(n) +
+            " elements, successfully read " + std::to_string(count) + "." );
+    }
+    return true;
+}
+
+
+// ============================================================================
+// Template definitions — deque<vector<T>>
+// ============================================================================
 
 /**
+  @brief Write a `std::deque<std::vector<T>>` to a binary stream.
 
-Uses the C-style fwrite() function for binary file IO to write the contents
-of an STL deque<vector<T> > to a binary file. The data segment is preceded
-by an 'unsigned long' number which determines the number of vector objects
-which are written to file.
+  Writes the outer element count, then delegates each inner vector to
+  `binaryFileWrite(vector<T>)`.
 
-@section arguments Input Arguments
-
-A file pointer of a binary file opened in write mode (e.g., "wb") and a
-constant reference to the STL vector of vectors which will be written to
-file.
-
-@return returns a boolean indicating whether all vector data have
-been written correctly to the file.
-
-@section implementation Implementation
-
-Uses the ANSI standard C function fwrite().
-
-@section application Application
-
-To efficiently write vector data to a binary file.
-
-@section messages Messages
-
-If the file pointer is invalid, method will quit, reporting an error.
+  @return `true` on success, `false` if the stream is not open.
 */
 template<class T>
-bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T> >& stl_ctner )
+bool binaryFileWrite( std::fstream& fp, const std::deque<std::vector<T>>& c )
 {
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(deque<vector>): WARNING: container is empty."<< std::endl;
-#endif
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileWrite(const deque<vector<T> >&): ";
-      std::cerr << "ERROR: invalid file pointer." << std::endl;
-      return false;
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(deque<vector<T>>): ERROR: file stream is not open.\n";
+        return false;
     }
-
-	// writing the number of vector objects
-	const size_t  elements(stl_ctner.size());
-	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-
-	// writing all elements
-  if ( elements >= 1 )
-    for ( auto it = stl_ctner.begin(); it != stl_ctner.end(); it++ )
-      binaryFileWrite(fp, (*it) );
-
-	return true;
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    for ( const auto& vec : c )
+        binaryFileWrite( fp, vec );
+    return true;
 }
 
 
-
 /**
+  @brief Read a `std::deque<std::vector<T>>` from a binary stream.
 
-Reads a vector of STL vector data from a binary file. The STL container
-is erased before adding the data, if it already contained any data. How many
-records are read is specified by an 'unsigned long' number which precedes
-the dataset.
-
-@section arguments Input Arguments
-
-A pointer to a binary file opened in read binary mode ("rb"), and a
-reference to an STL vector of vector.
-
-@return returns the boolean 'true' if the number of data records
-which precedes the dataset in the file has been read correctly. If the
-file pointer is invalid or less data are read, the function returns false.
-
-@section implementation Implementation
-
-Uses the ANSI C function fread(). The vector<vector<T> > which will hold the
-data is erased if it is not empty. Storage is reserved for the new number
-of elements which is read from file. Then the elements are read and the
-container is returned.
-
-@section application Application
-
-Efficiently read data into STL vector of vectors.
-
-@section messages Messages
-
-The function will return false if (1) the file pointer is invalid, (2)
-the number of data records cannot be read correctly, and (3) if this
-number does not match the number of records which were actually read.
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if fewer inner vectors than expected are read.
 */
 template<class T>
-bool binaryFileRead(std::fstream& fp, std::deque<std::vector<T> >& stl_ctner )
+bool binaryFileRead( std::fstream& fp, std::deque<std::vector<T>>& c )
 {
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileRead(deque<vector<T> >&): ";
-      std::cerr << "ERROR: invalid file pointer." << std::endl;
-      return false;
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(deque<vector<T>>): ERROR: file stream is not open.\n";
+        return false;
     }
-
-	// 1. reading number of vector records and assert this reading
-  const size_t  elements = readContainerSize( fp );
-
-	// TODO: write the elements in one go, rather than one by one
-	size_t counter(0);
-	if ( elements >= 1 ) {
-      if (!stl_ctner.empty())
-        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-      //stl_ctner.reserve( elements );
-      std::vector<T>  val;
-      // 2. reading all the vector records
-      for ( size_t i{0U}; i<elements; i++ ) {
-        // counting the successfully read elements
-        if (binaryFileRead(fp, val)) {
-          counter++;
-          stl_ctner.push_back(val);
-        }
-     }
-	}
-	if (counter != elements) {
-      std::cerr << "\nbool binaryFileRead(deque<vector<T> >&): ";
-      std::cerr << "ERROR: incorrect number of records were read: ";
-      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-      return false;
-    }
-
-	return true;
-}
-
-
-
-/**
-
-Uses the C-style fwrite() function for binary file IO to write the contents
-of an STL map to a binary file. The data segment is preceded
-by an 'unsigned long' number which determines the number of objects
-which are written to file. Each record is preceded by the
-corresponding map key.
-
-@section arguments Input Arguments
-
-A file pointer of a binary file opened in write mode (e.g., "wb") and a
-constant reference to the STL map which will be written to
-file.
-
-@return a boolean indicating whether all data have
-been written correctly to the file.
-
-@section implementation Implementation
-
-Uses the ANSI standard C function fwrite(). NOTE that the map key must
-not contain any dynamically allocated data. Otherwise these data are
-sliced of the binary record.
-
-@section application Application
-
-To efficiently write map data to a binary file.
-
-@section messages Messages
-
-If the file pointer is invalid, method will quit, reporting an error.
-*/
-template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::map<M, T>& stl_ctner)
-{
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(map): WARNING: container is empty."<< std::endl;
-#endif
-	if (!fp.is_open())
-    {
-      std::cerr << "\nbool binaryFileWrite(const map<M,T,less<M> >&): ";
-      std::cerr << "ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-
-	const size_t bytesM = sizeof(M);
-	const size_t bytesT = sizeof(T);
-	size_t       elements = stl_ctner.size();
-	M            key;
-	T            val;
-
-	// writing the number of vector objects
-	fp.write( reinterpret_cast<const char*>(&elements), sizeof(size_t) );
-
-	// writing all key-value pairs
-  if ( elements >= 1 )
-    for ( typename std::map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-      {
-        key = (*it).first;
-        val = (*it).second;
-        fp.write( reinterpret_cast<const char*>(&key), bytesM );
-        fp.write( reinterpret_cast<const char*>(&val), bytesT );
-      }
-	return true;
-}
-
-
-
-
-/**
-
-Reads an STL map from a binary file. The map
-is erased before adding the data if it already contains data. How many
-records are read is specified by an 'unsigned long' number which precedes
-the dataset.
-
-@section arguments Input Arguments
-
-A pointer to a binary file opened in read binary mode ("rb"), and a
-reference to an STL map.
-
-@return binaryFileRead() returns the boolean 'true' if the number of data records
-which precedes the dataset in the file has been read correctly. If the
-file pointer is invalid or less data are read, the function returns false.
-
-@section implementation Implementation
-
-Uses the ANSI C function fread(). The map which will hold the
-data is erased if it is not empty. Storage is reserved for the new number
-of elements which is read from file. Then the elements are read and the
-container is returned.
-
-@section application Application
-
-Efficiently read data into an STL map.
-
-@section messages Messages
-
-The function will return false if (1) the file pointer is invalid, (2)
-the number of data records cannot be read correctly, and (3) if this
-number does not match the number of records which were actually read.
-*/
-template<class M, class T>
-bool binaryFileRead(std::fstream& fp, std::map<M, T>& stl_ctner)
-{
-	if (!stl_ctner.empty())
-		stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-
-	if (!fp.is_open())
-	{
-		std::cerr << "\nbool binaryFileRead(map<M,T>&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-
-	const size_t bytesM = sizeof(M), bytesT = sizeof(T);
-  size_t  counterM(0), counterT(0);
-	M       key;
-	T       val;
-
-	// 1. read number of record in the map and assert reading
-  const size_t elements = readContainerSize( fp );
-
-	// TODO: write the elements in one go, rather than one by one
-	if (elements >= 1 ) {
-		// 2. reading all map records
-		for ( size_t i{0U}; i<elements; i++ )
-		{
-			// reading key
-			if (fp.read( reinterpret_cast<char*>(&key), bytesM )) counterM++;
-			// reading value
-			if (fp.read( reinterpret_cast<char*>(&val), bytesT )) counterT++;
-			// storing value in map after key
-			stl_ctner[key] = val;
-		}
-	}
-	if (counterM != elements || counterT != elements) {
-      std::cerr << "\nbool binaryFileRead(vector<map<M,T>&): ";
-      std::cerr << "ERROR: incorrect number of map records were read: ";
-      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counterM << std::endl;
-      return false;
-    }
-	return true;
-}
-
-
-/**
-
-Uses the C-style fwrite() function for binary file IO to write the contents
-of an STL unordered_map to a binary file. The data segment is preceded
-by an 'unsigned long' number which determines the number of objects
-which are written to file. Each record is preceded by the
-corresponding map key.
-
-@section arguments Input Arguments
-
-A file pointer of a binary file opened in write mode (e.g., "wb") and a
-constant reference to the STL map which will be written to
-file.
-
-@return a boolean indicating whether all data have
-been written correctly to the file.
-
-@section implementation Implementation
-
-Uses the ANSI standard C function fwrite(). NOTE that the map key must
-not contain any dynamically allocated data. Otherwise these data are
-sliced of the binary record.
-
-@section application Application
-
-To efficiently write map data to a binary file.
-
-@section messages Messages
-
-If the file pointer is invalid, method will quit, reporting an error.
-*/
-template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::unordered_map<M, T>& stl_ctner )
-{
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(unordered map): WARNING: container is empty."<< std::endl;
-#endif
-	if (!fp.is_open())
-	{
-		std::cerr << "\nbool binaryFileWrite(const unordered_map<M,T,less<M> >&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-	const size_t elements = stl_ctner.size();
-	const size_t bytesM = sizeof(M);
-	const size_t bytesT = sizeof(T);
-	M      key;
-	T      val;
-
-	// writing the number of vector objects
-	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
-
-	// writing all key-value pairs
-  if ( elements >= 1 )
-    for ( typename std::unordered_map<M, T>::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-      {
-        key = (*it).first;
-        val = (*it).second;
-        fp.write( reinterpret_cast<const char*>(&key), bytesM );
-        fp.write( reinterpret_cast<const char*>(&val), bytesT );
-      }
-	return true;
-}
-
-
-
-
-/**
-
-Reads an STL unordered_map from a binary file. The map
-is erased before adding the data if it already contains data. How many
-records are read is specified by an 'unsigned long' number which precedes
-the dataset.
-
-@section arguments Input Arguments
-
-A pointer to a binary file opened in read binary mode ("rb"), and a
-reference to an STL map.
-
-@return binaryFileRead() returns the boolean 'true' if the number of data records
-which precedes the dataset in the file has been read correctly. If the
-file pointer is invalid or less data are read, the function returns false.
-
-@section implementation Implementation
-
-Uses the ANSI C function fread(). The map which will hold the
-data is erased if it is not empty. Storage is reserved for the new number
-of elements which is read from file. Then the elements are read and the
-container is returned.
-
-@section application Application
-
-Efficiently read data into an STL map.
-
-@section messages Messages
-
-The function will return false if (1) the file pointer is invalid, (2)
-the number of data records cannot be read correctly, and (3) if this
-number does not match the number of records which were actually read.
-*/
-template<class M, class T>
-bool binaryFileRead(std::fstream& fp, std::unordered_map<M, T>& stl_ctner)
-{
-	if (!fp.is_open())
-    {
-      std::cerr << "\nbool binaryFileRead(unordered_map<M,T>&): ";
-      std::cerr << "ERROR: invalid file pointer." << std::endl;
-      return false;
-    }
-	const size_t bytesM = sizeof(M), bytesT = sizeof(T);
-	size_t  counterM(0), counterT(0);
-	 M      key;
-	 T      val;
-
-	// 1. read number of record in the map and assert reading
-  const size_t elements = readContainerSize( fp );
-
-	// TODO: write the elements in one go, rather than one by one
-	if (elements >= 1 ) {
-      if (!stl_ctner.empty())
-        stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-      // 2. reading all map records
-      for ( size_t i{0U}; i<elements; i++)
-        {
-          // reading key
-          if (fp.read( reinterpret_cast<char*>(&key), bytesM)) counterM++;
-          // reading value
-          if (fp.read( reinterpret_cast<char*>(&val), bytesT)) counterT++;
-          // storing value in map after key
-          stl_ctner[key] = val;
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
+
+    size_t count = 0;
+    for ( size_t i = 0; i < n; ++i ) {
+        std::vector<T> val;
+        // Fix #11: binaryFileRead(vector) now returns true for empty vectors,
+        // so this counter correctly reflects the number of records read.
+        if ( binaryFileRead( fp, val ) ) {
+            c.push_back( std::move(val) );
+            ++count;
+        } else {
+            throw std::runtime_error(
+                "binaryFileRead(deque<vector<T>>): failed to read inner vector "
+                + std::to_string(i) + " of " + std::to_string(n) + "." );
         }
     }
-	if (counterM != elements || counterT != elements) {
-		std::cerr << "\nbool binaryFileRead(vector<map<M,T>&): ";
-		std::cerr << "ERROR: incorrect number of map records were read: ";
-		std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counterM << std::endl;
-		return false;
-	}
-	return true;
+    return true;
 }
 
 
-
-
-/**
-
-Uses the C-style fwrite() function for binary file IO to write the contents
-of an STL map of vector<T> to a binary file. The data segment is preceded
-by an 'size_t' number which determines the number of vector objects
-which are written to file. Each vector record is preceded by the
-corresponding map key.
-
-@section arguments Input Arguments
-
-A file pointer of a binary file opened in write mode (e.g., "wb") and a
-constant reference to the STL map of vectors which will be written to
-file.
-
-@return a boolean indicating whether all map data have
-been written correctly to the file.
-
-@section implementation Implementation
-
-Uses the ANSI standard C function fwrite(). NOTE that the map key must
-not contain any dynamically allocated data. Otherwise these data are
-sliced of the binary record.
-
-@section application Application
-
-To efficiently write a map of vector data to a binary file.
-
-@section messages Messages
-
-If the file pointer is invalid, method will quit, reporting an error.
-*/
-template<class M, class T>
-bool binaryFileWrite(std::fstream& fp, const std::map<M, std::vector<T> >& stl_ctner)
-{
-#ifdef DEBUG
-  if ( stl_ctner.empty() )
-    std::cerr <<"\nbinaryFileWrite(map<vector>>): WARNING: container is empty."<< std::endl;
-#endif
-	if (!fp.is_open()) {
-		std::cerr << "\nbool binaryFileWrite(const map<M,vector<T>,less<M> >&): ";
-		std::cerr << "ERROR: invalid file pointer." << std::endl;
-		return false;
-	}
-
-	const size_t elements = stl_ctner.size();
-	const size_t bytes = sizeof(M);
-	M            val;
-
-	// writing the number of vector objects
-	fp.write(reinterpret_cast<const char*>(&elements), sizeof(size_t));
-
-	// writing all elements
-  if ( elements >= 1 )
-    for ( typename std::map<M, std::vector<T> >::const_iterator it = stl_ctner.begin(); it != stl_ctner.end(); it++)
-      {
-        val = (*it).first;
-        fp.write( reinterpret_cast<const char*>(&val), bytes );
-        binaryFileWrite(fp, (*it).second );
-      }
-	return true;
-}
-
-
+// ============================================================================
+// Template definitions — map<M,T>
+// ============================================================================
 
 /**
+  @brief Write a `std::map<M,T>` to a binary stream.
 
-Reads a map of STL vectors and their keys from a binary file. The map
-is erased before adding the data if it already contained any data. How many
-records are read is specified by an 'size_t' number which precedes
-the dataset.
+  Writes the element count followed by each key-value pair as raw bytes.
 
-@section arguments Input Arguments
+  @note Both `M` and `T` must be trivially copyable (no heap-allocated members).
 
-A pointer to a binary file opened in read binary mode ("rb"), and a
-reference to an STL map of vectors.
-
-@return the boolean 'true' if the number of data records
-which precedes the dataset in the file has been read correctly. If the
-file pointer is invalid or less data are read, the function returns false.
-
-@section implementation Implementation
-
-Uses the ANSI C function fread(). The map which will hold the
-data is erased if it is not empty. Storage is reserved for the new number
-of elements which is read from file. Then the elements are read and the
-container is returned.
-
-@section application Application
-
-Efficiently read data into an STL map of vectors.
-
-@section messages Messages
-
-The function will return false if (1) the file pointer is invalid, (2)
-the number of data records cannot be read correctly, and (3) if this
-number does not match the number of records which were actually read.
+  @return `true` on success, `false` if the stream is not open.
 */
 template<class M, class T>
-bool binaryFileRead(std::fstream& fp, std::map<M, std::vector<T> >& stl_ctner)
+bool binaryFileWrite( std::fstream& fp, const std::map<M, T>& c )
 {
-	if (!fp.is_open()) {
-      std::cerr << "\nbool binaryFileRead(map<M,vector<T>,less<M> >&): ";
-      std::cerr << "ERROR: invalid file pointer." << std::endl;
-      return false;
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(map<M,T>): ERROR: file stream is not open.\n";
+        return false;
     }
-	const size_t   bytes(sizeof(M));
-	size_t         counter(0);
-	std::vector<T> val;
-	M              key;
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    for ( const auto& [key, val] : c ) {
+        fp.write( reinterpret_cast<const char*>(&key), sizeof(M) );
+        fp.write( reinterpret_cast<const char*>(&val), sizeof(T) );
+    }
+    return true;
+}
 
-	// 1. read number of record in the map and assert reading
-  const size_t elements = readContainerSize( fp );
 
-	// TODO: write the elements in one go, rather than one by one
-	if (elements >= 1 ) {
-    if (!stl_ctner.empty())
-      stl_ctner.erase(stl_ctner.begin(), stl_ctner.end());
-		// 2. reading all map records
-		for ( size_t i{0U}; i<elements; i++)
-      {
-        // reading key
-        fp.read( reinterpret_cast<char*>(&key), bytes);
-        // reading vector and counting the successfully read records
-        if (binaryFileRead(fp, val)) {
-          counter++;
-          stl_ctner[key] = val;
+/**
+  @brief Read a `std::map<M,T>` from a binary stream.
+
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if fewer records than expected are read.
+*/
+template<class M, class T>
+bool binaryFileRead( std::fstream& fp, std::map<M, T>& c )
+{
+    // Fix #8: is_open checked before any mutation of the output container.
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(map<M,T>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
+
+    size_t count = 0;
+    for ( size_t i = 0; i < n; ++i ) {
+        M key;
+        T val;
+        fp.read( reinterpret_cast<char*>(&key), sizeof(M) );
+        fp.read( reinterpret_cast<char*>(&val), sizeof(T) );
+        if ( fp ) {
+            c[key] = val;
+            ++count;
         }
-      }
-	}
-	if (counter != elements) {
-      std::cerr << "\nbool binaryFileRead(vector<map<M,vector<T> >&): ";
-      std::cerr << "ERROR: incorrect number of map records were read: ";
-      std::cerr << "\nIndicated number: " << elements << ", actual number read: " << counter << std::endl;
-      return false;
     }
-	return true;
+    if ( count != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(map<M,T>): truncated read — file may be corrupt. "
+            "Expected " + std::to_string(n) +
+            " key-value pairs, successfully read " + std::to_string(count) + "." );
+    }
+    return true;
 }
 
+
+// ============================================================================
+// Template definitions — unordered_map<M,T>
+// ============================================================================
+
 /**
-@}
+  @brief Write a `std::unordered_map<M,T>` to a binary stream.
+
+  @note Iteration order of `unordered_map` is not deterministic; the file
+  will be valid but the order of records may differ between runs.
+
+  @return `true` on success, `false` if the stream is not open.
 */
+template<class M, class T>
+bool binaryFileWrite( std::fstream& fp, const std::unordered_map<M, T>& c )
+{
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(unordered_map<M,T>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    for ( const auto& [key, val] : c ) {
+        fp.write( reinterpret_cast<const char*>(&key), sizeof(M) );
+        fp.write( reinterpret_cast<const char*>(&val), sizeof(T) );
+    }
+    return true;
+}
 
-} // csmp
+
+/**
+  @brief Read a `std::unordered_map<M,T>` from a binary stream.
+
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if fewer records than expected are read.
+*/
+template<class M, class T>
+bool binaryFileRead( std::fstream& fp, std::unordered_map<M, T>& c )
+{
+    // Fix #8: is_open checked before any mutation of the output container.
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(unordered_map<M,T>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
+
+    c.reserve( n );
+    size_t count = 0;
+    for ( size_t i = 0; i < n; ++i ) {
+        M key;
+        T val;
+        fp.read( reinterpret_cast<char*>(&key), sizeof(M) );
+        fp.read( reinterpret_cast<char*>(&val), sizeof(T) );
+        if ( fp ) {
+            c[key] = val;
+            ++count;
+        }
+    }
+    if ( count != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(unordered_map<M,T>): truncated read — file may be corrupt. "
+            "Expected " + std::to_string(n) +
+            " key-value pairs, successfully read " + std::to_string(count) + "." );
+    }
+    return true;
+}
 
 
-#endif
+// ============================================================================
+// Template definitions — map<M, vector<T>>
+// ============================================================================
+
+/**
+  @brief Write a `std::map<M, std::vector<T>>` to a binary stream.
+
+  Writes the map size, then for each entry writes the key as raw bytes
+  followed by the vector via `binaryFileWrite(vector<T>)`.
+
+  @return `true` on success, `false` if the stream is not open.
+*/
+template<class M, class T>
+bool binaryFileWrite( std::fstream& fp, const std::map<M, std::vector<T>>& c )
+{
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileWrite(map<M,vector<T>>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    const size_t n = c.size();
+    fp.write( reinterpret_cast<const char*>(&n), sizeof(size_t) );
+    for ( const auto& [key, vec] : c ) {
+        fp.write( reinterpret_cast<const char*>(&key), sizeof(M) );
+        binaryFileWrite( fp, vec );
+    }
+    return true;
+}
+
+
+/**
+  @brief Read a `std::map<M, std::vector<T>>` from a binary stream.
+
+  @return `true` on success, `false` if the stream is not open.
+  @throws `std::runtime_error` if fewer records than expected are read.
+*/
+template<class M, class T>
+bool binaryFileRead( std::fstream& fp, std::map<M, std::vector<T>>& c )
+{
+    if ( !fp.is_open() ) {
+        std::cerr << "\nbinaryFileRead(map<M,vector<T>>): ERROR: file stream is not open.\n";
+        return false;
+    }
+    c.clear();
+    const size_t n = readContainerSize( fp );
+    if ( n == 0 ) return true;
+
+    size_t count = 0;
+    for ( size_t i = 0; i < n; ++i ) {
+        M key;
+        fp.read( reinterpret_cast<char*>(&key), sizeof(M) );
+        std::vector<T> val;
+        if ( binaryFileRead( fp, val ) ) {
+            c[key] = std::move( val );
+            ++count;
+        } else {
+            throw std::runtime_error(
+                "binaryFileRead(map<M,vector<T>>): failed to read vector for "
+                "map entry " + std::to_string(i) + " of " + std::to_string(n) + "." );
+        }
+    }
+    if ( count != n ) {
+        throw std::runtime_error(
+            "binaryFileRead(map<M,vector<T>>): truncated read — file may be corrupt. "
+            "Expected " + std::to_string(n) +
+            " entries, successfully read " + std::to_string(count) + "." );
+    }
+    return true;
+}
+
+} // namespace csmp
+
+#endif // CSMP_READ_WRITE_H
+

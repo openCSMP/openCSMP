@@ -213,7 +213,7 @@ class PDE_Integrator_Test : public Test {
     NumIntegral_dNT_dN_dV
     NumIntegral_dNT_mixed_op_dN_dV
     NumIntegral_dNT_mixed_op_dN_NT_v_dN_dV
-    NumIntegral_dNT_op_dN_dV                                      1
+    NumIntegral_dNT_lhsop_dN_dV                                      1
     NumIntegral_dNT_op_dN_dV_NT_v_dN_dV
     NumIntegral_dNT_op_dN_NT_op_dop_dN_dV
     NumIntegral_DNT_op_DN_NT_v_DN_dV
@@ -231,7 +231,7 @@ class PDE_Integrator_Test : public Test {
     NumIntegral_NT_mixed_op_dNi_dV
     NumIntegral_NT_op_dNi_dV
     NumIntegral_NT_op_N_dS
-    NumIntegral_NT_op_N_dV                                        1
+    NumIntegral_NT_rhsop_N_dV                                        1
     NumIntegral_NT_op1_op2_dNi_dV
     NumIntegral_op_NT_dN_orthogonal_dV
     NumIntegral_op_NT_N_dV

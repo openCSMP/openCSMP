@@ -292,25 +292,25 @@ public:
   void InterpolateBoundaryValues( BOX_BOUNDARY, const char* input_prop, const std::vector<VectorVariable<dim> >& bvalues );
 
   /// replaces the values of the target propery (to) with the values of property (from); both variables must have the same type and placement
-  void CopyReplace( const char* from, const char* to );
+  void CopyReplace( const char* from, const char* to, const char* target_region="Model" );
 
   /// computes the (constant valued) first spatial derivative of the node property and assigns it to the element property / barycenter of the element
-  bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop );
+  bool CopyGradientOfProperty_A_To_B( const char* node_prop, const char* element_prop, const char* target_region="Model" );
 
   /// linearly interpolates the value of the integration point property to the barycentre of element; result is stored as element property
-  void InterpolateIntegrationPointToCellProperty( const char* ipoint_prop, const char* eprop );
+  void InterpolateIntegrationPointToCellProperty( const char* ipoint_prop, const char* eprop, const char* target_region="Model" );
 
   /// interpolates node property values to the barycentre of element and stores results in element property
-  void InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose = true );
+  void InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose = true, const char* target_region="Model" );
 
   /// interpolates distributed node property values the quadrature points of numerically integrated finite elements
-  void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* ipoint_prop );
+  void InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* ipoint_prop, const char* target_region="Model" );
 
   /// linearly extrapolates the values of the integration point variable to the element nodes where an averaging with the neighbor elements is performed
-  void ExtrapolateIntegrationPointToNodeProperty( const char* ipoint_prop, const char* eprop );
+  void ExtrapolateIntegrationPointToNodeProperty( const char* ipoint_prop, const char* eprop, const char* target_region="Model" );
 
   /// piecewise constant element property values are extrapolated to nodes using a choice of averaging schemes (1/distance vs. element-volume weighted)
-  void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true );
+  void ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance = true, const char* target_region="Model" );
 
   /// changes the flags of the target variable all across the model
   void ChangePropertyStatus( const char* input_prop, VARIABLE_FLAG new_status );
@@ -418,9 +418,6 @@ private:
 
 // SUPPORTING FUNCTIONS
 
-/// attempts to return the spatial dimension of the model stored in the file (1-3D)
-uint32_t spatialDimensionOfModel( const char* csmp_binary );
-
 /// returns the extent of the model in the x,y,z dimensions and reports this back as a string
 std::string  boundingBox( const Model<3U>& sg, double& dim_x, double& dim_y, double& dim_z );
 
@@ -506,6 +503,12 @@ void stripDomainEdgesFor( Model<2U>&, const char* el_prop );
 /// initialise TOPOTYPE flags and returns # nodes on faces, edges, and vertices (primitive types of a B-REP)
 template<uint32_t dim>
 tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags( Model<dim>& );
+
+// alternative methods not fully tested on corner cases
+template<uint32_t dim>
+tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags_vs2( Model<2>& );
+template<uint32_t dim>
+tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags_vs2( Model<3>& );
 
 /// compares the mesh connectivity in the model with that of the input vset; returns true if both have the same
 template<uint32_t dim>

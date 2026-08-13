@@ -45,6 +45,7 @@ class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
     
     SPATIAL_DERIVATIVE           xyz_;     ///< direction of partial derivative of interest
     std::vector<ScalarVariable>  op_vec_;  ///< nodal operand values
+    DenseMatrix<DM_MIN>          DERIV_;   ///< shape function derivative matrix
 };
 
 } // csmp

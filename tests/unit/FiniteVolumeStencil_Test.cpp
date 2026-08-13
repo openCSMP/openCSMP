@@ -440,7 +440,7 @@ void FiniteVolumeStencil_Test::sectorFacetConnectivityTest() // facets that deli
   		// the facets surrounding a sector is to the segments surrounding the node
   		// as the sector is to the node  
   		setFacets.clear();
-  		for( auto iFacet = 0; iFacet < vIterFVS->FacetsPerSector(iSector); iFacet++)
+  		for( uint32_t iFacet = 0; iFacet < vIterFVS->FacetsPerSector(iSector); iFacet++)
   		{
   		  setFacets.insert(vIterFVS->FacetSurroundingSector(iSector, iFacet));
   		}
@@ -706,7 +706,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                     (*vIterFEs)->Nrst( rst1[0], rst1[1], rst1[2], NRST1 );
 
                     Point<3> pt0(0,0,0), pt1(0,0,0);
-                    for ( auto iNode = 0; iNode < iNrOfNodes; ++iNode) {
+                    for ( uint32_t iNode = 0; iNode < iNrOfNodes; ++iNode) {
                       const Point<3u> n(matCoords(iNode,0),matCoords(iNode,1),matCoords(iNode,2));
                       const Point<3u> nt = Point<3u>(A * n.Coordinates()) + translate;
                       pt0 += NRST0[iNode] * nt;
@@ -771,7 +771,7 @@ void FiniteVolumeStencil_Test::orientationAndLengthOfNormalsTest()
                 //3. Test the orientation of the normal and calcualted area
                 bool bEquivalent(true);
                 
-                for( auto iVal = 0; iVal < 3; iVal++)
+                for( uint32_t iVal = 0; iVal < 3; iVal++)
                     bEquivalent &= ( fabs(computedNormal[iVal] - mappedNormal[iVal]) < 1.e-7 );
                 
                 _test(bEquivalent);

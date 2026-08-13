@@ -4368,9 +4368,9 @@ void  ModelSubDomain<dim,CELL>::InterpolateNodeToCellProperty( const char* nprop
                         n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
-     if ( e_key.place != ELEMENT ) {
+     if ( e_key.place != ELEMENT && e_key.place != FACE && e_key.place != INTER_FACE ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateNodeToCellProperty",
-                                 "Property arg2 is not an cell property, nothing was done...");
+                                 "Property arg2 is not a cell property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {
@@ -4550,14 +4550,14 @@ void  ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToCellProperty( const
      const csmp::Index  e_key = pref_.StorageKey(eprop);
      const csmp::Index  c_key = pref_.StorageKey(cprop);
 
-     if ( e_key.place != ELEMENT ) {
+     if ( e_key.place != ELEMENT && e_key.place != FACE && e_key.place != INTER_FACE ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToCellProperty",
-                                 "Property arg2 is not an cell property, nothing was done...");
+                                 "Property arg2 is not a cell property, nothing was done...");
           return;
        }
-     if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
+     if ( c_key.place != ELEMENT_INTEGRATION_POINT && c_key.place != FACE_INTEGRATION_POINT && c_key.place != INTER_FACE_INTEGRATION_POINT ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::InterpolateIntegrationPointToCellProperty",
-                                 "Property arg1 is not a constraint point property, nothing was done...");
+                                 "Property arg1 is not an integration-point point property, nothing was done...");
           return;
        }
      if ( e_key.type != c_key.type ) {
@@ -4606,12 +4606,12 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateCellToIntegrationPointProperty( const
     const csmp::Index  c_key = pref_.StorageKey(cprop);
 
     // 1. check whether conditions for operation are O.K.
-    if ( e_key.place != ELEMENT ) {
+    if ( e_key.place != ELEMENT && e_key.place != FACE && e_key.place != INTER_FACE ) {
          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateCellToIntegrationPointProperty",
-                                "Property arg1 is not an cell property, nothing was done...");
+                                "Property arg1 is not a cell property, nothing was done...");
          return;
       }
-    if ( c_key.place != ELEMENT_INTEGRATION_POINT ) {
+    if ( c_key.place != ELEMENT_INTEGRATION_POINT && c_key.place != FACE_INTEGRATION_POINT && c_key.place != INTER_FACE_INTEGRATION_POINT ) {
          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateCellToIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
@@ -4688,12 +4688,15 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateCellToFacetIntegrationPointProperty( 
     const csmp::Index  fip_key = pref_.StorageKey(fipprop);
 
     // 1. check whether conditions for operation are O.K.
-    if ( e_key.place != ELEMENT ) {
+    if ( e_key.place != ELEMENT && e_key.place != FACE && e_key.place != INTER_FACE ) {
          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateCellToFacetIntegrationPointProperty",
-                                "Property arg1 is not an cell property, nothing was done...");
+                                "Property arg1 is not a cell property, nothing was done...");
          return;
       }
-    if ( fip_key.place != FACET_INTEGRATION_POINT ) {
+    if ( fip_key.place != FACET_INTEGRATION_POINT &&
+         fip_key.place != FACE_FACET_INTEGRATION_POINT &&
+         fip_key.place != INTER_FACE_FACET_INTEGRATION_POINT )
+      {
          throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateCellToFacetIntegrationPointProperty",
                                 "Property arg2 is not an integration point property, nothing was done...");
          return;
@@ -4785,9 +4788,9 @@ void  ModelSubDomain<dim,CELL>::ExtrapolateCellToNodeProperty( const char* eprop
                         n_key = pref_.StorageKey(nprop);
 
      // 1. check whether conditions for operation are O.K.
-     if ( e_key.place != ELEMENT ) {
+     if ( e_key.place != ELEMENT && e_key.place != FACE && e_key.place != INTER_FACE ) {
           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::ExtrapolateCellToNodeProperty",
-                                 "Property arg1 is not an cell property, nothing was done...");
+                                 "Property arg1 is not a cell property, nothing was done...");
           return;
        }
      if ( n_key.place != NODE ) {

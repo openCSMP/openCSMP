@@ -10,7 +10,7 @@
 #include "NumJacobianIntegral_BT_m_N_dV.h"
 #include "NumJacobianIntegral_N_mT_B_dV.h"
 #include "NumIntegral_NT_lhsop_N_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_PT_op_dV.h"
 
 #include "VSet.h"
@@ -1374,8 +1374,8 @@ void PDE_Integrator_Test::TestAssemblySingleVectorDirichlet( bool debug ) {
 
 
     // Create pde-operators
-//    NumIntegral_dNT_op_dN_dV<2U> pressureLHS(model_->Database(), "permeability", "fluid pressure", "fluid pressure");
-//    NumIntegral_NT_op_N_dV<2U> sourceVolume(model_->Database(), "fluid volume source", "fluid pressure");
+//    NumIntegral_dNT_lhsop_dN_dV<2U> pressureLHS(model_->Database(), "permeability", "fluid pressure", "fluid pressure");
+//    NumIntegral_NT_rhsop_N_dV<2U> sourceVolume(model_->Database(), "fluid volume source", "fluid pressure");
 //    pde_integrator.Add(&pressureLHS);
 //    pde_integrator.Add(&sourceVolume);
 
@@ -2016,7 +2016,7 @@ void PDE_Integrator_Test::TestBlockStructuredCoupledFEM_AssemblyWithDirichletEli
     NumIntegral_PT_op_dV<DIM>  Fu( model_->Database(), "gravity term", "displacement" );
     attorney.Add(&Fu);
     
-    NumIntegral_NT_op_N_dV<DIM>  Fp( model_->Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<DIM>  Fp( model_->Database(), "fluid volume source", "fluid pressure" );
     attorney.Add(&Fp);
 
 

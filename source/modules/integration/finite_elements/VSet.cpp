@@ -275,7 +275,7 @@ template<uint32_t dim>
 void VSet<dim>::AddBREP_Flags( typename std::vector<std::int8_t>::const_iterator first,
                                typename std::vector<std::int8_t>::const_iterator last )
  {
-    assert( distance(first,last) == Vertices() );
+    assert( distance(first,last) == static_cast<long>(Vertices()) );
     
     ResizeBREP_Flags();
     auto bit{ BREP_FlagsBegin() };

@@ -81,7 +81,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  {
     // this integral is only for analytically integrated finite elements
-    assert( e.FE()->UsesLocalCoordinates() == false );
+    assert( e.UsesLocalCoordinates() == false );
 
     MathOperatorLHS<dim,CELL>::GetOperands(e);
         
@@ -118,10 +118,10 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<d
     res_.Fill(0.0);
   
     const double global_factor = prefactor_ * e.Volume() / (delta_ * static_cast<double>(e.Nodes()) );
-    for ( auto j{0U}; j < e.Nodes(); ++j) {
+    for ( uint32_t j{0U}; j < e.Nodes(); ++j) {
       const double j_factor = el_d_lambda[j]() - el_lambda[j]();
-      for (auto i{0U}; i < e.Nodes(); ++i) {
-        for (auto k{0U}; k < e.Nodes(); ++k) {
+      for (uint32_t i{0U}; i < e.Nodes(); ++i) {
+        for (uint32_t k{0U}; k < e.Nodes(); ++k) {
           res_(i, j) += DNT(i, k) * el_test_orig[k]() * j_factor * global_factor;
         }
       }
@@ -130,10 +130,6 @@ void Jacobian_Integral_dNT_op_dN_dV<dim,CELL>::ComputeContribution( const CELL<d
     // assigning element contribution
     MathOperatorLHS<dim,CELL>::LHS.Resize(e.Nodes(),e.Nodes());
     MathOperatorLHS<dim,CELL>::LHS = res_;
-      
-  
- //cout <<"\nElement: "<< e.Idx();
- //MathOperatorLHS<dim>::LHS.Out();
 
 } // end ComputeContribution
 

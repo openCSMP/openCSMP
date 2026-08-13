@@ -25,8 +25,8 @@
 
 // PDE
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_dNT_op_dV.h"
 
 
@@ -492,8 +492,8 @@ void DES2PhaseSlightlyCompressibleFlow_Example::ComputeSteadyStatePressure( Mode
     CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
     PDE_Integrator<dim,Element>  steady_pressure(linear_solver);
 #endif
-    NumIntegral_dNT_op_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
-    NumIntegral_NT_op_N_dV<dim>    elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<dim>  conductance( mdl.Database(), conductance_operator.c_str(), "fluid pressure", "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim> elmt_volume_source( mdl.Database(), "fluid volume source", "fluid pressure" );
     //PointSource_rhsop<dim>          nodal_volume_source( mdl.Database(), "nodal fluid volume source", "fluid pressure" );
     steady_pressure.Add( &conductance );
     steady_pressure.Add( &elmt_volume_source );

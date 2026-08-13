@@ -3514,6 +3514,331 @@ size_t VData::SwitchCornerTriangles2D()
 
 
 
+/**
+ * @brief Private implementation of TOPOTYPE initialisation, shared by 2D and 3D.
+ * @see InitialiseNodeTopologyIdentifiers2D, InitialiseNodeTopologyIdentifiers3D
+ *
+ * VData.h
+  private:
+    template<uint32_t dim>
+    void InitialiseNodeTopologyIdentifiers_impl();
+
+  public:
+    void InitialiseNodeTopologyIdentifiers2D();
+    void InitialiseNodeTopologyIdentifiers3D();
+
+VData.cpp
+  void VData::InitialiseNodeTopologyIdentifiers2D()
+    -> InitialiseNodeTopologyIdentifiers_impl<2>()
+
+  void VData::InitialiseNodeTopologyIdentifiers3D()
+    -> InitialiseNodeTopologyIdentifiers_impl<3>()
+
+  template<uint32_t dim>
+  void VData::InitialiseNodeTopologyIdentifiers_impl()
+    Step 1. Initialise
+    Step 2. Region elements    (constexpr dim)
+    Step 3. Interface elements (constexpr dim)
+    Step 4. Manifold refinement
+    Step 5. Collision resolution (constexpr dim)
+    Step 6. Hull sweep         (constexpr dim)
+ */
+template<uint32_t dim>
+void VData::InitialiseNodeTopologyIdentifiers_Claude()
+{
+    static_assert( dim == 2 || dim == 3,
+                  "VData::InitialiseNodeTopologyIdentifiers_impl: dim must be 2 or 3" );
+
+    if ( !WithNeighbourConnectivity() )
+        throw csmp::Exception( ERROR, "VData::InitialiseNodeTopologyIdentifiers",
+                               "Needs connectivity info" );
+
+    // -------------------------------------------------------------------------
+    // Step 1. Initialise all nodes to MESH_VERTEX
+    // -------------------------------------------------------------------------
+    for ( auto nit = BREP_FlagsBegin(); nit != BREP_FlagsEnd(); ++nit )
+        (*nit) = static_cast<int8_t>( MESH_VERTEX );
+
+    // -------------------------------------------------------------------------
+    // Step 2. Assign flags from region element types
+    //
+    //   3D: Surface elements -> all nodes -> INTERIOR_SURFACE
+    //   2D/3D: Line elements -> valence-based:
+    //            valence == 1  -> PERIMETER_POINT
+    //            valence == 2  -> INTERIOR_LINE
+    //            valence >= 3  -> INTERIOR_POINT
+    // -------------------------------------------------------------------------
+    if constexpr ( dim == 3 )
+    {
+        for ( size_t e = 0; e < first_interface_; ++e )
+        {
+            const CSMP_FEM_TYPE etype = HybridElementTypeMesh()
+                                      ? static_cast<CSMP_FEM_TYPE>( pelmt[e] )
+                                      : static_cast<CSMP_FEM_TYPE>( pelmt[0] );
+            if ( isSurfaceElement( etype ) )
+                for ( const auto nid : plist[e] )
+                    BREP_Flag( nid, static_cast<int8_t>( INTERIOR_SURFACE ) );
+        }
+    }
+
+    {
+        // Line elements: valence-based assignment (2D and 3D)
+        map<size_t, uint32_t> lineValence;
+        for ( size_t e = 0; e < first_interface_; ++e )
+        {
+            const CSMP_FEM_TYPE etype = HybridElementTypeMesh()
+                                      ? static_cast<CSMP_FEM_TYPE>( pelmt[e] )
+                                      : static_cast<CSMP_FEM_TYPE>( pelmt[0] );
+            if ( isLineElement( etype ) )
+                for ( const auto nid : plist[e] )
+                    lineValence[nid]++;
+        }
+        for ( auto const& [nid, valence] : lineValence )
+        {
+            if      ( valence == 1 ) BREP_Flag( nid, static_cast<int8_t>( PERIMETER_POINT ) );
+            else if ( valence == 2 ) BREP_Flag( nid, static_cast<int8_t>( INTERIOR_LINE   ) );
+            else                     BREP_Flag( nid, static_cast<int8_t>( INTERIOR_POINT  ) );
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 3. Assign flags from Interface (SplitBoundary) element connectivity
+    //
+    //   Collocated node pair (leftN == rightN):
+    //     3D -> PERIMETER_SURFACE
+    //     2D -> PERIMETER_LINE
+    //
+    //   Non-collocated nodes form the SplitBoundary perimeter chain:
+    //     perimeter valence == 1  -> PERIMETER_POINT  (tip / fracture end)
+    //     perimeter valence >= 2  -> PERIMETER_LINE   (sliding perimeter)
+    // -------------------------------------------------------------------------
+    if ( Interfaces() > 0 )
+    {
+        map<size_t, uint32_t> perimeterValence;
+
+        for ( auto it = PlistInterFacesBegin(); it != PlistInterFacesEnd(); ++it )
+        {
+            const auto& interfaceNodes = *it;
+            const size_t n_pair = interfaceNodes.size() / 2;
+
+            for ( size_t i = 0; i < n_pair; ++i )
+            {
+                const size_t leftN  = interfaceNodes[i];
+                const size_t rightN = interfaceNodes[interfaceNodes.size() - 1 - i];
+
+                if ( leftN == rightN )
+                {
+                    // Collocated: interior of SplitBoundary
+                    if constexpr ( dim == 3 )
+                        BREP_Flag( leftN, static_cast<int8_t>( PERIMETER_SURFACE ) );
+                    else
+                        BREP_Flag( leftN, static_cast<int8_t>( PERIMETER_LINE    ) );
+                }
+                else
+                {
+                    // Non-collocated: on the perimeter of the SplitBoundary
+                    perimeterValence[leftN]++;
+                    perimeterValence[rightN]++;
+                }
+            }
+        }
+
+        // Assign perimeter chain flags based on valence
+        for ( auto const& [nid, valence] : perimeterValence )
+        {
+            if ( valence == 1 )
+                BREP_Flag( nid, static_cast<int8_t>( PERIMETER_POINT ) );
+            else
+                BREP_Flag( nid, static_cast<int8_t>( PERIMETER_LINE  ) );
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 4. Refine flags using NodeManifold classification
+    //
+    //   STAND_ALONE                    -> PERIMETER_POINT (orphan node)
+    //   SPLIT_BOUNDARY                 -> already set in Step 3, no override
+    //   SPLIT_BOUNDARY_WITH_INTERNAL_MESH
+    //                                  -> internal mesh flags set in Step 2,
+    //                                     no override needed
+    //   SPLIT_BOUNDARY_END             -> PERIMETER_POINT (internal)
+    //                                     EXTERIOR_POINT  (on hull)
+    //   SPLIT_BOUNDARY_CROSSING        -> INTERIOR_POINT
+    //   MULTI_SB_CROSSING              -> INTERIOR_POINT
+    // -------------------------------------------------------------------------
+    for ( auto nit = PmanifoldsBegin(); nit != PmanifoldsEnd(); ++nit )
+    {
+        const auto& manifoldNodes = (*nit).first;
+        const ManifoldType mtype  = (*nit).second;
+
+        for ( const auto& nid : manifoldNodes )
+        {
+            const BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>( BFlag( nid ) );
+            const bool on_hull = ( bflag != NOT && bflag != INTERNAL );
+
+            switch ( mtype )
+            {
+                case ManifoldType::STAND_ALONE:
+                    BREP_Flag( nid, static_cast<int8_t>( PERIMETER_POINT ) );
+                    break;
+
+                case ManifoldType::SPLIT_BOUNDARY:
+                case ManifoldType::SPLIT_BOUNDARY_WITH_INTERNAL_MESH:
+                    // Handled in Steps 2 and 3; no override.
+                    break;
+
+                case ManifoldType::SPLIT_BOUNDARY_END:
+                    BREP_Flag( nid, static_cast<int8_t>(
+                        on_hull ? EXTERIOR_POINT : PERIMETER_POINT ) );
+                    break;
+
+                case ManifoldType::SPLIT_BOUNDARY_CROSSING:
+                case ManifoldType::MULTI_SB_CROSSING:
+                    BREP_Flag( nid, static_cast<int8_t>( INTERIOR_POINT ) );
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 5. Collision resolution (second pass)
+    //
+    //   Counts node appearances across elements, tracking whether any
+    //   contributing assignment was INTERIOR_* (dominates PERIMETER_*).
+    //
+    //   3D face collisions  (PERIMETER_SURFACE / INTERIOR_SURFACE):
+    //     count >= 2, interior_count == 0  -> PERIMETER_LINE
+    //     count >= 2, interior_count >  0  -> INTERIOR_LINE
+    //
+    //   Edge collisions  (PERIMETER_LINE / INTERIOR_LINE):
+    //     count >= 2, interior_count == 0  -> PERIMETER_POINT
+    //     count >= 2, interior_count >  0  -> INTERIOR_POINT
+    //
+    //   Vertex collisions  (INTERIOR_POINT):
+    //     count >= 2                       -> INTERIOR_POINT
+    // -------------------------------------------------------------------------
+    {
+        // { node_id -> { total_count, interior_count } }
+        unordered_map<size_t, pair<uint32_t,uint32_t>> faces, edges, vertices;
+
+        auto accumulate = []( unordered_map<size_t, pair<uint32_t,uint32_t>>& m,
+                              size_t nid, bool is_interior )
+        {
+            auto& entry = m.emplace( nid, make_pair( 0u, 0u ) ).first->second;
+            entry.first++;
+            if ( is_interior ) entry.second++;
+        };
+
+        // Helper to classify a node into the correct collision map
+        auto classify = [&]( size_t nid )
+        {
+            const TOPOTYPE t = static_cast<TOPOTYPE>( BREP_Flag( nid ) );
+            if constexpr ( dim == 3 )
+            {
+                if      ( t == INTERIOR_SURFACE || t == PERIMETER_SURFACE )
+                    accumulate( faces,    nid, t == INTERIOR_SURFACE );
+                else if ( t == INTERIOR_LINE    || t == PERIMETER_LINE    )
+                    accumulate( edges,    nid, t == INTERIOR_LINE    );
+                else if ( t == INTERIOR_POINT )
+                    accumulate( vertices, nid, true                  );
+            }
+            else // dim == 2
+            {
+                if      ( t == INTERIOR_LINE  || t == PERIMETER_LINE  )
+                    accumulate( edges,    nid, t == INTERIOR_LINE  );
+                else if ( t == INTERIOR_POINT )
+                    accumulate( vertices, nid, true                );
+            }
+        };
+
+        // Accumulate from region/boundary elements
+        for ( size_t e = 0; e < first_interface_; ++e )
+            for ( const auto nid : plist[e] )
+                classify( nid );
+
+        // Accumulate from interface elements
+        if ( Interfaces() > 0 )
+            for ( auto it = PlistInterFacesBegin(); it != PlistInterFacesEnd(); ++it )
+                for ( const auto nid : *it )
+                    classify( nid );
+
+        // Apply collision resolution
+        if constexpr ( dim == 3 )
+            for ( auto& [nid, counts] : faces )
+                if ( counts.first >= 2 )
+                    BREP_Flag( nid, static_cast<int8_t>(
+                        counts.second > 0 ? INTERIOR_LINE : PERIMETER_LINE ) );
+
+        for ( auto& [nid, counts] : edges )
+            if ( counts.first >= 2 )
+                BREP_Flag( nid, static_cast<int8_t>(
+                    counts.second > 0 ? INTERIOR_POINT : PERIMETER_POINT ) );
+
+        for ( auto& [nid, counts] : vertices )
+            if ( counts.first >= 2 )
+                BREP_Flag( nid, static_cast<int8_t>( INTERIOR_POINT ) );
+    }
+
+    // -------------------------------------------------------------------------
+    // Step 6. Hull sweep — EXTERIOR_* promotion using BOX_BOUNDARY flags
+    //
+    //   3D:
+    //     Corner                                          -> EXTERIOR_POINT
+    //     Edge   + (INTERIOR_POINT / PERIMETER_POINT)    -> EXTERIOR_POINT
+    //     Edge   + any other                             -> EXTERIOR_LINE
+    //     Face   + (INTERIOR_POINT / PERIMETER_POINT)    -> EXTERIOR_POINT
+    //     Face   + (INTERIOR_LINE  / PERIMETER_LINE)     -> EXTERIOR_LINE
+    //     Face   + any other                             -> EXTERIOR_SURFACE
+    //
+    //   2D:
+    //     Corner                                          -> EXTERIOR_POINT
+    //     Side   + (INTERIOR_POINT / PERIMETER_POINT)    -> EXTERIOR_POINT
+    //     Side   + any other                             -> EXTERIOR_LINE
+    // -------------------------------------------------------------------------
+    for ( size_t i = 0; i < Vertices(); ++i )
+    {
+        const BOX_BOUNDARY bflag = static_cast<BOX_BOUNDARY>( BFlag(i) );
+        if ( bflag == NOT || bflag == INTERNAL ) continue;
+
+        const TOPOTYPE current = static_cast<TOPOTYPE>( BREP_Flag(i) );
+
+        const bool is_point_type = ( current == INTERIOR_POINT ||
+                                     current == PERIMETER_POINT );
+        const bool is_line_type  = ( current == INTERIOR_LINE  ||
+                                     current == PERIMETER_LINE  );
+
+        if ( isCorner( bflag ) )
+        {
+            BREP_Flag( i, static_cast<int8_t>( EXTERIOR_POINT ) );
+        }
+        else if constexpr ( dim == 3 )
+        {
+            if ( isEdge( bflag ) )
+            {
+                BREP_Flag( i, static_cast<int8_t>(
+                    is_point_type ? EXTERIOR_POINT : EXTERIOR_LINE ) );
+            }
+            else if ( isSide( bflag ) )
+            {
+                if      ( is_point_type ) BREP_Flag( i, static_cast<int8_t>( EXTERIOR_POINT   ) );
+                else if ( is_line_type  ) BREP_Flag( i, static_cast<int8_t>( EXTERIOR_LINE    ) );
+                else                      BREP_Flag( i, static_cast<int8_t>( EXTERIOR_SURFACE ) );
+            }
+        }
+        else // dim == 2
+        {
+            if ( isSide( bflag ) )
+            {
+                BREP_Flag( i, static_cast<int8_t>(
+                    is_point_type ? EXTERIOR_POINT : EXTERIOR_LINE ) );
+            }
+        }
+    }
+
+} // end InitialiseNodeTopologyIdentifiers_impl
 
 
 

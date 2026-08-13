@@ -25,8 +25,8 @@
 // algebraic multigrid solvers
 #include "LinearSolver.h"
 // fluid pressure algorithm and velocity computation
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "VelocityAndVolumeFlux.h"
 
 // transport scheme
@@ -383,16 +383,16 @@ void EffectiveStressDilatation2D_Example::ComputeTransientFluidPressure( Model<2
     transient_pressure.SetSolver( linear_solver );
 #endif
 
-    NumIntegral_dNT_op_dN_dV<2U>  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<2U>  conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
                                                conductance.MultiplyWithTimeIncrement(true);
 
     NumIntegral_NT_lhsop_N_dV<2U> capacitance_lhs( model.Database(), "storativity",  "fluid pressure", "fluid pressure" );
                                                capacitance_lhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U>  capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U> capacitance_rhs( model.Database(), "storativity",  "fluid pressure" );
                                                capacitance_rhs.LumpedFormulation(true);
 
-    NumIntegral_NT_op_N_dV<2U>  source( model.Database(), "fluid volume source",  "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U> source( model.Database(), "fluid volume source",  "fluid pressure" );
                                                source.MultiplyWithTimeIncrement(true);
                                                source.AddAccumulateLater();
                                                source.LumpedFormulation(true);

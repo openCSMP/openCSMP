@@ -33,8 +33,7 @@ In the case of a coupled problem, where u = [u1, u2], the matrix M can
 contain off-diagonal blocks which are multiplied with u1 (u2), but the
 contribution must be assembled into the u2 (u1) part of the global rhs
 vector! Since Integral_NT_op_N_dV cannot deal with that, I wrote this
-animal here...
- 
+alternative version.
  
 @section applicability Applicability
  
@@ -47,6 +46,12 @@ MathOperatorRHS. Corresponds to the u1 variable mentioned in the example
 above. The variable "test" is needed to specify where the entry is
 assembled in the global rhs vector. Additional variables "upwind" and
 "trigger" for upwinding
+
+@attention Implementation works only for linear triangles
+
+@author A. Burri
+@date 2004
+
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim,CELL> {
@@ -61,9 +66,10 @@ class Integral_var_NT_rhsop_N_dV : public MathOperatorRHS<dim,CELL> {
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const override final { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
-  private:
+    Integral_var_NT_rhsop_N_dV<dim,CELL>* clone() const override final
+       { return new Integral_var_NT_rhsop_N_dV<dim,CELL> (*this); }
 
+  private:
     void ComputeIntegral( const CELL<dim>& );
     
     ScalarVariable op_;

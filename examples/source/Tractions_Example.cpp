@@ -20,8 +20,8 @@
 
 #include "LinearSolver.h"
 #include "PDE_Integrator.h"
-#include "NumIntegral_dNT_op_dN_dV.h"  // conductance matrix (LHS)
-#include "NumIntegral_NT_op_N_dV.h"    // fluid volume source
+#include "NumIntegral_dNT_lhsop_dN_dV.h"  // conductance matrix (LHS)
+#include "NumIntegral_NT_rhsop_N_dV.h" // fluid volume source
 #include "NumIntegral_NT_op_N_dS.h"    // boundary integral
 
 #include "VelocityAndVolumeFlux.h"     // post-processing of Darcy velocity
@@ -99,8 +99,8 @@ void Tractions_Example::Run()
   fluid_pressure.SetSolver( linear_solver );
 #endif
 
-  NumIntegral_dNT_op_dN_dV<dim> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
-  NumIntegral_NT_op_N_dV<dim> source( model.Database(), "fluid volume source",  "fluid pressure" );
+  NumIntegral_dNT_lhsop_dN_dV<dim> conductance( model.Database(), "conductivity",  "fluid pressure", "fluid pressure" );
+  NumIntegral_NT_rhsop_N_dV<dim> source( model.Database(), "fluid volume source",  "fluid pressure" );
 
   VelocityAndVolumeFlux<dim>  velocity( model,  "conductivity", "porosity", "fluid pressure", false );
 

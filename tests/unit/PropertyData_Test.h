@@ -1,13 +1,5 @@
-//
-//  PropertyData_Test.hpp
-//  CSMP_API_examples
-//
-//  Created by Stephan Matthai on 7/04/2016.
-//  Copyright © 2016 Stephan Matthai. All rights reserved.
-//
-
-#ifndef PropertyData_Test_hpp
-#define PropertyData_Test_hpp
+#ifndef CSMP_PROPERTY_DATA_TEST_H
+#define CSMP_PROPERTY_DATA_TEST_H
 
 #include "Test.h"
 #include "PropertyData.h"
@@ -15,11 +7,11 @@
 namespace csmp {
 
 class PropertyData_Test : public Test {
-public:
+  public:
     virtual void run();
     const static bool verbose_ = false;
 };
- 
- } // end csmp
 
-#endif /* PropertyData_Test_hpp */
+} // namespace csmp
+
+#endif // CSMP_PROPERTY_DATA_TEST_H

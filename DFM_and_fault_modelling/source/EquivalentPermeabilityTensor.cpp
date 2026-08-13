@@ -1,31 +1,34 @@
-#include "CSMP_definitions.h"
+#include "EquivalentPermeabilityTensor.h"
+
 #include "CSMP_highLevelUtilities.h"
 #include "PropertyHandle.h"
 #include "Matrix.h"
-#include <sstream>
 
 // Model
 #include "Model.h"
 #include "Region.h"
-#include "RegionInterface.h"
 
 // Solver
+#include "LinearSolver.h"
+#ifdef CSMP_WITH_SAMG
 #include "SAMG_Settings.h"
 #include "SAMG_Solver.h"
+#endif
 #include "LUdcmp_Solver.h"
+
+// PDE solution framework
+#include "PDE_Integrator.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 
 // Interface
 #include "VTK_Interface.h"
 
-#include "EquivalentPermeabilityTensor.h"
 #include "StatisticalDistributionGenerator.h"
 
 using namespace std;
 
 namespace csmp {
-
-// only defined in C++2.0, what a joke!
-const double PI = 3.141592653589793238463;
 
 template<uint32_t dim>
 EquivalentPermeabilityTensor<dim>::EquivalentPermeabilityTensor( Model<dim>& model )
@@ -52,17 +55,12 @@ EquivalentPermeabilityTensor<dim>::EquivalentPermeabilityTensor( Model<dim>& mod
 
 
 
-template<uint32_t dim>
-EquivalentPermeabilityTensor<dim>::~EquivalentPermeabilityTensor()
-{
-}
-
-
 
 
 template<uint32_t dim>
 void EquivalentPermeabilityTensor<dim>::InitializeSolver()
 {
+#ifdef CSMP_WITH_SAMG
     // targeting SAMG DLL 1 for this pressure solver
     // iout
     settings_.Set_iout1( 0 );
@@ -87,6 +85,7 @@ void EquivalentPermeabilityTensor<dim>::InitializeSolver()
     fluid_pressure.GetSolverSettings().Set_ioform( "f" );
     // set filename for SAMG file output other than default "level", idmp > 1 is required
     fluid_pressure.GetSolverSettings().Set_filnam_dump( "ReservoirSimulator_steady_state_p" );
+  #endif
   #endif
 }
 
@@ -315,8 +314,20 @@ void EquivalentPermeabilityTensor<dim>::Left2RightFlow( Model<dim>& model )
 	model.LinearBoundaryCondition( BOTTOM, "fluid pressure1", bvalues );
 	model.LinearBoundaryCondition( TOP, "fluid pressure1", bvalues );
 */
-  SAMG_Solver solver(&settings_);
-	PDE_Integrator<dim,Element> pressure_left2right( solver  );
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                  samg_solver( &settings );
+    PDE_Integrator<dim,Element>  pressure_left2right(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
+    PDE_Integrator<dim,Element>  pressure_left2right(linear_solver);
+#endif
   PressureField( model, "fluid pressure1", pressure_left2right );
   VelocityAndPressureGradientField( model, pressure_left2right_key_, velocity_left2right_, 
                                     velocity_left2right_key_, gradp_left2right_, gradp_left2right_key_ );
@@ -349,8 +360,20 @@ void EquivalentPermeabilityTensor<dim>::Bottom2TopFlow( Model<dim>& model )
 	model.LinearBoundaryCondition( LEFT, "fluid pressure2", bvalues );
 	model.LinearBoundaryCondition( RIGHT, "fluid pressure2", bvalues );
 */
-  SAMG_Solver solver(&settings_);
-  PDE_Integrator<dim,Element>  pressure_bottom2top( solver );
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                  samg_solver( &settings );
+    PDE_Integrator<dim,Element>  pressure_bottom2top(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
+    PDE_Integrator<dim,Element>  pressure_bottom2top(linear_solver);
+#endif
     // releasing any pre-assigned boundary conditions
   PressureField( model, "fluid pressure2", pressure_bottom2top );
   VelocityAndPressureGradientField( model, pressure_bottom2top_key_, velocity_bottom2top_, 
@@ -373,8 +396,20 @@ void EquivalentPermeabilityTensor<dim>::Back2FrontFlow( Model<dim>& model )
 {
     model.InputBoundaryValue( BACK, "fluid pressure3", makeScalar(DIRICH, 1.0e8) );
     model.InputBoundaryValue( FRONT, "fluid pressure3", makeScalar(DIRICH, 1.0e5) );
-    SAMG_Solver solver(&settings_);
-    PDE_Integrator<dim,Element>  pressure_back2front( solver );
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
+    // iout
+    settings.ExplicitSecondary(true);
+    settings.Set_iout1( -1 );
+    settings.Set_iout2( -1 );
+    settings.Set_idmp( -1 );
+    settings.Set_mode_mess( -2 );
+    SAMG_Solver                  samg_solver( &settings );
+    PDE_Integrator<dim,Element>  pressure_back2front(samg_solver);
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
+    PDE_Integrator<dim,Element>  pressure_back2front(linear_solver);
+#endif
     PressureField( model, "fluid pressure3", pressure_back2front );
     VelocityAndPressureGradientField( model, pressure_back2front_key_, velocity_back2front_, 
                                       velocity_back2front_key_, gradp_back2front_, gradp_back2front_key_ );
@@ -391,12 +426,14 @@ void EquivalentPermeabilityTensor<dim>::Back2FrontFlow( Model<dim>& model )
 
 
 template<uint32_t dim>
-void EquivalentPermeabilityTensor<dim>::PressureField( Model<dim>& model, const string pressureVariableName, PDE_Integrator<dim,Element>& fluid_pressure )
+void EquivalentPermeabilityTensor<dim>::PressureField( Model<dim>& model,
+                                                       const string& pressureVariableName,
+                                                       PDE_Integrator<dim,Element>& fluid_pressure )
 {
     // conductance matrix [K] on the left-hand side
-    NumIntegral_dNT_op_dN_dV<dim> conductance(model.Database(), "transmissivity", pressureVariableName.c_str(), pressureVariableName.c_str());
+    NumIntegral_dNT_lhsop_dN_dV<dim> conductance(model.Database(), "transmissivity", pressureVariableName.c_str(), pressureVariableName.c_str());
     // source vector {Q} on the right-hand side
-    NumIntegral_NT_op_N_dV<dim> source( model.Database(), "fluid volume source", pressureVariableName.c_str() );
+    NumIntegral_NT_rhsop_N_dV<dim> source( model.Database(), "fluid volume source", pressureVariableName.c_str() );
     // add PDE_Operators to the FE Algorithm
     fluid_pressure.Add( &conductance );
     fluid_pressure.Add( &source );

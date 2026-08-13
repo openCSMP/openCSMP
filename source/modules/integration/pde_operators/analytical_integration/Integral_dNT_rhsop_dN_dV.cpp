@@ -12,72 +12,65 @@ namespace csmp {
 template<uint32_t dim, template<uint32_t> class CELL>
 Integral_dNT_rhsop_dN_dV<dim,CELL>::Integral_dNT_rhsop_dN_dV( const PropertyDatabase<dim>& pref,
                                                               const char*             oper,
-                                                              const char*             test,
-                                                              const char*             grad_var )
-  : MathOperatorRHS<dim,CELL>(pref,oper,test),
-    grad_key(pref.StorageKey( grad_var )),
-    DN(2,3), DNT(3,2), VAR(3,1)
+                                                              const char*             test )
+  : MathOperatorRHS<dim,CELL>(pref,oper,test)
 {
     MathOperatorRHS<dim,CELL>::Name("Integral_dNT_rhsop_dN_dV", oper, test );
 
     // testing the Operands 
-    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT and MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != REGION )
-    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
+    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != ELEMENT &&
+         MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() != REGION )
+    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)",
                     oper, "Operand must be placed on the element or group.");
 
     if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
                     test, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
-
-    if ( grad_key.place != NODE || grad_key.type != SCALAR )
-    throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::(constructor)", 
-                    grad_var, "Testfunction (dependent) variable must be a scalar property placed on the nodes.");
 }
-
-
-
-
 
 
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
-{
-    // this integral is only for analytically integrated finite elements
-    assert( e.FE()->UsesLocalCoordinates() == false );
+ {
+    assert( e.UsesLocalCoordinates() == false );
 
-    // only if the property is an element property  something is done here
-    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT or MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == REGION ) 
+    MathOperatorRHS<dim,CELL>::MTRL.resize( 1U );
+    MathOperatorRHS<dim,CELL>::MTRL[0].Resize( dim, dim );
+    MathOperatorRHS<dim,CELL>::MTRL[0].Zero();
+
+    switch ( MathOperatorRHS<dim,CELL>::MaterialOperandType() )
       {
-         MathOperatorRHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-         MathOperatorRHS<dim,CELL>::MTRL[0].Zero();
-      
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) ); 
-           }
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-              VectorVariable<dim>  vc;
-              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
-              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc ); 
-           }
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-              TensorVariable<dim>  ts;
-              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
-              MathOperatorRHS<dim,CELL>::MTRL[0] = ts;
-           }
+        case SCALAR:
+          MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal(
+              dim, e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) );
+          break;
+        case VECTOR:
+          {
+            VectorVariable<dim> vc;
+            e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
+            MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc );
+          }
+          break;
+        case TENSOR:
+          {
+            TensorVariable<dim> ts;
+            e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
+            MathOperatorRHS<dim,CELL>::MTRL[0] = ts;
+          }
+          break;
+        default:
+          throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::GetOperands",
+                                 "Unsupported material operand type." );
       }
-    else throw csmp::Exception( FATAL_ERROR, "Integral_dNT_rhsop_dN_dV::GetOperands", 
-                               "The current finite element is analytically integrated and therefore has no integration points",
-                                        "Hence, nodal properties cannot be integrated. Use numerically integrated elements in stead.");
-   VAR.Resize(e.Nodes(),1);   
-   // the gradient variable
-   for ( auto i{0}; i<e.Nodes(); i++ )
-     VAR(i,0) = e.N(i)->Read( grad_key );   
-          
+
+    // read nodal test variable values
+    e.NodePropertyVector( MathOperatorRHS<dim,CELL>::TestOperandKey(), u_ );
+
+     e.NodePropertyVector( MathOperatorRHS<dim,CELL>::TestOperandKey(), u_ );
+
 } // end GetOperands
-
-
 
 
 
@@ -85,24 +78,27 @@ void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 template<uint32_t dim, template<uint32_t> class CELL>
 void Integral_dNT_rhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
-    e.dN( DN );
-    // transpose the shape function derivative matrix
-    DNT.Resize(e.Nodes(),dim); 
-    DN.Transposed( DNT );
-    
-    // calculate the element contribution to RHS (lumping into vector format)
-    DNT *= MathOperatorRHS<dim,CELL>::MTRL[0];
-    DNT *= DN;
-    DNT *= VAR;
-    
-    // assigning element contribution & integrating the matrix
-    double volume = e.Volume();
-    
-    MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
-    for ( auto i{0U}; i<e.Nodes(); i++ )
-      MathOperatorRHS<dim,CELL>::RHS[i] = DNT(i,0) * volume;
+    assert( e.UsesLocalCoordinates() == false );
 
-} // end ComputeContribution
+    MathOperatorRHS<dim,CELL>::RHS.resize( e.Nodes() );
+
+    e.dN( DN_ );
+    DN_.Transposed( DNT_ );
+
+    TEMP_ = DNT_;
+    TEMP_ *= MathOperatorRHS<dim,CELL>::MTRL[0];
+    TEMP_ *= DN_;
+
+    const double volume{ e.Volume() };
+    for ( uint32_t j{0U}; j < e.Nodes(); ++j )
+      {
+        double val{0.0};
+        for ( uint32_t k{0U}; k < e.Nodes(); ++k )
+          val += TEMP_(j,k) * u_[k]();
+        MathOperatorRHS<dim,CELL>::RHS[j] = val * volume;
+      }
+
+ } // end ComputeContribution
 
 
 

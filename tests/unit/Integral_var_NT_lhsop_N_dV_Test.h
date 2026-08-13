@@ -1,22 +1,28 @@
-#ifndef __Integral_var_NT_lhsop_N_dV_Test_h__
-#define __Integral_var_NT_lhsop_N_dV_Test_h__
+#ifndef CSMP_INTEGRAL_VAR_NT_LHSOP_N_DV_TEST
+#define CSMP_INTEGRAL_VAR_NT_LHSOP_N_DV_TEST
 
 #include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
-#include "SparseMatrix.h"
 
 #include "Integral_var_NT_lhsop_N_dV.h"
 #include "Integral_NT_lhsop_N_dV.h"
-#include "Concatenate.h"
 
 namespace csmp {
 
+template<uint32_t> class Model;
+
 class Integral_var_NT_lhsop_N_dV_Test : public Test {
   public:
-    Integral_var_NT_lhsop_N_dV_Test( bool verbose );
+    explicit Integral_var_NT_lhsop_N_dV_Test( bool verbose );
     ~Integral_var_NT_lhsop_N_dV_Test();
-    void run();
+    // rule of five — non-copyable, non-movable (owns raw Model pointer)
+    Integral_var_NT_lhsop_N_dV_Test( const Integral_var_NT_lhsop_N_dV_Test& ) = delete;
+    Integral_var_NT_lhsop_N_dV_Test& operator=( const Integral_var_NT_lhsop_N_dV_Test& ) = delete;
+    Integral_var_NT_lhsop_N_dV_Test( Integral_var_NT_lhsop_N_dV_Test&& ) = delete;
+    Integral_var_NT_lhsop_N_dV_Test& operator=( Integral_var_NT_lhsop_N_dV_Test&& ) = delete;
+
+    void run() override;
     void valueTest();
     void compareConsistentTest();
     void compareLumpedTest();
@@ -26,12 +32,12 @@ class Integral_var_NT_lhsop_N_dV_Test : public Test {
   private:
     void compareTest(bool lumped);
 
-    void setNodeVariable(std::vector<double>& var, const char* var_name);
-    void showNodeVariable(const char* var_name);
-    void setElementVariable(std::vector<double>& var, const char* var_name);
+    void setNodeVariable( const std::vector<double>& var, const char* var_name);
+    void showNodeVariable(const char* var_name) const;
+    void setElementVariable( const std::vector<double>& var, const char* var_name);
     void calculateGlobalMatrix(SparseMatrix& sm, MathOperatorLHS<2U>& oper);
 
-    double tol_;
+    static constexpr double tol_ = 1.0e-5;
 
     Model<2U>* sg_ = nullptr;
     const bool verbose_;

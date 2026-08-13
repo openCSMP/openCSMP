@@ -184,7 +184,7 @@ vector<uint32_t>  FiniteElement::NodesConnectedTo( uint32_t node_id ) const
   }
 
     
-void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM )
+void FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& DM ) const
   {
      InstructUser("FiniteElement::IntegraldNdN( DenseMatrix<DM_MIN>& M )");
      DM.Out();
@@ -390,7 +390,7 @@ void   FiniteElement::N_AtBaryCenter( vector<double>& N )
     throw invalid_argument("FiniteElement::N_AtBaryCenter");
  }
 
-void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& DM, DenseMatrix<DM_MIN>& K)
+void FiniteElement::Integral_dNT_K_dN(DenseMatrix<DM_MIN>& DM, DenseMatrix<DM3>& )  const
 {
 	InstructUser("FiniteElement::Integral_dNT_K_dN");
 	cout << "\nThis method is not defined for the FE element type which you are using" << endl;

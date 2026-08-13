@@ -12,7 +12,7 @@ namespace csmp {
 template<uint32_t dim, template<uint32_t> class CELL>
   MathOperatorRHS<dim,CELL>::MathOperatorRHS()
     : name_("unspecified RHS-operator"),
-      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
+      MTRL(13, DenseMatrix<dim>(dim,dim)),
       factor_(1.),
       add_accumulate_(true),
       subtract_accumulate_(false),
@@ -35,9 +35,9 @@ template<uint32_t dim, template<uint32_t> class CELL>
                                               const char* test)
     : name_("unspecified RHS-operator"),
       top(make_pair(pref.Parameter(test), 0)),
-      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-      DERIV(2, 3),
-      IPOL(3),
+      MTRL(13, DenseMatrix<dim>(dim,dim)),
+//      DERIV(2, 3),
+//      IPOL(3),
       factor_(1.),
       add_accumulate_(true),
       subtract_accumulate_(false),
@@ -62,9 +62,9 @@ template<uint32_t dim, template<uint32_t> class CELL>
     : name_("unspecified RHS-operator"),
       op(pref.Parameter(oper)),
       top(make_pair(pref.Parameter(test), 0)),
-      MTRL(13, DenseMatrix<DM_MIN>(2, 2)),
-      DERIV(2, 3),
-      IPOL(3),
+      MTRL(13, DenseMatrix<dim>(dim,dim)),
+//      DERIV(2, 3),
+//      IPOL(3),
       factor_(1.),
       add_accumulate_(true),
       subtract_accumulate_(false),
@@ -88,8 +88,8 @@ template<uint32_t dim, template<uint32_t> class CELL>
       top(mo.top),   // testfunction operand
       RHS(mo.RHS),   // solution vector to be accumulated
       MTRL(mo.MTRL),  // basic Operand storage
-      DERIV(mo.DERIV),
-      IPOL(mo.IPOL),
+//      DERIV(mo.DERIV),
+//      IPOL(mo.IPOL),
       factor_(mo.factor_),
       add_accumulate_(mo.add_accumulate_),
       subtract_accumulate_(mo.subtract_accumulate_),
@@ -115,8 +115,8 @@ template<uint32_t dim, template<uint32_t> class CELL>
       top = mo.top;       // testfunction operand
       RHS = mo.RHS;       // solution vector to be accumulated
       MTRL = mo.MTRL;      // basic Operand storage
-      DERIV = mo.DERIV;
-      IPOL = mo.IPOL;
+//      DERIV = mo.DERIV;
+//      IPOL = mo.IPOL;
       add_accumulate_ = mo.add_accumulate_;
       subtract_accumulate_ = mo.subtract_accumulate_;
       add_accumulate_later_ = mo.add_accumulate_later_;
@@ -604,7 +604,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_ref,
                                                             const csmp::Index& idx,
                                                             uint32_t ip,
-                                                            DenseMatrix<DM_MIN>& M )
+                                                            DenseMatrix<dim>& M )
   {
     if (!e_ref.UsesLocalCoordinates())
       throw csmp::Exception(FATAL_ERROR,
@@ -730,85 +730,86 @@ void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_r
  When the property is an element property, it will be put into the
  first vector entry MTRL[0].*/
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
-  {
+void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
+ {
     // if operand property is an element property
     if ( MaterialOperandPlacement() == ELEMENT || MaterialOperandPlacement() == FACE || MaterialOperandPlacement() == REGION )
       {
         MTRL.resize(1U);
-        if (MaterialOperandType() == SCALAR)
-            MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
-          else if (MaterialOperandType() == VECTOR) {
-            VectorVariable<dim>  vc;
-            e_ref.Read(MaterialOperandKey(), vc);
-            MTRL[0].AssignToDiagonal(vc);
-          }
-        else if (MaterialOperandType() == TENSOR) {
-            TensorVariable<dim>  ts;
-            e_ref.Read(MaterialOperandKey(), ts);
-            MTRL[0] = ts;
-          }
-        else if (MaterialOperandType() == ARRAY)
+        switch ( MaterialOperandType() )
           {
-            ArrayVariable ar(MaterialOperandDataDepth());
-            e_ref.Read(MaterialOperandKey(), ar);
-            MTRL[0].AssignToDiagonal(ar);
-          }
-        else if (MaterialOperandType() == FLAGGEDARRAY)
-          {
-            FlaggedArrayVariable fr(MaterialOperandDataDepth());
-            e_ref.Read(MaterialOperandKey(), fr);
-            MTRL[0].AssignToDiagonal(fr);
+            case SCALAR:
+              MTRL[0].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(MaterialOperandKey()));
+              break;
+            case VECTOR:
+              {
+                VectorVariable<dim>  vc;
+                e_ref.Read(MaterialOperandKey(), vc);
+                MTRL[0].AssignToDiagonal(vc);
+              }
+              break;
+            case TENSOR:
+              {
+                TensorVariable<dim>  ts;
+                e_ref.Read(MaterialOperandKey(), ts);
+                MTRL[0] = ts;
+              }
+              break;
+            default:
+              throw csmp::Exception(FATAL_ERROR,
+                "MathOperatorRHS<dim,CELL>::GetOperands",
+                "Unsupported MaterialOperandType for ELEMENT/FACE/REGION placement");
           }
       }
     else // if the operand is placed on the constraint-points
       {
         const auto n_integration_points{ e_ref.IntegrationPoints() };
 
-        if (MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT || MaterialOperandPlacement() == FACE_INTEGRATION_POINT ) {
-          MTRL.resize( n_integration_points );
-          for (auto i{0U}; i < n_integration_points; i++)
+        if ( MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT || MaterialOperandPlacement() == FACE_INTEGRATION_POINT )
           {
-            if (MaterialOperandType() == SCALAR)
-              MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
-            else if (MaterialOperandType() == VECTOR) {
-              VectorVariable<dim>  vc;
-              e_ref.Read(i, MaterialOperandKey(), vc);
-              MTRL[i].AssignToDiagonal(vc);
-            }
-            else if (MaterialOperandType() == TENSOR) {
-              TensorVariable<dim>  ts;
-              e_ref.Read(i, MaterialOperandKey(), ts);
-              MTRL[i] = ts;
-            }
-            else if (MaterialOperandType() == ARRAY)
-            {
-              ArrayVariable ar(MaterialOperandDataDepth());
-              e_ref.Read(i, MaterialOperandKey(), ar);
-              MTRL[0].AssignToDiagonal(ar);
-            }
-            else if (MaterialOperandType() == FLAGGEDARRAY)
-            {
-              FlaggedArrayVariable fr(MaterialOperandDataDepth());
-              e_ref.Read(i, MaterialOperandKey(), fr);
-              MTRL[0].AssignToDiagonal(fr);
-            }
+            MTRL.resize( n_integration_points );
+            for ( uint32_t i{0U}; i < n_integration_points; i++ )
+              {
+                switch ( MaterialOperandType() )
+                  {
+                    case SCALAR:
+                      MTRL[i].AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(i, MaterialOperandKey()));
+                      break;
+                    case VECTOR:
+                      {
+                        VectorVariable<dim>  vc;
+                        e_ref.Read(i, MaterialOperandKey(), vc);
+                        MTRL[i].AssignToDiagonal(vc);
+                      }
+                      break;
+                    case TENSOR:
+                      {
+                        TensorVariable<dim>  ts;
+                        e_ref.Read(i, MaterialOperandKey(), ts);
+                        MTRL[i] = ts;
+                      }
+                      break;
+                    default:
+                      throw csmp::Exception(FATAL_ERROR,
+                        "MathOperatorRHS<dim,CELL>::GetOperands",
+                        "Unsupported MaterialOperandType for ELEMENT_INTEGRATION_POINT/FACE_INTEGRATION_POINT placement");
+                  }
+              }
           }
-        }
+        // if the operand is placed on the node
+        else if ( MaterialOperandPlacement() == NODE )
+          {
+            MTRL.resize( n_integration_points );
+            for ( uint32_t i{0U}; i < n_integration_points; i++ )
+              PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
+          }
+        else
+          throw csmp::Exception(FATAL_ERROR,
+            "MathOperatorRHS<dim,CELL>::GetOperands",
+            "InterFace based operands cannot be accumulated with this method");
+      }
 
-      // if the operand is placed on the node
-      else if (MaterialOperandPlacement() == NODE) {
-          MTRL.resize(n_integration_points);
-          for (auto i{0U}; i < n_integration_points; i++)
-            PropertyAtIntegrationPoint(e_ref, MaterialOperandKey(), i, MTRL[i]);
-        }
-      else
-        throw csmp::Exception(FATAL_ERROR,
-          "MathOperatorRHS<dim,CELL>::GetOperands(Element):",
-          "InterFace based operands cannot be accumulated with this method");
-    }
-
-  } // end GetOperands(Element)
+ } // end GetOperands(Element)
 
 
 template<uint32_t dim, template<uint32_t> class CELL>

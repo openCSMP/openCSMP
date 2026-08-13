@@ -4,8 +4,8 @@
 #include "PDE_Integrator.h"
 #include "PropertyHandle.h"
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "LinearSolver.h"
 #include "ExtractVectorVariableLength.h"
 #include "CSMP_definitions.h"
@@ -51,7 +51,7 @@ void parallelPlatePermeabilityFromChannelWidth( Model<dim>& sg,
     // laplacian matrix [L] on the left-hand side
     NumIntegral_dNT_dN_dV<dim>  laplacian( sg.Database(), "parabolic function", "parabolic function" );
     // source vector {q} on the right-hand side = 1
-    NumIntegral_NT_op_N_dV<dim> rhs( sg.Database(),"source term", "parabolic function" );
+    NumIntegral_NT_rhsop_N_dV<dim> rhs( sg.Database(),"source term", "parabolic function" );
     parabolic_profile.Add( &laplacian );
     parabolic_profile.Add( &rhs );
 

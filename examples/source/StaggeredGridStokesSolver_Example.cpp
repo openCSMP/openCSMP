@@ -86,7 +86,7 @@
 #include "Integral_SetRHS_to_Zero.h"
 // numeric integration
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_DNi_rhsop_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "StatisticalAnalyzer.h"
@@ -369,7 +369,7 @@ void StaggeredGridStokesSolver_Example::Run()
     settings.Set_ncycle(50);
 */
 
-    NumIntegral_dNT_op_dN_dV<dim> viscosity_matr_x( quadratic_model.Database(), "viscosity", "nodal velocity x", "nodal velocity x" ),
+    NumIntegral_dNT_lhsop_dN_dV<dim> viscosity_matr_x( quadratic_model.Database(), "viscosity", "nodal velocity x", "nodal velocity x" ),
                                   viscosity_matr_y( quadratic_model.Database(), "viscosity", "nodal velocity y", "nodal velocity y" ),
                                   viscosity_matr_z( quadratic_model.Database(), "viscosity", "nodal velocity z", "nodal velocity z" );
                                   

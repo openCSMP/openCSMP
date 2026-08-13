@@ -11,8 +11,8 @@
 #include "compareFloats.h"
 #include "ANSYS_Model3D.h"
 #include "ModelTopology.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "PDE_Integrator.h"
 #include "Model.h"
 #include "Boundary.h"
@@ -102,9 +102,9 @@ void Intrepid_Example::Run()
 #endif
   PDE_Integrator<3U,Element>  heat_conductor(solver);
 
-  NumIntegral_dNT_op_dN_dV<3U> conductance (model.Database(), "thermal conductivity", "temperature", "temperature");
+  NumIntegral_dNT_lhsop_dN_dV<3U> conductance (model.Database(), "thermal conductivity", "temperature", "temperature");
   
-  NumIntegral_NT_op_N_dV<3U>  heat_source( model.Database(), "heat source", "temperature" );
+  NumIntegral_NT_rhsop_N_dV<3U>  heat_source( model.Database(), "heat source", "temperature" );
   
 //  NumIntegral_NT_op_N_dS<3U,Face >  basal_hfu( model.Database(), "basal heat flow", "temperature" );
 //  basal_hfu.LumpedFormulation();

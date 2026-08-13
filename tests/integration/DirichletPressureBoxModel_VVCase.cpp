@@ -24,8 +24,8 @@
 #include "Region.h"
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_dN_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
-#include "NumIntegral_NT_op_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
 #include "LHS_Integral_dNT_dN_dV.h"
 #include "Integral_NT_op_N_dV.h"
 #include "LinearSolver.h"
@@ -136,8 +136,8 @@ void DirichletPressureBoxModel_VVCase::TestModelFromANSYS()
 #endif
 
       const PropertyDatabase<DIM>&   p_ref = model.Database();
-      NumIntegral_dNT_op_dN_dV<DIM>  laplacian( p_ref, "conductivity",  "fluid pressure", "fluid pressure" );
-      NumIntegral_NT_op_N_dV<DIM>    rhs( p_ref, "fluid volume source", "fluid pressure" );
+      NumIntegral_dNT_lhsop_dN_dV<DIM>  laplacian( p_ref, "conductivity",  "fluid pressure", "fluid pressure" );
+      NumIntegral_NT_rhsop_N_dV<DIM> rhs( p_ref, "fluid volume source", "fluid pressure" );
 
       pde_integrator.Add( &laplacian );
       pde_integrator.Add( &rhs );           // End the numIntegration

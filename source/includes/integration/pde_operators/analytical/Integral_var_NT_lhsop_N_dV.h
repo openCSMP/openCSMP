@@ -10,9 +10,12 @@ template<uint32_t> class Element;
 /**
 @author S.K. Matthaei
 @author S. Roberts
-@date 1999 */
+@date 1999
 
-/// known as mass or capacitance matrix
+  Mass or capacitance matrix
+  @attention this implementation works only for linear triangular elements.
+  
+*/
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim,CELL> {
   public:
@@ -27,7 +30,8 @@ class Integral_var_NT_lhsop_N_dV : public MathOperatorLHS<dim,CELL> {
 
     void ComputeContribution( const CELL<dim>& ) override final;
     
-    Integral_var_NT_lhsop_N_dV<dim,CELL>* clone() const override final { return new Integral_var_NT_lhsop_N_dV<dim,CELL> (*this); }
+    Integral_var_NT_lhsop_N_dV<dim,CELL>* clone() const override final
+      { return new Integral_var_NT_lhsop_N_dV<dim,CELL> (*this); }
     
   private:
     void ComputeIntegral( const CELL<dim>& );

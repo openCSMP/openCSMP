@@ -107,8 +107,7 @@ void PropertyConstraints::ChangeConstraint( const char* prop_name, double pmin, 
              }
       }
     else
-    throw csmp::Exception( INFO, "PropertyConstraints::ChangeConstraint", "Constraint did not exist, but was added");
-    criteria_[ prop_name ] = make_pair(pmin,pmax);
+    throw csmp::Exception( ERROR, "PropertyConstraints::ChangeConstraint", "Constraint does not exist");
  }
  
 
@@ -117,7 +116,7 @@ template<uint32_t dim>
 bool PropertyConstraints::InitializePropertyIndices( const PropertyDatabase<dim>& pref )
   {
     if ( criteria_.empty() ) {
-        throw csmp::Exception( WARNING, "PropertyConstraints::InitializePropertyIndices",
+        throw csmp::Exception( ERROR, "PropertyConstraints::InitializePropertyIndices",
           "No criteria have been defined so far");
         return false;
       }
@@ -386,38 +385,86 @@ void PropertyConstraints::Erase()
 
 template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
- {
-    uint32_t i, counter;
-    
+{
     for ( const auto& it : check_list_ )
       {
-         if ( vector_length_check_ && it.first.place )
+         // vector length check takes priority and is handled separately
+         if ( vector_length_check_ && it.first.type == VECTOR )
            return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
-         switch( it.first.place ) {
+         switch ( it.first.place ) {
               case NODE:
-                   for ( counter=i=0U; i<e->Nodes(); i++ ) {
-                     if ( !e->N(i)->IsWithinRange( it.first, it.second.first, it.second.second ) )
-                          counter++;
-                     }   
-                   if ( counter >= e->Nodes()-1U ) return false;
+                 {
+                   // count how many nodes fall outside the constraint range
+                   uint32_t out_of_range{ 0U };
+
+                   if ( it.first.type == SCALAR ) {
+                        ScalarVariable sc;
+                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+                            e->N(i)->Read( it.first, sc );
+                            if ( it.second.first  > sc() ||
+                                 it.second.second < sc() )
+                                ++out_of_range;
+                          }
+                     }
+                   else if ( it.first.type == VECTOR ) {
+                        // vector_length_check_ is false here (handled above)
+                        VectorVariable<dim> vc;
+                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+                            e->N(i)->Read( it.first, vc );
+                            bool node_in_range{ true };
+                            for ( uint32_t j{ 0U }; j < dim; ++j )
+                                if ( it.second.first  > vc(j) ||
+                                     it.second.second < vc(j) ) {
+                                    node_in_range = false;
+                                    break;
+                                  }
+                            if ( !node_in_range ) ++out_of_range;
+                          }
+                     }
+                   else if ( it.first.type == TENSOR ) {
+                        TensorVariable<dim> ts;
+                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+                            e->N(i)->Read( it.first, ts );
+                            bool node_in_range{ true };
+                            for ( uint32_t j{ 0U }; j < dim && node_in_range; ++j )
+                                for ( uint32_t k{ 0U }; k < dim && node_in_range; ++k )
+                                    if ( it.second.first  > ts(j,k) ||
+                                         it.second.second < ts(j,k) )
+                                        node_in_range = false;
+                            if ( !node_in_range ) ++out_of_range;
+                          }
+                     }
+
+                   // fail only if ALL nodes are outside the range
+                   // (i.e. not even one node satisfies the constraint)
+                   if ( out_of_range >= e->Nodes() ) return false;
+                 }
                 break;
+
               case ELEMENT_INTEGRATION_POINT:
-                   for ( i=0; i<e->IntegrationPoints(); i++ )
-                     if ( !e->IsWithinRange( i, it.first, it.second.first, it.second.second ) )
+                   // integration point variables are not nodal —
+                   // single-node mode does not apply; use strict check
+                   for ( uint32_t i{ 0U }; i < e->IntegrationPoints(); ++i )
+                     if ( !e->IsWithinRange( i, it.first,
+                                             it.second.first, it.second.second ) )
                        return false;
                 break;
+
               case ELEMENT:
-                   if ( !e->IsWithinRange( it.first, it.second.first, it.second.second ) )
+                   if ( !e->IsWithinRange( it.first,
+                                           it.second.first, it.second.second ) )
                      return false;
                 break;
+
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckSingleNodeConstraints",
-                                              "Placement of constraint variable could not be identified");
+                   throw csmp::Exception( ERROR,
+                       "PropertyConstraints::CheckSingleNodeConstraints",
+                       "Placement of constraint variable could not be identified" );
            }
       }
     return true;
- }
+}
  
  
 
@@ -478,10 +525,13 @@ bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* e,
  {
     VectorVariable<dim>  vc;
  
+    if ( idx.type != VECTOR ) {
+         throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
+                                       "the variable index must define a VectorVariable");
+      }
     if ( nodal_average_ ) {
-         throw csmp::Exception( FATAL_ERROR, "PropertyConstraints::VectorLengthCheck",
-                                      "'nodal average' and 'vector_length_check' are mutually exclusive switches");
-         return false;
+         throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
+                                       "'nodal average' and 'vector_length_check' are mutually exclusive switches");
       }
  
     if ( idx.place == NODE ) {

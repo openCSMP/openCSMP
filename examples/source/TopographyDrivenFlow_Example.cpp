@@ -6,8 +6,8 @@
 #include "CSMP_highLevelUtilities.h"
 
 #include "TRIANGLE_Interface.h"
-#include "NumIntegral_NT_op_N_dV.h"
-#include "NumIntegral_dNT_op_dN_dV.h"
+#include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_op_dNi_dV.h"
 #include "LinearSolver.h"
 
@@ -122,9 +122,9 @@ void TopographyDrivenFlow_Example::Run()
 #endif
 
     // conductance matrix [K] on the lefthand side
-    NumIntegral_dNT_op_dN_dV<2U>    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
+    NumIntegral_dNT_lhsop_dN_dV<2U>    conductance( model.Database(), "conductivity", "absolute fluid pressure",  "absolute fluid pressure" );
     // source vector {Q} on the righthand side
-    NumIntegral_NT_op_N_dV<2U>      source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<2U>   source( model.Database(),  "fluid volume source", "absolute fluid pressure" );
     // gravity term on righthand side
     NumIntegral_NT_op_dNi_dV<2U>    gravity( model.Database(),  "fluid density",  "conductivity", "absolute fluid pressure" );
 

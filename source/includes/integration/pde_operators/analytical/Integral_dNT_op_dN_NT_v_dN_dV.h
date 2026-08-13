@@ -18,12 +18,17 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
 class Integral_dNT_op_dN_NT_v_dN_dV : public MathOperatorLHS<dim,CELL> {
   public:
     Integral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>& pref, 
-                                    const char* oper,  const char* velo, 
-                                    const char* basic, const char* test );
+                                   const char* oper,
+                                   const char* velo,
+                                   const char* basic,
+                                   const char* test );
     
     void GetOperands( const CELL<dim>& ) override final;
     void ComputeContribution( const CELL<dim>& ) override final;
-  
+ 
+     virtual Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>* clone() const override final
+        { return new Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL> (*this); }
+
   private:
     DenseMatrix<DM_MIN>  B, BT;
     csmp::Index          velo_key;

@@ -7,40 +7,43 @@
 
 namespace csmp {
 
-void planeStressMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
+void planeStressMatrix( double E, double nu, DenseMatrix<DM3>& D );
 
-void planeStrainMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
+void planeStrainMatrix( double E, double nu, DenseMatrix<DM3>& D );
 
-void stiffnessMatrix( double E, double nu, DenseMatrix<DM_MIN>& D );
+void stiffnessMatrix( double E, double nu, DenseMatrix<DM6>& D );
 
-void stiffnessMatrix( double E, DenseMatrix<DM_MIN>& D, double length );
+void stiffnessMatrix( double E, DenseMatrix<DM6>& D, double length );
 
 
 void planeStressMatrix( const std::vector<ScalarVariable >& E, 
                         const std::vector<ScalarVariable >& nu, 
-                        std::vector<DenseMatrix<DM_MIN> >& D );
+                        std::vector<DenseMatrix<DM3> >& D );
 
 void planeStrainMatrix( const std::vector<ScalarVariable >& E, 
                         const std::vector<ScalarVariable >& nu, 
-                        std::vector<DenseMatrix<DM_MIN> >& D );
+                        std::vector<DenseMatrix<DM3> >& D );
 
 void stiffnessMatrix( const std::vector<ScalarVariable >& E, 
                       const std::vector<ScalarVariable >& nu, 
-                      std::vector<DenseMatrix<DM_MIN> >& D );
+                      std::vector<DenseMatrix<DM6> >& D );
 
 
 // by the magnitude of the Eigenvalues
 void sortEigenVectorsAndValues( VectorVariable<2U>& vc, TensorVariable<2U>& ts );
 void sortEigenVectorsAndValues( VectorVariable<3U>& vc, TensorVariable<3U>& ts );
 
-void convertColumnTo( const DenseMatrix<DM_MIN>& INP, uint32_t column, TensorVariable<2U>& ts );
-void convertColumnTo( const DenseMatrix<DM_MIN>& INP, uint32_t column, TensorVariable<3U>& ts );
+template<uint32_t DM_SIZE>
+void convertColumnTo( const DenseMatrix<DM_SIZE>& INP, uint32_t column, TensorVariable<2U>& ts );
+
+template<uint32_t DM_SIZE>
+void convertColumnTo( const DenseMatrix<DM_SIZE>& INP, uint32_t column, TensorVariable<3U>& ts );
 
 void convertTo( const std::vector<double>& INP, uint32_t entry, TensorVariable<2U>& ts );
 void convertTo( const std::vector<double>& INP, uint32_t entry, TensorVariable<3U>& ts );
 
-void extractRowTo( const DenseMatrix<DM_MIN>& INP, uint32_t row, VectorVariable<2U>& vc );
-void extractRowTo( const DenseMatrix<DM_MIN>& INP, uint32_t row, VectorVariable<3U>& vc );
+void extractRowTo( const DenseMatrix<DM3>& INP, uint32_t row, VectorVariable<2U>& vc );
+void extractRowTo( const DenseMatrix<DM3>& INP, uint32_t row, VectorVariable<3U>& vc );
 
 
 // various utile functions
@@ -81,18 +84,22 @@ inline void extractRowTo( const DenseMatrix<DM_MIN>& INP,
 
 /** Extracts column of DenseMatrix into TensorVariable.
 */
-inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP, 
+template<uint32_t DM_SIZE>
+inline void convertColumnTo( const DenseMatrix<DM_SIZE>& INP, 
                              uint32_t column, TensorVariable<2U>& ts )
  {
+     static_assert( DM_SIZE >= 2U, "ERROR: convertColumnTo: INP matrix too small");
      // building symmetric 2D tensor
      ts(0,0) = INP(0,column);
      ts(1,1) = INP(1,column);
      ts(0,1) = ts(1,0) = INP(2,column);
  }
 
-inline void convertColumnTo( const DenseMatrix<DM_MIN>& INP, 
+template<uint32_t DM_SIZE>
+inline void convertColumnTo( const DenseMatrix<DM_SIZE>& INP, 
                              uint32_t column, TensorVariable<3U>& ts )
  {
+     static_assert( DM_SIZE >= 3U, "ERROR: convertColumnTo: INP matrix too small");
      // building symmetric 3D tensor
      ts(0,0) = INP(0,column);
      ts(1,1) = INP(1,column);

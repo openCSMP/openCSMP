@@ -148,6 +148,7 @@ class CompressedRowMatrix {
 
     friend class EigenSolver;
     friend class SAMG_Solver;
+    friend class PETSc_Solver;
     friend class CompressedRowMatrix_Test;
     friend class PDE_Integrator_Test;
 };

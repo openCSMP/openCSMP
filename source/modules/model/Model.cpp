@@ -501,7 +501,7 @@ int createVariablesInVSetThatAreMissingFromDatabase( PropertyDatabase<dim>& dbas
              csmp_error.Note( WARNING, "createVariablesInVSetThatAreMissingFromDatabase):", "all values are the same");
            // creating notation from first 2 letters and number of variable added
            string notation{ (*pit).first.substr(0,2) };
-           notation += vars_added;
+           notation += to_string(vars_added);
            // adding the property
            dbase.AddProperty( (*pit).first.c_str(), // name
                                notation.c_str(),
@@ -856,15 +856,6 @@ string Model<dim>::BinaryVariablesFileName( const char* base_file_name )
 }
 
 
-
-
-/// attempts to return the spatial dimension of the model stored in the file (1-3D)
-uint32_t spatialDimensionOfModel( const char* csmp_binary )
- {
-    throw csmp::Exception( ERROR, "spatialDimensionOfModel(binary file)", "method not implemented yet.");
-    return 3U;
-    
- } // end dimensionModelInBinaryFile
 
 
 
@@ -1389,9 +1380,9 @@ error if it does not match the specifications from above. In this case
 it will return without carrying out the extrapolation.
 */
 template<uint32_t dim>
-void  Model<dim>::ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance )
+void  Model<dim>::ExtrapolateCellToNodeProperty( const char* eprop, const char* nprop, bool by_distance, const char* target_region )
 {
-  this->Region( "Model" ).ExtrapolateCellToNodeProperty( eprop, nprop, by_distance );
+  this->Region(target_region).ExtrapolateCellToNodeProperty( eprop, nprop, by_distance );
 
 } // end ExtrapolateCellToNodeProperty
 
@@ -2071,7 +2062,7 @@ void Model<dim>::InterpolateBoundaryValues( BOX_BOUNDARY side, const char* input
   VectorVariable<dim>  res( bvalues[0] ); // getting the flags
   for ( typename vector<VectorVariable<dim> >::const_iterator
         vit = bvalues.begin(); vit != bvalues.end(); vit++ )
-    for ( auto i{0U}; i<dim; i++ )
+    for ( uint32_t i{0U}; i<dim; i++ )
       if ( (*vit).Flag( i ) != res.Flag( i ) )
         throw csmp::Exception( ERROR, "Model<dim>::InterpolateBoundaryValues: ",
                                "inconsistent flagging of boundary vector variables" );
@@ -2200,6 +2191,7 @@ variable flags such as DIRICH are also copied to the target variable.
 
 @param from The variable names of the physical variable (property) which is copied
 @param to the variable name that will be replaced.
+@param target_region specifies ModelSubDomain to which the copying will be restricted
 
 @section application Application
 
@@ -2215,9 +2207,9 @@ or the placement of the input variables are not the same. In this case
 an error will be reported.
 */
 template<uint32_t dim>
-void Model<dim>::CopyReplace( const char* from, const char* to )
+void Model<dim>::CopyReplace( const char* from, const char* to, const char* target_region )
 {
-  this->Region( "Model" ).CopyReplace( from, to );
+  this->Region(target_region).CopyReplace( from, to );
 } // end CopyReplace
 
 
@@ -2229,9 +2221,13 @@ vector variable placed on the element, CopyGradientOfProperty_A_To_B() will
 calculate the gradient of property 'a' for each element and assign the
 result to the element variable 'b'.
 
-@param prop_a specifies the scalar node variable of which the gradient will be calculated
+@param node_prop specifies the scalar node variable of which the gradient will be calculated
 second string identifies the vector variable placed on the element which
 will store the calculated gradient of property 'a'.
+
+@param elmt_prop  specifies the scalar  variable to which the calculated gradient will be assigned
+
+@param target_region specifies ModelSubDomain to which the copying will be restricted
 
 @section application Application
 
@@ -2248,9 +2244,9 @@ calculations, if the input variables do not comply with the specifications
 outlined above.
 */
 template<uint32_t dim>
-bool  Model<dim>::CopyGradientOfProperty_A_To_B( const char* prop_a, const char* prop_b )
+bool  Model<dim>::CopyGradientOfProperty_A_To_B( const char* prop_a, const char* prop_b, const char* target_region )
 {
-  return this->Region( "Model" ).CopyGradientOfProperty_A_To_B( prop_a, prop_b );
+  return this->Region(target_region).CopyGradientOfProperty_A_To_B( prop_a, prop_b );
 }
 
 
@@ -2263,6 +2259,10 @@ InterpolateNodePropertyToCellProperty() interpolates node property to the
 value is different from the result obtained by applying the interrelation
 subclass NodeToCellProperty. The Calculate() method of the latter assigns
 the average value of the 3 element nodes to the element property 'eprop'.
+
+@param nprop The name of the node property which shall be interpolated to the
+@param eprop element property.
+@param target_region the model subdomain where the extrapolation shall be performed
 
 @section arguments Input Arguments
 
@@ -2284,13 +2284,14 @@ InterpolateNodePropertyToCellProperty() will report an error and
 return without completing its task.
 */
 template<uint32_t dim>
-void  Model<dim>::InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose )
+void  Model<dim>::InterpolateNodeToCellProperty( const char* nprop, const char* eprop, bool verbose, const char* target_region )
 {
-  this->Region( "Model" ).InterpolateNodeToCellProperty( nprop, eprop );
+  this->Region(target_region).InterpolateNodeToCellProperty( nprop, eprop );
 
   if ( verbose ) {
     cout << "\nModel<" << dim << ">::InterpolateNodeToCellProperty: ";
-    cout << "'" << nprop << "' has been successfully interpolated to '" << eprop << "'." << endl;
+    cout << "'" << nprop << "' has been successfully interpolated to '" << eprop;
+    cout << "' in target region '"<< target_region <<"'." << endl;
   }
 
 } // end InterpolateNodeToCellProperty
@@ -2300,12 +2301,13 @@ void  Model<dim>::InterpolateNodeToCellProperty( const char* nprop, const char* 
 
 
 template<uint32_t dim>
-void  Model<dim>::InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* cpprop )
+void  Model<dim>::InterpolateNodeToIntegrationPointProperty( const char* nprop, const char* cpprop, const char* target_region )
 {
-  this->Region( "Model" ).InterpolateNodeToIntegrationPointProperty( nprop, cpprop );
+  this->Region(target_region).InterpolateNodeToIntegrationPointProperty( nprop, cpprop );
 
   cout << "\nModel<" << dim << ">::InterpolateNodeToIntegrationPointProperty: ";
-  cout << "'" << nprop << "' has been successfully interpolated to '" << cpprop << "'." << endl;
+  cout << "'" << nprop << "' has been successfully interpolated to '" << cpprop;
+  cout << "' in target region '"<< target_region <<"'." << endl;
 
 } // end InterpolateNodeToIntegrationPointProperty
 
@@ -2317,6 +2319,7 @@ to the target element property.
 
 @param cprop The name of the constraint point property which shall be interpolated to the
 @param eprop element property.
+@param target_region the model subdomain where the extrapolation shall be performed
 
 The results are returned to the Model.
 
@@ -2340,12 +2343,13 @@ Consistency checks are performed on the placement and type of the
 input variables.
 */
 template<uint32_t dim>
-void  Model<dim>::InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop )
+void  Model<dim>::InterpolateIntegrationPointToCellProperty( const char* cprop, const char* eprop, const char* target_region )
 {
-  this->Region( "Model" ).InterpolateIntegrationPointToCellProperty( cprop, eprop );
+  this->Region(target_region).InterpolateIntegrationPointToCellProperty( cprop, eprop );
 
   cout << "\nModel<" << dim << ">::InterpolateIntegrationPointToCellProperty: ";
-  cout << "'" << cprop << "' has been successfully interpolated to '" << eprop << "'." << endl;
+  cout << "'" << cprop << "' has been successfully interpolated to '" << eprop;
+  cout << "' in target region '"<< target_region <<"'." << endl;
 
 } // end InterpolateIntegrationPointToCellProperty
 
@@ -2359,6 +2363,7 @@ barycentre to the node is applied.
 
 @param cprop The names of the targeted constraint point
 @param nprop and node variables.
+@param target_region the model subdomain where the extrapolation shall be performed
 
 The result of the extrapolation is returned into the Model property
 storage.
@@ -2378,12 +2383,13 @@ IntegrationPoints.
 A consistency check on variable type and placement is performed.
 */
 template<uint32_t dim>
-void  Model<dim>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop )
+void  Model<dim>::ExtrapolateIntegrationPointToNodeProperty( const char* cprop, const char* nprop, const char* target_region )
 {
-  this->Region( "Model" ).ExtrapolateIntegrationPointToNodeProperty( cprop, nprop );
+  this->Region(target_region).ExtrapolateIntegrationPointToNodeProperty( cprop, nprop );
 
   cout << "\nModel<" << dim << ">::ExtrapolateIntegrationPointToNodeProperty: ";
-  cout << "'" << cprop << "' has been successfully interpolated to '" << nprop << "'." << endl;
+  cout << "'" << cprop << "' has been successfully interpolated to '" << nprop;
+  cout << "' in target region '"<< target_region <<"'." << endl;
 
 } // end ExtrapolateIntegrationPointToNodeProperty
 
@@ -3817,7 +3823,7 @@ void smoothElementVariable( Model<dim>& model, const char* region, const char* e
     // smoothing
     Region<dim>& ref = model.Region(region);
    
-    for ( auto i{0U}; i<n_smoothing_cycles; i++ ) {
+    for ( uint32_t i{0U}; i<n_smoothing_cycles; i++ ) {
          ref.ExtrapolateCellToNodeProperty( element_var, temp_node_var );
          ref.InterpolateNodeToCellProperty( temp_node_var, element_var );
       }
@@ -3902,7 +3908,7 @@ void randomPerturb( Model<dim>& sg, const char* prop, double by_percent_of_max_v
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
                     eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
-                for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
+                for ( uint32_t i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    (*eit)->Read( i, prop_key, sc );
                    sc -= rngen(gen);
@@ -3963,7 +3969,7 @@ void flagToNumber( Model<dim>& model, const char* variable )
          case ELEMENT_INTEGRATION_POINT:
               for ( typename vector<Element<dim>*>::const_iterator
                     eit=mref.CellsBegin(); eit!=mref.CellsEnd(); eit++ )
-                for ( auto i{0U}; i<(*eit)->IntegrationPoints(); i++ )
+                for ( uint32_t i{0U}; i<(*eit)->IntegrationPoints(); i++ )
                 {
                    double value = static_cast<double>( (*eit)->Status(prop_key) );
                    (*eit)->Store( prop_key, makeScalar( (*eit)->Status(prop_key), value ) );
@@ -4170,7 +4176,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
 
     csmp::Region<2>&  model_domain(sg.Region("Model"));
 
-    for ( auto n=0U; n<model_domain.Cells(); n++ )
+    for ( size_t n=0U; n<model_domain.Cells(); n++ )
        {
           //  for elements that are not located at model boundary
           if ( atBoundary( model_domain.E(n) ) == NOT )
@@ -4184,7 +4190,7 @@ void stripDomainEdgesFor( Model<2U>& sg, const char* el_prop )
                // 1. counting the surrounding values that are different from el-value
                double     sc_sum(0U);
                unsigned int counter(0U);
-               for ( auto i{0U}; i<model_domain.E(n)->Neighbors(); i++ ) {
+               for ( uint32_t i{0U}; i<model_domain.E(n)->Neighbors(); i++ ) {
                    assert( model_domain.E(n)->Neighbor(i) != nullptr );
                    if ( sc() > model_domain.E(n)->Neighbor(i)->Read( prop_key ) ) {
                         sc_sum += model_domain.E(n)->Neighbor(i)->Read( prop_key );
@@ -4356,7 +4362,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  break;
                case ELEMENT_INTEGRATION_POINT:
                   for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
-                    for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
+                    for ( uint32_t i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::min(limit_value,val) ) );
                       }
@@ -4387,7 +4393,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                  break;
                case ELEMENT_INTEGRATION_POINT:
                   for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
-                    for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
+                    for ( uint32_t i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                          double val = (*it)->Read( i, prop_key );
                          (*it)->Store( i, prop_key, makeScalar( (*it)->Status(i,prop_key), std::max(limit_value,val) ) );
                       }
@@ -4439,7 +4445,7 @@ void imposeLimitOn( Model<dim>& model, const char* region, const char* variable,
                break;
              case ELEMENT_INTEGRATION_POINT:
                 for ( auto it=rref.CellsBegin();  it!=rref.CellsEnd(); ++it )
-                  for ( auto i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
+                  for ( uint32_t i{0U}; i<(*it)->IntegrationPoints(); i++ ) {
                        (*it)->Read( i, prop_key, vc );
                         const double vmagnitude = vc.Length();
                         assert( vmagnitude > 0. );
@@ -4879,6 +4885,593 @@ tuple<size_t,size_t,size_t>  initialise_BREP_TopologyFlags( Model<2>& model ) //
  } // end initialise_BREP_TopologyFlags
 
 
+
+// Claude refactor of the 2D method
+/**
+    Based on the unique Regions, Boundaries and SplitBoundaries in the Model,
+    this method initialises the nodal TOPOTYPE flags for a 2D model, discerning
+    region intersections, perimeter points and intersection points.
+
+    Processing is performed in five passes:
+
+      1. Initialise all nodes to MESH_VERTEX
+
+      2. Assign flags from Regions, Boundaries and SplitBoundaries:
+           Surface region interior nodes     -> INTERIOR_LINE
+           Surface region perimeter nodes    -> PERIMETER_LINE
+           Line region interior nodes        -> INTERIOR_LINE
+           Line region perimeter nodes       -> PERIMETER_POINT
+
+      3. Collision resolution (second pass, INTERIOR_* beats PERIMETER_*):
+           PERIMETER_LINE x PERIMETER_LINE   -> PERIMETER_POINT
+           INTERIOR_LINE  x any line         -> INTERIOR_POINT
+           INTERIOR_POINT x any             -> INTERIOR_POINT
+
+      4. Line-tip-on-line detection:
+           Free-standing line terminating on PERIMETER_LINE -> PERIMETER_POINT
+
+      5. Hull sweep using BOX_BOUNDARY flags (EXTERIOR_* promotion):
+           Corner                                       -> EXTERIOR_POINT
+           Side   + (INTERIOR_POINT / PERIMETER_POINT) -> EXTERIOR_POINT
+           Side   + any other                          -> EXTERIOR_LINE
+           INTERNAL + MESH_VERTEX                      -> INTERIOR_LINE
+
+    @attention Only unique regions are considered as part of the model topology.
+    @attention Boundary BOX_BOUNDARY flags must have been assigned before calling
+               this method.
+
+    @returns tuple of { nodes_on_faces, nodes_on_edges, nodes_on_vertices }
+             Note: nodes_on_faces is always 0 for 2D models (no surface collisions).
+*/
+template<>
+tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags_vs2<2>( Model<2>& model )
+{
+    // -------------------------------------------------------------------------
+    // Step 1. Initialise all nodes to MESH_VERTEX
+    // -------------------------------------------------------------------------
+    for ( auto nit = model.Mesh().NodesBegin(); nit != model.Mesh().NodesEnd(); ++nit )
+        (*nit).Attribute( MESH_VERTEX );
+
+
+    // -------------------------------------------------------------------------
+    // Step 2. Assign flags from Regions, Boundaries and SplitBoundaries
+    //
+    //   In 2D:
+    //     Surface (cell_dim==2) region interior nodes -> INTERIOR_LINE
+    //     Surface (cell_dim==2) region perimeter nodes -> PERIMETER_LINE
+    //     Line    (cell_dim==1) region interior nodes -> INTERIOR_LINE
+    //     Line    (cell_dim==1) region perimeter nodes -> PERIMETER_POINT
+    // -------------------------------------------------------------------------
+
+    auto assignRegionFlags = []( auto& region, uint32_t cell_dim )
+    {
+        if ( cell_dim == 2 )
+        {
+            // Surface region interior nodes
+            for ( auto nit = region.NodesBegin(); nit != region.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+            // Surface region perimeter nodes
+            for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_LINE );
+        }
+        else // cell_dim == 1
+        {
+            // Line region interior nodes
+            for ( auto nit = region.NodesBegin(); nit != region.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+            // Line region perimeter nodes (tips)
+            for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_POINT );
+        }
+    };
+
+    // Unique Regions
+    for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        assignRegionFlags( (*it).second, cell_dim );
+    }
+
+    // Boundaries
+    for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        assignRegionFlags( (*it).second, cell_dim );
+    }
+
+    // SplitBoundaries
+    // Inside nodes:  [0, inside_nodes.second)        -> interior  -> INTERIOR_LINE
+    //                [inside_nodes.second, size())   -> perimeter -> PERIMETER_LINE
+    // Outside nodes: [0, outside_nodes.second)       -> interior  -> INTERIOR_LINE
+    //                [outside_nodes.second, size())  -> perimeter -> PERIMETER_LINE
+    for ( auto it = model.SplitBoundariesBegin(); it != model.SplitBoundariesEnd(); ++it )
+    {
+        auto inside_nodes  = (*it).second.InsideNodes();
+        auto outside_nodes = (*it).second.OutsideNodes();
+
+        // Interior nodes (both sides)
+        for ( size_t n{0}; n < inside_nodes.second; ++n )
+            inside_nodes.first[n]->Attribute( INTERIOR_LINE );
+        for ( size_t n{0}; n < outside_nodes.second; ++n )
+            outside_nodes.first[n]->Attribute( INTERIOR_LINE );
+
+        // Perimeter nodes (both sides)
+        for ( size_t n = inside_nodes.second; n < inside_nodes.first.size(); ++n )
+            inside_nodes.first[n]->Attribute( PERIMETER_LINE );
+        for ( size_t n = outside_nodes.second; n < outside_nodes.first.size(); ++n )
+            outside_nodes.first[n]->Attribute( PERIMETER_LINE );
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 3. Collision resolution (second pass)
+    //
+    //   { node -> { total_count, interior_count } }
+    //
+    //   edges    tracks PERIMETER_LINE / INTERIOR_LINE collisions
+    //   vertices tracks INTERIOR_POINT collisions
+    //
+    //   PERIMETER_LINE x PERIMETER_LINE  -> PERIMETER_POINT
+    //   INTERIOR_LINE  x any line        -> INTERIOR_POINT
+    //   INTERIOR_POINT x any            -> INTERIOR_POINT
+    // -------------------------------------------------------------------------
+    size_t nodes_on_edges{0}, nodes_on_vertices{0};
+    {
+        unordered_map<Node<2>*, pair<uint32_t,uint32_t>> edges, vertices;
+
+        auto accumulate = []( auto& map, Node<2>* node, bool is_interior )
+        {
+            auto& entry = map.emplace( node, make_pair( 0u, 0u ) ).first->second;
+            entry.first++;
+            if ( is_interior ) entry.second++;
+        };
+
+        auto classify = [&]( Node<2>* node )
+        {
+            const TOPOTYPE t = static_cast<TOPOTYPE>( node->Attribute() );
+            switch ( t )
+            {
+                case INTERIOR_LINE:
+                case PERIMETER_LINE:
+                    accumulate( edges,    node, t == INTERIOR_LINE );
+                    break;
+                case INTERIOR_POINT:
+                    accumulate( vertices, node, true               );
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        // Accumulate from Unique Regions
+        for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+            for ( auto& node : (*it).second.NodeVector() )
+                classify( node );
+
+        // Accumulate from Boundaries
+        for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+            for ( auto& node : (*it).second.NodeVector() )
+                classify( node );
+
+        // Accumulate from SplitBoundaries (inside and outside)
+        for ( auto it = model.SplitBoundariesBegin(); it != model.SplitBoundariesEnd(); ++it )
+        {
+            auto inside_nodes  = (*it).second.InsideNodes();
+            auto outside_nodes = (*it).second.OutsideNodes();
+            for ( auto node : inside_nodes.first  ) classify( node );
+            for ( auto node : outside_nodes.first ) classify( node );
+        }
+
+        // Apply collision resolution
+        for ( auto& [node, counts] : edges )
+            if ( counts.first >= 2 )
+            {
+                node->Attribute( counts.second > 0 ? INTERIOR_POINT : PERIMETER_POINT );
+                nodes_on_edges++;
+            }
+
+        for ( auto& [node, counts] : vertices )
+            if ( counts.first >= 2 )
+            {
+                node->Attribute( INTERIOR_POINT );
+                nodes_on_vertices++;
+            }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 4. Line-tip-on-line detection
+    //
+    //   A free-standing line terminating against a PERIMETER_LINE should
+    //   produce a PERIMETER_POINT at the tip.
+    //
+    //   Detection: for each line region/boundary, check perimeter nodes —
+    //   if a perimeter node sits on a PERIMETER_LINE, assign PERIMETER_POINT.
+    // -------------------------------------------------------------------------
+    auto checkLineTips = []( auto& region, uint32_t cell_dim )
+    {
+        if ( cell_dim != 1 ) return;
+        for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+        {
+            const TOPOTYPE t = static_cast<TOPOTYPE>( (*nit)->Attribute() );
+            if ( t == PERIMETER_LINE )
+                (*nit)->Attribute( PERIMETER_POINT );
+        }
+    };
+
+    for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        checkLineTips( (*it).second, cell_dim );
+    }
+    for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        checkLineTips( (*it).second, cell_dim );
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 5. Hull sweep — EXTERIOR_* promotion using BOX_BOUNDARY flags
+    //
+    //   Corner                                        -> EXTERIOR_POINT
+    //   Side   + (INTERIOR_POINT / PERIMETER_POINT)  -> EXTERIOR_POINT
+    //   Side   + any other                           -> EXTERIOR_LINE
+    //   INTERNAL + MESH_VERTEX                       -> INTERIOR_LINE
+    // -------------------------------------------------------------------------
+    for ( auto nit = model.Mesh().NodesBegin(); nit != model.Mesh().NodesEnd(); ++nit )
+    {
+        const TOPOTYPE current = static_cast<TOPOTYPE>( (*nit).Attribute() );
+        const bool is_point    = ( current == INTERIOR_POINT ||
+                                   current == PERIMETER_POINT );
+
+        switch ( (*nit).AtBoundary() )
+        {
+            case LEFT: case RIGHT: case TOP: case BOTTOM: case IRREGULAR:
+            case EDGE1: case EDGE2: case EDGE3: case EDGE4:
+                if ( is_point ) (*nit).Attribute( EXTERIOR_POINT );
+                else            (*nit).Attribute( EXTERIOR_LINE  );
+                break;
+
+            case CNR1: case CNR2: case CNR3: case CNR4:
+                (*nit).Attribute( EXTERIOR_POINT );
+                break;
+
+            case INTERNAL:
+                if ( current == MESH_VERTEX )
+                    (*nit).Attribute( INTERIOR_LINE );
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    // nodes_on_faces is always 0 for 2D (no surface-surface collisions)
+    return make_tuple( 0UL, nodes_on_edges, nodes_on_vertices );
+
+} // end initialise_BREP_TopologyFlags<2>
+
+
+
+
+
+// Claude refactor of 3D method
+/**
+    Based on the unique Regions, Boundaries and SplitBoundaries in the Model,
+    this method initialises the nodal TOPOTYPE flags, discerning region
+    intersections, perimeter lines and intersection points.
+
+    Processing is performed in five passes:
+
+      1. Initialise all nodes to MESH_VERTEX
+
+      2. Assign flags from Regions, Boundaries and SplitBoundaries:
+           Volumetric region perimeter nodes -> PERIMETER_SURFACE
+           Surface region interior nodes     -> INTERIOR_SURFACE
+           Surface region perimeter nodes    -> PERIMETER_LINE
+           Line region interior nodes        -> INTERIOR_LINE
+           Line region perimeter nodes       -> PERIMETER_POINT
+
+      3. Collision resolution (second pass, INTERIOR_* beats PERIMETER_*):
+           PERIMETER_SURFACE x PERIMETER_SURFACE -> PERIMETER_LINE
+           INTERIOR_SURFACE  x any surface       -> INTERIOR_LINE
+           PERIMETER_LINE    x PERIMETER_LINE    -> PERIMETER_POINT
+           INTERIOR_LINE     x any line          -> INTERIOR_POINT
+           INTERIOR_POINT    x any              -> INTERIOR_POINT
+
+      4. Line-tip-on-surface detection:
+           Free-standing line terminating on PERIMETER_SURFACE -> PERIMETER_POINT
+
+      5. Hull sweep using BOX_BOUNDARY flags (EXTERIOR_* promotion):
+           Corner                                       -> EXTERIOR_POINT
+           Edge + (INTERIOR_POINT / PERIMETER_POINT)   -> EXTERIOR_POINT
+           Edge + any other                            -> EXTERIOR_LINE
+           Face + (INTERIOR_POINT / PERIMETER_POINT)   -> EXTERIOR_POINT
+           Face + (INTERIOR_LINE  / PERIMETER_LINE)    -> EXTERIOR_LINE
+           Face + any other                            -> EXTERIOR_SURFACE
+
+    @attention Only unique regions are considered as part of the model topology.
+    @attention Method assumes no duplicated surfaces, and that all surfaces and
+               lines were already intersected so that perimeter or intersection
+               lines already exist.
+    @attention Boundary BOX_BOUNDARY flags must have been assigned before calling
+               this method.
+
+    @returns tuple of { nodes_on_faces, nodes_on_edges, nodes_on_vertices }
+*/
+template<>
+tuple<size_t,size_t,size_t> initialise_BREP_TopologyFlags_vs2<3>( Model<3>& model )
+{
+    // -------------------------------------------------------------------------
+    // Step 1. Initialise all nodes to MESH_VERTEX
+    // -------------------------------------------------------------------------
+    for ( auto nit = model.Mesh().NodesBegin(); nit != model.Mesh().NodesEnd(); ++nit )
+        (*nit).Attribute( MESH_VERTEX );
+
+
+    // -------------------------------------------------------------------------
+    // Step 2. Assign flags from Regions, Boundaries and SplitBoundaries
+    // -------------------------------------------------------------------------
+
+    // Helper: assign flags for a region/boundary of known cell dimension
+    // Perimeter nodes are in range [PerimeterNodesBegin, NodesEnd)
+    // Interior nodes are in range [NodesBegin, PerimeterNodesBegin)
+    auto assignRegionFlags = []( auto& region, uint32_t cell_dim )
+    {
+        if ( cell_dim == 3 )
+        {
+            // Volumetric region: only perimeter nodes are topologically relevant
+            for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_SURFACE );
+        }
+        else if ( cell_dim == 2 )
+        {
+            // Surface region interior
+            for ( auto nit = region.NodesBegin(); nit != region.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_SURFACE );
+            // Surface region perimeter
+            for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_LINE );
+        }
+        else // cell_dim == 1
+        {
+            // Line region interior
+            for ( auto nit = region.NodesBegin(); nit != region.PerimeterNodesBegin(); ++nit )
+                (*nit)->Attribute( INTERIOR_LINE );
+            // Line region perimeter (tips)
+            for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+                (*nit)->Attribute( PERIMETER_POINT );
+        }
+    };
+
+    // Unique Regions
+    for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsVolume()   ? 3 :
+                                  (*it).second.E(0)->IsSurface()  ? 2 : 1;
+        assignRegionFlags( (*it).second, cell_dim );
+    }
+
+    // Boundaries
+    for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        assignRegionFlags( (*it).second, cell_dim );
+    }
+
+    // SplitBoundaries
+    // Inside nodes: [0, inside_nodes.second)          -> interior
+    //               [inside_nodes.second, size())     -> perimeter
+    // Outside nodes: [0, outside_nodes.second)        -> interior
+    //                [outside_nodes.second, size())   -> perimeter
+    for ( auto it = model.SplitBoundariesBegin(); it != model.SplitBoundariesEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+
+        auto inside_nodes  = (*it).second.InsideNodes();
+        auto outside_nodes = (*it).second.OutsideNodes();
+
+        if ( cell_dim == 2 )
+        {
+            // Interior nodes (both sides)
+            for ( size_t n{0}; n < inside_nodes.second; ++n )
+                inside_nodes.first[n]->Attribute( INTERIOR_SURFACE );
+            for ( size_t n{0}; n < outside_nodes.second; ++n )
+                outside_nodes.first[n]->Attribute( INTERIOR_SURFACE );
+            // Perimeter nodes (both sides)
+            for ( size_t n = inside_nodes.second; n < inside_nodes.first.size(); ++n )
+                inside_nodes.first[n]->Attribute( PERIMETER_LINE );
+            for ( size_t n = outside_nodes.second; n < outside_nodes.first.size(); ++n )
+                outside_nodes.first[n]->Attribute( PERIMETER_LINE );
+        }
+        else // cell_dim == 1
+        {
+            // Interior nodes (both sides)
+            for ( size_t n{0}; n < inside_nodes.second; ++n )
+                inside_nodes.first[n]->Attribute( INTERIOR_LINE );
+            for ( size_t n{0}; n < outside_nodes.second; ++n )
+                outside_nodes.first[n]->Attribute( INTERIOR_LINE );
+            // Perimeter nodes / tips (both sides)
+            for ( size_t n = inside_nodes.second; n < inside_nodes.first.size(); ++n )
+                inside_nodes.first[n]->Attribute( PERIMETER_POINT );
+            for ( size_t n = outside_nodes.second; n < outside_nodes.first.size(); ++n )
+                outside_nodes.first[n]->Attribute( PERIMETER_POINT );
+        }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 3. Collision resolution (second pass)
+    //
+    //   { node -> { total_count, interior_count } }
+    //
+    //   faces    tracks PERIMETER_SURFACE / INTERIOR_SURFACE collisions
+    //   edges    tracks PERIMETER_LINE    / INTERIOR_LINE    collisions
+    //   vertices tracks INTERIOR_POINT    collisions
+    // -------------------------------------------------------------------------
+    size_t nodes_on_faces{0}, nodes_on_edges{0}, nodes_on_vertices{0};
+    {
+        unordered_map<Node<3>*, pair<uint32_t,uint32_t>> faces, edges, vertices;
+
+        auto accumulate = []( auto& map, Node<3>* node, bool is_interior )
+        {
+            auto& entry = map.emplace( node, make_pair( 0u, 0u ) ).first->second;
+            entry.first++;
+            if ( is_interior ) entry.second++;
+        };
+
+        auto classify = [&]( Node<3>* node )
+        {
+            const TOPOTYPE t = static_cast<TOPOTYPE>( node->Attribute() );
+            switch ( t )
+            {
+                case INTERIOR_SURFACE:
+                case PERIMETER_SURFACE:
+                    accumulate( faces,    node, t == INTERIOR_SURFACE );
+                    break;
+                case INTERIOR_LINE:
+                case PERIMETER_LINE:
+                    accumulate( edges,    node, t == INTERIOR_LINE    );
+                    break;
+                case INTERIOR_POINT:
+                    accumulate( vertices, node, true                  );
+                    break;
+                default:
+                    break;
+            }
+        };
+
+        // Accumulate from Unique Regions
+        for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+            for ( auto& node : (*it).second.NodeVector() )
+                classify( node );
+
+        // Accumulate from Boundaries
+        for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+            for ( auto& node : (*it).second.NodeVector() )
+                classify( node );
+
+        // Accumulate from SplitBoundaries (inside and outside)
+        for ( auto it = model.SplitBoundariesBegin(); it != model.SplitBoundariesEnd(); ++it )
+        {
+            auto inside_nodes  = (*it).second.InsideNodes();
+            auto outside_nodes = (*it).second.OutsideNodes();
+            for ( auto node : inside_nodes.first  ) classify( node );
+            for ( auto node : outside_nodes.first ) classify( node );
+        }
+
+        // Apply collision resolution
+        for ( auto& [node, counts] : faces )
+            if ( counts.first >= 2 )
+            {
+                node->Attribute( counts.second > 0 ? INTERIOR_LINE : PERIMETER_LINE );
+                nodes_on_faces++;
+            }
+
+        for ( auto& [node, counts] : edges )
+            if ( counts.first >= 2 )
+            {
+                node->Attribute( counts.second > 0 ? INTERIOR_POINT : PERIMETER_POINT );
+                nodes_on_edges++;
+            }
+
+        for ( auto& [node, counts] : vertices )
+            if ( counts.first >= 2 )
+            {
+                node->Attribute( INTERIOR_POINT );
+                nodes_on_vertices++;
+            }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 4. Line-tip-on-surface detection
+    //
+    //   A free-standing line terminating against a PERIMETER_SURFACE should
+    //   produce a PERIMETER_POINT at the tip, not remain INTERIOR_LINE or
+    //   MESH_VERTEX.
+    //
+    //   Detection: for each line region/boundary, check perimeter nodes —
+    //   if a perimeter node sits on a PERIMETER_SURFACE, assign PERIMETER_POINT.
+    // -------------------------------------------------------------------------
+    auto checkLineTips = []( auto& region, uint32_t cell_dim )
+    {
+        if ( cell_dim != 1 ) return;
+        for ( auto nit = region.PerimeterNodesBegin(); nit != region.NodesEnd(); ++nit )
+        {
+            const TOPOTYPE t = static_cast<TOPOTYPE>( (*nit)->Attribute() );
+            if ( t == PERIMETER_SURFACE )
+                (*nit)->Attribute( PERIMETER_POINT );
+        }
+    };
+
+    for ( auto it = model.UniqueRegionsBegin(); it != model.UniqueRegionsEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsVolume()  ? 3 :
+                                  (*it).second.E(0)->IsSurface() ? 2 : 1;
+        checkLineTips( (*it).second, cell_dim );
+    }
+    for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
+    {
+        const uint32_t cell_dim = (*it).second.E(0)->IsSurface() ? 2 : 1;
+        checkLineTips( (*it).second, cell_dim );
+    }
+
+
+    // -------------------------------------------------------------------------
+    // Step 5. Hull sweep — EXTERIOR_* promotion using BOX_BOUNDARY flags
+    //
+    //   Corner                                        -> EXTERIOR_POINT
+    //   Edge   + (INTERIOR_POINT / PERIMETER_POINT)  -> EXTERIOR_POINT
+    //   Edge   + any other                           -> EXTERIOR_LINE
+    //   Face   + (INTERIOR_POINT / PERIMETER_POINT)  -> EXTERIOR_POINT
+    //   Face   + (INTERIOR_LINE  / PERIMETER_LINE)   -> EXTERIOR_LINE
+    //   Face   + any other                           -> EXTERIOR_SURFACE
+    //   INTERNAL + MESH_VERTEX                       -> INTERIOR_SURFACE
+    // -------------------------------------------------------------------------
+    for ( auto nit = model.Mesh().NodesBegin(); nit != model.Mesh().NodesEnd(); ++nit )
+    {
+        const TOPOTYPE current  = static_cast<TOPOTYPE>( (*nit).Attribute() );
+        const bool is_point     = ( current == INTERIOR_POINT  ||
+                                    current == PERIMETER_POINT );
+        const bool is_line      = ( current == INTERIOR_LINE   ||
+                                    current == PERIMETER_LINE  );
+
+        switch ( (*nit).AtBoundary() )
+        {
+            case LEFT: case RIGHT: case TOP: case BOTTOM:
+            case FRONT: case BACK: case IRREGULAR:
+                if      ( is_point ) (*nit).Attribute( EXTERIOR_POINT   );
+                else if ( is_line  ) (*nit).Attribute( EXTERIOR_LINE    );
+                else                 (*nit).Attribute( EXTERIOR_SURFACE );
+                break;
+
+            case EDGE1:  case EDGE2:  case EDGE3:  case EDGE4:
+            case EDGE5:  case EDGE6:  case EDGE7:  case EDGE8:
+            case EDGE9:  case EDGE10: case EDGE11: case EDGE12:
+                if ( is_point ) (*nit).Attribute( EXTERIOR_POINT );
+                else            (*nit).Attribute( EXTERIOR_LINE  );
+                break;
+
+            case CNR1: case CNR2: case CNR3: case CNR4:
+            case CNR5: case CNR6: case CNR7: case CNR8:
+                (*nit).Attribute( EXTERIOR_POINT );
+                break;
+
+            case INTERNAL:
+                if ( current == MESH_VERTEX )
+                    (*nit).Attribute( INTERIOR_SURFACE );
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    return make_tuple( nodes_on_faces, nodes_on_edges, nodes_on_vertices );
+
+} // end initialise_BREP_TopologyFlags3D<3>
 
 
 

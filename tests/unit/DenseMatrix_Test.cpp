@@ -146,9 +146,9 @@ void DenseMatrix_Test::run()
         ResA( 3, 3 ) = 5.;
 
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 //cout << D(i, j) << "  ";
                 //cout << A(i, j) << endl;
@@ -194,9 +194,9 @@ void DenseMatrix_Test::run()
         ResC( 3, 3 ) = 15.;
 
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResC(i,j), 1E-6 );
             }
@@ -218,9 +218,9 @@ void DenseMatrix_Test::run()
         if ( verbose_ ) C.Out();
 
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResC(i,j), 1E-6 );
             }
@@ -282,7 +282,7 @@ void DenseMatrix_Test::run()
 
         if ( verbose_ ) cout << "\nA = ";
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
             if ( verbose_ ) cout << B(i,0) << setw(5);
 
@@ -324,7 +324,7 @@ void DenseMatrix_Test::run()
         D.operator *=( Ca );
         if ( verbose_ ) D.Out();
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
             if ( verbose_ ) cout << D(i,0) << setw(5);
 
@@ -383,9 +383,9 @@ void DenseMatrix_Test::run()
         ResAB( 3, 2 ) = 30.;
         ResAB( 3, 3 ) = 48.;
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( C(i,j), ResAB(i,j), 1E-6 );
             }
@@ -408,9 +408,9 @@ void DenseMatrix_Test::run()
     
         if ( verbose_ ) D.Out();
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( D(i,j), ResAB(i,j), 1E-6 );
             }
@@ -431,11 +431,11 @@ void DenseMatrix_Test::run()
         B.Fill(1.);
         if ( verbose_ ) B.Out();
 
-        C = 1.;
+        C.Fill(1.);
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( B(i,j), C(i,j), 1E-6 );
             }
@@ -451,7 +451,7 @@ void DenseMatrix_Test::run()
         B.FillCol(2,5.5);
         if ( verbose_ ) B.Out();
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
             _equal( B(i,2), 5.5, 1E-6 );
         }
@@ -466,7 +466,7 @@ void DenseMatrix_Test::run()
         B.FillRow(2,3.3);
         B.Out();
 
-        for ( auto j = 0; j < 4; j++ )
+        for ( uint32_t j = 0; j < 4; j++ )
         {
             _equal( B(2,j), 3.3, 1E-6 );
         }
@@ -488,7 +488,7 @@ void DenseMatrix_Test::run()
         double ColSumB2 = B.ColSum(2);
         double CheckColSumB2 = 0.;
 
-        for ( auto i = 0; i < 4; i++ )
+        for ( uint32_t i = 0; i < 4; i++ )
         {
             CheckColSumB2 += B(i,2);
         }
@@ -507,7 +507,7 @@ void DenseMatrix_Test::run()
         double RowSumB2 = B.RowSum(2);
         double CheckRowSumB2 = 0.;
 
-        for ( auto j = 0; j < 4; j++ )
+        for ( uint32_t j = 0; j < 4; j++ )
         {
             CheckRowSumB2 += B(2,j);
         }
@@ -530,7 +530,7 @@ void DenseMatrix_Test::run()
     
           if ( verbose_ ) B.Out();
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
                 _equal( B(i,2), 0., 1E-6 );
             }
@@ -545,7 +545,7 @@ void DenseMatrix_Test::run()
             B.ZeroRow(2);
             if ( verbose_ ) B.Out();
 
-            for ( auto j = 0; j < 4; j++ )
+            for ( uint32_t j = 0; j < 4; j++ )
             {
                 _equal( B(2,j), 0., 1E-6 );
             }
@@ -560,9 +560,9 @@ void DenseMatrix_Test::run()
             B.Zero();
             if ( verbose_ ) B.Out();
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
-                for ( auto j = 0; j < 4; j++ )
+                for ( uint32_t j = 0; j < 4; j++ )
                 {
                     _equal( B(i,j), 0., 1E-6 );
                 }
@@ -586,9 +586,9 @@ void DenseMatrix_Test::run()
             B = C;
             if ( verbose_ ) B.Out();
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
-                for ( auto j = 0; j < 4; j++ )
+                for ( uint32_t j = 0; j < 4; j++ )
                 {
                     _equal( B(i,j), C(i,j), 1E-6 );
                 }
@@ -613,9 +613,9 @@ void DenseMatrix_Test::run()
                 F.Out();
               }
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
-                for ( auto j = 0; j < 4; j++ )
+                for ( uint32_t j = 0; j < 4; j++ )
                 {
                     _equal( F(i,j), A(j,i), 1E-6 );
                 }
@@ -654,9 +654,9 @@ void DenseMatrix_Test::run()
             ResF( 3, 2 ) = 29.7;
             ResF( 3, 3 ) = 22.5;
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
-                for ( auto j = 0; j < 4; j++ )
+                for ( uint32_t j = 0; j < 4; j++ )
                 {
                     _equal( ResF(i,j), F(i,j), 1E-6 );
                 }
@@ -698,9 +698,9 @@ void DenseMatrix_Test::run()
             ResG( 3, 2 ) = 57.2;
             ResG( 3, 3 ) = 21.2;
 
-            for ( auto i = 0; i < 4; i++ )
+            for ( uint32_t i = 0; i < 4; i++ )
             {
-                for ( auto j = 0; j < 4; j++ )
+                for ( uint32_t j = 0; j < 4; j++ )
                 {
                     _equal( ResG(i,j), G(i,j), 1E-6 );
                 }
@@ -750,9 +750,9 @@ void DenseMatrix_Test::run()
             DenseMatrix3x3 = TensorVariable2U;
             if ( verbose_ ) DenseMatrix3x3.Out();
 
-            for ( auto i = 0; i < 2; i++ )
+            for ( uint32_t i = 0; i < 2; i++ )
             {
-                for ( auto j = 0; j < 2; j++ )
+                for ( uint32_t j = 0; j < 2; j++ )
                 {
                     if ( i==j ) _equal( DenseMatrix3x3(i,j), 2., 1E-6 );
                     else        _equal( DenseMatrix3x3(i,j), 1., 1E-6 );
@@ -779,9 +779,9 @@ void DenseMatrix_Test::run()
             DenseMatrix3x3 = TensorVariable3U;
             if ( verbose_ ) DenseMatrix3x3.Out();
 
-            for ( auto i = 0; i < 3; i++ )
+            for ( uint32_t i = 0; i < 3; i++ )
             {
-                for ( auto j = 0; j < 3; j++ )
+                for ( uint32_t j = 0; j < 3; j++ )
                 {
                     if ( i==j ) _equal( DenseMatrix3x3(i,j), 3., 1E-6 );
                     else        _equal( DenseMatrix3x3(i,j), 2., 1E-6 );
@@ -829,9 +829,9 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3 *= ( TensorVariable2U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0; i < 2; i++ )
+                for ( uint32_t i = 0; i < 2; i++ )
                 {
-                    for ( int j = 0; j < 2; j++ )
+                    for ( uint32_t j = 0; j < 2; j++ )
                     {
                         _equal( DenseMatrix3x3(i,j), 15., 1E-6 );
                     }
@@ -858,9 +858,9 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3 *= ( TensorVariable3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( auto i = 0; i < 3; i++ )
+                for ( uint32_t i = 0; i < 3; i++ )
                 {
-                    for ( auto j = 0; j < 3; j++ )
+                    for ( uint32_t j = 0; j < 3; j++ )
                     {
                         _equal( DenseMatrix3x3(i,j), 35., 1E-6 );
                     }
@@ -891,7 +891,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3 *= ( VectorVariable2U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0; i < 2; i++ )
+                for ( uint32_t i = 0; i < 2; i++ )
                 {
                     _equal( DenseMatrix3x3(i,0), 60., 1E-6 );
 
@@ -918,7 +918,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3 *= ( VectorVariable3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0; i < 3; i++ )
+                for ( uint32_t i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(i,0), 105., 1E-6 );
                 }
@@ -943,7 +943,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignToDiagonalAndZeroOffDiagonal(2, 6.);
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0, j = 0; i < 2; i++, j++ )
+                for ( uint32_t i = 0, j = 0; i < 2; i++, j++ )
                 {
                    _equal( DenseMatrix3x3(i,j), 6., 1E-6 );
                 }
@@ -990,7 +990,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable2U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0, j = 0; i < 2; i++, j++ )
+                for ( uint32_t i = 0, j = 0; i < 2; i++, j++ )
                 {
                    _equal( DenseMatrix3x3(i,j), 10., 1E-6 );
                 }
@@ -1016,7 +1016,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignToDiagonal ( VectorVariable3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0, j = 0 ; i < 3; i++, j++ )
+                for ( uint32_t i = 0, j = 0 ; i < 3; i++, j++ )
                 {
                     _equal( DenseMatrix3x3(i,j), 10., 1E-6 );
                 }
@@ -1037,7 +1037,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignToDiagonalAndZeroOffDiagonal(3, 10.);
                 DenseMatrix3x3.Out();
 
-                for ( int i = 0, j = 0 ; i < 3; i++, j++ )
+                for ( uint32_t i = 0, j = 0 ; i < 3; i++, j++ )
                 {
                     _equal( DenseMatrix3x3(i,j), 10., 1E-6 );
                 }
@@ -1101,7 +1101,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.ExportTo(TensorVariable2U);
                 if ( verbose_ ) TensorVariable3U.Out();
 
-                for ( int i = 0; i < 2; i++ )
+                for ( uint32_t i = 0; i < 2; i++ )
                 {
                     _equal( DenseMatrix3x3(i,i), 1., 1E-6 );
                 }
@@ -1125,7 +1125,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.ExportTo(TensorVariable3U);
                 if ( verbose_ ) TensorVariable3U.Out();
 
-                for ( int i = 0; i < 3; i++ )
+                for ( uint32_t i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(i,i), 1., 1E-6 );
                 }
@@ -1174,7 +1174,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignRow( 1, Point2U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0; i < 2; i++ )
+                for ( uint32_t i = 0; i < 2; i++ )
                 {
                     _equal( DenseMatrix3x3(1,i), 11., 1E-6 );
                 }
@@ -1198,7 +1198,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignRow( 1, Point3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( auto i = 0; i < 3; i++ )
+                for ( uint32_t i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(1,i), 13.-i, 1E-6 );
                 }
@@ -1243,7 +1243,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignCol( 1, Point2U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( int i = 0; i < 2; i++ )
+                for ( uint32_t i = 0; i < 2; i++ )
                 {
                     _equal( DenseMatrix3x3(i,1), 11., 1E-6 );
                 }
@@ -1267,7 +1267,7 @@ void DenseMatrix_Test::run()
                 DenseMatrix3x3.AssignCol( 2, Point3U );
                 if ( verbose_ ) DenseMatrix3x3.Out();
 
-                for ( auto i = 0; i < 3; i++ )
+                for ( uint32_t i = 0; i < 3; i++ )
                 {
                     _equal( DenseMatrix3x3(i,2), 13.-i, 1E-6 );
                 }
@@ -1316,8 +1316,8 @@ void DenseMatrix_Test::run()
                     DenseMatrix3x3 *= ( Point2U );
                     if ( verbose_ ) DenseMatrix3x3.Out();
 
-                    for ( auto i = 0; i < 2; i++ )
-                        _equal( DenseMatrix3x3(i,0), 110., 1E-6 );
+                    for ( uint32_t i = 0; i < 2; i++ )
+                      _equal( DenseMatrix3x3(i,0), 110., 1E-6 );
 
 
                     //Operator*= ( Point<3U> )
@@ -1340,7 +1340,7 @@ void DenseMatrix_Test::run()
                     DenseMatrix3x3 *= ( Point3U );
                     if ( verbose_ ) DenseMatrix3x3.Out();
 
-                    for ( auto i = 0; i < 3; i++ )
+                    for ( uint32_t i = 0; i < 3; i++ )
                         _equal( DenseMatrix3x3(i,0), 180., 1E-6 );
 
 
@@ -1387,9 +1387,102 @@ void DenseMatrix_Test::run()
                         int cols = 2;
                         DenseMatrix3x3.In();
 */
+        CornerCases_Test();
+        
+ } // end run
+ 
+ 
 
+
+void DenseMatrix_Test::CornerCases_Test()
+{
+    // ---------------------------------------------------------
+    // 1. Asymmetric Test (2D) - VectorVariable
+    // ---------------------------------------------------------
+    // Using distinct values detects row/col index swaps.
+    DenseMatrix<DM2> mat2(2,2);
+    mat2(0, 0) = 1.0; mat2(0, 1) = 2.0;
+    mat2(1, 0) = 3.0; mat2(1, 1) = 4.0;
+    
+    VectorVariable<2> vec2;
+    vec2(0) = 10.0;
+    vec2(1) = 20.0;
+    
+    mat2 *= vec2;
+    
+    // Check dot product results
+    _equal(mat2(0, 0), 50.0, 1E-6);  // 1*10 + 2*20 = 50
+    _equal(mat2(1, 0), 110.0, 1E-6); // 3*10 + 4*20 = 110
+    
+    // State Collapse Verification: Matrix should now logically be a vector
+    _equal(mat2.Cols(), 1U, 0.0);
+
+    // ---------------------------------------------------------
+    // 2. Asymmetric Test (3D) - Point
+    // ---------------------------------------------------------
+    DenseMatrix<3> mat3(3,3);
+    mat3(0, 0) = 1.0; mat3(0, 1) = 2.0; mat3(0, 2) = 3.0;
+    mat3(1, 0) = 4.0; mat3(1, 1) = 5.0; mat3(1, 2) = 6.0;
+    mat3(2, 0) = 7.0; mat3(2, 1) = 8.0; mat3(2, 2) = 9.0;
+    
+    Point<3> pt3;
+    pt3[0] = 1.0; 
+    pt3[1] = 0.0; 
+    pt3[2] = -1.0;
+    
+    mat3 *= pt3;
+    
+    _equal(mat3(0, 0), -2.0, 1E-6); // 1*1 + 2*0 + 3*-1 = -2
+    _equal(mat3(1, 0), -2.0, 1E-6); // 4*1 + 5*0 + 6*-1 = -2
+    _equal(mat3(2, 0), -2.0, 1E-6); // 7*1 + 8*0 + 9*-1 = -2
+    _equal(mat3.Cols(), 1U, 0.0);
+
+    // ---------------------------------------------------------
+    // 3. 1D Branch Coverage (dim == 1U)
+    // ---------------------------------------------------------
+    DenseMatrix<1> mat1(1,1);
+    mat1(0, 0) = 7.0;
+    
+    VectorVariable<1> vec1;
+    vec1(0) = 3.0;
+    
+    mat1 *= vec1;
+    
+    _equal(mat1(0, 0), 21.0, 1E-6);
+    _equal(mat1.Cols(), 1U, 0.0);
+
+    // ---------------------------------------------------------
+    // 4. Exception Path: std::vector mismatch
+    // ---------------------------------------------------------
+    DenseMatrix<3> errMat(2,2);
+    std::vector<double> mismatchVec = { 1.0, 2.0, 3.0 }; // size 3 vs cols 2
+
+/* works but commented out because it triggers exception breakpoint
+
+    bool caughtMismatch = false;
+    try {
+        errMat *= mismatchVec;
+    } catch (const std::length_error&) {
+        caughtMismatch = true;
     }
+    // _equal(1, 1) acts as a boolean assertion that the throw occurred
+    _equal(caughtMismatch, true, 0.0); 
+*/
+    // ---------------------------------------------------------
+    // 5. Exception Path: double* nullptr check
+    // ---------------------------------------------------------
+/* works but commented out because it triggers exception breakpoint
+    bool caughtNull = false;
+    double* nullPtr = nullptr;
+    try {
+        errMat *= nullPtr;
+    } catch (const std::length_error&) {
+        caughtNull = true;
+    }
+    _equal(caughtNull, true, 0.0);
+*/
 
+} // end CornerCases_Test
 
 } // end csmp
 

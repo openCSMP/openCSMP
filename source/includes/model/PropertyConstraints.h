@@ -12,14 +12,14 @@ template<uint32_t> class Node;
 template<uint32_t> class PropertyDatabase;
 
 /**
-    @brief PropertyConstraints permits to combine multiple criteria on the 
-    basis of which non-unique regions can be formed.
+    @brief PropertyConstraints purpose is to identify cells on the basis of combined criteria
+    so that non-unique regions can be formed.
     
     In the terminology of this class, a criterion is called a constraint.
     This class stores user-defined constraints that may include, for instance, 
-    the magnitude of a vector.
+    a target range of scalar variable values or the magnitude of a vector variable stored on the cell.
     
-    @note look in the region interface to see how to build regions
+    @note look at RegionInterface to see how to build regions
     using PropertyConstraints.
     
     @author SKM
