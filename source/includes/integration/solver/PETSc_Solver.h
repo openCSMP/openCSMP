@@ -11,7 +11,9 @@
 #include "Solver.h"
 #include "PETSc_Settings.h"
 
+#if defined(CSMP_WITH_PETSC_SOLVER)
 #include <petsc.h>
+#endif
 
 #include <array>
 #include <charconv>

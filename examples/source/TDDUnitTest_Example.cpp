@@ -3,8 +3,6 @@
 #include "CSMP_definitions.h"
 #include "Exception.h"
 #include "compareFloats.h"
-//#include "open-csmp-2024/tests/TestSuite.h"
-//#include "open-csmp-2024/tests/Test.h"
 #include "TestSuite.h"
 #include "Test.h"
 
@@ -22,7 +20,7 @@ class Unit_c {
   // @note this is a Test not an example
 class FooFunction_Test : public Test {
   public:
-    ~FooFunction_Test() override final {}
+    ~FooFunction_Test() = default;
     void run() override final { TestFunctions(); }
 
   private:

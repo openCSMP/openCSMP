@@ -2,7 +2,7 @@
 #include "Integral_dNT_lhsop_dN_NT_v_dN_dV_Test.h"
 
 #include "Integral_dNT_op_dN_NT_v_dN_dV.h"
-#include "NumIntegral_DNT_op_DN_NT_v_DN_dV.h"
+#include "NumIntegral_dNT_op_dN_NT_v_dN_dV.h"
 #include "TRIANGLE_Interface.h"
 #include "Exception.h"
 

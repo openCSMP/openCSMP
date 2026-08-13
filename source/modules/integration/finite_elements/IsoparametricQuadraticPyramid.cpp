@@ -1,8 +1,6 @@
 #include "IsoparametricQuadraticPyramid.h"
+
 #include "Exception.h"
-#include <fstream>
-#include <cstring>
-#include <climits>
 
 using namespace std;
 
