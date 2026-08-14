@@ -1,0 +1,59 @@
+#ifndef CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
+#define CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H
+
+#include "MathOperatorLHS.h"
+
+namespace csmp {
+
+template<uint32_t> class Element;
+
+/// advection-dispersion integral, see Istok (1989), use to obtain steady-state solutions for small Peclet number flows
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_dNT_op_dN_NT_v_dN_dV final : public MathOperatorLHS<dim,CELL> {
+  public:
+    NumIntegral_dNT_op_dN_NT_v_dN_dV( const PropertyDatabase<dim>&, 
+                                      const char* diffusion_oper,   ///< element prop, for instance thermal conductivity
+                                      const char* advection_oper,   ///< element prop, for instance heat transport velocity
+                                      const char* basic,            ///< e.g., fluid pressure
+                                      const char* test );           ///< e.g., fluid pressure
+                            
+    void GetOperands( const CELL<dim>& ) override final;
+    void ComputeContribution( const CELL<dim>& ) override final;
+
+    NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
+
+  private:
+    DenseMatrix<DM_MIN>  DN, DNT, VIP, NT3;
+    std::vector<double>  IPOL;    ///< basis function values (at integration point)
+    VectorVariable<dim>  velo_;   ///< Darcy flow velocity
+    csmp::Index          adv_key; ///< index of the variable that shall be advected
+};
+
+} // csmp
+
+#endif /* CSMP_NUM_INTEGRAL_DNT_OP_DN_NT_V_DN_DV_H */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

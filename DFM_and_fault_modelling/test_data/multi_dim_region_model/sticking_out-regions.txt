@@ -1,0 +1,10 @@
+aperture_20_frac-regions.txt
+no properties
+MATRIX
+BACK
+BOTTOM
+FRONT
+LEFT
+RIGHT
+TOP
+MIXED_FRACTURE

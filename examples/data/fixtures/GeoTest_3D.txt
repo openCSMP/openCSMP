@@ -1,0 +1,43 @@
+name	notation	unit	index	min.	max.	place
+
+thermal conductivity			K	m2 s-1			1	0.00E+00	1.00E+02	element
+mobility				MB	m m-1		1	0.0E+00		5.00E+00	element
+radiogenic heat source			QT	J s-1		1	-1.00E+00	1.00E+00	element
+fluid pressure					PF		Pa				1	-1.00E+08	1.00E+08	node
+reference fluid pressure			RFP		Pa			1	-1.EE+08	1.00E+08	node
+fluid volume source				QV		m3				1	-1.00E+08	1.00E+08	element
+mass source				QM	kg	1	-1.00E+8	1.00E+8		element
+previous fluid pressure			PF0		Pa				1	-1.00E+08	1.00E+08	node
+absolute fluid pressure			PF0		Pa				1	-1.00E+08	1.00E+08	node
+hydrostatic pressure			HPF		Pa				1	-1.00E+08	1.00E+08	node
+nodal fluid volume source		QV		m3 s-1			1	-1.00E+00	1.00E+00	node
+fluid density					RHO		kg m-3			1	6.00E+02	1.60E+03	node
+element fluid density				ERHO	kg m-3			1	6.00E+02	1.60E+03	element
+IP fluid density				IPRHO	kg m-3	1	6.00E+02	1.600E+03	cpoint
+previous fluid density			RHOP	kg m-3			1	1.00E+03	1.20E+03	node
+boussinesq fluid density			RHOR	kg m-3			1	1.00E+03	1.20E+03	node
+fluid viscosity					MU		Pa s			1	1.00E-06	1.00E+03	node
+IP fluid viscosity			IPMU	Pa s	1	1.00E-06	1.00E+03	cpoint
+storativity						S		m3 m-3 Pa-1		1	1.00e-15	1.00e-05	element
+permeability					k		m2				1	1.00E-25	1.00E+00	element
+conductivity					K		m2 s-1			1	1.00E-25	1.00E+00	element
+reference conductivity				RK	m2 s-1	1	1.00E-25	1.00E+00	element
+porosity						PHI		X				1	1.00E-05	1.00E+00	element
+temperature						T		oC				1	-1.00E-08	5.00E+02	node
+previous temperature			PT		oC				1	-1.00E-08	5.00E+02	node
+velocity						V		m s-1			2	-1.00E+02	1.00E+02	element
+var velocity				VV	m s-1	2	-1.00E+02	1.00E+02	element
+reference velocity			RV	m s-1	2	-1.00E+02	1.00E+02	element
+heat transfer velocity			VH		m s-1			2	-1.00E+02	1.00E+02	element
+volume flux						VF		m3 s-1			1	0.00E+00	1.00E+02	element
+density							RHOR	kg m-3			1	1.90E+03	8.00E+03	element
+heat capacity					CP		J kg-1 K-1		1	0.00E+00	1.00E+08	element
+total heat capacity				CPT		J m-3 K-1		1	0.00E+00	1.00E+08	element
+fluid heat capacity				L		J kg-1 L-1		1	5.00E+02	1.00E+04	node
+nodal heat source				NQ		J s-1 m-2		1	-1.00E+08	1.00E+08	node
+finite volume heat source		FVQ		J s-1 m-2		1	-1.00E+08	1.00E+08	node
+fluid enthalpy					h		J kg-1			1	0.00E+00	1.00E+07	node
+fluid expansivity				alpha	K-1				1	0.00E+00	1.00E+00	node
+fluid compressibility			beta	Pa-1			1	0.00E+00	1.00E+00	node
+gravity term				gt	kg m-3 s-1	2	-1.E20	1.E20	element
+reference gravity term			rgt	kg m-3 s-1	2	-1.E20	1.E20	cpoint

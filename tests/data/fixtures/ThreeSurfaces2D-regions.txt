@@ -1,0 +1,5 @@
+SB Test Model, PL 2011
+no properties
+UPPER_LEFT
+UPPER_RIGHT
+LOWER

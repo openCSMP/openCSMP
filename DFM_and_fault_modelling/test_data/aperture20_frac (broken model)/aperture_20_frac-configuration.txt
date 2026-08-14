@@ -1,0 +1,15 @@
+‘aperture_20_frac-configuration.txt’  - test model for aperture calculations, CM6/6/2014
+
+# model has 4407 nodes and 632 boundary nodes
+# default properties
+permeability	1e-17
+porosity	0.5
+thickness	1.
+
+# regional properties: fractures
+SET1_EW		complete	permeability	8.33E-14
+SET1_EW		complete	thickness	1.0e-4
+SET1_EW		complete	porosity	1.
+SET2_NNW_SSE	complete	permeability	8.33E-14
+SET2_NNW_SSE	complete	thickness	1.0e-4
+SET2_NNW_SSE	complete	porosity	1.

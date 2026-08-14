@@ -1,0 +1,10 @@
+box_with_hole2-regions.txt
+no properties
+ZONE_0
+WELL
+TOP
+BOTTOM
+LEFT
+BACK
+RIGHT
+FRONT

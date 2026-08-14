@@ -1,0 +1,4 @@
+'prism_test1-regions.txt' domain selection file
+permeability	porosity	concentration
+MATRIX			1.0e-6		1.		0.0
+FRAC_VOLUMES	1.0e-4		1.		0.

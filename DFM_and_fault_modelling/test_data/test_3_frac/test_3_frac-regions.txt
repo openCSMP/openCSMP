@@ -1,0 +1,12 @@
+test_3_frac-regions.txt
+no properties
+MATRIX
+BACK
+BOTTOM
+FRONT
+LEFT
+RIGHT
+TOP
+FRACTURE1
+FRACTURE2
+FRACTURE3

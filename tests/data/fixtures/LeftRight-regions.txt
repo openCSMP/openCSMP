@@ -1,0 +1,4 @@
+'LeftRight-regions.txt' domain selection file
+no properties
+M_LEFT
+M_RIGHT

@@ -1,0 +1,11 @@
+
+Standard_IO_Handler::Out: File 'frac_layer_box'
+0.000000 secs, range of'permeability' [m2]: 0.000000 to 0.000000
+0.000000 secs, range of'thickness' [m]: 1.000000 to 1.000000
+0.000000 secs, range of'transmissivity' [m2 s-1]: 0.000000 to 0.000000
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 590657.500000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000006
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 1080990.000000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000000
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 2061655.000000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000006

@@ -1,0 +1,1045 @@
+#include "SplitBoundary_Test.h"
+#include "Boundary.h"
+#include "VTU_Interface.h"
+#include "ANSYS_Model2D.h"
+#include "ANSYS_Model3D.h"
+#include "EclipseModel.h"
+#include "VTK_Interface.h"
+#include "ModelTopology.h"
+#include "InputDataManager.h"
+
+using namespace std;
+
+// TODO: when the new nodes and elements are created, are the property values from the old nodes mapped to them? - would this help a user?
+
+<<<<<<< HEAD
+namespace csmp
+{
+
+
+
+
+
+//Main funtion where all tests inut here will be run
+void SplitBoundary_Test::run()
+{
+
+
+ //linear 2d tests
+ Test_InputNodePropertyValue("InternalBoundary_test");
+ Test_Area_and_SurfaceIntegral("InternalBoundary_test");
+
+ //quadratic 2d tests
+ Test_InputNodePropertyValue("InternalBoundary_Test_quadratic");
+ Test_Area_and_SurfaceIntegral("InternalBoundary_Test_quadratic");
+
+
+  // test splitboundary between 2D regions
+  /*
+  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
+  test_splitboundary_between_regions<2U>( "ThreeZones2D" );
+
+  // test splitboundary between 3D regions
+  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
+  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
+
+  // test splitboundary around interfaces
+  // JC: working on the QC process which is requried for the following models
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+
+  // test splitboundary from constructor of ansys model
+  // JC: working on the QC process which is requried for the following models
+  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
+
+  // test splitboundary for complex ansys models
+  test_splitboundary_between_regions<3U>( "lamination" );
+  test_splitboundary_between_regions<2U>( "kueper_one_interface" );
+  */
+
+
+}
+
+
+
+
+//E.P Added Tests to SplitBoundary
+
+//Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
+bool SplitBoundary_Test::Test_InputNodePropertyValue(const char* mesh_file){
+
+  enum {dim=2U};
+  // Model initialization
+  //const char* mesh_file_lin("InternalBoundary_Test");
+  //const char* mesh_file_quad("InternalBoundary_Test_quadratic");
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+
+  ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+
+  pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
+  std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+
+  int32_t material_id = 1;
+  model.InsertLowerDimensionalRegionsIntoSplitBoundaries(material_id);
+  model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+
+  SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+
+  ScalarVariable val1(PLAIN, 1.0);
+  ScalarVariable val2(PLAIN, 2.0);
+  ScalarVariable val3(PLAIN, 3.0);
+  s_ref.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
+  s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
+  s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
+
+  for (typename std::vector<InterFace<dim>*>::const_iterator ifit = s_ref.CellsBegin(); ifit != s_ref.CellsEnd(); ++ifit ){
+    for (size_t i=0; i < (*ifit)->FE()->Nodes(); i++){
+      _test( (*ifit)->N(i, INSIDE)->Read(model.Database().StorageKey("inside"))   == 1.0);
+      _test( (*ifit)->N(i, OUTSIDE)->Read(model.Database().StorageKey("outside"))  == 2.0);
+      _test( (*ifit)->N(i, MIDDLE)->Read(model.Database().StorageKey("middle"))  == 3.0);
+    }
+  }
+
+return true;
+
+
+}
+
+//Tests that properties are indeed defined on the node side they should be on (perimiter option not tested)
+bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
+
+  enum {dim=2U};
+  // Model initialization
+  //const char* mesh_file_lin("InternalBoundary_Test");
+  //const char* mesh_file_quad("InternalBoundary_Test_quadratic");
+  const char* variables_file("SplitBoundary_Test-variables.txt");
+  const char* regions_file("InternalBoundary_Test");
+
+  //model construction
+  ANSYS_Model2D model(mesh_file, regions_file, variables_file, false, true, true);
+
+  //split boundary construction
+  pair<set<string>,bool> b_name   =  model.CreateInternalBoundaryFrom("FRACTURE");
+  std::string sb_name  = (model.CreateSplitBoundaryFrom( model.Boundary( *(b_name.first.begin()) )) ).first ;
+
+  int32_t material_id;
+  model.InsertLowerDimensionalRegionsIntoSplitBoundaries( material_id );
+
+
+  model.Database().Out();
+  //property construction
+  model.CreateProperty("inside",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("outside", "SI",  SCALAR, NODE, 1, 0.0, 100);
+  model.CreateProperty("middle",  "SI",  SCALAR, NODE, 1, 0.0, 100);
+
+  SplitBoundary<dim>& s_ref = model.SplitBoundary(sb_name);
+
+  ScalarVariable val1(PLAIN, 1.0);
+  ScalarVariable val2(PLAIN, 2.0);
+  ScalarVariable val3(PLAIN, 3.0);
+  s_ref.InputNodePropertyValue( "inside",   val1, COMPLETE, INSIDE);
+  s_ref.InputNodePropertyValue( "outside",  val2, COMPLETE, OUTSIDE);
+  s_ref.InputNodePropertyValue( "middle",   val3, COMPLETE, MIDDLE);
+
+  double area_inside  =  s_ref.Area(INSIDE);
+  double area_outside =  s_ref.Area(OUTSIDE);
+  double area_middle  =  s_ref.Area(MIDDLE);
+
+  _test(area_inside == area_outside);
+  _test(area_middle == area_inside);
+  _equal(area_inside, 2.12121, 0.0001); //actual area of crack not pulled apart
+
+  double int_inside = s_ref.SurfaceIntegral(model.Database(), "inside", INSIDE);
+  double int_outside = s_ref.SurfaceIntegral(model.Database(), "outside", OUTSIDE);
+  double int_middle = s_ref.SurfaceIntegral(model.Database(), "middle", MIDDLE);
+
+  _equal(     area_inside ,  int_inside,  0.0001);
+  _equal( 2.0*area_outside,  int_outside, 0.0001);
+  _equal( 3.0*area_middle ,  int_middle , 0.0001);
+
+  SplitBoundaryInterface_Test vis_method;
+  vis_method.PullApartSplitboundaries(model, 1.0);
+
+  //spltting boundaries and testing area again
+  area_inside  =  s_ref.Area(INSIDE);
+  area_outside =  s_ref.Area(OUTSIDE);
+  double new_area_middle  =  s_ref.Area(MIDDLE);
+  _test(area_inside > area_middle);
+  _test(area_outside > area_middle);
+  _test(area_middle == new_area_middle);    //not changed area of middle element
+
+return true;
+
+
+}
+
+
+
+
+
+
+template<uint32_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
+{
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
+  if ( dim == 2 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+        }
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+          (*it)->N( i, side )->z( (*it)->N( i, side )->z() + zShift );
+        }
+      }
+    }
+}
+
+=======
+namespace csmp {
+>>>>>>> 07789dd6896550c4fa4ad775f228290f58646525
+
+void SplitBoundary_Test::run()
+{
+   // SKM 26/7/22 - test model received from Anne-Laure Tertois
+   Test_InitialiseSKUA_Model("SKUA_split_boundary_surface");
+  // test splitboundary between 2D regions
+  /*
+  test_splitboundary_between_regions<2U>( "BoxHalfs2D" );
+  test_splitboundary_between_regions<2U>( "ThreeZones2D" );
+
+  // test splitboundary between 3D regions
+  test_splitboundary_between_regions<3U>( "BoxHalfs3D" );
+  test_splitboundary_between_regions<3U>( "ThreeZones3D" );
+
+  // test splitboundary around interfaces
+  // JC: working on the QC process which is requried for the following models
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_xline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_yline" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_orthogonal" );
+  test_splitboundary_around_regions<2U>( "UnitSquareFracs_irregular" );
+
+  // test splitboundary from constructor of ansys model
+  // JC: working on the QC process which is requried for the following models
+  //detect_and_create_splitboundaries_from_constructor<2U>( "Jura-slope1" );
+  detect_and_create_splitboundaries_from_constructor<3U>( "Dyke_Split" );
+
+  // test splitboundary for complex ansys models
+  test_splitboundary_between_regions<3U>( "lamination" );
+  test_splitboundary_between_regions<2U>( "kueper_one_interface" );
+  */
+
+}
+
+
+/*
+    Uses SKUA_split_boundary_surface.
+*/
+void SplitBoundary_Test::Test_InitialiseSKUA_Model( const string& model_name )
+ {
+    // Read VSet binary file generated by SKUA
+    double   model_time{ 0. };
+    VSet<3U> vset;
+    vset.InputFrom( model_name.c_str(), model_time );
+
+    // Read ModelTopology file generated by SKUA
+    ModelTopology model_topology(true);
+    model_topology.InputFromTextFile( model_name.c_str() );
+    
+    // Assign box boundary flags TODO: remove this once Anne-Laure automated the creation of this info
+/*
+model_topology.AssignBoxShapedModelFlags( vset );
+cout <<"\n bflags created by ModelTopology:"<< endl;
+for ( size_t i{0U}; i<vset.Vertices(); i++ )
+  cout << static_cast<int>(vset.BFlag(i)) <<" ";
+*/
+
+    // assigning element and node numbers needed for VSet comparison
+    // element numbers
+    const uint32_t dim{3};
+    PropertyData elmt_nums( ELEMENT, SCALAR, dim );
+    elmt_nums.Reserve( vset.Elements() );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    vset.AddData( "element number", elmt_nums );
+    // face numbers
+    PropertyData face_nums( FACE, SCALAR, dim );
+    face_nums.Reserve( vset.Faces() );
+    for ( size_t i{0U}; i<vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+    vset.AddData( "face number", face_nums );
+    // interface numbers
+    PropertyData iface_nums( INTER_FACE, SCALAR, dim );
+    iface_nums.Reserve( vset.Interfaces() );
+    for ( size_t i{0U}; i<vset.Interfaces(); ++i ) pushBack( iface_nums, makeScalar( ANY, i ) );
+    vset.AddData( "interface number", iface_nums );
+    // node numbers
+    PropertyData node_nums( NODE, SCALAR, dim );
+    node_nums.Reserve( vset.Vertices() );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    vset.AddData( "node number", node_nums );
+    
+    // Build Model using variables file generated by SKUA
+    const string variables_file = model_name + "-variables.txt";
+    Model<3U>    model( model_topology, vset, variables_file.c_str(), false );
+
+    // Checks...
+    printModelDimensions( model, true );
+    // are the manifolds there?
+    size_t manifold_count{0U};
+    const Region<3U>& model_domain( model.Region("Model"));
+    for ( const auto& nit : model_domain.NodeVector() )
+      if ( nit->IsManifold() ) manifold_count++;
+    _test( vset.NodeManifolds() == manifold_count/2 ); // since there are 2 distinct 1nodes connected to each manifold
+    
+    // Creating property values
+    model.CreateProperty( "compressibility", "Pa-1", SCALAR, ELEMENT );
+    model.InputPropertyValue( "compressibility",  makeScalar(PLAIN,5.0e-10) ); // for fluid and rock, in Pa-1
+    
+    // Adding required properties which are not read from SKUA exported file
+    model.CreateProperty( "fluid volume source", "m3 m-2 s-1", SCALAR, ELEMENT );
+    model.CreateProperty( "fluid pressure", "Pa", SCALAR, NODE );
+    
+    // Using 'node variable' to see whether perimeter nodes are discovered correctly
+    model.InputPropertyValue( "node variable",  makeScalar(PLAIN,0.) );
+    // assigning values at inside, outside and perimeter
+    SplitBoundary<3U>& split_boundary( model.SplitBoundary("split_boundary_inside"));
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,1.), INTERIOR, INSIDE );
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,2.), INTERIOR, OUTSIDE );
+    split_boundary.InputNodePropertyValue( "node variable", makeScalar(PLAIN,3.), PERIMETER, INSIDE );
+
+    if ( verbose_ ) {
+        VTK_Interface<3U>  vtk_output;
+        vtk_output.OutputDataToVTK( model, "SKUA_porosity", "porosity", 0 );
+        vtk_output.OutputDataToVTK( model, "SKUA_permeability", "permeability", 0 );
+        vtk_output.OutputDataToVTK( model, "SKUA_compressibility", "compressibility", 0 );
+        // specially flagged split boundary (O.K.)
+        vtk_output.OutputDataToVTK( model, "inside_outside_perimeter", "node variable", 0 );
+      }
+    
+/*
+    InputDataManager<3U>  model_configuration;
+    model_configuration.ConfigureFromFile(  model, model_name.c_str(),
+                                            false,   // region name from parameter range
+                                            true,    // default property values
+                                            true,    // regional property values
+                                            true,    // boundary conditions for box-shaped model
+                                            false,   // essential conditions for regions
+                                            false );
+*/
+    // TESTING
+    // -------
+    // comparing original VSet with one that was output from model
+    VSet<3U> vset_restored;
+    const bool get_indices_from_stored_variables{false}; // no need because the model was not saved to disk in between
+    model.OutputMeshTo( vset_restored, get_indices_from_stored_variables );
+    
+    _test( vset_restored == vset );
+    
+ } // end Test_InitialiseSKUA_Model
+        
+
+
+
+
+
+template<uint32_t dim>
+void SplitBoundary_Test::LoadModel( const std::string& model_name )
+{
+  // Model initialization
+  const std::string variables_file("SplitBoundary_Test-variables.txt");
+  Model<dim>* model = NULL;
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+
+  // visualization
+  VTU_Interface<dim> vtu( *model );
+  vtu.OmitZeroInFileName( false );
+  list<string> outputProps;
+  outputProps.push_back( "element variable" );
+  ScalarVariable regionValue( ANY, 0.0 );
+
+  if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
+  model->InputPropertyValue( "element variable", regionValue );
+  for ( typename Model<dim>::regionIterator it = model->RegionsBegin(); it != model->RegionsEnd(); it++ )
+  {
+    regionValue += 1.0;
+    (*it).second.InputPropertyValue( "element variable", regionValue );
+    vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).first.c_str(), 0.0 );
+  }
+  if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
+
+  model->OutputToBinaryFile( model_name.c_str() );
+}
+
+
+
+
+
+template<uint32_t dim>
+void SplitBoundary_Test::LoadModel( const std::string& model_name,
+                                    std::vector<std::string>& regions )
+{
+  // Model initialization
+  const std::string variables_file("SplitBoundary_Test-variables.txt");
+  Model<dim>* model = NULL;
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+
+  // visualization
+  VTU_Interface<dim> vtu( *model );
+  vtu.OmitZeroInFileName( false );
+  list<string> outputProps;
+  outputProps.push_back( "element variable" );
+  ScalarVariable regionValue( ANY, 0.0 );
+
+  string  spliboundary_regions_file( model_name );
+
+  // load regions from the input file
+  InputFromFile( std::string( spliboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), regions );
+
+  if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface / interface(s) sets will be considered:\n\n";
+  model->InputPropertyValue( "element variable", regionValue );
+  for ( std::vector<string>::const_iterator it = regions.begin(); it != regions.end(); it++ )
+  {
+    regionValue += 1.0;
+    model->Region( (*it).c_str() ).InputPropertyValue( "element variable", regionValue );
+    vtu.OutputDataToVTU( model_name.c_str(), outputProps, (*it).c_str(), 0.0 );
+  }
+  if ( verbose_ ) vtu.OutputDataToVTU( model_name.c_str(), outputProps, "Model", 0.0 );
+
+  model->OutputToBinaryFile( model_name.c_str() );
+}
+
+
+
+
+
+template<uint32_t dim>
+void SplitBoundary_Test::LoadContiguousModel( const std::string& model_name,
+                                              std::vector<std::string>& interfaces )
+{
+  // 0. Model initialization
+  const string variables_file("SplitBoundary_Test-variables.txt");
+  Model<dim>* model(nullptr);
+  if constexpr ( dim == 2U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model2D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+  else if constexpr ( dim == 3U )
+    model = dynamic_cast<Model<dim>*>(new ANSYS_Model3D( model_name.c_str(), model_name.c_str(), variables_file.c_str(), false, true ));
+
+  string  splitboundary_regions_file( model_name );
+
+  // 1. InterFace sets
+  std::set<std::string> interface_basic_sets;
+  std::set<std::string> interface_sets;
+  InputFromFile( std::string( splitboundary_regions_file + "-disconnected-interface-regions.txt" ).c_str(), interface_basic_sets );
+
+  // 2. splitting input regions if they are discontigouos
+  bool discontiguous_regions( false );
+  for ( set<string>::const_iterator it = interface_basic_sets.begin(); it != interface_basic_sets.end(); ++it )
+    if ( !model->IsContiguous( (*it).c_str() ) ) {
+      if ( verbose_ ) cerr << "\n\tSplitBoundary_Test::PrepareModel: discovered discontiguous region: " << (*it);
+      discontiguous_regions = true;
+    }
+  if ( discontiguous_regions ) {
+    set<string>  original_region_names;
+    for ( typename RegionInterface<dim, Region>::regionIterator it = model->UniqueRegionsBegin(); it != model->UniqueRegionsEnd(); ++it )
+      if ( (*it).first != "Model" )
+        original_region_names.insert( (*it).first.c_str() );
+
+    // partitioning regions without revisiting new partitions that can inserted into region map
+    for ( set<string>::const_iterator it = original_region_names.begin(); it != original_region_names.end(); ++it )
+      model->PartitionRegionIntoContiguousSubRegions( (*it).c_str() );
+  }
+
+  // 2. preparing lower dimensional regions for making SplitBoundaries around
+  etablishContiguosRegionsList( *model, interface_basic_sets, interface_sets );
+
+  model->MergeRegions( interface_sets, "interfaces" );
+
+  for ( auto& name : interface_sets )
+    model->RemoveRegion( name.c_str(), false );
+
+  interfaces.clear();
+  interfaces.push_back( "interfaces" );
+  OutputToFile( std::string( splitboundary_regions_file + "-connected-interface-regions.txt" ).c_str(), interfaces );
+
+  if ( verbose_ ) cout << "\n\n\nSplitBoundary_Test::PrepareModel: the following interface(s) / interface sets will be considered:\n\n";
+
+  // 3. creating SplitBoundaries
+  for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); it++ ) {
+       cerr <<"\nRecode this so that it does the right thing!\n";
+       model->CreateInternalBoundaryFrom( (*it).c_str() );
+       Boundary<dim>& bdry = model->Boundary( (*it).c_str() );
+       model->CreateSplitBoundaryFrom( bdry );
+    }
+
+  // 4. creating lower-dimensional stand-alone meshes from SplitBoundary objects, and 
+  //    insert them into a new sub-region (simply named by 'SPLITBOUNDARY_SURFACE')
+  set<string> new_regions = model->RegionsFromSplitBoundaries();
+
+  // 5. Writing it 
+  model->OutputToBinaryFile( model_name.c_str() );
+}
+
+
+
+
+
+/// Input name of regions to split
+void SplitBoundary_Test::InputFromFile( const char* file_name,
+                                        std::set<string>& interface_basic_set )
+{
+  assert( file_name != NULL );
+
+  ifstream ifs( file_name );
+  if ( !ifs.is_open() )
+    throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile",
+                           file_name,
+                           "file specifying regions is missing" );
+  if ( !interface_basic_set.empty() )
+    interface_basic_set.clear();
+
+  // reading header line printing it to screen and swallowing empty line thereafter
+  char text[256];
+  ifs.getline( text, 256 );
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::inputFromFile: file header: " << text << endl;
+  ifs.getline( text, 256 );
+
+  int n_interfaces( 0 );
+  ifs >> n_interfaces;
+  assert( n_interfaces > 0 );
+  assert( n_interfaces < 10000 );
+
+  string  interface_name;
+  for ( int n = 0; n<n_interfaces; n++ ) {
+    ifs >> interface_name;
+    if ( !interface_name.empty() )
+      interface_basic_set.insert( interface_name );
+    else
+      throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name." );
+  }
+
+  ifs.close();
+
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::inputFromFile: region names stored in '" << file_name << "' read successfully." << endl;
+
+} // end inputFromFile
+
+
+
+
+/// Input name of regions to split
+template<uint32_t dim>
+void SplitBoundary_Test::EstablishContiguousRegionsList( Model<dim>& model,
+                                                         const std::set<string>& interface_basic_set,
+                                                         std::set<string>& interface_sets )
+{
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::EstablishContiguousRegionsList:" << endl;
+
+  if ( !interface_sets.empty() )
+    interface_sets.clear();
+  bool first_call( true );
+  for ( typename map<string, csmp::Region<dim> >::const_iterator
+        git = model.UniqueRegionsBegin(); git != model.UniqueRegionsEnd(); git++ )
+  {
+    for ( set<string>::const_iterator it = interface_basic_set.begin(); it != interface_basic_set.end(); ++it )
+      if ( (*git).first.find( *it ) != string::npos )
+      {
+        interface_sets.insert( (*git).first );
+        if ( first_call ) {
+          cout << "\n\tregion(s) incorporated into the input list: ";
+          first_call = false;
+        }
+        cout << (*git).first << " ";
+        break;
+      }
+  }
+  if ( verbose_ ) cout << "\n\n";
+
+} // end inputFromFile
+
+
+
+
+/// Input name of regions to split
+void SplitBoundary_Test::InputFromFile( const char* file_name,
+                                        std::vector<string>& interfaces )
+{
+  assert( file_name != NULL );
+
+  ifstream ifs( file_name );
+  if ( !ifs.is_open() )
+    throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile",
+                           file_name,
+                           "file specifying regions is missing" );
+  if ( !interfaces.empty() )
+    interfaces.clear();
+
+  // reading header line printing it to screen and swallowing empty line thereafter
+  char text[256];
+  ifs.getline( text, 256 );
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::inputFromFile: file header: " << text << endl;
+  ifs.getline( text, 256 );
+
+  int n_interfaces( 0 );
+  ifs >> n_interfaces;
+  assert( n_interfaces > 0 );
+  assert( n_interfaces < 10000 );
+
+  string  interface_name;
+  for ( int n = 0; n<n_interfaces; n++ ) {
+    ifs >> interface_name;
+    if ( !interface_name.empty() )
+      interfaces.push_back( interface_name );
+    else
+      throw csmp::Exception( ERROR, "SplitBoundary_Test::inputFromFile:", "encountered empty region name." );
+  }
+
+  ifs.close();
+
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::inputFromFile: region names stored in '" << file_name << "' read successfully." << endl;
+
+} // end inputFromFile
+
+
+
+
+
+/// Write contiguous regions
+void SplitBoundary_Test::OutputToFile( const char* file_name,
+                                       const std::vector<string>& interfaces )
+{
+  assert( file_name != NULL );
+
+  ofstream ofs( file_name );
+  if ( !ofs.is_open() )
+    throw csmp::Exception( ERROR, "SplitBoundary_Test::outputToFile",
+                           file_name, "file specifying permeability-model input variables is missing" );
+
+  ofs << "'" << file_name << "' interface regions to be included.\n\n";
+
+  ofs << interfaces.size() << " ";
+  for ( std::vector<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
+    ofs << (*it) << " ";
+
+  ofs << "\n";
+  ofs.close();
+
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::outputToFile: '" << file_name << "' written successfully." << endl;
+
+} // end outputToFile
+
+
+
+
+/// Write interface regions
+void SplitBoundary_Test::OutputToFile( const char* file_name,
+                                       const std::set<string>& interfaces )
+{
+  assert( file_name != NULL );
+
+  ofstream ofs( file_name );
+  if ( !ofs.is_open() )
+    throw csmp::Exception( ERROR, "SplitBoundary_Test::outputToFile",
+                           file_name, "file specifying permeability-model input variables is missing" );
+
+  ofs << "'" << file_name << "' interface regions to be included.\n\n";
+
+  ofs << interfaces.size() << " ";
+  for ( std::set<string>::const_iterator it = interfaces.begin(); it != interfaces.end(); ++it )
+    ofs << (*it) << " ";
+
+  ofs << "\n";
+  ofs.close();
+
+  if ( verbose_ ) cout << "\nSplitBoundary_Test::outputToFile: '" << file_name << "' written successfully." << endl;
+
+} // end outputToFile
+
+
+
+template<uint32_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, INTERFACE_SIDE side, double xShift, double yShift, double zShift )
+{
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
+  if ( dim == 2 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+        }
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE )->Idx() != (*it)->N( i, OUTSIDE )->Idx() )
+        {
+          (*it)->N( i, side )->x( (*it)->N( i, side )->x() + xShift );
+          (*it)->N( i, side )->y( (*it)->N( i, side )->y() + yShift );
+          (*it)->N( i, side )->z( (*it)->N( i, side )->z() + zShift );
+        }
+      }
+    }
+}
+
+
+template<uint32_t dim>
+void shiftSplitBoundary( SplitBoundary<dim>& splitboundary, double shift )
+{
+  VectorVariable<dim> displacementPerpedicularToInterface( ANY, 0.0 );
+  Point<dim> displacementToBaryCenter;
+  Point<dim> baryCenter;
+  size_t null_neighbors( 0 );
+  Element<dim>* parentElement( NULL );
+
+  const typename vector<InterFace<dim>*>::const_iterator facesEnd( splitboundary.CellsEnd() );
+  if ( dim == 2 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      if ( (*it)->InterveningElement() != NULL )
+        (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
+      else
+        (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
+      displacementPerpedicularToInterface *= shift;
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
+        {
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == NULL )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
+          }
+          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
+          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
+
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, INSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == NULL )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
+          }
+          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
+          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
+        }
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<InterFace<dim>*>::const_iterator it = splitboundary.CellsBegin(); it != facesEnd; ++it )
+    {
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        if ( (*it)->InterveningElement() != NULL )
+          (*it)->InterveningElement()->UnitNormal( displacementPerpedicularToInterface );
+        else
+          (*it)->UnitNormal( displacementPerpedicularToInterface, INSIDE );
+        displacementPerpedicularToInterface *= shift;
+        if ( (*it)->N( i, INSIDE ) != (*it)->N( i, OUTSIDE ) )
+        {
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, OUTSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, OUTSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == NULL )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( OUTSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, OUTSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementToBaryCenter[1] );
+            (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementToBaryCenter[2] );
+          }
+          (*it)->N( i, OUTSIDE )->x( (*it)->N( i, OUTSIDE )->x() + displacementPerpedicularToInterface[0] );
+          (*it)->N( i, OUTSIDE )->y( (*it)->N( i, OUTSIDE )->y() + displacementPerpedicularToInterface[1] );
+          (*it)->N( i, OUTSIDE )->z( (*it)->N( i, OUTSIDE )->z() + displacementPerpedicularToInterface[2] );
+
+          null_neighbors = 0;
+          for ( size_t k = 0; k<(*it)->N( i, INSIDE )->Parents(); k++ )
+          {
+            parentElement = (*it)->N( i, INSIDE )->Parent( k );
+            for ( size_t j = 0; j<parentElement->Neighbors(); j++ )
+            {
+              if ( parentElement->Neighbor( j ) == NULL )
+                null_neighbors++;
+            }
+          }
+          if ( null_neighbors > 1 )
+          {
+            baryCenter = (*it)->Parent( INSIDE )->BaryCenter();
+            displacementToBaryCenter = baryCenter - (*it)->N( i, INSIDE )->Coordinate();
+            displacementToBaryCenter.NormalizeLengthTo( 1.0 );
+            displacementToBaryCenter *= shift;
+            (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() + displacementToBaryCenter[0] );
+            (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() + displacementToBaryCenter[1] );
+            (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() + displacementToBaryCenter[2] );
+          }
+          (*it)->N( i, INSIDE )->x( (*it)->N( i, INSIDE )->x() - displacementPerpedicularToInterface[0] );
+          (*it)->N( i, INSIDE )->y( (*it)->N( i, INSIDE )->y() - displacementPerpedicularToInterface[1] );
+          (*it)->N( i, INSIDE )->z( (*it)->N( i, INSIDE )->z() - displacementPerpedicularToInterface[2] );
+        }
+      }
+    }
+}
+
+
+template<uint32_t dim>
+void shiftInterfaceTips( Region<dim>& region, double shift )
+{
+  Point<dim> displacement;
+  Point<dim> baryCenter;
+
+  if ( dim == 2 )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
+    {
+      baryCenter = (*it)->BaryCenter();
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        displacement = baryCenter - (*it)->N( i )->Coordinate();
+        displacement.NormalizeLengthTo( 1.0 );
+        displacement *= shift;
+        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
+        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
+      }
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Element<dim>*>::const_iterator it = region.PerimeterCellsBegin(); it != region.CellsEnd(); ++it )
+    {
+      baryCenter = (*it)->BaryCenter();
+      const size_t nodes( (*it)->Nodes() );
+      for ( auto i = 0; i < nodes; ++i )
+      {
+        displacement = baryCenter - (*it)->N( i )->Coordinate();
+        displacement.NormalizeLengthTo( 1.0 );
+        displacement *= shift;
+        (*it)->N( i )->x( (*it)->N( i )->x() + displacement[0] );
+        (*it)->N( i )->y( (*it)->N( i )->y() + displacement[1] );
+        (*it)->N( i )->z( (*it)->N( i )->z() + displacement[2] );
+      }
+    }
+}
+
+
+template<uint32_t dim>
+void shiftRegion( Region<dim>& region, double xShift, double yShift, double zShift )
+{
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x() + xShift );
+      (*it)->y( (*it)->y() + yShift );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x() + xShift );
+      (*it)->y( (*it)->y() + yShift );
+      (*it)->z( (*it)->z() + zShift );
+    }
+}
+
+
+template<uint32_t dim>
+void shiftRegionAboveLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
+{
+  if ( dim == 2 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() > (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() > (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+  }
+  else if ( dim == 3 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() > (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() > (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+    else {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->z() > (line_coordinate + eps) )
+          (*it)->z( (*it)->z() + shift );
+    }
+  }
+}
+
+
+template<uint32_t dim>
+void shiftRegionBelowLine( Region<dim>& region, size_t x_or_y_or_z, double line_coordinate, double shift, double eps )
+{
+  if ( dim == 2 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() < (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() < (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+  }
+  else if ( dim == 3 )
+  {
+    if ( x_or_y_or_z == 0 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->x() < (line_coordinate + eps) )
+          (*it)->x( (*it)->x() + shift );
+    }
+    else if ( x_or_y_or_z == 1 )
+    {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->y() < (line_coordinate + eps) )
+          (*it)->y( (*it)->y() + shift );
+    }
+    else {
+      for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+        if ( (*it)->z() < (line_coordinate + eps) )
+          (*it)->z( (*it)->z() + shift );
+    }
+  }
+}
+
+
+template<uint32_t dim>
+void scaleRegionSymmetricOverZero( Region<dim>& region, double xScale, double yScale, double zScale )
+{
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x()*xScale );
+      (*it)->y( (*it)->y()*yScale );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( (*it)->x()*xScale );
+      (*it)->y( (*it)->y()*yScale );
+      (*it)->z( (*it)->z()*zScale );
+    }
+}
+
+<<<<<<< HEAD
+=======
+
+template<uint32_t dim>
+void scaleRegion( Region<dim>& region, double xScale, double yScale, double zScale )
+{
+  Point<dim> min_point;
+  Point<dim> max_point;
+  Point<dim> mid_point;
+
+  region.MinMaxCoordinates( min_point, max_point );
+  mid_point = (min_point + max_point) / 2.0;
+
+  if ( dim == 2 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
+      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
+    }
+  else if ( dim == 3 )
+    for ( typename vector<Node<dim>*>::const_iterator it = region.NodesBegin(); it != region.NodesEnd(); ++it )
+    {
+      (*it)->x( mid_point[0] + ((*it)->x() - mid_point[0])*xScale );
+      (*it)->y( mid_point[1] + ((*it)->y() - mid_point[1])*yScale );
+      (*it)->z( mid_point[2] + ((*it)->z() - mid_point[2])*zScale );
+    }
+}
+
+
+// TEST METHODS START HERE
+
+
+>>>>>>> 07789dd6896550c4fa4ad775f228290f58646525
+} // csmp

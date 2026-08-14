@@ -1,0 +1,1 @@
+The MATLAB script 'FFSA_Aperture.m' calculates shear displacement, shear dilation and resulting aperture with the far-field stress approximation (FFSA).

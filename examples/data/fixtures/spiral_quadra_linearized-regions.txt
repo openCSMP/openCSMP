@@ -1,0 +1,8 @@
+no properties
+
+PORES
+PORE_EDGE
+GRAINS
+SPIRAL
+FRONT
+BACK

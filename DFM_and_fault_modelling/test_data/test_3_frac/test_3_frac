@@ -1,0 +1,23 @@
+
+Standard_IO_Handler::Out: File 'test_3_frac'
+0.000000 secs, range of'permeability' [m2]: 0.000000 to 0.006406
+0.000000 secs, range of'thickness' [m]: 0.049409 to 1.000000
+0.000000 secs, range of'transmissivity' [m2 s-1]: 0.000000 to 1.110070
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 1080990.000000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000000
+Do you want to output results to VTK -> true.
+0.0000000.000000, region: fractures, secs, range of 'fluid pressure' [Pa]: 278255.298132 to 784335.669953
+0.0000000.000000, region: fractures, secs, range of 'velocity' [m s-1]: 0.000000 to 0.000000
+0.0000000.000000, region: fractures, secs, range of 'volume flux' [m3 s-1]: 0.000000 to 0.000000
+0.0000000.000000, region: fractures_, secs, range of 'fluid pressure' [Pa]: 784335.669948 to 784335.669953
+0.0000000.000000, region: fractures_, secs, range of 'velocity' [m s-1]: 0.000000 to 0.000000
+0.0000000.000000, region: fractures_, secs, range of 'volume flux' [m3 s-1]: 0.000000 to 0.000000
+0.0000000.000000, region: matrix, secs, range of 'fluid pressure' [Pa]: 100325.000000 to 1080990.000000
+0.0000000.000000, region: matrix, secs, range of 'velocity' [m s-1]: 0.000000 to 0.000000
+0.0000000.000000, region: matrix, secs, range of 'volume flux' [m3 s-1]: 0.000000 to 0.000000
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 1080990.000000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000001
+Do you want to output results to VTK -> false.
+0.000000 secs, range of'fluid pressure' [Pa]: 100325.000000 to 1080990.000000
+0.000000 secs, range of'flow speed' [m s-1]: 0.000000 to 0.000000
+Do you want to output results to VTK -> false.

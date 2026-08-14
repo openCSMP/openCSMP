@@ -1,0 +1,8 @@
+'box2d_fault.txt' file
+no properties
+RESERVOIR
+FAULT
+TOP
+BOTTOM
+LEFT
+RIGHT

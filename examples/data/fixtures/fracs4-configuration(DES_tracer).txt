@@ -1,0 +1,19 @@
+'fracs4-confuguration.txt' test model for single-phase flow analysis in 3D
+
+# (1) global material properties
+permeability				1.0e-12
+porosity					0.25
+fluid volume source			0.0
+nodal fluid volume source		0.0
+concentration				0.0
+# initial guess of pressure is used by solver to estimate residual
+fluid pressure				2.0e6
+
+# (2) local material properties (of the fractures)
+FRACS	complete	porosity		1.
+FRACS	complete	permeability	1.0e-10
+
+# (3) essential conditions on model boundaries
+LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6	2.0e6	2.0e6
+RIGHT	Dirichlet	fluid pressure		1.5e6	1.5e6	1.5e6	1.5e6
+LEFT	Dirichlet	concentration		3.	3.	3.	3.

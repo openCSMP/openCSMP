@@ -1,0 +1,16 @@
+name	notation	unit	index	min.	max.	place
+									
+viscosity		MU	Pa.s	1	-1.00E+00	1.00E+00	node
+fluid pressure		PF	Pa	1	-5.00E+07	5.00E+07	node
+conductivity		K	m s-1	1	1.00E-25	1.00E+00	node
+nodal fluid volume source	NQ	m3/s	1	-1.0e+5	1.0e+5		node
+velocity		VT	m s-1	2	0.		1.00E+02	element
+volume flux		QV	m3 s-1	1	0.		1.00E+02	element
+one			SRC	m3 s-1	1	-1.0e-30		1.0		element
+parabolic function	PFUN	1/m	1	-1.00E+05	1.00E+05	node
+grad parabolic function	GRADF	m s-1	2	-1.00E+05	1.00E+05	element
+magnitude grad parabolic function	MGRADF	m	1	0.	1.00E+07	element
+channel width		W	m	1	0.	1.00E-02	node
+capillary pressure	PC	Pa	1	-1.00E+07	1.00E+07	node
+wetting angle		ALPH	deg	1	0.		120.		node
+non-wetting phase entry pressure	NWP	Pa	1	0.	1e8	node

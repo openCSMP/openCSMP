@@ -1,0 +1,691 @@
+The MATLAB script 'FFSA_Aperture.m' calculates shear displacement, 
+shear dilation, and resulting aperture with the far-field stress approximation (FFSA).
+
+
+
+
+
+
+function [delta_d,JRC_mob,phi_d_mob] = ...
+    FFSA_ShearDilation(delta_s,delta_peak,JRC,JCS,sigma_eff,phi_r,M,method)
+% *************************************************************************
+% FFSA_ShearDilation.m
+% Created by Michael Liem on 21.06.2022
+% Copyright (C) 2022 IFD, ETH Zurich.
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program. If not, see <https://www.gnu.org/licenses/>.
+%
+% *************************************************************************
+%
+% delta_s           Shear displacement                                 [mm]
+% delta_peak        Peak shear displacement                            [mm]
+% JRC               Joint roughness coefficient                         [-]
+% JCS               Joint wall compressive strength                   [MPa]
+% sigma_eff         Effective normal stress                           [MPa]
+% phi_r             Residual friction angle                             [°]
+% M                 Damage coefficient                                  [-]
+%
+% method            Method how to calculate shear dilation         [string]
+%                      'integrate'      Integrate over delta_s
+%                      'integrate_pos'  Integrate only phi_d_mob>0
+%                      'last'           Use last value (no integration)
+%
+% -------------------------------------------------------------------------
+%
+% delta_d           Shear dilation                                     [mm]
+% JRC_mob           Mobilized joint roughness coefficient               [-]
+% phi_d_mob         Mobilized dilation angle                            [°]
+%
+% *************************************************************************
+
+
+% Check if effective normal stress is positive 
+% -> This code does not consider tensile opening
+if sigma_eff<0
+    error(['Negative sigma_eff = ' num2str(sigma_eff) ' MPa. Tensile opening!'])
+end
+
+% Check if shear displacement is zero (or even negative?)
+if delta_s<=0
+    % Mobilized JRC
+    JRC_mob= FFSA_JRCmob(0,sigma_eff,JRC,JCS,phi_r);
+
+    % Mobilized dilation angle
+    phi_d_mob= NaN;
+    
+    % Shear dilation
+    delta_d= 0;
+    
+    return;
+end
+
+
+switch method
+    case 'integrate'
+        % Numerical integration width 
+        d_delta_s= 0.1;
+
+        % List of delta_s where JRC_mob need to be calculated
+        if delta_s>= d_delta_s
+            all_delta_s= d_delta_s/2:d_delta_s:delta_s;
+        else
+            all_delta_s= delta_s;
+            d_delta_s= delta_s;
+        end
+
+        % Mobilized JRC
+        all_JRC_mob= FFSA_JRCmob(all_delta_s/delta_peak,sigma_eff,JRC,JCS,phi_r);
+
+        % Mobilized dilation angle
+        all_phi_d_mob= 1/M*all_JRC_mob*log10(JCS/sigma_eff);
+
+        % Incremental shear dilation
+        d_delta_d= d_delta_s*tand(all_phi_d_mob);
+
+        % Total shear dilation
+        delta_d= sum(d_delta_d);
+
+        % Final values
+        JRC_mob= all_JRC_mob(end);
+        phi_d_mob= all_phi_d_mob(end);
+        
+    case 'integrate_pos'
+        % Numerical integration width 
+        d_delta_s= 0.01;
+
+        % List of delta_s where JRC_mob need to be calculated
+        if delta_s>= d_delta_s
+            all_delta_s= d_delta_s/2:d_delta_s:delta_s;
+        else
+            all_delta_s= delta_s;
+            d_delta_s= delta_s;
+        end
+
+        % Mobilized JRC
+        all_JRC_mob= FFSA_JRCmob(all_delta_s/delta_peak,sigma_eff,JRC,JCS,phi_r);
+
+        % Mobilized dilation angle
+        all_phi_d_mob= 1/M*all_JRC_mob*log10(JCS/sigma_eff);
+
+        % Incremental shear dilation
+        d_delta_d= d_delta_s*tand(all_phi_d_mob);
+
+        % Total shear dilation
+        delta_d= sum(d_delta_d(d_delta_d>=0));
+
+        % Final values
+        JRC_mob= all_JRC_mob(end);
+        phi_d_mob= all_phi_d_mob(end);
+        
+    case 'last'
+        % Mobilized JRC
+        JRC_mob= FFSA_JRCmob(delta_s/delta_peak,sigma_eff,JRC,JCS,phi_r);
+
+        % Mobilized dilation angle
+        phi_d_mob= 1/M*JRC_mob*log10(JCS/sigma_eff);
+
+        % Shear dilation
+        delta_d= delta_s*tand(phi_d_mob);
+    otherwise
+        error(['FFSA_ShearDilation.m: Unknown method ' method])
+end
+
+
+
+
+
+
+
+
+function [JRC_mob] = FFSA_JRCmob(d_by_dpeak,sigma_n,JRC,JCS,phi_r)
+% *************************************************************************
+% FFSA_JRCmob.m
+% Created by Michael Liem on 28.04.2022
+% Copyright (C) 2022 IFD, ETH Zurich.
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program. If not, see <https://www.gnu.org/licenses/>.
+%
+% *************************************************************************
+%
+% d_by_dpeak        Ratio shear displacement to peak shear displacement [-]
+%                   -> Has to be in range [0 100]
+% sigma_n           Normal stress (or effective normal stress)        [MPa]
+% JRC               (Peak) Joint roughness coefficient                  [-]
+% JCS               Joint wall compressive strength                   [MPa]
+% phi_r             Residual friction angle                             [°]
+%
+% -------------------------------------------------------------------------
+%
+% JRC_mob           Mobilized joint roughness coefficient               [-]
+%
+% *************************************************************************
+
+
+i= JRC*log10(JCS/sigma_n); % [°]
+
+list_d_by_dpeak=        [0         0.3  0.6   1  2     4    10    100];
+list_JRCmob_by_JRCpeak= [-phi_r/i  0    0.75  1  0.85  0.7   0.5    0];
+
+% Check if any input values for shear displacement are negative
+if any(d_by_dpeak<0)
+    disp('FFSA_JRCmob.m: Warning: d_by_dpeak < 0 -> Taking absolute value!')
+    d_by_dpeak= abs(d_by_dpeak);
+end
+
+% If ratio >= 100 -> JRC_mob = 0 anyway
+d_by_dpeak(d_by_dpeak>100)= 100;
+
+% Calculate JRC_mob according to e.g. Barton et al. (1985)
+JRCmob_by_JRCpeak= interp1(list_d_by_dpeak, list_JRCmob_by_JRCpeak, d_by_dpeak);
+
+JRC_mob= JRCmob_by_JRCpeak*JRC;
+
+
+end
+
+
+
+
+
+
+
+function [result,debug] = FFSA_Aperture(params)
+% *************************************************************************
+% FFSA_Aperture.m
+% Created by Michael Liem on 18.01.2023
+% Copyright (C) 2023 IFD, ETH Zurich.
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program. If not, see <https://www.gnu.org/licenses/>.
+%
+% *************************************************************************
+%
+% params            Struct with information about uncertainty of parameters
+%   .L                Fracture length                                   [m]
+%   .alpha            Fracture angle (i.e. between fracture and x-axis) [°]
+%   .sigma_H          Max. principal far field stress                 [MPa]
+%   .sigma_h          Min. principal far field stress                 [MPa]
+%   .beta             Orientation of sigma_H                            [°]
+%   .p_f              Fluid pressure                                  [MPa]
+%   .JRC              Joint roughness coefficient                       [-]
+%   .sigma_c          Unconfined compression strength                 [MPa]
+%   .JCS              Joint wall compressive strength                   [-]
+%   .K_ni             Initial normal stiffness                     [MPa/mm]
+%   .vm_factor        Factor for maximum possible joint closure         [-]
+%   .phi_r            Residual friction angle                           [°]
+%   .E_mod            E-modulus                                       [MPa]
+%   .nu               Poisson's ratio                                   [-]
+%   .C_g              Proportionality between displacement and shear stress
+%   .M                Damage coefficient (optional)                     [-]
+%   .sigma_EFF        sigma_eff for phi_s_mob & phi_d_mob (optional)  [MPa]
+%   .method           Method to calculate displacement & dilation  [string]
+%
+% -------------------------------------------------------------------------
+%
+% result            Array with resulting apertures                     [mm]
+%                     [a_0 delta_n delta_s delta_d a]
+%
+% debug             Struct with all the variables
+%
+% *************************************************************************
+
+
+fn= fieldnames(params);
+
+% Find number of fractures
+N_list= NaN(numel(fn),1);
+for i=1:numel(fn)
+    if isnumeric(params.(fn{i}))
+        N_list(i)= length(params.(fn{i}));
+    end
+end
+N_list= N_list(~isnan(N_list));
+N_frac= max(N_list);
+
+if any(N_list~=1 & N_list~=N_frac)
+    error('Inconsistent number of fractures')
+end
+
+% Make vectors out of all parameters
+for i=1:numel(fn)
+    if isnumeric(params.(fn{i}))
+        if any(isnan(params.(fn{i}))) && ~strcmp(fn{i},'M')
+            error(['Input parameter ' fn{i} ' contains NaN values'])
+        end
+        if length(params.(fn{i})) ~= N_frac
+            params.(fn{i})= params.(fn{i})*ones(N_frac,1);
+        end
+    end
+end
+
+
+result= NaN(N_frac,5);
+
+debug.sigma_H=    NaN(N_frac,1);
+debug.sigma_h=    NaN(N_frac,1);
+debug.beta=       NaN(N_frac,1);
+debug.p_f=        NaN(N_frac,1);
+debug.sigma_n=    NaN(N_frac,1);
+debug.sigma_s=    NaN(N_frac,1);
+debug.sigma_eff=  NaN(N_frac,1);
+debug.sigma_EFF=  NaN(N_frac,1);
+
+debug.JRC=        NaN(N_frac,1);
+debug.JCS=        NaN(N_frac,1);
+debug.sigma_c=    NaN(N_frac,1);
+debug.a_0=        NaN(N_frac,1);
+debug.vm_factor=  NaN(N_frac,1);
+debug.v_m=        NaN(N_frac,1);
+debug.K_ni=       NaN(N_frac,1);
+debug.delta_n=    NaN(N_frac,1);
+
+debug.phi_r=      NaN(N_frac,1);
+debug.E_mod=      NaN(N_frac,1);
+debug.nu=         NaN(N_frac,1);
+debug.C_g=        NaN(N_frac,1);
+debug.G=          NaN(N_frac,1);
+debug.K_s=        NaN(N_frac,1);
+debug.delta_s=    NaN(N_frac,1);
+debug.phi_s_mob=  NaN(N_frac,1);
+
+debug.delta_peak= NaN(N_frac,1);
+debug.JRC_mob=    NaN(N_frac,1);
+debug.M=          NaN(N_frac,1);
+debug.phi_d_mob=  NaN(N_frac,1);
+debug.delta_d=    NaN(N_frac,1);
+debug.a=          NaN(N_frac,1);
+debug.k=          NaN(N_frac,1);
+
+
+method_disp=      params.method.displacement;
+method_dil=       params.method.dilation;
+method_peak=      params.method.peak_displacement;
+method_sigma_eff= params.method.sigma_eff;
+
+
+for frac=1:N_frac
+    % Extract parameters for current fracture
+    L=          params.L(        frac);
+    alpha=      params.alpha(    frac);
+    sigma_H=    params.sigma_H(  frac);
+    sigma_h=    params.sigma_h(  frac);
+    beta=       params.beta(     frac);
+    p_f=        params.p_f(      frac);
+    JRC=        params.JRC(      frac);
+    JCS=        params.JCS(      frac);
+    sigma_c=    params.sigma_c(  frac);
+    K_ni=       params.K_ni(     frac);
+    vm_factor=  params.vm_factor(frac);
+    phi_r=      params.phi_r(    frac);
+    E_mod=      params.E_mod(    frac);
+    nu=         params.nu(       frac);
+    C_g=        params.C_g(      frac);
+    
+    % Angle between sigma_H and fracture normal                         [°]
+    theta= 90+alpha-beta;
+    
+    
+    % ---------------------------------------------------------------------
+    % Part 1: Calculate effective stress
+    sigma_n= sigma_H*cosd(theta)^2 + sigma_h*sind(theta)^2;
+    sigma_s= (sigma_h-sigma_H)*cosd(theta)*sind(theta);
+    sigma_eff= sigma_n - p_f;
+    
+    if sigma_eff<0
+        error(['Negative sigma_eff = ' num2str(sigma_eff) ' MPa. Tensile opening!'])
+    end
+    
+    % ---------------------------------------------------------------------
+    % Part 2: Normal closure
+    
+    % Initial fracture aperture                                        [mm]
+    a_0= JRC/5*(0.2*sigma_c/JCS - 0.1);
+    
+    % Maximum closure                                                  [mm]
+    v_m= vm_factor*a_0;
+        
+    % Closure due to normal stress                                     [mm]
+    delta_n= sigma_eff*v_m/( K_ni*v_m + sigma_eff );
+    
+    % ---------------------------------------------------------------------
+    % Part 3: Shear displacement
+    
+    % Shear modulus                                                   [MPa]
+    G= E_mod/(2*(1+nu));
+    
+    % Shear stiffness                                              [MPa/mm]
+    K_s= C_g*G/(L*1e3);
+    
+    
+    % Use a different effective stress to calculate                   [MPa]
+    %    delta_peak, M, JRC_mob, phi_s_mob, phi_d_mob
+    switch method_sigma_eff
+        case 'end'
+            % Take the value at the highest fluid pressure (default)
+            sigma_EFF= sigma_eff;
+        case 'onset'
+            % Take the value approx. at onset of shear displacement
+            sigma_EFF= sigma_n - sigma_s/tand(phi_r);
+        case 'mean'
+            % Take the mean of 'end' and 'onset'
+            sigma_EFF= sigma_n - 0.5*(sigma_s/tand(phi_r) + p_f);
+        case 'value'
+            % Take the value from input file
+            if ~isfield(params,'sigma_EFF')
+                error("method.sigma_eff= 'value' but no input value for sigma_EFF")
+            end
+            sigma_EFF= params.sigma_EFF(frac);
+        otherwise
+            % Take the value at the highest fluid pressure (default)
+            sigma_EFF= sigma_eff;
+    end
+    
+    % Peak shear displacement                                          [mm]
+    switch method_peak
+        case 'Barton'
+            delta_peak= L/500 * (JRC/L)^0.33 * 1e3;
+        case 'Asadollahi'
+            delta_peak= 0.0077*L^0.45*(sigma_EFF/JCS)^0.34*cosd( JRC*log10(JCS/sigma_EFF) )*1e3;
+        otherwise
+            error(['Unknown method for calculating peak shear displacment: ' method.peak_disp])
+    end
+    
+    % Shear displacement                                               [mm]
+    % Mobilized joint roughness coefficient                             [-]
+    % Mobilized friciton angle                                          [°]
+    [delta_s,JRC_mob,phi_s_mob] = FFSA_ShearDisplacement(...
+        sigma_s,K_s,delta_peak,JRC,JCS,sigma_eff,sigma_EFF,phi_r,method_disp,0);
+    
+    % ---------------------------------------------------------------------
+    % Part 4: Shear dilation
+
+    % Damage coefficient                                                [-]
+    if isfield(params,'M') && ~isnan(params.M(frac))
+        M= params.M(frac);
+    else
+        M= 0.7 + JRC/(12*log10(JCS/sigma_EFF));
+    end
+    
+    % Shear dilation                                                   [mm]
+    % Mobilized dilation angle                                          [°]
+    [delta_d,~,phi_d_mob] = FFSA_ShearDilation(...
+        delta_s,delta_peak,JRC,JCS,sigma_EFF,phi_r,M,method_dil);
+    
+    % ---------------------------------------------------------------------
+    % Part 5: Aperture
+    a= a_0 - delta_n + delta_d;
+    
+    k= (a/1e3)^2 / 12;
+    
+    
+    
+    % ---------------------------------------------------------------------
+    % Collecting results
+    result(frac,1)= a_0;
+    result(frac,2)= delta_n;
+    result(frac,3)= delta_s;
+    result(frac,4)= delta_d;
+    result(frac,5)= a;
+    
+    debug.sigma_H(   frac)= sigma_H;
+    debug.sigma_h(   frac)= sigma_h;
+    debug.beta(      frac)= beta;
+    debug.p_f(       frac)= p_f;
+    debug.sigma_n(   frac)= sigma_n;
+    debug.sigma_s(   frac)= sigma_s;
+    debug.sigma_eff( frac)= sigma_eff;
+    debug.sigma_EFF( frac)= sigma_EFF;
+    
+    debug.JRC(       frac)= JRC;
+    debug.JCS(       frac)= JCS;
+    debug.sigma_c(   frac)= sigma_c;
+    debug.a_0(       frac)= a_0;
+    debug.vm_factor( frac)= vm_factor;
+    debug.v_m(       frac)= v_m;
+    debug.K_ni(      frac)= K_ni;
+    debug.delta_n(   frac)= delta_n;
+    
+    debug.phi_r(     frac)= phi_r;
+    debug.E_mod(     frac)= E_mod;
+    debug.nu(        frac)= nu;
+    debug.C_g(       frac)= C_g;
+    debug.G(         frac)= G;
+    debug.K_s(       frac)= K_s;
+    debug.delta_s(   frac)= delta_s;
+    debug.phi_s_mob( frac)= phi_s_mob;
+    
+    debug.delta_peak(frac)= delta_peak;
+    debug.JRC_mob(   frac)= JRC_mob;
+    debug.M(         frac)= M;
+    debug.phi_d_mob( frac)= phi_d_mob;
+    debug.delta_d(   frac)= delta_d;
+    debug.a(         frac)= a;
+    debug.k(         frac)= k;
+      
+end
+
+
+
+
+
+
+function [delta_s,JRC_mob,phi_s_mob] = FFSA_ShearDisplacement(...
+    sigma_s,K_s,delta_peak,JRC,JCS,sigma_eff,sigma_EFF,phi_r,method,verbose)
+% *************************************************************************
+% FFSA_ShearDisplacement.m
+% Created by Michael Liem on 22.11.2022
+% Copyright (C) 2022 IFD, ETH Zurich.
+%
+% This program is free software: you can redistribute it and/or modify
+% it under the terms of the GNU General Public License as published by
+% the Free Software Foundation, either version 3 of the License, or
+% (at your option) any later version.
+%
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+% GNU General Public License for more details.
+%
+% You should have received a copy of the GNU General Public License
+% along with this program. If not, see <https://www.gnu.org/licenses/>.
+%
+% *************************************************************************
+%
+% sigma_s           Shear stress                                      [MPa]
+% K_s               Shear stiffness of fracture                    [MPa/mm]
+% delta_peak        Peak shear displacement                            [mm]
+% JRC               Joint roughness coefficient                         [-]
+% JCS               Joint wall compressive strength                   [MPa]
+% sigma_eff         Effective normal stress (for delta_tau or tau)    [MPa]
+% sigma_EFF         Effective normal stress (for JRC_mob & phi_s_mob) [MPa]
+% phi_r             Residual friction angle                             [°]
+%
+% method            Method how to calculate shear dilation         [string]
+%                      'mob': friction angle is function of delta_s
+%                      'old': friction angle = residual friction angle
+%                             (this was used in ECMOR22 paper)
+% verbose           Print some information                              [-]
+%                      0: no info (default)
+%                      1: command window output of convergence
+%                      2: plot additionally a figure
+%
+% -------------------------------------------------------------------------
+%
+% delta_s           Shear displacement                                 [mm]
+% JRC_mob           Mobilized joint roughness coefficient               [-]
+% phi_s_mob         Mobilized friction angle                            [°]
+%
+% *************************************************************************
+
+
+% Set to default value
+if ~exist('verbose','var')
+    verbose=0;
+end
+
+
+% Check if effective normal stress is positive 
+% -> This code does not consider tensile opening
+if sigma_eff<0
+    error(['Negative sigma_eff = ' num2str(sigma_eff) ' MPa. Tensile opening!'])
+end
+if sigma_EFF<0
+    error(['Negative sigma_EFF = ' num2str(sigma_EFF) ' MPa. Tensile opening!'])
+end
+
+
+% Legacy code: option to calculate delta_s as in ECMOR22 paper
+if strcmp(method,'old')
+    % Excess shear stress                                             [MPa]
+    delta_tau= abs(sigma_s) - sigma_eff*tand(phi_r);
+    
+    % Shear displacement                                               [mm]
+    delta_s= max(delta_tau/K_s,0);
+    
+    % Ratio of shear displacement over peak shear displacement          [-]
+    d_by_dpeak= delta_s/delta_peak;
+    
+    % Mobilized JRC                                                     [-]
+    JRC_mob= FFSA_JRCmob(d_by_dpeak,sigma_EFF,JRC,JCS,phi_r);
+    
+    % Mobilized friction angle                                          [°]
+    phi_s_mob= JRC_mob * log10(JCS/sigma_EFF) + phi_r;
+    
+    return;
+elseif ~strcmp(method,'mob')
+    error(['Unknown method: ' method])
+end
+
+
+% Create an initial list of candidates for shear displacement          [mm]
+delta_s_cand= [0:0.05:1.9 2:10 20:10:100]*delta_peak;
+
+% Shear displacement for which relaxed shear stress is zero            [mm]
+% -> This would be the solution without friction
+delta_s_max= abs(sigma_s)/K_s;
+
+% Limit candidates of delta_s so that only 1 entry is >= delta_s_max
+delta_s_cand= delta_s_cand(1:min(max(sum(delta_s_cand<delta_s_max)+1,2),length(delta_s_cand)));
+
+
+% Prepare figure (if desired)
+if verbose>=2
+    set(groot,'defaultAxesTickLabelInterpreter','latex');
+    set(groot,'defaulttextinterpreter','latex');
+    set(groot,'defaultLegendInterpreter','latex');
+    figure('units','normalized','outerposition',[0 0 1 1])
+end
+if verbose >=1
+    disp('FFSA_ShearDisplacement')
+end
+
+% Value for iteration
+i=0;
+
+% Max. numbers of iterations
+max_iter= 10;
+
+% Tolerance value (absolute value)                                    [MPa]
+tolerance= 1e-3;
+
+% Find delta_s such that relaxed shear stress = shear strengh
+while true
+    i= i+1;
+    % Relaxed shear stress for each candidate                         [MPa]
+    sigma_s_rel= max( abs(sigma_s) - K_s*delta_s_cand , 0);
+    
+    % Ratio of shear displacement over peak shear displacement          [-]
+    d_by_dpeak= delta_s_cand/delta_peak;
+    % Mobilized JRC                                                     [-]
+    JRC_mob= FFSA_JRCmob(d_by_dpeak,sigma_EFF,JRC,JCS,phi_r);
+    % Mobilized friction angle                                          [°]
+    phi_s_mob= JRC_mob * log10(JCS/sigma_EFF) + phi_r;
+    % Shear strength for each candidate of delta_s
+    tau= sigma_eff*tand(phi_s_mob);
+    
+    % Absolute difference between relaxed shear stress and shear strength
+    residual= abs(sigma_s_rel-tau);
+    
+    % Plot some figure (if desired)
+    if verbose>=2
+        subplot(2,ceil(max_iter/2),i)
+        plot(delta_s_cand,tau)
+        hold on
+        plot(delta_s_cand,sigma_s_rel)
+        plot(delta_s_cand,residual)
+        legend({'$\tau$','$\sigma_{s}^{rel}$','$|\tau-\sigma_{s}^{rel}|$'})
+        title(['iter ' num2str(i)])
+        xlabel('$\delta_s$ [mm]')
+        ylabel('MPa')
+        set(gca,'FontSize',16)
+    end
+    
+    % Find index where residual is minimal
+    idx= find(min(residual)==residual,1,'first');
+    
+    % Print information about convergence (if desired)
+    if verbose >=1
+        disp(['   iter = ' num2str(i) ': delta_s = ' num2str(delta_s_cand(idx)) ' mm'...
+            ' , residual = ' num2str(residual(idx)) ' MPa'])
+    end
+    
+    % Break loop if residual is small enough or after 10 iterations
+    if residual(idx)<=tolerance || i>max_iter
+        break;
+    end
+    
+    % Choose one index lower and higher as bounds for next iteration
+    % -> Make sure that index are valid
+    idx1= max(idx-1,1);
+    idx2= min(idx+1,length(residual));
+    
+    % Create new candidate list
+    delta_s_cand= [0 .25 .4 .45 .48 .5 .52 .55 .6 .75 1]*...
+        (delta_s_cand(idx2)-delta_s_cand(idx1)) + delta_s_cand(idx1);
+    
+    % Limit candidates of delta_s so that only 1 entry is >= delta_s_max
+    delta_s_cand= ...
+        delta_s_cand(1:min(max(sum(delta_s_cand<delta_s_max)+1,2),length(delta_s_cand)));
+end
+
+
+% Shear displacement                                                   [mm]
+delta_s= delta_s_cand(idx);
+
+% Mobilized joint roughness coefficient                                 [-]
+JRC_mob= JRC_mob(idx);
+
+% Mobilized friction angle                                              [°]
+phi_s_mob= phi_s_mob(idx);

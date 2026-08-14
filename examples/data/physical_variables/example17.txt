@@ -1,0 +1,18 @@
+name	MParameter	unit	index	min.	max.	place
+									
+energy source			QE	J kg-1 s-1	1	-1.00E+00	1.00E+00	element
+fluid pressure			PF	Pa		1	0.00E+00	1.00E+10	node
+fluid pressure analytic		PFA	Pa		1	0.00E+00	1.00E+10	node
+fluid compressibility		B	Pa-1		1	0.00E+00	1.00E-03	node
+fluid expansivity		A	oC-1		1	-2.00E+00	2.00E+00	node
+fluid density			RHO	kg m-3	1	1.00E+00	2.00E+03	node
+fluid viscosity			MU	Pa s-1	1	1.00E-07	1.00E-03	node
+fluid enthalpy			H	J kg-1	1	1.00E+02	1.00E+09	node
+fluid heat capacity		CP	J kg-1 oC-1	1	1.00E+02	1.00E+09	node
+temperature			T	oC		1	0.00E+00	1.00E+03	node
+thermal expansion		QT	m3 s-1	1	-1.00E+00	1.00E+00	element
+thermal conductivity		KT	J kg-1 oC-1	1	1.00E-01	1.00E+01	element
+permeability			k	m2		1	1.00E-25	1.00E+00	element
+conductivity			K	m2 s-1	1	1.00E-25	1.00E+00	element
+element fluid density		RE	kg m-3	1	1.00E+00	2.00E+03	element
+saturation steam		SAT	X		1	0.00E+00	1.00E+00	node
