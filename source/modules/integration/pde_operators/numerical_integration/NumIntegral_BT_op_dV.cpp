@@ -79,7 +79,7 @@ void NumIntegral_BT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
            }
       }
 
-    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // getting global intpol. function derivative matrix and determinant of
          // byproduct Jacobian matrix (B is already in global coordinates)

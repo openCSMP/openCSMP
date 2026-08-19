@@ -17,6 +17,16 @@ template<uint32_t> class Element;
     The resulting vector goes into the righthandside integrated numerically via this integral:
     
     NumIntegral_dNT_op_dV(  model.Database(), "gravity term", "fluid pressure" );,
+
+    This is $\int_\Omega \nabla N^T \cdot \mathbf{f} , dV$ — the divergence form, which is correct for a body force
+    that enters via integration by parts from the left-hand side flux term. Specifically, starting from:
+
+    ∫ Ω ∇NT⋅K∇p  dV = −∫Ω∇NT⋅ρf g ez K dV + boundary terms
+
+    ∫ Ω​ ∇N T ⋅K∇pdV=−∫ Ω​ ∇N T ⋅ρ f​ ge z KdV + boundary terms
+    
+    the right-hand side body force integral is  $\int_\Omega \nabla N^T \cdot \mathbf{f} , dV$,
+    which matches what NumIntegral_dNT_op_dV computes. So the operator itself is correct for this formulation.
     
     @author Shaho Bazr-Afkan
     @date 2011

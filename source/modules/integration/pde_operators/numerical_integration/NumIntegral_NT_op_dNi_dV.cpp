@@ -15,8 +15,8 @@ use the local value
 
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
-                                                              const char* oper,
-                                                              const char* test,
+                                                              const char* oper,  ///< for instance, fluid density
+                                                              const char* test,  ///< for instance, fluid pressure
                                                               double acc_gravity )
   : MathOperatorRHS<dim,CELL>(pref,oper,test),
     IPOL(3),
@@ -49,9 +49,9 @@ use the local value
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyDatabase<dim>& pref,
-                                                               const char* oper,
-                                                               const char* mtrl,
-                                                               const char* test,
+                                                               const char* oper, ///< for instance, fluid density (node)
+                                                               const char* mtrl, ///< for instance, hydraulic conductivity
+                                                               const char* test, ///< for instance, fluid pressure
                                                                double acc_gravity )
   : MathOperatorRHS<dim,CELL>(pref,oper,test),
     mtrl_key(pref.StorageKey(mtrl)),
@@ -62,6 +62,7 @@ NumIntegral_NT_op_dNi_dV<dim,CELL>::NumIntegral_NT_op_dNi_dV( const PropertyData
  {
     MathOperatorRHS<dim,CELL>::Name("NumIntegral_NT_op_dNi_dV", oper, test );
     
+    // NB: oper assumes role of material operand in the base class
     if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() != SCALAR )
     throw csmp::Exception( ERROR, "NumIntegral_NT_op_dNi_dV<dim>::(constructor)", 
                            oper, "Operand must be a scalar property." );
@@ -148,7 +149,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
     MathOperatorRHS<dim,CELL>::RHS.resize(e.Nodes());
     fill( MathOperatorRHS<dim,CELL>::RHS.begin(), MathOperatorRHS<dim,CELL>::RHS.end(), 0. );
     
-    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
          if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ) {
                // multiply property value it with multipliers
                ip_value = oper_eprop * eprop * -gravity;
@@ -160,7 +161,7 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
            }
          else // if Operand is placed on the NODE
            {
-               // interpolating Operand value and multipliers to integration point
+               // interpolating nodal Operand value and multipliers to element integration points
                e.N_AtIntegrationPoint( i, IPOL );
                double op_value(0.);
                for ( uint32_t j{0U}; j<e.Nodes(); j++ ) op_value += IPOL[j] * oper_nprop[j]();
@@ -169,9 +170,8 @@ void NumIntegral_NT_op_dNi_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
                ip_value = op_value * eprop * -gravity;
            }
 
-         // assembling contribution to right-hand vector
-         ip_value *= e.WeightAtIntegrationPoint(i) 
-                   * e.dN_AtIntegrationPoint( DN, i );
+         // integrating and assembling contribution to right-hand vector
+         ip_value *= (e.WeightAtIntegrationPoint(i) * e.dN_AtIntegrationPoint( DN, i ));
          //                                                                              Y-derivative
          for ( uint32_t j{0U}; j<e.Nodes(); j++ ) MathOperatorRHS<dim,CELL>::RHS[j] += ip_value * DN((xyz),j);
       }

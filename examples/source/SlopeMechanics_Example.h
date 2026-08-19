@@ -16,6 +16,15 @@ namespace csmp {
 
 template<uint32_t> class Model;
 
+/// to compute hydrostatic pore pressure on the right-side of model
+template<uint32_t dim>
+double computeAndFreezeBoundaryPressure( Model<dim>& model, const char* edge_boundary,
+                                         double pressure_at_top, double acc_gravity );
+                                         
+template<uint32_t dim>
+void strainInducedChangeInPorePressure( Model<dim>& model );
+
+
 class SlopeMechanics_Example : public Example {
   public:
     virtual ~SlopeMechanics_Example() {}

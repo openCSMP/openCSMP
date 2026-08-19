@@ -60,12 +60,20 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
          E_.resize(e.IntegrationPoints());
          nu_.resize(e.IntegrationPoints());
          for ( uint32_t i{0U}; i<e.IntegrationPoints(); ++i ) {
+              E_[i]  = e.Read( i, E_key_ );
+              nu_[i] = e.Read( i, nu_key_ );
+           }
+      }
+    else if ( E_key_.place == NODE ) { // Integration Point
+         E_.resize(e.IntegrationPoints());
+         nu_.resize(e.IntegrationPoints());
+         for ( uint32_t i{0U}; i<e.IntegrationPoints(); ++i ) {
               E_[i]  = e.PropertyValueAtIntegrationPoint( E_key_, i );
               nu_[i] = e.PropertyValueAtIntegrationPoint( nu_key_, i );
            }
       }
     else throw csmp::Exception( ERROR, "NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands",
-                               "Young's modulus and Poisson's ratio must be placed on ELEMENT or its integration points");
+                               "Young's modulus and Poisson's ratio must be placed on ELEMENT, its integration points or NODE");
 
     // material Operand 'dilation' or other
     const auto placement = MathOperatorRHS<dim,CELL>::MaterialOperandPlacement();

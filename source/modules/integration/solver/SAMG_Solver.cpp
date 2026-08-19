@@ -17,7 +17,6 @@
 #include "samg.h"
 #endif
 
-
 using namespace std;
 
 namespace csmp {

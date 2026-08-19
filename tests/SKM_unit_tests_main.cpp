@@ -229,15 +229,26 @@ int main()
 // TODO:       refactored.addTest( new BoundaryInterface_Test() );          // - test alternative BREP flagging approaches
        
 
-        refactored.addTest( new PropertyConstraints_Test() );
+// TODO: work in progress:        refactored.addTest( new PropertyConstraints_Test() );
  //       refactored.addTest( new SplitBoundaryTest_JK() ); // tested OK
 
 
-// TODO: rerun
-         // refactored.addTest( new PDE_Integrator_Computation_Test() );
+// TODO: does not run transient problem yet; compare analytic with num integrals
+//        refactored.addTest( new PDE_Integrator_Transient_Test() ); // OK (Anne-Laure Tertois) granite_model1
+//          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK
 // TODO: test PDE_Integrator with periodic boundary conditions
-//         refactored.addTest( new PDE_Integrator_Computation_Test() );
- 
+
+
+//        refactored.addTest( new PDE_Integrator_Test() ); // refactored and passed 2/2/26
+//        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
+//        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)
+//        refactored.addTest( new ModelSubDomain_Test() );  passed 1/5/2026 (detected need to improve CreatSplitBoundaryBetween() method
+//        refactored.addTest( new VData_Test() ); passed: 27/4/2026
+//        refactored.addTest( new VSet_Test2() ); passed: 27/4/2026
+//       refactored.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );
+
+
+
 // Exact integration
 // -----------------
 // LHS
@@ -261,17 +272,6 @@ int main()
 //          refactored.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
 //          refactored.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) ); // tested: OK
 
-
-// TODO: does not run transient problem yet; compare analytic with num integrals
-//        refactored.addTest( new PDE_Integrator_Transient_Test() );
-
-//        refactored.addTest( new PDE_Integrator_Test() ); // refactored and passed 2/2/26
-//        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
-//        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)
-//        refactored.addTest( new ModelSubDomain_Test() );  passed 1/5/2026 (detected need to improve CreatSplitBoundaryBetween() method
-//        refactored.addTest( new VData_Test() ); passed: 27/4/2026
-//        refactored.addTest( new VSet_Test2() ); passed: 27/4/2026
-//       refactored.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );
 
         // SplitBoundary related testing
         // -----------------------------
@@ -590,6 +590,8 @@ int main()
       // computations
       composite.addTest( new PDE_Integrator_Test( model2D ) );
       composite.addTest( new PDE_Integrator_Transient_Test() );
+      composite.addTest( new PDE_Integrator_Computation_Test() );
+      // TODO: test periodic BCs
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );

@@ -79,7 +79,7 @@ int main()
             examplesSuite.RegisterExample( new PressureDiffusion_Example() );
             examplesSuite.RegisterExample( new TransientPressure_Example() );
             examplesSuite.RegisterExample( new ParallelPlateFracture_Example() );
-            examplesSuite.RegisterExample( new EffectiveStressDilatation2D_Example() ); // TODO: refactor
+            examplesSuite.RegisterExample( new EffectiveStressDilatation2D_Example() ); // TODO: incomplete! - refactor
             examplesSuite.RegisterExample( new StreamFunction_Example() );
             examplesSuite.RegisterExample( new TopographyDrivenFlow_Example() );
             examplesSuite.RegisterExample( new QuadraticPressure_parallelPlatePermeability_Example() );
@@ -93,7 +93,6 @@ int main()
             examplesSuite.RegisterExample( new TemperatureDensityPressure_Example() );
             examplesSuite.RegisterExample( new ThermalConvectionETHZ_Example() );
             examplesSuite.RegisterExample( new Geothermal_Example() );
-            examplesSuite.RegisterExample( new MechanicsAndMultiphaseFlow_Example() );
             examplesSuite.RegisterExample( new UG4_ProMeshOutput_Example() );
             examplesSuite.RegisterExample( new StaggeredGridStokesSolver_Example() );
             examplesSuite.RegisterExample( new PressureDependentBlackOilProperties_Example() );

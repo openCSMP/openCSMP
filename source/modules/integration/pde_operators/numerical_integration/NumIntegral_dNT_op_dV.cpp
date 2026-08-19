@@ -19,10 +19,11 @@ NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<d
     
     if ( !(MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
            MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ||
-           MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == FACE) ||
+           MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == FACE ||
+           MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == FACE_INTEGRATION_POINT ) ||
            MathOperatorRHS<dim,CELL>::MaterialOperandType() != VECTOR )
       throw csmp::Exception( ERROR, "NumIntegral_dNT_op_dV<dim>::(constructor)", 
-                      oper, "Operand must be a vector property placed on the element, face or element integration point." );
+                      oper, "Operand must be a vector property placed on the element/face, or element/face integration point." );
 
     if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE || 
          MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR )
@@ -32,6 +33,12 @@ NumIntegral_dNT_op_dV<dim,CELL>::NumIntegral_dNT_op_dV( const PropertyDatabase<d
 
 
 
+
+/**
+      Computes:  f_j​ = i ∑​ w_i​ |∣J_i​ | k ∑​  ∂x k​ ∂N_j​ ​/ ∂x_k ​  f_k
+      
+            This is $\frac{\partial N_j}{\partial x_k}$ at each integration point.
+ */
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
@@ -45,7 +52,8 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
     //  When the material property is an element or face property
     // ----------------------------------------------------------
     const uint32_t n_nodes{ e.Nodes() };
-    if ( this->MaterialOperandPlacement() == ELEMENT || this->MaterialOperandPlacement() == FACE )
+    if ( this->MaterialOperandPlacement() == ELEMENT ||
+         this->MaterialOperandPlacement() == FACE )
       {
         for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
           {
@@ -70,7 +78,8 @@ void NumIntegral_dNT_op_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
         return;
       }
       
-    if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT )
+    if ( this->MaterialOperandPlacement() == ELEMENT_INTEGRATION_POINT ||
+         this->MaterialOperandPlacement() == FACE_INTEGRATION_POINT )
       {
          for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
            {

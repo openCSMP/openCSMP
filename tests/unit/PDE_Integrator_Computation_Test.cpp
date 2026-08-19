@@ -98,23 +98,36 @@ void PDE_Integrator_Computation_Test::run()
     // -----------------------------------------------------------------------
     // 4. Single PDE_Integrator — running test
     // -----------------------------------------------------------------------
-
-    // --- Steady state solution test ---
-//    TestSteadyState_PressureDiffusionAndFlow();
-
     list<string> output_props = {"fluid pressure","velocity","volume flux"};
-//    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), 0 );
-//    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), 0 );
+
+    // --- Steady state solution test (scalar equation) ---
+    //     --------------------------------------------
+    //     NumIntegral_dNT_lhsop_dN_dV<3>
+    //     NumIntegral_NT_rhsop_N_dV<3>
+    //     VelocityAndVolumeFlux<3>
+    TestSteadyState_PressureDiffusionAndFlow();
+    if ( verbose_ ) {
+         printRangeOfVariable( *model_ptr_, "fluid pressure" );
+         vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), 0 );
+         vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), 0 );
+      }
+
 
     // TODO: test that the solution is divergence free for source=0
     
     // TODO: test performance for quadratic elements and ones with VECTOR and TENSOR properties
 
     // --- Transient solution test ---
+    // --------------------------------
+    //  extra operators
+    //     NumIntegral_NT_lhsop_N_dV<3>
+    //     NumIntegral_NT_rhsop_N_dV<3>
     double time_interval_tested = TestTransient_PressureDiffusionAndFlow();
 
-    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"), static_cast<long>(time_interval_tested) );
-    vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), static_cast<long>(time_interval_tested) );
+    if ( verbose_ ) {
+         vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("Model"),       static_cast<long>(time_interval_tested) );
+         vtu_output.OutputDataToVTU( string( string( model_ptr_->Name() ) + "-test_output" ).c_str(), output_props, string("FRAC_VOLUMES"), static_cast<long>(time_interval_tested) );
+      }
 
     cout << "\nPDE_Integrator_Computation_Test: all tests run.\n";
 

@@ -15,6 +15,374 @@ using namespace std;
 
 namespace csmp {
 
+// ----------------------------------------------------------------------------
+//  Internal helpers
+// ----------------------------------------------------------------------------
+
+namespace {
+
+/**
+    @brief Derives coordinate validity bounds from the model bounding box.
+
+    The bounds are set to 100x the bounding box diagonal in each direction,
+    centred on the model. This is large enough to flag genuinely erratic
+    coordinates while remaining meaningful for models ranging from
+    centimetre-scale to continental-scale.
+
+    @param xyz_min  Minimum corner of the model bounding box.
+    @param xyz_max  Maximum corner of the model bounding box.
+    @param[out] valid_min  Lower validity bound per coordinate.
+    @param[out] valid_max  Upper validity bound per coordinate.
+*/
+template<uint32_t dim>
+void deriveValidityBounds( const Point<dim>& xyz_min,
+                           const Point<dim>& xyz_max,
+                           Point<dim>&       valid_min,
+                           Point<dim>&       valid_max )
+{
+    for ( uint32_t d{ 0U }; d < dim; ++d ) {
+        const double centre = ( xyz_min[d] + xyz_max[d] ) / 2.;
+        const double half   = ( xyz_max[d] - xyz_min[d] ) / 2.;
+        // 100x the half-extent, but at least 1 m to handle degenerate flat models
+        const double margin = max( 100. * half, 1.0 );
+        valid_min[d] = centre - margin;
+        valid_max[d] = centre + margin;
+    }
+}
+
+
+/**
+    @brief Derives a minimum plausible volume/area/length threshold.
+
+    Set to the cube/square/length of 1e-4 times the shortest bounding box
+    dimension. This allows cm-scale objects to be resolved in km-scale models
+    while still flagging genuinely degenerate elements.
+
+    @param xyz_min  Minimum corner of the model bounding box.
+    @param xyz_max  Maximum corner of the model bounding box.
+    @return         Minimum plausible measure for an element of type @c dim.
+*/
+template<uint32_t dim>
+double deriveMinVolume( const Point<dim>& xyz_min,
+                        const Point<dim>& xyz_max )
+{
+    double shortest = numeric_limits<double>::max();
+    for ( uint32_t d{ 0U }; d < dim; ++d ) {
+        const double extent = xyz_max[d] - xyz_min[d];
+        if ( extent > 0. && extent < shortest )
+            shortest = extent;
+    }
+    // 1e-4 of the shortest extent, raised to the power of dim
+    const double unit = 1.0e-4 * shortest;
+    double result = unit;
+    for ( uint32_t d{ 1U }; d < dim; ++d ) result *= unit;
+    return result;
+}
+
+
+/**
+    @brief Derives a maximum plausible volume/area/length threshold.
+
+    Set to the cube/square/length of the longest bounding box dimension.
+
+    @param xyz_min  Minimum corner of the model bounding box.
+    @param xyz_max  Maximum corner of the model bounding box.
+    @return         Maximum plausible measure for an element of type @c dim.
+*/
+template<uint32_t dim>
+double deriveMaxVolume( const Point<dim>& xyz_min,
+                        const Point<dim>& xyz_max )
+{
+    double longest = 0.;
+    for ( uint32_t d{ 0U }; d < dim; ++d ) {
+        const double extent = xyz_max[d] - xyz_min[d];
+        if ( extent > longest ) longest = extent;
+    }
+    double result = longest;
+    for ( uint32_t d{ 1U }; d < dim; ++d ) result *= longest;
+    return result;
+}
+
+
+/**
+    @brief Returns a human-readable label for the measure of an element.
+
+    @param e  Pointer to the element.
+    @return   "length", "area", or "volume" as appropriate.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+const char* measureLabel( const CELL<dim>* e )
+{
+    if ( e->IsLine()    ) return "length";
+    if ( e->IsSurface() ) return "area";
+    return "volume";
+}
+
+} // anonymous namespace
+
+
+// ----------------------------------------------------------------------------
+//  ScrutinizeMesh
+// ----------------------------------------------------------------------------
+
+template<uint32_t dim>
+MeshDiagnosticsResult
+MeshDiagnostics<dim>::ScrutinizeMesh( Model<dim>& model,
+                                      double aspect_ratio_warn,
+                                      double coincidence_tol ) const
+{
+    MeshDiagnosticsResult result;
+
+    Region<dim>& sgroup( model.Region( "Model" ) );
+    sgroup.UpdateMemberIndexes();
+
+    // -------------------------------------------------------------------------
+    // 0. Bounding box and derived thresholds
+    // -------------------------------------------------------------------------
+    Point<dim> xyz_min, xyz_max;
+    model.MinMaxCoordinates( xyz_min, xyz_max );
+
+    Point<dim> valid_min, valid_max;
+    deriveValidityBounds<dim>( xyz_min, xyz_max, valid_min, valid_max );
+
+    const double vol_min = deriveMinVolume<dim>( xyz_min, xyz_max );
+    const double vol_max = deriveMaxVolume<dim>( xyz_min, xyz_max );
+
+    cout << "\nMeshDiagnostics<" << dim << ">::ScrutinizeMesh: "
+         << "Model bounding box:\n";
+    for ( uint32_t d{ 0U }; d < dim; ++d )
+        cout << "\t[" << d << "] " << xyz_min[d] << " to " << xyz_max[d] << "\n";
+    cout << "\tDerived volume/area/length thresholds: ["
+         << vol_min << ", " << vol_max << "]\n";
+
+
+    // -------------------------------------------------------------------------
+    // 1. Node coordinate check
+    // -------------------------------------------------------------------------
+    cout << "\nMeshDiagnostics<" << dim << ">::ScrutinizeMesh: "
+         << "Verifying node coordinates...\n";
+
+    for ( auto nit = sgroup.NodesBegin(); nit != sgroup.NodesEnd(); ++nit ) {
+        const Node<dim>* n = *nit;
+        for ( uint32_t d{ 0U }; d < dim; ++d ) {
+            const double coord = n->Coordinate()[d];
+            if ( coord < valid_min[d] || coord > valid_max[d] ) {
+                cerr << "\tErratic coordinate[" << d << "] on node "
+                     << n->Idx() << ": " << coord << "\n";
+                ++result.erratic_coordinates;
+                result.problems = true;
+            }
+        }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 2. Per-element checks: coincident nodes, segment lengths, volume
+    // -------------------------------------------------------------------------
+    cout << "\nMeshDiagnostics<" << dim << ">::ScrutinizeMesh: "
+         << "Checking elements...\n";
+
+    vector<size_t> negative_volume_ids;
+    vector<size_t> zero_volume_ids;
+    vector<size_t> erratic_volume_ids;
+    vector<size_t> large_aspect_ratio_ids;
+    vector<size_t> coincident_node_ids;
+
+    // pre-reserve to avoid repeated allocation
+    negative_volume_ids.reserve( 1024U );
+    zero_volume_ids.reserve( 1024U );
+    erratic_volume_ids.reserve( 1024U );
+    large_aspect_ratio_ids.reserve( 1024U );
+    coincident_node_ids.reserve( 1024U );
+
+    result.sl_min         =  numeric_limits<double>::max();
+    result.sl_max         =  0.;
+    result.aspect_ratio_min =  numeric_limits<double>::max();
+    result.aspect_ratio_max =  0.;
+
+    bool first_element = true;
+
+    for ( auto eit = sgroup.CellsBegin(); eit != sgroup.CellsEnd(); ++eit ) {
+        const auto* e = *eit;
+        const size_t eidx = e->Idx();
+
+        // --- 2a. Coincident node pairs ---
+        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+            const Point<dim> pi( e->N(i)->Coordinate() );
+            for ( uint32_t j{ i + 1U }; j < e->Nodes(); ++j ) {
+                const Point<dim> pj( e->N(j)->Coordinate() );
+                if ( pi.CoincidesWithWithinTolerance( pj, coincidence_tol ) ) {
+                    cerr << "\tElement " << eidx
+                         << ": nodes " << e->N(i)->Idx()
+                         << " (local " << i << ") and "
+                         << e->N(j)->Idx()
+                         << " (local " << j << ") are coincident\n";
+                    ++result.coincident_node_pairs;
+                    result.problems = true;
+                    coincident_node_ids.push_back( eidx );
+                }
+            }
+        }
+
+        // --- 2b. Segment lengths and per-element aspect ratio ---
+        vector<double> lengths;
+        e->SegmentLengths( lengths );
+
+        double e_sl_min =  numeric_limits<double>::max();
+        double e_sl_max =  0.;
+
+        for ( const double len : lengths ) {
+            if ( len < result.sl_min ) result.sl_min = len;
+            if ( len > result.sl_max ) result.sl_max = len;
+            if ( len < e_sl_min      ) e_sl_min      = len;
+            if ( len > e_sl_max      ) e_sl_max      = len;
+        }
+
+        // aspect ratio only meaningful when element has more than one segment
+        if ( lengths.size() > 1U && e_sl_min > 0. ) {
+            const double ratio = e_sl_max / e_sl_min;
+
+            if ( first_element ) {
+                result.aspect_ratio_min = result.aspect_ratio_max = ratio;
+                first_element = false;
+            }
+            if ( ratio > result.aspect_ratio_max ) result.aspect_ratio_max = ratio;
+            if ( ratio < result.aspect_ratio_min ) result.aspect_ratio_min = ratio;
+
+            if ( ratio > aspect_ratio_warn ) {
+                cerr << "\tLarge aspect ratio in element " << eidx
+                     << ": " << ratio
+                     << " (segments: " << e_sl_min << " to " << e_sl_max << ")\n";
+                ++result.large_aspect_ratios;
+                result.problems = true;
+                large_aspect_ratio_ids.push_back( eidx );
+            }
+        }
+
+        // --- 2c. Volume / area / length ---
+        double volume = numeric_limits<double>::quiet_NaN();
+        try {
+            volume = e->Volume();
+        }
+        catch ( const csmp::Exception& ex ) {
+            cerr << "\tVolume() threw for element " << eidx
+                 << ": " << ex.what() << "\n";
+            result.problems = true;
+            negative_volume_ids.push_back( eidx );
+            continue;
+        }
+        catch ( ... ) {
+            cerr << "\tVolume() threw unknown exception for element "
+                 << eidx << "\n";
+            result.problems = true;
+            negative_volume_ids.push_back( eidx );
+            continue;
+        }
+
+        if ( isnan( volume ) ) continue;
+
+        const char* label = measureLabel( e );
+
+        if ( volume < 0. ) {
+            cerr << "\tNegative " << label << " in element "
+                 << eidx << ": " << volume << "\n";
+            ++result.negative_volumes;
+            result.problems = true;
+            negative_volume_ids.push_back( eidx );
+        }
+        else if ( volume < vol_min ) {
+            cerr << "\tNear-zero " << label << " in element "
+                 << eidx << ": " << volume
+                 << " (threshold: " << vol_min << ")\n";
+            ++result.zero_volumes;
+            result.problems = true;
+            zero_volume_ids.push_back( eidx );
+        }
+        else if ( volume > vol_max ) {
+            cerr << "\tImplausibly large " << label << " in element "
+                 << eidx << ": " << volume
+                 << " (threshold: " << vol_max << ")\n";
+            ++result.erratic_volumes;
+            result.problems = true;
+            erratic_volume_ids.push_back( eidx );
+        }
+    }
+
+
+    // -------------------------------------------------------------------------
+    // 3. Form diagnostic regions and write VTK output
+    // -------------------------------------------------------------------------
+    auto formAndOutput = [&]( vector<size_t>&  ids,
+                               const string&    region_name,
+                               const string&    vtk_filename )
+    {
+        if ( ids.empty() ) return;
+
+        // deduplicate — an element may appear in multiple sub-checks
+        sort( ids.begin(), ids.end() );
+        ids.erase( unique( ids.begin(), ids.end() ), ids.end() );
+
+        // FormRegionFrom( const char* regionname, std::vector<size_t>& elmt_ids, bool is_unique=true );
+        model.FormRegionFrom( region_name.c_str(), ids, false );
+
+        VTK_Interface<dim> vtk_out;
+        vtk_out.OutputDataToVTK( model, region_name, vtk_filename,
+                                 "permeability", 0, true );
+
+        cout << "\tRegion '" << region_name << "' formed with "
+             << ids.size() << " element(s) — written to " << vtk_filename << "\n";
+    };
+
+    cout << "\nMeshDiagnostics<" << dim << ">::ScrutinizeMesh: "
+         << "Forming diagnostic regions...\n";
+
+    formAndOutput( negative_volume_ids,
+                   "diag: negative volume",
+                   "DIAG_NEGATIVE_VOLUME" );
+
+    formAndOutput( zero_volume_ids,
+                   "diag: zero volume",
+                   "DIAG_ZERO_VOLUME" );
+
+    formAndOutput( erratic_volume_ids,
+                   "diag: erratic volume",
+                   "DIAG_ERRATIC_VOLUME" );
+
+    formAndOutput( large_aspect_ratio_ids,
+                   "diag: large aspect ratio",
+                   "DIAG_LARGE_ASPECT_RATIO" );
+
+    formAndOutput( coincident_node_ids,
+                   "diag: coincident nodes",
+                   "DIAG_COINCIDENT_NODES" );
+
+
+    // -------------------------------------------------------------------------
+    // 4. Summary report
+    // -------------------------------------------------------------------------
+    cout << "\nMeshDiagnostics<" << dim << ">::ScrutinizeMesh: Summary\n";
+    cout << "\tBounding box min:            " << xyz_min << "\n";
+    cout << "\tBounding box max:            " << xyz_max << "\n";
+    cout << "\tShortest segment:            " << result.sl_min << "\n";
+    cout << "\tLongest segment:             " << result.sl_max << "\n";
+    cout << "\tMin per-element aspect ratio:" << result.aspect_ratio_min << "\n";
+    cout << "\tMax per-element aspect ratio:" << result.aspect_ratio_max << "\n";
+    cout << "\tCoincident node pairs:       " << result.coincident_node_pairs << "\n";
+    cout << "\tNegative volumes:            " << result.negative_volumes << "\n";
+    cout << "\tNear-zero volumes:           " << result.zero_volumes << "\n";
+    cout << "\tImplausibly large volumes:   " << result.erratic_volumes << "\n";
+    cout << "\tErratic coordinates:         " << result.erratic_coordinates << "\n";
+    cout << "\tLarge aspect ratio elements: " << result.large_aspect_ratios << "\n";
+    cout << "\tOverall problems found:      "
+         << ( result.problems ? "YES" : "no" ) << "\n";
+
+    return result;
+
+} // end ScrutinizeMesh
+
+
+
+
 template<uint32_t dim>
 void MeshDiagnostics<dim>::ElementVolumeRange( const Model<dim>& sg,
                                                double& vmin, double& vmax ) const
@@ -66,11 +434,11 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
         sign = 0.;
         // construct a polygon of with vertices equal to the barycenters of the neighbor FEs
         // if there is no neighbor FE, use barycenter of current FE.
-        for ( auto i{0}; i<(*eit)->Neighbors(); i++ ) {
+        for ( uint32_t i{0}; i<(*eit)->Neighbors(); i++ ) {
             if ( (*eit)->Neighbor(i) != NULL ) bc_vec[i] = (*eit)->Neighbor(i)->BaryCenter();
             else                               bc_vec[i] = (*eit)->BaryCenter(); 
           }
-        for ( auto i{0}; i<(bc_vec.size()-1U); i++ ) {
+        for ( uint32_t i{0}; i<(bc_vec.size()-1U); i++ ) {
             // calculate sign of polygon determinant z = x1 * y2 - x2 * y1 + x2 * y3 - x3 * y2 + xn * y1 + x1 * yn
             sign += bc_vec[i][0] * bc_vec[i+1U][1] - bc_vec[i+1][0] * bc_vec[i][1];
           } 
@@ -83,11 +451,11 @@ void MeshDiagnostics<dim>::FixFiniteElementNeighborOrientationOfSurfaceMeshes( M
             if ( id_vec.size() != (*eit)->Neighbors() ) id_vec.resize((*eit)->Neighbors());
             id = (*eit)->Neighbors()-1;
             // reorder element ids
-            for ( auto i{0U}; i<(*eit)->Neighbors(); i++ ) {
+            for ( uint32_t i{0U}; i<(*eit)->Neighbors(); i++ ) {
                 if ( (*eit)->Neighbor(i) != NULL ) id_vec[id-i] = (*eit)->Neighbor(i)->Idx();
                 else                               id_vec[id-i] = 0;
               }
-            for ( auto i{0U}; i<id_vec.size(); i++ ) {
+            for ( uint32_t i{0U}; i<id_vec.size(); i++ ) {
                 if ( id_vec[i] > 0 ) (*eit)->Assign( i, sgref.E(id_vec[i]-1) );
                 else                 (*eit)->Assign( i, static_cast<Element<dim>*>(nullptr) );
               }
@@ -138,6 +506,8 @@ diagnostics to stdout:
 SKM fix 18/10/2014: additions to catch exceptions associated with negative Jacobians.
       
  */
+/* buggy old version
+
 template<uint32_t dim>
 bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
  {
@@ -154,7 +524,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     bool   problems = false;
            
     DenseMatrix<DM_MIN>    XY(3,3);
-    vector<uint32_t>         nids(3);
+    vector<uint32_t>       nids(3);
     Standard_IO_Handler    stdio;
 
     // Node coordinates
@@ -167,8 +537,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     h_valmin = h_valmax = sgroup.N(0)->x();
     v_valmin = v_valmax = sgroup.N(0)->y();    
  
-    for ( vector<Element<3U>*>::const_iterator
-          eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
+    for ( auto eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->NodeCoordinateMatrix( XY );
          for ( uint32_t i{0}; i<(*eit)->Nodes(); i++ )
@@ -196,8 +565,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     (*sgroup.CellsBegin())->SegmentLengths( lengths );
     sl_min = sl_max = lengths[0];
 
-    for ( vector<Element<3U>*>::const_iterator
-          eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
+    for ( auto eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          (*eit)->SegmentLengths( lengths );
          for ( uint32_t i{0}; i<lengths.size(); i++ )
@@ -224,8 +592,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     vector<size_t>  element_numbers;
    
     cout <<"\n\nMeshDiagnostics<dim>::ScrutinizeMesh: Verifying element volumes/areas/lengths..."<< endl;
-    for ( vector<Element<3U>*>::const_iterator
-           eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
+    for ( auto eit=sgroup.CellsBegin(); eit!=sgroup.CellsEnd(); eit++ )
       {
          // catching exceptions that might originate from negative Jacobian calculations
          try {
@@ -272,7 +639,7 @@ bool MeshDiagnostics<dim>::ScrutinizeMesh( Model<3U>& sg ) const
     return problems;
  
  } // end scrutinize mesh
-
+*/
 
 
 

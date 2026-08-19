@@ -49,17 +49,17 @@ class PDE_Integrator_Transient_Test : public Test {
                           Model<2U>&               model );
                       
     void TestLumpedMassMatrix( const PDE_Integrator_Attorney1<2U>& attorney,
-                                const Region<2U>&                   region,
-                                const Model<2U>&                    model,
-                                double                              dt );
+                               const Region<2U>&                   region,
+                               const Model<2U>&                    model,
+                               double                              dt );
                             
     void TestSymmetry( const PDE_Integrator_Attorney1<2U>& attorney,
-                      size_t                               n_free );
+                       size_t                               n_free );
                      
     void TestInitialConditionRHS( const PDE_Integrator_Attorney1<2U>& attorney,
-                                 const Region<2U>&                   region,
-                                 const Model<2U>&                    model,
-                                 double                              dt );
+                                  const Region<2U>&                   region,
+                                  const Model<2U>&                    model,
+                                  double                              dt );
                                  
     void TestDirichletRHSModification( const PDE_Integrator_Attorney1<2U>& attorney,
                                        const Region<2U>&                   region,

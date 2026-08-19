@@ -7,10 +7,13 @@
 //
 
 #include "SlopeMechanics_Example.h"
+
 #include "compareFloats.h"
 #include "ANSYS_Model2D.h"
+#include "MeshDiagnostics.h"
 #include "NumIntegral_dNT_lhsop_dN_dV.h"
 #include "NumIntegral_NT_rhsop_N_dV.h"
+#include "NumIntegral_dNT_op_dV.h"
 #include "PDE_Integrator.h"
 #include "Face.h"
 #include "NumIntegral_NT_op_N_dS.h"
@@ -21,8 +24,8 @@
 #include "LinearSolver.h"
 #endif
 
+#include "PropertyHandle.h"
 #include "InputDataManager.h"
-#include "VTK_Interface.h"
 #include "VTU_Interface.h"
 
 // include any header files that you need here...
@@ -37,11 +40,10 @@
 #include "NumIntegral_PT_op_dV.h"
 #include "NumIntegral_BT_D_op_dV.h"
 #include "NumIntegral_BT_op_dV.h"
-#include "StressesAndStrains.h"
 #include "StressesAndStrains2.h"
-#include "NodeCenteredFiniteVolumeTransport.h"
-#include "SinglePhaseVelocityVisitor.h"
 #include "ExtractTensorVariableComponent.h"
+
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
@@ -49,14 +51,13 @@ namespace csmp {
 
 void SlopeMechanics_Example::Specifications()
   {
-     SetTitle( "Fluid pressure and stress distribution in hill slope" );
+     SetTitle( "Pore pressure and effective stress distribution in a hill slope" );
      SetDifficulty( 2 );
      SetCategory( "Simulation of Physical Processes" );
      AddAuthor( "Stephan Matthai" );
      AddDescription( "source in: SlopeMechanics_Example.cpp" );
      AddDescription( "Empty example for the user to experiment with" );
      AddRequirement( "Input file suite: Jura-slope1, CSMP_field_scale_mechanics_variables.txt" );
-//     AddRequirement( "no predefined model or variables file" );
   }
 
 
@@ -71,7 +72,17 @@ void SlopeMechanics_Example::Specifications()
      using the gravitational loading and the plane stress assumption.
  
      input models:
-     - slope_model1
+      
+     Exercise: extend this example:
+                
+     TODO: define interrelation between water-content and volume of clays
+     TODO: add computation of seepage force
+     TODO: consider potential stress changes due to insolation of slope etc.
+     TODO: using the stress invariants apply failure criteria: tensile, shear...; assess slope stability iteratively
+     TODO: run same model using QFEM = quadratic finite element approximation
+     TODO: work with an anisotropic permeability
+     TODO: change placement of the strength related variables to the element integration points
+     
 */
 void SlopeMechanics_Example::Run()
 {
@@ -84,7 +95,7 @@ void SlopeMechanics_Example::Run()
    */
 
    // ------------------------------------------------------------
-   // 1. Load CSMP native format model
+   // 1. Load CSMP native format model and checking it
    // ------------------------------------------------------------
    string model_name;
    cout<< "\nPlease enter the name of input model, or press ENTER to use the default model 'Jura-slope1':"<<endl;
@@ -105,6 +116,10 @@ void SlopeMechanics_Example::Run()
    Region<DIM>& model_domain(model.Region("Model"));
 
    printModelDimensions( model, true );
+   
+   MeshDiagnostics<DIM> mesh_quality;
+   mesh_quality.FixFiniteElementNeighborOrientationOfSurfaceMeshes( model );
+   mesh_quality.ScrutinizeMesh( model, 10., 1.0e-7 );
 
    InputDataManager<DIM>  model_configuration;
    ComputationalSettings settings;
@@ -126,15 +141,16 @@ void SlopeMechanics_Example::Run()
       SteadyStateDiffusor<DIM,Element>  temperature( model, "thermal conductivity", "temperature", "energy source");
       printRangeOfVariable( model, "thermal conductivity" );
       printRangeOfVariable( model, "energy source");
-      // TODO: consider potential stress changes due to insolation of slope etc.
       model.InputBoundaryValue( TOP, "temperature", makeScalar(DIRICH,15.));
       //model.InputBoundaryValue( BOTTOM, "temperature", makeScalar(DIRICH,80.));
       temperature.ComputeSteadyState( model.Region("Model") );
       printRangeOfVariable( model, "temperature");
     }
-   VTK_Interface<DIM>  vtk_output;
-   vtk_output.OutputDataToVTK( model, "temperature", "temperature", 0, true );
-
+  
+  // Output to VTU (XML encoded VTK files in text format without compression)
+  VTU_Interface<DIM> vtu_output( model );
+  
+  vtu_output.OutputDataToVTU( string(model.Name()) +"_temperature", "temperature", string("Model"), static_cast<long>(0) );
 
   
   // -------------------------------------------------------------------------
@@ -154,13 +170,13 @@ void SlopeMechanics_Example::Run()
   const csmp::Index visc_key(model.Database().StorageKey("fluid viscosity"));
   const csmp::Index cond_key(model.Database().StorageKey("conductivity"));
   ScalarVariable  visc;
-  for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
-       (*it)->PropertyValueAtBaryCenter( visc_key, visc );
-       (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
+  for ( auto& it : model_domain.CellVector() ) {
+       it->PropertyValueAtBaryCenter( visc_key, visc );
+       it->Store( cond_key, makeScalar( it->Status(cond_key), it->Read(perm_key) / visc() ) );
     }
   printRangeOfVariable( model, "conductivity" );
-
-  model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
+// testing
+vtu_output.OutputDataToVTU( string(model.Name()) + "_initial_conductivity", "conductivity", string("Model"), static_cast<long>(0) );
   
   // Setting up the FE algorithm to compute the initial hydrostatic fluid pressure and velocities
 #ifdef CSMP_WITH_SAMG_SOLVER
@@ -178,53 +194,116 @@ void SlopeMechanics_Example::Run()
   PDE_Integrator<DIM,Element>  hydrostatic_pressure( solver );
 
   NumIntegral_dNT_lhsop_dN_dV<DIM>  hydrostatic_conductance( model.Database(),
-                                                         "conductivity",
-                                                         "fluid pressure", "fluid pressure" );
+                                                            "conductivity",
+                                                            "fluid pressure", "fluid pressure" );
 
-  // cin >> "\nmain: Enter the acceleration of gravity (kg/m.s2): in the area of interest: ";
-  double acc_gravity(9.81);
-  // unless specified otherwise, in a 1D model, gravity will automatically act in the x-direction
-  NumIntegral_NT_op_dNi_dV<DIM>  hydrostatic_gravity( model.Database(), "element fluid density",
-                                                                 "conductivity", "fluid pressure", acc_gravity );
+  NumIntegral_dNT_op_dV<DIM>  fluid_gravity( model.Database(), "fluid body force", "fluid pressure" );
+                                                                 
   hydrostatic_pressure.Add( &hydrostatic_conductance );
-  hydrostatic_pressure.Add( &hydrostatic_gravity );
+  hydrostatic_pressure.Add( &fluid_gravity );
 
-  // "\nmain: Enter the amount of total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t): ";
+  // total dissolved solids (ppm = g/tonne; normal seawater=12000 g/t are just added to the fluid density
   double total_dissolved_solids(0.); // g->kg (157500-ppm = 157kg salt)
   total_dissolved_solids /= 1000.; // gets kg/m3
-  printRangeOfVariable( model, "element fluid density" );
-  PropertyHandle<DIM>  rhof( model, "element fluid density", SCALAR, ELEMENT );
-  rhof.OutputCondition(ANY);
-  rhof += total_dissolved_solids/1000.;
-  printRangeOfVariable( model, "element fluid density" );
-  vtk_output.OutputDataToVTK( model, "element-fluid-density", "element fluid density", 0, true );
-  
-  cout <<"\nmain: initial guess of fluid pressure.";
+
+  // Apply Dirichlet (essential) boundary conditions to all sides of the model
+  // (irregular and left boundaries where already handled in config file)
+  constexpr double p_atm = 100325.;
+  /* auto bottom_pf = */ computeAndFreezeBoundaryPressure<DIM>( model, "RIGHT", p_atm, csmp::ACC_GRAVITY );
+  // creates issue with pressure constraint on the left
+  // model.Boundary("BOTTOM").InputPropertyValue("fluid pressure", makeScalar(DIRICH,bottom_pf) );
+
+  cout <<"\nrun: initial guess of fluid pressure range.";
   printRangeOfVariable( model, "fluid pressure" );
-/*
+
   cout << "\n\n\nmain: Iterating fluid pressure to find correct fluid density and viscosity... " << endl;
-  for ( uint32_t i=0; i<=5U; i++ ) {
-       cout <<"\n\titeration "<< i+1U <<":"<< endl;
-       model.Apply( hydrostatic_pressure );
-//printRangeOfVariable( model, "fluid pressure" );
-//vtk_output.OutputDataToVTK( model, "fluid pressure", "fluid pressure", 0, true );
-       model.Accept( properties_visitor );
-       for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
-            (*it)->PropertyValueAtBaryCenter( visc_key, visc );
-            (*it)->Store( cond_key, makeScalar( (*it)->Status(cond_key), (*it)->Read(perm_key) / visc() ) );
+  PropertyHandle<DIM>  fluid_bf( model, "fluid body force", VECTOR, ELEMENT );
+  const csmp::Index    rhof_key = model.Database().StorageKey("fluid density");
+  const csmp::Index    K_key    = model.Database().StorageKey("conductivity");
+  const csmp::Index    pf_key(model.Database().StorageKey("fluid pressure"));
+  
+  for ( uint32_t i=0; i<3U; i++ )
+    {
+       // computing the element vector property "fluid body force": rho_f(node)_interpolated * g
+       for ( auto& it : model_domain.CellVector() ) {
+            assert( it->IsLine() == false );
+            VectorVariable<DIM> vc( ANY, ANY, 0., -1. * csmp::ACC_GRAVITY * it->Read(K_key) * (it->PropertyValueAtBaryCenter(rhof_key) + total_dissolved_solids) );
+            it->Store( fluid_bf.Key(), vc );
          }
-       model.InterpolateNodeToCellProperty( "fluid density", "element fluid density" );
-       rhof += total_dissolved_solids;
-       printRangeOfVariable( model, "fluid pressure" );
-       printRangeOfVariable( model, "element fluid density" );
+       printRangeOfVariable( model, "fluid body force" );
+       cout <<"\n\t"<<"Fluid pressure iteration "<< i+1U <<":"<< endl;
+       model.Apply( hydrostatic_pressure );
+       // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+       hydrostatic_pressure.Reset(false);
+       auto pmin = printRangeOfVariable( model, "fluid pressure", false );
+       // bracketing negative fluid pressures that might arise near the atmospheric pressure boundary due to vertical integration inaccuracy
+       // (circumventing this problem would require working with relative fluid density)
+       if ( pmin < p_atm ) {
+          for ( auto& nit : model_domain.NodeVector() ) {
+               double pf = nit->Read( pf_key );
+               if ( pf < p_atm ) nit->Store( pf_key, makeScalar(nit->Status(pf_key),p_atm) );
+            }
+       }
+       // updating hydraulic conductivity
+       model.Accept( properties_visitor );
+       for ( auto& it : model_domain.CellVector() ) {
+            it->PropertyValueAtBaryCenter( visc_key, visc );
+            it->Store( cond_key, makeScalar( it->Status(cond_key), it->Read(perm_key) / visc() ) );
+         }
+       printRangeOfVariable( model, "fluid viscosity" );
+       printRangeOfVariable( model, "fluid density" );
     }
-   vtk_output.OutputDataToVTK( model, "fluid pressure", "fluid pressure", 0, true );
-*/
+
+  vtu_output.OutputDataToVTU( string(model.Name()) + "_iterated-fluid-pressure", "fluid pressure", string("Model"), static_cast<long>(0) );
+
+  // -----------------------------------------------------------
+  // 4. computing the Darcy velocity
+  // -----------------------------------------------------------
+  assignNodeCoordinatesTo( model, 'Y', "elevation" );
+  vtu_output.OutputDataToVTU( string(model.Name()) + "_elevation", "elevation", string("Model"), static_cast<long>(0) );
+  
+  // 4.1 computing the hydraulic head, h = pf/rho*g + z   from the fluid pressure distribution
+  const csmp::Index E_key(model.Database().StorageKey("elevation"));
+  const csmp::Index h_key(model.Database().StorageKey("hydraulic head"));
+  const csmp::Index vD_key(model.Database().StorageKey("Darcy velocity"));
+
+  for ( auto& nit : model_domain.NodeVector() )
+    {
+        double head = nit->Read(pf_key) / (nit->Read(rhof_key) * csmp::ACC_GRAVITY) + nit->Read(E_key);
+       nit->Store( h_key, makeScalar( nit->Status(h_key), head ) );
+    }
+  printRangeOfVariable( model, "hydraulic head" );
+  vtu_output.OutputDataToVTU( string(model.Name()) + "_hydraulic-head", "hydraulic head", string("Model"), static_cast<long>(0) );
+
+  // 4.2 computing hydraulic head, its gradients and the ensuing Darcy velocity
+  DenseMatrix<DM_MIN> DERIV;
+  VectorVariable<DIM> velo;
+  // 4.3 computing ensuing fluid flow
+  for ( auto& it : model_domain.CellVector() )
+    {
+       const double K = it->Read( K_key );
+       velo = 0.;
+       it->dN_AtBaryCenter( DERIV, 1U );
+       for ( uint32_t i=0U; i<it->Nodes(); i++ ) {
+            double h = it->N(i)->Read( h_key );
+            velo(0)  += h  * -DERIV(0,i) * K;
+            velo(1)  += h  * -DERIV(1,i) * K;
+            velo.Flag(0) = it->Status(vD_key,0);
+            velo.Flag(1) = it->Status(vD_key,1);
+         }
+      
+       it->Store( vD_key, velo );
+    }
+  printRangeOfVariable( model, "Darcy velocity" );
+  vtu_output.OutputDataToVTU( string(model.Name()) + "final-", "Darcy velocity", string("Model"), static_cast<long>(0) );
+  model.ExtrapolateCellToNodeProperty( "Darcy velocity", "Darcy velocity node" );
+  printRangeOfVariable( model, "Darcy velocity node" );
+  vtu_output.OutputDataToVTU( string(model.Name()) + "_Darcy-velocity", "Darcy velocity", string("Model"), static_cast<long>(0) );
 
 
 
   // -----------------------------------------------------------
-  // 4. initial rock effective stress due to gravitional loading
+  // 5. initial rock effective stress due to gravitional loading
   // -----------------------------------------------------------
   // mechanical properties are placed on the element integration points
   // computes the increase in pore-pressure due to the gravitational loading
@@ -256,7 +335,7 @@ void SlopeMechanics_Example::Run()
     printRangeOfVariable( model, "Biot term" );
   
     // computing the gravity force
-    gravityForce( model, acc_gravity );
+    gravityForce( model, csmp::ACC_GRAVITY );
     printRangeOfVariable( model, "gravity force" );
   
     deformation.Add( &porepressure );
@@ -290,44 +369,16 @@ void SlopeMechanics_Example::Run()
          model.Apply( ystress );
          model.Apply( stress_xy );
       }
-    model.MoveNodeCoordinatesBy("displacement");
   
-    vtk_output.OutputDataToVTK( model, "displacement", "displacement", 1, true );
-    vtk_output.OutputDataToVTK( model, "strain",       "strain",       1, true );
-    vtk_output.OutputDataToVTK( model, "stress",       "stress",       1, true );
-    vtk_output.OutputDataToVTK( model, "mean-stress",  "mean stress",  1, true );
-    vtk_output.OutputDataToVTK( model, "dilatation",   "dilatation",   1, true );
-    vtk_output.OutputDataToVTK( model, "sigma1_",      "sigma1",       1, true );
-    vtk_output.OutputDataToVTK( model, "sigma2_",      "sigma2",       1, true );
-    vtk_output.OutputDataToVTK( model, "strain1_",     "strain1",      1, true );
-    vtk_output.OutputDataToVTK( model, "strain2_",     "strain2",      1, true );
-    vtk_output.OutputDataToVTK( model, "stress-y",     "stress-y",     1, true );
-    vtk_output.OutputDataToVTK( model, "stress-xy",    "stress-xy",    1, true );
-  
-   // get the divergence
-    dilatationInducedChangeInPorePressure( model );
+   // get a FEM-based estimate of the effects of a loading induced divergence of velocity field
+    strainInducedChangeInPorePressure<DIM>( model );
     printRangeOfVariable( model, "fluid pressure" );
-  
-    SinglePhaseVelocityVisitor<DIM,Element>  velo( model, "porosity", "conductivity",
-                                                          "fluid density", "fluid pressure", "total velocity" );
-    model.Accept( velo );
-    printRangeOfVariable( model, "total velocity" );
 
-  // divergence of fluid flow to get volume strains (none yet)
-  // ---------------------------------------------------------
-  // loop over the finite volumes and measure the divergence of the facet fluxes
-  // ignoring the FV at the model boundaries
-   const bool second_order_in_space(false);
-   const bool second_order_in_time(false);
-   NodeCenteredFiniteVolumeTransport<DIM>  ncfvt( "Model", model, "porosity", "concentration", "total velocity",
-                                                  "nodal fluid volume source",
-                                                   second_order_in_space, second_order_in_time );
-   // the divergence is assigned to the fvs
-   ncfvt.Divergence( "total velocity", "nodal fluid volume source");
+    std::list<string> output_props = {"displacement","fluid pressure","strain","stress","mean stress","stress-y","stress-xy"};
 
-   model.MoveNodeCoordinatesBy("displacement");
+    vtu_output.OutputDataToVTU( (string(model.Name()) + "_mechanics-results").c_str(), output_props, string("Model"), static_cast<long>(0) );
   
-   cout <<"\nSlopeMechanics_Example: That's it!\n";
+    cout <<"\nSlopeMechanics_Example: That's it!\n";
 
    filesystem::current_path("../../example_inputs/");
   
@@ -338,53 +389,265 @@ void SlopeMechanics_Example::Run()
 
 // OTHER FUNCTION RELATIONSHIPS
 
-/**
-    Since fluid pressure is a node property we are looking
-    for the dilatation at the node which is computed using the 
-    finite volume framework.
- 
-    @note Notes
 
-       1. Loading the rock skeleton results in an increase in pore pressure.
-       2. the corresponding velocity field is no longer divergence free
-       3. computing ensuing fluxes over the time-interval of interest, reveals
-          how much fluid is leaving the rock
-       4. the rock volume must be reduced accordingly, but without creating a stress response
+
+/** 
+    Computation of gravity-equilibrated fixed pressure at vertical boundaries of 2D models,
+    by top down piecewise integration. The new pressure values are flagged Dirichlet.
 */
-void dilatationInducedChangeInPorePressure( Model<DIM>& model )
- {
-    const csmp::Index dil_key(model.Database().StorageKey("dilatation"));
-    const csmp::Index pf_key(model.Database().StorageKey("fluid pressure"));
-    const csmp::Index bf_key(model.Database().StorageKey("fluid compressibility"));
- 
-    Region<DIM>& model_domain(model.Region("Model"));
+/**
+    @brief Computes gravity-equilibrated fluid pressure at a named vertical
+    boundary of a 2D model and flags all boundary nodes as Dirichlet.
 
-    // TODO: we need to get the nodal dilatation using the FVM discretisation
-    // volume-weighted average of the dilatation of the FV sectors surrounding the node
-   
-    for ( auto it=model_domain.NodesBegin(); it!=model_domain.NodesEnd(); ++it )
-      {
-         // get the inputs
-         double pf         = (*it)->Read( pf_key );
-         double fluid_compressibility = (*it)->Read(bf_key);
-         // finite volume average dilatation
-         double fv_dilatation(0.), fv_volume(0.);
-         for ( auto i{0}; i<(*it)->Parents(); ++i ) {
-             // needed: sector volumes and elemental dilatation values
-             Element<DIM>*  eptr((*it)->Parent(i));
-             double sector_dilatation = eptr->Read( dil_key );
-             auto   esector = (*it)->ParentNodeNumber(i);
-             double sector_volume  = eptr->SectorVolume(esector);
-             fv_dilatation += sector_dilatation * sector_volume;
-             fv_volume     += sector_volume;
-           }
-         fv_dilatation /= fv_volume;
-        
-         // compute pressure change and store the new pore pressure
-         (*it)->Store( pf_key, makeScalar((*it)->Status(pf_key), pf + fv_dilatation / fluid_compressibility) );
+    Integration proceeds top-down using the trapezoidal rule, approximating
+    fluid density as the piecewise average between adjacent boundary nodes.
+
+    @tparam  dim         Spatial dimension of the model (typically 2).
+    @param  model       The CSMP model containing the boundary and database.
+    @param  edge_boundary Name of the boundary on which pressure is set.
+    @param  pressure_at_top Atmospheric (or other) pressure at the topmost node [Pa].
+    @param  acc_gravity Gravitational acceleration, positive magnitude [m/s^2].
+    @return the maximum pressure found by the top-down integration
+
+    @pre  "fluid density"  must be defined and initialised on boundary nodes.
+    @pre  "fluid pressure" must be defined on boundary nodes.
+    @pre  acc_gravity > 0.
+    
+    @post All nodes on edge_boundary have fluid pressure stored with DIRICH flag.
+*/
+template<uint32_t dim>
+double computeAndFreezeBoundaryPressure( Model<dim>&  model,
+                                         const char*  edge_boundary,
+                                         double       pressure_at_top,
+                                         double       acc_gravity )
+{
+    assert( acc_gravity > 0. );
+
+    // --- validate inputs ---
+    if ( !model.Database().IsDefined( "fluid density" ) )
+        throw csmp::Exception( ERROR, "computeAndFreezeBoundaryPressure",
+                               "fluid density is not defined in the database" );
+    if ( !model.Database().IsDefined( "fluid pressure" ) )
+        throw csmp::Exception( ERROR, "computeAndFreezeBoundaryPressure",
+                               "fluid pressure is not defined in the database" );
+
+    const Boundary<dim>& bref( model.Boundary( edge_boundary ) );
+
+    const csmp::Index rho_key( model.Database().StorageKey( "fluid density"  ) );
+    const csmp::Index pf_key ( model.Database().StorageKey( "fluid pressure" ) );
+
+    // --- order boundary nodes top-down by Y coordinate ---
+    // multimap handles the case where two nodes share the same Y value
+    multimap<double, Node<dim>*, greater<double>> nodes_map;
+    for ( auto nit = bref.NodesBegin(); nit != bref.NodesEnd(); ++nit )
+        nodes_map.insert( make_pair( (*nit)->y(), *nit ) );
+
+    // --- top-down trapezoidal integration ---
+    set<double> pressure_range;
+    ScalarVariable sc;
+
+    auto nit = nodes_map.begin();
+
+    // store atmospheric pressure at the topmost node
+    (*nit).second->Store( pf_key, makeScalar( DIRICH, pressure_at_top ) );
+    pressure_range.insert( pressure_at_top );
+
+    (*nit).second->Read( rho_key, sc );
+    double density1  = sc();
+    double pressure1 = pressure_at_top;
+    double elevation = (*nit).first;
+    ++nit;
+
+    while ( nit != nodes_map.end() ) {
+        (*nit).second->Read( rho_key, sc );
+        const double density2  = sc();
+        const double rho_avg   = ( density1 + density2 ) / 2.;
+        const double dz        = elevation - (*nit).first; // positive going downward
+        const double pressure2 = pressure1 + acc_gravity * rho_avg * dz;
+
+        (*nit).second->Store( pf_key, makeScalar( DIRICH, pressure2 ) );
+        pressure_range.insert( pressure2 );
+
+        pressure1 = pressure2;
+        density1  = density2;
+        elevation = (*nit).first;
+        ++nit;
       }
- 
- } // end dilatationInducedChangeInPorePressure
+
+    cout << "\ncomputeAndFreezeBoundaryPressure: pressure range at boundary '"
+         << edge_boundary << "': "
+         << *pressure_range.begin()  << " to "
+         << *pressure_range.rbegin() << " Pa.\n";
+         
+   return *pressure_range.rbegin();
+
+} // computeAndFreezeBoundaryPressure
+
+template double computeAndFreezeBoundaryPressure<DIM>( Model<DIM>&, const char*, double, double );
+
+
+
+
+
+/**
+    @brief Computes the instantaneous change in pore pressure induced by
+    volumetric strain at element integration points.
+
+    Rather than deforming the mesh or using the finite volume framework,
+    this function evaluates the volumetric strain directly at the integration
+    points of each element — where it is exact for isoparametric elements —
+    and distributes the resulting pore pressure change to the element nodes
+    via shape function weighting.
+
+    The poromechanical coupling is:
+
+    @f[
+        \Delta p_f = -\frac{\epsilon_v}{c_f}
+    @f]
+
+    where @f$ \epsilon_v = \nabla \cdot \mathbf{u} @f$ is the volumetric
+    strain (trace of the strain tensor) and @f$ c_f @f$ is the fluid
+    compressibility. Compression (@f$ \epsilon_v < 0 @f$) increases pore
+    pressure (@f$ \Delta p_f > 0 @f$).
+
+    The nodal pressure update is computed as the integration-point-weighted
+    average over all elements sharing the node:
+
+    @f[
+        \Delta p_f^{node} = -\frac{1}{c_f} \frac{\sum_e \sum_i w_i |J_i| \epsilon_v^{e,i} N_j^{e,i}}
+                                                  {\sum_e \sum_i w_i |J_i| N_j^{e,i}}
+    @f]
+
+    where the outer sum is over all elements @f$ e @f$ sharing the node,
+    the inner sum is over integration points @f$ i @f$, @f$ w_i @f$ are
+    the quadrature weights, @f$ |J_i| @f$ is the Jacobian determinant,
+    and @f$ N_j^{e,i} @f$ is the shape function value at integration
+    point @f$ i @f$ for the local node corresponding to the global node.
+
+    @note The mesh is not deformed. Displacements are read from the
+    displacement variable but node coordinates are not updated.
+
+    @note Boundary nodes retain their Dirichlet status. If the boundary
+    pressure should respond to the strain field, remove the Dirichlet
+    guard before calling this function.
+
+    @param model  The model on which to compute the pressure update.
+
+    @throws csmp::Exception if fluid compressibility is not strictly
+            positive at any node, or if the strain tensor variable is
+            not defined at element integration points.
+*/
+template<uint32_t dim>
+void strainInducedChangeInPorePressure( Model<dim>& model )
+{
+    const csmp::Index pf_key  ( model.Database().StorageKey( "fluid pressure"       ) );
+    const csmp::Index bf_key  ( model.Database().StorageKey( "fluid compressibility") );
+    const csmp::Index eps_key ( model.Database().StorageKey( "strain"               ) );
+
+    // confirm strain is stored at integration points — this is where it is exact
+    if ( model.Database().Placement("strain") != ELEMENT_INTEGRATION_POINT )
+        throw csmp::Exception( ERROR,
+            "strainInducedChangeInPorePressure",
+            "strain must be stored at element integration points" );
+
+    Region<dim>& model_domain( model.Region( "Model" ) );
+
+    // --- accumulate weighted dilatation and weight at each node ---
+    // Two passes: first accumulate, then normalise and update pressure.
+    // This avoids double-counting when a node is shared between elements.
+
+    // node index -> accumulated weighted dilatation
+    std::map<size_t, double> weighted_dilatation;
+    // node index -> accumulated weight
+    std::map<size_t, double> accumulated_weight;
+
+    for ( auto eit  = model_domain.CellsBegin();
+               eit != model_domain.CellsEnd(); ++eit ) {
+        const Element<dim>* e = *eit;
+
+        if ( !e->UsesLocalCoordinates() ) continue;
+
+        const uint32_t n_integration_points = e->IntegrationPoints();
+        const uint32_t n_nodes              = e->Nodes();
+
+        // shape function values at each integration point — n_nodes x n_ip
+        // dN_AtIntegrationPoint fills the gradient matrix and returns detJ;
+        // we need N (not dN) here, so we use N_AtIntegrationPoint
+        for ( uint32_t i{ 0U }; i < n_integration_points; ++i ) {
+
+            // shape function values at integration point i
+            std::vector<double> N( n_nodes );
+            e->N_AtIntegrationPoint( i, N );
+
+            const double weight = e->WeightAtIntegrationPoint( i );
+
+            // Jacobian determinant at integration point i
+            DenseMatrix<DM_MIN> gradientMatrix;
+            const double detJ = e->dN_AtIntegrationPoint( gradientMatrix, i, SCALAR );
+
+            const double quadrature_weight = weight * detJ;
+
+            // read strain tensor at this integration point
+            TensorVariable<dim> strain;
+            e->Read( i, eps_key, strain );
+
+            // volumetric strain = trace of strain tensor
+            double volumetric_strain = 0.;
+            for ( uint32_t d{ 0U }; d < dim; ++d )
+                volumetric_strain += strain( d, d );
+
+            // distribute to nodes via shape function weighting
+            for ( uint32_t j{ 0U }; j < n_nodes; ++j ) {
+                const size_t global_node_idx = e->N(j)->Idx();
+                const double nodal_weight    = N[j] * quadrature_weight;
+
+                weighted_dilatation[ global_node_idx ] += volumetric_strain * nodal_weight;
+                accumulated_weight [ global_node_idx ] += nodal_weight;
+            }
+        }
+    }
+
+    // --- second pass: normalise and update nodal pore pressure ---
+    for ( auto& nit : model_domain.NodeVector() ) {
+        const size_t node_idx = nit->Idx();
+
+        // skip nodes with no accumulated weight (e.g. isolated nodes)
+        const auto weight_it = accumulated_weight.find( node_idx );
+        if ( weight_it == accumulated_weight.end() ) continue;
+        if ( weight_it->second <= 0. )               continue;
+
+        // read fluid compressibility at this node
+        ScalarVariable bf_var;
+        nit->Read( bf_key, bf_var );
+        const double fluid_compressibility = bf_var();
+
+        if ( fluid_compressibility <= 0. )
+            throw csmp::Exception( ERROR,
+                "strainInducedChangeInPorePressure",
+                "fluid compressibility must be strictly positive" );
+
+        // normalised volumetric strain at this node
+        const double nodal_dilatation = weighted_dilatation.at( node_idx )
+                                      / weight_it->second;
+
+        // compression (negative dilatation) increases pore pressure
+        const double delta_pf = -nodal_dilatation / fluid_compressibility;
+
+        // read current pressure and update, preserving Dirichlet status
+        ScalarVariable pf_var;
+        nit->Read( pf_key, pf_var );
+
+        // do not overwrite Dirichlet boundary conditions
+        if ( pf_var.Flag() == DIRICH ) continue;
+
+        nit->Store( pf_key, makeScalar( ANY, pf_var() + delta_pf ) );
+    }
+
+} // end strainInducedChangeInPorePressure
+
+// explicit instantiations
+template void strainInducedChangeInPorePressure( Model<2U>& );
+template void strainInducedChangeInPorePressure( Model<3U>& );
 
 
 
@@ -399,7 +662,7 @@ void permeabilityPorosityCorrelation( Model<DIM>& model )
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it )
       {
          double porosity = (*it)->Read( phi_key );
-         // TODO: introduce proper relationship here
+         // TODO: exercise: introduce credible relationship here
          double permeability = porosity * 1.0e-12;
          (*it)->Store( k_key, makeScalar((*it)->Status(k_key), permeability) );
       }

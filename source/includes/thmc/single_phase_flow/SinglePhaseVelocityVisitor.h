@@ -32,12 +32,12 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
                                const char* fluid_density,
                                const char* fluid_pressure,
                                const char* velocity,               // results: Darcy Velocity
-                               const char* model_gravity_vector = NULL,
-                               const char* pore_velocity = NULL,   // results: True velocity (v/phi)
-                               const char* volume_flux = NULL,     // results:
-                               const char* nodal_velocity = NULL,
-                               const char* nodal_pore_velocity = NULL,
-                               const char* nodal_volume_flux = NULL);
+                               const char* model_gravity_vector = nullptr,
+                               const char* pore_velocity = nullptr,   // results: True velocity (v/phi)
+                               const char* volume_flux = nullptr,     // results:
+                               const char* nodal_velocity = nullptr,
+                               const char* nodal_pore_velocity = nullptr,
+                               const char* nodal_volume_flux = nullptr);
 
     ~SinglePhaseVelocityVisitor() {}
 

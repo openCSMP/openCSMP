@@ -1,8 +1,10 @@
 #include "NumIntegral_dNT_lhsop_dN_dV.h"
+
 #include "Element.h"
 #include "Face.h"
 #include "InterFace.h"
 #include "Exception.h"
+#include "denseMatrixMethods.h"
 #include <Eigen/Dense>
 
 using namespace std;
@@ -17,9 +19,9 @@ integral properties.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_dNT_lhsop_dN_dV<dim,CELL>::NumIntegral_dNT_lhsop_dN_dV( const PropertyDatabase<dim>& pref,
-                                                              const char*           oper,
-                                                              const char*           basic,
-                                                              const char*           test )
+                                                                    const char*           oper,
+                                                                    const char*           basic,
+                                                                    const char*           test )
   : MathOperatorLHS<dim,CELL>(pref,oper,basic,test)
 {
     MathOperatorLHS<dim,CELL>::Name("NumIntegral_dNT_lhsop_dN_dV", oper, basic, test );
@@ -114,16 +116,21 @@ void NumIntegral_dNT_lhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
             // material varies per integration point but B does not.
             // Accumulate contribution of each integration point separately,
             // each weighted by its own w_i * |J|.
-            DenseMatrix<DM_MIN> BTK;
             for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
             {
-                BTK  = BT;                                          // copy constant BT
-                BTK *= MTRL[i];                                     // apply material at ip i
-                BTK *= B;                                           // apply constant B
-                BTK *= e.WeightAtIntegrationPoint(i) * detJ;       // scale by w_i * |J|
-                LHS += BTK;
+                B.Transposed( BT );          // reset BT from the constant B
+                BT *= MTRL[i];                                     // apply material at ip i
+                BT *= B;                                           // apply constant B
+                BT *= e.WeightAtIntegrationPoint(i) * detJ;       // scale by w_i * |J|
+                LHS += BT;
             }
         }
+
+        applyLumping( LHS,
+                      MathOperatorLHS<dim,CELL>::LumpedFormulation(),
+                      true, /* lump_by_volume, else you get zeroes in diagonal */
+                      V_e,
+                      e.Nodes() );
         return;
     }
 
@@ -132,6 +139,7 @@ void NumIntegral_dNT_lhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
     //
     // B and detJ vary per integration point — full Gauss loop required.
     // ==================================================================
+    double V_ref = 0.;
     for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
     {
         const double detJ = e.dN_AtIntegrationPoint( B, i, SCALAR );
@@ -145,7 +153,15 @@ void NumIntegral_dNT_lhsop_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>
         BT *= B;
         BT *= e.WeightAtIntegrationPoint(i) * detJ;
         LHS += BT;
+        
+        V_ref += e.WeightAtIntegrationPoint(i) * detJ;
     }
+
+    applyLumping( LHS,
+                  MathOperatorLHS<dim,CELL>::LumpedFormulation(),
+                  true, /* lump_by_volume, else you get zeroes in diagonal */ 
+                  V_ref,
+                  e.Nodes() );
 
 } // end ComputeContribution
 

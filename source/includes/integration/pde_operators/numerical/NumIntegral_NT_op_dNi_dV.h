@@ -14,6 +14,8 @@ template<uint32_t> class Element;
 example hydrostatic pf-gradient;
 basic operands can be node or element variables.
 
+@attention operator used in TopographyDrivenFlow_Example
+
 @author S.K. Matthai
 @date 2005
 

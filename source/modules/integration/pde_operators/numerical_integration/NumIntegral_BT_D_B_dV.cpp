@@ -121,7 +121,8 @@ void NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
           }
       }
      else throw csmp::Exception( WARNING, "NumIntegral_BT_D_B_dV<dim,CELL>::GetOperands",
-                                 MathOperatorLHS<dim,CELL>::MaterialOperandName().c_str(), "placement of material operand not handled yet." );
+                                 MathOperatorLHS<dim,CELL>::MaterialOperandName().c_str(),
+                                "material operand placement not handled yet." );
       
 } // end GetOperands
 

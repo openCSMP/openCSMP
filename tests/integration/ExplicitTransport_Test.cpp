@@ -268,8 +268,8 @@ double ExplicitTransport_Test::FluxMultiplier( const Element<3U>* const eptr, si
     // TODO: do this only once inside the finite-volume stencil:
     // for each sector, record whether the facet normal is inward or outward pointing
     vector<vector<short> > sign_of_facet( eptr->Facets(), vector<short>(eptr->Nodes(),0) );
-    for ( auto i{0}; i<eptr->Nodes(); ++i ) {
-         for ( auto j=0U; j<eptr->FV()->FacetsPerSector(i); ++j ) {
+    for ( uint32_t i{0}; i<eptr->Nodes(); ++i ) {
+         for ( uint32_t j=0U; j<eptr->FV()->FacetsPerSector(i); ++j ) {
                auto s_facet      = eptr->FV()->FacetSurroundingSector( i, j );
                auto inside_node  = eptr->FV()->InsideNode( s_facet );
                sign_of_facet[s_facet][i] = (inside_node==i) ? 1 : -1;
@@ -337,7 +337,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     const size_t sector_ip(0U);
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
         FE_PV += (*it)->Volume() * (*it)->Read( phi_key );
-        for ( auto i{0}; i<(*it)->Nodes(); i++ ) {
+        for ( uint32_t i{0}; i<(*it)->Nodes(); i++ ) {
              sector_volume += (*it)->Read( i, sector_ip, sv_key ); // larger tolerance needed presumable because sectors are hexahedra
              sector_PV     += (*it)->Read( i, sector_ip, spv_key );
           }
@@ -359,7 +359,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     //     but avoiding truncated FVs at boundaries
     // double sectorFlux( const Element<dim>* const eptr, size_t sector, const csmp::Index& flux_key ); // tested: O.K.
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
-         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
+         for ( uint32_t i{0}; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();
                    flux_balance[ node ] += sectorFlux( (*it), i, flux_key );
@@ -379,7 +379,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
          // Attention: inside/outside is with reference to facet, and NOT to finite-element sector
          //            when outside-inside>1 the opposite sign needs to be applied because facet is between first and last node !
-         for ( auto i{0}; i<(*it)->Facets(); ++i ) {
+         for ( uint32_t i{0}; i<(*it)->Facets(); ++i ) {
               const uint32_t facet_ip(0U);
               // finding the orientation of the facet
               // inside sector
@@ -404,7 +404,7 @@ void ExplicitTransport_Test::Test_initializeFiniteVolumeProperties( double toler
     // reporting in case of a failure
     if ( verbose_ && fabs(max_value) >= numeric_limits<double>::epsilon() ) {
          cerr <<"\nExplicitTransport_Test::run: error in flux balance for elements:\n";
-         for ( auto i{0}; i<flux_balance.size(); ++i ) {
+         for ( uint32_t i{0}; i<flux_balance.size(); ++i ) {
              if ( fabs(flux_balance[i]) >= numeric_limits<double>::epsilon() ) {
                   cerr <<"\n\tflux balance error: "<< flux_balance[i];
                   model_domain.N(i)->Out();
@@ -434,7 +434,7 @@ void ExplicitTransport_Test::TestInteriorFluxBalance( double tolerance_relaxatio
     // NB: establishing the flux balance in an element loop, including the perimeter elements,
     //     but avoiding truncated FVs at the model boundary
     for ( auto it=model_domain.CellsBegin(); it!=model_domain.CellsEnd(); ++it ) {
-         for ( auto i{0}; i<(*it)->Nodes(); ++i ) {
+         for ( uint32_t i{0}; i<(*it)->Nodes(); ++i ) {
               if ( (*it)->N(i)->AtBoundary() == NOT ) {
                    size_t node = (*it)->N(i)->Idx();
                    flux_balance[ node ] += sectorFlux( (*it), i, flux_key );
@@ -473,7 +473,7 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double tolerance_rel
         {
            // looping over the parent elements accumulating their flux contributions
            double boundary_flux(0.);
-           for ( auto i{0}; i<(*nit)->Parents(); ++i ) {
+           for ( uint32_t i{0}; i<(*nit)->Parents(); ++i ) {
                 const Element<3U>* eptr = (*nit)->Parent(i);
                 const auto         nid  = (*nit)->ParentNodeNumber(i);
                 boundary_flux += sectorFlux( eptr, nid, flux_key );
