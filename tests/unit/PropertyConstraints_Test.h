@@ -37,7 +37,7 @@ namespace csmp {
 class PropertyConstraints_Test : public Test {
   public:
     explicit PropertyConstraints_Test( bool verbose = false );
-    ~PropertyConstraints_Test();
+    ~PropertyConstraints_Test() { delete model_; }
 
     virtual void run();
 
@@ -101,6 +101,9 @@ class PropertyConstraints_Test : public Test {
 
     /// Tests that pointInVolumeElement works using prism_test model
     bool PointInVolumeElementTest();
+    
+    /// combining different placements and variable types
+    bool TestMixedConstraints();
 
   private:
   

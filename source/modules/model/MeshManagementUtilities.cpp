@@ -22,6 +22,9 @@
 #include "VTU_Interface.h"
 #include "Box.h"
 #include "plf_colony.h"
+#include <Eigen/Dense>
+#include <Eigen/SVD>
+
 
 using namespace std;
 
@@ -1260,6 +1263,175 @@ bool hasNonManifoldVertices( const csmp::Element<3>* const tptr, double toleranc
 
 
 
+
+
+/**
+    @brief Tests whether cells are so severely skewed that the stiffness
+    matrix @f$ \mathbf{B}^T \mathbf{B} @f$ becomes singular.
+
+    For each cell in @p cells, computes the gradient matrix
+    @f$ \mathbf{B} @f$ at the barycentre via @c dN_AtBaryCenter(), forms
+    the product @f$ \mathbf{B}^T \mathbf{B} @f$, and performs a Singular
+    Value Decomposition using Eigen. If the ratio of the largest to smallest
+    singular value exceeds @p condition_threshold, or if any singular value
+    is below @p zero_threshold, the cell is flagged as degenerate.
+
+    @note @f$ \mathbf{B}^T \mathbf{B} @f$ is the element stiffness matrix
+    kernel for a Laplacian operator with unit conductivity. Its condition
+    number directly measures the geometric quality of the cell — a large
+    condition number indicates severe skewing that will cause ill-conditioning
+    in the assembled global matrix.
+
+    @param cells               Cells to test.
+    @param condition_threshold Condition number above which a cell is
+                               flagged as degenerate (default 1e6).
+    @param verbose             If true, prints per-cell diagnostics.
+
+    @return  Pointers to degenerate cells, cast to @c Element<dim>* for
+             compatibility with @c Model::FormRegionFrom and
+             @c VTK_Interface::OutputDataToVTK.
+             
+    @note The singular values of the scaled B matrix measure how uniformly the element maps reference directions to physical directions:
+
+    $\sigma_{max} / \sigma_{min} \approx 1$ — perfectly isotropic element
+    $\sigma_{max} / \sigma_{min} \sim 10$ — moderately stretched, typical for unstructured meshes
+    $\sigma_{max} / \sigma_{min} \sim 100$ — significantly skewed
+    $\sigma_{max} / \sigma_{min} > 1000$ — severely degenerate
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+std::vector<CELL<dim>*> testCellSkewing( const std::vector<CELL<dim>*>& cells,
+                                         double condition_number_limit,
+                                         bool   verbose )
+{
+    std::vector<CELL<dim>*> degenerate_cells;
+
+    for ( CELL<dim>* c : cells ) {
+        assert( c != nullptr );
+
+        if ( !c->UsesLocalCoordinates() ) {
+            if ( verbose )
+                cout << "Cell " << c->Idx()
+                     << ": skipping — does not use local coordinates\n";
+            continue;
+        }
+
+        DenseMatrix<DM_MIN> B;
+        const double detJ = c->dN_AtBaryCenter( B );
+
+        if ( detJ <= 0. ) {
+            if ( verbose )
+                cerr << "Cell " << c->Idx()
+                     << ": non-positive Jacobian at barycentre: " << detJ << "\n";
+            degenerate_cells.push_back( c );
+            continue;
+        }
+
+        const uint32_t n_nodes = c->Nodes();
+
+        // SegmentLengths() returns the lengths of the element edges in their
+        // correct topological order, respecting the element connectivity.
+        vector<double> segment_lengths;
+        c->SegmentLengths( segment_lengths );
+        double h_max = 0.;
+        for ( const double len : segment_lengths )
+            if ( len > h_max ) h_max = len;
+            
+        if ( h_max <= 0. ) {
+            if ( verbose )
+                cerr << "Cell " << c->Idx()
+                     << ": zero maximum segment length\n";
+            degenerate_cells.push_back( c );
+            continue;
+        }
+
+        // --- copy scaled B into Eigen (dim x n_nodes) ---
+        // scale by h_max so entries are O(1)
+        Eigen::MatrixXd eigenB( dim, n_nodes );
+        for ( uint32_t row{ 0U }; row < dim; ++row )
+            for ( uint32_t col{ 0U }; col < n_nodes; ++col )
+                eigenB( row, col ) = B( row, col ) * h_max;
+
+        // --- SVD of B directly (not BT*B) ---
+        // B is dim x n_nodes with dim < n_nodes, so it has exactly dim
+        // non-zero singular values. The condition number of B is the ratio
+        // of the largest to the smallest of these dim singular values.
+        // This directly measures the geometric quality of the element:
+        // a large condition number means the element is stretched in one
+        // direction relative to another.
+        Eigen::JacobiSVD<Eigen::MatrixXd> svd( eigenB,
+                                                Eigen::ComputeThinU |
+                                                Eigen::ComputeThinV );
+        const Eigen::VectorXd& singular_values = svd.singularValues();
+
+        // singular values are in descending order
+        // there are exactly dim non-zero singular values for a well-shaped element
+        const double sigma_max = singular_values(0);
+        const double sigma_min = singular_values( dim - 1 );
+
+        if ( sigma_max <= 0. ) {
+            if ( verbose )
+                cerr << "Cell " << c->Idx()
+                     << ": zero largest singular value — degenerate geometry\n";
+            degenerate_cells.push_back( c );
+            continue;
+        }
+
+        // relative condition number of B:
+        // sigma_min near zero means the element is collapsed in one direction
+        const double relative_zero = std::numeric_limits<double>::epsilon()
+                                   * sigma_max;
+
+        bool is_degenerate = false;
+
+        if ( sigma_min < relative_zero ) {
+            is_degenerate = true;
+            if ( verbose )
+                cerr << "Cell " << c->Idx()
+                     << ": degenerate — sigma_min=" << sigma_min
+                     << " is below floating point resolution "
+                     << relative_zero
+                     << " (sigma_max=" << sigma_max
+                     << " h_max=" << h_max
+                     << " detJ=" << detJ << ")\n";
+        }
+        else {
+            const double condition_number = sigma_max / sigma_min;
+
+            if ( condition_number > condition_number_limit ) {
+                is_degenerate = true;
+                if ( verbose )
+                    cerr << "Cell " << c->Idx()
+                         << ": ill-conditioned — condition number of B: "
+                         << condition_number
+                         << " > " << condition_number_limit
+                         << " (sigma_max=" << sigma_max
+                         << " sigma_min=" << sigma_min
+                         << " h_max=" << h_max
+                         << " detJ=" << detJ << ")\n";
+            }
+        }
+
+        if ( is_degenerate )
+            degenerate_cells.push_back( c );
+    }
+
+    if ( verbose ) {
+        cout << "\ntestCellSkewing: "
+             << cells.size()            << " cells tested, "
+             << degenerate_cells.size() << " degenerate\n";
+    }
+
+    return degenerate_cells;
+}
+
+template vector<Element<3>*> testCellSkewing( const vector<Element<3>*>&, double, bool );
+template vector<Element<2>*> testCellSkewing( const vector<Element<2>*>&, double, bool );
+
+template vector<Face<3>*> testCellSkewing( const vector<Face<3>*>&, double, bool );
+template vector<Face<2>*> testCellSkewing( const vector<Face<2>*>&, double, bool );
+
+
+
 /**
     For the supplied range of nodes, for each node,
     computes parent element barycentre-to-node distances for all parent elements and returns them into the supplied vector
@@ -2433,7 +2605,7 @@ bool integrityCheck( const plf::colony<CELL<dim> >& cells,
            for ( uint32_t i{0U}; i<it.Neighbors(); ++i ) {
                if ( it.Neighbor(i) != nullptr ) {
                     if ( !it.FE() ) { cerr <<"\nelement "<< it.Idx() <<" has corrupt FE pointer."; issues++; }
-                    if ( it.Neighbor(i)->Idx() >= 1e6 ) {
+                    if ( it.Neighbor(i)->Idx() >= 1000000 ) {
                          cerr <<"\nis element "<< it.Idx() <<" neighbor idx="<< it.Neighbor(i)->Idx() <<" really this large?";
                          issues++;
                       }

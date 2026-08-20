@@ -416,7 +416,7 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     // adding 'element number' as a variable
     PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
     node_nums.Reserve( vset.Elements() );
-    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
     vset.AddData( "element number", elmt_nums );
 
     Model<3U> model( vset, varFileName.c_str() );

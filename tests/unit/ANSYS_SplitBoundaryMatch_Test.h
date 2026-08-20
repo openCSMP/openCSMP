@@ -19,10 +19,12 @@ template<uint32_t> class SplitBoundary;
 */
 class ANSYS_SplitBoundaryMatch_Test : public Test {
   public:
-    virtual void run();
+    explicit ANSYS_SplitBoundaryMatch_Test( bool verbose=false ) : verbose_(verbose) {}
+    
+    void run() override final;
 
   private:
-    const static bool verbose_ = true;
+    const bool verbose_;
     
     bool TestForContiguousModel( /* "Split_Edges" */ );
     bool TestForDiscontiguousModel();

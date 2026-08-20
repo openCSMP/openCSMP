@@ -1,4 +1,4 @@
-// Disable wingdi.h because it steps on our toes
+// Disable wingdi.h
 #define NOGDI
 
 #include "CSMP_definitions.h"
@@ -10,168 +10,166 @@
 #include "Test.h"
 #include "TestSuite.h"
 
-// fundamentals
+// --- fundamentals ---
+#include "ArrayVariable_Test.h"
 #include "binaryReadWrite_Test.h"
 #include "Colony_Test.h"
 #include "ColorPalette_Test.h"
+#include "ConvexPolygon_Test.h"
+#include "FlaggedArrayVariable_Test.h"
+#include "GenericSingleton_Test.h"
 #include "ScalarVar_Test.h"
-#include "VectorVar_Test.h"
-#include "VectorVar_Test1.h"
-#include "VectorVar_Test2.h"
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
 #include "TensorVar_Test2.h"
-#include "ArrayVariable_Test.h"
-#include "FlaggedArrayVariable_Test.h"
 #include "Variables_Test.h"
-#include "GenericSingleton_Test.h"
-#include "ConvexPolygon_Test.h"
-#include "vsetMakers.h"
+#include "VectorVar_Test.h"
+#include "VectorVar_Test1.h"
+#include "VectorVar_Test2.h"
 
-// math
-#include "IsnanIsinf_Test.h"
+// --- math ---
+#include "CompressedRowMatrix_Test.h"
 #include "CubicSpline_Test.h"
 #include "DenseMatrix_Test.h"
-#include "Matrix_Test.h"
-#include "SparseMatrix_Test.h"
-#include "CompressedRowMatrix_Test.h"
+#include "DynamicArray_Test.h"
 #include "FibonacciHeap_Test.h"
 #include "geometricCalculations_Test.h"
-#include "DynamicArray_Test.h"
-#include "ColorPalette_Test.h"
+#include "IsnanIsinf_Test.h"
+#include "Matrix_Test.h"
+#include "SparseMatrix_Test.h"
 
-// Model with variable storage
-#include "Parameter_Test.h"
-#include "PropertyDatabase_Test.h"
-#include "Index_Test.h"
-#include "INDEXandVariables_Test.h"
-#include "LocalVariableStorage_Test.h"
-#include "Box_Test.h"
-#include "Point_Test.h"
-#include "Node_Test.h"
-#include "NodeManifold_Test.h"
-#include "NodeFunctions_Test.h"
-#include "Element_Test.h"
-#include "ElementPolicyIntegrity_Test.h"
-#include "FiniteElementPolicy_Test.h"
-#include "FiniteElementManager_Test.h"
-#include "Face_Test.h"
-#include "InterFace_Test.h"
-#include "MeshManager_Test.h"
-#include "MeshManagementUtilities_Test.h"
-#include "NodeManifoldManager_Test.h"
-#include "ModelBasics_Test.h"
-#include "parentElementStorageOptions_Test.h"
-#include "ModelSubDomain_Test.h"
+// --- model with variable storage ---
 #include "BoundaryInterface_Test.h"
 #include "Boundary_Test.h"
+#include "Box_Test.h"
+#include "CopyReplaceVisitor_Test.h"
+#include "Element_Test.h"
+#include "ElementPolicyIntegrity_Test.h"
+#include "Face_Test.h"
+#include "FiniteElementManager_Test.h"
+#include "FiniteElementPolicy_Test.h"
+#include "Index_Test.h"
+#include "INDEXandVariables_Test.h"
+#include "IntegrationPointToNodePropertyVisitor_Test.h"
+#include "InterFace_Test.h"
+#include "LocalVariableStorage_Test.h"
+#include "MeshManager_Test.h"
+#include "MeshManagementUtilities_Test.h"
+#include "ModelBasics_Test.h"
+#include "ModelSubDomain_Test.h"
+#include "Node_Test.h"
+#include "NodeFunctions_Test.h"
+#include "NodeManifold_Test.h"
+#include "NodeManifoldManager_Test.h"
+#include "Parameter_Test.h"
+#include "parentElementStorageOptions_Test.h"
+#include "Point_Test.h"
+#include "PointPropertyToCellMapper2D_Test.h"
+#include "PropertyAtPointVisitor_Test.h"
+#include "PropertyDatabase_Test.h"
+#include "PropertyHandle_MathTest.h"
+#include "PropertyHandle_Test.h"
 #include "Region_Test.h"
 #include "SplitBoundary_Test.h"
 #include "SplitBoundaryInterface_Test.h"
 #include "SplitBoundaryTest_JK.h"
-#include "CopyReplaceVisitor_Test.h"
-// model manipulation and property retrieval
-#include "IntegrationPointToNodePropertyVisitor_Test.h"
-#include "PointPropertyToCellMapper2D_Test.h"
-#include "PropertyHandle_Test.h"
-#include "PropertyHandle_MathTest.h"
-#include "PropertyAtPointVisitor_Test.h"
 
-// finite elements
-#include "IsoparametricLinearTriangle.h"
-#include "IsoparametricQuadraticTriangle.h"
+// --- finite elements ---
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test2.h" // misc. tests
-#include "IsoparametricQuadraticTetrahedron_Test.h"
-#include "IsoparametricLinearTetrahedron.h"
-#include "IsoparametricLinearPyramid_Test.h"
+#include "FiniteElement_Test2.h"                      // misc. tests
 #include "IsoparametricLinearHexahedron_Test.h"
+#include "IsoparametricLinearPyramid_Test.h"
+#include "IsoparametricLinearTetrahedron.h"
+#include "IsoparametricLinearTriangle.h"
+#include "IsoparametricQuadraticTetrahedron_Test.h"
+#include "IsoparametricQuadraticTriangle.h"
 #include "LinearCuboid_Test.h"
 
-// finite volumes
+// --- finite volumes ---
 #include "ExplicitTransport_Test.h"
-#include "FiniteVolumeStencil_Test.h"
 #include "FiniteVolumePolicy_Test.h"
-#include "FV_Parameter_Test.h"
+#include "FiniteVolumeStencil_Test.h"
 #include "FluxMismatch_Test.h"
+#include "FV_Parameter_Test.h"
+#include "GenericFiniteVolumeTransport_Test.h" // TODO: from Andrew Bromage: test fails for any non-simplex elements
 #include "GFVT_ParametricSpaceComputation_Test.h"
-#include "GenericFiniteVolumeTransport_Test.h" // TODO: from Andrew Bromage: test fails for non-simplex elements
 
-// interfaces to other software
-// importing
-#include "CommandLineParser_Test.h"
-#include "VData_Test.h"
-#include "VSet_Test1.h"
-#include "VSet_Test2.h"
-#include "vsetMakers_Test.h"
-#include "PropertyData_Test.h"
-#include "FEM_Data_Test.h"
-#include "ModelTopology_Test.h"
-#include "InputDataManager_Test.h"
-#include "SKUA_FiniteElementMeshInterface_Test.h"
+// --- interfaces to other software: importing ---
 #include "ANSYS_Model2D_Test.h"
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_SplitBoundaryMatch_Test.h"
+#include "CommandLineParser_Test.h"
+#include "FEM_Data_Test.h"
+#include "InputDataManager_Test.h"
+#include "ModelTopology_Test.h"
+#include "PropertyData_Test.h"
+#include "SKUA_FiniteElementMeshInterface_Test.h"
 #include "TRIANGLE_Interface_Test.h"
 // TODO: test Quadrilaterator
-// exporting
+#include "VData_Test.h"
+#include "vsetMakers.h"
+#include "vsetMakers_Test.h"
+#include "VSet_Test1.h"
+#include "VSet_Test2.h"
+
+// --- interfaces to other software: exporting ---
+#include "ModelComparator_Test.h"
 #include "UG4_UGX_FileExport_Test.h"
 #include "VTU_Interface_Test.h"
-#include "ModelComparator_Test.h"
 
-// FE/FV integration
-#include "Operand_Test.h"
+// --- FE/FV integration ---
 #include "MathOperatorLHS_Test.h"
 #include "MathOperatorRHS_Test.h"
+#include "Operand_Test.h"
+
 // PDE operators
 #include "Integral_dNT_lhsop_dN_dV_Test.h"
 #include "Integral_dNT_lhsop_dN_NT_v_dN_dV_Test.h"
-#include "Integral_NT_lhsop_N_dV_Test.h"
 #include "Integral_dNT_rhsop_dN_dV_Test.h"
 #include "Integral_dNT_rhsop_dV_Test.h"
-
+#include "Integral_NT_lhsop_N_dV_Test.h"
 #include "Integral_var_NT_lhsop_N_dV_Test.h"
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
-
+#include "NumIntegral_DNT_op_DN_NT_v_DN_dV_Test.h"
+#include "NumIntegral_dNT_lhsop_dN_dV_Test.h"
+#include "NumIntegral_dNT_op_dV_Test.h"
+#include "NumIntegral_dNT_rhsop_dN_dV_Test.h"
 #include "NumIntegral_NT_lhsop_N_dV_Test.h"
 #include "NumIntegral_NT_rhsop_N_dV_Test.h"
-#include "NumIntegral_dNT_lhsop_dN_dV_Test.h"
-#include "NumIntegral_dNT_rhsop_dN_dV_Test.h"
-#include "NumIntegral_dNT_op_dV_Test.h"
-#include "NumIntegral_DNT_op_DN_NT_v_DN_dV_Test.h"
+
 // PDE integrators
+#include "PDE_Integrator_Computation_Test.h"
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator_Transient_Test.h"
-#include "PDE_Integrator_Computation_Test.h"
 
-// constitutive relationships
-#include "TwoPhaseModel_TestSuite.h"
+// --- constitutive relationships ---
 #include "ExponentialTransferFunction_Test.h"
-#include "TwoPhaseModelWithHysteresis_Test.h"
-#include "H2O_CO2_NaCl_FlowFunctions.h"
 #include "FlowFunctionsModule.h"
+#include "H2O_CO2_NaCl_FlowFunctions.h"
+#include "TwoPhaseModel_TestSuite.h"
+#include "TwoPhaseModelWithHysteresis_Test.h"
 
-// analysis
+// --- analysis ---
 #include "PropertyConstraints_Test.h"
-#include "StatisticalAnalyzer_Test.h"
 #include "RegionMonitor_Test.h"
+#include "StatisticalAnalyzer_Test.h"
 #include "Visitor_TestSuite.h"
 
-// performance tests
-#include "VariableStorageSpeed_Test.h"
-#include "FiniteVolumeStencilSpeed_Test.h"
-#include "PropertyStorageSpeed_Test.h"
-#include "CSMP_VariableBenchmarking_Test.h"
-#include "JaggedArray3D_Comparison_Test.h"
+// --- performance tests ---
 #include "AccumulationSpeedProfiling_Test.h"
+#include "CSMP_VariableBenchmarking_Test.h"
 #include "ExactVersusNumericIntegrationSpeed_Test.h"
 #include "FiniteVolumeStencilSpeed_Test.h"
+#include "JaggedArray3D_Comparison_Test.h"
+#include "PropertyStorageSpeed_Test.h"
+#include "VariableStorageSpeed_Test.h"
 
-// integration tests
-#include "Geothermal_1D_VVCase.h"
+// --- integration tests ---
 #include "DirichletPressureBoxModel_VVCase.h"
+#include "Geothermal_1D_VVCase.h"
 #include "GravityInducedFluidPressure_Test.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
+
 
 using namespace std;
 using namespace csmp;
@@ -224,18 +222,17 @@ int main()
     if ( test_refactoring ) {
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
+        
+//        refactored.addTest( new AccumulationSpeedProfiling_Test() );
+//        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
 
 // TODO:       refactored.addTest( new IsoparametricLinearPyramid_Test() ); // pyramid is correct but test fails
 // TODO:       refactored.addTest( new BoundaryInterface_Test() );          // - test alternative BREP flagging approaches
        
 
-// TODO: work in progress:        refactored.addTest( new PropertyConstraints_Test() );
- //       refactored.addTest( new SplitBoundaryTest_JK() ); // tested OK
-
-
 // TODO: does not run transient problem yet; compare analytic with num integrals
 //        refactored.addTest( new PDE_Integrator_Transient_Test() ); // OK (Anne-Laure Tertois) granite_model1
-//          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK
+          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK
 // TODO: test PDE_Integrator with periodic boundary conditions
 
 
@@ -426,7 +423,7 @@ int main()
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt", verbose ) );   // 2D case 4 integration points
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );  // 3D case 3 integration point
       // non-standard element tests
-      interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // TODO: no flux balance for constant velocity projected on sides
+      interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // TODO: poor flux balance for constant velocity projected on sides
       // other elements
       // --------------
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
@@ -446,25 +443,25 @@ int main()
 // Exact integration
 // -----------------
 // LHS
-      interdependent1.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
-      interdependent1.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
-      interdependent1.addTest( new Integral_NT_lhsop_N_dV_Test(true) );     // tested: OK
-      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_NT_lhsop_N_dV_Test(true) );
+      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) );
 // RHS
-      interdependent1.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
-      interdependent1.addTest( new Integral_dNT_rhsop_dV_Test(true) );    // gradient operand, tested: OK
-      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_dNT_rhsop_dV_Test(true) );
+      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) );
           
 // Numeric integration
 // -------------------
 // LHS
-      interdependent1.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
-      interdependent1.addTest( new NumIntegral_dNT_op_dV_Test(true) ); // tested: OK
-      interdependent1.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
-      interdependent1.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_dNT_op_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) );
 // RHS
-      interdependent1.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
-      interdependent1.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) ); // tested: OK
+      interdependent1.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) );
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
@@ -563,6 +560,7 @@ int main()
     // =========================================================================================================
     //
     //             COMPOSITE FUNCTIONALITY
+    //             Run speed tests only in release mode (NDEBUG==true)
     //
     // =========================================================================================================
     if ( test_composite ) {
@@ -585,25 +583,29 @@ int main()
       composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
       composite.addTest( new PropertyConstraints_Test() );
-      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
 
       // computations
       composite.addTest( new PDE_Integrator_Test( model2D ) );
       composite.addTest( new PDE_Integrator_Transient_Test() );
       composite.addTest( new PDE_Integrator_Computation_Test() );
+      composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       // TODO: test periodic BCs
+
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );
 
       // constitutive relationships
       composite.addTest( new ExponentialTransferFunction_Test() );
-      composite.addTest( new PropertyStorageSpeed_Test( &clog ) ); // luxury extra
 
       // constitutive relations
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
       composite.addTest( new TwoPhaseModelwithHysteresis_Test() );
+      
+      // speed tests
+      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+      
       // running unit tests and reporting errors
       composite.run();
       fails_composite = composite.report();
@@ -641,7 +643,9 @@ int main()
     if ( fails_new_developments > 0 ) cerr <<"\nnew development tests failed.";
     cerr << endl << endl;
     
-  } // Exception handling (warnings etc. are caught at a much lower level)
+  }
+  
+  // Exception handling (warnings etc. are caught at a much lower level)
   catch( bad_alloc& ba ) {
     cerr <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << endl;
     system("pause");

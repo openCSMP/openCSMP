@@ -144,32 +144,47 @@ inline constexpr ErrorInfo kUnknown{
 }
 
 
-/** Usage
+/** printError
  
     petsc::printError(63);
     // PETSC_ERR_ARG_OUTOFRANGE (63) — Argument out of range
 
     petsc::printError(-3);
     // PETSC_ERR_UNKNOWN (-3) — Unknown, non-standard, or version-specific PETSc error code
+
+    Unicode output extension not supported by older g++
+    @code
+    inline void printError(int code)
+    {
+        const auto error = describe(code);
+
+        std::println(
+            "{} ({}) — {}",
+            error.symbol,
+            error.code,
+            error.description
+        );
+    }
+    #endcode
  */
 inline void printError(int code)
 {
     const auto error = describe(code);
 
-    std::println(
-        "{} ({}) — {}",
-        error.symbol,
-        error.code,
-        error.description
-    );
+    std::cout << error.symbol
+              << " (" << error.code << ")"
+              << " \xe2\x80\x94 "   // UTF-8 encoding of em dash (—)
+              << error.description
+              << "\n";
 }
 
-// Extracts codes from lines such as:
-//   "PETSc error code 63"
-//   "error code: 82"
-//   "PETSC ERROR: error code = 95"
-[[nodiscard]] inline std::optional<ErrorInfo>
-parse_error(std::string_view text)
+
+/** Extracts codes from lines such as:
+     "PETSc error code 63"
+     "error code: 82"
+     "PETSC ERROR: error code = 95"
+*/
+[[nodiscard]] inline std::optional<ErrorInfo> parse_error(std::string_view text)
 {
     static const std::regex pattern{
         R"(\b(?:PETSc\s+)?error\s+code\s*[:=]?\s*(-?\d+)\b)",

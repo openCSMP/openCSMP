@@ -1,6 +1,7 @@
 #ifndef XML_DOCUMENT_H
 #define XML_DOCUMENT_H
 
+#include <cstring>
 #include <string>
 #include <vector>
 

@@ -39,6 +39,7 @@ void AccumulationSpeedProfiling_Test::run()
  } // end run
  
  
+ 
 Model<3U>* AccumulationSpeedProfiling_Test::BuildModel3D()
  {
     ANSYS_Model3D m0( "prism_test", "prism_test", "CSMP-1phase-variables.txt", true );
@@ -246,8 +247,8 @@ void AccumulationSpeedProfiling_Test::MatrixMultiplication_DenseMatrix_vs_Eigen_
      auto t0 = chrono::high_resolution_clock::now();
      for ( int n{0}; n<1e6; ++n ) {
           // matrix initialisation
-          for (int i = 0; i < A.Rows(); ++i)
-            for (int j = 0; j < A.Cols(); ++j) {
+          for (uint32_t i = 0; i < A.Rows(); ++i)
+            for (uint32_t j = 0; j < A.Cols(); ++j) {
                  A(i, j) = dis(gen);
                  B(i, j) = dis(gen);
               }
@@ -517,7 +518,7 @@ void AccumulationSpeedProfiling_Test::MatrixResizeTest()
      // Create a random number generator
      std::random_device rd;  // Seed for the random number generator
      std::mt19937 gen(rd()); // Standard Mersenne Twister generator
-     std::uniform_int_distribution<> dis(1,36); // Range [1, 100]
+     std::uniform_int_distribution<uint32_t> dis(1,36); // Range [1, 100]
   
      // CSMP++
      {
@@ -526,7 +527,7 @@ void AccumulationSpeedProfiling_Test::MatrixResizeTest()
        // resizing = just changing rows_ and cols_ (high-mem policy)
        double tracker{0.};
        auto t0 = chrono::high_resolution_clock::now();
-       for ( int n{0}; n<1e7; ++n ) {
+       for ( uint32_t n{0}; n<1e7; ++n ) {
             // matrix resize
             CSMPMAT.Resize( dis(gen), dis(gen) );
             tracker += CSMPMAT(0,0);

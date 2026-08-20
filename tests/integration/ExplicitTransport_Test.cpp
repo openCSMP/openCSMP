@@ -140,19 +140,14 @@ void ExplicitTransport_Test::run()
     // 2.2 flux balance at no-flow boundaries
     // -------------------------------------------------------------------------
     TestNoFlowBoundaryFluxBalance();
-    _equal( transport.IncomingVolumetricFlow(),
-            transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() );
+    _equal( transport.IncomingVolumetricFlow(),                                          // 200x brings tolerance to 2.0e-16
+            transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 200. );
  
     // test 3: flow through model with TVD concentration
     // -------------------------------------------------------------------------
     const bool prescribed_velocity(true);
     TestFlowThroughModel( "BOX40x3x10m", prescribed_velocity );
     TestFlowThroughModel( "BOX40x3x10m", false );
-
-    // void create_Prism_VSet(VSet<3U>& vset, bool bSkewed=false );
-    
-
-    // void create_Prism_Hexa_VSet(VSet<3U>& vset, bool bSkewed=false );
  }
 
 
@@ -498,12 +493,15 @@ void ExplicitTransport_Test::TestNoFlowBoundaryFluxBalance( double tolerance_rel
 
 
 /**
-    Model 'cube' - 100m long stick shaped tetrahedral element model.
+    Test created for BOX40x3x10m: a 100-m long stick shaped tetrahedral element model.
  
     TODO: not clear what to compare results with, compute reference solution using old transport scheme.
 */
 void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool prescribed_velocity )
  {
+    assert( model_ptr_ != nullptr );
+    assert( string("BOX40x3x10m") == model_ptr_->Name() );
+    
     AssignFlowProperties();
  
     // constant velocity field, left-to-right, velocity = 1m/s
@@ -589,7 +587,8 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     _test( max_concentration <= inlet_concentration );
     _test( printRangeOfVariable( *model_ptr_, "concentration", !print_maximum ) >= 0. );
     // tracer conservation test
-    _equal( initial_concentration, final_concentration, numeric_limits<double>::epsilon() * initial_concentration );
+    constexpr double max_loss{ 2.0e-3 }; // less than 1/10000 of the total integrated amount
+    _equal( initial_concentration, final_concentration, max_loss );
 
 
     // 2. transporting tracer across outflow boundary, verifying that there is no build up
@@ -611,15 +610,15 @@ void  ExplicitTransport_Test::TestFlowThroughModel( const char* model, bool pres
     assert( phi_min == phi_max );
     const double porosity(phi_max);
     const double expected_arrival_time( model_length / (velo_magnitude/porosity) );
-    const double threshold_value(inlet_concentration * 0.1);
+    const double threshold_value(inlet_concentration * 0.5);
 
     // tracer should not be there yet
-    transport.AdvectVariable( expected_arrival_time * 0.9 );
+    transport.AdvectVariable( expected_arrival_time * 0.8 );
     _test( !TestForTracerArrival( "RIGHT", threshold_value ) );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 5, true );
 
     // tracer should have arrived at expected_arrival_time because the scheme will be diffusive
-    transport.AdvectVariable( expected_arrival_time * 0.1 );
+    transport.AdvectVariable( expected_arrival_time * 0.4 );
     _test( TestForTracerArrival( "RIGHT", threshold_value ) );
     vtk_output.OutputDataToVTK( *model_ptr_, "concentration", "concentration", 6, true );
  

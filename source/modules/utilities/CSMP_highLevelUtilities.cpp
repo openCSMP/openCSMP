@@ -195,29 +195,20 @@ void printRangeOf( const vector<pair<double,double> >&  data )
  } // end printRangeOf
  
 
-
-
-
-
-
-
- 
-  
-  
   
 
 /**
    @todo document this function
 */
 #if defined _MSC_VER || defined __MINGW32__
-const char * strp_weekdays[] =
+const char* strp_weekdays[] =
 { "sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday" };
-const char * strp_monthnames[] =
+const char* strp_monthnames[] =
 { "january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december" };
 bool strp_atoi(const char * & s, int & result, int low, int high, int offset)
 {
 	bool worked = false;
-	char * end;
+	char* end(nullptr);
 	unsigned long num = strtoul(s, &end, 10);
 	if (num >= (unsigned long)low && num <= (unsigned long)high)
 	{
@@ -457,7 +448,7 @@ char * strptime(const char *s, const char *format, struct tm *tm)
 	}
 	return (working ? (char *)s : 0);
 }
-#endif // _MSC_VER
+#endif // defined _MSC_VER || defined __MINGW32__
 
 
 
@@ -557,10 +548,10 @@ static void test_createUniqueCombinations()
  }
  
  
- 
+// is the executable compiled for the Rosetta X86 replacement environment on Apple Silicon
+#if defined(__APPLE__)
 #include <sys/sysctl.h>
 
-// is the executable compiled for the Rosetta X86 replacement environment on Apple Silicon
 inline bool running_under_Rosetta()
 {
     int translated = 0;
@@ -575,7 +566,7 @@ inline bool running_under_Rosetta()
     }
     return false;
 }
- 
+#endif
  
  
 } // end namespace csmp

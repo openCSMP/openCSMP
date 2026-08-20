@@ -370,7 +370,10 @@ bool PropertyConstraints::CheckConstraints( const CELL<dim>* e ) const
 
 uint32_t  PropertyConstraints::Constraints() const { return static_cast<uint32_t>(criteria_.size()); }
  
+ 
 void PropertyConstraints::CheckLengthOfVectorVariables( bool check ) { vector_length_check_=check; }
+ 
+ 
  
     
 void PropertyConstraints::Erase()
@@ -388,72 +391,43 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
 {
     for ( const auto& it : check_list_ )
       {
-         // vector length check takes priority and is handled separately
+         // vector length check is a special case — handled separately
          if ( vector_length_check_ && it.first.type == VECTOR )
            return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
          switch ( it.first.place ) {
               case NODE:
                  {
-                   // count how many nodes fall outside the constraint range
+                   // count nodes that fall outside the constraint range.
+                   // IsWithinRange handles scalar, vector, and tensor types
+                   // internally — PropertyConstraints does not need to
+                   // distinguish between them here.
                    uint32_t out_of_range{ 0U };
+                   for ( uint32_t i{ 0U }; i < e->Nodes(); ++i )
+                     if ( !e->N(i)->IsWithinRange( it.first,
+                                                   it.second.first,
+                                                   it.second.second ) )
+                       ++out_of_range;
 
-                   if ( it.first.type == SCALAR ) {
-                        ScalarVariable sc;
-                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
-                            e->N(i)->Read( it.first, sc );
-                            if ( it.second.first  > sc() ||
-                                 it.second.second < sc() )
-                                ++out_of_range;
-                          }
-                     }
-                   else if ( it.first.type == VECTOR ) {
-                        // vector_length_check_ is false here (handled above)
-                        VectorVariable<dim> vc;
-                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
-                            e->N(i)->Read( it.first, vc );
-                            bool node_in_range{ true };
-                            for ( uint32_t j{ 0U }; j < dim; ++j )
-                                if ( it.second.first  > vc(j) ||
-                                     it.second.second < vc(j) ) {
-                                    node_in_range = false;
-                                    break;
-                                  }
-                            if ( !node_in_range ) ++out_of_range;
-                          }
-                     }
-                   else if ( it.first.type == TENSOR ) {
-                        TensorVariable<dim> ts;
-                        for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
-                            e->N(i)->Read( it.first, ts );
-                            bool node_in_range{ true };
-                            for ( uint32_t j{ 0U }; j < dim && node_in_range; ++j )
-                                for ( uint32_t k{ 0U }; k < dim && node_in_range; ++k )
-                                    if ( it.second.first  > ts(j,k) ||
-                                         it.second.second < ts(j,k) )
-                                        node_in_range = false;
-                            if ( !node_in_range ) ++out_of_range;
-                          }
-                     }
-
-                   // fail only if ALL nodes are outside the range
-                   // (i.e. not even one node satisfies the constraint)
+                   // fail only if NO node satisfies the constraint
                    if ( out_of_range >= e->Nodes() ) return false;
                  }
                 break;
 
               case ELEMENT_INTEGRATION_POINT:
-                   // integration point variables are not nodal —
-                   // single-node mode does not apply; use strict check
+                   // single-node mode does not apply to integration point
+                   // variables — use the strict all-points check
                    for ( uint32_t i{ 0U }; i < e->IntegrationPoints(); ++i )
                      if ( !e->IsWithinRange( i, it.first,
-                                             it.second.first, it.second.second ) )
+                                             it.second.first,
+                                             it.second.second ) )
                        return false;
                 break;
 
               case ELEMENT:
                    if ( !e->IsWithinRange( it.first,
-                                           it.second.first, it.second.second ) )
+                                           it.second.first,
+                                           it.second.second ) )
                      return false;
                 break;
 
@@ -472,48 +446,64 @@ bool PropertyConstraints::CheckSingleNodeConstraints( const CELL<dim>* e ) const
 
 template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::CheckNodeAverageConstraints( const CELL<dim>* e ) const
- {
+{
     for ( const auto& it : check_list_ )
       {
-         if ( vector_length_check_ && it.first.place )
+         // vector length check is a special case — handled separately
+         if ( vector_length_check_ && it.first.type == VECTOR )
            return VectorLengthCheck( e, it.first, it.second.first, it.second.second );
 
-         csmp::Index index = it.first;
-         
-         switch( it.first.place ) {
+         switch ( it.first.place ) {
               case NODE:
+                 {
+                   // PropertyValueAtBaryCenter interpolates nodal values to
+                   // the barycentre using shape functions. IsWithinRange on
+                   // the resulting variable handles scalar, vector, and tensor
+                   // types internally — no type dispatch needed here.
                    if ( it.first.type == SCALAR ) {
                         ScalarVariable sc;
-                        e->PropertyValueAtBaryCenter( index, sc );
-                        if ( !sc.IsWithinRange( it.second.first, it.second.second ) ) return false; 
+                        e->PropertyValueAtBaryCenter( it.first, sc );
+                        if ( !sc.IsWithinRange( it.second.first,
+                                                it.second.second ) ) return false;
                      }
                    else if ( it.first.type == VECTOR ) {
                         VectorVariable<dim> vc;
-                        e->PropertyValueAtBaryCenter( index, vc );
-                        if ( !vc.IsWithinRange( it.second.first, it.second.second ) ) return false; 
+                        e->PropertyValueAtBaryCenter( it.first, vc );
+                        if ( !vc.IsWithinRange( it.second.first,
+                                                it.second.second ) ) return false;
                      }
                    else if ( it.first.type == TENSOR ) {
                         TensorVariable<dim> ts;
-                        e->PropertyValueAtBaryCenter( index, ts );
-                        if ( !ts.IsWithinRange( it.second.first, it.second.second ) ) return false; 
+                        e->PropertyValueAtBaryCenter( it.first, ts );
+                        if ( !ts.IsWithinRange( it.second.first,
+                                                it.second.second ) ) return false;
                      }
+                 }
                 break;
+
               case ELEMENT_INTEGRATION_POINT:
-                   for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
-                     if ( !e->IsWithinRange( i, it.first, it.second.first, it.second.second ) )
+                   for ( uint32_t i{ 0U }; i < e->IntegrationPoints(); ++i )
+                     if ( !e->IsWithinRange( i, it.first,
+                                             it.second.first,
+                                             it.second.second ) )
                        return false;
                 break;
+
               case ELEMENT:
-                   if ( !e->IsWithinRange( it.first, it.second.first, it.second.second ) )
+                   if ( !e->IsWithinRange( it.first,
+                                           it.second.first,
+                                           it.second.second ) )
                      return false;
                 break;
+
               default:
-                   throw csmp::Exception( ERROR, "PropertyConstraints::CheckNodeAverageConstraints",
-                                              "Placement of constraint variable could not be identified");
+                   throw csmp::Exception( ERROR,
+                       "PropertyConstraints::CheckNodeAverageConstraints",
+                       "Placement of constraint variable could not be identified" );
            }
       }
     return true;
- }
+}
 
 
 
@@ -522,45 +512,45 @@ template<uint32_t dim, template<uint32_t> class CELL>
 bool PropertyConstraints::VectorLengthCheck( const CELL<dim>* e,
                                              const csmp::Index& idx,
                                              double vmin, double vmax ) const
- {
-    VectorVariable<dim>  vc;
- 
-    if ( idx.type != VECTOR ) {
-         throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
-                                       "the variable index must define a VectorVariable");
-      }
-    if ( nodal_average_ ) {
-         throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
-                                       "'nodal average' and 'vector_length_check' are mutually exclusive switches");
-      }
- 
+{
+    VectorVariable<dim> vc;
+
+    if ( idx.type != VECTOR )
+        throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
+                               "the variable index must define a VectorVariable" );
+
+    if ( nodal_average_ )
+        throw csmp::Exception( ERROR, "PropertyConstraints::VectorLengthCheck",
+                               "'nodal average' and 'vector_length_check' are mutually exclusive switches" );
+
     if ( idx.place == NODE ) {
-         if ( one_node_only_ ) {
-              for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
-                   e->N(i)->Read( idx, vc );
-                   if ( vc.IsWithinRange( vmin, vmax ) ) return true; 
-                }
-              return false;
-           }
-         else
-         for ( uint32_t i{0U}; i<e->Nodes(); i++ ) {
-              e->N(i)->Read( idx, vc );
-              if ( !vc.IsWithinRange( vmin, vmax ) ) return false; 
-           }
-      }
+        if ( one_node_only_ ) {
+            for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+                e->N(i)->Read( idx, vc );
+                if ( vc.Length() >= vmin && vc.Length() <= vmax ) return true;
+            }
+            return false;
+        }
+        else {
+            for ( uint32_t i{ 0U }; i < e->Nodes(); ++i ) {
+                e->N(i)->Read( idx, vc );
+                if ( vc.Length() < vmin || vc.Length() > vmax ) return false;
+            }
+        }
+    }
     else if ( idx.place == ELEMENT_INTEGRATION_POINT ) {
-         for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ ) {
-              e->Read( i, idx, vc );
-              if ( !vc.IsWithinRange( vmin, vmax ) ) return false; 
-           }
-      }
+        for ( uint32_t i{ 0U }; i < e->IntegrationPoints(); ++i ) {
+            e->Read( i, idx, vc );
+            if ( vc.Length() < vmin || vc.Length() > vmax ) return false;
+        }
+    }
     else if ( idx.place == ELEMENT ) {
-              e->Read( idx, vc );
-              if ( !vc.IsWithinRange( vmin, vmax ) ) return false; 
-      }
-      
+        e->Read( idx, vc );
+        if ( vc.Length() < vmin || vc.Length() > vmax ) return false;
+    }
+
     return true;
- }
+}
 
 
 
@@ -573,10 +563,8 @@ void PropertyConstraints::Out() const
     if ( check_list_.empty() )       cout <<"\tIndex data are not established yet."<< endl;
     else                            cout <<"\tIndex data have been established."<< endl;
 
-    map<string,pair<double,double> >::const_iterator  crit;       
-    
     cout <<"\tAssigned property constraints, and their ranges:";
-    for ( crit=criteria_.begin(); crit!=criteria_.end(); crit++ )
+    for ( auto crit=criteria_.begin(); crit!=criteria_.end(); crit++ )
       cout <<"\n\t\t'"<< (*crit).first <<"' range: "<< (*crit).second.first <<" to "<< (*crit).second.second;
     
     cout << endl; 

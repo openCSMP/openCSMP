@@ -203,6 +203,13 @@ bool interPenetrating( const Element<dim>* const, const Element<dim>* const );
 /// Tests whether a tetrahedron is degenerate because all of its vertices lie within a single plane; tolerance in meters.
 bool hasNonManifoldVertices( const csmp::Element<3U>* const tptr, double tolerance=1.0e-5 );
 
+/// Tests whether cells are so severely skewed that the stiffness matrix @f$ \mathbf{B}^T \mathbf{B} @f$ becomes singular.
+template<uint32_t dim, template<uint32_t> class CELL>
+std::vector<CELL<dim>*> testCellSkewing( const std::vector<CELL<dim>*>& cells,
+                                         double condition_number_limit = 50., ///< value varies as function of element type
+                                         bool   verbose                = false );
+
+
 /// detects whether the point is contained in any of the elements of the region
 csmp::Element<3u>* const pointInVolumeElement( Region<3U>& region, const Point<3U>& query );
 
