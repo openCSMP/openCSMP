@@ -259,6 +259,8 @@ size_t outsideElementsWithNodesTouchingPerimeter( const Region<dim>&,
                                                   const std::vector<std::pair<std::pair<Element<dim>*,uint32_t>,
                                                                std::pair<Element<dim>*,uint32_t> > >& perimeter_cells,
                                                   std::map<Node<dim>*,std::map<Element<dim>*,uint32_t>>& touching_elmts );
+
+
 } // csmp
 
 #endif

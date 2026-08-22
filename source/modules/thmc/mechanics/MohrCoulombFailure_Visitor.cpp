@@ -1,358 +1,442 @@
+/*
+ *  MohrCoulombFailure_Visitor.cpp
+ *  Revised and corrected.
+ */
+
 #include "MohrCoulombFailure_Visitor.h"
 #include "Model.h"
+#include "Region.h"
+#include "Boundary.h"
+#include "Element.h"
 #include "Node.h"
+#include "ErrorHandler.h"
 #include "Exception.h"
-#include <cmath>
-
+#include "StressInvariants.h"
+#include "CSMP_physical_constants.h"
 
 using namespace std;
 
 namespace csmp {
 
-/**
-    @attention SKM 28/9/2014 - added documentation, fixed wrong output and formatted code
-*/
-template<uint32_t dim>
-MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model,
-                                                             bool positive_compressive_stress_convention,
-                                                             bool verbose )
-    : Visitor<dim>( MODEL, ELEMENT ),
-      stressref_(model.Database()),
-      verbose_(verbose),
-      // getting csmp::Index values for the involved Node and ELEMENT variables
-      Stress_key_(stressref_.StorageKey("stress")),
-      Cohesion_key_(stressref_.StorageKey("cohesion")),
-      Friction_key_(stressref_.StorageKey("friction angle")),
-      Failure_key_(stressref_.StorageKey("failure")),
-      Failure01_key_(stressref_.StorageKey("tensile failure")),
-      // converting the friction angle in 'degrees' to 'radians'
-      degrees_to_radians_( (2*3.14159265358979)/360. ),
-      sqrt3_(sqrt(3.)),
-      sqrt32_(sqrt(3./2.)),
-      fluid_pressure_(0.),
-      sign_of_tensile_stress_( positive_compressive_stress_convention ? -1.0 : 1.0 )
+// delete For2D for 3D and 1D
+template<>
+MohrCoulombFailure_Visitor<3U>
+MohrCoulombFailure_Visitor<3U>::For2D( Model<3U>&,
+                                        PlaneAssumption,
+                                        PLACEMENT ) = delete;
+
+template<>
+MohrCoulombFailure_Visitor<1U>
+MohrCoulombFailure_Visitor<1U>::For2D( Model<1U>&,
+                                        PlaneAssumption,
+                                        PLACEMENT ) = delete;
+
+// provide For2D only for 2D
+template<>
+MohrCoulombFailure_Visitor<2U>
+MohrCoulombFailure_Visitor<2U>::For2D( Model<2U>&      model,
+                                        PlaneAssumption  assumption,
+                                        PLACEMENT        target_placement )
 {
-   // fluid pressure is only considered if it os defined
-   if ( model.Database().IsDefined("fluid pressure") )
-       pf_key_ = model.Database().StorageKey("fluid pressure");
+    return MohrCoulombFailure_Visitor<2U>( model, assumption, target_placement );
+}
 
-    cout <<"\nMohrCoulombFailure_Visitor: diagnostics: ";
-    if ( (Cohesion_key_.place != ELEMENT_INTEGRATION_POINT and Cohesion_key_.place != ELEMENT) || Cohesion_key_.type != SCALAR )
-        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor):",
-                              "'cohesion' must be a scalar variable." );
+// ----------------------------------------------------------------------------
+//  Shared constructor — 3D and 1D (no PlaneAssumption)
+// ----------------------------------------------------------------------------
 
-    if ( (Failure_key_.place != ELEMENT_INTEGRATION_POINT and Failure_key_.place != ELEMENT) || Failure_key_.type != SCALAR )
-        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor):",
-                               "'failure' must be a scalar variable." );
+template<uint32_t dim>
+MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor(
+    Model<dim>& model,
+    PLACEMENT   target_placement )
+    : Visitor<dim>( MODEL, ELEMENT ),
+      plane_assumption_( PlaneAssumption::PLANE_STRESS ),  // irrelevant for 3D/1D
+      analysis_var_placement_( target_placement                ),
+      stress_key_      ( model.Database().StorageKey( "stress"           ) ),
+      cohesion_key_    ( model.Database().StorageKey( "cohesion"         ) ),
+      friction_key_    ( model.Database().StorageKey( "friction angle"   ) ),
+      tensile_str_key_ ( model.Database().StorageKey( "tensile strength" ) ),
+      biot_alpha_key_  ( model.Database().StorageKey( "Biot alpha"       ) ),
+      nu_key_          ( csmp::Index()                                      ),
+      failure_key_     ( model.Database().StorageKey( "failure"          ) ),
+      failure01_key_   ( model.Database().StorageKey( "tensile failure"  ) ),
+      pf_key_          ( model.Database().IsDefined( "fluid pressure" )
+                         ? model.Database().StorageKey( "fluid pressure" )
+                         : csmp::Index()                                   )
+{
+    const char* caller = "MohrCoulombFailure_Visitor (constructor)";
 
-    if ( (Failure01_key_.place != ELEMENT_INTEGRATION_POINT and Failure01_key_.place != ELEMENT) || Failure01_key_.type != SCALAR )
-        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor)",
-                               "'failure01' must be a scalar variable" );
+    if ( analysis_var_placement_ != ELEMENT &&
+         analysis_var_placement_ != ELEMENT_INTEGRATION_POINT )
+        throw csmp::Exception( ERROR, caller,
+                               "target placement must be ELEMENT or "
+                               "ELEMENT_INTEGRATION_POINT" );
 
-    if ( (Stress_key_.place != ELEMENT_INTEGRATION_POINT and Stress_key_.place != ELEMENT) || Stress_key_.type != TENSOR )
-        throw csmp::Exception( ERROR, "MohrCoulombFailure_Visitor (constructor)",
+    if ( stress_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'stress' placement does not match "
+                               "target placement" );
+    if ( failure_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'failure' placement does not match "
+                               "target placement" );
+    if ( failure01_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'tensile failure' placement does not match "
+                               "target placement" );
+
+    if ( stress_key_.type != TENSOR )
+        throw csmp::Exception( ERROR, caller,
                                "'stress' must be a tensor variable" );
+    if ( cohesion_key_.type    != SCALAR ||
+         friction_key_.type    != SCALAR ||
+         tensile_str_key_.type != SCALAR ||
+         biot_alpha_key_.type  != SCALAR ||
+         failure_key_.type     != SCALAR ||
+         failure01_key_.type   != SCALAR )
+        throw csmp::Exception( ERROR, caller,
+                               "one or more scalar variables have the "
+                               "wrong type" );
+
+    auto requireVariablePlacement = [&]( const csmp::Index& key,
+                                         const char*        name )
+    {
+        if ( key.place != analysis_var_placement_ )
+            throw csmp::Exception( ERROR, caller,
+                                   name, parsePlacement(analysis_var_placement_) );
+    };
+
+    requireVariablePlacement( cohesion_key_,    "cohesion"         );
+    requireVariablePlacement( friction_key_,    "friction angle"   );
+    requireVariablePlacement( tensile_str_key_, "tensile strength" );
+    requireVariablePlacement( biot_alpha_key_,  "Biot alpha"       );
+
+    if ( pf_key_.place != UNDEFINED && pf_key_.place != NODE )
+        throw csmp::Exception( ERROR, caller,
+                               "'fluid pressure' must be placed at NODE" );
+
+    if constexpr ( verbose_ )
+        cout << "\nMohrCoulombFailure_Visitor: construction checks passed\n"
+             << "  placement of analysis variables: "
+             << ( analysis_var_placement_ == ELEMENT_INTEGRATION_POINT
+                  ? "ELEMENT_INTEGRATION_POINT" : "ELEMENT" ) << "\n";
+}
+
+
+// ----------------------------------------------------------------------------
+//  Private constructor — 2D only, called by For2D factory
+// ----------------------------------------------------------------------------
+
+template<>
+MohrCoulombFailure_Visitor<2U>::MohrCoulombFailure_Visitor( Model<2U>&      model,
+                                                            PlaneAssumption assumption,
+                                                            PLACEMENT       target_placement )
+    : Visitor<2U>( MODEL, ELEMENT ),
+      plane_assumption_( assumption       ),
+      analysis_var_placement_( target_placement ),
+      stress_key_      ( model.Database().StorageKey( "stress"           ) ),
+      cohesion_key_    ( model.Database().StorageKey( "cohesion"         ) ),
+      friction_key_    ( model.Database().StorageKey( "friction angle"   ) ),
+      tensile_str_key_ ( model.Database().StorageKey( "tensile strength" ) ),
+      biot_alpha_key_  ( model.Database().StorageKey( "Biot alpha"       ) ),
+      nu_key_          ( model.Database().IsDefined( "Poissons ratio" )
+                         ? model.Database().StorageKey( "Poissons ratio" )
+                         : csmp::Index()                                   ),
+      failure_key_     ( model.Database().StorageKey( "failure"          ) ),
+      failure01_key_   ( model.Database().StorageKey( "tensile failure"  ) ),
+      pf_key_          ( model.Database().IsDefined( "fluid pressure" )
+                         ? model.Database().StorageKey( "fluid pressure" )
+                         : csmp::Index()                                   )
+{
+    const char* caller = "MohrCoulombFailure_Visitor<2U> (constructor)";
+
+    if ( analysis_var_placement_ != ELEMENT &&
+         analysis_var_placement_ != ELEMENT_INTEGRATION_POINT )
+        throw csmp::Exception( ERROR, caller,
+                               "target placement must be ELEMENT or "
+                               "ELEMENT_INTEGRATION_POINT" );
+
+    if ( stress_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'stress' placement does not match "
+                               "target placement" );
+    if ( failure_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'failure' placement does not match "
+                               "target placement" );
+    if ( failure01_key_.place != analysis_var_placement_ )
+        throw csmp::Exception( ERROR, caller,
+                               "'tensile failure' placement does not match "
+                               "target placement" );
+
+    if ( stress_key_.type != TENSOR )
+        throw csmp::Exception( ERROR, caller,
+                               "'stress' must be a tensor variable" );
+    if ( cohesion_key_.type    != SCALAR ||
+         friction_key_.type    != SCALAR ||
+         tensile_str_key_.type != SCALAR ||
+         biot_alpha_key_.type  != SCALAR ||
+         failure_key_.type     != SCALAR ||
+         failure01_key_.type   != SCALAR )
+        throw csmp::Exception( ERROR, caller,
+                               "one or more scalar variables have the "
+                               "wrong type" );
+
+    auto requireVariablePlacement = [&]( const csmp::Index& key,
+                                        const char*        name )
+    {
+        if ( key.place != analysis_var_placement_ )
+            throw csmp::Exception( ERROR, caller,
+                                   name, parsePlacement(analysis_var_placement_) );
+    };
+
+    requireVariablePlacement( cohesion_key_,    "cohesion"         );
+    requireVariablePlacement( friction_key_,    "friction angle"   );
+    requireVariablePlacement( tensile_str_key_, "tensile strength" );
+    requireVariablePlacement( biot_alpha_key_,  "Biot alpha"       );
+
+    if ( pf_key_.place != UNDEFINED && pf_key_.place != NODE )
+        throw csmp::Exception( ERROR, caller,
+                               "'fluid pressure' must be placed at NODE" );
+
+    if constexpr ( verbose_ )
+        cout << "\nMohrCoulombFailure_Visitor<2U>: construction checks passed\n"
+             << "  placement of analysis variables: "
+             << ( analysis_var_placement_ == ELEMENT_INTEGRATION_POINT
+                  ? "ELEMENT_INTEGRATION_POINT" : "ELEMENT" ) << "\n"
+             << "  plane assumption: "
+             << ( plane_assumption_ == PlaneAssumption::PLANE_STRAIN
+                  ? "PLANE_STRAIN" : "PLANE_STRESS" ) << "\n";
 }
 
 
 
 
 
+// ----------------------------------------------------------------------------
+//  evaluateFailure — single-point computation
+// ----------------------------------------------------------------------------
+
+template<uint32_t dim>
+void MohrCoulombFailure_Visitor<dim>::ComputeFailure(
+    const StressInvariants& si,
+    double                  cohesion,
+    double                  friction_deg,
+    double                  tensile_str,
+    double                  biot_alpha,
+    double                  pf,
+    double&                 Fmc,
+    double&                 F01 ) noexcept
+{
+    const double p_eff   = si.MeanStress() - biot_alpha * pf;
+    const double K_theta = si.SmoothMohrCoulombYieldEnvelope( friction_deg );
+    const double phi_rad = friction_deg * ( CSMP_PI / 180. );
+    const double sin_phi = std::sin( phi_rad );
+    const double cos_phi = std::cos( phi_rad );
+
+    // Mohr-Coulomb shear failure criterion:
+    //   F_mc = p_eff · sin φ - c · cos φ + q · K(θ)
+    //   F_mc ≥ 0 means shear failure
+    Fmc = p_eff * sin_phi - cohesion * cos_phi + si.DeviatoricStress() * K_theta;
+
+    const double sigma3_eff = si.LeastPrincipalStress3() - biot_alpha * pf;
+
+    // cap tensile strength at the Mohr-Coulomb apex c/tan(φ) [Pa]:
+    // beyond the apex the envelope has no physical meaning.
+    // guard against φ = 0 (frictionless) which gives an infinite apex.
+    double max_tensile = tensile_str;
+    if ( friction_deg > 0.001 ) {
+        const double apex_limit = cohesion / std::tan( phi_rad );
+        if ( tensile_str > apex_limit )
+            max_tensile = apex_limit;
+    }
+
+    // tensile failure criterion (continuous measure, Pa):
+    //   F01 > 0 means tensile failure
+    //   F01 = -σ₃_eff - T_s
+    //   example: σ₃_eff = -5 MPa, T_s = 2 MPa → F01 = 5 - 2 = 3 MPa (failing)
+    F01 = -sigma3_eff - max_tensile;
+}
 
 
-/**
-    Loops over the element integration points and evaluates shear and tensile failure potential.
-    Where failure occurred the variable 'failure' is set to 1.
-    A distinction is made between tensile 'tensile failure' and shear failure 'failure' variables.
-    
-    @attention it is assumed that the tensile strength is about 1/10 of the cohesive strength of the rock
-    
-    @attention SKM 28/9/2014 - added case where stress is placed on the element.
+
+
+template<uint32_t dim>
+void MohrCoulombFailure_Visitor<dim>::EvaluateFailure(
+                          const TensorVariable<dim>& stress,
+                          double                     cohesion,
+                          double                     friction_deg,
+                          double                     tensile_str,
+                          double                     biot_alpha,
+                          double                     nu,
+                          PlaneAssumption            condition,
+                          double                     pf,
+                          double&                    Fmc,
+                          double&                    F01 ) const noexcept
+{
+    if constexpr ( dim == 1U ) {
+        // Mohr-Coulomb failure is not defined for 1D stress states (false && always triggers)
+        assert( false && "MohrCoulombFailure_Visitor: Mohr-Coulomb failure "
+               "is not defined for 1D stress states" );
+        Fmc = 0.;
+        F01 = 0.;
+        return;
+    }
+    else if constexpr ( dim == 2U ) {
+        ComputeFailure( StressInvariants( stress, condition, nu ),
+                        cohesion, friction_deg, tensile_str,
+                        biot_alpha, pf, Fmc, F01 );
+    }
+    else if constexpr ( dim == 3U ) {
+        ComputeFailure( StressInvariants( stress ),
+                        cohesion, friction_deg, tensile_str,
+                        biot_alpha, pf, Fmc, F01 );
+    }
+}
+
+
+
+// ----------------------------------------------------------------------------
+//  Visit
+// ----------------------------------------------------------------------------
+
+/*
+template<uint32_t dim>
+void MohrCoulombFailure_Visitor<dim>::Visit( Region<dim>* r )
+{
+    assert( r != nullptr );
+//    r->Accept(*this);
+}
+
+
+template<uint32_t dim>
+void MohrCoulombFailure_Visitor<dim>::Visit( Boundary<dim>* b )
+{
+    assert( b != nullptr );
+//    b->Accept(*this);
+}
+
+
+// in source
+template<uint32_t dim>
+inline void MohrCoulombFailure_Visitor<dim>::Visit( Model<dim>* m )
+{
+    assert( m != nullptr );
+//    m->Accept( *this );
+}
 */
+
 template<uint32_t dim>
 void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )
- {
-    // cohesion, failure variables are in integration point
-    if ( Stress_key_.place == ELEMENT_INTEGRATION_POINT ) {
-        const size_t integration_points(e->FE()->IntegrationPoints());
-        for ( auto i{0U}; i<integration_points; i++ )
-          {
-            // 1. reading input variables
-            e->Read(i, Stress_key_, Cartesian_stress_ );
-            double cohesion = e->Read(i,Cohesion_key_);
-            double alpha    = e->Read(i,Friction_key_) * degrees_to_radians_;
+{
+    // Mohr-Coulomb failure is only meaningful for volume elements —
+    // face and interface elements do not carry a full stress tensor
+    // TODO: this restriction is dangerous and must be removed after testing
+    if constexpr (dim == 3 ) if ( !e->IsVolume() ) return;
+    if constexpr (dim == 2 ) if ( !e->IsSurface() ) return;
+
+    // --- integration point placement ---
+    if ( stress_key_.place == ELEMENT_INTEGRATION_POINT ) {
+
+        const uint32_t n_ip = e->IntegrationPoints();
+        for ( uint32_t i{ 0U }; i < n_ip; ++i ) {
+
+            TensorVariable<dim> stress;
+            e->Read( i, stress_key_, stress );
+
+            ScalarVariable cohesion_var, friction_var,
+                           tensile_var,  biot_var;
+            e->Read( i, cohesion_key_,    cohesion_var );
+            e->Read( i, friction_key_,    friction_var );
+            e->Read( i, tensile_str_key_, tensile_var  );
+            e->Read( i, biot_alpha_key_,  biot_var     );
+
+            // Poisson's ratio is only needed for 2D plane strain
+            double nu = 0.;
+            if constexpr ( dim == 2U ) {
+                ScalarVariable nu_var;
+                e->Read( i, nu_key_, nu_var );
+                nu = nu_var();
+            }
+
+            double pf = 0.;
             if ( pf_key_.place != UNDEFINED )
-              fluid_pressure_ = e->PropertyValueAtIntegrationPoint( pf_key_, i );
+                pf = e->PropertyValueAtIntegrationPoint( pf_key_, i );
 
-            // six components of symmetric stress tensor
-            double sigmaxx = Cartesian_stress_(0,0);
-            double sigmayy = Cartesian_stress_(1,1);
-            double sigmazz = Cartesian_stress_(2,2);
-            double sigmaxy = Cartesian_stress_(0,1);
-            double sigmaxz = Cartesian_stress_(0,2);
-            double sigmayz = Cartesian_stress_(1,2);
+            double Fmc = 0.;
+            double F01 = 0.;
+            EvaluateFailure( stress,
+                             cohesion_var(),
+                             friction_var(),
+                             tensile_var(),
+                             biot_var(),
+                             nu,
+                             plane_assumption_,
+                             pf,
+                             Fmc, F01 );
 
-            // Biot coefficient (alpha) should be included as
-            // alpha = 1. - (K/K_{s}),
-            // where K and K_{s} are effective and bulk moduli correspondingly
-            // for the time being alpha assumed to be 1
-            biot_coefficient_alpha_ = 1.0;
+            e->Store( i, failure_key_,   makeScalar( PLAIN, Fmc ) );
+            e->Store( i, failure01_key_, makeScalar( PLAIN, F01 ) );
 
-            // 2. computing parameter s
-            //    Smith & Griffiths, eqn. 6.3, p. 227
-            //    s ( distance from the origin to the pi-plane in which the stress point lies )
-            const double s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
-                                        : (sigmaxx + sigmayy + sigmazz) / sqrt3_;
+            if ( verbose_ )
+                cout << "  ip " << i
+                     << "  F_mc=" << Fmc
+                     << "  F01="  << F01 << "\n";
+        }
+        return;
+    }
 
-            // 3. computing parameter t
-            //    Smith & Griffiths, eq. 6.3, p. 227
-            //    t ( perpendicular distance of the stress point from the space diagonal: sigma1 = sigma2 = sigma3 )
-            double t(0.);
-            if ( dim == 2 ) {
-                 t = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy)) + 3. * sigmaxy * sigmaxy;
-              }
-            else if ( dim == 3 ) {
-                 // assuming a symmetric stress tensor
-                 t  = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy));
-                 t += ((sigmayy - sigmazz)*(sigmayy - sigmazz));
-                 t += ((sigmazz - sigmaxx)*(sigmazz - sigmaxx));
-                 t += 6. * (sigmaxy * sigmaxy) + 6. * (sigmayz * sigmayz) + 6. * (sigmaxz * sigmaxz);
-              }
-            t  = sqrt(t) / sqrt3_;
+    // --- element placement ---
+    if ( stress_key_.place == ELEMENT ) {
 
-            // 4. calculate Lode angle(theta), in radians
-            //    Smith & Griffiths, eq. 6.3. p. 227
-            double sx, sy, sz, J3(std::numeric_limits<double>::quiet_NaN());
-            if ( dim == 2 ) {
-                // 2D case not sure yet, search reference
-                sx  = (2. * sigmaxx - sigmayy) / 2.;
-                sy  = (2. * sigmayy - sigmaxx) / 2.;
-                J3  = sx * sy + 2.* sigmaxy;
-              }
-            else if ( dim == 3 ) {
-                sx  = (2. * sigmaxx - sigmayy - sigmazz) / 3.;
-                sy  = (2. * sigmayy - sigmazz - sigmaxx) / 3.;
-                sz  = (2. * sigmazz - sigmaxx - sigmayy) / 3.;
-                J3  = sx * sy * sz;
-                J3 -= sx * (sigmayz * sigmayz);
-                J3 -= sy * (sigmaxz * sigmaxz);
-                J3 -= sz * (sigmaxy * sigmaxy);
-                J3 += 2. * sigmaxy * sigmaxz * sigmayz;
-              }
-            // the Lode angle theta
-            const double theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
+        TensorVariable<dim> stress;
+        e->Read( stress_key_, stress );
 
-            // 5. computing mean stress,
-            //    Smith & Griffiths, eq. 6.4, p. 228
-            //    mean stress = sqrt(1/3)*s
-            double meanstress = s/sqrt3_;
+        ScalarVariable cohesion_var, friction_var,
+                       tensile_var,  biot_var;
+        e->Read( cohesion_key_,    cohesion_var );
+        e->Read( friction_key_,    friction_var );
+        e->Read( tensile_str_key_, tensile_var  );
+        e->Read( biot_alpha_key_,  biot_var     );
 
-            // taking into account sign convention,
-            // since current formulation is ment to be used for positive tensile stress convention,
-            // the correction of sign must be perfomed in the mean stress
-            // if one is applying positive compressive stress convention
-            // ------------------------------
-            meanstress *= sign_of_tensile_stress_;
+        // Poisson's ratio is only needed for 2D plane strain
+        double nu = 0.;
+        if constexpr ( dim == 2U ) {
+            ScalarVariable nu_var;
+            e->Read( nu_key_, nu_var );
+            nu = nu_var();
+        }
 
-            // taking into account pore pressure
-            // note that plus is because of positive tensile stress convention
-            // no conversion is needed here, because it is lined up with current formulation
-            // ------------------------------
-            meanstress += biot_coefficient_alpha_*fluid_pressure_;
+        double pf = 0.;
+        if ( pf_key_.place != UNDEFINED ) {
+            ScalarVariable sc;
+            e->PropertyValueAtBaryCenter( pf_key_, sc );
+            pf = sc();
+        }
 
-            // 6. computing deviatoric stress,
-            //    Smith & Griffiths, eq. 6.4, p. 228
-            //    deviatoric stress = sqrt(3/2)*t
-            const double devstress = t*sqrt32_;
+        double Fmc = 0.;
+        double F01 = 0.;
+        EvaluateFailure( stress,
+                         cohesion_var(),
+                         friction_var(),
+                         tensile_var(),
+                         biot_var(),
+                         nu,
+                         plane_assumption_,
+                         pf,
+                         Fmc, F01 );
 
-            // 7. computing K_OfTheta ( original Mohr-Coulomb yield surface )
-            //    Zienkiewitz, Finite element method for solid and structural mechanics,
-            //    Chapter 4. Inelastic and non-linear materials
-            //    4.5.1 Isotropic yield surfaces
-            //double K_OfTheta = -sin(alpha);
-            //K_OfTheta *= sin(theta);
-            //K_OfTheta /= sqrt3_;
-            //K_OfTheta += cos(theta);
-            //K_OfTheta /= sqrt3_;
+        e->Store( failure_key_,   makeScalar( PLAIN, Fmc ) );
+        e->Store( failure01_key_, makeScalar( PLAIN, F01 ) );
 
-            // 7. computing K_OfTheta = 1/G_OfTheta ( modified Mohr-Coulomb envelope with smooth boundaries ):
-            //    Zienkiewitz, Finite element method for solid and structural mechanics,
-            //    Chapter 4. Inelastic and non-linear materials
-            //    4.11. Non-uniqueness and localization in elasto-plastic deformations
-            double K(sin(alpha));
-            K = (3. - K) / (3. + K);
-            const double G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
-            const double K_OfTheta = 1.0/G_OfTheta;
+        if ( verbose_ )
+            cout << "  element " << e->Idx()
+                 << "  F_mc=" << Fmc
+                 << "  F01="  << F01 << "\n";
+    }
 
-            // 8. calculating friction criterion Fmc
-            //    Yielding can occur when Fmc >= 0,
-            //    the material is described only in terms of its friction angle and cohesion.
-            // ------------------------------
-            // TODO: organise failure modes like in fault module
-            // TODO: add failure if bulk modulus is exceeded
-            // TODO: deal with pure tensile failure if normal stress is negative
-            double Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
+} // end Visit
 
-            // tensile failure determination assuming that the tensile strength is about 0.1 of
-            // the value of the cohesion
-            const double tensile_strength(cohesion * 0.1);
-            double F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
-
-            // 9. store variables
-            e->Store(i, Failure_key_,   makeScalar(PLAIN,Fmc) );
-            e->Store(i, Failure01_key_, makeScalar(PLAIN,F01) );
-
-            // 10. output if desired
-            if ( verbose_ ) {
-                cout <<"\nshear failure criterion F "<< endl;
-                cout.width(35); cout <<"at element integration point ";
-                cout << i << ": "<< Fmc << endl;
-                cout.flush();
-            }
-         }
-       return;
-     }
-  
-     
-    // cohesion, failure variables are placed on the element
-    if ( Stress_key_.place == ELEMENT )
-      {
-          // 1. reading input variables
-          e->Read( Stress_key_, Cartesian_stress_ );
-          const double alpha    = e->Read(Friction_key_) * degrees_to_radians_;
-          const double cohesion = e->Read( Cohesion_key_ );
-          if ( pf_key_.place != UNDEFINED ) {
-               ScalarVariable sc;
-               e->PropertyValueAtBaryCenter( pf_key_, sc );
-               fluid_pressure_ = sc();
-            }
-          const double sigmaxx = Cartesian_stress_(0,0);
-          const double sigmayy = Cartesian_stress_(1,1);
-          const double sigmazz = Cartesian_stress_(2,2);
-          const double sigmaxy = Cartesian_stress_(0,1);
-          const double sigmaxz = Cartesian_stress_(0,2);
-          const double sigmayz = Cartesian_stress_(1,2);
-
-          // Biot coefficient (alpha) should be included as
-          // alpha = 1. - (K/K_{s}),
-          // where K and K_{s} are effective and bulk moduli correspondingly
-          // for the time being alpha assumed to be 1
-          biot_coefficient_alpha_ = 1.;
-
-          // 2. computing parameter s
-          //    Smith & Griffiths, eqn. 6.3, p. 227
-          //    s ( distance from the origin to the pi-plane in which the stress point lies )
-          const double s = (dim==2) ? (sigmaxx + sigmayy) / sqrt3_
-                                      : (sigmaxx + sigmayy + sigmazz) / sqrt3_;
-
-          // 3. computing parameter t
-          //    Smith & Griffiths, eq. 6.3, p. 227
-          //    t ( perpendicular distance of the stress point from the space diagonal: sigma1 = sigma2 = sigma3 )
-          double t(0.);
-          if ( dim == 2 ) {
-               t = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy)) + 3. * sigmaxy * sigmaxy;
-            }
-          else if ( dim == 3 ) {
-               // assuming a symmetric stress tensor
-               t  = ((sigmaxx - sigmayy)*(sigmaxx - sigmayy));
-               t += ((sigmayy - sigmazz)*(sigmayy - sigmazz));
-               t += ((sigmazz - sigmaxx)*(sigmazz - sigmaxx));
-               t += 6. * (sigmaxy * sigmaxy) + 6. * (sigmayz * sigmayz) + 6. * (sigmaxz * sigmaxz);
-            }
-          t  = sqrt(t) / sqrt3_;
-
-          // 4. calculate Lode angle(theta), in radians
-          //    Smith & Griffiths, eq. 6.3. p. 227
-          double sx, sy, sz, J3(std::numeric_limits<double>::quiet_NaN());
-          if ( dim == 2 ) {
-              // 2D case not sure yet, search reference
-              sx  = (2. * sigmaxx - sigmayy) / 2.;
-              sy  = (2. * sigmayy - sigmaxx) / 2.;
-              J3  = sx * sy + 2.* sigmaxy;
-            }
-          else if ( dim == 3 ) {
-              sx  = (2. * sigmaxx - sigmayy - sigmazz) / 3.;
-              sy  = (2. * sigmayy - sigmazz - sigmaxx) / 3.;
-              sz  = (2. * sigmazz - sigmaxx - sigmayy) / 3.;
-              J3  = sx * sy * sz;
-              J3 -= sx * (sigmayz * sigmayz);
-              J3 -= sy * (sigmaxz * sigmaxz);
-              J3 -= sz * (sigmaxy * sigmaxy);
-              J3 += 2. * sigmaxy * sigmaxz * sigmayz;
-            }
-          // the Lode angle theta
-          const double theta = 1./3. * asin( (-3.* sqrt(6.) * J3) / (t * t * t) );
-
-          // 5. computing mean stress,
-          //    Smith & Griffiths, eq. 6.4, p. 228
-          //    mean stress = sqrt(1/3)*s
-          double meanstress = s/sqrt3_;
-
-          // taking into account sign convention,
-          // since current formulation is ment to be used for positive tensile stress convention,
-          // the correction of sign must be perfomed in the mean stress
-          // if one is applying positive compressive stress convention
-          // ------------------------------
-          meanstress *= sign_of_tensile_stress_;
-
-          // taking into account pore pressure
-          // note that plus is because of positive tensile stress convention
-          // no conversion is needed here, because it is lined up with current formulation
-          // ------------------------------
-          meanstress += biot_coefficient_alpha_*fluid_pressure_;
-
-          // 6. computing deviatoric stress,
-          //    Smith & Griffiths, eq. 6.4, p. 228
-          //    deviatoric stress = sqrt(3/2)*t
-          const double devstress = t*sqrt32_;
-
-          // 7. computing K_OfTheta ( original Mohr-Coulomb yield surface )
-          //    Zienkiewitz, Finite element method for solid and structural mechanics,
-          //    Chapter 4. Inelastic and non-linear materials
-          //    4.5.1 Isotropic yield surfaces
-          //double K_OfTheta = -sin(alpha);
-          //K_OfTheta *= sin(theta);
-          //K_OfTheta /= sqrt3_;
-          //K_OfTheta += cos(theta);
-          //K_OfTheta /= sqrt3_;
-
-          // 7. computing K_OfTheta = 1/G_OfTheta ( modified Mohr-Coulomb envelope with smooth boundaries ):
-          //    Zienkiewitz, Finite element method for solid and structural mechanics,
-          //    Chapter 4. Inelastic and non-linear materials
-          //    4.11. Non-uniqueness and localization in elasto-plastic deformations
-          double K(sin(alpha));
-          K = (3. - K) / (3. + K);
-          const double G_OfTheta = (2.*K) / ((1+K) - sin(3. * theta) * (1-K));
-          const double K_OfTheta = 1.0/G_OfTheta;
-
-          // 8. calculating friction criterion Fmc
-          //    Yielding can occur when Fmc >= 0,
-          //    the material is described only in terms of its friction angle and cohesion.
-          // ------------------------------
-          // TODO: organise failure modes like in fault module
-          // TODO: add failure if bulk modulus is exceeded
-          // TODO: deal with pure tensile failure if normal stress is negative
-          double Fmc = meanstress * sin(alpha) - cohesion * cos(alpha) + devstress * K_OfTheta;
-
-          // tensile failure determination assuming that the tensile strength is about 0.1 of
-          // the value of the cohesion
-          const double tensile_strength(cohesion * 0.1);
-          double F01 = ( (Fmc - tensile_strength ) <= 0. ) ? F01 = 1. : F01 = 0.;
-
-          // 9. store variables
-          e->Store( Failure_key_,   makeScalar(PLAIN,Fmc)   );
-          e->Store( Failure01_key_, makeScalar(PLAIN,F01) );
-
-          // 10. output if desired
-          if ( verbose_ ) {
-              cout <<"\nshear failure criterion F "<< endl;
-              cout.width(35); cout <<" in element "<< e->Idx();
-              cout <<": "<< Fmc << endl;
-              cout.flush();
-          }
-      }
-  
-} // end Visit(Element)
 
 template class MohrCoulombFailure_Visitor<1U>;
 template class MohrCoulombFailure_Visitor<2U>;

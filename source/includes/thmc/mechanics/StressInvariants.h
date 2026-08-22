@@ -1,10 +1,9 @@
-//
-//  StressInvariants.h
-//  CSMP_ReservoirSimulator
-//
-//  Created by Stephan Matthai on 10/25/14.
-//  Copyright (c) 2014 Stephan K. Matthai. All rights reserved.
-//
+/*
+ *  StressInvariants.h
+ *
+ *  Created by Stephan Matthai on 10/25/14.
+ *  Revised and corrected.
+ */
 
 #ifndef STRESS_INVARIANTS_H
 #define STRESS_INVARIANTS_H
@@ -13,72 +12,247 @@
 
 namespace csmp {
 
-/// standard decompositions of stress tensor, see Smith & Griffith
-class StressInvariants {
-  public:
-    /// factors the upper triagonal of the symmetric tensor in terms of s, t, and theta
-    explicit StressInvariants( const TensorVariable<2U>& );
-    explicit StressInvariants( const TensorVariable<3U>& );
-  
-    /// theta angle in Mohr-Coulomb diagram that at which shear stresses are maximized
-    double LodeAngle( const TensorVariable<2U>& ) const;
-    double LodeAngle( const TensorVariable<3U>& ) const;
-  
-    /// mean stress = average of principal stresses
-    double MeanStress() const;
-  
-    /// maximum of the deviatoric stresses = nonisostatic stresses
-    double DeviatoricStress() const;
-  
-    /// sigma1 = maximum principal stress (Pa)
-    double /* sigma1 */ MaximumPrincipalStress1() const;
-    /// sigma2
-    double /* sigma2 */ IntermediatePrincipalStress2() const;
-    /// sigma3
-    double /* sigma3 */ LeastPrincipalStress3() const;
+/**
+    @brief Plane condition for 2D stress analysis.
 
-    /// K(theta), see Zienkiewitz, volume 2, chapter 4.5.1, p. 233, alpha is in degrees
-    double MohrCoulombYieldEnvelope( double friction_angle_alpha ) const;
-
-    /// K(theta), see Zienkiewitz, volume 2, chapter 4.5.11, alpha is in degrees
-    double SmoothMohrCoulombYieldEnvelope( double friction_angle_alpha ) const;
-
-  private:
-    const double sqrt3_, sqrt32_,
-                   degrees_to_radians_,
-                   s_, t_, theta_;
+    Disambiguates the two common 2D assumptions when computing
+    stress invariants from a 2D stress tensor.
+*/
+enum class PlaneAssumption {
+    PLANE_STRESS,  ///< out-of-plane normal stress is zero: σ_zz = 0
+    PLANE_STRAIN   ///< out-of-plane normal strain is zero: σ_zz = ν(σ_xx + σ_yy)
 };
 
+
 /**
-  @class StressInvariants StressInvariants.h "main_library/constitutive_relationships/mechanics/"
+    @brief Standard decompositions of the Cauchy stress tensor into
+    engineering invariants following Smith & Griffiths and Zienkiewicz Vol. 2.
 
-  @author S.K. Matthaei
+    @par Sign convention
+    Compressive stresses are **positive**, following geotechnical engineering
+    convention. Tensile stresses are negative.
 
-  @section motivation Motivation
+    @par Invariants computed
+    Given the symmetric Cauchy stress tensor σ, the following invariants
+    are extracted and stored at construction time:
 
-  To extract the standard engineering invariants s, t, and theta from the upper 
-  diagonal of a (symmetric diagonally dominant) Cartesian stress tensor,
-  calculate the principal stresses, and evaluate a series of failure criteria.
-  
-  @section applicability Applicability
+    - p = I₁/3 — mean (isotropic) stress
+    - J₂ = ½ s:s — second deviatoric invariant, where s = σ - p·I
+    - J₃ = det(s) — third deviatoric invariant
+    - θ ∈ [-π/6, π/6] — Lode angle (radians)
+    - q = √(3·J₂) — von Mises deviatoric stress
 
-  CSMP geomechanics models.
-  
-  @section collaborations Collaborations
+    Principal stresses are recovered as:
 
+        σᵢ = p + (2/√3)·√J₂·sin(θ + 2πi/3)   for i = 1, 0, -1
 
-  @section implementation Implementation
+    giving σ₁ ≥ σ₂ ≥ σ₃ (most to least compressive).
 
-  Follows Zienkiewitz volume 2 and Smith and Griffith.
+    @par Lode angle sign convention
+    Following the geotechnical convention (compression positive):
+    - θ = -π/6 at triaxial compression (σ₁ > σ₂ = σ₃)
+    - θ =  0   at pure shear
+    - θ = +π/6 at triaxial extension  (σ₁ = σ₂ > σ₃)
 
-  @section examples Application Examples
+    @par Efficiency
+    All invariants and principal stresses are computed once at construction
+    and stored. All accessor methods are inlined and return stored values
+    at zero computational cost, making this class suitable for use in
+    tight loops over integration points.
 
-  To get an Index for a variable of interest in order to perform
-  a computation, do the following:
+    @par References
+    - Smith & Griffiths, Programming the Finite Element Method, 4th ed., Ch. 6
+    - Zienkiewicz & Taylor, The Finite Element Method, Vol. 2, Ch. 4
 
-  @test
-
+    @author S.K. Matthai
 */
+class StressInvariants {
+  public:
+
+    /**
+        @brief Constructs invariants from a 2D stress tensor.
+
+        @param ts         Symmetric 2D Cauchy stress tensor. Components used:
+                          σ_xx = ts(0,0), σ_yy = ts(1,1), σ_xy = ts(0,1).
+        @param condition  Whether the 2D model is plane stress or plane strain.
+                          Under plane strain, σ_zz = ν(σ_xx + σ_yy).
+                          Under plane stress, σ_zz = 0.
+        @param nu         Poisson's ratio. Required only for plane strain;
+                          ignored for plane stress.
+
+        @pre Compressive stresses are positive (geotechnical convention).
+    */
+    explicit StressInvariants( const TensorVariable<2U>& ts,
+                               PlaneAssumption condition = PlaneAssumption::PLANE_STRESS,
+                               double nu = 0. );
+
+    /**
+        @brief Constructs invariants from a 3D stress tensor.
+
+        @param ts  Symmetric 3D Cauchy stress tensor. Components used:
+                   σ_xx = ts(0,0), σ_yy = ts(1,1), σ_zz = ts(2,2),
+                   σ_xy = ts(0,1), σ_xz = ts(0,2), σ_yz = ts(1,2).
+
+        @pre Compressive stresses are positive (geotechnical convention).
+    */
+    explicit StressInvariants( const TensorVariable<3U>& ts );
+
+    /**
+        @brief Lode angle θ for a 2D stress state [radians].
+
+        Recomputes the Lode angle from the supplied tensor and the stored
+        √J₂. Returns 0 for hydrostatic states (J₂ = 0).
+
+        @param ts        2D stress tensor.
+        @param sigma_zz  Out-of-plane normal stress. Zero for plane stress;
+                         ν(σ_xx + σ_yy) for plane strain.
+        @return Lode angle in radians, range [-π/6, π/6].
+    */
+    double LodeAngle( const TensorVariable<2U>& ts,
+                      double                    sigma_zz ) const noexcept;
+
+    /**
+        @brief Lode angle θ for a 3D stress state [radians].
+
+        Recomputes the Lode angle from the supplied tensor and the stored
+        √J₂. Returns 0 for hydrostatic states (J₂ = 0).
+
+        @param ts  3D stress tensor.
+        @return Lode angle in radians, range [-π/6, π/6].
+    */
+    double LodeAngle( const TensorVariable<3U>& ts ) const noexcept;
+
+    /**
+        @brief Mean stress p = I₁/3 [Pa].
+
+        Positive in compression (geotechnical convention).
+        Precomputed at construction — zero cost to call.
+    */
+    inline double MeanStress() const noexcept;
+
+    /**
+        @brief Von Mises deviatoric stress q = √(3·J₂) [Pa].
+
+        Always non-negative. Precomputed at construction — zero cost to call.
+    */
+    inline double DeviatoricStress() const noexcept;
+
+    /**
+        @brief Maximum principal stress σ₁ [Pa].
+
+        Most compressive stress under geotechnical sign convention.
+        Satisfies σ₁ ≥ σ₂ ≥ σ₃.
+        Precomputed at construction — zero cost to call.
+    */
+    inline double MaximumPrincipalStress1() const noexcept;
+
+    /**
+        @brief Intermediate principal stress σ₂ [Pa].
+
+        Satisfies σ₁ ≥ σ₂ ≥ σ₃.
+        Precomputed at construction — zero cost to call.
+    */
+    inline double IntermediatePrincipalStress2() const noexcept;
+
+    /**
+        @brief Least principal stress σ₃ [Pa].
+
+        Least compressive (or most tensile) stress.
+        Satisfies σ₁ ≥ σ₂ ≥ σ₃.
+        Precomputed at construction — zero cost to call.
+    */
+    inline double LeastPrincipalStress3() const noexcept;
+
+    /**
+        @brief Hexagonal Mohr-Coulomb yield envelope K(θ).
+
+        Angular factor of the Mohr-Coulomb yield surface on the
+        deviatoric plane:
+
+            K(θ) = cos θ - sin φ · sin θ / √3
+
+        See Zienkiewicz Vol. 2, Ch. 4.5.1, p. 233.
+
+        @param friction_angle_degrees  Friction angle φ in degrees.
+        @return K(θ), dimensionless.
+    */
+    double MohrCoulombYieldEnvelope( double friction_angle_degrees ) const noexcept;
+
+    /**
+        @brief Smooth (rounded) Mohr-Coulomb yield envelope K(θ).
+
+        Avoids the corners of the hexagonal Mohr-Coulomb surface:
+
+            K_param = (3 - sin φ) / (3 + sin φ)
+            G(θ)    = 2·K_param / [(1 + K_param) - sin(3θ)·(1 - K_param)]
+            K(θ)    = 1 / G(θ)
+
+        See Zienkiewicz Vol. 2, Ch. 4.5.11.
+
+        @param friction_angle_degrees  Friction angle φ in degrees.
+        @return K(θ), dimensionless.
+    */
+    double SmoothMohrCoulombYieldEnvelope( double friction_angle_degrees ) const noexcept;
+
+  private:
+
+    /// @name Precomputed constants
+    /// @{
+    const double sqrt3_;               ///< √3
+    const double degrees_to_radians_;  ///< π/180
+    /// @}
+
+    /// @name Stress invariants — computed once in constructor
+    /// @{
+    const double p_;       ///< mean stress I₁/3
+    const double J2_;      ///< second deviatoric invariant ½ s:s
+    const double sqrt_J2_; ///< √J₂, precomputed for principal stress recovery
+    const double theta_;   ///< Lode angle [radians]
+    const double q_;       ///< von Mises stress √(3·J₂)
+    /// @}
+
+    /// @name Derived quantities — precomputed once, returned at zero cost
+    /// @{
+    const double sigma1_; ///< maximum principal stress
+    const double sigma2_; ///< intermediate principal stress
+    const double sigma3_; ///< least principal stress
+    /// @}
+};
+
+
+// ----------------------------------------------------------------------------
+//  Inlines
+// ----------------------------------------------------------------------------
+
+/// Mean stress p = I₁/3. Positive in compression (geotechnical convention).
+inline double StressInvariants::MeanStress() const noexcept
+{
+    return p_;
+}
+
+/// Von Mises deviatoric stress q = √(3·J₂). Always non-negative.
+inline double StressInvariants::DeviatoricStress() const noexcept
+{
+    return q_;
+}
+
+/// Maximum principal stress σ₁. Most compressive under geotechnical convention.
+inline double StressInvariants::MaximumPrincipalStress1() const noexcept
+{
+    return sigma1_;
+}
+
+/// Intermediate principal stress σ₂.
+inline double StressInvariants::IntermediatePrincipalStress2() const noexcept
+{
+    return sigma2_;
+}
+
+/// Least principal stress σ₃. Least compressive or most tensile.
+inline double StressInvariants::LeastPrincipalStress3() const noexcept
+{
+    return sigma3_;
+}
 
 } // end csmp
 

@@ -197,7 +197,7 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
     cout << model.Database().StorageKey("stress") << endl;
 
 
-     MohrCoulombFailure_Visitor<3U> failureTest(model,true /* positive compressive stress convention */, false/* verbose mode */);
+     MohrCoulombFailure_Visitor<3U> failureTest( model, ELEMENT );
 
      model.InputPropertyValue( "cohesion", makeScalar( PLAIN, 1400000. ) ); // 14 MPa --->UCS=50 MPa (unconfined compression strenght)
      model.InputPropertyValue( "friction angle", makeScalar( PLAIN, 31. ) ); //friction angle 31 degree -->0.6 friction coefficient

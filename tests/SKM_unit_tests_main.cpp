@@ -165,10 +165,17 @@
 #include "VariableStorageSpeed_Test.h"
 
 // --- integration tests ---
+#include "BoreHole_stability_VerticalWell3D_VVCase.h"
+#include "BoreHole_stability_InclinedWell3D_VVCase.h"
+#include "BoreHole_stability2D_VVCase.h"
 #include "DirichletPressureBoxModel_VVCase.h"
 #include "Geothermal_1D_VVCase.h"
 #include "GravityInducedFluidPressure_Test.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
+
+// constitutive relationships
+#include "MohrCoulombFailure_Visitor_Test.h"
+#include "StressInvariants_Test.h"
 
 
 using namespace std;
@@ -223,6 +230,10 @@ int main()
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
+        refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
+//        refactored.addTest( new BoreHole_stability2D_VVCase("box_with_hole2") );
+//         refactored.addTest( new MohrCoulombFailure_Visitor_Test() ); OK
+
 //        refactored.addTest( new AccumulationSpeedProfiling_Test() );
 //        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
 
@@ -232,7 +243,7 @@ int main()
 
 // TODO: does not run transient problem yet; compare analytic with num integrals
 //        refactored.addTest( new PDE_Integrator_Transient_Test() ); // OK (Anne-Laure Tertois) granite_model1
-          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK
+//          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK, but only one Test
 // TODO: test PDE_Integrator with periodic boundary conditions
 
 

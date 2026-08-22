@@ -59,8 +59,6 @@ void normalAndShearStressOnPlane( const TensorVariable<3U>& cartesian_stress,
                                   double& sigma_n, VectorVariable<3U>& sigma_s );
 
 
-
-
 // inline function definitions
 
 

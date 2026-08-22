@@ -255,7 +255,7 @@ void Region<dim>::Accept( csmp::Visitor<dim>& v )
 {
   if ( v.ApplicationLevel() == MODEL or
        v.ApplicationLevel() == REGION )
-    v.Visit( this ); // SKM_FIX else visitor will never be applied to region
+    v.Visit( this ); // else visitor will never be applied to region
 
   switch ( v.ApplicationTarget() ) {
     case MODEL:
