@@ -15,7 +15,7 @@ namespace csmp
   /// JEM 2015, modifications and updates
 ///  SKM 18/1/24 templatised and fixed open MP issue
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-  class ConductivityVisitor : public Visitor<dim> {
+  class ConductivityVisitor final : public Visitor<dim> {
   public:
       ConductivityVisitor( Model<dim>&,
                            const char* specific_saturated_hydraulic_conductivity, // this is without mult. by density
@@ -27,10 +27,9 @@ template<uint32_t dim, template<uint32_t> class CELL=Element>
                            const char* porosity = NULL,
                            const char* specific_saturated_hydraulic_diffusivity=NULL); // this is without mult. by density
 
-    virtual ~ConductivityVisitor() {}
-
     /// for visiting elements, faces and interfaces
-    virtual void Visit( CELL<dim>* );
+    virtual void Visit( CELL<dim>* ) override final;
+    virtual void Visit( Model<dim>* ) override final {}
 
   protected:
     ConductivityVisitor();

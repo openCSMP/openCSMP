@@ -58,15 +58,13 @@ class StressRegime;
      @note This visitor allows for a workaround for applying stress boundary conditions
      if one does not want to use the Neumann condition functionality of the PDE_Integrator.
 */
-class AndersonianBoundaryStressVisitor : public Visitor<3U> {
+class AndersonianBoundaryStressVisitor final : public Visitor<3U> {
   public:
     /// by default, any entries into the RHS force vectors will get overwritten
     AndersonianBoundaryStressVisitor( const Model<3U>&,
                                       const StressRegime&,
                                       const char* SV_variable="overburden pressure", ///< should vary with depth
                                       bool overwrite_force_vector=false );
-
-    ~AndersonianBoundaryStressVisitor() = default;
 
     /// to zero out force vector if overwrite_force_vector=true, prior to accumulation of forces
     void Visit( Boundary<3U>* ) override final;

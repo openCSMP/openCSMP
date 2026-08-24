@@ -27,13 +27,13 @@ template<uint32_t> class Model;
  
 */
 template<uint32_t dim>
-class BrittleFailureVisitor : public Visitor<dim> {
+class BrittleFailureVisitor final : public Visitor<dim> {
   public:
     explicit BrittleFailureVisitor( Model<dim>&,
                                     bool verbose=false );
 
-    virtual ~BrittleFailureVisitor();
-    virtual void Visit( Element<dim>* );
+    void Visit( Element<dim>* ) override final;
+    void Visit( Model<dim>* ) override final {}
   
   private:
     void InitializeInputProperties( Element<dim>* );

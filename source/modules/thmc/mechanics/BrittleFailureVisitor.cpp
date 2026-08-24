@@ -53,12 +53,6 @@ BrittleFailureVisitor<dim>::BrittleFailureVisitor( Model<dim>& model,
 
 
 
-template<uint32_t dim>
-BrittleFailureVisitor<dim>::~BrittleFailureVisitor()
-{
-}
-
-
 
 /** 
     Reads all relevant rock and fluid properties from the element.

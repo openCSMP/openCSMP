@@ -15,17 +15,16 @@ template<uint32_t> class Model;
 @author S. Roberts
 @date 2001 */
 template<uint32_t dim>
-class DispersivityVisitor : public Visitor< dim> {
+class DispersivityVisitor final : public Visitor< dim> {
   public:
     DispersivityVisitor( Model< dim>&, const char* dispersivity, const char* pore_velocity, 
                          const char* diffusivity,  const char* dispersion_long, const char* dispersion_trans );
                                                   
     DispersivityVisitor( Model< dim>&, const char* dispersivity, const char* pore_velocity, 
                           double diffusivity, double dispersion_long, double dispersion_trans );
-                 
-    virtual ~DispersivityVisitor();
     
-    virtual void Visit( Element<dim>* );   
+    void Visit( Element<dim>* )  override final;
+    void Visit( Model<dim>* )  override final {}
     
   private:
     

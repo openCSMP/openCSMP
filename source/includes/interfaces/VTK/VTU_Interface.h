@@ -65,9 +65,7 @@ public:
     // Usage inside the class:  ConnectivityMap<Element>
     // ------------------------------------------------------------------
     template<template <uint32_t> class CELL>
-    using ConnectivityMap =
-        std::map<const ModelSubDomain<dim, CELL>*,
-                 std::unique_ptr<XML_Document>>;
+    using ConnectivityMap = std::map<const ModelSubDomain<dim, CELL>*, std::unique_ptr<XML_Document>>;
 
     // ------------------------------------------------------------------
     // Construction / destruction

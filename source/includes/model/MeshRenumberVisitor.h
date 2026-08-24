@@ -17,13 +17,12 @@ template<uint32_t> class Element;
     @date 2006
 */
 template<uint32_t dim>
-class MeshRenumberVisitor : public Visitor<dim> {
+class MeshRenumberVisitor final : public Visitor<dim> {
   public:
     MeshRenumberVisitor();
-
-    virtual ~MeshRenumberVisitor();
     
-    virtual void Visit( Element<dim>* );  
+    void Visit( Element<dim>* ) override final;
+    void Visit( Model<dim>* ) override final {}
     
     size_t  VisitedElements() const;
     size_t  VisitedNodes() const; 

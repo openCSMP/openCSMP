@@ -87,12 +87,6 @@ BoundaryStressVisitor<dim>::BoundaryStressVisitor( const Model<dim>& model,
 
 
 
-template<uint32_t dim>
-BoundaryStressVisitor<dim>::~BoundaryStressVisitor()
-{
-}
-
-
 
 
 /**

@@ -24,8 +24,7 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
                         const char* basic,  // Poisson's ratio
                         const char* test,   // displacement
                         bool  principal_vectors,
-                        bool extrapolate_results_to_nodes=false,
-                        bool geomechanics_conventions=true  );
+                        bool  extrapolate_results_to_nodes=false );
     
     /// get displacement values to compute {d} vector
     void GetOperands( const Element<3U>& ) override final;
@@ -47,8 +46,8 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
                 means_key_, dilat_key_,                    ///< mean stress (scalar), dilatation (scalar)
                 shear_key_;                                ///< maximum shear stress (scalar)
 
-    DenseMatrix<DM_MIN>             DISPL_, EGP_;
-    DenseMatrix<DM6>                STRESS_, STRAIN_, SGP_, PEGP_, PSGP_;
+    DenseMatrix<DM_MIN>             DISPL_, STRESS_, STRAIN_, EGP_;
+    DenseMatrix<DM6>                SGP_;
     std::vector<DenseMatrix<DM6> >  STIFF_;
     std::vector<double>             IPSTRAIN_, IPSTRESS_,
                                     NSTRAIN_,  NSTRESS_, 
@@ -63,12 +62,11 @@ class StressesAndStrains<3U> : public MathOperatorLHS<3U,Element> {
     std::vector<ScalarVariable>           youngs_, pratio_;
     std::vector<VectorVariable<3U> >      NVAR_;
     bool                                  verbose_,
-                                          principal_e_and_sigma_,
-                                          geomechanics_conventions_;
+                                          principal_e_and_sigma_;
     // to prevent duplicate node output
-    std::vector<bool>                           node_output_;  
-    std::vector<std::deque<std::vector<double> > >  temp_strains_, 
-                                                      temp_stresses_;
+    std::vector<bool>                               node_output_;
+    std::vector<std::deque<std::vector<double> > >  temp_strains_,
+                                                    temp_stresses_;
 };
 
 } // csmp

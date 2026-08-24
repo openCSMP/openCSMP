@@ -190,7 +190,7 @@ void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
     }
     else if ( conductivity_key_.place == ELEMENT_INTEGRATION_POINT )
     {
-        for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
+        for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
                 MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->Read(i, conductivity_key_));
@@ -208,7 +208,7 @@ void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
     }
     else if ( conductivity_key_.place == NODE )
     {
-        for ( auto i{0U}; i<e->IntegrationPoints(); i++ )
+        for ( uint32_t i{0U}; i<e->IntegrationPoints(); i++ )
         {
             if ( conductivity_key_.type == SCALAR )
                 MTRL[i].AssignToDiagonalAndZeroOffDiagonal( dim, e->PropertyValueAtIntegrationPoint( conductivity_key_, i ) );
@@ -234,8 +234,8 @@ void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
         // ---------------------------------------------
         // vel = -(k/mu)*(grad p - rho*g*{g_unit})
         velo = 0.;
-        for ( auto i{0U}; i<e->Nodes(); i++ )
-            for ( auto j{0U}; j<dim; j++ )
+        for ( uint32_t i{0U}; i<e->Nodes(); i++ )
+            for ( uint32_t j{0U}; j<dim; j++ )
                 velo(j) += PF[i]() * DERIV(j,i) ;
 
         if (with_gravity_) {
@@ -243,7 +243,7 @@ void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
             // ---------------------------------------------
 
             if ( e->Interpolation() == 1U && velo_key_.place == ELEMENT){
-                for (auto i = 0 ; i < dim ; i++)
+                for (uint32_t i{0U} ; i < dim ; i++)
                     velo(i) -= gravity_unit_vector_(i) *gravitational_acceleration_* rho();
 
             }
@@ -254,7 +254,7 @@ void SinglePhaseVelocityVisitor<dim,CELL>::Visit( CELL<dim>* e )
             }
         }
 
-        for ( auto j{0U}; j<dim; j++ )
+        for ( uint32_t j{0U}; j<dim; j++ )
             velo(j) *= -MTRL[0](j,j);
 
         if (ivelo_key_!=csmp::Index()) {

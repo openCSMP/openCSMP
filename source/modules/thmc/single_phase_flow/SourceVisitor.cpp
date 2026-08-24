@@ -53,12 +53,7 @@ SourceVisitor<dim>::SourceVisitor(Model<dim>& model,
 }
 
 template<uint32_t dim>
-SourceVisitor<dim>::~SourceVisitor()
-{
-}
-
-template<uint32_t dim>
-void SourceVisitor<dim>::Visit( Model<dim>* model )
+void SourceVisitor<dim>::Visit( Model<dim>* )
 {
 
     timestep()=1.0; // this is equivalent to not dividing the source term by the timestep, as used by the Geothermal Example.

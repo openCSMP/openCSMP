@@ -13,11 +13,6 @@ MeshRenumberVisitor<dim>::MeshRenumberVisitor()
   }
 
 
-template<uint32_t dim>
-MeshRenumberVisitor<dim>::~MeshRenumberVisitor() 
- {  
- }
-
 // MeshRenumberVisitor Methods ====================
 
 template<uint32_t dim>

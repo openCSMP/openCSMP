@@ -125,15 +125,6 @@ ThermalVisitor<dim>::ThermalVisitor( Model<dim>& model,
 }
 
 
-template<uint32_t dim>
-ThermalVisitor<dim>::~ThermalVisitor()
-{
-}
-
-template<uint32_t dim>
-void ThermalVisitor<dim>::Visit( Model<dim>* )
-{
-}
 
 /**
     This is the key part of this Node visitor.

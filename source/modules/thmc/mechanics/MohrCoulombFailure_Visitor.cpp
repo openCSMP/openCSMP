@@ -21,22 +21,18 @@ namespace csmp {
 // delete For2D for 3D and 1D
 template<>
 MohrCoulombFailure_Visitor<3U>
-MohrCoulombFailure_Visitor<3U>::For2D( Model<3U>&,
-                                        PlaneAssumption,
-                                        PLACEMENT ) = delete;
+MohrCoulombFailure_Visitor<3U>::For2D( Model<3U>&, PlaneAssumption, PLACEMENT ) = delete;
 
 template<>
 MohrCoulombFailure_Visitor<1U>
-MohrCoulombFailure_Visitor<1U>::For2D( Model<1U>&,
-                                        PlaneAssumption,
-                                        PLACEMENT ) = delete;
+MohrCoulombFailure_Visitor<1U>::For2D( Model<1U>&, PlaneAssumption, PLACEMENT ) = delete;
 
 // provide For2D only for 2D
 template<>
 MohrCoulombFailure_Visitor<2U>
-MohrCoulombFailure_Visitor<2U>::For2D( Model<2U>&      model,
-                                        PlaneAssumption  assumption,
-                                        PLACEMENT        target_placement )
+MohrCoulombFailure_Visitor<2U>::For2D( Model<2U>&       model,
+                                       PlaneAssumption  assumption,
+                                       PLACEMENT        target_placement )
 {
     return MohrCoulombFailure_Visitor<2U>( model, assumption, target_placement );
 }
@@ -46,12 +42,10 @@ MohrCoulombFailure_Visitor<2U>::For2D( Model<2U>&      model,
 // ----------------------------------------------------------------------------
 
 template<uint32_t dim>
-MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor(
-    Model<dim>& model,
-    PLACEMENT   target_placement )
+MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model, PLACEMENT analysis_var_placement )
     : Visitor<dim>( MODEL, ELEMENT ),
       plane_assumption_( PlaneAssumption::PLANE_STRESS ),  // irrelevant for 3D/1D
-      analysis_var_placement_( target_placement                ),
+      analysis_var_placement_( analysis_var_placement                    ),
       stress_key_      ( model.Database().StorageKey( "stress"           ) ),
       cohesion_key_    ( model.Database().StorageKey( "cohesion"         ) ),
       friction_key_    ( model.Database().StorageKey( "friction angle"   ) ),
@@ -120,7 +114,12 @@ MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor(
              << "  placement of analysis variables: "
              << ( analysis_var_placement_ == ELEMENT_INTEGRATION_POINT
                   ? "ELEMENT_INTEGRATION_POINT" : "ELEMENT" ) << "\n";
+                  
+    // setting failure criteria to zero
+    model.InputPropertyValue("failure", makeScalar(ANY,0.) );
+    model.InputPropertyValue("failure01", makeScalar(ANY,0.) );
 }
+
 
 
 // ----------------------------------------------------------------------------
@@ -207,6 +206,10 @@ MohrCoulombFailure_Visitor<2U>::MohrCoulombFailure_Visitor( Model<2U>&      mode
              << "  plane assumption: "
              << ( plane_assumption_ == PlaneAssumption::PLANE_STRAIN
                   ? "PLANE_STRAIN" : "PLANE_STRESS" ) << "\n";
+
+    // setting failure criteria to zero
+    model.InputPropertyValue("failure", makeScalar(ANY,0.) );
+    model.InputPropertyValue("failure01", makeScalar(ANY,0.) );
 }
 
 
@@ -299,32 +302,6 @@ void MohrCoulombFailure_Visitor<dim>::EvaluateFailure(
 // ----------------------------------------------------------------------------
 //  Visit
 // ----------------------------------------------------------------------------
-
-/*
-template<uint32_t dim>
-void MohrCoulombFailure_Visitor<dim>::Visit( Region<dim>* r )
-{
-    assert( r != nullptr );
-//    r->Accept(*this);
-}
-
-
-template<uint32_t dim>
-void MohrCoulombFailure_Visitor<dim>::Visit( Boundary<dim>* b )
-{
-    assert( b != nullptr );
-//    b->Accept(*this);
-}
-
-
-// in source
-template<uint32_t dim>
-inline void MohrCoulombFailure_Visitor<dim>::Visit( Model<dim>* m )
-{
-    assert( m != nullptr );
-//    m->Accept( *this );
-}
-*/
 
 template<uint32_t dim>
 void MohrCoulombFailure_Visitor<dim>::Visit( Element<dim>* e )

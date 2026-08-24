@@ -63,8 +63,6 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
   VTU_Interface<3U> vtu( model );
   vtu.OmitZeroInFileName(true);
 
-  VTK_Interface<3U> vtk;
-
   // output properties & initial output
   list<string> outputProps;
 
@@ -107,11 +105,17 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
 
   bottomBoundary.InputPropertyValue("displacement",DisplacementVectorBOTTOM);// BOTTOM Boundary can not move in the Y direction
 
-  vtu.OutputDataToVTU( "borehole_fluid pressure", "fluid pressure", "Model", 0 );
-  vtu.OutputDataToVTU( "borehole_Neumann stress", "Neumann stress", "Model", 0 );
+  // input properties & initial output
+  list<string> inputProps = {"Young's modulus", "Poisson's ratio", "displacement",
+                             "gravity force", "Neumann stress", "mean stress", "force", "fluid pressure", "displacement"};
+
+
+  printRangeOfVariable( model, "Neumann stress");
+  // will not print Neumann stress as it is a FACE variable
+  vtu.OutputDataToVTU( "BoreHole_stability_VerticalWell3D_VVCase_input", inputProps, "ZONE_0", 0 );
+
 
   // setting up & solving linear elasticity fea problem
-
   #ifdef CSMP_WITH_SAMG_SOLVER
   SAMG_Settings settings;
   settings.Set_napproach(2);
@@ -123,10 +127,10 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
   #endif
 
   PT_op<3U> bforces( model.Database(), "force", "displacement" );
-  NumIntegral_BT_D_B_dV<3U> stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
-  NumIntegral_PT_op_dV<3U>     bodyforce(  model.Database(), "gravity force", "displacement");
-  NumIntegral_PT_op_dV<3U>     AppliedStress( model.Database(), "Neumann stress", "displacement");
-  NumIntegral_BT_op_dV<3U>     WellBorePressure( model.Database(),"fluid pressure", "displacement");
+  NumIntegral_BT_D_B_dV<3U>  stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement" );
+  NumIntegral_PT_op_dV<3U>   bodyforce(  model.Database(), "gravity force", "displacement");
+  NumIntegral_PT_op_dV<3U>   AppliedStress( model.Database(), "Neumann stress", "displacement");
+  NumIntegral_BT_op_dV<3U>   WellBorePressure( model.Database(),"fluid pressure", "displacement");
 
   deformation.Add( &stiffness );
   deformation.Add( &bforces );
@@ -134,7 +138,8 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
   deformation.Add( &AppliedStress );
   deformation.Add( &WellBorePressure );
 
-  StressesAndStrains<3U>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", true,true);
+  constexpr bool output_principal_vectors{true}, extrapolate_results_to_nodes{false};
+  StressesAndStrains<3U>  postpro( model, "Young's modulus", "Poisson's ratio", "displacement", output_principal_vectors, extrapolate_results_to_nodes );
   deformation.AddPostProcess( &postpro );
 
   model.Apply( deformation );
@@ -150,21 +155,24 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
   // apply resulting displacement
   model.MoveNodeCoordinatesBy("displacement");
 
-  vtk.OutputDataToVTK(model,"Model_strain1","strain1",0);
-  vtk.OutputDataToVTK(model,"Model_strain2","strain2",0);
-  vtk.OutputDataToVTK(model,"Model_strain3","strain3",0);
-  vtk.OutputDataToVTK(model,"Model_sigma1","sigma1",0);
-  vtk.OutputDataToVTK(model,"Model_sigma2","sigma2",0);
-  vtk.OutputDataToVTK(model,"Model_sigma3","sigma3",0);
-  vtk.OutputDataToVTK(model,"Model_meanstress","mean stress",0);
-  vtk.OutputDataToVTK(model,"Model_displacement","displacement",0);
-  vtk.OutputDataToVTK(model,"Model_failure","failure",0);
-  vtk.OutputDataToVTK(model,"Model_stress","stress",0);
-  vtk.OutputDataToVTK(model,"Model_strain","strain",0);
-  vtk.OutputDataToVTK(model,"Model_failure01","failure01",0);
-  vtk.OutputDataToVTK(model,"Model_stressNode","stress node",0);
-  vtk.OutputDataToVTK(model,"Model_strainNode","strain node",0);
-// vtk.OutputDataToVTK(model,"Model_principal stress","principal stress",0);
-}
+  // collect all output variables into a single set and write one VTU file
+  const set<string> output_variables {
+      "strain1",
+      "strain2",
+      "strain3",
+      "sigma1",
+      "sigma2",
+      "sigma3",
+      "mean stress",
+      "displacement",
+      "failure",
+      "stress",
+      "strain",
+      "failure01",
+      "stress node",
+      "strain node"
+  };
+
+  vtu.OutputDataToVTU( "BoreholeStability", output_variables, "Model", 0 );}
 
 } // csmp

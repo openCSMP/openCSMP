@@ -62,12 +62,6 @@ PropertyAtPointVisitor<dim>::PropertyAtPointVisitor( const Model<dim>& m,
 
 
 template<uint32_t dim>
-PropertyAtPointVisitor<dim>::~PropertyAtPointVisitor()
-{
-
-}
-
-template<uint32_t dim>
 void PropertyAtPointVisitor<dim>::SetDebugOn()
 {
     debug_ = true;

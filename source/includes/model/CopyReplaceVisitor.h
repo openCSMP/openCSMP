@@ -25,7 +25,7 @@ template<uint32_t> class Region;
     is no longer a give.
 */
 template<typename Var, uint32_t dim>
-class CopyReplaceVisitor : public Visitor<dim> {
+class CopyReplaceVisitor final : public Visitor<dim> {
   public:
     CopyReplaceVisitor( const PropertyDatabase<dim>&, 
                         const char* prop_a,

@@ -91,14 +91,9 @@ class MohrCoulombFailure_Visitor final : public Visitor<dim> {
     */
     static MohrCoulombFailure_Visitor<dim>
     For2D( Model<dim>& model, PlaneAssumption assumption, PLACEMENT analysis_input_variables=ELEMENT_INTEGRATION_POINT );
-                                         
-    ~MohrCoulombFailure_Visitor() = default;
 
     void Visit( Element<dim>* ) override final;
-
-//    void Visit( Region<dim>* ) override final;
-//    void Visit( Boundary<dim>* ) override final;
-//    void Visit( Model<dim>* ) override final;
+    void Visit( Model<dim>* ) override final {}
 
   private:
     /// private constructor used by For2D
@@ -144,7 +139,7 @@ class MohrCoulombFailure_Visitor final : public Visitor<dim> {
                           double&                    Fmc,
                           double&                    F01 ) const noexcept;
 
-    static constexpr bool   verbose_ = true;  ///< set to true if you want extra diagnostics
+    static constexpr bool   verbose_ = false;  ///< set to true if you want extra diagnostics
     PlaneAssumption         plane_assumption_;
     PLACEMENT               analysis_var_placement_;
 

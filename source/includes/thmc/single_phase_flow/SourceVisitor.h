@@ -19,7 +19,7 @@ template<uint32_t> class Model;
 
 */
 template<uint32_t dim>
-class SourceVisitor : public Visitor<dim>
+class SourceVisitor final : public Visitor<dim>
 {
 public:
     SourceVisitor( Model<dim>&, std::vector<std::string>* to_initialize_keys = nullptr );
@@ -28,10 +28,11 @@ public:
                    Index densityDiffKey,
                    Index nfvsKey,
                    Index thicknessKey);
-    ~SourceVisitor();
+                   
+    ~SourceVisitor() = default;
     
-    virtual void Visit( Element<dim>* );
-    virtual void Visit( Model<dim>* );
+    void Visit( Element<dim>* ) override final;
+    void Visit( Model<dim>* ) override final;
 
 private:
     SourceVisitor();

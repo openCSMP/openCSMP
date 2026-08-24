@@ -12,20 +12,17 @@ template<uint32_t> class Model;
        TODO: Who? - What for?
 */
 template<uint32_t dim>
-class GravityProjectionVisitor : public Visitor<dim>
+class GravityProjectionVisitor final : public Visitor<dim>
   {
     public:
-
       GravityProjectionVisitor(  Model<dim>&,
                                  const Index& prop_idx,
                                  const Index& result_idx,
                                  VectorVariable<dim>& );
 
-      virtual ~GravityProjectionVisitor();
-
-      virtual void Visit(Element<dim>* );
-      virtual void Visit(Model<dim>* );
-      virtual void Visit(Region<dim>* );
+      void Visit(Element<dim>* ) override final;
+      void Visit(Model<dim>* ) override final;
+      void Visit(Region<dim>* ) override final;
 
       /// Get Result
       Index Get_PropertyIndex();

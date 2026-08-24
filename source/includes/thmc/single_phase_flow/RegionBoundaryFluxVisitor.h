@@ -20,17 +20,15 @@ template<uint32_t,template<uint32_t> class> class ModelSubDomain;
 
 /// using the FVM this visitor computes the cumulative single-phase influx into the target region
 template<uint32_t dim,template<uint32_t> class COMPUTATION_DOMAIN>
-class RegionBoundaryFluxVisitor : public Visitor<dim> {
+class RegionBoundaryFluxVisitor final : public Visitor<dim> {
   public:
     /// choice between Region, Boundary and SplitBoundary is desired
     RegionBoundaryFluxVisitor( Model<dim>&,
                                const char*  target_region,
                                const char*  Darcy_velocity );
-  
-    virtual ~RegionBoundaryFluxVisitor() {};
 
     /// application target = node-centered finite volume
-    virtual void Visit( Node<dim>* );
+    void Visit( Node<dim>* ) override final;
   
     /// returns the flux through the region boundary 
     double InFlux() const;

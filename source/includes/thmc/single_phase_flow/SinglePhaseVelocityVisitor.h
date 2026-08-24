@@ -23,7 +23,7 @@ template<uint32_t> class Model;
 /// -- Julian M. 26-09-2015
 
 template<uint32_t dim, template<uint32_t> class CELL>
-class SinglePhaseVelocityVisitor : public Visitor<dim> {
+class SinglePhaseVelocityVisitor final : public Visitor<dim> {
   public:
 
     SinglePhaseVelocityVisitor(Model<dim>&,
@@ -39,9 +39,8 @@ class SinglePhaseVelocityVisitor : public Visitor<dim> {
                                const char* nodal_pore_velocity = nullptr,
                                const char* nodal_volume_flux = nullptr);
 
-    ~SinglePhaseVelocityVisitor() {}
-
-    virtual void Visit( CELL<dim>* );
+    void Visit( CELL<dim>* ) override final;
+    void Visit( Model<dim>* ) override final { /* nothings needs to be done */ }
 
   private:
     const size_t components_;

@@ -32,7 +32,7 @@ namespace csmp {
 */
 template<uint32_t dim>
 FlatBoundaryStressVisitor<dim>::FlatBoundaryStressVisitor( const Model<dim>& model,
-                                                   bool overwrite_force_vector )
+                                                           bool overwrite_force_vector )
     : Visitor<dim>( BOUNDARY, FACE ),
       Sn_key_(model.Database().StorageKey("normal stress")),
       Ss_key_(model.Database().StorageKey("shear stress")),

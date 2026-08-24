@@ -13,7 +13,7 @@ template<uint32_t> class Model;
 template<uint32_t> class TwoPhaseModel;
 
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class ComputeSinglePhaseGravityTermVisitor : public Visitor<dim>
+class ComputeSinglePhaseGravityTermVisitor final : public Visitor<dim>
 {
   public:
     ComputeSinglePhaseGravityTermVisitor(Model<dim>& model,
@@ -24,9 +24,8 @@ class ComputeSinglePhaseGravityTermVisitor : public Visitor<dim>
                                          const char* model_gravity_vector,
                                          const char *densityTag2 = NULL); // post multiplies gravity term if provided
 
-    virtual ~ComputeSinglePhaseGravityTermVisitor() {}
-
-    virtual void Visit(CELL<dim>* );
+    void Visit(CELL<dim>* ) override final;
+    void Visit(Model<dim>* ) override final {}
 
   private:
     VectorVariable<dim>  gravity_unit_vector_;

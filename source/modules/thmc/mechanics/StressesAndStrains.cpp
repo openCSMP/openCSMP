@@ -34,8 +34,7 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
                                             const char* basic, 
                                             const char* test,
                                             bool  principal_vectors,
-                                            bool extrapolate_results_to_nodes,
-                                            bool geomechanics )
+                                            bool extrapolate_results_to_nodes )
   : MathOperatorLHS<3U,Element>(sg.Database(),oper,basic,test),
     strain_key_(sg.Database().StorageKey("strain")),
     stress_key_(sg.Database().StorageKey("stress")),
@@ -54,7 +53,6 @@ StressesAndStrains<3U>::StressesAndStrains( const Model<3U>& sg,
     temp_strains_(sg.Region("Model").Nodes()),
     temp_stresses_(sg.Region("Model").Nodes()),
     principal_e_and_sigma_(principal_vectors),
-    geomechanics_conventions_(geomechanics),
     verbose_(false)
  {
     MathOperatorLHS<3U,Element>::Name("StressesAndStrains", oper, basic, test );
@@ -229,8 +227,8 @@ void StressesAndStrains<3U>::GetOperands( const Element<3U>& e )
          // ----------------------------
          DISPL_.Resize( nodes * 3U, 1 );
          uint32_t k(0U);
-         for ( auto i{0U}; i<nodes; i++ )
-           for ( auto j{0U}; j<3; j++ ) DISPL_(k++,0) = NVAR_[i](j);
+         for ( uint32_t i{0U}; i<nodes; i++ )
+           for ( uint32_t j{0U}; j<3U; j++ ) DISPL_(k++,0) = NVAR_[i](j);
 
          if ( verbose_ ) {     
               cout <<"\nStressesAndStrains<"<< 3U;
@@ -307,7 +305,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
         
         // 1.1 Computing the strains at the integration points
         // ---------------------------------------------------
-        for ( auto i{0U}; i<integration_points; i++ )
+        for ( uint32_t i{0U}; i<integration_points; i++ )
           {
              //  getting DN matrices at the node points
              e.dN_AtIntegrationPoint( EGP_, i, 3U );
@@ -390,16 +388,14 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
                  {  
                     // averaging strain components
                     double sum(0.);
-                    for ( deque<vector<double> >::const_iterator 
-                          lit=temp_strains_[ e.N(i)->Idx() ].begin();
+                    for ( auto lit=temp_strains_[ e.N(i)->Idx() ].begin();
                           lit!=temp_strains_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
                     sum /= static_cast<double>(temp_strains_[ e.N(i)->Idx() ].size());
                     STRAIN_(j,i) = sum;
 
                     // averaging stress components
                     sum = 0.;
-                    for ( deque<vector<double> >::const_iterator
-                          lit=temp_stresses_[ e.N(i)->Idx() ].begin();
+                    for ( auto lit=temp_stresses_[ e.N(i)->Idx() ].begin();
                           lit!=temp_stresses_[ e.N(i)->Idx() ].end(); lit++ ) sum += (*lit)[j];
                     sum /= static_cast<double>(temp_stresses_[ e.N(i)->Idx() ].size());
                     STRESS_(j,i) = sum;
@@ -456,7 +452,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
         // 1. accumulating and averaging the strain & stress values
         // --------------------------------------------------------
         // accumulation
-        for ( auto i{0U}; i<e.IntegrationPoints(); i++ ) {
+        for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
               convertTo( IPSTRAIN_, i, ts_ );
               IP_STRAIN_TENSOR_ += ts_;
               convertTo( IPSTRESS_, i, ts_ );
@@ -494,10 +490,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
                }
              sortEigenVectorsAndValues( evals_, evecs_ );
              // geomechanics convention: changing the sign of the stresses
-             if ( geomechanics_conventions_ ) {
-                  evals_ *= -1.;
-                  //evecs_ *= -1.;
-               }
+             evals_ *= -1.;
              // assuming that each row contains one Eigenvector
              e.Store( sigma1_key_, evecs_.Row(0) );
              e.Store( sigma2_key_, evecs_.Row(1) );
@@ -514,7 +507,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
     // --------------------------------
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
+      for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------
@@ -547,10 +540,8 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
             if ( principal_e_and_sigma_ ) {
                   ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
                   sortEigenVectorsAndValues( evals_, evecs_ );
-                  if ( geomechanics_conventions_ ) {
-                       evals_ *= -1.;
-                       //evecs_ *= -1.;
-                    }
+                  // geomechanics_conventions_
+                  evals_ *= -1.;
                   vc_ = evecs_.Row(0);
                   e.Store( i, sigma1_key_, vc_ ); 
                   vc_ = evecs_.Row(1);
@@ -611,10 +602,8 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
                      convertColumnTo( STRESS_, i, ts_ );
                      ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
                      sortEigenVectorsAndValues( evals_, evecs_ );
-                     if ( geomechanics_conventions_ ) {
-                          evals_ *= -1.;
-                          //evecs_ *= -1.;
-                       }
+                     // geomechanics_conventions
+                     evals_ *= -1.;
                      vc_ = evecs_.Row(0);
                      e.N(i)->Store( sigma1_key_, vc_ ); 
                      vc_ = evecs_.Row(1);

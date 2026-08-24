@@ -29,12 +29,10 @@ template<uint32_t> class Model;
 
 // see DOxygen doc further below
 template<uint32_t dim>
-class FlatBoundaryStressVisitor : public Visitor<dim> {
+class FlatBoundaryStressVisitor final : public Visitor<dim> {
   public:
     /// by default, any entries into the RHS force vectors will get overwritten
     explicit FlatBoundaryStressVisitor( const Model<dim>&, bool overwrite_force_vector=true );
-
-    ~FlatBoundaryStressVisitor() = default;
 
     /// to zero out force vector, prior to accumulation of forces.
     void Visit( Boundary<dim>* ) override final;

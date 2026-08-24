@@ -33,7 +33,7 @@ template<uint32_t> class Model;
  
 */
 template<uint32_t dim>
-class OverburdenPressureVisitor : public Visitor<dim> {
+class OverburdenPressureVisitor final : public Visitor<dim> {
   public:
     /// for the computation of nodal 'gravity force'
     OverburdenPressureVisitor( Model<dim>&, double acc_gravity ); ///< local constant for reservoir

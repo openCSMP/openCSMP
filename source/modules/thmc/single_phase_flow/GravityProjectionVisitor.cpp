@@ -41,11 +41,6 @@ GravityProjectionVisitor<dim>::GravityProjectionVisitor( Model<dim>& m,
         vec_ = vec;
 }
 
-template<uint32_t dim>
-GravityProjectionVisitor<dim>::~GravityProjectionVisitor()
-{
-
-}
 
 template<uint32_t dim>
 Index GravityProjectionVisitor<dim>::Get_ResultIndex( )

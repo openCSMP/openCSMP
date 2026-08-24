@@ -47,12 +47,11 @@ class ThermalVisitor : public Visitor<dim>
                       Index beta_tot_key,
                       Index beta_fluid_key);
           
-      ~ThermalVisitor();
-      void SetInitialProperties(Model<dim> *model);
+      void SetInitialProperties(Model<dim> *model) override final;
 	    void ApplyTemperatureBoundaryConditionsToTransportedVariables();
       
-      virtual void Visit(Node<dim>* );
-      virtual void Visit(Model<dim>* );
+      void Visit( Node<dim>* ) override final;
+      void Visit( Model<dim>* ) override final {}
 
  private:
       ThermalVisitor();

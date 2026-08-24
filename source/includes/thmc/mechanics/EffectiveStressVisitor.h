@@ -13,7 +13,7 @@ namespace csmp {
 
   /// effective- and mean stress, by post-processing of a diagonalized stress tensor with fluid pressure as input.
   template<uint32_t dim>
-  class EffectiveStressVisitor : public Visitor<dim> {
+  class EffectiveStressVisitor final : public Visitor<dim> {
   public:
     EffectiveStressVisitor( Model<dim>& model, 
                             const char* stressTensor,
@@ -25,9 +25,8 @@ namespace csmp {
                             const char* fluidPressure,
                             const char* meanStress );
 
-    ~EffectiveStressVisitor() = default;
-
     void Visit(Element<dim>* ) override final;
+    void Visit(Model<dim>* ) override final {}
 
   private:
     EffectiveStressVisitor();

@@ -51,7 +51,7 @@ enum class BOUNDARY_STRESS { SINGLE_VALUED, DEPTH_DEPENDENT /* TODO: TRIANGULAR?
      @author SKM 29/9/2014
 */
 template<uint32_t dim>
-class BoundaryStressVisitor : public Visitor<dim> {
+class BoundaryStressVisitor final : public Visitor<dim> {
   public:
     /// by default, any entries into the RHS force vectors will get overwritten
     BoundaryStressVisitor( const Model<dim>&,
@@ -62,8 +62,6 @@ class BoundaryStressVisitor : public Visitor<dim> {
     BoundaryStressVisitor( const Model<dim>&,
                            BOUNDARY_STRESS=BOUNDARY_STRESS::SINGLE_VALUED,
                            bool overwrite_force_vector=true );
-
-    virtual ~BoundaryStressVisitor();
 
     /// to zero out force vector, prior to accumulation of forces.
     virtual void Visit( Boundary<dim>* );

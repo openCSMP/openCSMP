@@ -34,14 +34,12 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
     
     if ( alpha_t() > alpha_l() ) {
               cout << "\nalpha trans: " << alpha_t() << ", alpha long: " << alpha_l() << endl;
-		throw csmp::Exception( INFO, "DispersivityVisitor< dim>::(constructor)", 
-          "The transversal dispersivity is larger than the longitudinal dispersivity, is this really intended?" ); 
-
-          
+      		throw csmp::Exception( INFO, "DispersivityVisitor< dim>::(constructor)",
+          "The transversal dispersivity is larger than the longitudinal dispersivity, is this really intended?" );
       }
-    
-    		       
   }
+
+
 
 template<uint32_t dim>
 DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg, 
@@ -80,11 +78,6 @@ DispersivityVisitor< dim>::DispersivityVisitor( Model< dim>& sg,
    
 
   }
-
-
-template<uint32_t dim>
-DispersivityVisitor< dim>::~DispersivityVisitor() 
- {}
 
 
 template<uint32_t dim>

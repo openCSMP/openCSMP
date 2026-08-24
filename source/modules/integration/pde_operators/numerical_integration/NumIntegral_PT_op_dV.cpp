@@ -68,7 +68,7 @@ void NumIntegral_PT_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
    else // Element property
      {
         const PLACEMENT place = MathOperatorRHS<dim,CELL>::MaterialOperandKey().place;
-        assert( place == ELEMENT );
+        assert( place == ELEMENT || place == FACE );
         VectorVariable<dim>  vc;
         e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
    

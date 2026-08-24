@@ -103,23 +103,13 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
   VTU_Interface<3U> vtu( model );
   vtu.OmitZeroInFileName(true);
 
-  VTK_Interface<3U> vtk;
-
-
-  // output properties & initial output
-  list<string> outputProps;
-  //    outputProps.push_back( "mean stress" );
    model.InputPropertyValue( "mean stress", zeroScalar );
    model.InputPropertyValue( "displacement", zeroVector );
    model.InputPropertyValue( "force", zeroVector );
    model.InputPropertyValue( "Neumann stress", zeroVector );
    model.InputPropertyValue( "fluid pressure", makeScalar(PLAIN, Pp) );
 
-
-   vtu.OutputDataToVTU( ((string)(input_file_name.data())+"UnLoaded").data(), outputProps, "Model", static_cast<int>(0) );
-
     // model configuration
-
     model.InputPropertyValue( "Poisson's ratio", makeScalar( PLAIN, 0.29 ) ); //carbonate
     model.InputPropertyValue( "Young's modulus", makeScalar( PLAIN, 24.0e+9 ) ); //carbonate
     model.InputPropertyValue("gravity force", Rho_g );
@@ -153,13 +143,14 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
 
     TOPwellbore.InputPropertyValue( "fluid pressure", Pressure );
     BOTTOMwellbore.InputPropertyValue( "fluid pressure", Pressure );
+    
+    // input properties & initial output
+    list<string> inputProps = {"Young's modulus", "Poisson's ratio", "displacement",
+                               "gravity force", "Neumann stress", "mean stress", "force", "fluid pressure", "displacement"};
 
-    vtu.OutputDataToVTU( "borehole_fluid pressure", "fluid pressure",    "Model", 0 );
-
-    vtu.OutputDataToVTU( "borehole_Neumann stress", "Neumann stress",    "Model", 0 );
+    vtu.OutputDataToVTU( "BoreHole_stability_InclinedWell3D_VVCase_input", inputProps, "ZONE_0", 0 );
 
     // setting up & solving linear elasticity fea problem
-
     #ifdef CSMP_WITH_SAMG_SOLVER
     SAMG_Settings settings;
     settings.Set_napproach(2);
@@ -207,25 +198,6 @@ const VectorVariable<3U> Rho_g( PLAIN, PLAIN ,PLAIN, 0. , - 2.4e+4 , 0.);
 
 // apply resulting displacement
       model.MoveNodeCoordinatesBy("displacement");
-
-
-//    vtk.OutputDataToVTK(model,"Model_strain1","strain1",0);
-//    vtk.OutputDataToVTK(model,"Model_strain2","strain2",0);
-//    vtk.OutputDataToVTK(model,"Model_strain3","strain3",0);
-//    vtk.OutputDataToVTK(model,"Model_sigma1","sigma1",0);
-//    vtk.OutputDataToVTK(model,"Model_sigma2","sigma2",0);
-//    vtk.OutputDataToVTK(model,"Model_sigma3","sigma3",0);
-    vtk.OutputDataToVTK(model,"Model_meanstress","mean stress",0);
-//    vtk.OutputDataToVTK(model,"Model_displacement","displacement",0);
-//    vtk.OutputDataToVTK(model,"Model_failure","failure",0);
-    vtk.OutputDataToVTK(model,"Model_stress","stress",0);
-//    vtk.OutputDataToVTK(model,"Model_strain","strain",0);
-//    vtk.OutputDataToVTK(model,"Model_stress_node","stress node",0);
-//    vtk.OutputDataToVTK(model,"Model_strain_node","strain node",0);
-    vtk.OutputDataToVTK(model,"Model_failure01","failure01",0);
-//    vtk.OutputDataToVTK(model,"Model_principal stress","principal stress",0);
-
-
 
       return;
      }

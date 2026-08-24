@@ -26,20 +26,18 @@ template<uint32_t> class Model;
 
 */
 template<typename Var, uint32_t dim>
-class DataInputVisitor : public Visitor<dim> {
+class DataInputVisitor final : public Visitor<dim> {
   public:
     DataInputVisitor( Model<dim>& sg, 
                       const char* input_prop,
                       const std::vector<double>& input_data );
-
-    virtual ~DataInputVisitor();
     
-    virtual void Visit( Model<dim>* );
-    virtual void Visit( Region<dim>* );
-    virtual void Visit( Element<dim>* );  
-    virtual void Visit( Face<dim>* );
-    virtual void Visit( InterFace<dim>* );
-    virtual void Visit( Node<dim>* );
+    void Visit( Model<dim>* ) override final;
+    void Visit( Region<dim>* ) override final;
+    void Visit( Element<dim>* ) override final;
+    void Visit( Face<dim>* ) override final;
+    void Visit( InterFace<dim>* ) override final;
+    void Visit( Node<dim>* ) override final;
     
     void  Reset();
 

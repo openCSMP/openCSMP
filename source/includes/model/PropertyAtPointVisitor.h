@@ -10,19 +10,16 @@
 namespace csmp {
 
 template<uint32_t dim>
-class PropertyAtPointVisitor : public Visitor<dim> {
+class PropertyAtPointVisitor final : public Visitor<dim> {
 
 public:
     /// attempts to retrieve the value of the property at the point in the mesh
     PropertyAtPointVisitor( const Model<dim>&,
                             const std::map<size_t,std::vector<double> >& points_to_search,
                             const char* node_property_name );
-  
-    ~PropertyAtPointVisitor();
 
-
-    virtual void Visit(Element<dim>*);
-    virtual void Visit(Model<dim>*);
+    void Visit(Element<dim>*) override final;
+    void Visit(Model<dim>*) override final;
 
     std::map<size_t,size_t>& TargetFound();
   
