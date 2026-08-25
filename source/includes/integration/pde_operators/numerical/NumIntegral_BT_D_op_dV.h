@@ -9,20 +9,34 @@ namespace csmp {
 template<uint32_t> class Element;
 
 /**
+    Volume strain operator.
 
-Vector solution variable: volume strain
+    f_j = ∫_Ω Bⱼᵀ D(E, ν) [ε₀] dV
 
-@author S.K. Matthaei
-@author S. Roberts
-@date 1999 */
+    where D is the isotropic constitutive matrix assembled from Young's modulus E and Poisson's ratio ν,
+    B is the strain-displacement matrix, and [ε₀] is a known volumetric strain field
+    (e.g. thermal expansion, swelling, or dilatation induced by fluid pressure changes).
 
+    Operands: Young's modulus,
+    Poisson's ratio (scalar, element-placed) and the
+    volumetric strain operand [ε₀] (scalar or tensor, element or integration point-placed).
+
+    Test variable: Vector (displacement), node-placed.
+
+    Application:
+
+    - Thermal loading (thermoelastic coupling)
+    - Swelling or shrinkage strains in geomechanics
+    - Dilatation-induced body forces in poromechanics
+*/
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_BT_D_op_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>&, const char* oper,     // volume strain
-                            const char* youngs,   // Young's modulus
-                            const char* poissons, // Poisson's ratio
-                            const char* test, bool plane_strain=true ); // displacement
+    NumIntegral_BT_D_op_dV( const PropertyDatabase<dim>&,
+                            const char* oper,     ///< volume strain
+                            const char* youngs,   ///< Young's modulus
+                            const char* poissons, ///< Poisson's ratio
+                            const char* test, bool plane_strain=true ); ///< displacement
 
     void GetOperands( const CELL<dim>& ) override final;
 

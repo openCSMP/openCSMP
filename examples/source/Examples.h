@@ -32,6 +32,7 @@
 #include "PETSc_Example.h"                                      ///< PETSc linear solver integration
 #include "PolicyBased_Example.h"                                ///< policy-based C++ design example
 #include "PoreRadiusAnd_Pc_Example.h"                           ///< pore radius and capillary pressure
+#include "PoroElasticity_Example.h"                             ///< coupling between stress and pore pressure in porous medium
 #include "PressureDependentBlackOilProperties_Example.h"        ///< pressure-dependent black-oil fluid properties
 #include "PressureDiffusion_Example.h"                          ///< 2D transient fluid pressure diffusion
 #include "QuadraticPressure_parallelPlatePermeability_Example.h"///< quadratic pressure parallel-plate permeability

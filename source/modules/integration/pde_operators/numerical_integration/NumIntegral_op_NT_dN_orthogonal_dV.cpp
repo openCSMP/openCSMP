@@ -62,7 +62,7 @@ void NumIntegral_op_NT_dN_orthogonal_dV<dim,CELL>::GetOperands( const CELL<dim>&
     // read node variable which must be a scalar
     // --------------------------------------------
     NPROP.resize( e.Nodes() );
-    for ( auto i{0U}; i<e.Nodes(); ++i )
+    for ( uint32_t i{0U}; i<e.Nodes(); ++i )
       NPROP[i] = e.N(i)->Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
     
 } // end GetOperands

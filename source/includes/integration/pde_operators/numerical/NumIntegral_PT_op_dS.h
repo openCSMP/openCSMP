@@ -8,17 +8,22 @@ namespace csmp {
 
 template<uint32_t> class Face;
   
-/** Scalars, or vectors acting on model boundary surfaces as tractions/stresses
+/**
+   @brief Neumann traction RHS (surface integral)
+   
+    f_j = ∫_Γ Pⱼᵀ t dS  ≈  Σᵢ wᵢ |Jᵢ| N_j(ξᵢ) · t
+   
+   where t is the applied traction vector (or scalar pressure) on the boundary face Γ, wᵢ are quadrature weights, and |Jᵢ| is the surface Jacobian determinant.
 
-@date 2000-2013
-@author Dr. Stephan K. Matthai
-@author Stephen G. Roberts
-@author M. Nejati
-@author P.S. Lang
+   Operand: Vector traction or scalar pressure — face-placed, flagged NEUMANN.
+   Only faces where the operand carries the NEUMANN status flag are accumulated; all others are skipped.
 
-Operator to be applied to boundary, with NEUMANN variables considered only. Scalars are considered positiv if directed
-towards inside of boundary.
+   Test variable: Vector (displacement), node-placed.
 
+  Application:
+  - Far-field in-situ stress conditions on outer model boundaries
+  - Mud pressure on the borehole wall
+  - Any distributed surface traction in mechanics
 */
 template<uint32_t dim>
 class NumIntegral_PT_op_dS : public MathOperatorRHS<dim,Face> {

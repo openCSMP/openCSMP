@@ -7,7 +7,7 @@
 
 namespace csmp {
 
-/// PDE operator:  div^2 N = interpolation function derivate matrix squared. Laplacian squared. No material operand.
+/// Laplacian squared PDE operator:  div^2 N = interpolation function derivate matrix squared. No material operand.
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_dN_dV final : public MathOperatorLHS<dim,CELL> {
   public:

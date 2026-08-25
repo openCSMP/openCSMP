@@ -7,12 +7,17 @@
 namespace csmp {
 
 template<uint32_t> class Element;
-/**
-@author S.K. Matthaei
-@author S. Roberts
-@date 1997 */
 
-/// Known as: mass or capacitance matrix
+/**
+     Mass or capacitance matrix
+     
+     C_jk = ∫_Ω N_j [σ] N_k dV
+     
+     To represent heat capacity, storativity (specific storage).
+     Used as transient storage term in pressure diffusion, compressibility matrix in poromechanics.
+     
+     @note Supported via LumpedFormulation(true) — produces a diagonal matrix whose entries equal the row sums of the consistent matrix.
+ */
 template<uint32_t dim, template<uint32_t> class CELL=csmp::Element>
 class NumIntegral_NT_lhsop_N_dV final : public MathOperatorLHS<dim,CELL> {
   public:

@@ -9,7 +9,13 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/// PDE operator:  oper div^2 N - interpolation functions squared = conductance matrix
+/**
+    Stiffness matrix / conductance matrix
+    
+    K_jk = ∫_Ω (∇N_j)ᵀ [σ] ∇N_k dV
+    
+    for pressure or temperature diffusion, heat conduction, species transport.
+*/
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_lhsop_dN_dV final : public MathOperatorLHS<dim,CELL> {
   public:

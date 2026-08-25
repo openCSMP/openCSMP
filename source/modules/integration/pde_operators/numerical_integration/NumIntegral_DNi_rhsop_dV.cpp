@@ -64,7 +64,6 @@ void NumIntegral_dNi_rhsop_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  
  
  
-//element contribution
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_dNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
@@ -77,7 +76,7 @@ void NumIntegral_dNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
     double det = (is_simplex_element_type) ? e.dN_AtBaryCenter( DERIV_ ) : 0.;
 
     vector<double> IPOL;
-    for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
       {
          // computing gradient of operand
          if ( !is_simplex_element_type ) det = e.dN_AtIntegrationPoint( DERIV_, i );

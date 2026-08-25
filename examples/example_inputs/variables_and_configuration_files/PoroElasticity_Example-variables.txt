@@ -1,0 +1,17 @@
+name	MParameter	unit	index	min.	max.	place	usage
+
+Biot alpha			alpha		X	1	0.	1.	element	input
+Biot modulus		invM		Pa-1	1	0.	1.	element	input
+displacement		UV	m	2	-1.00E+03	1.00E+03	node	computed
+fluid pressure		PF	Pa	1	0.00E+00	1.00E+09	node	computed
+fluid volume source	QV	m3	1	-1.00E+08	1.00E+08	element	input
+gravity term		GT	m	2	-1.00E+08	1.00E+08	element	computed
+mean stress			SM	Pa m-2	1	-1.00E+12	1.00E+12	ipoint	computed
+Poissons ratio		NU	X	1	0.00E+00	0.50		element	input
+sigma1			SI1	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+sigma2			SI2	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+strain			EPS	Pa m-2	3	-1.00E+03	1.00E+03	ipoint	computed
+strain1			E1	Pa m-2	2	-1.00E+03	1.00E+03	ipoint	computed
+strain2			E2	Pa m-2	2	-1.00E+03	1.00E+03	ipoint	computed
+stress			SI	Pa m-2	3	-1.00E+12	1.00E+12	element	computed
+Youngs modulus		E	Pa-1	1	0.00E+00	1.00E+15	element	input

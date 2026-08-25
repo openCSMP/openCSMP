@@ -36,8 +36,6 @@ class NumIntegral_PT_lhsop_P_dV : public MathOperatorLHS<dim,CELL> {
     void N_to_P( const std::vector<double>& N, DenseMatrix<DM_MIN>& P );
 };
 
-// copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger
-
 } // csmp
 
 

@@ -8,15 +8,22 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/** 
+/**
+    @brief Initial stress / pore pressure body force RHS
 
-@brief classical stiffness matrix, i.e., interpolation function derivative matrix
-for a vector solution variable like displacement which has u, v, w components.
+    f_j = ∫_Ω Bⱼᵀ [σ₀] dV
 
-@author S.K. Matthai
-@author S. Roberts
-@date 1999 
+    where [σ₀] is a known initial stress or pore-pressure-induced stress tensor. B is the strain-displacement matrix.
+    This integral adds the equivalent nodal forces produced by a pre-existing stress state or fluid pressure field.
 
+    Operand: Scalar (isotropic, e.g. fluid pressure) or tensor (anisotropic initial stress) — element or integration point-placed.
+
+    Test variable: Vector (displacement), node-placed.
+
+    Application:
+
+    Pore pressure contribution to effective stress in poromechanics (Biot coupling term on the RHS)
+    Initial stress loading in geomechanics.
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_BT_op_dV : public MathOperatorRHS<dim,CELL> {

@@ -12,6 +12,17 @@ template<uint32_t> class Element;
 /**
     To integrate over a gradient represented by a vector property.
     
+    f_j = ∫_Ω (∇N_j)ᵀ [f] dV
+
+    where [f] is a vector body force (e.g. ρg for fluid body force in the pressure equation).
+    The gradient of the test function is contracted with the body force vector.
+
+    Operand: Vector — element-placed.
+
+    Test variable: Scalar, node-placed.
+
+    Application: Fluid body force in the pressure diffusion equation, gravity term in Darcy flow.
+
     @example Compute   gravityTerm = rho_w * gravityVector
     and project it onto the dip-vector of a lower dimensional element.
     The resulting vector goes into the righthandside integrated numerically via this integral:

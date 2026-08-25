@@ -9,7 +9,45 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/// streamfunction operand for the RHS
+/**
+@brief Stream function orthogonal gradient RHS
+
+f_k = -∫_Ω Nₖ φ (∇⊥N)ᵀ dV
+
+where ∇⊥ denotes the 90°-rotated gradient operator:
+
+∇⊥N = ( -∂N/∂y,  ∂N/∂x )
+
+applied component-wise to the shape functions, and φ is the scalar stream function interpolated from nodal values φⱼ.
+The negative sign reflects the convention that flow is directed down the pressure gradient.
+
+The rotation transforms the stream function gradient into the orthogonal velocity field: if ψ is the stream function then
+
+u = ∂ψ/∂y,   v = -∂ψ/∂x
+
+so the velocity vector is perpendicular to the isolines of ψ.
+
+Operand: Scalar stream function — node-placed. Nodal values are read directly via Node::Read into NPROP.
+
+Test variable: Scalar, node-placed.
+
+Spatial dimension: 2D only. The 90° rotation is only defined in 2D — the operator should not be used for dim == 3.
+
+Key distinction from other gradient operators:
+
+NumIntegral_dNT_op_dV contracts (∇N)ᵀ with a pre-computed element body force vector
+NumIntegral_dNi_rhsop_dV computes the gradient of a nodal scalar in one coordinate direction
+This operator rotates the gradient by 90° before contracting,
+converting stream function gradients into orthogonal velocity contributions
+
+Application:
+- Stream function formulation of 2D incompressible flow
+- Post-processing of stream function fields to recover velocity
+- Linear elasticity computations involving rotated gradient fields
+
+@note see streamfunction example
+
+ */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_op_NT_dN_orthogonal_dV : public MathOperatorRHS<dim,CELL> {
   public:

@@ -9,16 +9,18 @@ namespace csmp {
 template<uint32_t> class Element;
 
 /**
+    @brief RHS = vector operator - interpolation function derivative matrix collapsed
+    into righthand side vector.
 
-@brief RHS = div^2 . operand - interpolation function derivative matrix collapsed 
-into righthand side vector.
+    Known as Diffusive source / flux divergence RHS
 
-@author S.K. Matthai
-@author S. Roberts
-@date 1999 
+    f_j = ∫_Ω (∇N_j)ᵀ [σ] ∇φ dV
 
-@copyright 1999 by Dr. Stephan K. Matthaei & Stephen G. Roberts
+    where φ is a known scalar field (e.g. a reference pressure or gravity head).
 
+    Operand: Scalar or tensor — element-placed.
+    Test variable: Scalar, node-placed.
+    Application: Gravity-driven flow (hydrostatic body force in pressure formulation), reference state subtraction.
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_rhsop_dN_dV final : public MathOperatorRHS<dim,CELL> {

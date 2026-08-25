@@ -10,11 +10,8 @@ namespace csmp {
 template<uint32_t> class Element;
 
 /**
-vector solution variable: "mass matrix" for computation of vector properties (2-3DOF) and constant coefficients
 
-@author S.K. Matthai
-@author S. Geiger
-@date 2000
+Vector solution variable: "mass matrix" for computation of vector properties (2-3DOF) and constant coefficients
 
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
@@ -28,8 +25,6 @@ class NumIntegral_op_PT_P_dV : public MathOperatorRHS<dim,CELL> {
   private:
     uint32_t  nodal_degrees_of_freedom;
 };
-
-// copyright (c) 2000 by Stephan K. Matthai & Sebastian Geiger
 
 } // csmp
 

@@ -7,7 +7,18 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/// advection-dispersion integral, see Istok (1989), use to obtain steady-state solutions for small Peclet number flows
+/**
+    Advection-dispersion matrix (FEM integral), see Istok (1989), suitable for steady-state solutions for small Peclet number flows
+    
+    K_jk = ∫_Ω (∇N_j)ᵀ [σ] ∇N_k dV  +  ∫_Ω N_j (v · ∇N_k) dV
+    
+    The first term is the diffusive contribution (identical to NumIntegral_dNT_lhsop_dN_dV).
+    The second term is the advective contribution weighted by the velocity field v.
+
+    Operands: Diffusivity tensor [σ] and advection velocity v — both element or integration point-placed.
+    Test variable: Scalar, node-placed.
+    Application: Advection-diffusion transport of scalar quantities (concentration, temperature, tracer).
+ */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_dNT_op_dN_NT_v_dN_dV final : public MathOperatorLHS<dim,CELL> {
   public:

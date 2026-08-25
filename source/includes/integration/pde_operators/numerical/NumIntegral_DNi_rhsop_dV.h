@@ -13,10 +13,34 @@ std::string parse( SPATIAL_DERIVATIVE );
 template<uint32_t> class Element;
 
 /**
+    @brief Directional gradient projection RHS
+    
+    f_k = ∫_Ω N_k (∂φ/∂xᵢ) dV
+
+    where φ is a scalar field interpolated from nodal values φⱼ via the shape functions:
+    
+    ∂φ/∂xᵢ = Σⱼ (∂N_j/∂xᵢ) φⱼ
+
+    and xᵢ is the spatial direction selected by the xyz_ member (x, y or z).
+
+    Operand: Scalar — node-placed. Nodal values are collected into op_vec_ via NodePropertyVector
+    and used to reconstruct the gradient of the scalar field at each integration point.
+
+    Test variable: Scalar, node-placed.
+
+    Key distinction from NumIntegral_dNT_op_dV: That operator contracts the transposed gradient of the
+    test function (∇N)ᵀ with a pre-computed body force vector stored as an element property.
+    This operator instead computes the gradient of the operand itself from its nodal values and projects it
+    onto the scalar test function N — the roles of the gradient and the interpolation are swapped.
+
+    Application:
+
+    Directional derivative of a nodal scalar field (e.g. pressure gradient contribution to a transport equation)
+    - Advective flux terms where the transported quantity is node-placed
+    - Gradient recovery operators
+    
     Volume integral over the gradient of the Operand in the direction i (i=x,y,z).
     Accumulation into the right-hand side of the linear algebraic system Ax=b
-    
-    @author SKM 6-12-2016
     
     @note created to compute a grad P right-handside for a 2-step Stokes
     lubrication solver.

@@ -9,7 +9,7 @@ template<uint32_t> class Face;
 
 /**
 
-@brief Known as: "mass matrix", "fluid sources or sinks", or "capacitance matrix"
+@brief Surface integral over mass, fluid sources or sinks, or "capacitance" vector.
 
 @author S.K. Matthaei
 @author S. Roberts

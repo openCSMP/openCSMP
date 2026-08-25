@@ -13,13 +13,16 @@ template<uint32_t> class Element;
 
 @brief Known as: "mass matrix", "fluid sources or sinks", or "capacitance matrix"
 
+f_j = ∫_Ω N_j [σ] N_k φ_k dV
+
+where φ_k are known nodal values of a scalar field.
+
+Operand: Scalar — element or integration point-placed.
+
+Test variable: Scalar, node-placed.
+
+Application: Volumetric source or sink terms (fluid injection/production, heat generation).
 This operator collapses the matrix into the right-hand vector.
-
-@author S.K. Matthaei
-@author S. Roberts
-@date 1999
-
-@note use only for scalar-type dependent variables (1 DOF per node)
 
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>

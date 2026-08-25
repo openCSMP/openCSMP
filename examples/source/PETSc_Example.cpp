@@ -275,7 +275,7 @@ void PETSc_Example::Run()
                              "dilatation", "fluid pressure", "area", "velocity" };
                              
   VTU_Interface<2> vtu_quadratic( model );
-  vtu_quadratic.OutputDataToVTU( model_name, output_props, string("rock"), static_cast<long>(1) );
+  vtu_quadratic.OutputDataToVTU( model_name, output_props, string("Model"), static_cast<long>(1) );
 
   cout <<"\nmain: That's it..."<< endl;
 

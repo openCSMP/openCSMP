@@ -8,18 +8,19 @@ namespace csmp {
 template<uint32_t> class Element;
 
 /**
-@class NumIntegral_PT_op_dV NumIntegral_PT_op_dV "pde_operators/NumIntegral_PT_op_dV.h"
+    @brief Body force RHS (vector test function, volume integral).
 
-Add contributions to the righthandside of a matrix equation which arise
-due to forces acting on the mass represented by each element. These 
-forces are specified as nodal vector<double> variables and NumIntegral_PT_op_dV
-distributes them evenly over the element.
+    f_j = ∫_Ω Pⱼᵀ [f] dV
 
-  Vector solution variable (test): integration of 'body forces', e.g., action of gravity
-  
-@author S.K. Matthaei
-@date 2000 
+    where P is the vector interpolation matrix and [f] is a body force vector (e.g. ρg for gravitational loading in mechanics).
 
+    Operand: Vector — element-placed.
+
+    Test variable: Vector (displacement), node-placed.
+
+    Application: Gravitational body force in linear elasticity and geomechanics.
+
+    Vector solution variable (test): integration of 'body forces', e.g., action of gravity
  */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {

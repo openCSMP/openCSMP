@@ -90,6 +90,7 @@ int main()
             examplesSuite.RegisterExample( new DES2PhaseFlowWithSplitBoundary_Example() );
             examplesSuite.RegisterExample( new LinearElasticity_Example() );
             examplesSuite.RegisterExample( new SlopeMechanics_Example() );
+            examplesSuite.RegisterExample( new PoroElasticity_Example() );
             examplesSuite.RegisterExample( new TemperatureDensityPressure_Example() );
             examplesSuite.RegisterExample( new ThermalConvectionETHZ_Example() );
             examplesSuite.RegisterExample( new Geothermal_Example() );

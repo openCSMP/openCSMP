@@ -6,14 +6,19 @@
 #include "Operand.h"
 
 namespace csmp {
-/**
-@author S.K. Matthaei
-@author S. Roberts
-@date 1999 */
 
 /**
-    vector solution variable: stiffness matrix with 2(2D) or 3(3D) nodal degrees of freedon
+    Elastic stiffness matrix
+    
+    K_jk = ∫_Ω Bⱼᵀ D(E, ν) Bₖ dV
  
+    D involves Two scalar element variables — Young's modulus and Poisson's ratio.
+    D is assembled internally from these two parameters.
+    
+    Test operand is the node-placed vector variable displacement.
+    
+    Use for linear elasticity / geomechanics.
+
     @attention special case: if nu=0.5 a purely viscous (incompressible) fluid is modeled
     this requires a special material property matrix, see Zienkiewicz Vol II
 */

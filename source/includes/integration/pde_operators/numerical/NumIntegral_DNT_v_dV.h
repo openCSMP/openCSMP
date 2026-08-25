@@ -13,7 +13,7 @@ template<uint32_t> class Element;
 @author S. Roberts
 @date 1999 */
 
-/// for instance for calculation of hydrostatic gradient
+/// Ffor calculation of hydrostatic and other gradient
 template<uint32_t dim, template<uint32_t> class CELL>
 class NumIntegral_dNT_v_dV : public MathOperatorRHS<dim,CELL> {
   public:
