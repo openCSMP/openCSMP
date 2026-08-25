@@ -1289,30 +1289,50 @@ void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulate( const ModelSubDom
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
 void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
-                                                                 const Boundary<dim>& boundary )
+                                                                            const Boundary<dim>& boundary )
  {
     bool did_accumulation{ false };
 
     // accumulating into the righhand vector 'rhs'
     // --------------------------------------------------------------
-     for ( const auto& it_rhs : rhs_boundary_operators_ )
-       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
-         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
-           // if the material operand is flagged Neumann, an accumulation will be performed
-           // @attention it is assumed that the material operand has the same status for all integration points
-           if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
-                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
-             {
-               it_rhs.second->GetOperands( *(*git) );
-               it_rhs.second->ComputeContribution( *(*git) );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *(*git), rh_, DOF_indexes_ );
-               did_accumulation = true;
-             }
+    for ( const auto& it_rhs : rhs_boundary_operators_ ) {
+        if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
+            continue;
+
+        const auto& key       = it_rhs.second->MaterialOperandKey();
+        const bool  is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool  at_ip     = it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT;
+
+        for ( auto& git : boundary.CellVector() ) {
+
+            // check NEUMANN status — most selective and cheap test first.
+            // for vector variables, any component flagged NEUMANN is sufficient.
+            // isContainedIn() is the most expensive check so it runs last.
+            const bool is_neumann = [&]() -> bool {
+                if ( is_vector ) {
+                    const uint32_t depth = it_rhs.second->MaterialOperandDataDepth();
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == NEUMANN
+                                   : git->Status(     key, c ) == NEUMANN )
+                            return true;
+                    return false;
+                }
+                // scalar
+                return at_ip ? git->Status( 0U, key ) == NEUMANN
+                             : git->Status(     key ) == NEUMANN;
+            }();
+
+            if ( !is_neumann || !isContainedIn( comp_domain, *git ) )
+                continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
+            did_accumulation = true;
+        }
+    }
    
     if ( did_accumulation ) {
         cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals: ";
@@ -1322,32 +1342,55 @@ void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals( cons
  } // AccumulateBoundaryIntegrals
 
 
+
+
 /**
     Version for model subdomains other than "Model"
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals()
- {
-    // accumulating into the righhand vector 'rhs'
-    // --------------------------------------------------------------
-     for ( const auto& it_rhs : rhs_boundary_operators_ )
-       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
-         for ( const auto& bit : boundary_faces_ )
-           // if the material operand is flagged Neumann, an accumulation will be performed
-           // @attention it is assumed that the material operand has the same status at all integration points
-           if ( ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  bit->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
-                  bit->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) )
-             {
-               it_rhs.second->GetOperands( *bit );
-               it_rhs.second->ComputeContribution( *bit );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
-             }
-   
- } // AccumulateBoundaryIntegrals
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals()
+{
+    // accumulate into the right-hand vector from boundary faces
+    for ( const auto& it_rhs : rhs_boundary_operators_ ) {
+        if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
+            continue;
+
+        const auto&  key       = it_rhs.second->MaterialOperandKey();
+        const bool   is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool   at_ip     = it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT;
+        const uint32_t depth   = is_vector
+                                 ? it_rhs.second->MaterialOperandDataDepth()
+                                 : 0U;
+
+        for ( const auto& bit : boundary_faces_ ) {
+
+            // lambda checks NEUMANN status — for vector variables any component suffices
+            const bool is_neumann = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? bit->Status( 0U, key, c ) == NEUMANN
+                                   : bit->Status(     key, c ) == NEUMANN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? bit->Status( 0U, key ) == NEUMANN
+                             : bit->Status(     key ) == NEUMANN;
+            }();
+
+            if ( !is_neumann )
+                continue;
+
+            it_rhs.second->GetOperands( *bit );
+            it_rhs.second->ComputeContribution( *bit );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
+        }
+    }
+
+} // AccumulateBoundaryIntegrals
+
+
 
 
 /**
@@ -1358,246 +1401,393 @@ void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateBoundaryIntegrals()
  
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
-                                                                     const Boundary<dim>& boundary )
- {
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& comp_domain,
+                                                                               const Boundary<dim>& boundary )
+{
     bool did_accumulation{ false };
-    
-    // accumulating as late addition into the righhand vector 'rhs'
-    // ------------------------------------------------------------
-     for ( const auto&  it_rhs : rhs_boundary_operators_ )
-       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
-         for ( auto git=boundary.CellsBegin(); git!=boundary.CellsEnd(); git++ )
-           // accumulations need to be performed only where material operands are flagged Neumann
-           if ( isContainedIn( comp_domain, *(*git) ) == true && (
-                ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  (*git)->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
-                  (*git)->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ) )
-             {
-               it_rhs.second->GetOperands( *(*git) );
-               it_rhs.second->ComputeContribution( *(*git) );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal(*(*git), this->rh_, DOF_indexes_ );
-               did_accumulation = true;
-             }
-             
+
+    // late accumulation into the right-hand vector from boundary faces
+    for ( const auto& it_rhs : rhs_boundary_operators_ ) {
+        if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+            continue;
+
+        const auto&    key       = it_rhs.second->MaterialOperandKey();
+        const bool     is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip     = it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT;
+        const uint32_t depth     = is_vector
+                                   ? it_rhs.second->MaterialOperandDataDepth()
+                                   : 0U;
+
+        for ( auto& git : boundary.CellVector() ) {
+
+            // NEUMANN status check — cheap, runs before isContainedIn
+            // for vector variables any component flagged NEUMANN is sufficient
+            const bool is_neumann = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == NEUMANN
+                                   : git->Status(      key, c ) == NEUMANN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? git->Status( 0U, key ) == NEUMANN
+                             : git->Status(      key ) == NEUMANN;
+            }();
+
+            // isContainedIn is the most expensive check — runs last
+            if ( !is_neumann || !isContainedIn( comp_domain, *git ) ) continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, this->rh_, DOF_indexes_ );
+            did_accumulation = true;
+        }
+    }
+
     if ( did_accumulation ) {
-        cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals: ";
-        cout <<"late accumulating integrals into RHS from '"<< boundary.Name() <<"'"<< endl;
-      }
-      
- } // end LateAccumulateBoundaryIntegrals
+        cout << "\nPDE_Integrator<" << dim
+             << ",CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals: "
+             << "late accumulating integrals into RHS from '"
+             << boundary.Name() << "'\n";
+    }
+
+} // end LateAccumulateBoundaryIntegrals
+
 
 
 /**
     Version for model subdomains other than "Model"
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals()
- {
-    // accumulating into the righhand vector 'rhs'
-    // --------------------------------------------------------------
-     for ( const auto& it_rhs : rhs_boundary_operators_ )
-       if ( it_rhs.second->AddLater() && it_rhs.second->SubtractLater() )
-         for ( const auto& bit : boundary_faces_ )
-           // if the material operand is flagged Neumann, an accumulation will be performed
-           // @attention it is assumed that the material operand has the same status at all integration points
-           if ( ( it_rhs.second->MaterialOperandPlacement() == FACE &&
-                  bit->Status( it_rhs.second->MaterialOperandKey() ) == NEUMANN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT &&
-                  bit->Status( 0U, it_rhs.second->MaterialOperandKey() ) == NEUMANN ) )
-             {
-               it_rhs.second->GetOperands( *bit );
-               it_rhs.second->ComputeContribution( *bit );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
-             }
-   
- } // LateAccumulateBoundaryIntegrals
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateBoundaryIntegrals()
+{
+    // late accumulation into the right-hand vector from boundary faces
+    for ( const auto& it_rhs : rhs_boundary_operators_ ) {
+        if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
+            continue;
+
+        const auto&    key       = it_rhs.second->MaterialOperandKey();
+        const bool     is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip     = it_rhs.second->MaterialOperandPlacement() == FACE_INTEGRATION_POINT;
+        const uint32_t depth     = is_vector
+                                   ? it_rhs.second->MaterialOperandDataDepth()
+                                   : 0U;
+
+        for ( const auto& bit : boundary_faces_ ) {
+
+            // NEUMANN status check — for vector variables any component suffices
+            const bool is_neumann = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? bit->Status( 0U, key, c ) == NEUMANN
+                                   : bit->Status(     key, c ) == NEUMANN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? bit->Status( 0U, key ) == NEUMANN
+                             : bit->Status(     key ) == NEUMANN;
+            }();
+
+            if ( !is_neumann ) continue;
+
+            it_rhs.second->GetOperands( *bit );
+            it_rhs.second->ComputeContribution( *bit );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *bit, rh_, DOF_indexes_ );
+        }
+    }
+
+} // LateAccumulateBoundaryIntegrals
+
+
+
 
 // ============================================================================
 // SPLIT BOUNDARY INTEGRAL ACCUMULATION
 // ============================================================================
 
-/**
-    Coupling conditions / surface integrals applied to SplitBoundary objects
-*/
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&,
-                                                                                 const SplitBoundary<dim>& splitboundary )
- {
-    bool did_lhs_accumulation{ false };
-    bool did_rhs_accumulation{ false };
-    
-    // accumulating InterFace integrals into the sparse matrix 'G'
-    // -----------------------------------------------------------
-     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
-       if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
-         for ( auto git = splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); ++git  )
-           {
-              it_lhs.second->GetOperands( *(*git) );
-              it_lhs.second->ComputeContribution( *(*git) );
-              if ( it_lhs.second->MultiplyWithTimeIncrement() )
-                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-              it_lhs.second->AssignToGlobal( *(*git), this->G_, pivotVector_, DOF_indexes_);
-              did_lhs_accumulation = true;
-           }
-
-     // E.P New accumulating into the righhand vector 'rhs'
-     // --------------------------------------------------------------
-     if ( !rhs_split_boundary_operators_.empty() )
-       for ( auto& it_rhs : rhs_split_boundary_operators_ )
-         if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() ) {
-           const bool time_increment = it_rhs.second->MultiplyWithTimeIncrement();
-           for ( InterFace<dim>* git : splitboundary.CellVector() ) {
-                 it_rhs.second->GetOperands( *git );
-                 it_rhs.second->ComputeContribution( *git );
-                 if ( time_increment )
-                   it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-                 // Eddi's default: takes f.CurrentSide() for test operand
-                 it_rhs.second->AssignToGlobal( *git, pivotVector_, DOF_indexes_) ;
-                 did_rhs_accumulation = true;
-             }
-         }
-   
-    if ( did_lhs_accumulation ) {
-        cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals: ";
-        cout <<"accumulated integrals from '"<< splitboundary.Name() <<"' into LHS."<< endl;
-      }
-    if ( did_rhs_accumulation ) {
-        cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals: ";
-        cout <<"accumulated integrals from '"<< splitboundary.Name() <<"' into RHS."<< endl;
-      }
-    
- } // AccumulateSplitBoundaryIntegrals
-
-
-// Eddi's version
-template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals()
- {
-    // accumulating into the sparse matrix 'G'
-    // ------------------------------------------------
-     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
-       if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
-         for ( const auto& git : splitboundary_interfaces_ )
-           {
-              it_lhs.second->GetOperands( *git );
-              it_lhs.second->ComputeContribution( *git );
-              if ( it_lhs.second->MultiplyWithTimeIncrement() )
-                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-              it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_);
-           }
-
-    // accumulating into the righhand vector 'rhs'
-    // --------------------------------------------------------------
-     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
-       if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() )
-         for (  const auto& git : splitboundary_interfaces_ )
-           // if the material operand is flagged Robin, the accumulation will be performed
-           // @attention it is assumed that the material operand has the same status at all integration points
-           if ( ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
-                  git->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
-                  git->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) )
-             {
-               it_rhs.second->GetOperands( *git );
-               it_rhs.second->ComputeContribution( *git );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
-             }
-   
- } // AccumulateSplitBoundaryIntegrals
-
-
-/**
-    Coupling conditions / surface integrals applied to SplitBoundary objects
-*/
-template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>&,
-                                                                                     const SplitBoundary<dim>& splitboundary )
- {
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& /*comp_domain*/,
+                                                                                const SplitBoundary<dim>& splitboundary )
+{
     bool did_lhs_accumulation{ false };
     bool did_rhs_accumulation{ false };
 
-    // SKM NEW: accumulating into the sparse matrix 'G'
-    // ------------------------------------------------
-     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
-       if ( it_lhs.second->AddLater() || it_lhs.second->SubtractLater() )
-         for ( auto git = splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); ++git  )
-           {
-              it_lhs.second->GetOperands( *(*git) );
-              it_lhs.second->ComputeContribution( *(*git) );
-              if ( it_lhs.second->MultiplyWithTimeIncrement() )
+    // --- LHS: accumulate into sparse matrix G ---
+    for ( const auto& it_lhs : lhs_split_boundary_operators_ ) {
+        if ( it_lhs.second->AddLater() || it_lhs.second->SubtractLater() )
+            continue;
+
+        for ( InterFace<dim>* git : splitboundary.CellVector() ) {
+            it_lhs.second->GetOperands( *git );
+            it_lhs.second->ComputeContribution( *git );
+            if ( it_lhs.second->MultiplyWithTimeIncrement() )
                 it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-              it_lhs.second->AssignToGlobal( *(*git), this->G_, pivotVector_, DOF_indexes_);
-              did_lhs_accumulation = true;
-           }
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            did_lhs_accumulation = true;
+        }
+    }
 
-    // E.P New: accumulating as late addition into the righhand vector 'rhs'
-    // ---------------------------------------------------------------------
-     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
-       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
-         for ( auto git=splitboundary.CellsBegin(); git!=splitboundary.CellsEnd(); git++ ) {
-               it_rhs.second->GetOperands( *(*git) );
-               it_rhs.second->ComputeContribution( *(*git) );
-               if (it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *(*git), pivotVector_, DOF_indexes_) ;
-               did_rhs_accumulation = true;
-            }
+    // --- RHS: accumulate into right-hand vector ---
+    for ( auto& it_rhs : rhs_split_boundary_operators_ ) {
+        if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
+            continue;
 
-    if ( did_lhs_accumulation ) {
-        cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals: ";
-        cout <<"late accumulated integrals from '"<< splitboundary.Name() <<"' into LHS."<< endl;
-      }
-    if ( did_rhs_accumulation ) {
-        cout <<"\nPDE_Integrator<"<< dim <<",CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals: ";
-        cout <<"late accumulated integrals from '"<< splitboundary.Name() <<"' into RHS."<< endl;
-      }
+        const bool     time_increment = it_rhs.second->MultiplyWithTimeIncrement();
+        const bool     is_vector      = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip          = it_rhs.second->MaterialOperandPlacement()
+                                        == INTER_FACE_INTEGRATION_POINT;
+        const auto&    key            = it_rhs.second->MaterialOperandKey();
+        const uint32_t depth          = is_vector
+                                        ? it_rhs.second->MaterialOperandDataDepth()
+                                        : 0U;
 
- } // LateAccumulateSplitBoundaryIntegrals
+        for ( InterFace<dim>* git : splitboundary.CellVector() ) {
+
+            // check ROBIN status — for vector variables any component suffices
+            const bool is_robin = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == ROBIN
+                                   : git->Status(      key, c ) == ROBIN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? git->Status( 0U, key ) == ROBIN
+                             : git->Status(      key ) == ROBIN;
+            }();
+
+            if ( !is_robin )
+                continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( time_increment )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, pivotVector_, DOF_indexes_ );
+            did_rhs_accumulation = true;
+        }
+    }
+
+    if ( did_lhs_accumulation )
+        cout << "\nPDE_Integrator<" << dim
+             << ",CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals: "
+             << "accumulated integrals from '"
+             << splitboundary.Name() << "' into LHS.\n";
+
+    if ( did_rhs_accumulation )
+        cout << "\nPDE_Integrator<" << dim
+             << ",CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals: "
+             << "accumulated integrals from '"
+             << splitboundary.Name() << "' into RHS.\n";
+
+} // AccumulateSplitBoundaryIntegrals
 
 
-// Eddi's version
+
+
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals()
- {
-    // SKM NEW: accumulating into the sparse matrix 'G'
-    // ------------------------------------------------
-     for ( const auto& it_lhs : lhs_split_boundary_operators_ )
-       if ( it_lhs.second->AddLater() || it_lhs.second->SubtractLater() )
-         for ( const auto& git : splitboundary_interfaces_  )
-           {
-              it_lhs.second->GetOperands( *git );
-              it_lhs.second->ComputeContribution( *git );
-              if ( it_lhs.second->MultiplyWithTimeIncrement() )
-                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-              it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_);
-           }
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals()
+{
+    // --- LHS: accumulate into sparse matrix G ---
+    for ( const auto& it_lhs : lhs_split_boundary_operators_ ) {
+        if ( it_lhs.second->AddLater() || it_lhs.second->SubtractLater() )
+            continue;
 
-    // accumulating into the righhand vector 'rhs'
-    // -------------------------------------------
-     for ( const auto& it_rhs : rhs_split_boundary_operators_ )
-       if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
-         for ( const auto& git : splitboundary_interfaces_  )
-           if ( ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE &&
-                  git->Status( it_rhs.second->MaterialOperandKey() ) == ROBIN ) ||
-                ( it_rhs.second->MaterialOperandPlacement() == INTER_FACE_INTEGRATION_POINT &&
-                  git->Status( 0U, it_rhs.second->MaterialOperandKey() ) == ROBIN ) )
-             {
-               it_rhs.second->GetOperands( *git );
-               it_rhs.second->ComputeContribution( *git );
-               if ( it_rhs.second->MultiplyWithTimeIncrement() )
-                 it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
-               it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
-             }
-   
- } // LateAccumulateSplitBoundaryIntegrals
+        for ( const auto& git : splitboundary_interfaces_ ) {
+            it_lhs.second->GetOperands( *git );
+            it_lhs.second->ComputeContribution( *git );
+            if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+        }
+    }
+
+    // --- RHS: accumulate into right-hand vector ---
+    for ( const auto& it_rhs : rhs_split_boundary_operators_ ) {
+        if ( it_rhs.second->AddLater() || it_rhs.second->SubtractLater() )
+            continue;
+
+        const auto&    key       = it_rhs.second->MaterialOperandKey();
+        const bool     is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip     = it_rhs.second->MaterialOperandPlacement()
+                                   == INTER_FACE_INTEGRATION_POINT;
+        const uint32_t depth     = is_vector
+                                   ? it_rhs.second->MaterialOperandDataDepth()
+                                   : 0U;
+
+        for ( const auto& git : splitboundary_interfaces_ ) {
+
+            // check ROBIN status — for vector variables any component suffices
+            const bool is_robin = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == ROBIN
+                                   : git->Status(     key, c ) == ROBIN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? git->Status( 0U, key ) == ROBIN
+                             : git->Status(     key ) == ROBIN;
+            }();
+
+            if ( !is_robin ) continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
+        }
+    }
+
+} // AccumulateSplitBoundaryIntegrals
+
+
+// ----------------------------------------------------------------------------
+//  LateAccumulateSplitBoundaryIntegrals( comp_domain, splitboundary )
+// ----------------------------------------------------------------------------
+
+template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals( const ModelSubDomain<dim,CELLTYPE>& /*comp_domain*/,
+                                                                                    const SplitBoundary<dim>&  splitboundary )
+{
+    bool did_lhs_accumulation{ false };
+    bool did_rhs_accumulation{ false };
+
+    // --- LHS: late accumulate into sparse matrix G ---
+    for ( const auto& it_lhs : lhs_split_boundary_operators_ ) {
+        if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
+            continue;
+
+        for ( InterFace<dim>* git : splitboundary.CellVector() ) {
+            it_lhs.second->GetOperands( *git );
+            it_lhs.second->ComputeContribution( *git );
+            if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            did_lhs_accumulation = true;
+        }
+    }
+
+    // --- RHS: late accumulate into right-hand vector ---
+    for ( const auto& it_rhs : rhs_split_boundary_operators_ ) {
+        if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() ) continue;
+
+        const bool     is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip     = it_rhs.second->MaterialOperandPlacement()
+                                   == INTER_FACE_INTEGRATION_POINT;
+        const auto&    key       = it_rhs.second->MaterialOperandKey();
+        const uint32_t depth     = is_vector
+                                   ? it_rhs.second->MaterialOperandDataDepth()
+                                   : 0U;
+
+        for ( InterFace<dim>* git : splitboundary.CellVector() ) {
+
+            // check ROBIN status — for vector variables any component suffices
+            const bool is_robin = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == ROBIN
+                                   : git->Status(     key, c ) == ROBIN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? git->Status( 0U, key ) == ROBIN
+                             : git->Status(     key ) == ROBIN;
+            }();
+
+            if ( !is_robin ) continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, pivotVector_, DOF_indexes_ );
+            did_rhs_accumulation = true;
+        }
+    }
+
+    if ( did_lhs_accumulation )
+        cout << "\nPDE_Integrator<" << dim
+             << ",CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals: "
+             << "late accumulated integrals from '"
+             << splitboundary.Name() << "' into LHS.\n";
+
+    if ( did_rhs_accumulation )
+        cout << "\nPDE_Integrator<" << dim
+             << ",CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals: "
+             << "late accumulated integrals from '"
+             << splitboundary.Name() << "' into RHS.\n";
+
+} // LateAccumulateSplitBoundaryIntegrals
+
+
+
+
+
+template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegrals()
+{
+    // --- LHS: late accumulate into sparse matrix G ---
+    for ( const auto& it_lhs : lhs_split_boundary_operators_ ) {
+        if ( !it_lhs.second->AddLater() && !it_lhs.second->SubtractLater() )
+            continue;
+
+        for ( const auto& git : splitboundary_interfaces_ ) {
+            it_lhs.second->GetOperands( *git );
+            it_lhs.second->ComputeContribution( *git );
+            if ( it_lhs.second->MultiplyWithTimeIncrement() )
+                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+        }
+    }
+
+    // --- RHS: late accumulate into right-hand vector ---
+    for ( const auto& it_rhs : rhs_split_boundary_operators_ ) {
+        if ( !it_rhs.second->AddLater() && !it_rhs.second->SubtractLater() ) continue;
+
+        const auto&    key       = it_rhs.second->MaterialOperandKey();
+        const bool     is_vector = it_rhs.second->MaterialOperandType() == VECTOR;
+        const bool     at_ip     = it_rhs.second->MaterialOperandPlacement()
+                                   == INTER_FACE_INTEGRATION_POINT;
+        const uint32_t depth     = is_vector
+                                   ? it_rhs.second->MaterialOperandDataDepth()
+                                   : 0U;
+
+        for ( const auto& git : splitboundary_interfaces_ ) {
+
+            // check ROBIN status — for vector variables any component suffices
+            const bool is_robin = [&]() -> bool {
+                if ( is_vector ) {
+                    for ( uint32_t c{ 0U }; c < depth; ++c )
+                        if ( at_ip ? git->Status( 0U, key, c ) == ROBIN
+                                   : git->Status(     key, c ) == ROBIN )
+                            return true;
+                    return false;
+                }
+                return at_ip ? git->Status( 0U, key ) == ROBIN
+                             : git->Status(     key ) == ROBIN;
+            }();
+
+            if ( !is_robin ) continue;
+
+            it_rhs.second->GetOperands( *git );
+            it_rhs.second->ComputeContribution( *git );
+            if ( it_rhs.second->MultiplyWithTimeIncrement() )
+                it_rhs.second->MultiplyWithTimeFactor( time_increment_ );
+            it_rhs.second->AssignToGlobal( *git, rh_, DOF_indexes_ );
+        }
+    }
+
+} // LateAccumulateSplitBoundaryIntegrals
+
+
+
+
 
 // ============================================================================
 // DOMAIN COUPLING
@@ -1911,7 +2101,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( ModelSubDomain<dim,
  
          if ( !rhs_boundary_operators_.empty() )
            throw csmp::Exception( ERROR, "PDE_Integrator<>::IntegrateOver(domain):",
-                                 "integrator contains Boundary object integrals; call IntegrateOver(model,domain), such that boundary objects can be considered." );
+                                 "integrator contains Boundary object integrals; call IntegrateOver(model,domain), to assure that these get considered." );
       }
     // 2. Accumulation of finite element integrals
     domain.RenumberNodes();

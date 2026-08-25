@@ -2658,7 +2658,7 @@ void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, bool debug )
 }
 
 
-/// application to all boundaries
+/// Boundary computations, in this case considering multiple boundaries
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 {
@@ -2669,16 +2669,22 @@ void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 
 
 /**
-specific regions
+   Application of PDE_Integrator to model subregions, searching for boundaries touching these in case the integrator contains
+   boundary integrals.
 */
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, const char* region_name, bool debug )
 {
-  problem.IntegrateOver( this->Region( region_name ), debug );
+  // do boundary integrals have to be considered?
+  if ( string("Model") != region_name && problem.HasBoundaryIntegrals() )
+    problem.IntegrateOver( *this, this->Region( region_name ), debug );
+  else // cheaper version without boundary searcn
+    problem.IntegrateOver( this->Region( region_name ), debug );
 }
 
 
-/// PDE solution applied to a specific boundary
+
+/// Solving a PDE on a specific boundary
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, const string& boundary_name, bool debug )
 {

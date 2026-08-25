@@ -22,13 +22,13 @@ template<uint32_t> class Element;
     lubrication solver.
 */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
+class NumIntegral_dNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
   public:
-    NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>&,
+    NumIntegral_dNi_rhsop_dV( const PropertyDatabase<dim>&,
                               const char* oper,
                               const char* test );
     
-    ~NumIntegral_DNi_rhsop_dV();
+    ~NumIntegral_dNi_rhsop_dV() = default;
   
     /// reads the operand values from the nodes and stores them in a vector
     void GetOperands( const CELL<dim>& ) override final;
@@ -38,10 +38,10 @@ class NumIntegral_DNi_rhsop_dV : public MathOperatorRHS<dim,CELL> {
     /// to chose the spatial derivate direction of interest; default is Y-axis
     void SpatialDerivative( SPATIAL_DERIVATIVE );
   
-    NumIntegral_DNi_rhsop_dV<dim,CELL>* clone() const override final { return new NumIntegral_DNi_rhsop_dV<dim,CELL> (*this); }
+    NumIntegral_dNi_rhsop_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNi_rhsop_dV<dim,CELL> (*this); }
   
   private:
-    NumIntegral_DNi_rhsop_dV();
+    NumIntegral_dNi_rhsop_dV();
     
     SPATIAL_DERIVATIVE           xyz_;     ///< direction of partial derivative of interest
     std::vector<ScalarVariable>  op_vec_;  ///< nodal operand values

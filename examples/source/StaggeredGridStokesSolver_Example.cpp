@@ -87,7 +87,7 @@
 // numeric integration
 #include "NumIntegral_dNT_dN_dV.h"
 #include "NumIntegral_dNT_lhsop_dN_dV.h"
-#include "NumIntegral_DNi_rhsop_dV.h"
+#include "NumIntegral_dNi_rhsop_dV.h"
 #include "NumIntegral_SetRHS_to_Zero.h"
 #include "StatisticalAnalyzer.h"
 
@@ -373,7 +373,7 @@ void StaggeredGridStokesSolver_Example::Run()
                                   viscosity_matr_y( quadratic_model.Database(), "viscosity", "nodal velocity y", "nodal velocity y" ),
                                   viscosity_matr_z( quadratic_model.Database(), "viscosity", "nodal velocity z", "nodal velocity z" );
                                   
-    NumIntegral_DNi_rhsop_dV<dim> gradient_x( quadratic_model.Database(), "fluid pressure", "nodal velocity x"),
+    NumIntegral_dNi_rhsop_dV<dim> gradient_x( quadratic_model.Database(), "fluid pressure", "nodal velocity x"),
                                   gradient_y( quadratic_model.Database(), "fluid pressure", "nodal velocity y"),
                                   gradient_z( quadratic_model.Database(), "fluid pressure", "nodal velocity z");
 

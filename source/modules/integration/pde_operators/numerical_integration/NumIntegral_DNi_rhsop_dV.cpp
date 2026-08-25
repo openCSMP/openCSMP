@@ -1,4 +1,4 @@
-#include "NumIntegral_DNi_rhsop_dV.h"
+#include "NumIntegral_dNi_rhsop_dV.h"
 #include "Element.h"
 #include "Face.h"
 #include "Exception.h"
@@ -7,28 +7,25 @@ using namespace std;
 
 namespace csmp {
 
-template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_DNi_rhsop_dV<dim,CELL>::~NumIntegral_DNi_rhsop_dV() {}
-
 /// custom constructor that should be used
 template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_DNi_rhsop_dV<dim,CELL>::NumIntegral_DNi_rhsop_dV( const PropertyDatabase<dim>& pref,
-                                                                 const char*                  oper,
-                                                                 const char*                  test )
+NumIntegral_dNi_rhsop_dV<dim,CELL>::NumIntegral_dNi_rhsop_dV( const PropertyDatabase<dim>& pref,
+                                                              const char*                  oper,
+                                                              const char*                  test )
   : MathOperatorRHS<dim,CELL>(pref,oper,test),
     xyz_(Y_DIRECTION), op_vec_(dim)
 {
-    MathOperatorRHS<dim,CELL>::Name("NumIntegral_DNi_rhsop_dV",oper, test );
+    MathOperatorRHS<dim,CELL>::Name("NumIntegral_dNi_rhsop_dV",oper, test );
     
 
     if ( MathOperatorRHS<dim,CELL>::BasicOperandPlacement() != NODE ||
          MathOperatorRHS<dim,CELL>::BasicOperandType() != SCALAR )
-      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+      throw csmp::Exception( ERROR, "NumIntegral_dNi_rhsop_dV<dim>::(constructor)",
                              oper, "Operand must be a scalar property placed on the nodes." );
 
     if ( MathOperatorRHS<dim,CELL>::TestOperandPlacement() != NODE ||
          MathOperatorRHS<dim,CELL>::TestOperandType() != SCALAR)
-      throw csmp::Exception( ERROR, "NumIntegral_DNi_rhsop_dV<dim>::(constructor)",
+      throw csmp::Exception( ERROR, "NumIntegral_dNi_rhsop_dV<dim>::(constructor)",
                              test, "Operand (test) must be a scalar property placed on the nodes." );
 }
 
@@ -47,7 +44,7 @@ string parse( SPATIAL_DERIVATIVE deriv ) {
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
+void NumIntegral_dNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE num_xyz )
  {
     xyz_ = num_xyz;
  }
@@ -57,7 +54,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::SpatialDerivative( SPATIAL_DERIVATIVE n
  
  
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
+void NumIntegral_dNi_rhsop_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 {
    e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), op_vec_ );
 
@@ -69,7 +66,7 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  
 //element contribution
 template<uint32_t dim, template<uint32_t> class CELL>
-void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
+void NumIntegral_dNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
  {
     // initialize output matrix
     MathOperatorRHS<dim,CELL>::RHS.resize( e.Nodes() );
@@ -107,12 +104,12 @@ void NumIntegral_DNi_rhsop_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e
 
 
 
-template class NumIntegral_DNi_rhsop_dV<1U,Element>;
-template class NumIntegral_DNi_rhsop_dV<2U,Element>;
-template class NumIntegral_DNi_rhsop_dV<3U,Element>;
+template class NumIntegral_dNi_rhsop_dV<1U,Element>;
+template class NumIntegral_dNi_rhsop_dV<2U,Element>;
+template class NumIntegral_dNi_rhsop_dV<3U,Element>;
 
-template class NumIntegral_DNi_rhsop_dV<1U,Face>;
-template class NumIntegral_DNi_rhsop_dV<2U,Face>;
-template class NumIntegral_DNi_rhsop_dV<3U,Face>;
+template class NumIntegral_dNi_rhsop_dV<1U,Face>;
+template class NumIntegral_dNi_rhsop_dV<2U,Face>;
+template class NumIntegral_dNi_rhsop_dV<3U,Face>;
 
 } // namespace csmp

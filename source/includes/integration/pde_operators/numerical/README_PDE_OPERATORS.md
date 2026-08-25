@@ -1,4 +1,4 @@
-/# PDE Operator Naming Convention and Catalogue
+# PDE Operator Naming Convention and Catalogue
 
 ## Overview
 
@@ -21,36 +21,42 @@ form of the integral directly in the class name.
 
 ### Tokens
 
-| Token  | Mathematical symbol | Meaning |
-|--------|--------------------|---------| 
-| `N`    | $$N$$              | Scalar interpolation (test/trial) function |
-| `NT`   | $$N^T$$            | Transposed scalar interpolation function |
-| `DN`   | $$\nabla N$$       | Gradient matrix of scalar solution variable |
-| `DNT`  | $$(\nabla N)^T$$   | Transposed gradient matrix of scalar solution variable |
-| `B`    | $$B$$              | Strain-displacement matrix for **vector** solution variable (mechanics) |
-| `BT`   | $$B^T$$            | Transposed strain-displacement matrix |
-| `op`   | $$[\sigma]$$       | Material operand (scalar, vector or tensor property) |
-| `lhsop`| $$[\sigma]$$       | Material operand on the left-hand side matrix |
-| `rhsop`| $$[\sigma]$$       | Material operand on the right-hand side vector |
-| `v`    | $$\mathbf{v}$$     | Advection velocity vector |
-| `dV`   | $$dV$$             | Volume integral |
-| `dS`   | $$dS$$             | Surface (face) integral |
+| Token   | Mathematical symbol | Meaning |
+|---------|---------------------|---------|
+| `N`     | N                   | Scalar interpolation (test/trial) function |
+| `NT`    | Nᵀ                  | Transposed scalar interpolation function |
+| `dN`    | ∇N                  | Gradient matrix of scalar solution variable |
+| `dNT`   | (∇N)ᵀ               | Transposed gradient matrix of scalar solution variable |
+| `B`     | B                   | Strain-displacement matrix for **vector** solution variable (mechanics) |
+| `BT`    | Bᵀ                  | Transposed strain-displacement matrix |
+| `P`     | P                   | Interpolation matrix for **vector** solution variable (mechanics) |
+| `PT`    | Pᵀ                  | Transposed interpolation matrix for vector solution variable |
+| `op`    | [σ]                 | Material operand (scalar, vector or tensor property) |
+| `lhsop` | [σ]                 | Material operand contributing to the left-hand side matrix |
+| `rhsop` | [σ]                 | Material operand contributing to the right-hand side vector |
+| `D`     | D                   | Constitutive (elasticity) matrix, function of E and ν |
+| `v`     | **v**               | Advection velocity vector |
+| `dV`    | dV                  | Volume integral over element domain Ω |
+| `dS`    | dS                  | Surface (face) integral over boundary Γ |
 
-### Key distinction: `B` vs `DN`
+### Key distinction: `B`/`P` vs `dN`/`N`
 
 | Symbol | DOF type        | Typical application |
 |--------|-----------------|---------------------|
-| `B`    | **Vector** DOFs | Mechanics (displacement, strain) |
-| `DN`   | **Scalar** DOFs | Flow and transport (pressure, concentration) |
+| `B`    | **Vector** DOFs | Mechanics — strain-displacement matrix relating nodal displacements to strains |
+| `P`    | **Vector** DOFs | Mechanics — interpolation matrix relating nodal displacements to displacement field |
+| `dN`   | **Scalar** DOFs | Flow and transport — gradient of scalar field (pressure, concentration) |
+| `N`    | **Scalar** DOFs | Flow and transport — interpolation of scalar field |
 
 This distinction follows standard mechanics textbook notation where `B` is
-the strain-displacement matrix, while `DN` is used for scalar gradient
+the strain-displacement matrix and `P` is the displacement interpolation
+matrix, while `dN` and `N` are used for scalar gradient and interpolation
 operators in flow and transport problems.
 
 ### Side suffix
 
-| Suffix | Meaning |
-|--------|---------|
+| Suffix   | Meaning |
+|----------|---------|
 | _(none)_ | Left-hand side matrix operator (`MathOperatorLHS`) |
 | `_rhs`   | Right-hand side vector operator (`MathOperatorRHS`) |
 
@@ -59,74 +65,12 @@ than the name, but the mathematical form of the integral makes it clear.
 
 ---
 
-## Numerical vs Analytical Integration
+## Numerical Integration
 
-CSMP PDE operators are divided into two families distinguished by their
-name prefix: b
-
-### `NumIntegral` — Numerical Integration (Isoparametric Elements)
-
-Operators prefixed with `Num` use **Gauss quadrature** in a parametric
+All operators prefixed with `Num` use **Gauss quadrature** in parametric
 reference space. They require isoparametric finite elements where the
 geometry and the solution field are interpolated using the same shape
-functions.
+functions:
 
 ```cpp
 assert( e.FE()->Isoparametric() == true );  // enforced in ComputeContribution
-
-
-## Operator Catalogue
-
-### Left-Hand Side (Matrix) Operators
-
-These operators inherit from `MathOperatorLHS<dim,CELL>` and assemble
-contributions into the global stiffness or mass matrix.
-
----
-
-#### `NumIntegral_dNT_lhsop_dN_dV`
-
-**Known as:** Stiffness matrix / conductance matrix
-
-**Integral:**
-$$K_{jk} = \int_{\Omega^e} (\nabla N_j)^T \, [\sigma] \, \nabla N_k \, dV$$
-
-**Operand `op`:** Scalar, vector (diagonal anisotropy) or full tensor
-diffusivity/conductivity/permeability — element-placed.
-
-**Test variable:** Scalar, node-placed (e.g. `"fluid pressure"`).
-
-**Application:** Pressure diffusion, heat conduction, species transport.
-
-**Constructor:**
-```cpp
-NumIntegral_dNT_lhsop_dN_dV( const PropertyDatabase<dim>&,
-                           const char* oper,   // e.g. "conductivity"
-                           const char* basic,  // e.g. "fluid pressure"
-                           const char* test ); // e.g. "fluid pressure"
-
----
-
-#### `NumIntegral_NT_lhsop_N_dV`
-
-**Known as:** Capacitance matrix / mass matrix (LHS)
-
-**Integral:**
-$$C_{jk} = \int_{\Omega^e} N_j \, \sigma \, N_k \, dV$$
-
-**Operand `op`:** Scalar — element, integration point or node-placed.
-
-**Test variable:** Scalar, node-placed.
-
-**Lumped formulation:** Supported — produces diagonal matrix whose
-diagonal equals the row sums of the consistent mass matrix.
-
-**Application:** Transient storage term in pressure diffusion,
-compressibility matrix in poromechanics.
-
-**Constructor:**
-```cpp
-NumIntegral_NT_lhsop_N_dV( const PropertyDatabase<dim>&,
-                            const char* oper,   // e.g. "compressibility"
-                            const char* basic,  // e.g. "fluid pressure"
-                            const char* test ); // e.g. "fluid pressure"

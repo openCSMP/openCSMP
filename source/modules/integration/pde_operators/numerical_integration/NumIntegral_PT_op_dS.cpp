@@ -65,36 +65,68 @@ void NumIntegral_PT_op_dS<dim>::GetOperands( const Face<dim>& f )
 
 
 /**
-Calculates the surface integral over the boundary face of the element
-and assigns this contribution in a weighted fashion to the boundary
-nodes in the righthand vector. Since we checked for NEUMANN in GetOperand()
-we don't need to do it here. Vector components are set to zero otherwise.
+    @brief Computes the Neumann traction surface integral over a boundary face
+    and accumulates the result into the element right-hand vector.
 
-@param f The element from which accumulation into the global matrix takes placed.  
+    Evaluates the weak-form surface integral:
 
-The result is returned into the MathOperatorRHS vector.
+        f_j^{df} = ∫_Γ N_j · t_{df} dS
+                 ≈ Σ_i w_i |J_i| N_j(ξ_i) · t_{df}
 
-@section application Application
-Within the PDE_Integrator framework to assign stress boundary conditions to a model.  
+    where:
+    - N_j(ξ_i)  is the shape function of node j evaluated at integration point i
+    - w_i       is the quadrature weight at integration point i
+    - |J_i|     is the surface Jacobian determinant at integration point i
+    - t_{df}    is the df-th component of the traction vector (material operand)
+
+    The result is stored in RHS with node-major DOF ordering:
+        RHS[ j * dim + df ]
+    where j is the local node index and df is the spatial degree of freedom.
+
+    @note The NEUMANN status check is performed by the PDE_Integrator framework
+    in AccumulateBoundaryIntegrals before this method is called. By the time
+    ComputeContribution is reached, the traction has already been confirmed as
+    a Neumann condition and read into the material operand by GetOperands.
+
+    @note RHS is zero-initialised at the start of each call. Components for
+    which the traction is zero contribute nothing to the integral.
+
+    @param f  The boundary face over which the surface integral is evaluated.
+
+    @par Application
+    Used within the PDE_Integrator framework to apply Neumann traction boundary
+    conditions to the right-hand side of the linear system. Typical uses include:
+    - Far-field in-situ stress conditions on outer model boundaries
+    - Mud pressure on the borehole wall (BOUNDARY_WELL)
+    - Any distributed surface load expressed as a traction vector
+
+    @par References
+    Zienkiewicz & Taylor, The Finite Element Method, Vol. 1, Ch. 3
 */
 template<uint32_t dim>
 void NumIntegral_PT_op_dS<dim>::ComputeContribution( const Face<dim>& f )
 {
-   MathOperatorRHS<dim,Face>::RHS.resize( f.Nodes() * dim );
-   fill( MathOperatorRHS<dim,Face>::RHS.begin(), MathOperatorRHS<dim,Face>::RHS.end(), 0. );
+    // initialise RHS to zero — one entry per node per spatial DOF
+    MathOperatorRHS<dim,Face>::RHS.resize( f.Nodes() * dim );
+    fill( MathOperatorRHS<dim,Face>::RHS.begin(),
+          MathOperatorRHS<dim,Face>::RHS.end(), 0. );
 
-   vector<double> N;
-   for ( uint32_t i{0U}; i < f.IntegrationPoints(); ++i )
-     {
-       N.clear();
-       f.N_AtIntegrationPoint( i, N );
-       double const detJ = f.det_J_AtIntegrationPoint(i);
-       double const weight = f.WeightAtIntegrationPoint(i);
-       for( uint32_t j{0U}; j < f.Nodes(); ++j )
-         for( uint32_t df(0); df < dim; ++df )
-           MathOperatorRHS<dim,Face>::RHS[j*dim+df] += N[j] * weight * detJ * oper_(df) ;
-     }
-} 
+    vector<double> N;
+    for ( uint32_t i{ 0U }; i < f.IntegrationPoints(); ++i ) {
+        N.clear();
+        f.N_AtIntegrationPoint( i, N );
+        const double detJ   = f.det_J_AtIntegrationPoint( i );
+        const double weight = f.WeightAtIntegrationPoint( i );
+
+        // accumulate weighted traction contribution for each node and DOF:
+        //   RHS[j*dim+df] += N_j(ξ_i) · w_i · |J_i| · t_{df}
+        for ( uint32_t j{ 0U }; j < f.Nodes(); ++j )
+            for ( uint32_t df{ 0U }; df < dim; ++df )
+                MathOperatorRHS<dim,Face>::RHS[j*dim+df] +=
+                    N[j] * weight * detJ * oper_(df);
+    }
+}
+
 
 
 template class NumIntegral_PT_op_dS<1U>;

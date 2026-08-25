@@ -288,6 +288,9 @@ class PDE_Integrator {
 
     /// adds integral terms on the boundary of the computational domain if any
     void          AddBoundaryIntegral( MathOperatorRHS<dim,Face>* );
+    
+    /// to perform checks during the application of the PDE_Integrator
+    bool          HasBoundaryIntegrals() const { return rhs_boundary_operators_.empty(); }
 
     /// for the computation of fluxes across internal split boundaries
     void          AddSplitBoundaryIntegral( MathOperatorRHS<dim,InterFace>* );
@@ -410,6 +413,7 @@ class PDE_Integrator {
     std::map<csmp::Parameter,size_t>                      basic_operands_;          ///< column operators ordered alphabetical by corresponding primary variable name
     std::map<csmp::Parameter,size_t>                      test_operands_;           ///< row operators ordered alphabetical by corresponding primary variable name
   
+    // TODO: recheck the circumstances under which these extra pointers must be stored
     std::vector<const csmp::Face<dim>*>       boundary_faces_;           ///< empty if computation applies to entire model; else Faces needed for dS integrals
     std::vector<const csmp::InterFace<dim>*>  splitboundary_interfaces_; ///< empty if computation applies to entire model; else InterFaces needed for domain coupling
 

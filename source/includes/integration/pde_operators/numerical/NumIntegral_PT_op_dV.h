@@ -7,7 +7,19 @@ namespace csmp {
 
 template<uint32_t> class Element;
 
-/** vector solution variable (test): integration of 'body forces', e.g., action of gravity
+/**
+@class NumIntegral_PT_op_dV NumIntegral_PT_op_dV "pde_operators/NumIntegral_PT_op_dV.h"
+
+Add contributions to the righthandside of a matrix equation which arise
+due to forces acting on the mass represented by each element. These 
+forces are specified as nodal vector<double> variables and NumIntegral_PT_op_dV
+distributes them evenly over the element.
+
+  Vector solution variable (test): integration of 'body forces', e.g., action of gravity
+  
+@author S.K. Matthaei
+@date 2000 
+
  */
 template<uint32_t dim, template<uint32_t> class CELL=Element>
 class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {
@@ -24,19 +36,6 @@ class NumIntegral_PT_op_dV : public MathOperatorRHS<dim,CELL> {
     std::vector<double>  BFORCE;
 };
 
-/**
- 
-@class NumIntegral_PT_op_dV NumIntegral_PT_op_dV "pde_operators/NumIntegral_PT_op_dV.h"
-
-@author S.K. Matthaei
-@date 2000 
-
-Add contributions to the righthandside of a matrix equation which arise
-due to forces acting on the mass represented by each element. These 
-forces are specified as nodal vector<double> variables and NumIntegral_PT_op_dV
-distributes them evenly over the element. 
- 
- */
 
 } // csmp
 
