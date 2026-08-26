@@ -11,6 +11,11 @@
 
 #include "IntegralEquation.h"
 #include "LinearSolver.h"
+#ifdef CSMP_WITH_SAMG_SOLVER
+#include "SAMG_Settings.h"
+#include "SAMG_Solver.h"
+#include "SAMG_Exception.h"
+#endif
 
 namespace csmp {
 

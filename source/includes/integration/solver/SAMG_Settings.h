@@ -4,235 +4,334 @@
 #include "CSMP_definitions.h"
 #include "SolverSettings.h"
 
+// ============================================================================
+// SAMG CONFIGURATION: enforce dependency
+// SAMG_LEGACY requires SAMG_MULTIPLE_INSTANCES
+// ============================================================================
+#ifdef SAMG_LEGACY
+#  ifndef SAMG_MULTIPLE_INSTANCES
+#    define SAMG_MULTIPLE_INSTANCES
+#  endif
+#endif
+
 namespace csmp {
-  
-  class SAMG_Settings : public SolverSettings {
-    public:
-      SAMG_Settings();
-      
-      int32_t Get_matrix() const;
-      int32_t Get_ifirst() const;
-      double Get_eps() const;
-      double Get_rel_eps() const;
-      int32_t Get_nsolve() const;
-      int32_t Get_ncyc() const;
-      int32_t Get_iswit() const;
-      int32_t Get_iswtch() const;
-      double Get_chktol() const;
-      int32_t Get_idump() const;
-      int32_t Get_idmp() const;
-      int32_t Get_iout() const;
-      double Get_a_cmplx() const;
-      double Get_g_cmplx() const;
-      double Get_p_cmplx() const;
-      double Get_w_avrge() const;
-      int32_t Get_ncg() const;
-      int32_t Get_ncyc_done() const;
-      int32_t Get_ncyc_best() const;
-      int32_t Get_levelx() const;
-      int32_t Get_ioform() const;
-      int32_t Get_ioform_length() const;
-      int32_t Get_iter_pre() const;
-      int* Get_filnam_dump();
-      int32_t Get_filnam_dump_length() const;
-      bool ExplicitSecondary() const;
-      bool UsePointBasedApproach() const;
-#if defined( LEGACY_SAMG )
-      int32_t GetSolverInstance() const;
-#endif
-      int32_t Get_mode_mess() const;
-      int32_t Get_nxtyp() const;
-      int32_t Get_nrd() const;
-      int32_t Get_nru() const;
-      
-      // from ETHZ solver version
-      int32_t Get_clsolver_finest() const;
-      int32_t Get_nptmax() const;
-      std::string Get_filnam_dump_str() const;
-
-#if defined(_OPENMP )
-      int32_t Get_icolor_omp() const;
-      int32_t Get_iordered_omp() const;
-      int32_t Get_irestriction_openmp() const;
-      int32_t Get_samg_omp_num_threads_external() const;
-#endif
-      
-      void Set_isym( int32_t isym );
-      void Set_irow( int32_t irow );
-      void Set_itypu( int32_t itypu );
-      void Set_eps( double eps );
-      void Set_rel_eps( double rel_eps );
-      void Set_napproach( int32_t napproach );
-      void Set_nxtyp( int32_t nxtyp );
-      void Set_nrd( int32_t nrd );
-      void Set_nru( int32_t nrd );
-      void Set_internal( int32_t internal );
-      void Set_nprim( int32_t nprim );
-      void Set_npr_is_dummy( int32_t npr_is_dummy );
-      void Set_nint_weights( int32_t nint_weights );
-      void Set_nint_pat( int32_t nint_pat );
-      void Set_igam( int32_t igam );
-      void Set_ncgrad( int32_t ncgrad );
-      void Set_nkdim( int32_t nkdim );
-      void Set_ncycle( int32_t ncycle );
-      void Set_ncyc_done( int32_t ncyc_done );
-      void Set_ncyc_best( int32_t ncyc_best );
-      void Set_iswit( int32_t iswit );
-      void Set_iextent( int32_t iextent );
-      void Set_ndefault( int32_t ndefault );
-      void Set_norm_typ( int32_t norm_typ );
-      void Set_ioscratch( int32_t ioscratch );
-      void Set_chktol( double chktol );
-      void Set_idmp( int32_t idmp );
-      void Set_igdp( int32_t igdp );
-      void Set_iadp( int32_t iadp );
-      void Set_iwdp( int32_t iwdp );
-      void Set_iout1( int32_t iout1 );
-      void Set_iout2( int32_t iout2 );
-      void Set_a_cmplx( double a_cmplx );
-      void Set_g_cmplx( double g_cmplx );
-      void Set_p_cmplx( double p_cmplx );
-      void Set_w_avrge( double w_avrge );
-      void Set_ncgtyp( int32_t ncgtyp );
-      void Set_nred( int32_t nred );
-      void Set_nredlev( int32_t nredlev );
-      void Set_nxf_clean( int32_t nxf_clean );
-      void Set_neg_diag( int neg_diag );
-      void Set_npcol( int32_t npcol );
-      void Set_levelx( int32_t levelx );
-      void Set_ioform( std::string ioform );
-      void Set_filnam_dump(  const std::string& filnam_dump );
-      void Set_iter_pre(int32_t iter_pre);
-      void Set_mode_mess(int32_t);
-    
-      void SetNegative_nsolve( bool negative_nsolve );
-      void SetNegative_ncyc( bool negative_ncyc );
-      void SetNegative_idump( bool negative_idump );
-      void SetNegative_iout( bool negative_iout );
-      /// if this is not set 'true' all attempts to set secondary parameters will fail (default=false)
-      void ExplicitSecondary( bool explicit_secondary );
-#if defined( LEGACY_SAMG )
-      void SetSolverInstance(  int32_t instance  );
-#endif
-
-     // from ETHZ SAMG solver implementation
-#if defined(_OPENMP )
-      void Set_icolor_omp( int32_t icolor_omp );
-      void Set_iordered_omp( int32_t iordered_omp );
-      void Set_irestriction_openmp( int32_t irestriction_openmp );
-#endif
-      void Set_clsolver_finest( int32_t clsolver_finest );
-      void Set_nptmax( int32_t nptmax );
-
-    private:
-      int32_t       isym_;
-      int32_t       irow_;
-      int32_t       itypu_;
-      double        eps_;
-      double        rel_eps_;
-      int32_t       napproach_;
-      int32_t       nxtyp_;
-      int32_t       nrd_;
-      int32_t       nru_;
-      int32_t       internal_;
-      int32_t       nprim_;
-      int32_t       npr_is_dummy_;
-      int32_t       nint_weights_;
-      int32_t       nint_pat_;
-      int32_t       igam_;
-      int32_t       ncgrad_;
-      int32_t       nkdim_;
-      int32_t       ncycle_;
-      int32_t       ncyc_done_;    /// < total number of cycles (iterations) performed
-      int32_t       ncyc_best_;    /// < stores lowest number of cycles achieved
-      int32_t       iswit_;
-      int32_t       iextent_;
-      int32_t       ndefault_;
-      int32_t       norm_typ_;
-      int32_t       ioscratch_;
-      double        chktol_;
-      int32_t       idmp_;
-      int32_t       igdp_;
-      int32_t       iadp_;
-      int32_t       iwdp_;
-      int32_t       iout1_;
-      int32_t       iout2_;
-      double        a_cmplx_;
-      double        g_cmplx_;
-      double        p_cmplx_;
-      double        w_avrge_;
-      int32_t       ncgtyp_;
-      int32_t       ioform_;
-      int32_t       ioform_length_;
-      int32_t       levelx_;
-      std::string   filnam_dump_;
-      int32_t       filnam_dump_length_;
-      int           filnam_dump_Array_[50];
-      int           neg_diag_;
-      int32_t       nred_;
-      int32_t       nredlev_;
-      int32_t       nxf_clean_;
-      int32_t       npcol_;
-#if defined( LEGACY_SAMG )
-      int32_t       solver_instance_ = 0;
-#endif
-      int32_t       iter_pre_;
-      int32_t       mode_mess_;
-      
-      // from ETHZ version of solver
-      int32_t      clsolver_finest_ = 0;
-      int32_t      nptmax_ = 200;
-#ifdef _OPENMP
-  #ifndef HAVE_MPI_CXX
-      int32_t     icolor_omp_ = 2; ///< // default switch in serial samg, for samgp is zero
-  #else
-      int32_t     icolor_omp_ = 0; ///< // default switch in serial samg, for samgp is zero
-  #endif
-      int32_t     iordered_omp_ = 1;
-      int32_t     samg_omp_num_threads_external_ = 0;
-      int32_t     irestriction_openmp_ = 2;
-      int32_t     samg_omp_num_threads_external_ = 0;
-#else
-    int32_t       iordered_omp_ = 0;
-#endif
-      bool negative_nsolve_;
-      bool negative_ncyc_;
-      bool negative_idump_;
-      bool negative_iout_;
-      bool explicit_secondary_;
-  };
 
 /**
- 
+
 @class SAMG_Settings SAMG_Settings "solver/SAMG_Settings.h"
 @author S.K. Matthaei
 @author S. Geiger
 @author G. Roberts
 @date 2001
- 
+
 @section motivation Motivation
- 
-Factoring out SAMG tuning parameter in a separate class so that they
-can be changed indepently of the solver object.
- 
- 
+
+Factoring out SAMG tuning parameters in a separate class so that they
+can be changed independently of the solver object.
+
 @section design Design Intent
- 
-SAMG_Settings objects store SAMG tuning parameter. These tuning parameter
+
+SAMG_Settings objects store SAMG tuning parameters. These tuning parameters
 are divided into switches and their subswitches.
 
 Each switch can be accessed by its respective Get-method and its subswitches
 can be set using the respective Set-methods.
- 
+
 Every Set-method checks if the input data conforms to the restrictions
-imposed by the SAMG solver. If the input value is invald, a domain_error
+imposed by the SAMG solver. If the input value is invalid, a domain_error
 exception is thrown.
 
 @warning Only the rules for the subswitch itself are checked! Interdependencies
 between subswitches are NOT checked! The user is responsible to guarantee that
-all subswitches together form a meaniful parametrization for the SAMG solver.
-*/
-  
-} // end namespace csp
+all subswitches together form a meaningful parametrisation for the SAMG solver.
 
+*/
+class SAMG_Settings : public SolverSettings {
+  public:
+
+    SAMG_Settings();
+
+    // ========================================================================
+    // GETTERS: PRIMARY PARAMETERS
+    // ========================================================================
+
+    int32_t     Get_matrix()              const;
+    int32_t     Get_ifirst()              const;
+    double      Get_eps()                 const;
+    double      Get_rel_eps()             const;
+    int32_t     Get_nsolve()              const;
+    int32_t     Get_ncyc()                const;
+    int32_t     Get_iswit()               const;
+    int32_t     Get_iswtch()              const;
+    double      Get_chktol()              const;
+    int32_t     Get_idump()               const;
+    int32_t     Get_idmp()                const;
+    int32_t     Get_iout()                const;
+    double      Get_a_cmplx()             const;
+    double      Get_g_cmplx()             const;
+    double      Get_p_cmplx()             const;
+    double      Get_w_avrge()             const;
+    int32_t     Get_ncg()                 const;
+    int32_t     Get_ncyc_done()           const;
+    int32_t     Get_ncyc_best()           const;
+    int32_t     Get_levelx()              const;
+    int32_t     Get_ioform()              const;
+    int32_t     Get_ioform_length()       const;
+    int32_t     Get_iter_pre()            const;
+    int*        Get_filnam_dump();
+    int32_t     Get_filnam_dump_length()  const;
+    std::string Get_filnam_dump_str()     const;
+    bool        ExplicitSecondary()       const;
+    bool        UsePointBasedApproach()   const;
+    int32_t     Get_mode_mess()           const;
+    int32_t     Get_nxtyp()               const;
+    int32_t     Get_nrd()                 const;
+    int32_t     Get_nru()                 const;
+
+    // ========================================================================
+    // GETTERS: ETHZ ADDITIONS
+    // ========================================================================
+
+    int32_t     Get_clsolver_finest()     const;
+    int32_t     Get_nptmax()              const;
+
+    // ========================================================================
+    // GETTERS: SAMG_MULTIPLE_INSTANCES
+    // ========================================================================
+
+#ifdef SAMG_MULTIPLE_INSTANCES
+    /// returns the SAMG solver instance index (0..5)
+    int32_t     GetSolverInstance()       const;
+#else
+    /// single-instance build: always returns 0
+    int32_t     GetSolverInstance()       const { return 0; }
 #endif
+
+    // ========================================================================
+    // GETTERS: LICENCE RETRY
+    // ========================================================================
+
+    /// maximum number of attempts to connect to the SAMG licence server (default: 120)
+    int32_t     Get_license_retry_attempts()      const { return license_retry_attempts_;      }
+    /// delay in seconds between licence retry attempts (default: 60)
+    int32_t     Get_license_retry_delay_seconds() const { return license_retry_delay_seconds_; }
+    /// path to the licence retry log file
+    std::string Get_license_retry_log_path()      const { return license_retry_log_path_;      }
+
+    // ========================================================================
+    // GETTERS: OPENMP
+    // ========================================================================
+
+#ifdef _OPENMP
+    int32_t     Get_icolor_omp()                      const;
+    int32_t     Get_iordered_omp()                    const;
+    int32_t     Get_irestriction_openmp()             const;
+    int32_t     Get_samg_omp_num_threads_external()   const;
+#endif
+
+    // ========================================================================
+    // SETTERS: PRIMARY PARAMETERS
+    // ========================================================================
+
+    void Set_isym(              int32_t isym );
+    void Set_irow(              int32_t irow );
+    void Set_itypu(             int32_t itypu );
+    void Set_eps(               double  eps );
+    void Set_rel_eps(           double  rel_eps );
+    void Set_napproach(         int32_t napproach );
+    void Set_nxtyp(             int32_t nxtyp );
+    void Set_nrd(               int32_t nrd );
+    void Set_nru(               int32_t nru );
+    void Set_internal(          int32_t internal );
+    void Set_nprim(             int32_t nprim );
+    void Set_npr_is_dummy(      int32_t npr_is_dummy );
+    void Set_nint_weights(      int32_t nint_weights );
+    void Set_nint_pat(          int32_t nint_pat );
+    void Set_igam(              int32_t igam );
+    void Set_ncgrad(            int32_t ncgrad );
+    void Set_nkdim(             int32_t nkdim );
+    void Set_ncycle(            int32_t ncycle );
+    void Set_ncyc_done(         int32_t ncyc_done );
+    void Set_ncyc_best(         int32_t ncyc_best );
+    void Set_iswit(             int32_t iswit );
+    void Set_iextent(           int32_t iextent );
+    void Set_ndefault(          int32_t ndefault );
+    void Set_norm_typ(          int32_t norm_typ );
+    void Set_ioscratch(         int32_t ioscratch );
+    void Set_chktol(            double  chktol );
+    void Set_idmp(              int32_t idmp );
+    void Set_igdp(              int32_t igdp );
+    void Set_iadp(              int32_t iadp );
+    void Set_iwdp(              int32_t iwdp );
+    void Set_iout1(             int32_t iout1 );
+    void Set_iout2(             int32_t iout2 );
+    void Set_a_cmplx(           double  a_cmplx );
+    void Set_g_cmplx(           double  g_cmplx );
+    void Set_p_cmplx(           double  p_cmplx );
+    void Set_w_avrge(           double  w_avrge );
+    void Set_ncgtyp(            int32_t ncgtyp );
+    void Set_nred(              int32_t nred );
+    void Set_nredlev(           int32_t nredlev );
+    void Set_nxf_clean(         int32_t nxf_clean );
+    void Set_neg_diag(          int     neg_diag );
+    void Set_npcol(             int32_t npcol );
+    void Set_levelx(            int32_t levelx );
+    void Set_ioform(            std::string ioform );
+    void Set_filnam_dump(       const std::string& filnam_dump );
+    void Set_iter_pre(          int32_t iter_pre );
+    void Set_mode_mess(         int32_t mode );
+
+    void SetNegative_nsolve(    bool negative_nsolve );
+    void SetNegative_ncyc(      bool negative_ncyc );
+    void SetNegative_idump(     bool negative_idump );
+    void SetNegative_iout(      bool negative_iout );
+
+    /// if not set to true, all attempts to set secondary parameters will fail (default=false)
+    void ExplicitSecondary(     bool explicit_secondary );
+
+    // ========================================================================
+    // SETTERS: ETHZ ADDITIONS
+    // ========================================================================
+
+    void Set_clsolver_finest(   int32_t clsolver_finest );
+    void Set_nptmax(            int32_t nptmax );
+
+    // ========================================================================
+    // SETTERS: SAMG_MULTIPLE_INSTANCES
+    // ========================================================================
+
+#ifdef SAMG_MULTIPLE_INSTANCES
+    /// sets the SAMG solver instance index (0..5)
+    void SetSolverInstance( int32_t instance );
+#endif
+
+    // ========================================================================
+    // SETTERS: LICENCE RETRY
+    // ========================================================================
+
+    void Set_license_retry_attempts(      int32_t attempts ) { license_retry_attempts_      = attempts; }
+    void Set_license_retry_delay_seconds( int32_t seconds  ) { license_retry_delay_seconds_ = seconds;  }
+    void Set_license_retry_log_path( const std::string& path ) { license_retry_log_path_    = path;     }
+
+    // ========================================================================
+    // SETTERS: OPENMP
+    // ========================================================================
+
+#ifdef _OPENMP
+    void Set_icolor_omp(                    int32_t icolor_omp );
+    void Set_iordered_omp(                  int32_t iordered_omp );
+    void Set_irestriction_openmp(           int32_t irestriction_openmp );
+#endif
+
+  private:
+
+    // ========================================================================
+    // MEMBER VARIABLES: PRIMARY PARAMETERS
+    // ========================================================================
+
+    int32_t       isym_;
+    int32_t       irow_;
+    int32_t       itypu_;
+    double        eps_;
+    double        rel_eps_;
+    int32_t       napproach_;
+    int32_t       nxtyp_;
+    int32_t       nrd_;
+    int32_t       nru_;
+    int32_t       internal_;
+    int32_t       nprim_;
+    int32_t       npr_is_dummy_;
+    int32_t       nint_weights_;
+    int32_t       nint_pat_;
+    int32_t       igam_;
+    int32_t       ncgrad_;
+    int32_t       nkdim_;
+    int32_t       ncycle_;
+    int32_t       ncyc_done_;    ///< total number of cycles (iterations) performed
+    int32_t       ncyc_best_;    ///< stores lowest number of cycles achieved
+    int32_t       iswit_;
+    int32_t       iextent_;
+    int32_t       ndefault_;
+    int32_t       norm_typ_;
+    int32_t       ioscratch_;
+    double        chktol_;
+    int32_t       idmp_;
+    int32_t       igdp_;
+    int32_t       iadp_;
+    int32_t       iwdp_;
+    int32_t       iout1_;
+    int32_t       iout2_;
+    double        a_cmplx_;
+    double        g_cmplx_;
+    double        p_cmplx_;
+    double        w_avrge_;
+    int32_t       ncgtyp_;
+    int32_t       ioform_;
+    int32_t       ioform_length_;
+    int32_t       levelx_;
+    std::string   filnam_dump_;
+    int32_t       filnam_dump_length_;
+    int           filnam_dump_Array_[50];
+    int           neg_diag_;
+    int32_t       nred_;
+    int32_t       nredlev_;
+    int32_t       nxf_clean_;
+    int32_t       npcol_;
+    int32_t       iter_pre_;
+    int32_t       mode_mess_;
+
+    // ========================================================================
+    // MEMBER VARIABLES: ETHZ ADDITIONS
+    // ========================================================================
+
+    int32_t       clsolver_finest_ = 0;
+    int32_t       nptmax_          = 200;
+
+    // ========================================================================
+    // MEMBER VARIABLES: SAMG_MULTIPLE_INSTANCES
+    // ========================================================================
+
+#ifdef SAMG_MULTIPLE_INSTANCES
+    int32_t       solver_instance_ = 0;  ///< SAMG solver instance index (0..5)
+#endif
+
+    // ========================================================================
+    // MEMBER VARIABLES: LICENCE RETRY
+    // ========================================================================
+
+    int32_t       license_retry_attempts_      = 120;
+    int32_t       license_retry_delay_seconds_ = 60;
+    std::string   license_retry_log_path_      = "samg_license_not_found.log";
+
+    // ========================================================================
+    // MEMBER VARIABLES: OPENMP
+    // ========================================================================
+
+#ifdef _OPENMP
+#  ifndef HAVE_MPI_CXX
+    int32_t       icolor_omp_                    = 2;  ///< default for serial SAMG; 0 for SAMGP
+#  else
+    int32_t       icolor_omp_                    = 0;
+#  endif
+    int32_t       iordered_omp_                  = 1;
+    int32_t       irestriction_openmp_           = 2;
+    int32_t       samg_omp_num_threads_external_ = 0;  ///< 0 = use OMP_NUM_THREADS from environment
+#else
+    int32_t       iordered_omp_                  = 0;
+#endif
+
+    // ========================================================================
+    // MEMBER VARIABLES: SIGN FLAGS
+    // ========================================================================
+
+    bool          negative_nsolve_;
+    bool          negative_ncyc_;
+    bool          negative_idump_;
+    bool          negative_iout_;
+    bool          explicit_secondary_;
+};
+
+} // end namespace csmp
+
+#endif /* SAMG_SETTINGS_H */
+

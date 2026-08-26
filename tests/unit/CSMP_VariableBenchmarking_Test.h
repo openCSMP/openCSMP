@@ -6,8 +6,8 @@
 //  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 
-#ifndef CSMP_VariableBenchmarking_Test_hpp
-#define CSMP_VariableBenchmarking_Test_hpp
+#ifndef CSMP_VARIABLE_BENCHMARKING_TEST_H
+#define CSMP_VARIABLE_BENCHMARKING_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -18,11 +18,14 @@ namespace csmp {
 // comparing performance of different makeScalar() implementations
 
 class VariableBenchmarking_Test : public Test {
-    virtual void run();
+  public:
+    VariableBenchmarking_Test() = default;
+
+    void run() override final;
  };
 
 
 } // end csmp
 
 
-#endif /* CSMP_VariableBenchmarking_Test_hpp */
+#endif /* CSMP_VARIABLE_BENCHMARKING_TEST_H */

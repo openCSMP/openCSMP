@@ -175,7 +175,11 @@
 #include "Geothermal_1D_VVCase.h"
 #include "GravityInducedFluidPressure_Test.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
+#include "BoreHole_stability_VerticalWell3D_VVCase.h"
 
+// constitutive relationships
+#include "MohrCoulombFailure_Visitor_Test.h"
+#include "StressInvariants_Test.h"
 
 using namespace std;
 using namespace csmp;
@@ -482,6 +486,7 @@ int main()
       visitorTests.run();
       composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
+      composite.addTest( new MohrCoulombFailure_Visitor_Test() );
       composite.addTest( new PropertyConstraints_Test() );
 
       // computations
@@ -489,7 +494,7 @@ int main()
       composite.addTest( new PDE_Integrator_Transient_Test() );
       composite.addTest( new PDE_Integrator_Computation_Test() );
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
-      // TODO: test periodic BCs
+      composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
       // misc
       composite.addTest( new RegionMonitor_Test() );
@@ -497,14 +502,23 @@ int main()
 
       // constitutive relationships
       composite.addTest( new ExponentialTransferFunction_Test() );
+      composite.addTest( new StressInvariants_Test() );
 
       // constitutive relations
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
       composite.addTest( new TwoPhaseModelwithHysteresis_Test() );
       
-      // speed tests
-      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+      // speed tests (run only in the optimised RELEASE version of the code)
+#ifdef NDEBUG
+        refactored.addTest( new AccumulationSpeedProfiling_Test() );
+        refactored.addTest( new VariableBenchmarking_Test() );
+        refactored.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+        refactored.addTest( new FiniteVolumeStencilSpeed_Test() );
+        refactored.addTest( new JaggedArray3D_Comparison_Test() );
+        refactored.addTest( new PropertyStorageSpeed_Test( &cout ) );
+        refactored.addTest( new VariableStorageSpeed_Test() );
+#endif
       
       // running unit tests and reporting errors
       composite.run();
