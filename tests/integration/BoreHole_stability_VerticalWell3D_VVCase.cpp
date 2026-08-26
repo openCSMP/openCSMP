@@ -104,7 +104,9 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
     // =========================================================================
     //  Model setup
     // =========================================================================
-
+    // TODO: needs a quadratic finite element formulation with failure placed on integration points
+    // TODO: failure must be classified according to the categories defined for CSMP
+    
     string input_file_name( prefix_ );
 
     ANSYS_Model3D model( input_file_name.data(),
