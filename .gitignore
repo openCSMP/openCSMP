@@ -116,3 +116,4 @@ build*/
 *-build/
 
 
+thirdparty/eigen/
