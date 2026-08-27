@@ -40,6 +40,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 */
 #include <algorithm>
 #include <array>
+#include <atomic>
 #include <chrono>
 #include <deque>
 #include <exception>
