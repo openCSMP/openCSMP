@@ -1,0 +1,8 @@
+klingbeil-regions.txt
+no properties
+OW
+BM
+P_T_H
+S
+M
+UNDEFINED

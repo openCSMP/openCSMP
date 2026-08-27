@@ -1,0 +1,318 @@
+name	MParameter	unit	index	min.	max.	place
+element ID	eID	-	1	0.00E0	1.00E+10	element
+node ID	nID	-	1	0.00E0	1.00E+10	node
+nodal volatile mass	nvm	kg m-3	1	0	1.0E+10	node
+thickness	h	m	1	1.00E-25	1.00E+00	element
+permeability	k	m2	1	1.00E-25	1.00E+00	element
+previous permeability	pk	m2	1	1.00E-25	1.00E+00	element
+previous previous permeability	ppk	m2	1	1.00E-25	1.00E+00	element
+nodal permeability	k	m2	1	1.00E-25	1.00E+00	node
+total heat capacity	CPT	J kg-1 oC-1	1	0.00E+00	1.00E+20	element
+temperature	T	oC	1	0.00E+00	1.00E+03	node
+initial temperature	Tinit	oC	1	0.00E+00	1.00E+03	node
+temperature pre P	T	oC	1	0.00E+00	1.00E+03	node
+previous temperature	pT	oC	1	0.00E+00	1.00E+03	node
+temperature element	T	oC	1	0.00E+00	1.00E+03	element
+nodal heat capacity	nCP	J kg-1 oC-1	1	0.00E+00	1.00E+20	node
+thermal conductivity	KT	J kg-1 oC-1	1	-1.00E+01	1.00E+01	element
+nodal heat flux bottom	QHB	J kg-1 s-1	1	-1.00E+10	1.00E+10	node
+nodal total compressibility	nCT	Pa-1	1	1.00E-17	1.00E-03	node
+fluid pressure	PF	Pa	1	0.00E+00	1.00E+10	node
+test fluid pressure	tPF	Pa	1	0.00E+00	1.00E+10	node
+fluid pressure element	PFe	Pa	1	0.00E+00	1.00E+10	element
+reference pressure	rPF	Pa	1	0.00E+00	1.00E+10	node
+failure pressure	fPF	Pa	1	0.00E+00	1.00E+10	node
+liquid mass mobility	rKl	m2 s-1	1	0.00E+00	1.00E+20	node
+vapor mass mobility	rKv	m2 s-1	1	0.00E+00	1.00E+20	node
+liquid mass mobility density	rKl	kg s-1 m-1	1	1.00E-25	1.00E+03	node
+vapor mass mobility density	rKv	kg s-1 m-1	1	1.00E-25	1.00E+03	node
+nodal fluid volume source	nQT	kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+nodal fluid volume source2	nQT2	kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+previous nodal fluid volume source	pnQT	kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+fluid source rate	fsr	kg s-1	1	0.00E+00	1.00E+10	node
+porosity	PHI	X	1	0.00E+00	1.00E+00	element
+pore volume	PV	m3	1	0.00E+00	1.00e+20	node
+pore volume before	PVb	m3	1	0.00E+00	1.00e+20	node
+pore volume element	PVe	m3	1	0.00E+00	1.00e+20	element
+fluid density	RF	kg m-3	1	0.00E+00	1.00E+07	node
+mass	m	kg m-3	1	0.00E+00	1.00E+07	node
+previous mass	Pm	kg m-3	1	0.00E+00	1.00E+07	node
+nodal fluid mass accumulated	mMf	kg m-3	1	0.00E+00	1.00E+07	node
+mass KCl	mKCl	kg m-3	1	0.00E+00	1.00E+07	node
+previous mass KCl	mKCl	kg m-3	1	0.00E+00	1.00E+07	node
+boundary flow mass	bfm	kg m-3	1	-1.00E+07	1.00E+07	node
+total bfm mass out	bfmot	kg	1	-1.00E+30	1.00E+30	model
+enthalpy content liquid	CHl	J m-3	1	0.00E+00	2.00E+20	node
+enthalpy content vapor	CHv	J m-3	1	0.00E+00	2.00E+20	node
+previous temperature	Tp	oC	1	0.00E+00	1.00E+03	node
+nodal porosity	nPHI	X	1	0.00E+00	1.00E+00	node
+previous nodal porosity	npPHI	X	1	0.00E+00	1.00E+00	node
+nodal heat capacity rock	nCPR	J kg-1 oC-1	1	0.00E+00	2.00E+03	node
+nodal density rock	nRHOR	kg m-3	1	1.00E-05	1.00E+04	node
+previous nodal density rock	pnRHOR	kg m-3	1	1.00E-05	1.00E+04	node
+previous enthalpy content liquid	PCHl	J m-3	1	0.00E+00	2.00E+20	node
+previous enthalpy content vapor	PCHv	J m-3	1	0.00E+00	2.00E+20	node
+fluid source h	fsh	J s-1	1	0.00E+00	1.00E+20	node
+fluid mass liquid	Ml	kg m-3	1	0.00E+00	3.00E+09	node
+fluid mass vapor	Mv	kg m-3	1	0.00E+00	3.00E+09	node
+previous fluid mass liquid	PMl	kg m-3	1	0.00E+00	3.00E+09	node
+previous fluid mass vapor	PMv	kg m-3	1	0.00E+00	3.00E+09	node
+previous fluid density	PRF	kg m-3	1	0.00E+00	1.00E+07	node
+total enthalpy	Ht	J m-3	1	0.00E+00	2.00E+20	node
+previous total enthalpy	Htp	J m-3	1	0.00E+00	2.00E+20	node
+previous previous total enthalpy	Htpp	J m-3	1	0.00E+00	2.00E+20	node
+enthalpy	H	J m-3	1	-2.00E+20	2.00E+20	node
+previous enthalpy	PH	J m-3	1	-2.00E+20	2.00E+20	node
+boundary flow enthalpy	bfH	J m-3	1	0.00E+00	2.00E+20	node
+fluid enthalpy	HF	J kg-1	1	0.00E+00	1.00E+07	node
+enthalpy	H	J m-3	1	-2.00E+20	2.00E+20	node
+saturation liquid	Sl	X	1	0.00E+00	1.00E+00	node
+saturation vapor	Sv	X	1	0.00E+00	1.00E+00	node
+density liquid	RHOl	kg m-3	1	1.00E+00	2.00E+03	node
+density vapor	RHOv	kg m-3	1	1.00E+00	2.00E+03	node
+viscosity liquid	MUl	Pa s-1	1	1.00E-07	1.00E-03	node
+viscosity vapor	MUv	Pa s-1	1	1.00E-07	1.00E-03	node
+fluid viscosity	MUf	Pa s-1	1	1.00E-07	1.00E-03	node
+enthalpy liquid	Hl	J kg-1	1	1.00E+02	1.00E+20	node
+enthalpy vapor	Hv	J kg-1	1	1.00E+02	1.00E+20	node
+fluid heat capacity	CPF	J kg-3 C-1	1	0.00E+00	1.00E+04	node
+compressibility	B	Pa-1	1	0.00E+00	1.00E-03	node
+volumetric enthalpy liquid	VHl	J m-3	1	0.00E+00	2.00E+20	node
+volumetric enthalpy vapor	VHv	J m-3	1	0.00E+00	2.00E+20	node
+density liquid transport	RHOlT	kg m-3	1	1.00E+00	2.00E+08	node
+density vapor transport	RHOvT	kg m-3	1	1.00E+00	2.00E+08	node
+fluid mass	MF	kg m-3	1	0.00E+00	1.00E+07	node
+previous fluid mass	pMF	kg m-3	1	0.00E+00	1.00E+07	node
+volume factor	OPF	Pa	1	0.00E+00	1.00E+10	node
+fluid state	FS	-	1	-1.00E+00	1.00E+01	node
+bulk fluid density	BRF	kg m-3	1	0.00E+00	2.00E+03	node
+nodal compressibility rock	BR	Pa-1	1	0.00E+00	1.00E-03	node
+liquid enthalpy mobility	rKl	m2 s-1	1	1.00E-25	1.00E+10	node
+vapor enthalpy mobility	rKv	m2 s-1	1	1.00E-25	1.00E+10	node
+lithostatic pressure	PL	Pa	1	0.00E+00	1.00E+10	node
+liquid enthalpy mobility density	rKld	m2 s-1	1	1.00E-25	1.00E+10	node
+vapor enthalpy mobility density	rKvd	m2 s-1	1	1.00E-25	1.00E+10	node
+density rock	RHOR	kg m-3	1	1.00E-05	1.00E+04	element
+velocity	V	m s-1	2	-1.00E+10	1.00E+10	element
+pore velocity	PV	m s-1	2	-1.00E+02	1.00E+02	element
+nodal source liquid	nQTl	kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+nodal source vapor	nQTv	kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+previous fluid pressure	PPF	Pa	1	0.00E+00	1.00E+10	node
+previous previous fluid pressure	PPPF	Pa	1	0.00E+00	1.00E+10	node
+previous fluid state	pFS	-	1	-0.1	1.00E+01	node
+diffusivity	DI	X	1	0.00E+00	1.00E+00	element
+velocity liquid	Vl	m s-1	2	-1.00E+02	1.00E+02	element
+velocity vapor	Vv	m s-1	2	-1.00E+02	1.00E+02	element
+pore velocity liquid	PVl	m s-1	2	-1.00E+02	1.00E+02	element
+pore velocity vapor	PVv	m s-1	2	-1.00E+02	1.00E+02	element
+nodal pore velocity	pvn	m s-1	2	-1.00E+02	1.00E+02	node
+relperm viscosity liquid	MUl-1	s Pa-1	1	1.00E-07	1.00E+07	node
+relperm viscosity vapor	MUv-1	s Pa-1	1	1.00E-07	1.00E+07	node
+KgradP	KgradP	m2 Pa m-1	2	1.00E-10	1.00E+10	element
+gradP scaling	gradP_sc	-	1	1.00E-10	1.00E+10	element
+courant liquid	cfl_l	s	1	1.00E-10	1.00E+20	element
+courant vapor	cfl_v	s	1	1.00E-10	1.00E+20	element
+upwind control liquid	uc_l	-	1	0	30	element
+upwind control vapor	uc_v	-	1	0	30	element	
+salt fraction fluid	XF	Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction liquid	Xl	Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction vapor	Xv	Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction halite	Xh	Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt content liquid	CXl	kg m-3	1	0.00E+00	1.00E+09	node
+salt content vapor	CXv	kg m-3	1	0.00E+00	1.00E+09	node
+salt content halite	CXv	kg m-3	1	0.00E+00	1.00E+09	node
+salt content liquid KCl	KCl_CXl	kg m-3	1	0.00E+00	1.00E+09	node
+salt content vapor KCl	KCl_CXv	kg m-3	1	0.00E+00	1.00E+09	node
+salt content halite KCl	KCl_CXh	kg m-3	1	0.00E+00	1.00E+09	node
+salt content fluid	CXf	kg m-3	1	0.00E+00	1.00E+09	node
+previous salt content fluid	pCXf	kg m-3	1	0.00E+00	1.00E+09	node
+previous salt content liquid	pCXl	kg m-3	1	0.00E+00	1.00E+09	node
+previous salt content vapor	pCXv	kg m-3	1	0.00E+00	1.00E+09	node
+previous mass salt	pms	kg	1	0.00E+00	1.00E+09	node
+previous salt content liquid KCl	KCl_CXlp	kg m-3	1	0.00E+00	1.00E+09	node
+previous salt content vapor KCl	KCl_CXv	kg m-3	1	0.00E+00	1.00E+09	node
+previous salt content halite KCl	KCl_CXhp	kg m-3	1	0.00E+00	1.00E+09	node
+boundary flow salt	bfss	kg	1	-1.00E+09	1.00E+09	node
+salinity	S	Wt. NaCl	1	0.00E+00	1.00E+02	node
+salinity element	Se	Wt. NaCl	1	0.00E+00	1.00E+02	element
+previous salinity	Sp	Wt. NaCl	1	0.00E+00	1.00E+02	node
+liquid salt mobility	rKl	m2 s-1	1	0.00E+00	1.00E+20	node
+vapor salt mobility	rKv	m2 s-1	1	0.00E+00	1.00E+20	node
+liquid salt mobility KCl	rKl_KCl	m2 s-1	1	0.00E+00	1.00E+20	node
+vapor salt mobility KCl	rKv_KCl	m2 s-1	1	0.00E+00	1.00E+20	node
+fluid source wt	fsw	kg s-1	1	0.0	1.0e10	node
+saturation halite	Sh	X	1	0.00E+00	1.00E+00	node
+saturation halite element	She	X	1	0.00E+00	1.00E+00	element
+density halite	RHOh	kg m-3	1	1.00E+00	2.00E+03	node
+solid mass halite	Mh	kg m-3	1	0.00E+00	1.00E+04	node
+enthalpy halite	Hh	J kg-1	1	1.00E+02	1.00E+20	node
+volumetric enthalpy halite	VHh	J m-3	1	0.00E+00	2.00E+20	node
+enthalpy content halite	CHv	J m-3	1	0.00E+00	2.00E+20	node
+volumetric salinity vapor	VXv	kg m-3	1	0.00E+00	1.00E+09	node
+volumetric salinity liquid	VXl	kg m-3	1	0.00E+00	1.00E+09	node
+volumetric salinity halite	VXh	kg m-3	1	0.00E+00	1.00E+09	node
+fracturing reference	cf	-	1	0.00E+00	3.00E+01	element
+fracturing events	fe	-	1	0.00E+00	1.00E+20	element
+permeability increase	ki	m2	1	0.00E+00	1.00E+20	element
+permeability log increase	kli	m2	1	0.00E+00	1.00E+20	element
+permeability decrease	kd	m2	1	0.00E+00	1.00E+20	element
+permeability log decrease	kld	m2	1	0.00E+00	1.00E+20	element
+energy flux per second	Efps	J m-3 s-1	1	0.00E+00	1.00E+20	node
+energy flux integral	EfI	J m-3	1	0.00E+00	1.00E+20	node
+energy flux	Ef	J m-3	1	0.00E+00	1.00E+20	node
+fluid flux per second	ffps	kg m-3 s-1	1	0.00E+00	1.00E+20	node
+fluid flux integral	ffiI	kg m-3	1	0.00E+00	1.00E+20	node
+fluid flux with direction integral	ffwdi	m s-1	2	0.00E+00	1.00E+20	node
+fluid flux with direction	ffwd	m s-1	2	0.00E+00	1.00E+20	node
+fluid flux	ffi	kg m-3	1	0.00E+00	1.00E+20	node
+salt flux per second	Sfps	kg m-3 s-1	1	0.00E+00	1.00E+20	node
+salt flux integral	SfI	kg m-3	1	0.00E+00	1.00E+20	node
+salt flux	SfI	kg m-3	1	0.00E+00	1.00E+20	node
+previous fluid flux integral	pffI	kg m-3	1	0.00E+00	1.00E+20	node
+previous salt flux integral	pSfI	kg m-3	1	0.00E+00	1.00E+20	node
+previous energy flux integral	pEfI	kg m-3	1	0.00E+00	1.00E+20	node
+previous compressibility	BP	Pa-1	1	0.00E+00	1.00E-03	node
+reference compressibility	BP	Pa-1	1	0.00E+00	1.00E-03	node
+dangerous phase change	DPC	-	1	0.00E+00	1.00E+03	node
+after phasechange counter	APC	-	1	0.00E+00	2.00E+01	node
+reference specific enthalpy top	rset	J kg-1	1	0.00E+00	1.00E+07	node
+dt	dt	s	1	0.00E+00	1.00E+20	node
+bulk volume	Vl	m3	1	0.00E+00	1.00E+10	node
+bulk volume element	Vle	m3	1	0.00E+00	1.00E+10	element
+previous pore volume	Vl	m3	1	0.00E+00	1.00E+10	node
+previous bulk volume	Vl	m3	1	0.00E+00	1.00E+10	node
+initial bulk volume	Vl0	m3	1	0.00E+00	1.00E+10	node
+initial pore volume	pVl	m3	1	0.00E+00	1.00E+10	node
+region ID	rID	-	1	0.00E+00	1.00E+01	element
+with salinity	wsal	-	1	0.00E+00	1.00E+00	model
+with passive tracer	wpt	-	1	0.00E+00	1.00E+00	model
+with magma chamber	wmc	-	1	0.00E+00	1.00E+00	model
+with gold	wAu	-	1	0.00E+00	1.00E+00	model
+with quartz	wQtz	-	1	0.00E+00	1.00E+00	model
+with flux visitor	wqv	-	1	0.00E+00	1.00E+00	model
+with lithium	wLi	-	1	0.00E+00	1.00E+00	model
+with magma model	wmm	-	1	0.00E+00	1.00E+00	model
+with point source	wpt	-	1	0.00E+00	1.00E+00	model
+with temperature halo	Thalo	-	1	0.00E+00	1.00E+00	model
+with lithostatic pressure	lithPflag	-	1	0.00E+00	1.00E+00	model
+open top	oTop	-	1	0.00E+00	1.00E+00	model
+barycenter depth	m	m	1	0.00E+00	1.00E+06	element
+with anisotropic permeability	anik	-	1	0	1.0E+00	model
+permeability anisotropy factor	anikfact	-	1	1.0E-10	1.0E+10	element
+vertical permeability	kv	m2	1	1.00E-25	1.00E+00	element
+horizontal permeability	kh	m2	1	1.00E-25	1.00E+00	element
+log vertical permeability increase	logkinc	logm2	1	-1.00E+01	2.00E+01	element
+log horizontal permeability increase	logkinc	logm2	1	-1.00E+01	2.00E+01	element
+depth dependent permeability	dk	-	1	0.00E+00	1.00E+00	model
+with reference depth	wrefd	-	1	0.00E+00	1.00E+00	model
+reference depth	refd	-	1	-1.00E+10	1.00E+10	model
+temperature dependent permeability	Tk	-	1	0.00E+00	1.00E+00	model
+mineral dependent permeability	mk	-	1	0.00E+00	1.00E+00	model
+pore fluid factor dependent permeability	Pffk	-	1	0.00E+00	1.00E+00	model
+hydrofracturing	hf	-	1	0.00E+00	1.00E+00	model
+immediate fracture closure	fclosure	-	1	0.00E+00	1.00E+00	model
+change BDT temperature	cBDTT	-	1	0.00E+00	1.00E+00	model
+near critically pressured	critP	-	1	0.00E+00	1.00E+00	model
+BDT start temperature	BDTTs	oC	1	0.00E+00	1.00E+04	model
+BDT ductile temperature	BDTTd	oC	1	0.00E+00	1.00E+04	model
+BDT end temperature	BDTTe	oC	1	0.00E+00	1.00E+04	model
+BDT start log permeability	BDTks	m2	1	-25.00E+00	-1.00E+00	model
+BDT start permeability element	BDTks	m2	1	-25.00E+00	-1.00E+00	element
+BDT ductile log permeability	BDTks	m2	1	-25.00E+00	-1.00E+00	model
+BDT end log permeability	BDTkd	m2	1	-25.00E+00	-1.00E+00	model
+maximum log permeability model	kmax	m2	1	-25.00E+00	-1.00E+00	model
+initial wtpercent volatile in magma	iwtpVolMag	perc	1	0.00E+00	1.00E+02	model
+crystallization curve exponent	ccexp	-	1	1.00E+00	1.00E+02	model
+liquidus temperature	liqT	oC	1	0.00E+00	1.00E+03	node
+solidus temperature	soldT	oC	1	0.00E+00	1.00E+03	node
+model time	time	s 	1	0.00E+00	1.00E+20	model
+pore volume change factor	delta_pV	-	1	0.	1.E+9	node
+threshold pressure	Pthresh	Pa	1	0.00E+00	1.00E+09	node
+failure overpressure	fOP	Pa	1	0.	1.E+9	node
+threshold overpressure	OPthresh	Pa	1	0.	1.E+9	node
+fracturable flag	frac_flag	-	1	0.	1.E+9	element
+nodal depth	nd	m	1	0.	1.E+9	node
+volume	V	m3	1	0.00E+00	1.00e+20	node
+gravity flag	g	x	1	0.00E+00	1.00E+00	model
+salinity top	Stop	Wt. NaCl	1	0.00E+00	1.00E+02	model
+cfl scaling	cfl	-	1	0.00E+00	1.00E+04	model
+heat capacity melt	CPrm	J kg-1 oC-1	1	0.00E+00	1.00E+20	model
+with custom latent heat	wclh	-	1	0.00E+00	1.00E+00	model
+latent heat of fusion	lhf	J kg-1	1	0.00E+00	1.00E+20	model
+permeability tensor	kT	m2	3	1.00E-25	1.00E+00	element
+differential stress	diff_stress	Pa	1	0.00E+00	1.00E+10	model
+cohesion	C	-	1	0.00E+00	1.00E+10	model
+initial T diffusion time	Tdiff_t0	s	1	0.00E+00	1.00E+20	model
+initial intrusion temperature	Tmagma	oC	1	0.00E+00	1.00E+04	model
+no standard output	stdcout	-	1	0.	1	model
+coordinate x	x	m	1	-1.00E+05	1.00E+05	node
+coordinate y	y	m	1	-1.00E+05	1.00E+05	node
+coordinate z	z	m	1	-1.00E+05	1.00E+05	node
+save model increment	save_t	-	1	0.00E+00	1.00E+20	model
+fluid flux in	ffi	kg m-3	1	0.00E+00	1.00E+20	node
+fluid flux out	ffo	kg m-3	1	0.00E+00	1.00E+20	node
+total fluid flux in	tffi	kg m-3	1	0.00E+00	1.00E+20	node
+total fluid flux out	tffo	kg m-3	1	0.00E+00	1.00E+20	node
+previous total fluid flux in	tffi	kg m-3	1	0.00E+00	1.00E+20	node
+previous total fluid flux out	tffo	kg m-3	1	0.00E+00	1.00E+20	node
+conductivity	K	m2 Pa-1 s-1	1	0.00E+00	1.00E+00	element integration point
+mass conductivity	rK	s	1	0.00E+00	1.00E+00	element integration point
+temperature dependent differential stress flag	Tdep_diffP	-	1	0.00E+00	1.00E+00	model
+permeability ID	kID	-	1	0.00E+00	1.00E+01	element
+log permeability increase	logkinc	logm2	1	-1.00E+01	2.00E+01	element
+crystallization curve	Xcurvel	-	1	0.00E+00	2.00E+00	model
+with depth dependent porosity permeability coupling	wPhiKCouplingt	-	1	0.00E+00	1.00E+00	model
+lower porosity limit	phiMint	-	1	0.00E+00	1.00E+00	model
+upper porosity limit	phiMaxt	-	1	0.00E+00	1.00E+00	model
+quartz solubility	QS	mol kg-1	1	-1.00E+20	1.00E+20	node
+quartz solid	Qtzm	kg m-3	1	0.00E+00	1.00E+20	node
+initial quartz solid	inQtzm	kg m-3	1	0.00E+00	1.00E+21	node
+vein quartz solid	vQtzm	kg m-3	1	0.00E+00	1.00E+22	node
+minimum quartz solid	minQtzm	kg m-3	1	0.00E+00	1.00E+23	node
+delta quartz precipitated	dQtzp	kg m-3	1	-1.00E+20	1.00E+24	node
+with Cl partitioning	wClpart	-	1	0.00E+00	1.00E+00	model
+magmatic fluid mass liquid	mMl	kg m-3	1	0.00E+00	3.00E+09	node
+magmatic fluid mass vapor	mMv	kg m-3	1	0.00E+00	3.00E+09	node
+magmatic fluid mass	mMf	kg m-3	1	0.00E+00	1.00E+07	node
+magmatic salt content liquid	mCXl	kg m-3	1	0.00E+00	1.00E+09	node
+magmatic salt content vapor	mCXv	kg m-3	1	0.00E+00	1.00E+09	node
+magmatic mass salt	mms	kg	1	0.00E+00	1.00E+09	node
+magmatic liquid mass mobility	mrKl	m2 s-1	1	0.00E+00	1.00E+20	node
+magmatic vapor mass mobility	mrKv	m2 s-1	1	0.00E+00	1.00E+20	node
+magmatic liquid salt mobility	rKlm	m2 s-1	1	0.00E+00	1.00E+20	node
+magmatic vapor salt mobility	rKvm	m2 s-1	1	0.00E+00	1.00E+20	node
+magmatic fluid flux integral	mffI	kg m-3	1	0.00E+00	1.00E+20	node
+shell magmatic fluid flux integral	smffI	kg m-3	1	0.00E+00	1.00E+20	node
+magmatic fluid flux	mff	kg m-3	1	0.00E+00	1.00E+20	node
+shell magmatic fluid flux	smff	kg m-3	1	0.00E+00	1.00E+20	node
+magmatic salt content halite	mCXh	kg m-3	1	0.00E+00	1.00E+09	node
+sigma1 MagmaModel	sig1	-	1	0.00E+00	1.00E+00	model
+previous magmatic fluid mass	mMfp	kg m-3	1	0.00E+00	1.00E+07	node
+previous magmatic fluid mass vapor	mMvp	kg m-3	1	0.00E+00	3.00E+09	node
+previous magmatic fluid mass liquid	mMlp	kg m-3	1	0.00E+00	3.00E+09	node
+previous magmatic salt content liquid	mCXlp	kg m-3	1	0.00E+00	1.00E+09	node
+previous magmatic salt content vapor	mCXvp	kg m-3	1	0.00E+00	1.00E+09	node
+previous magmatic salt content halite	mCXhp	kg m-3	1	0.00E+00	1.00E+09	node
+previous magmatic mass salt	pmms	kg	1	0.00E+00	1.00E+09	node
+previous magmatic fluid flux integral	pmffI	kg m-3	1	0.00E+00	1.00E+20	node
+previous shell magmatic fluid flux integral	psffI	kg m-3	1	0.00E+00	1.00E+20	node
+previous salinity magmatic fluids	pSmf	Wt. NaCl	1	0.00E+00	1.00E+02	node
+with split boundary	wsb	-	1	0.00+00	1.00E+00	model
+split region gravity mass source	grav_mass_source	-	1	0.00+00	1.00E+20	node
+open space	os	m	1	0.00E00	1.0E+00	model
+fault permeability anisotropy factor	kfaf	m	1	1.00E-10	1.00E+05	model
+thickness split boundary	hsb	m	1	1.00E-25	1.00E+03	model
+split region nodal area	nA	-	1	0.00+00	1.00E+20	node
+split region mass source	qm	-	1	0.00+00	1.00E+20	node
+split region energy source	qe	-	1	0.00+00	1.00E+20	node
+split region salt source	qs	-	1	0.00+00	1.00E+20	node
+split region potential gradient l	split_grad_pot_l	-	1	0.00+00	1.00E+20	node
+split region potential gradient v	split_grad_pot_v	-	1	0.00+00	1.00E+20	node
+split region relperm l	split_relperm_l	-	1	0.00+00	1.00E+20	node
+split region relperm v	split_relperm_v	-	1	0.00+00	1.00E+20	node
+leftover nfvs	lonfvs	-	1	-1.00E+20	1.00E+20	node
+previous leftover nfvs	plonfvs	-	1	-1.00E+20	1.00E+20	node
+specific enthalpy liquid top	rhlT	J kg-1	1	0.00E+00	1.00E+07	node
+specific enthalpy vapor top	rhvT	J kg-1	1	0.00E+00	1.00E+07	node
+with depth dependent fault permeability	wkfD	-	1	0.00E+00	1.00E+00	model
+minimum permeability fault	kf_min	m2	1	1.00E-30	1.00E-01	element

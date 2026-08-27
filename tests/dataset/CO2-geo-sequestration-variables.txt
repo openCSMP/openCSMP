@@ -1,0 +1,98 @@
+name	MParameter	unit	index	min.	max.	place	usage
+acceleration gravity	g	m/s2	1	9.76	9.83	MODEL	input
+brooks corey parameter	bcp	none	1	0	8	ELEMENT	input
+bulk mass and fractions	Xbulk	none	ARRAY 4	0.	1e8	NODE	computed
+capillary diffusivity	diffpc	m2/Pa	1	0.	1	ELEMENT	computed
+cfl multiplier		CFL	none		1	0.00E+00	1.00E+10	NODE	computed
+change of saturation carbonic phase	dsCO2	m3/m3	1	0.	1.	ELEMENT	computed
+CO2 diffusivity	diff	m2/Pa	1	1E-50	1	ELEMENT	computed
+composition aqueous phase	H2O_comp	Xmass	ARRAy 3	0.	1.	NODE	computed
+composition carbonic phase	CO2_comp	Ymass	ARRAY 2	0.	1.	NODE	computed
+compressibility aqueous phase	cH2O	1/Pa	1	1E-12	0.00016	NODE	computed
+compressibility carbonic phase	cCO2	1/Pa	1	1E-12	0.0001	NODE	computed
+compressibility rock	cR	1/Pa	1	1E-15	1E-05	ELEMENT	input
+default time increment	dt	s	1	0.001	8640000	MODEL	input
+density aqueous phase	rhoH2O	kg/m3	1	500	1500	NODE	input
+density carbonic phase	rhoCO2	kg/m3	1	50	1000	NODE	input
+dip vector	dip	none	2	-1	1	ELEMENT	computed
+dissolved CO2	CO2aq	kg/m3	1	0	150	NODE	computed
+dry rock density	rhod	kg/m3	1	200	10000	ELEMENT	input
+electric conductivity	eC	S/m	1	0	100000000	ELEMENT	input
+element number		Ne	none	1	0	10000000000	ELEMENT	computed
+element system state	ePHS	none	1	0	7	ELEMENT	computed
+end of injection	eoi	secs	1	86400.	31536000000	MODEL	input
+energy source	Qe	W/m3	1	0	0.0001	ELEMENT	input
+entry pressure	pd	Pa	1	0	50000000	ELEMENT	input
+evaporated water	H2Og	kg/m3	1	0	50	NODE	computed
+event index			EVI	none		1	0.00E+00	1.00E+10	NODE	computed
+face dip vector	dipf	none	2	-1	1	FACE	computed
+face gravity term	fgt	N/m	2	-150000000	150000000	FACE	computed
+face total mobility permeability product	flt	1/(Pa.s)	2	1E-18	1	FACE	computed
+facet area	fA	m2	1	1E-08	1000000	FACET_INTEGRATION_POINT	computed
+facet normal	fn	none	2	0.99999999999	1.00000001	FACET_INTEGRATION_POINT	computed
+fluid mass source	QM	kg/(kg.s)	1	-100000000	100000000	ELEMENT	input
+fluid pressure	pf	Pa	1	0	1000000000	NODE	computed
+FV pore volume	fvPV	m3	1	0	10000000	NODE	computed
+FV total rock compressibility	fv_ctr	m3	1	1.0e-12	1.0e-5	NODE	computed
+FV total system compressibility	fv_ctm	kg	1	1.0e-12	1.0e-5	NODE	computed
+gravity term	gt	N/m	2	-100000000	100000000	ELEMENT	computed
+heat source	Qh	W/m3	1	0.00e+00	1.00e-05	ELEMENT	input
+interfacial tension	IFT	N/m	1	0	0.05	NODE	computed
+mass CO2		mCO2	kg	1	0.	1.0e10	NODE	computed
+mass CO2	mCO2	kg	1	0.00E+00	1.00E+08	NODE	computed
+mass H2O		mH20	kg	1	0.	1.0e10	NODE	computed	
+mass NaCl		mNaCl	kg	1	0.	1.0e10	NODE	computed
+mass NaClaq		mNaClaq	kg	1	0.	1.0e10	NODE	computed
+mixture density		rhom	kg/m3	1	200.	1800.	NODE	computed
+mobility aqueous phase	lH2O	1/(Pa.s)	1	0	1E+08	ELEMENT	computed
+mobility carbonic phase	lCO2	1/(Pa.s)	1	0	1E+08	ELEMENT	computed
+model time	t	s	1	0	1000000000000000	MODEL	computed
+nodal fluid mass source	nQM	kg/(kg.s)	1	-100000000	100000000	NODE	computed
+nodal system state	nPHS	none	1	0	7	NODE	input
+node number	Nn	int	1	0	10000000000	NODE	computed
+non-wetting phase timing array	NTA	none		7	-1.00E+10	1.00E+10	NODE	computed
+old saturation carbonic phase	sCO2_0	m3/m3	1	0.	1.	NODE	computed
+output times	t_out	s	1000	0	1000000000000000	MODEL	input
+permeability		k	m2	1	1E-21	1.0e-7	ELEMENT	input
+permeability calibration factor	k_cal	none	1	0	1	ELEMENT	input
+porosity	phi	none	1	1E-06	1	ELEMENT	input
+previous drainage endpoint	PDE	X	1	0.	1.	NODE	input
+previous fluid mass source	QM0	kg/(kg.s)	1	-100000000	100000000	ELEMENT	computed
+previous fluid pressure	pf0	Pa	1	-1000000000	1000000000	NODE	computed
+previous reduced fluid pressure	rpf0	Pa	1	-1000000000	1000000000	NODE	computed
+previous imbibition endpoint	PIE	X	1	0.	1.	NODE	input
+previous nodal fluid mass source	nQM0	kg/(kg.s)	1	-100000000	100000000	NODE	computed
+pseudo residual saturation carbonic phase		psrCO2	X	1	0.	1.	ELEMENT	input
+pseudo residual saturation aqueous phase	psrH2O	X	1	0.	1.	ELEMENT	input
+rate count			RAC	none		1	0.00E+00	1.00E+10	NODE	computed
+reduced fluid pressure	rpf	Pa	1	-1e8	1e8	NODE	computed
+relative permeability model parameters	kri_param	none	8	-50000000	50000000	ELEMENT	input
+residual saturation aqueous phase	srH2O	m3/m3	1	0	0.5	ELEMENT	input
+residual saturation carbonic phase	srCO2	m3/m3	1	0	0.5	ELEMENT	input
+rocktype	RRT	int	1	0	100	ELEMENT	computed
+run duration	TMAX	s	1	0	1000000000000000	MODEL	input
+salinity	NaClaq	kg/m3	1	0	40	NODE	input
+salt	NaCl	kg	1	0	5	NODE	input
+saturation aqueous phase	sH2O	m3/m3	1	0.	1.	NODE	input
+saturation carbonic phase	sCO2	m3/m3	1	0.	1.	NODE	input
+schedule count			SCC	none		1	0.00E+00	1.00E+10	NODE	computed
+sector pore volume	sPV	m3	1	1E-08	1000000	SECTOR_INTEGRATION_POINT	computed
+shock saturation aqueous phase	ssH2O	m3/m3	1	0.	1.	ELEMENT	computed
+synchronize count		SYC	none		1	0.00E+00	1.00E+10	NODE	computed
+temperature	T	oC	1	10	400	NODE	input
+tensor permeability	kk	m2	3	1E-21	1.0e-7	ELEMENT	input
+tensor total mobility permeability product	LT	m2/(Pa.s)	3	1E-18	1	ELEMENT	computed
+thermal conductivity	Kr	W/(m.K)	1	1	7	ELEMENT	input
+thermal conductivity aqueous phase	KH2O	W/(m.K)	1	0.5	10	NODE	computed
+thermal conductivity carbonic phase	KCO2	W/(m.K)	1	0.01	10	NODE	computed
+thickness	thi	m	1	1E-10	100000000	ELEMENT	input
+total mass		mTot	kg	1	0.	1.0e10	NODE	computed
+total mobility permeability product	lambda_t	m2/(Pa.s)	1	1E-18	1	ELEMENT	computed
+total system compressibility	ct	1/Pa	1	1E-15	1E-05	ELEMENT	computed
+total velocity		vt	kg/s	2	0.	1.0e-5	ELEMENT	computed
+total velocity		vt	m/s	1	0.	1.0	ELEMENT	computed
+update count			UPC	none		1	0.00E+00	1.00E+10	NODE	computed
+vertical permeability	kV	m2	1	1E-21	1.0E-07	ELEMENT	input
+viscosity aqueous phase	muH2O	Pa.s	1	1E-05	0.0016	NODE	input
+viscosity carbonic phase	muCO2	Pa.s	1	1E-05	0.1	NODE	input
+

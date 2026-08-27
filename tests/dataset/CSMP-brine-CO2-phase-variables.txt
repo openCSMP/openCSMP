@@ -1,0 +1,89 @@
+name	MParameter	unit	index	min.	max.	place
+									
+rocktype				RRT	NA	1	0.		256.		element
+thickness				h	m	1	1.00E-06	1.00E+03	element
+permeability				K	m2	1	0.00E-00	1.00E+00	element
+vertical permeability			KV	m2	1	0.00E-00	1.00E+00	element
+permeability calibration factor		KCF	m2	1	0.		1.00E+00	element
+fracture permeability			KFR	m2	1	1.00E-25	1.00E+00	element
+fault breccia permeability		KBR	m2	1	1.00E-25	1.00E+00	element
+porosity				PHI	X	1	1.00E-05	1.00E+00	element
+fluid pressure				PF	Pa	1	-1.00E+09	1.00E+09	node
+previous fluid pressure			PFP	Pa	1	-1.00E+09	1.00E+09	node
+compressibility rock			CR	Pa-1	1	1.00E-15	1.00E-05	element
+total system compressibility		CT	Pa-1	1	1.00E-15	1.00E-05	element
+previous fluid volume source		QVP	m3	1	-1.00E+00	1.00E+00	element
+fluid volume source			QV	m3	1	-1.00E+00	1.00E+00	element
+nodal fluid volume source		NQV	m3	1	-1.00E+00	1.00E+00	node
+dip vector				vd	X	2	-1.0		1.0		element
+gravity term				G	Pa	2	-1.50E+08	1.50E+08	element
+face dip vector				vdf	X	2	-1.0		1.0		face
+face gravity term			FG	Pa	2	-1.50E+08	1.50E+08	face
+total mobility				LT	m s-1	1	1.00E-20	1.00		element
+mobility oil				LO	m s-1	1	1.00E-20	1.00		element
+mobility water				LW	m s-1	1	1.00E-20	1.00		element
+face total mobility			FLT	m s-1	1	1.00E-20	1.00		face
+capillary diffusivity			DC	m2 s-1	1	1.00E-50	1.00E+00	element
+total velocity				VT	m s-1	2	-1.00E+03	1.00E+03	element
+volume flux				PVF	m3 s-1	1	0.00E+00	1.00E+02	element
+brooks corey parameter			BC	NA	1	0.0		8.0		element
+entry pressure				PD	Pa	1	0.00E+00	5.00E+07	element
+residual saturation wetting phase	SWR	X	1	0.00E+00	5.00E-01	element
+residual saturation non-wetting phase	SOR	X	1	0.00E+00	5.00-01		element
+density oil				RHOO	kg m-3	1	1.00E+02	1.80E+03	node
+density water				RHOW	kg m-3	1	5.00E+02	1.00E+03	node
+viscosity oil				MUO	Pa s	1	1.00E-05	1.00E-01	node
+viscosity water				MUW	Pa s	1	1.00E-04	1.60E-03	node
+compressibility oil			CO	Pa-1	1	1.00E-12	1.00E-04	node
+compressibility water			CW	Pa-1	1	1.00E-12	1.60E-04	node
+saturation oil				SO	X	1	-5.00E-02	1.05E+00	node
+new saturation oil			SO1	X	1	-5.00E-02	1.05E+00	node
+saturation water			SW	X	1	-5.00E-02	1.05E+00	node
+fracture matrix interface area		FMA	m2	1	1.00E-20	1.00E+08	element
+fracture porosity			PHIF	X	1	1.00E-20	1.00E+08	element
+fracture matrix flux ratio		QFQM	X	1	1.00E-20	1.00E+08	element
+fracture intensity			FI	1/m	1	0.		1000.		element
+block radius				BR	m	1	1.00E-20	1.00E+08	element
+initial water saturation		SWI	X	1	1.00E-20	1.00E+08	element
+fault size				FS	m	1	1.		1.00E+05	region
+slip patch area				AS	m2	1	0.1		1.00E+10	region
+failure					FF	X	1	-1.		4.		element
+normal stress				SN	Pa m2	1	-1.00E+08	1.00E+08	element
+shear stress				SS	Pa m2	1	-1.00E+08	1.00E+08	element
+overburden stress			OS	Pa m2	1	0.		1.00E+08	element
+effective stress			SSE	Pa m2	1	-1.00E+08	1.00E+08	element
+dilatation				DIL	X	1	-1.		1.		element
+tipline distance			DTL	m	1	0.		1.00E+05	node
+centerline distance			DCL	m	1	0.		1.00E+05	node
+cfl					CFL	X	1	0.		1.0e6		node
+model time				T	s	1	0.		1.0e+15		model
+run duration				TMAX	s	1	0.		1.0e+15		model
+output times				TOUT	s	1000	0.		1.0e+15		model
+default time increment			DT	s	1	0.001		8640000.	model
+dummy node				DN	m	1	-1e8		1e8		node
+FV pore volume				FVPHI	m3	1	0.		1.00E+07	node
+sector pore volume			SVPHI	m3	1	0.		1.00E+07	sector_integration_point
+flux balance				FB	m3	1	-1e8		1e8		node
+facet area				A	m2	1	0.		1.00E+07	facet_integration_point
+facet normal				UN	m	2	0.		1.0		facet_integration_point
+facet total flux			QFT	m3 s-1	1	-1e8		1e8		facet_integration_point
+facet flux oil				QFO	m3 s-1	1	-1e8		1e8		facet_integration_point
+thermal conductivity			K	W/m	1	1.		10.		element
+heat source				Qh	W/kg	1	0.		1.0e-5		element
+temperature				T	oC	1	10.		180.		node
+interfacial tension			IFT	N/m	1	0.		5.0e-2		model
+CO2 thermal conductivity		KCO2	W/m.K	1	0.01		10.		model
+H2O thermal conductivity		KH2O	W/m.K	1	0.5		10.		model
+XCo2					XCO2aq	X		1	0.	1.		node
+XH2o					XH2Oaq	X		1	0.	1.		node
+YCo2					XCO2g	X		1	0.	1.		node
+YH2o					XH2Og	X		1	0.	1.		node		
+xs					Xsaltaq	X		1	0.	1.		node
+xH2o					mH2Oaq	moles/kg	1	0.	2.		node
+xCo2					mCO2aq	moles/kg	1	0.	2.		node
+yH2o					yH2Og	moles/kg	1	0.	2.		node
+yCo2					yCO2g	moles/kg	1	0.	2.		node
+molality salt				mSalt	moles/kg	1	0. 	5.		node
+diffusivity CO2				DCO2	m2/s		1	1.0e-10	1.0e-5		node
+dissolved CO2				CO2aq	kg/m3		1	0.	150.		node
+dissolved H2O				H2Og	kg/m3		1	0.	50.		node

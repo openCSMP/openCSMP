@@ -1,4 +1,10 @@
 'fracs4-regions.txt' domain selection file
-permeability	porosity	concentration
-MATRIX	1.0e-12	.2		0.
-FRACS		1.0e-10	1.		0.
+no properties
+MATRIX
+FRACS
+LEFT
+RIGHT
+TOP
+BOOTOM
+BACK
+FRONT

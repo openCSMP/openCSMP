@@ -1,0 +1,9 @@
+'SKUA_split_boundary-configuration.txt' for testing SKUA export to CSMP
+
+# (1) global material properties
+fluid volume source						0.0
+fluid pressure							1.0e+07
+
+# (4) conditions on other parts of model
+LEFT	COMPLETE	Dirichlet	fluid pressure	3.0e7	3.0e7	3.0e7	3.0e7
+RIGHT	COMPLETE	Dirichlet	fluid pressure	1.0e7	1.0e7	1.0e7	1.0e7
