@@ -96,6 +96,7 @@ bool TestNodeNeighborConnectivity( const Model<dim>& model )
     size_t n_neighbors{0};
     for ( auto nit : node_neighbors ) n_neighbors += nit.size();
     cout <<"\n\taverage number of neighbors per node: "<< n_neighbors / node_neighbors.size();
+	return n_neighbors >= 2;
 }
 
 

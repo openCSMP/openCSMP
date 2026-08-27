@@ -68,17 +68,8 @@ class DenseMatrix {
     DenseMatrix& operator-=( const DenseMatrix<other_max>& rhs ) noexcept;
     
     template<uint32_t other_max>
-    DenseMatrix  operator+( const DenseMatrix<other_max>& rhs ) const noexcept;
-    
-    template<uint32_t other_max>
-    DenseMatrix  operator-( const DenseMatrix<other_max>& rhs ) const noexcept;
-    
-    template<uint32_t other_max>
     DenseMatrix& operator*=( const DenseMatrix<other_max>& rhs );
     
-    template<uint32_t other_max>
-    DenseMatrix  operator*( const DenseMatrix<other_max>& rhs ) const;
-
     // Standard vector/scalar operations
     DenseMatrix& operator*=( const std::vector<double>& );
     DenseMatrix& operator*=( const double* );
@@ -229,31 +220,6 @@ bool operator==( const DenseMatrix<mn_max_A>&, const DenseMatrix<mn_max_B>& ) no
 
 template<uint32_t mn_max_A, uint32_t mn_max_B>
 bool operator!=( const DenseMatrix<mn_max_A>&, const DenseMatrix<mn_max_B>& ) noexcept;
-
-/// same-type arithmetic operators
-template<uint32_t mn_max>
-DenseMatrix<mn_max> operator+( const DenseMatrix<mn_max>&, const DenseMatrix<mn_max>& );
-
-template<uint32_t mn_max>
-DenseMatrix<mn_max> operator-( const DenseMatrix<mn_max>&, const DenseMatrix<mn_max>& );
-
-template<uint32_t mn_max>
-DenseMatrix<mn_max> operator*( const DenseMatrix<mn_max>&, const DenseMatrix<mn_max>& );
-
-/// matrix-vector and vector-matrix products
-template<uint32_t mn_max>
-std::vector<double> operator*( const DenseMatrix<mn_max>&, const std::vector<double>& );
-
-/// v^T M — returns row matrix
-template<uint32_t mn_max>
-DenseMatrix<mn_max> operator*( const std::vector<double>&, const DenseMatrix<mn_max>& );
-
-/// cross-type matrix multiplication — result sized to max(mn_max_A, mn_max_B)
-template<uint32_t mn_max_A, uint32_t mn_max_B>
-DenseMatrix<(mn_max_A > mn_max_B ? mn_max_A : mn_max_B)>
-  operator*( const DenseMatrix<mn_max_A>&, const DenseMatrix<mn_max_B>& );
-
-
 
 // =============================================================================
 // Inline performance-critical member functions — defined outside the class body
@@ -444,36 +410,6 @@ inline void DenseMatrix<mn_max>::FillCol( uint32_t col, double val ) noexcept
 // =============================================================================
 
 // ----------------------------------------------------------------------
-// operator+
-// ----------------------------------------------------------------------
-template<uint32_t mn_max>
-template<uint32_t other_max>
-inline DenseMatrix<mn_max> DenseMatrix<mn_max>::operator+( const DenseMatrix<other_max>& rhs ) const noexcept
- {
-    DenseMatrix<mn_max> res;
-    res.Resize( rows, cols );
-    for ( uint32_t i{0U}; i < rows; ++i )
-      for ( uint32_t j{0U}; j < cols; ++j )
-        res.data[i][j] = data[i][j] + rhs.data[i][j];
-    return res;
- }
-
-// ----------------------------------------------------------------------
-// operator-
-// ----------------------------------------------------------------------
-template<uint32_t mn_max>
-template<uint32_t other_max>
-inline DenseMatrix<mn_max> DenseMatrix<mn_max>::operator-( const DenseMatrix<other_max>& rhs ) const noexcept
- {
-    DenseMatrix<mn_max> res;
-    res.Resize( rows, cols );
-    for ( uint32_t i{0U}; i < rows; ++i )
-      for ( uint32_t j{0U}; j < cols; ++j )
-        res.data[i][j] = data[i][j] - rhs.data[i][j];
-    return res;
- }
-
-// ----------------------------------------------------------------------
 // operator*=
 // ----------------------------------------------------------------------
 template<uint32_t mn_max>
@@ -513,39 +449,6 @@ DenseMatrix<mn_max>& DenseMatrix<mn_max>::operator*=( const DenseMatrix<other_ma
     return *this;
  }
  
- 
-// ----------------------------------------------------------------------
-// operator*
-// ----------------------------------------------------------------------
-template<uint32_t mn_max>
-template<uint32_t other_max>
-inline DenseMatrix<mn_max> DenseMatrix<mn_max>::operator*( const DenseMatrix<other_max>& rhs ) const
- {
-    static_assert( mn_max >= other_max, "ERROR: DenseMatrix<mn_max>::operator*: lhs matrix too small" );
-    if ( cols != rhs.rows )
-      {
-        std::cerr << "\nDenseMatrix<" << mn_max << ">::operator*: incompatible sizes" << std::endl;
-        throw std::length_error("DenseMatrix::operator*: incompatible sizes");
-      }
-    // Since this returns DenseMatrix<mn_max>, we must ensure it can fit rhs.cols
-    if ( rhs.cols > mn_max )
-      {
-        std::cerr << "\nDenseMatrix<" << mn_max << ">::operator*: return capacity exceeded" << std::endl;
-        throw std::length_error("DenseMatrix::operator*: right-hand cols exceeds return type capacity");
-      }
-      
-    DenseMatrix<mn_max> res;
-    res.Resize( rows, rhs.cols );
-    for ( uint32_t i{0U}; i < rows; ++i )
-      for ( uint32_t j{0U}; j < rhs.cols; ++j )
-        {
-          double sum{0.0};
-          for ( uint32_t k{0U}; k < cols; ++k )
-            sum += data[i][k] * rhs.data[k][j];
-          res.data[i][j] = sum;
-        }
-    return res;
- }
 
 
 // =============================================================================

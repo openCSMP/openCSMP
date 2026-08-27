@@ -29,19 +29,19 @@ indicated by i(column=x) and j(row=y).
 class FiniteDifferenceGrid {
   public:
     FiniteDifferenceGrid();
-    FiniteDifferenceGrid( const FiniteDifferenceGrid& g );
-    
+
     FiniteDifferenceGrid( double x_dim, double y_dim, double xres, double yres, int32_t frame_width=0 );
     
     FiniteDifferenceGrid( double x_min, double x_max, double y_min, double y_max, double xres, double yres, int32_t frame_width=0 );
     
-    ~FiniteDifferenceGrid();
     void Initialize( double x_dim, double y_dim, double xres, double yres, int32_t frame_width=0 );
     
     void Initialize( double x_min, double x_max, double y_min, double y_max, double xres, double yres, int32_t frame_width=0 );
-    
+
     FiniteDifferenceGrid& operator=( const FiniteDifferenceGrid& g );
+
     FiniteDifferenceGrid& operator=( double val );
+
     void  LinearInterpolateOnTo( FiniteDifferenceGrid& grid ) const;
 
     double    InterpolateOutside( double x, double y ) const;
@@ -61,9 +61,9 @@ class FiniteDifferenceGrid {
     double&   SE( int32_t i, int32_t j );
     double    ResolutionX() const;
     double    ResolutionY() const;
-    int32_t Rows()        const;
-    int32_t Columns()     const;
-    bool  HasFrame()    const;
+    int32_t   Rows()        const;
+    int32_t   Columns()     const;
+    bool      HasFrame()    const;
     double    MinX()        const;
     double    MinY()        const;
     double    MinZ()        const;
@@ -105,7 +105,7 @@ class FiniteDifferenceGrid {
 #endif
   
   private:
-    double*  grid = nullptr;
+    std::vector<double>  grid;
     double   xresolution, yresolution;
     double   x_min, y_min, x_max, y_max, z_min, z_max;
     int32_t  size_x, size_y, size_z;

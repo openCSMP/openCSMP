@@ -30,23 +30,21 @@ namespace csmp {
 
 
 FiniteDifferenceGrid::FiniteDifferenceGrid()
-  : grid(0), 
-    xresolution(1.0), yresolution(1.0),
+  : xresolution(1.0), yresolution(1.0),
     x_min(0.0), y_min(0.0), x_max(0.0), y_max(0.0), z_min(0.0), z_max(0.0),
-    size_x(0), size_y(0), size_z(0), rowlength(0), 
+    size_x(0), size_y(0), size_z(0), rowlength(0),
     xfr(0), yfr(0), zfr(0)
-{ 
+{
 //   cout <<"\nFiniteDifferenceGrid: called default constructor..."<< endl;
 }
 
 
 
 
-FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dim,       
-                                            double y_dim, 
+FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dim,
+                                            double y_dim,
                                             double xres, double yres, int32_t frame_width )
-  : grid(0)
- {
+  {
     Initialize( x_dim, y_dim, xres, yres, frame_width );
  }
 
@@ -55,10 +53,9 @@ FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dim,
 
 
 
-FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dmin, double x_dmax, 
-                                                double y_dmin, double y_dmax, 
+FiniteDifferenceGrid::FiniteDifferenceGrid( double x_dmin, double x_dmax,
+                                                double y_dmin, double y_dmax,
                                                 double xres, double yres, int32_t frame_width )
-  : grid(0)
  {
     Initialize( x_dmin, x_dmax, y_dmin, y_dmax, xres, yres, frame_width );
  }
@@ -111,7 +108,7 @@ double  FiniteDifferenceGrid::operator()( int32_t row, int32_t col ) const
            throw std::range_error("const FiniteDifferenceGrid::operator(column access)");
         }
 #endif
-      return grid[ (row+yfr)*rowlength + (col+xfr) ];
+      return grid[ static_cast<size_t>((row+yfr)*rowlength + (col+xfr)) ];
   }
 
 
@@ -211,9 +208,9 @@ double  FiniteDifferenceGrid::X( int32_t i ) const
 #endif
     return i * xresolution + x_min;
  }
- 
- 
- 
+
+
+
 ///returns x-coordinate for row c-style index 0...n
 double  FiniteDifferenceGrid::Y( int32_t j ) const
  {
@@ -263,7 +260,7 @@ void  FiniteDifferenceGrid::ClosestGridPointTo( double x, double y,
 #endif
       col = rint((x-x_min) / xresolution);
       row = rint((y-y_min) / yresolution);
- } 
+ }
 
 
 
@@ -283,29 +280,29 @@ bool FiniteDifferenceGrid::In( const char* fname )
     double     fxmin, fxmax, fymin, fymax, fdx, fdy;
     int32_t  frows, fcols;
 
-    // reading header 
+    // reading header
     ifs.getline( intext, 255 );
-    cout <<"\nTitle of file: '"<< fname <<"': "<< intext << endl;    
+    cout <<"\nTitle of file: '"<< fname <<"': "<< intext << endl;
 
     // overall dimensions
     ifs >> fdx >> fdy;
 
      // x & y ranges
-    ifs >> fxmin >> fxmax >> fymin >> fymax; 
+    ifs >> fxmin >> fxmax >> fymin >> fymax;
 
-    // resolution x and y 
-    ifs >> xresolution >> yresolution; 
+    // resolution x and y
+    ifs >> xresolution >> yresolution;
 
-    // rows x columns     
+    // rows x columns
     ifs >> frows >> fcols;
- 
-    // frame width 
-    ifs >> xfr >> yfr;  
+
+    // frame width
+    ifs >> xfr >> yfr;
     if ( xfr != yfr ) {
          cout <<"\nFiniteDifferenceGrid<double>::In:  Cannot handle different X & Y frame sizes."<< endl;
          throw length_error("FiniteDifferenceGrid<double>::In");
       }
-    
+
     // rebuilding grid
     Initialize( fxmin, fxmax, fymin, fymax, xresolution, yresolution, xfr );
 
@@ -325,27 +322,8 @@ bool FiniteDifferenceGrid::In( const char* fname )
 
 
 
-
-FiniteDifferenceGrid::FiniteDifferenceGrid( const FiniteDifferenceGrid& g )
- : grid(0) // strangely this is an absolute must
- {
-    *this = g;
- }
-
-
-
-
-
-FiniteDifferenceGrid::~FiniteDifferenceGrid()
- {
-    delete[] grid;
- }
-
-
-
-
 void FiniteDifferenceGrid::Initialize( double x_dim, double y_dim,
-				       double xres, double yres, int32_t frame_width )
+				                       double xres, double yres, int32_t frame_width )
  {
      Initialize( 0.0, x_dim, 0.0, y_dim, xres, yres, frame_width );
  }
@@ -353,16 +331,15 @@ void FiniteDifferenceGrid::Initialize( double x_dim, double y_dim,
 
 
 
-void FiniteDifferenceGrid::Initialize( double x_dmin, double x_dmax, 
-                                           double y_dmin, double y_dmax, 
-                                           double xres, double yres, int32_t frame_width )
+void FiniteDifferenceGrid::Initialize( double x_dmin, double x_dmax,
+                                       double y_dmin, double y_dmax,
+                                       double xres, double yres, int32_t frame_width )
  {
      // 0. removing old grid
-     delete[] grid; 
      x_min       = x_dmin;
      x_max       = x_dmax;
      y_min       = y_dmin;
-     y_max       = y_dmax; 
+     y_max       = y_dmax;
      xresolution = xres;
      yresolution = yres;
      xfr = yfr = zfr = frame_width;
@@ -380,49 +357,47 @@ void FiniteDifferenceGrid::Initialize( double x_dmin, double x_dmax,
 
      // 2. extra data member for speed
      rowlength = size_x + 2 * xfr;
-     
+
      // 3. setting up the vector-grid
      cout <<"\nFiniteDifferenceGrid: building new grid; allocating ";
      cout << (((size_x+2*xfr) * (size_y+2*yfr) * sizeof(double)) / 1.0e+6);
      cout <<" MByte of memory..." << endl;
-     
-     grid  = new double[ (size_x+2*xfr) * (size_y+2*yfr) ];
-     
+
      // 4. give initial value of zero
-     *this = 0.0;
+     grid.assign( (size_x+2*xfr) * (size_y+2*yfr), 0.0 );
  }
 
 
 
     double FiniteDifferenceGrid::ResolutionX() const { return xresolution; }
-    
+
 
     double FiniteDifferenceGrid::ResolutionY() const { return yresolution; }
-    
+
 
     int32_t   FiniteDifferenceGrid::Rows()        const { return size_y-1; }
-    
+
 
     int32_t   FiniteDifferenceGrid::Columns()     const { return size_x-1; }
-    
+
 
     bool   FiniteDifferenceGrid::HasFrame()    const { return (xfr!=0||yfr!=0||zfr!=0); }
-    
+
 
     double FiniteDifferenceGrid::MinX()        const { return x_min; }
-    
+
 
     double FiniteDifferenceGrid::MinY()        const { return y_min; }
-    
+
 
     double FiniteDifferenceGrid::MinZ()        const { return z_min; }
-    
+
 
     double FiniteDifferenceGrid::MaxX()        const { return x_max; }
-    
+
 
     double FiniteDifferenceGrid::MaxY()        const { return y_max; }
-    
+
 
     double FiniteDifferenceGrid::MaxZ()        const { return z_max; }
 
@@ -453,20 +428,18 @@ FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( const FiniteDifferenceGri
     xfr         = g.xfr;
     yfr         = g.yfr;
     zfr         = g.zfr;
-    delete[] grid;
-    grid = new double[ (size_x+2*xfr) * (size_y+2*yfr) ];
-    for ( int32_t i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) grid[i] = g.grid[i];
+    grid        = g.grid;
 
-    return *this;    
+    return *this;
  }
- 
- 
+
+
 
 
 FiniteDifferenceGrid& FiniteDifferenceGrid::operator=( double val )
  {
-    for ( int32_t i=0; i<((size_x+2*xfr)*(size_y+2*yfr)); i++ ) grid[i] = val;
-    return *this;    
+    std::fill( grid.begin(), grid.end(), val );
+    return *this;
  }
 
 
@@ -518,7 +491,7 @@ void   FiniteDifferenceGrid::SetLastNRowsTo( int32_t n, double val )
     for ( int32_t i=size_y-1; i>(size_y-1-n); i-- ) SetRowTo( i, val );
  }
 
- 
+
 
 double FiniteDifferenceGrid::RowAverage( int32_t row ) const
  {
@@ -537,21 +510,21 @@ double FiniteDifferenceGrid::ColumnAverage( int32_t col ) const
     assert( col+xfr >= 0 && col < size_x+xfr );
     for ( int32_t i=-yfr; i<(size_y+yfr); i++ ) avg += Value(i,col);
     return avg /= size_y+2*yfr;
- } 
+ }
 
 
 
 void   FiniteDifferenceGrid::SetRegionTo( double xmin, double xmax, double ymin, double ymax, double val )
  {
      int32_t i, j, imin, imax, jmin, jmax;
-     
+
      assert( xmin < xmax );
      assert( ymin < ymax );
      assert( xmax <= x_max );
      assert( ymax <= y_max );
-     
-     ClosestGridPointTo( xmin, ymin, imin, jmin ); 
-     ClosestGridPointTo( xmax, ymax, imax, jmax ); 
+
+     ClosestGridPointTo( xmin, ymin, imin, jmin );
+     ClosestGridPointTo( xmax, ymax, imax, jmax );
 
      for ( i=imin; i<=imax; i++ )
        for ( j=jmin; j<=jmax; j++ ) (*this)(i,j) = val;
@@ -561,7 +534,7 @@ void   FiniteDifferenceGrid::SetRegionTo( double xmin, double xmax, double ymin,
 
 
 void   FiniteDifferenceGrid::Out() const
- { 
+ {
     int32_t i, j;
     cout <<"\n\nFiniteDifferenceGrid<double>::Out(): printing grid of size: ";
     cout << x_max-x_min <<" by "<< y_max-y_min <<" m" << endl;
@@ -573,11 +546,11 @@ void   FiniteDifferenceGrid::Out() const
     cout << size_y <<" rows, "<< size_x <<" columns" << endl;
     cout  << "\n\t";
     for ( j=-xfr; j<size_x+xfr; j++ ) cout << "col "<< j <<"\t";
-    
+
     for ( i=-yfr; i<size_y+yfr; i++ )
       {
          cout <<"\nrow "<< i <<"\t";
-         for ( j=-xfr; j<size_x+xfr; j++ ) 
+         for ( j=-xfr; j<size_x+xfr; j++ )
            cout << (*this)(i,j) <<"\t";
       }
     cout <<"\n\nDone..." << endl;
@@ -593,20 +566,20 @@ void   FiniteDifferenceGrid::Out( const char* fname, int32_t tstep, bool with_fr
     snprintf( num, sizeof(num), "%d", tstep );
     strcat( name, num );
 
-    ofstream ifs( name );    
+    ofstream ifs( name );
     assert( ifs.is_open() );
- 
+
     ifs <<"FiniteDifferenceGrid<double>::Out: ASCII text file from double grid." << endl;
     // overall dimensions
-    ifs << x_max-x_min <<"\t"<< y_max-y_min << endl;    
+    ifs << x_max-x_min <<"\t"<< y_max-y_min << endl;
      // x & y ranges
-    ifs << x_min <<"\t"<< x_max <<"\t"<< y_min <<"\t"<< y_max << endl; 
-    // resolution x and y 
-    ifs << xresolution <<"\t"<< yresolution << endl; 
-    // rows x columns     
-    ifs << size_y <<"\t"<< size_x << endl; 
-    // frame width 
-    if ( with_frame ) ifs << xfr <<" "<< yfr << endl;  
+    ifs << x_min <<"\t"<< x_max <<"\t"<< y_min <<"\t"<< y_max << endl;
+    // resolution x and y
+    ifs << xresolution <<"\t"<< yresolution << endl;
+    // rows x columns
+    ifs << size_y <<"\t"<< size_x << endl;
+    // frame width
+    if ( with_frame ) ifs << xfr <<" "<< yfr << endl;
     else ifs << 0 <<" "<< 0 << endl;
 
     // central portion of grid to file
@@ -634,13 +607,13 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, boo
     snprintf( num, sizeof(num), "%d", tstep );
     strcat( name, num );
     strcpy( heading, "FiniteDifferenceGrid::BinaryOut: double grid as binary file");
- 
+
     fstream fp (name, ios::out | ios::binary);
     if ( !fp.is_open() ) {
         cout <<"\nFiniteDifferenceGrid::BinaryOut: File: "<< bin_name << " could not be opened"<< endl;
         return false;
       }
-    binaryFileWrite( fp, heading );  
+    binaryFileWrite( fp, heading );
 
     // stores dimensions of grid
     std::vector<double>    dim_fT(8);
@@ -649,34 +622,34 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, boo
     // grid data
     std::vector<double>    grid_data((static_cast<uint32_t>(size_x)+2*static_cast<uint32_t>(xfr)) * (static_cast<uint32_t>(size_y)+2*static_cast<uint32_t>(yfr)));
     size_t counter(0);
-    
+
     // overall dimensions
     dim_fT[0] = x_max-x_min;
     dim_fT[1] = y_max-y_min;
      // x & y ranges
-    dim_fT[2] = x_min; 
+    dim_fT[2] = x_min;
     dim_fT[3] = x_max;
     dim_fT[4] = y_min;
-    dim_fT[5] = y_max; 
-    // resolution x and y 
+    dim_fT[5] = y_max;
+    // resolution x and y
     dim_fT[6] = xresolution;
-    dim_fT[7] = yresolution; 
-    // rows x columns     
+    dim_fT[7] = yresolution;
+    // rows x columns
     dim_int[0] = size_x;
-    dim_int[1] = size_y; 
-    // frame width 
+    dim_int[1] = size_y;
+    // frame width
     if ( with_frame ) {
         dim_int[2] = xfr;
-        dim_int[3] = yfr;  
+        dim_int[3] = yfr;
       }
     else {
         dim_int[2] = 0;
-        dim_int[3] = 0;  
+        dim_int[3] = 0;
       }
-    
-    binaryFileWrite( fp, dim_fT ); 
-    binaryFileWrite( fp, dim_int ); 
-    
+
+    binaryFileWrite( fp, dim_fT );
+    binaryFileWrite( fp, dim_int );
+
     // writing grid data to storage vector
     if ( !with_frame )
       for ( int32_t i=0; i<size_y; i++ ) {
@@ -692,12 +665,12 @@ bool   FiniteDifferenceGrid::BinaryOut( const char* bin_name, int32_t tstep, boo
                counter++;
              }
         }
-    
-   binaryFileWrite( fp, grid_data ); 
+
+   binaryFileWrite( fp, grid_data );
    fp.close();
 
    cout <<"\n\n'" << bin_name <<"' written successfully..." << endl;
-   
+
    return true;
  }
 
@@ -712,7 +685,7 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
         return false;
      }
     char heading[200];
-    binaryFileRead( fp, heading ); 
+    binaryFileRead( fp, heading );
     cout <<"\nFiniteDifferenceGrid::BinaryIn: Reading: "<< heading << endl;
 
     // read dimensions of grid
@@ -724,8 +697,8 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
     size_t counter(0);
 
     // read info about dimension
-    binaryFileRead( fp, dim_fT ); 
-    binaryFileRead( fp, dim_int ); 
+    binaryFileRead( fp, dim_fT );
+    binaryFileRead( fp, dim_int );
 
     if ( dim_int[2] != dim_int[3] ) {
          cout <<"\nFiniteDifferenceGrid::BinaryIn:  Cannot handle different X & Y frame sizes."<< endl;
@@ -736,16 +709,16 @@ bool FiniteDifferenceGrid::BinaryIn( const char* bin_name )
     Initialize( dim_fT[2], dim_fT[3], dim_fT[4], dim_fT[5], dim_fT[6], dim_fT[7], xfr );
 
     // read data and transfer to grid
-    binaryFileRead( fp, grid_data ); 
+    binaryFileRead( fp, grid_data );
     for ( int32_t i=-dim_int[3]; i<dim_int[1]+dim_int[3]; i++ ) {
         for ( int32_t j=-dim_int[2]; j<dim_int[0]+dim_int[2]; j++ ) {
             (*this)(i,j) = grid_data[counter];
             counter++;
           }
-      }  
+      }
 
  	  fp.close();
-    
+
     cout <<"\nFiniteDifferenceGrid<double>::BinaryIn: grid build successfully from binary file." << endl;
     cout.flush();
 
@@ -760,14 +733,14 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double& dmin, double& dmax,
     int32_t  i, j;
     double val;
     bool first_call(true);
-     
+
     if ( frame_included )
       {
 	// getting min and max of the data (including frame)
-        for ( dmax=dmin=grid[0], i=1; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) 
+        for ( dmax=dmin=grid[0], i=1; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ )
            {
              if ( !isnan( grid[i] ) ) {
-                 if ( first_call ) { 
+                 if ( first_call ) {
                      dmin = dmax = grid[i];
                      first_call = false;
                    }
@@ -781,10 +754,10 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double& dmin, double& dmax,
 	// getting min and max of the data (excluding frame)
         dmax=dmin=(*this)( static_cast<int32_t>(0), static_cast<int32_t>(0) );
         for ( i=0; i<size_y; i++ )
-          for ( j=0; j<size_x; j++ ) 
+          for ( j=0; j<size_x; j++ )
            {
                if ( !isnan( (*this)(i,j) ) ) {
-                   if ( first_call ) { 
+                   if ( first_call ) {
                        dmin = dmax = (*this)(i,j);
                        first_call = false;
                      }
@@ -793,7 +766,7 @@ void  FiniteDifferenceGrid::DataMinMaxWithoutNAN( double& dmin, double& dmax,
                    if ( val < dmin ) dmin = val;
                  }
            }
-      }    
+      }
  } // end
 
 
@@ -803,11 +776,11 @@ void  FiniteDifferenceGrid::DataMinMax( double& dmin, double& dmax,
  {
     int32_t  i, j;
     double val;
-         
+
     if ( frame_included )
       {
 	// getting min and max of the data (including frame)
-        for ( dmax=dmin=grid[0], i=1; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) 
+        for ( dmax=dmin=grid[0], i=1; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ )
            {
              if ( grid[i] > dmax ) dmax = grid[i];
              if ( grid[i] < dmin ) dmin = grid[i];
@@ -818,13 +791,13 @@ void  FiniteDifferenceGrid::DataMinMax( double& dmin, double& dmax,
 	// getting min and max of the data (excluding frame)
         dmax=dmin=(*this)( static_cast<int32_t>(0),static_cast<int32_t>(0) );
         for ( i=0; i<size_y; i++ )
-          for ( j=0; j<size_x; j++ ) 
+          for ( j=0; j<size_x; j++ )
            {
              val = (*this)(i,j);
              if ( val > dmax ) dmax = val;
              if ( val < dmin ) dmin = val;
            }
-      }    
+      }
  } // end
 
 
@@ -835,9 +808,9 @@ void   FiniteDifferenceGrid::ScaleDataToRange( double dmin, double dmax )
     double  old_min, old_max;
     DataMinMax( old_min, old_max, false );
     double  old_range = old_max - old_min;
-    double  new_range = dmax - dmin;  
+    double  new_range = dmax - dmin;
 
-    for ( int32_t i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ ) 
+    for ( int32_t i=0; i<((size_x+2*xfr) * (size_y+2*yfr)); i++ )
       grid[i] = dmin + ((grid[i] - old_min)/old_range) * new_range;
 
  } // end ScaleDataToRange
@@ -853,11 +826,11 @@ void   FiniteDifferenceGrid::ScaleDataToRange( double dmin, double dmax )
 
 
 /// 4 point, third order polynomial extrapolation
-void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya, 
-                                                     double  x,  double& y, 
+void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya,
+                                                     double  x,  double& y,
                                                      double& dy ) const
 {
-    // constraint point arrays are: xa[], double ya[], 
+    // constraint point arrays are: xa[], double ya[],
     double  c[5], d[5];
     int32_t     i, m, ns=1;
     double  den, dif, dift, ho, hp, w;
@@ -877,7 +850,7 @@ void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya,
 			ho=xa[i]-x;
 			hp=xa[i+m]-x;
 			w=c[i+1]-d[i];
-			if ( (den=ho-hp) == 0.0) 
+			if ( (den=ho-hp) == 0.0)
 			  {
 			     cout <<"\nFiniteDifferenceGrid<double>::PolynomialInterpolation: ";
 			     cout <<"Error. No interpolation was accomplished."<< endl;
@@ -888,7 +861,7 @@ void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya,
 			     for ( int32_t j=1; j<=4; j++ ) cout << ya[j] <<" ";
 			     cout << endl;
 			     // setting output to zero
-			     y  = 0.0; 
+			     y  = 0.0;
 			     dy = 0.0;
 			     return;
 			  }
@@ -898,7 +871,7 @@ void  FiniteDifferenceGrid::PolynomialInterpolation( double* xa, double* ya,
 		}
 		y += (dy=(2*ns < (4-m) ? c[ns+1] : d[ns--]));
 	}
-	
+
 } // end PolynomialInterpolation
 
 
@@ -918,7 +891,7 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
     int32_t        i;
     double         a = std::numeric_limits<double>::quiet_NaN();
    double          err{0.};
-    
+
     // 1. outside normal boundaries
     // ----------------------------
     if ( x >= x_min && x <= x_max )
@@ -934,7 +907,7 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
                    ya[i] = (*this)(x,a);
                 }
            }
-         else 
+         else
          // TOP OUT
          if ( y < y_min )
            {
@@ -950,7 +923,7 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
       }
     if ( y >= y_min && y <= y_max )
       {
-         // LEFT OUT 
+         // LEFT OUT
          if ( x < x_min )
            {
               for ( i=1, a=x_min; a<=x_min+3*xresolution; a+=xresolution, i++ )
@@ -973,13 +946,13 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
 
          return a;
       }
-      
-    // 2. corner cases 
+
+    // 2. corner cases
     // ---------------
     double m, len_fac;
-    
+
     // BELOW ORIGIN
-    if ( x < x_min && y < y_min ) 
+    if ( x < x_min && y < y_min )
       {
          // slope of line from interpolation point through origin to find on-grid
          // interpolation coordinates f(x) = mx + x0
@@ -987,7 +960,7 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
          //       of the grid in order to find the appropriate value.
          m       = (y-y_min) / (x-x_min);
          len_fac = sqrt( 1.0 + m*m );
-         
+
          for ( i=1, a=x_min; a<=x_min+3*xresolution; a+=xresolution, i++ )
            {
               // scaling x to reflect pathlength aint32_t sloping line
@@ -999,11 +972,11 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
          a = len_fac * (x-x_min);
       }
     // LOWER-LEFT CORNER
-    if ( x < x_min && y > y_max ) 
+    if ( x < x_min && y > y_max )
       {
          m       = (y-y_max) / (x-x_min);
          len_fac = sqrt( 1.0 + m*m );
-         
+
          for ( i=1, a=x_min; a<=x_min+3*xresolution; a+=xresolution, i++ )
            {
               xa[i] = (i-1)*xresolution*len_fac;
@@ -1012,11 +985,11 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
          a = len_fac * (x-x_min);
       }
     // LOWER RIGHT CORNER
-    if ( x > x_max && y > y_max ) 
+    if ( x > x_max && y > y_max )
       {
          m       = (y-y_max) / (x-x_max);
          len_fac = sqrt( 1.0 + m*m );
-         
+
          for ( i=1, a=x_max-3*xresolution; a<=x_max; a+=xresolution, i++ )
            {
               xa[i] = (4-i)*xresolution*len_fac;
@@ -1025,11 +998,11 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
          a = len_fac * (x_max-x);
       }
     // TOP-RIGHT CORNER
-    if ( x > x_max && y < y_min )     
+    if ( x > x_max && y < y_min )
       {
          m       = (y-y_min) / (x-x_max);
          len_fac = sqrt( 1.0 + m*m );
-         
+
          for ( i=1, a=x_max-3*xresolution; a<=x_max; a+=xresolution, i++ )
            {
               xa[i] = (4-i)*xresolution*len_fac;
@@ -1044,690 +1017,452 @@ double  FiniteDifferenceGrid::ExtrapolateTo( double x, double y ) const
 //    for ( i=1; i<=4; i++ )
 //       cout <<"x: "<< xa[i] <<", f(x): "<< ya[i] << endl;
 //    cout << endl;
-      
-    return y;  
-      
- } // end ExtrapolateTo
 
+    return y;
+
+ } // end ExtrapolateTo
 
 
 #ifdef CSMP_WITH_IMAGE_OUTPUT
 
-/* writes Pixmaps with the following header:
-P3       // P3 signifies ascii format
-# CREATOR: CSMP FiniteDifferenceGrid::SaveToPPM() Matthai & Roberts 1999
-114 15   // rows x (columns * 3)
-255      // colors
-3  3  5    5  6  7  // R G B for each pixel
-*/
+// =============================================================================
+// RAII helpers — local to this translation unit
+// =============================================================================
 
-void   FiniteDifferenceGrid::SaveToPPM( const char* filename, int32_t timestep, bool greyscale ) const
- {
-    // rgb color stuff (created only once)
-    static ColorPalette  rgb_colorizer;  // default rainbow scale 1-255
-    float                colors[4];      // color values RGB A
-    if ( greyscale )     rgb_colorizer.MakeGreyPalette();
-    
-    // file name + extension
-    char name[200], num[30];
-    strcpy( name, filename );
-    snprintf( num, sizeof(num), "%d", timestep );
-    strcat( name, num );
-    strcat( name, ".ppm" );
+namespace {
 
-    ofstream ifs( name );
-    assert( ifs.is_open() );
-    
-    // obtain data range to scale the data to 0-255 for output
-    double  old_min, old_max;
-    DataMinMax( old_min, old_max, false );
-    double  old_range = old_max - old_min;
-    double  new_range = 255.0; 
-    double  out_val; 
-    int32_t    i, j;
+/// RAII wrapper for jpeg_compress_struct — ensures jpeg_destroy_compress
+/// is always called on any exit path, including exceptions.
+struct JpegCompressGuard
+{
+    jpeg_compress_struct* p;
+    ~JpegCompressGuard() { jpeg_destroy_compress( p ); }
+};
 
-    // data format tag 
-    ifs <<"P3"<< endl;
-    // binary output: ifs <<"P6"<< endl;
+/// Lambda deleter for std::unique_ptr<FILE> — avoids the
+/// -Wignored-attributes warning produced by decltype(&fclose).
+auto make_file_deleter()
+{
+    return []( FILE* f ) { if ( f ) fclose( f ); };
+}
 
-    // creator comment line
-    ifs <<"# CREATOR: CSMP FiniteDifferenceGrid<double>::SaveToPPM() Matthai & Roberts 1999." << endl;
-    
-    // writing the file name, timestep and data range into a comment line
-    ifs <<"# Filename: "<< filename <<", timestep: "<< timestep;
-    ifs <<", data value, min: "<< old_min <<", max: "<< old_max << endl;
-    
-    // output file size specifier
-    ifs << size_x <<" "<< size_y << endl;
-    
-    // how many color values
-    ifs << 255 << endl;    
+using FilePtr = std::unique_ptr<FILE, decltype(make_file_deleter())>;
 
-    // creating RGB datablock for central grid portion without frame 
-    for ( i=size_y-1; i>=0; i-- )
-      {
-        for ( j=0; j<size_x; j++ ) 
-          {
-             // scaling value to 0-256 scale
-             out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
-             // getting red,green, blue color values
-             rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
-             ifs.width(3);
-             ifs << static_cast<short>(colors[0]) <<" ";
-             ifs.width(3);
-             ifs << static_cast<short>(colors[1]) <<" ";
-             ifs.width(3);
-             ifs << static_cast<short>(colors[2]) <<" ";
-          }  
-        ifs << endl;
-      }
+/// Opens a file for binary writing and returns a RAII-managed pointer.
+/// Returns an empty unique_ptr if the file cannot be opened.
+FilePtr open_jpeg_file( const std::string& name )
+{
+    return FilePtr( fopen( name.c_str(), "wb" ), make_file_deleter() );
+}
 
-    ifs.close();
-    cout <<"\n\n'" << name <<"' written successfully..." << endl;
-          
- } // end SaveToPPM
-
-
-
-
-
-/**
-
-writes Grid to JPG image. Default is RGB in which case the method writes 
-24 bit colors (3 1-byte floats for each pixel). If greyscale is chosen the 
-writing becomes much faster and the image file will be only one-third
-of the RGB image size. If a property value is NAN, the according color will be black.
-*/
-
-void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t timestep, 
-                                                bool greyscale, bool sqrt_of ) const
- {
-    // rgb color stuff (created only once)
-    ColorPalette      rgb_colorizer;  // default rainbow scale 1-255
-    float             colors[4];      // color values RGB A
-    if ( greyscale )  rgb_colorizer.MakeGreyPalette();
-    
-    // file name + extension
+/// Builds the output filename from base name and zero-padded timestep.
+std::string make_jpeg_filename( const char* filename, int32_t timestep )
+{
     char num[30];
     snprintf( num, sizeof(num), "%d", timestep );
-    string  name(filename), padded_string( num );
-    replaceWhiteSpaceBy( padded_string, '0' );
-    name += padded_string;
-    name +=".jpg";
+    std::string padded( num );
+    replaceWhiteSpaceBy( padded, '0' );
+    return std::string( filename ) + padded + ".jpg";
+}
 
-    // obtain data range to scale the data to 0-255 for output
-    double  old_min, old_max;
-    DataMinMaxWithoutNAN( old_min, old_max, false );
-    cout.setf( ios::scientific );
-    cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
-    cout.unsetf( ios::scientific );
-    
-    // if old_min = old_max a textfile with the variable name and value is output instead
-    // (there is no need to go through the whole JPEG procedure if only a single value would be output)
-    ofstream ofs;
+/// Writes a uniform-value text file instead of a JPEG when min == max.
+/// Returns true if the text file was written.
+bool write_uniform_value_file( const std::string& jpeg_name,
+                               double value, int32_t timestep )
+{
+    std::string txt_name = jpeg_name + ".txt";
+    std::ofstream ofs( txt_name, std::ios::out | std::ios::trunc );
+    if ( !ofs ) {
+        std::cout << "\nOutput file: " << txt_name
+                  << " could not be opened. Nothing was done..." << std::endl;
+        return false;
+    }
+    ofs << txt_name << ": Uniform variable value: "
+        << value << " at timestep: " << timestep << std::endl;
+    std::cout << "\n\n'" << txt_name << "' written instead of JPG file..." << std::endl;
+    return true;
+}
 
-    if ( old_min == old_max )
-      {
-         name +=".txt";
-         ofs.open ( name.c_str(), ios::out|ios::trunc );
-         if ( !ofs ) 
-           cout <<"\nOutput file: "<< name <<" could not be opened. Nothing was done..." << endl;
-         else 
-           {
-              ofs << name <<": ";
-              ofs <<" Uniform variable value: "<< old_max <<" at timestep: "<< timestep << endl;
-              ofs.close();
-              cout <<"\n\n'" << name <<"' written instead of JPG file..." << endl;
-           }
-         return;
-      }
-    
-    // creating a scale factor for the data
-    if ( sqrt_of )
-      {
-         old_min = sqrt( old_min );
-         old_max = sqrt( old_max );
-      }
-    double  old_range = old_max - old_min;
-    double  new_range = 255.0; 
-    double  out_val; 
-
-    // ----------------------------------------------------------------------------------
-    // JPG Stuff
-    // ----------------------------------------------------------------------------------
-    // creating RGB scanline memory for central grid portion without frame
-    JSAMPROW          row_pointer[1];
-    int32_t           image_components = 3;
-    if ( greyscale )  image_components = 1;
-    int32_t           row_stride = size_x * image_components;
-  
-    // allocating image memory buffer and storing RGB values within it  
-    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
-
-      for ( int32_t incr{0}, i=size_y-1; i>=0; i-- )
-        for ( int32_t j{0}; j<size_x; j++ )
-          {
-             // scaling value to 0-256 scale
-             if ( sqrt_of ) {
-                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
-                 else                               out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
-               }
-             else {
-                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
-                 else                               out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
-               }
-             if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
-             else
-               {
-                  // getting red,green, blue color values
-                  if ( isnan( (*this)(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
-                  else                               rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
-               }
-          }
- 
-    // setting up the jpg storage structures
-    jpeg_compress_struct  cinfo;
-    jpeg_error_mgr        jerr;
-    
-    // initializing the error manager in the compression object
-    cinfo.err = jpeg_std_error( &jerr );
-    jpeg_create_compress( &cinfo );
-    
-    FILE*  outfile;
-    if ((outfile = fopen(name.c_str(), "wb")) == NULL ) 
-      {
-          cout <<"\nFiniteDifferenceGrid:SaveToJPG: cannot open outputfile: "<< name << endl;
-          return;
-      }
-    jpeg_stdio_dest( &cinfo, outfile );
-    
-    // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32_t>(size_x);
-    cinfo.image_height     = static_cast<uint32_t>(size_y);
-    cinfo.input_components = 3;        // color values per pixel
-    cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
-    if ( greyscale ) 
-      {
-        cinfo.input_components = 1;        // color values per pixel
-        cinfo.in_color_space   = JCS_GRAYSCALE; 
-      }
-
-    // assigning the values
+/// Configures a jpeg_compress_struct for the given image dimensions,
+/// component count and colour space.
+void configure_jpeg( jpeg_compress_struct& cinfo,
+                     int32_t width, int32_t height,
+                     int32_t components, bool greyscale )
+{
+    cinfo.image_width      = static_cast<JDIMENSION>( width  );
+    cinfo.image_height     = static_cast<JDIMENSION>( height );
+    cinfo.input_components = components;
+    cinfo.in_color_space   = greyscale ? JCS_GRAYSCALE : JCS_RGB;
     jpeg_set_defaults( &cinfo );
-    
-    // writing data to file: TRUE for complete jpg interchange datastream
+}
+
+/// Writes the image buffer to the open JPEG compressor scanline by scanline.
+void write_jpeg_scanlines( jpeg_compress_struct& cinfo,
+                           const std::vector<unsigned char>& image_buffer,
+                           int32_t row_stride )
+{
     jpeg_start_compress( &cinfo, TRUE );
     while ( cinfo.next_scanline < cinfo.image_height )
-      {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
-          jpeg_write_scanlines( &cinfo, row_pointer, 1 );
-      }
+    {
+        JSAMPROW row = const_cast<JSAMPROW>(
+            &image_buffer[ cinfo.next_scanline
+                           * static_cast<JDIMENSION>( row_stride ) ] );
+        jpeg_write_scanlines( &cinfo, &row, 1 );
+    }
     jpeg_finish_compress( &cinfo );
-    fclose( outfile );
+}
 
-    // cleanup
-    jpeg_destroy_compress( &cinfo );  
-    delete[] image_buffer;
-
-    cout <<"\n'" << name <<"' written successfully..." << endl;
-          
- } // end SaveToJPG
+} // anonymous namespace
 
 
+// =============================================================================
+// SaveToJPGWithoutNAN — auto data range
+// =============================================================================
 
+void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename,
+                                                int32_t     timestep,
+                                                bool        greyscale,
+                                                bool        sqrt_of ) const
+{
+    ColorPalette rgb_colorizer;
+    float        colors[4];
+    if ( greyscale ) rgb_colorizer.MakeGreyPalette();
 
+    const std::string name = make_jpeg_filename( filename, timestep );
 
-
-
-/**
-
-As method above but allows to specify a fixed value range, such that the
-color range does not vary from timestep to timestep.  
-*/
-
-void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename, int32_t timestep, 
-                                                    double vmin, double vmax, 
-                                                    bool greyscale, bool sqrt_of ) const
- {
-    // rgb color stuff (created only once)
-    ColorPalette         rgb_colorizer;  // default rainbow scale 1-255
-    float                colors[4];      // color values RGB A
-    if ( greyscale )     rgb_colorizer.MakeGreyPalette();
-    
-    // file name + extension
-    char num[30];
-    snprintf( num, sizeof(num), "%d", timestep );
-    string  name(filename), padded_string( num );
-    replaceWhiteSpaceBy( padded_string, '0' );
-    name += padded_string;
-    name +=".jpg";
-
-    // obtain data range to scale the data to 0-255 for output
-    double  old_min, old_max;
+    double old_min, old_max;
     DataMinMaxWithoutNAN( old_min, old_max, false );
-    cout.setf( ios::scientific );
-    cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
-    cout.unsetf( ios::scientific );
-    
-    if ( vmin > old_min ) {
-         cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' ";
-         cout <<"Data minimum is smaller than prescribed minimum; setting minimum to actual value."<< endl; 
-      }
-    // if the actual values are within the prescribed range, this range is used  
-    else old_min = vmin;
-    
-    if ( vmax < old_max ) {
-         cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' ";
-         cout <<"Data maximum is larger than prescribed maximum; setting maximum to actual value."<< endl; 
-      }
-    else old_max = vmax;
-    
-    // if old_min = old_max a textfile with the variable name and value is output instead
-    // (there is no need to go through the whole JPEG procedure if only a single value would be output)
-    ofstream ofs;
+    std::cout.setf( std::ios::scientific );
+    std::cout << "\nFiniteDifferenceGrid::SaveToJPGWithoutNAN: '" << filename
+              << "' data range: " << old_min << " to " << old_max << std::endl;
+    std::cout.unsetf( std::ios::scientific );
 
-    if ( old_min == old_max )
-      {
-         name +=".txt";
-         ofs.open ( name.c_str(), ios::out|ios::trunc );
-         if ( !ofs ) 
-           cout <<"\nOutput file: "<< name <<" could not be opened. Nothing was done..." << endl;
-         else 
-           {
-              ofs << name <<": ";
-              ofs <<" Uniform variable value: "<< old_max <<" at timestep: "<< timestep << endl;
-              ofs.close();
-              cout <<"\n\n'" << name <<"' written instead of JPG file..." << endl;
-           }
-         return;
-      }
-    
-    // creating a scale factor for the data
-    if ( sqrt_of )
-      {
-         old_min = sqrt( old_min );
-         old_max = sqrt( old_max );
-      }
-    double  old_range = old_max - old_min;
-    double  new_range = 255.0; 
-    double  out_val; 
-
-    // ----------------------------------------------------------------------------------
-    // JPG Stuff
-    // ----------------------------------------------------------------------------------
-    // creating RGB scanline memory for central grid portion without frame
-    JSAMPROW          row_pointer[1];
-    int               image_components = 3;
-    if ( greyscale )  image_components = 1;
-    int               row_stride = size_x * image_components;
-  
-    // allocating image memory buffer and storing RGB values within it  
-    unsigned char* image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
-
-      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
-        for ( int32_t j=0; j<size_x; j++ )
-          {
-             // scaling value to 0-256 scale
-             if ( sqrt_of ) {
-                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
-                 else                               out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
-               }
-             else {
-                 if ( isnan( (*this)(i,j) ) ) out_val = 255.0;
-                 else                               out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
-               }
-             if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
-             else
-               {
-                  // getting red,green, blue color values
-                  if ( isnan( (*this)(i,j) ) ) colors[0] = colors[1] = colors[2] = colors[3] = 255;
-                  else                               rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
-               }
-
- 
-          }
- 
-    // setting up the jpg storage structures
-    jpeg_compress_struct  cinfo;
-    jpeg_error_mgr        jerr;
-    
-    // initializing the error manager in the compression object
-    cinfo.err = jpeg_std_error( &jerr );
-    jpeg_create_compress( &cinfo );
-    
-    FILE*  outfile;
-    if ((outfile = fopen(name.c_str(), "wb")) == NULL ) 
-      {
-          cout <<"\nFiniteDifferenceGrid:SaveToJPG: cannot open outputfile: "<< name << endl;
-          return;
-      }
-    jpeg_stdio_dest( &cinfo, outfile );
-    
-    // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32_t>(size_x);
-    cinfo.image_height     = static_cast<uint32_t>(size_y);
-    cinfo.input_components = 3;        // color values per pixel
-    cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
-    if ( greyscale ) 
-      {
-        cinfo.input_components = 1;        // color values per pixel
-        cinfo.in_color_space   = JCS_GRAYSCALE; 
-      }
-
-    // assigning the values
-    jpeg_set_defaults( &cinfo );
-    
-    // writing data to file: TRUE for complete jpg interchange datastream
-    jpeg_start_compress( &cinfo, TRUE );
-    while ( cinfo.next_scanline < cinfo.image_height )
-      {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
-          jpeg_write_scanlines( &cinfo, row_pointer, 1 );
-      }
-    jpeg_finish_compress( &cinfo );
-    fclose( outfile );
-
-    // cleanup
-    jpeg_destroy_compress( &cinfo );  
-    delete[] image_buffer;
-
-    cout <<"\n'" << name <<"' written successfully..." << endl;
-          
- } // end SaveToJPG (fixed range)
-
-
-/**
-
-writes Grid to JPG image. Default is RGB in which case the method writes 
-24 bit colors (3 1-byte floats for each pixel). If greyscale is chosen the 
-writing becomes much faster and the image file will be only one-third
-of the RGB image size.
-
-'sqrt' (default=false) allows you to store the square root of the value.
-*/
-
-void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep, 
-                                      bool greyscale, bool sqrt_of ) const
- {
-    // rgb color stuff (created only once)
-    ColorPalette  rgb_colorizer;  // default rainbow scale 1-255
-    float                colors[4];      // color values RGB A
-    if ( greyscale )     rgb_colorizer.MakeGreyPalette();
-    
-    // file name + extension
-    char num[30];
-    snprintf( num, sizeof(num), "%d", timestep );
-    string  name(filename), padded_string( num );
-    replaceWhiteSpaceBy( padded_string, '0' );
-    name += padded_string;
-    name +=".jpg";
-
-    // obtain data range to scale the data to 0-255 for output
-    double  old_min, old_max;
-    DataMinMax( old_min, old_max, false );
-    cout.setf( ios::scientific );
-    cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
-    cout.unsetf( ios::scientific );
-    
-    // if old_min = old_max a textfile with the variable name and value is output instead
-    // (there is no need to go through the whole JPEG procedure if only a single value would be output)
-    ofstream ofs;
-
-    if ( old_min == old_max )
-      {
-         name +=".txt";
-         ofs.open ( name.c_str(), ios::out|ios::trunc );
-         if ( !ofs ) 
-           cout <<"\nOutput file: "<< name <<" could not be opened. Nothing was done..." << endl;
-         else 
-           {
-              ofs << name <<": ";
-              ofs <<" Uniform variable value: "<< old_max <<" at timestep: "<< timestep << endl;
-              ofs.close();
-              cout <<"\n\n'" << name <<"' written instead of JPG file..." << endl;
-           }
-         return;
-      }
-    
-    // creating a scale factor for the data
-    if ( sqrt_of )
-      {
-         old_min = sqrt( old_min );
-         old_max = sqrt( old_max );
-      }
-    double  old_range = old_max - old_min;
-    double  new_range = 255.0; 
-
-    // ----------------------------------------------------------------------------------
-    // JPG Export (C++20 RAII Style)
-    // ----------------------------------------------------------------------------------
-
-    int32_t image_components = greyscale ? 1 : 3;
-    int32_t row_stride = size_x * image_components;
-
-    // Use std::vector for automatic memory management
-    std::vector<unsigned char> image_buffer(static_cast<size_t>(size_x * size_y * image_components));
-
-    size_t incr = 0;
-    for (int32_t i = size_y - 1; i >= 0; i--) {
-        for (int32_t j = 0; j < size_x; j++) {
-            // Pre-calculate common factors if possible, but keeping your logic:
-            double val = (*this)(i, j);
-            double out_val = sqrt_of ? ((std::sqrt(val) - old_min) / old_range) * new_range
-                                    : ((val - old_min) / old_range) * new_range;
-
-            if (greyscale) {
-                image_buffer[incr++] = static_cast<unsigned char>(out_val);
-            } else {
-                rgb_colorizer.GiveRgb(static_cast<float>(out_val), colors);
-                image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
-                image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
-                image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
-            }
-        }
+    if ( old_min == old_max ) {
+        write_uniform_value_file( name, old_max, timestep );
+        return;
     }
 
-    // RAII for FILE pointer
-    std::unique_ptr<FILE, decltype(&fclose)> outfile(fopen(name.c_str(), "wb"), &fclose);
-    if (!outfile) {
-        std::cerr << "Error: Cannot open " << name << std::endl;
+    if ( sqrt_of ) { old_min = std::sqrt( old_min ); old_max = std::sqrt( old_max ); }
+    const double old_range = old_max - old_min;
+    const double new_range = 255.0;
+
+    const int32_t image_components = greyscale ? 1 : 3;
+    const int32_t row_stride       = size_x * image_components;
+
+    std::vector<unsigned char> image_buffer(
+        static_cast<size_t>( size_x * size_y * image_components ) );
+
+    size_t incr = 0;
+    for ( int32_t i = size_y - 1; i >= 0; --i )
+        for ( int32_t j = 0; j < size_x; ++j )
+        {
+            const double val = (*this)( i, j );
+            double out_val;
+            if ( std::isnan( val ) )
+                out_val = 255.0;
+            else if ( sqrt_of )
+                out_val = ( ( std::sqrt( val ) - old_min ) / old_range ) * new_range;
+            else
+                out_val = ( ( val - old_min ) / old_range ) * new_range;
+
+            if ( greyscale ) {
+                image_buffer[incr++] = static_cast<unsigned char>( out_val );
+            } else {
+                if ( std::isnan( val ) )
+                    colors[0] = colors[1] = colors[2] = 255.0f;
+                else
+                    rgb_colorizer.GiveRgb( static_cast<float>( out_val ), colors );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[0] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[1] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[2] );
+            }
+        }
+
+    auto outfile = open_jpeg_file( name );
+    if ( !outfile ) {
+        std::cerr << "\nFiniteDifferenceGrid::SaveToJPGWithoutNAN: cannot open: "
+                  << name << std::endl;
         return;
     }
 
     jpeg_compress_struct cinfo;
-    jpeg_error_mgr jerr;
+    jpeg_error_mgr       jerr;
+    JpegCompressGuard    guard{ &cinfo };
 
-    cinfo.err = jpeg_std_error(&jerr);
-    jpeg_create_compress(&cinfo);
-    jpeg_stdio_dest(&cinfo, outfile.get());
-
-    cinfo.image_width  = static_cast<JDIMENSION>(size_x);
-    cinfo.image_height = static_cast<JDIMENSION>(size_y);
-    cinfo.input_components = image_components;
-    cinfo.in_color_space   = greyscale ? JCS_GRAYSCALE : JCS_RGB;
-
-    jpeg_set_defaults(&cinfo);
-    jpeg_start_compress(&cinfo, TRUE);
-
-    while (cinfo.next_scanline < cinfo.image_height) {
-        JSAMPROW row_pointer = &image_buffer[ cinfo.next_scanline * static_cast<JDIMENSION>(row_stride) ];
-        jpeg_write_scanlines(&cinfo, &row_pointer, 1);
-    }
-
-    jpeg_finish_compress(&cinfo);
-    jpeg_destroy_compress(&cinfo);
-
- } // end SaveToJPG
-
-
-
-
-
-
-
-/**
-
-As method above but allows to specify a fixed value range, such that the
-color range does not vary from timestep to timestep.  
-*/
-
-void FiniteDifferenceGrid::SaveToJPG( const char* filename, int32_t timestep, 
-                                      double vmin, double vmax, 
-                                      bool greyscale, bool sqrt_of ) const
- {
-    // rgb color stuff (created only once)
-    static ColorPalette  rgb_colorizer;  // default rainbow scale 1-255
-    float                colors[4];      // color values RGB A
-    if ( greyscale )     rgb_colorizer.MakeGreyPalette();
-    
-    // file name + extension
-    char num[30];
-    snprintf( num, sizeof(num), "%d", timestep );
-    string  name(filename), padded_string( num );
-    replaceWhiteSpaceBy( padded_string, '0' );
-    name += padded_string;
-    name +=".jpg";
-
-    // obtain data range to scale the data to 0-255 for output
-    double  old_min, old_max;
-    DataMinMax( old_min, old_max, false );
-    cout.setf( ios::scientific );
-    cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' Output data range: "<< old_min<<" to "<< old_max << endl;
-    cout.unsetf( ios::scientific );
-    
-    if ( vmin > old_min ) {
-         cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' ";
-         cout <<"Data minimum is smaller than prescribed minimum; setting minimum to actual value."<< endl; 
-      }
-    // if the actual values are within the prescribed range, this range is used  
-    else old_min = vmin;
-    
-    if ( vmax < old_max ) {
-         cout <<"\nFiniteDifferenceGrid:SaveToJPG: '"<< filename <<"' ";
-         cout <<"Data maximum is larger than prescribed maximum; setting maximum to actual value."<< endl; 
-      }
-    else old_max = vmax;
-    
-    // if old_min = old_max a textfile with the variable name and value is output instead
-    // (there is no need to go through the whole JPEG procedure if only a single value would be output)
-    ofstream ofs;
-
-    if ( old_min == old_max )
-      {
-         name +=".txt";
-         ofs.open ( name.c_str(), ios::out|ios::trunc );
-         if ( !ofs ) 
-           cout <<"\nOutput file: "<< name <<" could not be opened. Nothing was done..." << endl;
-         else 
-           {
-              ofs << name <<": ";
-              ofs <<" Uniform variable value: "<< old_max <<" at timestep: "<< timestep << endl;
-              ofs.close();
-              cout <<"\n\n'" << name <<"' written instead of JPG file..." << endl;
-           }
-         return;
-      }
-    
-    // creating a scale factor for the data
-    if ( sqrt_of )
-      {
-         old_min = sqrt( old_min );
-         old_max = sqrt( old_max );
-      }
-    double  old_range = old_max - old_min;
-    double  new_range = 255.0; 
-    double  out_val; 
-
-    // ----------------------------------------------------------------------------------
-    // JPG Stuff
-    // ----------------------------------------------------------------------------------
-    // creating RGB scanline memory for central grid portion without frame
-    JSAMPROW          row_pointer[1];
-    int               image_components = 3;
-    if ( greyscale )  image_components = 1;
-    int               row_stride = size_x * image_components;
-    unsigned char*    image_buffer;
-  
-    // allocating image memory buffer and storing RGB values within it  
-    image_buffer = new unsigned char[ static_cast<size_t>(size_x * size_y * image_components) ];
-
-      for ( int32_t incr=0, i=size_y-1; i>=0; i-- )
-        for ( int32_t j=0; j<size_x; j++ )
-          {
-             // scaling value to 0-256 scale
-             if ( sqrt_of ) out_val = ((sqrt((*this)(i,j)) - old_min)/old_range) * new_range;
-             else           out_val = (((*this)(i,j) - old_min)/old_range) * new_range;
-             if ( greyscale ) image_buffer[incr++] = static_cast<unsigned char>(out_val);
-             else
-               {
-                  // getting red,green, blue color values
-                  rgb_colorizer.GiveRgb( static_cast<float>(out_val), colors );
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[0]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[1]);
-                  image_buffer[incr++] = static_cast<unsigned char>(colors[2]);
-               }
-          }
- 
-    // setting up the jpg storage structures
-    jpeg_compress_struct  cinfo;
-    jpeg_error_mgr        jerr;
-    
-    // initializing the error manager in the compression object
     cinfo.err = jpeg_std_error( &jerr );
     jpeg_create_compress( &cinfo );
-    
-    FILE*  outfile;
-    if ((outfile = fopen( name.c_str(), "wb")) == NULL ) 
-      {
-          cout <<"\nFiniteDifferenceGrid:SaveToJPG: cannot open outputfile: "<< name << endl;
-          return;
-      }
-    jpeg_stdio_dest( &cinfo, outfile );
-    
-    // setting up image size and colorspace
-    cinfo.image_width      = static_cast<uint32_t>(size_x);
-    cinfo.image_height     = static_cast<uint32_t>(size_y);
-    cinfo.input_components = 3;        // color values per pixel
-    cinfo.in_color_space   = JCS_RGB;  // RGB or JCS_GRAY_SCALE (only 1 val per pixel)
-    if ( greyscale ) 
-      {
-        cinfo.input_components = 1;        // color values per pixel
-        cinfo.in_color_space   = JCS_GRAYSCALE; 
-      }
+    jpeg_stdio_dest( &cinfo, outfile.get() );
+    configure_jpeg( cinfo, size_x, size_y, image_components, greyscale );
+    write_jpeg_scanlines( cinfo, image_buffer, row_stride );
 
-    // assigning the values
-    jpeg_set_defaults( &cinfo );
-    
-    // writing data to file: TRUE for complete jpg interchange datastream
-    jpeg_start_compress( &cinfo, TRUE );
-    while ( cinfo.next_scanline < cinfo.image_height )
-      {
-          row_pointer[0] = &image_buffer[ cinfo.next_scanline * static_cast<size_t>(row_stride) ];
-          jpeg_write_scanlines( &cinfo, row_pointer, 1 );
-      }
-    jpeg_finish_compress( &cinfo );
-    fclose( outfile );
-
-    // cleanup
-    jpeg_destroy_compress( &cinfo );  
-    delete[] image_buffer;
-
-    cout <<"\n'" << name <<"' written successfully..." << endl;
-          
- } // end SaveToJPG (fixed range)
+    std::cout << "\n'" << name << "' written successfully." << std::endl;
+}
 
 
+// =============================================================================
+// SaveToJPGWithoutNAN — fixed data range
+// =============================================================================
+
+void FiniteDifferenceGrid::SaveToJPGWithoutNAN( const char* filename,
+                                                int32_t     timestep,
+                                                double      vmin,
+                                                double      vmax,
+                                                bool        greyscale,
+                                                bool        sqrt_of ) const
+{
+    ColorPalette rgb_colorizer;
+    float        colors[4];
+    if ( greyscale ) rgb_colorizer.MakeGreyPalette();
+
+    const std::string name = make_jpeg_filename( filename, timestep );
+
+    double old_min, old_max;
+    DataMinMaxWithoutNAN( old_min, old_max, false );
+    std::cout.setf( std::ios::scientific );
+    std::cout << "\nFiniteDifferenceGrid::SaveToJPGWithoutNAN: '" << filename
+              << "' data range: " << old_min << " to " << old_max << std::endl;
+    std::cout.unsetf( std::ios::scientific );
+
+    // Clamp to prescribed range, warn if actual data exceeds it
+    if ( vmin > old_min )
+        std::cout << "\nData minimum smaller than prescribed minimum — using actual value.\n";
+    else
+        old_min = vmin;
+
+    if ( vmax < old_max )
+        std::cout << "\nData maximum larger than prescribed maximum — using actual value.\n";
+    else
+        old_max = vmax;
+
+    if ( old_min == old_max ) {
+        write_uniform_value_file( name, old_max, timestep );
+        return;
+    }
+
+    if ( sqrt_of ) { old_min = std::sqrt( old_min ); old_max = std::sqrt( old_max ); }
+    const double old_range = old_max - old_min;
+    const double new_range = 255.0;
+
+    const int32_t image_components = greyscale ? 1 : 3;
+    const int32_t row_stride       = size_x * image_components;
+
+    std::vector<unsigned char> image_buffer(
+        static_cast<size_t>( size_x * size_y * image_components ) );
+
+    size_t incr = 0;
+    for ( int32_t i = size_y - 1; i >= 0; --i )
+        for ( int32_t j = 0; j < size_x; ++j )
+        {
+            const double val = (*this)( i, j );
+            double out_val;
+            if ( std::isnan( val ) )
+                out_val = 255.0;
+            else if ( sqrt_of )
+                out_val = ( ( std::sqrt( val ) - old_min ) / old_range ) * new_range;
+            else
+                out_val = ( ( val - old_min ) / old_range ) * new_range;
+
+            if ( greyscale ) {
+                image_buffer[incr++] = static_cast<unsigned char>( out_val );
+            } else {
+                if ( std::isnan( val ) )
+                    colors[0] = colors[1] = colors[2] = 255.0f;
+                else
+                    rgb_colorizer.GiveRgb( static_cast<float>( out_val ), colors );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[0] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[1] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[2] );
+            }
+        }
+
+    auto outfile = open_jpeg_file( name );
+    if ( !outfile ) {
+        std::cerr << "\nFiniteDifferenceGrid::SaveToJPGWithoutNAN: cannot open: "
+                  << name << std::endl;
+        return;
+    }
+
+    jpeg_compress_struct cinfo;
+    jpeg_error_mgr       jerr;
+    JpegCompressGuard    guard{ &cinfo };
+
+    cinfo.err = jpeg_std_error( &jerr );
+    jpeg_create_compress( &cinfo );
+    jpeg_stdio_dest( &cinfo, outfile.get() );
+    configure_jpeg( cinfo, size_x, size_y, image_components, greyscale );
+    write_jpeg_scanlines( cinfo, image_buffer, row_stride );
+
+    std::cout << "\n'" << name << "' written successfully." << std::endl;
+}
 
 
+// =============================================================================
+// SaveToJPG — auto data range
+// =============================================================================
+
+void FiniteDifferenceGrid::SaveToJPG( const char* filename,
+                                      int32_t     timestep,
+                                      bool        greyscale,
+                                      bool        sqrt_of ) const
+{
+    ColorPalette rgb_colorizer;
+    float        colors[4];
+    if ( greyscale ) rgb_colorizer.MakeGreyPalette();
+
+    const std::string name = make_jpeg_filename( filename, timestep );
+
+    double old_min, old_max;
+    DataMinMax( old_min, old_max, false );
+    std::cout.setf( std::ios::scientific );
+    std::cout << "\nFiniteDifferenceGrid::SaveToJPG: '" << filename
+              << "' data range: " << old_min << " to " << old_max << std::endl;
+    std::cout.unsetf( std::ios::scientific );
+
+    if ( old_min == old_max ) {
+        write_uniform_value_file( name, old_max, timestep );
+        return;
+    }
+
+    if ( sqrt_of ) { old_min = std::sqrt( old_min ); old_max = std::sqrt( old_max ); }
+    const double old_range = old_max - old_min;
+    const double new_range = 255.0;
+
+    const int32_t image_components = greyscale ? 1 : 3;
+    const int32_t row_stride       = size_x * image_components;
+
+    std::vector<unsigned char> image_buffer(
+        static_cast<size_t>( size_x * size_y * image_components ) );
+
+    size_t incr = 0;
+    for ( int32_t i = size_y - 1; i >= 0; --i )
+        for ( int32_t j = 0; j < size_x; ++j )
+        {
+            const double val     = (*this)( i, j );
+            const double out_val = sqrt_of
+                ? ( ( std::sqrt( val ) - old_min ) / old_range ) * new_range
+                : ( ( val              - old_min ) / old_range ) * new_range;
+
+            if ( greyscale ) {
+                image_buffer[incr++] = static_cast<unsigned char>( out_val );
+            } else {
+                rgb_colorizer.GiveRgb( static_cast<float>( out_val ), colors );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[0] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[1] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[2] );
+            }
+        }
+
+    auto outfile = open_jpeg_file( name );
+    if ( !outfile ) {
+        std::cerr << "\nFiniteDifferenceGrid::SaveToJPG: cannot open: "
+                  << name << std::endl;
+        return;
+    }
+
+    jpeg_compress_struct cinfo;
+    jpeg_error_mgr       jerr;
+    JpegCompressGuard    guard{ &cinfo };
+
+    cinfo.err = jpeg_std_error( &jerr );
+    jpeg_create_compress( &cinfo );
+    jpeg_stdio_dest( &cinfo, outfile.get() );
+    configure_jpeg( cinfo, size_x, size_y, image_components, greyscale );
+    write_jpeg_scanlines( cinfo, image_buffer, row_stride );
+
+    std::cout << "\n'" << name << "' written successfully." << std::endl;
+}
 
 
-#endif // end CSP_WITH_IMAGE_OUTPUT
+// =============================================================================
+// SaveToJPG — fixed data range
+// =============================================================================
+
+void FiniteDifferenceGrid::SaveToJPG( const char* filename,
+                                      int32_t     timestep,
+                                      double      vmin,
+                                      double      vmax,
+                                      bool        greyscale,
+                                      bool        sqrt_of ) const
+{
+    ColorPalette rgb_colorizer;
+    float        colors[4];
+    if ( greyscale ) rgb_colorizer.MakeGreyPalette();
+
+    const std::string name = make_jpeg_filename( filename, timestep );
+
+    double old_min, old_max;
+    DataMinMax( old_min, old_max, false );
+    std::cout.setf( std::ios::scientific );
+    std::cout << "\nFiniteDifferenceGrid::SaveToJPG: '" << filename
+              << "' data range: " << old_min << " to " << old_max << std::endl;
+    std::cout.unsetf( std::ios::scientific );
+
+    // Clamp to prescribed range, warn if actual data exceeds it
+    if ( vmin > old_min )
+        std::cout << "\nData minimum smaller than prescribed minimum — using actual value.\n";
+    else
+        old_min = vmin;
+
+    if ( vmax < old_max )
+        std::cout << "\nData maximum larger than prescribed maximum — using actual value.\n";
+    else
+        old_max = vmax;
+
+    if ( old_min == old_max ) {
+        write_uniform_value_file( name, old_max, timestep );
+        return;
+    }
+
+    if ( sqrt_of ) { old_min = std::sqrt( old_min ); old_max = std::sqrt( old_max ); }
+    const double old_range = old_max - old_min;
+    const double new_range = 255.0;
+
+    const int32_t image_components = greyscale ? 1 : 3;
+    const int32_t row_stride       = size_x * image_components;
+
+    std::vector<unsigned char> image_buffer(
+        static_cast<size_t>( size_x * size_y * image_components ) );
+
+    size_t incr = 0;
+    for ( int32_t i = size_y - 1; i >= 0; --i )
+        for ( int32_t j = 0; j < size_x; ++j )
+        {
+            const double val     = (*this)( i, j );
+            const double out_val = sqrt_of
+                ? ( ( std::sqrt( val ) - old_min ) / old_range ) * new_range
+                : ( ( val              - old_min ) / old_range ) * new_range;
+
+            if ( greyscale ) {
+                image_buffer[incr++] = static_cast<unsigned char>( out_val );
+            } else {
+                rgb_colorizer.GiveRgb( static_cast<float>( out_val ), colors );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[0] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[1] );
+                image_buffer[incr++] = static_cast<unsigned char>( colors[2] );
+            }
+        }
+
+    auto outfile = open_jpeg_file( name );
+    if ( !outfile ) {
+        std::cerr << "\nFiniteDifferenceGrid::SaveToJPG: cannot open: "
+                  << name << std::endl;
+        return;
+    }
+
+    jpeg_compress_struct cinfo;
+    jpeg_error_mgr       jerr;
+    JpegCompressGuard    guard{ &cinfo };
+
+    cinfo.err = jpeg_std_error( &jerr );
+    jpeg_create_compress( &cinfo );
+    jpeg_stdio_dest( &cinfo, outfile.get() );
+    configure_jpeg( cinfo, size_x, size_y, image_components, greyscale );
+    write_jpeg_scanlines( cinfo, image_buffer, row_stride );
+
+    std::cout << "\n'" << name << "' written successfully." << std::endl;
+}
+
+#endif // CSMP_WITH_IMAGE_OUTPUT
 
 
 
@@ -1756,15 +1491,15 @@ void FiniteDifferenceGrid::LinearInterpolateOnTo( FiniteDifferenceGrid& grid2 ) 
          cout <<"\nFiniteDifferenceGrid<double>::LinearInterpolateOnTo: target grid max_y too small."<< endl;
          throw length_error("FiniteDifferenceGrid<double>::LinearInterpolateOnTo");
       }
- 
+
     for ( int32_t i=0; i<grid2.Rows(); i++ )
       for ( int32_t j=0; j<grid2.Columns(); j++ ) {
            ClosestGridPointTo( grid2.X(j), grid2.Y(i), y1, x1 );
            grid2(i,j) = (*this)(x1,y1);
         }
-        
+
  } // end LinearInterpolateOn
- 
+
 
 
 /**
@@ -1787,11 +1522,11 @@ double  FiniteDifferenceGrid::operator()( double x,  double y, bool rounded ) co
            x1 = static_cast<int32_t>((x-x_min) / xresolution);
            y1 = static_cast<int32_t>((y-y_min) / yresolution);
         }
-      
+
       // 2. if one of the points lies outside of the central grid
-      if ( x < x_min || x > x_max || y < y_min || y > y_max ) 
+      if ( x < x_min || x > x_max || y < y_min || y > y_max )
         return ExtrapolateTo( x, y );
-      
+
       // 3. getting the values at the interpolation points
       p1 = (*this)( y1,   x1   );
       if ( xfr==0 && x1+1 >= size_x ) x1 = size_x - 2;
@@ -1801,14 +1536,14 @@ double  FiniteDifferenceGrid::operator()( double x,  double y, bool rounded ) co
       p4 = (*this)( y1+1, x1   );
 
       // 4. if all points are the same, this shortcut is possible
-      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;      
+      if ( p1 == p2 && p2 == p3 && p3 == p4 ) return p1;
 
       // 5. computing interpolation functions. Num. Recip. p. 105
       t = ((x-x_min) - x1*xresolution) / xresolution;
       u = ((y-y_min) - y1*yresolution) / yresolution;
-         
+
       // 6. bi-linear interpolation
-      return (1.0-t)*(1.0-u)*p1 + t*(1.0-u)*p2 + t*u*p3 + (1.0-t)*u*p4;   
+      return (1.0-t)*(1.0-u)*p1 + t*(1.0-u)*p2 + t*u*p3 + (1.0-t)*u*p4;
   }
 
 
@@ -1825,9 +1560,9 @@ double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
       {
          assert( x >= x_min && x <= x_max );
          delta = (y - y_min) / yresolution;
-         if ( (*this)(1,x1)   == (*this)(0,x1)   && 
-              (*this)(0,x1)   == (*this)(1,x1+1) && 
-              (*this)(1,x1+1) == (*this)(0,x1+1) ) return (*this)(1,x1);   
+         if ( (*this)(1,x1)   == (*this)(0,x1)   &&
+              (*this)(0,x1)   == (*this)(1,x1+1) &&
+              (*this)(1,x1+1) == (*this)(0,x1+1) ) return (*this)(1,x1);
 
          //      interpolation slope                        y        b
          p1 = (((*this)(1,x1)-(*this)(0,x1))/yresolution)*delta + (*this)(0,x1);
@@ -1836,13 +1571,13 @@ double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
          // interpolation parallel to x
          return p1 + delta * ((p2-p1)/xresolution);
       }
-  
+
   // 2. if larger than the maximum of the y-range
     if ( y >= y_max )
       {
          assert( x >= x_min && x <= x_max );
          delta = (y - y_max) / yresolution;
-         if ( (*this)(size_y-1,x1)   == (*this)(size_y-2,x1)   && 
+         if ( (*this)(size_y-1,x1)   == (*this)(size_y-2,x1)   &&
               (*this)(size_y-2,x1)   == (*this)(size_y-1,x1+1) &&
               (*this)(size_y-1,x1+1) == (*this)(size_y-2,x1+1) ) return (*this)(size_y-1,x1);
 
@@ -1853,15 +1588,15 @@ double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
          // interpolation parallel to x
          return p1 + delta * ((p2-p1)/xresolution);
       }
-  
+
 
   // 3. if smaller than the minimum of the x(horizontal) range
     if ( x <= x_min )
       {
          assert( y >= y_min && y <= y_max );
          delta = (x - x_min) / xresolution;
-         if ( (*this)(y1,1)   == (*this)(y1,0)   && 
-              (*this)(y1,0)   == (*this)(y1+1,1) && 
+         if ( (*this)(y1,1)   == (*this)(y1,0)   &&
+              (*this)(y1,0)   == (*this)(y1+1,1) &&
               (*this)(y1+1,1) == (*this)(y1+1,0) ) return (*this)(y1,1);
 
          //      interpolation slope                        x        b
@@ -1877,8 +1612,8 @@ double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
       {
          assert( y >= y_min && y <= y_max );
          delta = (x - x_max) / xresolution;
-         if ( (*this)(y1,size_x-1)   == (*this)(y1,size_x-2)   && 
-              (*this)(y1,size_x-2)   == (*this)(y1+1,size_x-1) && 
+         if ( (*this)(y1,size_x-1)   == (*this)(y1,size_x-2)   &&
+              (*this)(y1,size_x-2)   == (*this)(y1+1,size_x-1) &&
               (*this)(y1+1,size_x-1) == (*this)(y1+1,size_x-2) ) return (*this)(y1,size_x-1);
 
          //      interpolation slope                        x        b
@@ -1890,7 +1625,7 @@ double FiniteDifferenceGrid::InterpolateOutside( double x, double y ) const
       }
     std::cerr <<"\nFiniteDifferenceGrid:InterpolateOutside: could not handle point: "<< x <<","<< y << std::endl;
     return std::numeric_limits<double>::signaling_NaN();
-    
+
 } // end InterpolateOutside
 
 
@@ -1909,7 +1644,7 @@ double FiniteDifferenceGrid::InterpolateWithin( double& x, double& y ) const
     if ( x < x_min && y > y_max ) return (*this)(size_y-1,0);
     if ( x > x_max && y < y_min ) return (*this)(0,size_x-1);
     if ( x > x_max && y > y_max ) return (*this)(size_y-1,size_x-1);
-  
+
     x1 = static_cast<int32_t>((x-x_min) / xresolution);
     y1 = static_cast<int32_t>((y-y_min) / yresolution);
 
@@ -1931,7 +1666,7 @@ double FiniteDifferenceGrid::InterpolateWithin( double& x, double& y ) const
          p2 = (*this)(size_y-1,x1+1);
          return p1 + delta * ((p2 - p1) / xresolution);
       }
-  
+
     if ( x <= x_min )
       {
          x     = x_min;
@@ -1951,7 +1686,7 @@ double FiniteDifferenceGrid::InterpolateWithin( double& x, double& y ) const
 
     // normal type interpolation
     return (*this)(x,y,false);
-    
+
 } // end InterpolateWithin
 
 

@@ -117,3 +117,4 @@ build*/
 
 
 thirdparty/eigen/
+cmake-build-debug/

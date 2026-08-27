@@ -1,67 +1,204 @@
 cmake_minimum_required(VERSION 3.29)
 
 # ===============================================================================================
-#  Setup of open-csmp (library, examples and tests)
+#  openCSMP — Library, Examples and Tests
 # ===============================================================================================
-# prerequisites
-# - C++23 capabable compiler (g++ 13.3 or later, CLang, Intel, NVC++)
-# - MPI 
-# - git
-# - Rosetta on OSX if you want to use SAMG (Intel (x86_64))
-#     cmake -DCMAKE_OSX_ARCHITECTURES=x86_64  (note that this will also require Intel MPI!)
-# ===============================================================================================
-# usage alternatives
 #
-#   cmake .. -DCMAKE_BUILD_TYPE="Release" -Dsamg=ON
-#   make -j$(sysctl -n hw.ncpu)
+#  Prerequisites:
+#    - C++23 capable compiler (g++ 13.3 or later, Clang, Intel, NVC++)
+#    - MPI
+#    - git
+#    - On macOS with SAMG: Rosetta 2 (Intel x86_64)
+#        cmake -DCMAKE_OSX_ARCHITECTURES=x86_64
+#        (also requires Intel MPI)
 #
-#   cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -Dsamg=ON
-#   cmake --build .
+#  Usage:
+#    cmake .. -DCMAKE_BUILD_TYPE=Release -DSAMG_ENABLE=ON
+#    make -j$(nproc)
 #
-# safe commits (code can be pushed only if the tests run safely automatically) by the program:
-#   .git/hooks/pre-push
+#    cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSAMG_ENABLE=ON
+#    cmake --build .
+#
+#  Safe commits (pre-push hook runs tests automatically):
+#    .git/hooks/pre-push
 # ===============================================================================================
 
-# toggle Fraunhofer's SAMG Solver and its configuration ON if you have access to it!
-option(SAMG_ENABLE "Enable SAMG Solver" OFF)
-option(BUILD_TESTING "Enable building tests" ON)
-option(BUILD_EXAMPLES "Enable building examples" ON)
 
+# ===============================================================================================
+# Build Options
+# ===============================================================================================
+option(SAMG_ENABLE            "Enable Fraunhofer SAMG algebraic multigrid solver" ON )
+option(BUILD_TESTING          "Enable building tests"                              ON )
+option(BUILD_EXAMPLES         "Enable building examples"                           ON )
+option(BUILD_SHARED_LIBS      "Build shared libraries (OFF = static)"              OFF)
+option(CSMP_WITH_IMAGE_OUTPUT "Enable image output support via libturbojpeg"       OFF)
+option(CSMP_WITH_PETSC        "Enable PETSc solver"                                ON )
+
+
+# ===============================================================================================
+# macOS / Rosetta 2 — must be set BEFORE project()
+# ===============================================================================================
 if(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64" AND SAMG_ENABLE)
-    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build architecture for OSX" FORCE)
-    message(STATUS "Configuring for x86_64 architecture to use SAMG with Rosetta 2")
+    set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build architecture for macOS" FORCE)
+    message(STATUS "Configuring for x86_64 (Rosetta 2) to support SAMG")
 endif()
 
-project(open-csmp
-        VERSION 23
-        DESCRIPTION "Open-CSMP++ library"
-        LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
+# ===============================================================================================
+# Project Declaration
+# ===============================================================================================
+project(openCSMP
+        VERSION     23
+        DESCRIPTION "openCSMP library"
+        LANGUAGES   CXX
+)
+
+set(CMAKE_CXX_STANDARD          23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS OFF)
-
-# turn OFF sets default to 'lib' for shared libs as opposed to .so, .dll etc.
-option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
+set(CMAKE_CXX_EXTENSIONS        OFF)
 
 
 # ===============================================================================================
-# Dependencies: MPI
+# Dependencies (library discovery section) — Fetched at configure time
 # ===============================================================================================
+
+# 1. plf_colony (header-only, essential)
+#    A fast, memory-efficient container for non-contiguous data.
+# ------------------------------------------------------------------------------------------------
+include(FetchContent)
+FetchContent_Declare(
+        plf_colony
+        GIT_REPOSITORY https://github.com/mattreecebentley/plf_colony.git
+        GIT_TAG        921cd38      # last stable release — avoids C++23 regression in master
+)
+FetchContent_MakeAvailable(plf_colony)
+message(STATUS "plf_colony source: ${plf_colony_SOURCE_DIR}")
+
+
+# 2. Eigen (header-only, essential)
+#    Linear algebra library. Tests and docs are disabled to keep build times short.
+# ------------------------------------------------------------------------------------------------
+set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
+set(EIGEN_BUILD_DOC     OFF CACHE BOOL "" FORCE)
+
+# Temporarily override BUILD_TESTING so Eigen's CMakeLists.txt cannot
+# register its tests even if it checks BUILD_TESTING directly
+set(BUILD_TESTING OFF)
+
+FetchContent_Declare(
+        eigen
+        GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
+        GIT_TAG        master
+)
+FetchContent_MakeAvailable(eigen)
+message(STATUS "Eigen source: ${eigen_SOURCE_DIR}")
+if(TARGET Eigen3::Eigen)
+    message(STATUS "Eigen3::Eigen target found")
+else()
+    message(WARNING "Eigen3::Eigen CMake target not found — will fall back to manual include path")
+endif()
+
+# Restore BUILD_TESTING for openCSMP's own tests
+set(BUILD_TESTING ON)
+
+
+# ===============================================================================================
+# Dependencies — System Libraries (found via pkg-config / find_package)
+# ===============================================================================================
+
+# Find pkg-config once — used by PETSc and libturbojpeg
+# install with: sudo apt install pkg-config
+find_package(PkgConfig REQUIRED)
+
+# 3. MPI (essential)
+# ------------------------------------------------------------------------------------------------
 find_package(MPI REQUIRED)
 message(STATUS "MPI found: ${MPI_CXX_LIBRARIES}")
 
 
+# 4. PETSc (optional)
+#    Install with: sudo apt install petsc-dev
+# ------------------------------------------------------------------------------------------------
+if(CSMP_WITH_PETSC)
+    pkg_check_modules(PETSC REQUIRED PETSc)
+    message(STATUS "PETSc found: ${PETSC_LIBRARIES}")
+endif()
+
+
+# 5. libturbojpeg (optional)
+#    Install with: sudo apt install libturbojpeg0-dev
+# ------------------------------------------------------------------------------------------------
+if(CSMP_WITH_IMAGE_OUTPUT)
+    pkg_check_modules(TURBOJPEG REQUIRED libturbojpeg)
+    message(STATUS "libturbojpeg found: ${TURBOJPEG_LIBRARIES}")
+endif()
+
+
 # ===============================================================================================
-# Source/Headers discovery (recursive)
+# Dependencies — Third-Party Source Libraries (built as part of this project)
 # ===============================================================================================
-# Collect .cpp sources (compile these). Collect headers for determining include dirs.
+
+# 6. IAPS H2O EOS (optional, built from source if present)
+#    Located in: thirdparty/iaps_h2o_eos/
+# ------------------------------------------------------------------------------------------------
+file(GLOB_RECURSE IAPS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/iaps_h2o_eos/*.cpp")
+list(FILTER IAPS_SRC EXCLUDE REGEX "/deprecated/")
+if(IAPS_SRC)
+    add_library(iaps_h2o_eos STATIC ${IAPS_SRC})
+    target_include_directories(iaps_h2o_eos PUBLIC
+            ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/iaps_h2o_eos
+    )
+    message(STATUS "IAPS H2O EOS found: ${IAPS_SRC}")
+else()
+    message(STATUS "IAPS H2O EOS not found — skipping")
+endif()
+
+
+# 7. CGNS (interface/header-only, from external_support_libs)
+# ------------------------------------------------------------------------------------------------
+# CGNS — install with: sudo apt install libcgns-dev
+find_package(CGNS QUIET)
+if(CGNS_FOUND)
+    message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
+    target_link_libraries(openCSMP PUBLIC ${CGNS_LIBRARIES})
+    target_include_directories(openCSMP PUBLIC ${CGNS_INCLUDE_DIRS})
+else()
+    # Fall back to pkg-config
+    pkg_check_modules(CGNS QUIET cgns)
+    if(CGNS_FOUND)
+        message(STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}")
+        target_link_libraries(openCSMP PUBLIC ${CGNS_LIBRARIES})
+        target_include_directories(openCSMP PUBLIC ${CGNS_INCLUDE_DIRS})
+    endif()
+endif()
+
+
+# 8. RapidXML (interface/header-only, from external_support_libs)
+# ------------------------------------------------------------------------------------------------
+# install via:  sudo apt install rapidxml-dev
+# RapidXML (header-only, essential)
+#   No apt package available — fetched automatically
+FetchContent_Declare(
+        rapidxml
+        GIT_REPOSITORY https://github.com/discord/rapidxml.git
+        GIT_TAG        master
+)
+FetchContent_MakeAvailable(rapidxml)
+message(STATUS "RapidXML source: ${rapidxml_SOURCE_DIR}")
+
+
+# ===============================================================================================
+# Source and Header Discovery
+# ===============================================================================================
+
+# Collect all .cpp sources for the core library
 file(GLOB_RECURSE LIBRARY_SOURCES CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/**/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/*.cpp"
         "${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files/*.cpp"
 )
 
+# Collect all headers (used to derive include directories)
 file(GLOB_RECURSE LIBRARY_HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/**/*.h"
         "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/**/*.hpp"
@@ -71,30 +208,35 @@ file(GLOB_RECURSE LIBRARY_HEADERS CONFIGURE_DEPENDS
         "${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files/*.hpp"
 )
 
-# Always include plf_colony header explicitly (you had this earlier)
-list(APPEND LIBRARY_HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony/plf_colony.h")
+# Exclude deprecated files from both lists
+list(FILTER LIBRARY_SOURCES EXCLUDE REGEX "/deprecated/")
+list(FILTER LIBRARY_HEADERS EXCLUDE REGEX "/deprecated/")
 
-# Combine for some operations (but only .cpp go into the lib target initially)
-set(LIBRARY_SOURCE_FILES ${LIBRARY_SOURCES} ${LIBRARY_HEADERS})
+# Exclude SAMG sources
+# (SAMG sources are added back conditionally in the SAMG section below)
+list(FILTER LIBRARY_SOURCES EXCLUDE REGEX ".*[Ss][Aa][Mm][Gg].*")
 
-# Variable Sets (Warning: WILL BE DEPRECATED)
+# Check that required non-GIT variable set headers exist
 set(VARIABLE_INDEX_SETS
         ${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files/VariableSet_TracerTransfer.h
         ${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files/VariableSet_TwoPhaseFlow.h
         ${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files/VariableSet_CO2GeoSequestration.h
 )
-# Check if they exist to prevent obscure compile errors
 foreach(v_file ${VARIABLE_INDEX_SETS})
     if(NOT EXISTS ${v_file})
-        message(WARNING "External VariableSet file missing: ${v_file}")
+        message(WARNING "Required VariableSet file missing: ${v_file}")
     endif()
 endforeach()
 
 
 # ===============================================================================================
-# Extract unique directories from headers/sources for flat includes
+# Include Directory Extraction
+#
+#   Derives a flat list of unique directories from all discovered headers and sources.
+#   This supports the project's flat-include model where headers are included by filename
+#   only (e.g. #include "Node.h") rather than by relative path.
 # ===============================================================================================
-function(get_directories result file_list)
+function(get_unique_directories result file_list)
     set(dir_list "")
     foreach(file_path ${file_list})
         if(EXISTS ${file_path})
@@ -106,238 +248,309 @@ function(get_directories result file_list)
     set(${result} ${dir_list} PARENT_SCOPE)
 endfunction()
 
-# Remove deprecated files (if present)
-list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX "/deprecated/")
+get_unique_directories(ALL_SUBDIRECTORIES "${LIBRARY_SOURCES};${LIBRARY_HEADERS}")
 
-# Extract all directories that contain headers/sources
-get_directories(ALL_SUBDIRECTORIES "${LIBRARY_SOURCE_FILES}")
-
-# Always add top-level include roots that should be searched (flat includes)
+# Always include top-level roots for flat includes
 list(APPEND ALL_SUBDIRECTORIES
         ${CMAKE_CURRENT_SOURCE_DIR}/source/includes
         ${CMAKE_CURRENT_SOURCE_DIR}/source/modules
         ${CMAKE_CURRENT_SOURCE_DIR}/source/non-GIT-files
-        ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony
-        ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg
+        ${CMAKE_CURRENT_SOURCE_DIR}/non-GIT-files
 )
 list(REMOVE_DUPLICATES ALL_SUBDIRECTORIES)
 
 
 # ===============================================================================================
-# Filter out SAMG source files by default (they are added back conditionally later)
+# Core Library Target: openCSMP
 # ===============================================================================================
-if(NOT SAMG_ENABLE)
-    list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX ".*SAMG.*")
-    list(FILTER LIBRARY_SOURCE_FILES EXCLUDE REGEX ".*samg.*")
-endif()
+add_library(openCSMP ${LIBRARY_SOURCES})
 
-
-# ===============================================================================================
-# Core Library Definition
-# ===============================================================================================
-add_library(open-csmp-core ${LIBRARY_SOURCE_FILES})
-
-# Export include dirs for build & install (flat include model)
-target_include_directories(open-csmp-core PUBLIC
+# Public include directories — propagated to all targets linking against openCSMP
+target_include_directories(openCSMP PUBLIC
         $<BUILD_INTERFACE:${ALL_SUBDIRECTORIES}>
-        $<INSTALL_INTERFACE:include/open-csmp>
+        $<BUILD_INTERFACE:${eigen_SOURCE_DIR}>
+        $<INSTALL_INTERFACE:include/openCSMP>
 )
 
-# later, more flags are added via the same command
-target_compile_definitions(open-csmp-core PUBLIC PYRAMID_TRIANGULAR_FACETS )
+# Compile definitions
+target_compile_definitions(openCSMP PUBLIC
+        PYRAMID_TRIANGULAR_FACETS
+)
 
 
-# ===============================================================================================
-# Third Party Libraries (Built as part of the project)
-# ===============================================================================================
+# -----------------------------------------------------------------------
+# External support libraries root — defined once to avoid path typos
+# -----------------------------------------------------------------------
+set(CSMP_EXTERNAL_LIBS "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs"
+        CACHE PATH "Path to external support libraries (samg, cgns, rapidxml etc.)")
 
-# 1. IAPS H2O EOS (if sources exist)
-# ----------------------------------
-file(GLOB_RECURSE IAPS_SRC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/iaps_h2o_eos/*.cpp")
-list(FILTER IAPS_SRC EXCLUDE REGEX "/deprecated/")
-if(IAPS_SRC)
-    add_library(iaps_h2o_eos STATIC ${IAPS_SRC})
-    target_include_directories(iaps_h2o_eos PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/iaps_h2o_eos)
-    target_link_libraries(open-csmp-core PUBLIC iaps_h2o_eos)
+# Verify the path resolves correctly before anything uses it
+message(STATUS "External support libs root: ${CSMP_EXTERNAL_LIBS}")
+message(STATUS "  -> SAMG expected at:      ${CSMP_EXTERNAL_LIBS}/samg/linux")
+message(STATUS "  -> CGNS expected at:      ${CSMP_EXTERNAL_LIBS}/cgns")
+message(STATUS "  -> RapidXML expected at:  ${CSMP_EXTERNAL_LIBS}/rapidxml")
+
+# Core link dependencies
+target_link_libraries(openCSMP PUBLIC
+        MPI::MPI_CXX
+        cgns
+        jpeg
+)
+
+# plf_colony — header-only, only plf_colony.h is needed
+# plf_tools.h is an internal detail and must never be compiled directly
+target_include_directories(openCSMP PUBLIC
+        ${plf_colony_SOURCE_DIR}
+)
+
+# Eigen — prefer the proper CMake target; fall back to manual include path
+if(TARGET Eigen3::Eigen)
+    target_link_libraries(openCSMP PUBLIC Eigen3::Eigen)
 else()
-    message(STATUS "IAPS H2O EOS not found - skipping.")
+    target_include_directories(openCSMP PUBLIC ${eigen_SOURCE_DIR})
 endif()
 
-# 2. JPEG (libjpeg-turbo would be better but does not lnk with Rosetta) 
-# ---------------------------------------------------------------------
-file(GLOB JPEG_SOURCE_FILES CONFIGURE_DEPENDS
-    "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg/*.cpp"
-    RECURSE
-)
-list(FILTER JPEG_SOURCE_FILES EXCLUDE REGEX "thirdparty/jpeg/deprecated/.*")
-add_library(jpeg STATIC ${JPEG_SOURCE_FILES})
-target_include_directories(jpeg PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg")
-
-# 3. Eigen (header-only)
-# ---------------------------------------------------------------------
-set(EIGEN_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/eigen")
-if(CMAKE_GENERATOR MATCHES "Xcode")
-    set(EIGEN_PATH "${EIGEN_PATH}/eigen")
+# IAPS H2O EOS (optional)
+if(TARGET iaps_h2o_eos)
+    target_link_libraries(openCSMP PUBLIC iaps_h2o_eos)
 endif()
-add_library(eigen_lib INTERFACE)
-target_include_directories(eigen_lib INTERFACE ${EIGEN_PATH})
-target_link_libraries(open-csmp-core PUBLIC eigen_lib)
 
-# 4. CGNS & RapidXML (Interface only)
-# ---------------------------------------------------------------------
-add_library(cgns INTERFACE)
-target_include_directories(cgns INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/cgns)
-target_link_libraries(open-csmp-core PUBLIC cgns)
+# CGNS linking (discovery happened earlier)
+if(CGNS_FOUND)
+    target_link_libraries(openCSMP PUBLIC ${CGNS_LIBRARIES})
+    target_include_directories(openCSMP PUBLIC ${CGNS_INCLUDE_DIRS})
+else()
+    target_link_libraries(openCSMP PUBLIC cgns)  # fallback interface library
+endif()
 
-add_library(rapidxml INTERFACE)
-target_include_directories(rapidxml INTERFACE ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/rapidxml)
-target_link_libraries(open-csmp-core PUBLIC rapidxml)
+# RapidXML — header-only, include path only needed
+target_include_directories(openCSMP PUBLIC ${rapidxml_SOURCE_DIR})
 
-# Link Core to basic dependencies
-target_link_libraries(open-csmp-core PUBLIC MPI::MPI_CXX)
+# PETSc (optional)
+if(CSMP_WITH_PETSC)
+    target_include_directories(openCSMP PRIVATE ${PETSC_INCLUDE_DIRS})
+    target_link_libraries(openCSMP PRIVATE ${PETSC_LIBRARIES})
+    # PETSC_CFLAGS_OTHER contains raw -DFOO flags — must use compile_options not compile_definitions
+    target_compile_options(openCSMP PRIVATE ${PETSC_CFLAGS_OTHER})
+    target_compile_definitions(openCSMP PRIVATE CSMP_WITH_PETSC)
+endif()
+
+# libturbojpeg (optional)
+option(CSMP_WITH_IMAGE_OUTPUT "Enable image output support via libturbojpeg" ON)
+
+if(CSMP_WITH_IMAGE_OUTPUT)
+    target_include_directories(openCSMP PRIVATE ${TURBOJPEG_INCLUDE_DIRS})
+    target_link_libraries(openCSMP PRIVATE ${TURBOJPEG_LIBRARIES})
+    target_compile_definitions(openCSMP PRIVATE CSMP_WITH_IMAGE_OUTPUT)
+endif()
 
 
 # ===============================================================================================
-# Feature: SAMG Solver
+# SAMG Solver (commercial — Fraunhofer/SCAPOS)
+#
+#   Algebraic multigrid solver for systems of equations.
+#   Requires prebuilt binaries in: ../external_support_libraries/samg/
+#
+#   Two modes:
+#     LEGACY_SAMG=ON  (default) — original SAMG integration with SAMG_MULTIPLE_INSTANCES
+#     LEGACY_SAMG=OFF           — modern SAMG integration, single instance
+#
+#   Toggle with:
+#     cmake -DSAMG_ENABLE=ON ..
+#     cmake -DSAMG_ENABLE=ON -DLEGACY_SAMG=OFF ..
 # ===============================================================================================
+option(LEGACY_SAMG "Use legacy SAMG integration (SAMG_MULTIPLE_INSTANCES)" ON)
+
 if(SAMG_ENABLE)
     message(STATUS "Enabling SAMG Solver...")
-    target_compile_definitions(open-csmp-core PUBLIC
-            CSMP_WITH_SAMG_SOLVER
-            SAMG_UNIX_LINUX
-            SAMG_LCASE_USCORE
-            SAMG_MULTIPLE_INSTANCES
-            LEGACY_SAMG
-    )
 
-    file(GLOB_RECURSE SAMG_SRC
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_*.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles/*.cpp"
-    )
-    if(SAMG_SRC)
-        target_sources(open-csmp-core PRIVATE ${SAMG_SRC})
-
-        target_include_directories(open-csmp-core PUBLIC
-                ${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/samg
-                ${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles
-        )
-    endif()
-
+    # Locate prebuilt libraries first — no point proceeding without them
     if(APPLE)
-        set(SAMG_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/samg/macosx")
-        set(SAMG_LIB "${SAMG_LIB_PATH}/libamg_mult.dylib")
-        set(OMP_LIB "${SAMG_LIB_PATH}/libiomp5.dylib")
+        set(SAMG_LIB_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs/samg/macosx")
+        set(SAMG_LIB      "${SAMG_LIB_PATH}/libamg_mult.dylib")
+        set(OMP_LIB       "${SAMG_LIB_PATH}/libiomp5.dylib")
     else()
-        find_library(SAMG_LIB NAMES amg_mult HINTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/samg/linux")
-        find_library(OMP_LIB NAMES iomp5 HINTS "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/samg/linux")
+        find_library(SAMG_LIB NAMES amg_mult
+                HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs/samg/linux")
+        find_library(OMP_LIB NAMES iomp5
+                HINTS "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs/samg/linux")
     endif()
 
     if(SAMG_LIB AND OMP_LIB)
-        target_link_libraries(open-csmp-core PUBLIC ${SAMG_LIB} ${OMP_LIB})
+        # Find SAMG source files
+        file(GLOB_RECURSE SAMG_SRC
+                "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_*.h"
+                "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_*.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles/*.cpp"
+        )
+
+        # Common definitions for all SAMG builds
+        target_compile_definitions(openCSMP PUBLIC
+                CSMP_WITH_SAMG_SOLVER
+                SAMG_UNIX_LINUX
+                SAMG_LCASE_USCORE
+        )
+
+        # Legacy mode adds multiple-instance support and legacy API definitions
+        if(LEGACY_SAMG)
+            target_compile_definitions(openCSMP PUBLIC
+                    SAMG_MULTIPLE_INSTANCES
+                    LEGACY_SAMG
+            )
+            message(STATUS "SAMG mode: LEGACY (SAMG_MULTIPLE_INSTANCES enabled)")
+        else()
+            message(STATUS "SAMG mode: MODERN (single instance)")
+        endif()
+
+        # SAMG source files
+        file(GLOB_RECURSE SAMG_SRC
+                "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_*.cpp"
+                "${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles/*.cpp"
+        )
+        if(SAMG_SRC)
+            target_sources(openCSMP PRIVATE ${SAMG_SRC})
+            target_include_directories(openCSMP PUBLIC
+                    ${CSMP_EXTERNAL_LIBS}/samg # for samg.h
+                    ${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles
+            )
+        else()
+            message(WARNING "SAMG enabled but no SAMG source files found")
+        endif()
+
+        target_link_libraries(openCSMP PUBLIC ${SAMG_LIB} ${OMP_LIB})
+        message(STATUS "SAMG library:   ${SAMG_LIB}")
+        message(STATUS "OpenMP library: ${OMP_LIB}")
+
     else()
-        message(WARNING "SAMG requested but SAMG_LIB or OMP_LIB is missing. Disabling SAMG support.")
-        set(WITH_SAMG OFF)
+        message(WARNING "SAMG requested but libraries not found — disabling SAMG support")
+        set(SAMG_ENABLE OFF)
     endif()
 endif()
 
 
 # ===============================================================================================
-# Optimization
+# Link-Time Optimisation (LTO / IPO)
 # ===============================================================================================
 include(CheckIPOSupported)
 check_ipo_supported(RESULT IPO_SUPPORTED)
 if(IPO_SUPPORTED)
-    set_target_properties(open-csmp-core PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set_target_properties(openCSMP PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+    message(STATUS "Link-time optimisation enabled")
 endif()
 
 
 # ===============================================================================================
-# Examples Executable
+# Shared Include Directories for Examples and Tests
+#
+#   Both the examples and tests executables need the same broad set of include paths.
+#   Defined once here as a list to avoid duplication.
+# ===============================================================================================
+set(CSMP_CONSUMER_INCLUDE_DIRS
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
+        "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+        "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
+        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
+        ${plf_colony_SOURCE_DIR}
+        ${eigen_SOURCE_DIR}
+)
+# Append optional include dirs only if the feature is enabled
+if(CSMP_WITH_IMAGE_OUTPUT)
+    list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${TURBOJPEG_INCLUDE_DIRS})
+endif()
+
+
+# ===============================================================================================
+# Examples Executable: openCSMP-examples
 # ===============================================================================================
 if(BUILD_EXAMPLES)
-    # 1. Collect Example Sources
     file(GLOB_RECURSE EXAMPLES_SRC
-        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/*.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/**/*.h"
     )
-
-    # 2. Including CSMP API Library Headers + Tests because they are demo'ed in examples
-    list(APPEND EXAMPLES_SRC 
-        ${LIBRARY_HEADERS}
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
-        "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
+    # Include test infrastructure so examples can demonstrate test cases
+    list(APPEND EXAMPLES_SRC
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
     )
+    list(FILTER EXAMPLES_SRC EXCLUDE REGEX "/deprecated/")
 
-    # 3. Exclude deprecated directory
-    list(FILTER EXAMPLES_SRC EXCLUDE REGEX "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/deprecated/.*")
-
-    # 4. Create Executable
     if(EXAMPLES_SRC)
-        add_executable(open-csmp-examples ${EXAMPLES_SRC})
-        
-        target_include_directories(open-csmp-examples PRIVATE
-          "${CMAKE_CURRENT_SOURCE_DIR}"
-          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
-          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
-          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
+        add_executable(openCSMP-examples ${EXAMPLES_SRC})
+
+        target_include_directories(openCSMP-examples PRIVATE
+                ${CSMP_CONSUMER_INCLUDE_DIRS}
+                "${CMAKE_CURRENT_SOURCE_DIR}"
         )
-        # This links libjpeg-turbo or standard libjpeg
-        target_link_libraries(open-csmp-examples PRIVATE open-csmp-core jpeg )
+
+        # Links against the core library (inherits all its PUBLIC dependencies)
+        # jpeg is linked separately for any direct JPEG calls in examples
+        target_link_libraries(openCSMP-examples PRIVATE
+                openCSMP
+                $<$<BOOL:${CSMP_WITH_IMAGE_OUTPUT}>:jpeg>
+        )
     else()
-        message(STATUS "No example sources found.")
+        message(STATUS "No example sources found — skipping openCSMP-examples")
     endif()
 endif()
 
 
 # ===============================================================================================
-# Testing (unit and integration tests)
+# Test Executable: openCSMP-tests
+#
+#   How to run:
+#     ctest                                      — run all tests
+#     ctest --output-on-failure                  — show output for failing tests
+#     ctest --rerun-failed --output-on-failure   — rerun and report failures
+#     ctest -R Suite_Fundamentals                — run a specific suite
+#     ctest --output-junit test-dashboard.xml    — JUnit XML report
+#
+#   Test suites run in strict dependency order:
+#     Fundamentals -> Interdependent1 -> Interdependent2 -> Interfaces -> Composite
 # ===============================================================================================
 if(BUILD_TESTING)
     include(CTest)
@@ -345,133 +558,82 @@ if(BUILD_TESTING)
 
     file(GLOB_RECURSE TEST_FILES
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.cpp"
-            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.h"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.h"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
+            "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
     )
     list(FILTER TEST_FILES EXCLUDE REGEX "/deprecated/")
 
-    add_executable(open-csmp-tests ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit_CTests_main.cpp ${TEST_FILES})
-    target_include_directories(open-csmp-tests PRIVATE
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
-          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/plf_colony"
-          "${CMAKE_CURRENT_SOURCE_DIR}"
-          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
-          "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/visitors"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/analysis"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/discretisation"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/eos"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/cvfe_hydrothermal"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_elements"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/DES_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/generic_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/finite_volumes/legacy_transport_scheme"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_integrators"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/analytical"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/pde_operators/numerical"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/integration/solver"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/ANSYS"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Eclipse"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Fracman"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/GeoModeller"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/gOcad_SKUA"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/JPEG"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Maple"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Matlab"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Rhinoceros"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/Tecplot"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/VTK"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/math"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/model"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/property_manipulation"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/regular_grids"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/run_control"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/fractures"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/geochemistry"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/mechanics"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/single_phase_flow"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/thmc/two_phase_flow"
-          "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/utilities"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
-          "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
-          "${CMAKE_CURRENT_SOURCE_DIR}/thirdparty/jpeg"
+    add_executable(openCSMP-tests
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit_CTests_main.cpp
+            ${TEST_FILES}
     )
-    target_link_libraries( open-csmp-tests PRIVATE open-csmp-core )
 
-    # Directory to place test runtime data, CMAKE_BINARY_DIR is from where you run CMake
+    target_include_directories(openCSMP-tests PRIVATE
+            ${CSMP_CONSUMER_INCLUDE_DIRS}
+    )
+
+    # Links against the core library (inherits all its PUBLIC dependencies)
+    target_link_libraries(openCSMP-tests PRIVATE openCSMP)
+
+    # -----------------------------------------------------------------------
+    # Test Runtime Data
+    #   Copies the tests/dataset directory into the build tree so tests can
+    #   find their input files regardless of where ctest is invoked from.
+    # -----------------------------------------------------------------------
     set(TEST_WORKING_DIR "${CMAKE_BINARY_DIR}/tests_runtime")
 
-    # Create the directory where the tests will be run at build time and copy /tests/dataset into it
     add_custom_target(copy_test_data ALL
             COMMAND ${CMAKE_COMMAND} -E make_directory "${TEST_WORKING_DIR}"
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             "${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset"
             "${TEST_WORKING_DIR}"
-            COMMENT "Copying test dataset to ${TEST_WORKING_DIR}"
+            COMMENT "Copying test dataset from tests/dataset to ${TEST_WORKING_DIR}"
+            VERBATIM
     )
-    add_dependencies(open-csmp-tests copy_test_data)
+    add_dependencies(openCSMP-tests copy_test_data)
 
+    # Also copy at configure time for IDE runs
     file(GLOB TEST_INPUT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset/*")
     if(TEST_INPUT_FILES)
         file(COPY ${TEST_INPUT_FILES} DESTINATION ${TEST_WORKING_DIR})
     endif()
 
-    add_test(NAME open-csmp-tests COMMAND open-csmp-tests)
-    set_tests_properties(open-csmp-tests PROPERTIES WORKING_DIRECTORY ${TEST_WORKING_DIR})
+    # -----------------------------------------------------------------------
+    # CTest Registration
+    # -----------------------------------------------------------------------
+    add_test(NAME openCSMP-tests COMMAND openCSMP-tests)
+    set_tests_properties(openCSMP-tests PROPERTIES
+            WORKING_DIRECTORY ${TEST_WORKING_DIR}
+    )
 
+    # Individual suites (run via --suite flag in the test executable)
+    add_test(NAME Suite_Fundamentals    COMMAND openCSMP-tests --suite fundamentals)
+    add_test(NAME Suite_Interdependent1 COMMAND openCSMP-tests --suite interdependent1)
+    add_test(NAME Suite_Interdependent2 COMMAND openCSMP-tests --suite interdependent2)
+    add_test(NAME Suite_Interfaces      COMMAND openCSMP-tests --suite interfaces)
+    add_test(NAME Suite_Composite       COMMAND openCSMP-tests --suite composite)
 
-# Enable testing
-enable_testing()
+    set_tests_properties(
+            openCSMP-tests
+            Suite_Fundamentals
+            Suite_Interdependent1
+            Suite_Interdependent2
+            Suite_Interfaces
+            Suite_Composite
+            PROPERTIES
+            WORKING_DIRECTORY "${TEST_WORKING_DIR}"
+            ENVIRONMENT       "LD_LIBRARY_PATH=/root/OpenCSMP/external_support_libs/samg/linux;CSMP_DATA_ROOT=${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset"
+    )
 
-# Define the individual test suites
-    add_test(NAME Suite_Fundamentals     COMMAND open-csmp-tests --suite fundamentals)
-    add_test(NAME Suite_Interdependent1  COMMAND open-csmp-tests --suite interdependent1)
-    add_test(NAME Suite_Interdependent2  COMMAND open-csmp-tests --suite interdependent2)
-    add_test(NAME Suite_Interfaces       COMMAND open-csmp-tests --suite interfaces)
-    add_test(NAME Suite_Composite        COMMAND open-csmp-tests --suite composite)
-
-# Point all the individual suites to the new runtime directory
-set_tests_properties(
-    Suite_Fundamentals 
-    Suite_Interdependent1 
-    Suite_Interdependent2 
-    Suite_Interfaces 
-    Suite_Composite
-    PROPERTIES WORKING_DIRECTORY "${TEST_WORKING_DIR}"
-)
-
-# Enforce the strict execution sequence
+    # Strict sequential dependency chain
     set_tests_properties(Suite_Interdependent1 PROPERTIES DEPENDS Suite_Fundamentals)
     set_tests_properties(Suite_Interdependent2 PROPERTIES DEPENDS Suite_Interdependent1)
     set_tests_properties(Suite_Interfaces      PROPERTIES DEPENDS Suite_Interdependent2)
     set_tests_properties(Suite_Composite       PROPERTIES DEPENDS Suite_Interfaces)
-
-# NOTE - how to perform the testing:
-#    compile your code and run ctest in your build directory.
-#
-#    To run normally: ctest
-#    To get nice dashboard with JUnit XML format using option: ctest --output-junit test-dashboard.xml
-#    Use "--rerun-failed --output-on-failure" options to get full report
-#
-#    To see the detailed output of a failing test: ctest --output-on-failure
-#
-#    To run a specific suite manually: ctest -R Suite_Fundamentals
-#
-#    CTest will give a pass/fail summary broken down by suite, 
-#    while the standard test output will print test-by-test Passed/Failed counts 
-#    generated by your custom TestSuite objects.
 
 endif()
 
@@ -479,56 +641,68 @@ endif()
 # ===============================================================================================
 # Installation
 # ===============================================================================================
-install(TARGETS open-csmp-core
-        EXPORT open-csmp-targets
+
+# Core library
+install(TARGETS openCSMP
+        EXPORT  openCSMP-targets
         LIBRARY DESTINATION lib
         ARCHIVE DESTINATION lib
         RUNTIME DESTINATION bin
 )
 
-if(TARGET open-csmp-examples)
-    install(TARGETS open-csmp-examples RUNTIME DESTINATION bin)
+# Optional executables (only installed if they were built)
+if(TARGET openCSMP-examples)
+    install(TARGETS openCSMP-examples RUNTIME DESTINATION bin)
+endif()
+if(TARGET openCSMP-tests)
+    install(TARGETS openCSMP-tests RUNTIME DESTINATION bin)
 endif()
 
-if(TARGET open-csmp-tests)
-    install(TARGETS open-csmp-tests RUNTIME DESTINATION bin)
-endif()
+# Public headers
+install(DIRECTORY source/includes/      DESTINATION include/openCSMP)
+install(DIRECTORY source/non-GIT-files/ DESTINATION include/openCSMP/non-GIT-files)
 
-# Install headers (keep install layout simple: include/open-csmp/*)
-install(DIRECTORY source/includes/ DESTINATION include/open-csmp)
-install(DIRECTORY source/non-GIT-files/ DESTINATION include/open-csmp/non-GIT-files)
-
-# Install example inputs and CI fixtures (if present)
+# Example inputs (copied to build tree at build time, installed separately)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs")
-    if(TARGET open-csmp-examples)
-        add_custom_command(TARGET open-csmp-examples POST_BUILD
+    if(TARGET openCSMP-examples)
+        add_custom_command(TARGET openCSMP-examples POST_BUILD
                 COMMAND ${CMAKE_COMMAND} -E copy_directory
                 "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs"
                 "${CMAKE_BINARY_DIR}/example_inputs"
-                || ${CMAKE_COMMAND} -E echo "WARNING: Could not update example_inputs – probably locked by another process"
-                COMMENT "Copying example_inputs (non-fatal)"
+                COMMENT "Copying example_inputs to build directory"
                 VERBATIM
         )
     endif()
-
-    # Keep the install rule unchanged
     install(DIRECTORY examples/example_inputs/
             DESTINATION example_inputs
-            PATTERN ".DS_Store" EXCLUDE
-            PATTERN "__MACOSX" EXCLUDE
-            PATTERN "Icon" EXCLUDE)
+            PATTERN ".DS_Store"  EXCLUDE
+            PATTERN "__MACOSX"   EXCLUDE
+            PATTERN "Icon"       EXCLUDE
+    )
 endif()
 
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/continuous_integration_testing")
-install(DIRECTORY continuous_integration_testing/ DESTINATION continuous_integration_testing)
+# Continuous integration fixtures
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../continuous_integration_testing")
+    install(DIRECTORY continuous_integration_testing/
+            DESTINATION continuous_integration_testing
+    )
 endif()
 
 
 # ===============================================================================================
-# Diagnostics / Summary of what was found
+# Configuration Summary
 # ===============================================================================================
-message(STATUS "Found ${LIBRARY_SOURCES} source files.")
-message(STATUS "Header dirs added to include path: ${ALL_SUBDIRECTORIES}")
-message(STATUS "SAMG Enabled: ${SAMG_ENABLE}")
-message(STATUS "Build examples: ${BUILD_EXAMPLES}")
-message(STATUS "Build tests: ${BUILD_TESTING}")
+message(STATUS "------------------------------------------------------------")
+message(STATUS "openCSMP configuration summary")
+message(STATUS "------------------------------------------------------------")
+message(STATUS "  C++ standard:       ${CMAKE_CXX_STANDARD}")
+message(STATUS "  Build type:         ${CMAKE_BUILD_TYPE}")
+message(STATUS "  SAMG solver:        ${SAMG_ENABLE}")
+message(STATUS "  PETSc solver:       ${CSMP_WITH_PETSC}")
+message(STATUS "  Image output:       ${CSMP_WITH_IMAGE_OUTPUT}")
+message(STATUS "  Build examples:     ${BUILD_EXAMPLES}")
+message(STATUS "  Build tests:        ${BUILD_TESTING}")
+message(STATUS "  LTO/IPO:            ${IPO_SUPPORTED}")
+message(STATUS "  Source files:       ${LIBRARY_SOURCES}")
+message(STATUS "  Include dirs:       ${ALL_SUBDIRECTORIES}")
+message(STATUS "------------------------------------------------------------")

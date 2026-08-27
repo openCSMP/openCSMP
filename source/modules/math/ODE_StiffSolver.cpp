@@ -318,7 +318,7 @@ in the diagonalization process.
 */
 void ODE_StiffSolver::LU_Decomposition( double **a, size_t n, int32_t *indx, double& d )
 {
-	int32_t i,imax = numeric_limits<double>::quiet_NaN(),j,k;
+	int32_t i,imax = numeric_limits<int32_t>::max(),j,k;
 	double big,dum,sum,temp;
 	double *vv;
 
@@ -757,7 +757,7 @@ void ODE_StiffSolver::StiffBulirschStoer( double y[], double dydx[], size_t nv,
                                           double& xx, double htry, double input_eps,
 	                                        double yscal[], double& hdid, double& hnext )
 {
-	int32_t i,iq,k,kk,km= numeric_limits<double>::quiet_NaN();
+	int32_t i,iq,k,kk,km= numeric_limits<int32_t>::max();
 	static int32_t first=1,kmax1,kopt,nvold = -1;
 	static double epsold = -1.0,xnew;
 	double eps1,errmax= numeric_limits<double>::quiet_NaN(),fact,h,red,scale=numeric_limits<double>::quiet_NaN(),work,wrkmin,xest;
