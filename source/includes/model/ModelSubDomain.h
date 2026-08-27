@@ -389,7 +389,7 @@ size_t  sharedPerimeterCells( const ModelSubDomain<dim,CELL>& subdomain1, const 
                               std::vector<std::pair<std::pair<CELL<dim>*,uint32_t>,std::pair<CELL<dim>*,uint32_t> > >& matching_cells );
                               
 /// collects the TOPOTYPEs of the nodes in the subdomain into the (unique) set that is returned
-template<uint32_t dim, template<uint32_t> class CELL>
+template<uint32_t dim>
 std::set<TOPOTYPE> nodeTopologyFlags( typename std::vector<Node<dim>*>::const_iterator first,
                                       typename std::vector<Node<dim>*>::const_iterator last );
                               

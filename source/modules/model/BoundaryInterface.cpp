@@ -737,8 +737,7 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
          ErrorHandler::Instance().Note( ERROR, "BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternalBoundaryFrom",
                                         subdomain.Name(), "region elements may still exist as remnants");
       }
-    subdomain.ScheduleForRebuild();
-    
+
     // establish connectivity between new Face objects
     model.Mesh().template BuildConnectivity<Face>( face_vector.begin(), face_vector.end() );
     
@@ -766,8 +765,8 @@ pair<set<string>,bool>   BoundaryInterface<dim,BOUNDARY_COMPLEX>::CreateInternal
     // ----------------------------------------------------------------------------------------------------------------------------------------------
     // 6. remove lower-dimensional input region (its elements were already removed above).
     // ----------------------------------------------------------------------------------------------------------------------------------------------
+    model.RemoveRegion( dim_1_region, false ); // elements were removed already
     model.Region("Model").ScheduleForRebuild();
-    model.RemoveRegion( dim_1_region );
     model.UpdateRegions();
    
     // ----------------------------------------------------------------------------------------------------------------------------------------------

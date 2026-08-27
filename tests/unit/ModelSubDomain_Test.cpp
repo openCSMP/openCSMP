@@ -1575,7 +1575,7 @@ void ModelSubDomain_Test::Test_NonMemberFunctions()
            _test( cell_pair.second.first->Neighbor(cell_pair.second.second) == cell_pair.first.first );
         }
 
-      set<TOPOTYPE> topo_flags = nodeTopologyFlags<2,Element>( region1.NodesBegin(), region1.NodesEnd() );
+      set<TOPOTYPE> topo_flags = nodeTopologyFlags<2>( region1.NodesBegin(), region1.NodesEnd() );
       //                         ^^^^^^^^^^^^^^^^^
       _test( topo_flags.count(MESH_VERTEX)     == 1 );
       _test( topo_flags.count(EXTERIOR_POINT)  == 1 );
@@ -1644,7 +1644,7 @@ void ModelSubDomain_Test::Test_NonMemberFunctions()
       model.CreateInternalBoundaryFrom( "HALF" );
 
       // testing that the INTERNAL flagging of the new Boundary is recognised
-      set<TOPOTYPE> topo_flags = nodeTopologyFlags<3,Element>( region1.NodesBegin(), region1.NodesEnd() );
+      set<TOPOTYPE> topo_flags = nodeTopologyFlags<3>( region1.NodesBegin(), region1.NodesEnd() );
       //                         ^^^^^^^^^^^^^^^^^
       _test( topo_flags.count(MESH_VERTEX)      == 1 );
       _test( topo_flags.count(EXTERIOR_POINT)   == 1 );

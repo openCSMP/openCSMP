@@ -1482,7 +1482,7 @@ pair<set<string>,bool>  SplitBoundaryInterface<dim, SPLITBOUNDARY_COMPLEX>::Crea
                  it->UnAssignInterveningElement();
            }
          // removing the elements and the region that contained them
-         model.RemoveRegion( dim_1_region, remove_elmts );
+         model.RemoveRegion( dim_1_region, retain_elmts_as_intervening_elements );
       }
 
 #ifdef DEBUG

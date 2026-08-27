@@ -6470,25 +6470,26 @@ template size_t sharedPerimeterCells( const ModelSubDomain<3U,InterFace>&, const
 
 
 /// collects the TOPOTYPEs of the nodes in the subdomain into the (unique) set that is returned
-template<uint32_t dim, template<uint32_t> class CELL>
-set<TOPOTYPE> nodeTopologyFlags( typename vector<Node<dim>*>::const_iterator first,
-                                 typename vector<Node<dim>*>::const_iterator last )
- {
-    set<TOPOTYPE> topology_flags;
-    while ( first != last ) {
-       topology_flags.insert( (*first)->Attribute() );
-       first++;
+    /// Collects the unique TOPOTYPE flags of the nodes in the given range.
+    template<uint32_t dim>
+    set<TOPOTYPE> nodeTopologyFlags( typename vector<Node<dim>*>::const_iterator first,
+                                     typename vector<Node<dim>*>::const_iterator last )
+    {
+        set<TOPOTYPE> topology_flags;
+        while ( first != last ) {
+            assert( (*first) != nullptr );
+            topology_flags.insert( (*first)->Attribute() );
+            ++first;
+        }
+        return topology_flags;
     }
-    return topology_flags;
- }
 
-template set<TOPOTYPE> nodeTopologyFlags<3,Element>( typename vector<Node<3>*>::const_iterator, typename vector<Node<3>*>::const_iterator );
-template set<TOPOTYPE> nodeTopologyFlags<2,Element>( typename vector<Node<2>*>::const_iterator, typename vector<Node<2>*>::const_iterator );
-template set<TOPOTYPE> nodeTopologyFlags<1,Element>( typename vector<Node<1>*>::const_iterator, typename vector<Node<1>*>::const_iterator );
-
-template set<TOPOTYPE> nodeTopologyFlags<3,Face>( typename vector<Node<3>*>::const_iterator, typename vector<Node<3>*>::const_iterator );
-template set<TOPOTYPE> nodeTopologyFlags<2,Face>( typename vector<Node<2>*>::const_iterator, typename vector<Node<2>*>::const_iterator );
-template set<TOPOTYPE> nodeTopologyFlags<1,Face>( typename vector<Node<1>*>::const_iterator, typename vector<Node<1>*>::const_iterator );
+    template set<TOPOTYPE> nodeTopologyFlags<3>( typename vector<Node<3>*>::const_iterator,
+                                                 typename vector<Node<3>*>::const_iterator );
+    template set<TOPOTYPE> nodeTopologyFlags<2>( typename vector<Node<2>*>::const_iterator,
+                                                 typename vector<Node<2>*>::const_iterator );
+    template set<TOPOTYPE> nodeTopologyFlags<1>( typename vector<Node<1>*>::const_iterator,
+                                                 typename vector<Node<1>*>::const_iterator );
 
 
 

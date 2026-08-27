@@ -49,10 +49,10 @@ void BoundaryInterface_Test::run()
       if ( verbose_ ) model.RegionsOut();
 
       const Region<3>& model_domain = model.Region("Model");
-      set<TOPOTYPE> B_flags_model_before = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      set<TOPOTYPE> B_flags_model_before = nodeTopologyFlags<3>( model_domain.NodesBegin(), model_domain.NodesEnd() );
       _test( B_flags_model_before.size() == 7 ); // mesh vertex, exterior points, lines & surfaces and interior lines and surfaces
       const Region<3>& fault = model.Region("NORMAL_FAULT");
-      set<TOPOTYPE> B_flags_before = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
+      set<TOPOTYPE> B_flags_before = nodeTopologyFlags<3>( fault.NodesBegin(), fault.NodesEnd() );
       _test( B_flags_before.size() == 4 ); // INTERIOR_SURFACE and INTERIOR_LINE, PERIMETER_LINE
 
       // testing VData::InitialiseTopoTypes()
@@ -64,8 +64,8 @@ void BoundaryInterface_Test::run()
       initialise_BREP_TopologyFlags( model ); // function defined in Model
  //     initialise_BREP_TopologyFlags_vs2<3>( model ); // Claude refactor, still gives wrong results
 
-      set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3,Element>( fault.NodesBegin(), fault.NodesEnd() );
-      set<TOPOTYPE> B_flags_model_after = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      set<TOPOTYPE> B_flags_after = nodeTopologyFlags<3>( fault.NodesBegin(), fault.NodesEnd() );
+      set<TOPOTYPE> B_flags_model_after = nodeTopologyFlags<3>( model_domain.NodesBegin(), model_domain.NodesEnd() );
 
      // testing initialise_BREP_TopologyFlags()
       if ( verbose_ ) {
@@ -227,14 +227,15 @@ void BoundaryInterface_Test::run()
       const size_t model_faces_after(model.Mesh().Faces());
       _test( (model_faces_after - model_faces_before) == elmts_original_region );
 
-      // testing for existance of the new boundary patches
+      // testing existance of the new boundary patches
       if ( verbose_ ) {
            cout << "\nBoundaryInterface_Test::run: Printing the name of the boundaries in the model:";
            for ( auto it = model.BoundariesBegin(); it != model.BoundariesEnd(); ++it )
              cout << "\n\tBoundary: " << (*it).first <<" ("<< (*it).second.Cells() <<" faces)";
         }
       _test( model.Boundaries() == 12 );
-      B_flags_model_after = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      B_flags_model_after = nodeTopologyFlags<3>( model.Region("Model").NodesBegin(),
+                                                 model.Region("Model").NodesEnd() );
 
       if ( verbose_ ) TestBoundaryAndTopoTypeIdentifiers( model );
 
@@ -295,7 +296,7 @@ void BoundaryInterface_Test::TestBoxShapedModel()
       if ( verbose_ ) model.RegionsOut();
       
       const Region<3>& model_domain = model.Region("Model");
-      set<TOPOTYPE> B_flags_model = nodeTopologyFlags<3,Element>( model_domain.NodesBegin(), model_domain.NodesEnd() );
+      set<TOPOTYPE> B_flags_model = nodeTopologyFlags<3>( model_domain.NodesBegin(), model_domain.NodesEnd() );
       _test( B_flags_model.size() == 4 ); // mesh vertex, exterior point, line and surface
       
       if ( verbose_ ) cout <<"\nBoundaryInterface_Test::TestBoxShapedModel: done."<< endl;
