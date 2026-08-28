@@ -162,8 +162,9 @@ void TransientPressure_Example::Run()
   VTK_Interface<2U>  vtk_output;
   vtk_output.OutputDataToVTK( model, "hydraulic-conductivity", "conductivity",  0 );
   // only write the results of the fault zone to jpg files because they will be too large otherwise
+#ifdef CSMP_WITH_IMAGE_OUTPUT
   JPEG_RegionInterface  jpg_output( model, "fault zone" );
-
+#endif
   const double day(86400.);  // 1 year in seconds
   double maxtime(20. * day), time_increment(0.5 * day), well_pressure;
   long   timestep(1), save_counter(1), save_frequency;
@@ -248,10 +249,10 @@ void TransientPressure_Example::Run()
           vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure",    timestep );
           vtk_output.OutputDataToVTK( model, "velocity",       "velocity",          timestep);
           vtk_output.OutputDataToVTK( model, "volume-flux",    "volume flux",       timestep );
-
+#ifdef CSMP_WITH_IMAGE_OUTPUT
           jpg_output.OutputRegionDataToJPG( model, "fluid-pressure", "fluid pressure", timestep );
           jpg_output.OutputRegionDataToJPG( model, "volume-flux",    "volume flux",    timestep );
-
+#endif
           save_counter = 0;
         }
 

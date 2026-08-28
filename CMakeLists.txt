@@ -8,9 +8,22 @@ cmake_minimum_required(VERSION 3.29)
 #    - C++23 capable compiler (g++ 13.3 or later, Clang, Intel, NVC++)
 #    - MPI
 #    - git
-#    - On macOS with SAMG: Rosetta 2 (Intel x86_64)
-#        cmake -DCMAKE_OSX_ARCHITECTURES=x86_64
-#        (also requires Intel MPI)
+#    - On Mac OSX with SAMG: you need Rosetta (Intel x86_64)
+#                            Enter Rosetta shell first
+#                            arch -x86_64 /bin/zsh
+#
+# cd /Users/skmatthai/OpenCSMP/open-csmp-2024/build
+# rm -rf *
+#
+# cmake .. \
+#    -DCMAKE_OSX_ARCHITECTURES=x86_64 \
+#    -DCMAKE_BUILD_TYPE=Release \
+#    -DSAMG_ENABLE=ON \
+#    -DMPI_CXX_COMPILER=/usr/local/opt/open-mpi/bin/mpicxx \
+#    -DMPI_C_COMPILER=/usr/local/opt/open-mpi/bin/mpicc \
+#    -DMPI_Fortran_COMPILER=/usr/local/opt/open-mpi/bin/mpifort
+#
+#        (Note: this requires Intel MPI buid in Rosetta shell )
 #
 #  Usage:
 #    cmake .. -DCMAKE_BUILD_TYPE=Release -DSAMG_ENABLE=ON
@@ -37,6 +50,7 @@ option(CSMP_WITH_PETSC        "Enable PETSc solver"                             
 
 # ===============================================================================================
 # macOS / Rosetta 2 — must be set BEFORE project()
+# use homebrew in the rosetta bash-3.2$ shell to install!
 # ===============================================================================================
 if(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "arm64" AND SAMG_ENABLE)
     set(CMAKE_OSX_ARCHITECTURES "x86_64" CACHE STRING "Build architecture for macOS" FORCE)
@@ -69,7 +83,7 @@ include(FetchContent)
 FetchContent_Declare(
         plf_colony
         GIT_REPOSITORY https://github.com/mattreecebentley/plf_colony.git
-        GIT_TAG        921cd38      # last stable release — avoids C++23 regression in master
+        GIT_TAG        921cd38   # last stable release — avoids C++23 regression in master
 )
 FetchContent_MakeAvailable(plf_colony)
 message(STATUS "plf_colony source: ${plf_colony_SOURCE_DIR}")
@@ -78,6 +92,36 @@ message(STATUS "plf_colony source: ${plf_colony_SOURCE_DIR}")
 # 2. Eigen (header-only, essential)
 #    Linear algebra library. Tests and docs are disabled to keep build times short.
 # ------------------------------------------------------------------------------------------------
+if ( APPLE )
+    # -----------------------------------------------------------------------
+    # macOS — Eigen via Homebrew
+    # Homebrew Eigen does not ship CMake config files so we use the
+    # include path directly rather than find_package.
+    # -----------------------------------------------------------------------
+    execute_process(
+        COMMAND brew --prefix eigen
+        OUTPUT_VARIABLE HOMEBREW_EIGEN_PREFIX
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+
+    if ( HOMEBREW_EIGEN_PREFIX )
+        set( EIGEN_INCLUDE_DIR "${HOMEBREW_EIGEN_PREFIX}/include/eigen3" )
+        if ( EXISTS "${EIGEN_INCLUDE_DIR}/Eigen/Dense" )
+            message( STATUS "Eigen found via Homebrew: ${EIGEN_INCLUDE_DIR}" )
+        else()
+            message( FATAL_ERROR
+                "Eigen headers not found at ${EIGEN_INCLUDE_DIR}\n"
+                "Install with: brew install eigen" )
+        endif()
+    else()
+        message( FATAL_ERROR
+            "Homebrew not found — cannot locate Eigen\n"
+            "Install Homebrew and then: brew install eigen" )
+    endif()
+
+else()
+
 set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
 set(EIGEN_BUILD_DOC     OFF CACHE BOOL "" FORCE)
 
@@ -89,6 +133,7 @@ FetchContent_Declare(
         eigen
         GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
         GIT_TAG        master
+        GIT_SHALLOW    TRUE    # only fetch latest commit — much faster download
 )
 FetchContent_MakeAvailable(eigen)
 message(STATUS "Eigen source: ${eigen_SOURCE_DIR}")
@@ -101,6 +146,8 @@ endif()
 # Restore BUILD_TESTING for openCSMP's own tests
 set(BUILD_TESTING ON)
 
+endif() # Eigen
+
 
 # ===============================================================================================
 # Dependencies — System Libraries (found via pkg-config / find_package)
@@ -112,9 +159,30 @@ find_package(PkgConfig REQUIRED)
 
 # 3. MPI (essential)
 # ------------------------------------------------------------------------------------------------
-find_package(MPI REQUIRED)
-message(STATUS "MPI found: ${MPI_CXX_LIBRARIES}")
+if ( APPLE )
+    if ( SAMG_ENABLE AND CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64" )
+        # SAMG requires x86_64 — use Rosetta Homebrew MPI at /usr/local/
+        set( MPI_CXX_COMPILER     "/usr/local/opt/open-mpi/bin/mpicxx"  )
+        set( MPI_C_COMPILER       "/usr/local/opt/open-mpi/bin/mpicc"   )
+        set( MPI_Fortran_COMPILER "/usr/local/opt/open-mpi/bin/mpifort" )
+        message( STATUS "Using x86_64 MPI for SAMG/Rosetta build" )
+    else()
+        # Native arm64 build — use arm64 Homebrew MPI at /opt/homebrew/
+        execute_process(
+            COMMAND brew --prefix open-mpi
+            OUTPUT_VARIABLE HOMEBREW_MPI_PREFIX
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        set( MPI_CXX_COMPILER     "${HOMEBREW_MPI_PREFIX}/bin/mpicxx"  )
+        set( MPI_C_COMPILER       "${HOMEBREW_MPI_PREFIX}/bin/mpicc"   )
+        set( MPI_Fortran_COMPILER "${HOMEBREW_MPI_PREFIX}/bin/mpifort" )
+        message( STATUS "Using arm64 MPI: ${HOMEBREW_MPI_PREFIX}" )
+    endif()
+endif()
 
+find_package( MPI REQUIRED )
+message( STATUS "MPI found: ${MPI_CXX_LIBRARIES}" )
 
 # 4. PETSc (optional)
 #    Install with: sudo apt install petsc-dev
@@ -125,12 +193,41 @@ if(CSMP_WITH_PETSC)
 endif()
 
 
-# 5. libturbojpeg (optional)
-#    Install with: sudo apt install libturbojpeg0-dev
+# 5. libjpeg (optional)
+#    Install with: sudo apt install jpeg or using homebrew (OSX)
 # ------------------------------------------------------------------------------------------------
-if(CSMP_WITH_IMAGE_OUTPUT)
-    pkg_check_modules(TURBOJPEG REQUIRED libturbojpeg)
-    message(STATUS "libturbojpeg found: ${TURBOJPEG_LIBRARIES}")
+if ( CSMP_WITH_IMAGE_OUTPUT )
+    if ( APPLE AND CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64" )
+        # x86_64 Rosetta — jpeg installed via /usr/local/ Homebrew
+        set( JPEG_INCLUDE_DIRS "/usr/local/opt/jpeg/include" )
+        set( JPEG_LIBRARIES    "/usr/local/opt/jpeg/lib/libjpeg.dylib" )
+        if ( NOT EXISTS "${JPEG_INCLUDE_DIRS}/jpeglib.h" )
+            # Fall back to Cellar path if opt symlink not present
+            set( JPEG_INCLUDE_DIRS "/usr/local/Cellar/jpeg/10/include" )
+            set( JPEG_LIBRARIES    "/usr/local/Cellar/jpeg/10/lib/libjpeg.dylib" )
+        endif()
+        message( STATUS "JPEG x86_64: ${JPEG_INCLUDE_DIRS}" )
+
+    elseif ( APPLE )
+        # arm64 native build
+        execute_process(
+            COMMAND brew --prefix jpeg
+            OUTPUT_VARIABLE HOMEBREW_JPEG_PREFIX
+            OUTPUT_STRIP_TRAILING_WHITESPACE
+            ERROR_QUIET
+        )
+        set( JPEG_INCLUDE_DIRS "${HOMEBREW_JPEG_PREFIX}/include" )
+        set( JPEG_LIBRARIES    "${HOMEBREW_JPEG_PREFIX}/lib/libjpeg.dylib" )
+        message( STATUS "JPEG arm64: ${JPEG_INCLUDE_DIRS}" )
+
+    else()
+        # Linux
+        find_package( JPEG REQUIRED )
+    endif()
+
+    target_include_directories( openCSMP PRIVATE ${JPEG_INCLUDE_DIRS} )
+    target_link_libraries( openCSMP PRIVATE ${JPEG_LIBRARIES} )
+    target_compile_definitions( openCSMP PRIVATE CSMP_WITH_IMAGE_OUTPUT )
 endif()
 
 
@@ -155,21 +252,71 @@ endif()
 
 
 # 7. CGNS (interface/header-only, from external_support_libs)
-# ------------------------------------------------------------------------------------------------
-# CGNS — install with: sudo apt install libcgns-dev
-find_package(CGNS QUIET)
-if(CGNS_FOUND)
-    message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
-    target_link_libraries(openCSMP PUBLIC ${CGNS_LIBRARIES})
-    target_include_directories(openCSMP PUBLIC ${CGNS_INCLUDE_DIRS})
-else()
-    # Fall back to pkg-config
-    pkg_check_modules(CGNS QUIET cgns)
-    if(CGNS_FOUND)
-        message(STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}")
-        target_link_libraries(openCSMP PUBLIC ${CGNS_LIBRARIES})
-        target_include_directories(openCSMP PUBLIC ${CGNS_INCLUDE_DIRS})
+# -----------------------------------------------------------------------
+# — install with: sudo apt install libcgns-dev
+# 
+# CGNS — CFD General Notation System
+#
+#   macOS:  brew install cgns
+#   Linux:  sudo apt install libcgns-dev
+#   Fallback: headers from external_support_libs/cgns (no linking)
+#
+#   Discovery is attempted in order:
+#     1. find_package  (works if CMake config files are present)
+#     2. pkg-config    (works on most Linux systems)
+#     3. Manual search (Homebrew path on macOS)
+#     4. Fallback      (header-only from external_support_libs)
+# -----------------------------------------------------------------------
+
+set( CGNS_FOUND_USABLE FALSE )
+
+# 1. Try find_package first
+find_package( CGNS QUIET )
+if ( CGNS_FOUND )
+    message( STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}" )
+    set( CGNS_FOUND_USABLE TRUE )
+
+# 2. Try pkg-config
+elseif ( PKG_CONFIG_FOUND )
+    pkg_check_modules( CGNS QUIET cgns )
+    if ( CGNS_FOUND )
+        message( STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}" )
+        set( CGNS_FOUND_USABLE TRUE )
     endif()
+endif()
+
+# 3. Try Homebrew manually on macOS
+if ( APPLE AND NOT CGNS_FOUND_USABLE )
+    execute_process(
+        COMMAND brew --prefix cgns
+        OUTPUT_VARIABLE HOMEBREW_CGNS_PREFIX
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+        ERROR_QUIET
+    )
+    if ( HOMEBREW_CGNS_PREFIX AND EXISTS "${HOMEBREW_CGNS_PREFIX}/include/cgnslib.h" )
+        message( STATUS "CGNS found via Homebrew: ${HOMEBREW_CGNS_PREFIX}" )
+        set( CGNS_INCLUDE_DIRS "${HOMEBREW_CGNS_PREFIX}/include" )
+        set( CGNS_LIBRARIES    "${HOMEBREW_CGNS_PREFIX}/lib/libcgns.dylib" )
+        set( CGNS_FOUND_USABLE TRUE )
+    endif()
+endif()
+
+# 4. Fallback — use headers from external_support_libs (no linking)
+if ( NOT CGNS_FOUND_USABLE )
+    message( WARNING
+        "CGNS not found via package manager — "
+        "falling back to external_support_libs headers (no linking).\n"
+        "  macOS:  brew install cgns\n"
+        "  Linux:  sudo apt install libcgns-dev" )
+    set( CGNS_INCLUDE_DIRS "${CSMP_EXTERNAL_LIBS}/cgns" )
+    set( CGNS_LIBRARIES    "" )
+endif()
+
+# Create an interface target for consistent usage
+add_library( cgns_iface INTERFACE )
+target_include_directories( cgns_iface INTERFACE ${CGNS_INCLUDE_DIRS} )
+if ( CGNS_LIBRARIES )
+    target_link_libraries( cgns_iface INTERFACE ${CGNS_LIBRARIES} )
 endif()
 
 
@@ -293,8 +440,6 @@ message(STATUS "  -> RapidXML expected at:  ${CSMP_EXTERNAL_LIBS}/rapidxml")
 # Core link dependencies
 target_link_libraries(openCSMP PUBLIC
         MPI::MPI_CXX
-        cgns
-        jpeg
 )
 
 # plf_colony — header-only, only plf_colony.h is needed
@@ -303,11 +448,22 @@ target_include_directories(openCSMP PUBLIC
         ${plf_colony_SOURCE_DIR}
 )
 
-# Eigen — prefer the proper CMake target; fall back to manual include path
-if(TARGET Eigen3::Eigen)
-    target_link_libraries(openCSMP PUBLIC Eigen3::Eigen)
+# Eigen — linking differs between macOS (direct path) and Linux (FetchContent)
+if ( APPLE )
+    # Direct include path from Homebrew
+    target_include_directories( openCSMP PUBLIC
+        $<BUILD_INTERFACE:${EIGEN_INCLUDE_DIR}>
+    )
+    message( STATUS "Eigen include path: ${EIGEN_INCLUDE_DIR}" )
+elseif ( TARGET Eigen3::Eigen )
+    # FetchContent provided a proper CMake target
+    target_link_libraries( openCSMP PUBLIC Eigen3::Eigen )
+    message( STATUS "Eigen3::Eigen target found ✓" )
 else()
-    target_include_directories(openCSMP PUBLIC ${eigen_SOURCE_DIR})
+    # FetchContent fallback — no CMake target
+    target_include_directories( openCSMP PUBLIC
+        $<BUILD_INTERFACE:${eigen_SOURCE_DIR}>
+    )
 endif()
 
 # IAPS H2O EOS (optional)
@@ -333,15 +489,6 @@ if(CSMP_WITH_PETSC)
     # PETSC_CFLAGS_OTHER contains raw -DFOO flags — must use compile_options not compile_definitions
     target_compile_options(openCSMP PRIVATE ${PETSC_CFLAGS_OTHER})
     target_compile_definitions(openCSMP PRIVATE CSMP_WITH_PETSC)
-endif()
-
-# libturbojpeg (optional)
-option(CSMP_WITH_IMAGE_OUTPUT "Enable image output support via libturbojpeg" ON)
-
-if(CSMP_WITH_IMAGE_OUTPUT)
-    target_include_directories(openCSMP PRIVATE ${TURBOJPEG_INCLUDE_DIRS})
-    target_link_libraries(openCSMP PRIVATE ${TURBOJPEG_LIBRARIES})
-    target_compile_definitions(openCSMP PRIVATE CSMP_WITH_IMAGE_OUTPUT)
 endif()
 
 
@@ -497,8 +644,16 @@ set(CSMP_CONSUMER_INCLUDE_DIRS
 )
 # Append optional include dirs only if the feature is enabled
 if(CSMP_WITH_IMAGE_OUTPUT)
-    list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${TURBOJPEG_INCLUDE_DIRS})
+    list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${JPEG_INCLUDE_DIRS})
 endif()
+
+# Add Eigen include to consumer targets
+if ( APPLE )
+    list( APPEND CSMP_CONSUMER_INCLUDE_DIRS ${EIGEN_INCLUDE_DIR} )
+else()
+    list( APPEND CSMP_CONSUMER_INCLUDE_DIRS ${eigen_SOURCE_DIR} )
+endif()
+
 
 
 # ===============================================================================================
@@ -531,7 +686,6 @@ if(BUILD_EXAMPLES)
         # jpeg is linked separately for any direct JPEG calls in examples
         target_link_libraries(openCSMP-examples PRIVATE
                 openCSMP
-                $<$<BOOL:${CSMP_WITH_IMAGE_OUTPUT}>:jpeg>
         )
     else()
         message(STATUS "No example sources found — skipping openCSMP-examples")

@@ -75,8 +75,9 @@ void ModelPreProcessor2D::ModelToMatrix( const string& file_name, size_t rows, s
     const bool gray_scale(false);
     const bool sqrt_of_value(true);
 
+#ifdef CSMP_WITH_IMAGE_OUTPUT
     regular_grid.SaveToJPG( file_name.c_str(), static_cast<int32_t>(0), gray_scale, sqrt_of_value );
-    
+#endif
     const bool with_frame(false);
     regular_grid.Out( file_name.c_str(), static_cast<int32_t>(0), with_frame );
 

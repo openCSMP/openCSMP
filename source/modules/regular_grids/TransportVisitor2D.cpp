@@ -257,7 +257,9 @@ bool TransportVisitor2D::AdvectUntil( Model<2U>& sg, double final_time )
          cout <<"      advection step: "<< ++n << endl;
          sg.Accept( *this );
          StoreResultsInGrid();
+#ifdef CSMP_WITH_IMAGE_OUTPUT
          grid.SaveToJPG( "test-grid", n );
+#endif
          time += time_increment;
          if ( n >= static_cast<int32_t>(max_increments) ) break;
       }

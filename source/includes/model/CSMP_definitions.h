@@ -116,22 +116,6 @@ concept CsmpVariable = is_csmp_variable<dim, Var>::value;
 } // end csmp
        
 // =====================================================
-/* Usage example
-
-template<uint32_t dim, CsmpVariable<dim> VAR>
-void Region<dim>::InputPropertyValue( const char* input_prop, const VAR& new_value );
-
-*/
-
-
-/*
-=======================
-JPEG Interface
-to create images etc.
-=======================
-*/
-#define CSMP_WITH_IMAGE_OUTPUT
-
 
 #if defined(DEBUG) && defined(NDEBUG)
 #error && "DEBUG and NDEBUG cannot be defined simultaneously"

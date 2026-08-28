@@ -123,16 +123,16 @@ class SAMG_Solver final : public Solver {
     // ========================================================================
 
     /// solves A x = b where A is a CompressedRowMatrix (preferred path)
-    virtual void SolveMatrixEquation( CompressedRowMatrix& A,
-                                      std::vector<double>& b,
-                                      std::vector<double>& x,
-                                      size_t no_unknowns );
+    void SolveMatrixEquation( CompressedRowMatrix& A,
+                              std::vector<double>& b,
+                              std::vector<double>& x,
+                              size_t no_unknowns ) override final;
 
     /// solves A x = b where A is a CSMP SparseMatrix (converted internally)
-    virtual void SolveMatrixEquation( SparseMatrix& A,
-                                      std::vector<double>& b,
-                                      std::vector<double>& x,
-                                      size_t no_unknowns );
+    void SolveMatrixEquation( SparseMatrix& A,
+                              std::vector<double>& b,
+                              std::vector<double>& x,
+                              size_t no_unknowns ) override final;
 
   private:
 
