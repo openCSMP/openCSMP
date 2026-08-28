@@ -843,15 +843,6 @@ void TextInterface::OutputDataAsTextColumns( const Model<dim>& model,
  } // end OutputDataAsTextColumns
 
 
-template void TextInterface::OutputDataAsTextColumns( const Model<1U>&, const char*, const char*,
-                                                      const CoordinateTransformer<1U>&, const list<string>& ) const;
-template void TextInterface::OutputDataAsTextColumns( const Model<2U>&, const char*, const char*,
-                                                      const CoordinateTransformer<2U>&, const list<string>& ) const;
-template void TextInterface::OutputDataAsTextColumns( const Model<3U>&, const char*, const char*,
-                                                      const CoordinateTransformer<3U>&, const list<string>& ) const;
-
-
-
 
 
 
@@ -1082,24 +1073,18 @@ The method will report an error and return without creating any output if
 no groups were defined. 
  
 */
-template<uint32_t dim>
-void TextInterface::OutputRegionsToTextFiles( const Model<dim>& sg, const char* property ) const
- {
-    typename map<string,Region<dim> >::const_iterator  it = sg.RegionsBegin();
-    char    file_name[INFO_STRING];
-    string  prop(property);
-    for ( string::iterator i=prop.begin(); i!=prop.end(); i++ ) if ( *i == ' ' ) *i = '_';
+  template<uint32_t dim>
+  void TextInterface::OutputRegionsToTextFiles( const Model<dim>& sg, const char* property ) const
+{
+  std::string prop( property );
+  for ( auto& c : prop ) if ( c == ' ' ) c = '_';
 
-    while ( it!=sg.RegionsEnd() )
-      {
-         strcpy( file_name, (*it).first.CharPointer() );
-         strcat( file_name, "_" );
-         strcat( file_name, prop.c_str() );
-         OutputDataAsTextColumns( (*it).first.c_str(), sg, file_name, property );
-         it++;
-      }
-
- } // end OutputRegionsToTextFiles
+  for ( auto it = sg.RegionsBegin(); it != sg.RegionsEnd(); ++it )
+  {
+    std::string file_name = it->first + "_" + prop;
+    OutputDataAsTextColumns( it->first.c_str(), sg, file_name.c_str(), property );
+  }
+}
 
 
 
@@ -1374,43 +1359,38 @@ bool  TextInterface::IsInNextLine( ifstream& ifs, const char* search_string ) co
 }
 
 
-template void
-TextInterface::OutputDataAsTextColumns<1U>( const Model<1U>& sg,
-                                                         const char* fname, const char* s ) const;
+// OutputDataAsTextColumns( Model, fname, var )
+template void TextInterface::OutputDataAsTextColumns<1U>( const Model<1U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumns<2U>( const Model<2U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumns<3U>( const Model<3U>&, const char*, const char* ) const;
 
-template void
-TextInterface::OutputDataAsTextColumns<2U>( const Model<2U>& sg, 
-                                                         const char* fname, const char* s ) const;
+// OutputDataAsTextColumns( region, Model, fname, var )
+template void TextInterface::OutputDataAsTextColumns<1U>( const char*, const Model<1U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumns<2U>( const char*, const Model<2U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumns<3U>( const char*, const Model<3U>&, const char*, const char* ) const;
 
-template void
-TextInterface::OutputDataAsTextColumns<3U>( const Model<3U>& sg,
-                                                         const char* fname, const char* s ) const;
+// OutputDataAsTextColumns( Model, fname, var, timestep, numbered )
+template void TextInterface::OutputDataAsTextColumns<1U>( const Model<1U>&, const char*, const char*, long, bool ) const;
+template void TextInterface::OutputDataAsTextColumns<2U>( const Model<2U>&, const char*, const char*, long, bool ) const;
+template void TextInterface::OutputDataAsTextColumns<3U>( const Model<3U>&, const char*, const char*, long, bool ) const;
 
-template void
-TextInterface::OutputDataAsTextColumnsNumbered<1U>( const Model<1U>& sg,
-                                                         const char* fname, const char* s ) const;
+// OutputDataAsTextColumns( Model, fname, region, transformer, vars )
+template void TextInterface::OutputDataAsTextColumns<1U>( const Model<1U>&, const char*, const char*, const CoordinateTransformer<1U>&, const list<string>& ) const;
+template void TextInterface::OutputDataAsTextColumns<2U>( const Model<2U>&, const char*, const char*, const CoordinateTransformer<2U>&, const list<string>& ) const;
+template void TextInterface::OutputDataAsTextColumns<3U>( const Model<3U>&, const char*, const char*, const CoordinateTransformer<3U>&, const list<string>& ) const;
 
-template void
-TextInterface::OutputDataAsTextColumnsNumbered<2U>( const Model<2U>& sg, 
-                                                         const char* fname, const char* s ) const;
+// OutputDataAsTextColumnsNumbered
+template void TextInterface::OutputDataAsTextColumnsNumbered<1U>( const Model<1U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumnsNumbered<2U>( const Model<2U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumnsNumbered<3U>( const Model<3U>&, const char*, const char* ) const;
 
-template void
-TextInterface::OutputDataAsTextColumnsNumbered<3U>( const Model<3U>& sg,
-                                                         const char* fname, const char* s ) const;
+template void TextInterface::OutputDataAsTextColumnsNumbered<1U>( const char*, const Model<1U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumnsNumbered<2U>( const char*, const Model<2U>&, const char*, const char* ) const;
+template void TextInterface::OutputDataAsTextColumnsNumbered<3U>( const char*, const Model<3U>&, const char*, const char* ) const;
 
-template void
-TextInterface::OutputDataAsTextColumns<1U>( const Model<1U>& sg, 
-                                                         const char* fname, const char* s,
-                                                         long timestep, bool ) const;
-
-template void
-TextInterface::OutputDataAsTextColumns<2U>( const Model<2U>& sg, 
-                                                         const char* fname, const char* s,
-                                                         long timestep, bool ) const;
-
-template void
-TextInterface::OutputDataAsTextColumns<3U>( const Model<3U>& sg, 
-                                                         const char* fname, const char* s,
-                                                         long timestep, bool  ) const;
+// OutputRegionsToTextFiles
+template void TextInterface::OutputRegionsToTextFiles<1U>( const Model<1U>&, const char* ) const;
+template void TextInterface::OutputRegionsToTextFiles<2U>( const Model<2U>&, const char* ) const;
+template void TextInterface::OutputRegionsToTextFiles<3U>( const Model<3U>&, const char* ) const;
 
 } // csmp

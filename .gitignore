@@ -74,8 +74,6 @@ search/
 *.pch
 
 # Compiled dynamic libraries
-*.so
-*.dylib
 *.dll
 
 # Fortran module files
@@ -84,7 +82,6 @@ search/
 # Compiled static libraries
 *.lai
 *.la
-*.a
 *.lib
 
 # Executables
@@ -115,6 +112,7 @@ build/
 build*/
 *-build/
 
-
-thirdparty/eigen/
+# CMake build directories
 cmake-build-debug/
+cmake-build-release/
+cmake-build-*/

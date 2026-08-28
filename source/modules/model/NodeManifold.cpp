@@ -326,7 +326,7 @@ uint32_t NodeManifold<dim>::Branches() const noexcept
 template<uint32_t dim>
 Node<dim>* const NodeManifold<dim>::N( size_t branch ) const noexcept
 {
-  assert( branch < branches_.size() );
+  if ( branch >= branches_.size() ) return nullptr;
   return branches_[branch];
 }
 

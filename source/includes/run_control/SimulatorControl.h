@@ -107,7 +107,7 @@ public:
     bool YesOrNo();
     bool CheckTimeIntervals();
     void InteractivelyManageEssentialConditions();
-    double GetRealInput(bool success=true);
+    double GetRealInput();
     int32_t GetIntegerInput();
     std::string GetStringInput();
     std::string ParseTrueOrFalse(bool trueorfalse);

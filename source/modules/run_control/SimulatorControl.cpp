@@ -675,18 +675,15 @@ void SimulatorControl<dim>::ManageWellRates()
 }
 
 template <uint32_t dim>
-double SimulatorControl<dim>::GetRealInput(bool success)
+double SimulatorControl<dim>::GetRealInput()
 {
-    std::string choice="";
-    getline(cin, choice);
-    if (!choice.empty()){
-        return std::stod(choice);
-        success=true;
+    std::string choice;
+    getline( cin, choice );
+    if ( !choice.empty() )
+    {
+        return std::stod( choice );
     }
-    else{
-        return 10e50;
-        success=false;
-    }
+    return std::numeric_limits<double>::quiet_NaN();
 }
 
 template <uint32_t dim>

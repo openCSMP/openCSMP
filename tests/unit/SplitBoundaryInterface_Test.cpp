@@ -657,15 +657,15 @@ bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Inters
   _test( perim_nodes_diagonal.size() == frac_region_diagonal.PerimeterNodes() );
 
 
-  Node<DIM>* split_perimter_node = nullptr;
+  Node<DIM>* perimeter_node = nullptr;
   for ( const auto& n : perim_nodes_planar ){
     if ( approximatelyEqual(n->Coordinate()[0] , 2.5, 0.01) &&
          approximatelyEqual(n->Coordinate()[1] , 5.0, 0.01) &&
          approximatelyEqual(n->Coordinate()[2] , 7.5, 0.01)  ){
-      split_perimter_node = n;                          //this node is on the perimter of fracture planar, but split by fracture diagonal
+      perimeter_node = n;                          //this node is on the perimeter of fracture planar, but split by fracture diagonal
     }
   }
-  assert(split_perimter_node!=nullptr);
+  assert(perimeter_node!=nullptr);
 
   ///Testing splitboundary creation
 
@@ -676,9 +676,11 @@ bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Inters
 
   //Need to find node on perimeter that was split by diagonal fracture
   Node<DIM>* second_split_perimeter_node = nullptr;
-  assert(split_perimter_node->Manifold()->Branches()==2);
-  split_perimter_node->Manifold()->N(0) == split_perimter_node ?  second_split_perimeter_node = split_perimter_node->Manifold()->N(1) : second_split_perimeter_node->Manifold()->N(0);
-
+  assert(perimeter_node->Manifold()->Branches()==2);
+  second_split_perimeter_node =
+      ( perimeter_node->Manifold()->N(0) == perimeter_node )
+      ? perimeter_node->Manifold()->N(1)
+      : perimeter_node->Manifold()->N(0);
 
   string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
   string sb2 = model1.MergeSplitBoundaries( "FRACTURE_DIAGONAL", sb_names_2);
@@ -902,15 +904,15 @@ bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Inters
   _test( perim_nodes_diagonal.size() == frac_region_diagonal.PerimeterNodes() );
 
 
-  Node<dim>* split_perimter_node = nullptr;
+  Node<dim>* split_perimeter_node = nullptr;
   for ( auto n : perim_nodes_planar ){
     if ( approximatelyEqual(n->Coordinate()[0] , 2.5, 0.01) &&
          approximatelyEqual(n->Coordinate()[1] , 5.0, 0.01) &&
          approximatelyEqual(n->Coordinate()[2] , 7.5, 0.01)  ){
-      split_perimter_node = n;                          //this node is on the perimter of fracture planar, but split by fracture diagonal
+      split_perimeter_node = n;                          //this node is on the perimeter of fracture planar, but split by fracture diagonal
     }
   }
-  assert(split_perimter_node!=nullptr);
+  assert(split_perimeter_node!=nullptr);
 
   ///Testing splitboundary creation
   //Region -> SplitBoundary
@@ -920,8 +922,13 @@ bool SplitBoundaryInterface_Test::Test_NodeAndElementsCorrespondance_3D_X_Inters
 
   //Need to find node on perimeter that was split by diagonal fracture
   Node<dim>* second_split_perimeter_node = nullptr;
-  assert(split_perimter_node->Manifold()->Branches()==2);
-  split_perimter_node->Manifold()->N(0) == split_perimter_node ?  second_split_perimeter_node = split_perimter_node->Manifold()->N(1) : second_split_perimeter_node->Manifold()->N(0);
+  assert(split_perimeter_node->Manifold()->Branches()==2);
+
+  // If N(0) of the manifold is the current node, take N(1), otherwise take N(0)
+  second_split_perimeter_node =
+      ( split_perimeter_node->Manifold()->N(0) == split_perimeter_node )
+      ? split_perimeter_node->Manifold()->N(1)
+      : split_perimeter_node->Manifold()->N(0);
 
 
   string sb1 = model1.MergeSplitBoundaries( "FRACTURE_PLANAR",   sb_names );
