@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: 2026 Stephan Matthai <stephan.matthai@unimelb.edu.au>
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include <ctime>
 #include "SimulatorSetup.h"
 #include "Model.h"
