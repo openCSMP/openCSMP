@@ -153,7 +153,6 @@
 #include "PropertyConstraints_Test.h"
 #include "RegionMonitor_Test.h"
 #include "StatisticalAnalyzer_Test.h"
-#include "Visitor_TestSuite.h"
 
 // --- performance tests ---
 #include "AccumulationSpeedProfiling_Test.h"
@@ -586,8 +585,6 @@ int main()
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
 
       // vistors
-      Visitor_TestSuite visitorTests( composite );
-      visitorTests.run();
       composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
       composite.addTest( new MohrCoulombFailure_Visitor_Test() );

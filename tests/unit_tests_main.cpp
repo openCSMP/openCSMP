@@ -148,12 +148,16 @@
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator_Transient_Test.h"
 
-// --- constitutive relationships ---
+// --- constitutive relationships flow ---
 #include "ExponentialTransferFunction_Test.h"
 #include "FlowFunctionsModule.h"
 #include "H2O_CO2_NaCl_FlowFunctions.h"
 #include "TwoPhaseModel_TestSuite.h"
 #include "TwoPhaseModelWithHysteresis_Test.h"
+
+// --- constitutive relationships mechanics ---
+#include "MohrCoulombFailure_Visitor_Test.h"
+#include "StressInvariants_Test.h"
 
 // --- analysis ---
 #include "PropertyConstraints_Test.h"
@@ -176,10 +180,6 @@
 #include "GravityInducedFluidPressure_Test.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
 #include "BoreHole_stability_VerticalWell3D_VVCase.h"
-
-// constitutive relationships
-#include "MohrCoulombFailure_Visitor_Test.h"
-#include "StressInvariants_Test.h"
 
 using namespace std;
 using namespace csmp;
@@ -369,7 +369,6 @@ int main()
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
-      interdependent1.addTest( new VariableStorageSpeed_Test() );
 
       // running unit tests and reporting errors
       interdependent1.run();
@@ -413,8 +412,6 @@ int main()
       interdependent2.addTest( new ANSYS_SplitBoundaryMatch_Test() );
       interdependent2.addTest( new PropertyHandle_Test() );    
       interdependent2.addTest( new PropertyHandle_MathTest() );
-      interdependent2.addTest( new IntegrationPointToNodePropertyVisitor_Test() ); // insufficient accuracy for IsoLinPyra
-      interdependent2.addTest( new CopyReplaceVisitor_Test( &model ) );
       // interfaces
       interdependent2.addTest( new InputDataManager_Test());
       interdependent2.addTest( new ANSYS_Model3D_Test() );
@@ -464,7 +461,7 @@ int main()
     // =========================================================================================================
     //
     //             COMPOSITE FUNCTIONALITY
-    //             Run speed tests only in release mode (NDEBUG==true)
+    //             Run performance tests only in release mode (NDEBUG==true)
     //
     // =========================================================================================================
     if ( test_composite ) {
@@ -482,12 +479,11 @@ int main()
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
 
       // vistors
-      Visitor_TestSuite visitorTests( composite );
-      visitorTests.run();
-      composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
+      composite.addTest( new IntegrationPointToNodePropertyVisitor_Test() );
+      composite.addTest( new CopyReplaceVisitor_Test( &model ) );
+      composite.addTest( new PropertyAtPointVisitor_Test(verbose) );
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
       composite.addTest( new MohrCoulombFailure_Visitor_Test() );
-      composite.addTest( new PropertyConstraints_Test() );
 
       // computations
       composite.addTest( new PDE_Integrator_Test( model2D ) );
@@ -511,13 +507,14 @@ int main()
       
       // speed tests (run only in the optimised RELEASE version of the code)
 #ifdef NDEBUG
-        refactored.addTest( new AccumulationSpeedProfiling_Test() );
-        refactored.addTest( new VariableBenchmarking_Test() );
-        refactored.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
-        refactored.addTest( new FiniteVolumeStencilSpeed_Test() );
-        refactored.addTest( new JaggedArray3D_Comparison_Test() );
-        refactored.addTest( new PropertyStorageSpeed_Test( &cout ) );
-        refactored.addTest( new VariableStorageSpeed_Test() );
+      composite.addTest( new VariableStorageSpeed_Test() );
+      composite.addTest( new AccumulationSpeedProfiling_Test() );
+      composite.addTest( new VariableBenchmarking_Test() );
+      composite.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+      composite.addTest( new FiniteVolumeStencilSpeed_Test() );
+      composite.addTest( new JaggedArray3D_Comparison_Test() );
+      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+      composite.addTest( new VariableStorageSpeed_Test() );
 #endif
       
       // running unit tests and reporting errors

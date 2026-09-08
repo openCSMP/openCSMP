@@ -8,6 +8,7 @@
 
 // --- fundamentals ---
 #include "ArrayVariable_Test.h"
+#include "FlaggedArrayVariable_Test.h"
 #include "Colony_Test.h"
 #include "ColorPalette_Test.h"
 #include "ConvexPolygon_Test.h"
@@ -67,6 +68,7 @@
 #include "PropertyAtPointVisitor_Test.h"
 #include "PropertyDatabase_Test.h"
 #include "PropertyHandle_Test.h"
+#include "PropertyHandle_MathTest.h"
 #include "Region_Test.h"
 #include "SplitBoundary_Test.h"
 #include "SplitBoundaryInterface_Test.h"
@@ -113,11 +115,27 @@
 #include "VTU_Interface_Test.h"
 
 // --- FE/FV integration ---
-#include "Integral_var_NT_lhsop_N_dV_Test.h"
-#include "Integral_var_NT_rhsop_N_dV_Test.h"
 #include "MathOperatorLHS_Test.h"
 #include "MathOperatorRHS_Test.h"
 #include "Operand_Test.h"
+
+// PDE operators
+#include "Integral_dNT_lhsop_dN_dV_Test.h"
+#include "Integral_dNT_lhsop_dN_NT_v_dN_dV_Test.h"
+#include "Integral_dNT_rhsop_dN_dV_Test.h"
+#include "Integral_dNT_rhsop_dV_Test.h"
+#include "Integral_NT_lhsop_N_dV_Test.h"
+#include "Integral_var_NT_lhsop_N_dV_Test.h"
+#include "Integral_var_NT_rhsop_N_dV_Test.h"
+#include "NumIntegral_dNT_op_dN_NT_v_dN_dV_Test.h"
+#include "NumIntegral_dNT_lhsop_dN_dV_Test.h"
+#include "NumIntegral_dNT_op_dV_Test.h"
+#include "NumIntegral_dNT_rhsop_dN_dV_Test.h"
+#include "NumIntegral_NT_lhsop_N_dV_Test.h"
+#include "NumIntegral_NT_rhsop_N_dV_Test.h"
+
+// PDE integrators
+#include "PDE_Integrator_Computation_Test.h"
 #include "PDE_Integrator_Test.h"
 #include "PDE_Integrator_Transient_Test.h"
 
@@ -128,11 +146,14 @@
 #include "TwoPhaseModel_TestSuite.h"
 #include "TwoPhaseModelWithHysteresis_Test.h"
 
+// --- constitutive relationships mechanics ---
+#include "MohrCoulombFailure_Visitor_Test.h"
+#include "StressInvariants_Test.h"
+
 // --- analysis ---
 #include "PropertyConstraints_Test.h"
 #include "RegionMonitor_Test.h"
 #include "StatisticalAnalyzer_Test.h"
-#include "Visitor_TestSuite.h"
 
 // --- performance tests ---
 #include "AccumulationSpeedProfiling_Test.h"
@@ -149,7 +170,8 @@
 #include "GravityInducedFluidPressure_Test.h"
 #include "Geothermal_1D_VVCase.h"
 #include "SplitBoundaryPressureDiffusion_Test.h"
-
+#include "ExplicitTransport_Test.h"
+#include "BoreHole_stability_VerticalWell3D_VVCase.h"
 
 
 /**
@@ -290,6 +312,7 @@ int main( int argc, char* argv[] )
       basic.addTest( new TensorVariable_Test1());
       basic.addTest( new TensorVariable_Test2());
       basic.addTest( new ArrayVariable_Test());
+      basic.addTest( new FlaggedArrayVariable_Test());
       
       // utilities tests
       basic.addTest( new Matrix_Test(verbose) );
@@ -342,7 +365,7 @@ int main( int argc, char* argv[] )
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,4), "IsoparametricLinearTriangle4IP.txt", verbose ) );   // 2D case 4 integration points
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );  // 3D case 3 integration point
       // non-standard element tests
-      interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) ); // TODO: no flux balance for constant velocity projected on sides
+      interdependent1.addTest( new IsoparametricQuadraticTetrahedron_Test(verbose) );
       // other elements
       // --------------
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
@@ -358,8 +381,28 @@ int main( int argc, char* argv[] )
       // finite element stencil manager
       interdependent1.addTest( new FiniteElementManager_Test() );
 
-// fail - TODO: legacy code needs refactoring      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test( verbose ) );
-// fail - TODO: legacy code needs refactoring      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test( verbose ) );
+// Exact integration
+// -----------------
+// LHS
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_NT_lhsop_N_dV_Test(true) );
+      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) );
+// RHS
+      interdependent1.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new Integral_dNT_rhsop_dV_Test(true) );
+      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) );
+          
+// Numeric integration
+// -------------------
+// LHS
+      interdependent1.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_dNT_op_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) );
+// RHS
+      interdependent1.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) );
+      interdependent1.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) );
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
@@ -390,7 +433,7 @@ int main( int argc, char* argv[] )
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
       interdependent2.addTest( new INDEXandVariables_Test() );
-      interdependent2.addTest( new ModelTopology_Test() ); // TODO: tests only minor functionality
+      interdependent2.addTest( new ModelTopology_Test() ); // TODO: extend to cover all functionality
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );
@@ -400,19 +443,19 @@ int main( int argc, char* argv[] )
       interdependent2.addTest( new ModelSubDomain_Test() );
       interdependent2.addTest( new NodeManifoldManager_Test() );
       interdependent2.addTest( new Region_Test() );
+      interdependent2.addTest( new PropertyConstraints_Test() );
       interdependent2.addTest( new BoundaryInterface_Test() );
       interdependent2.addTest( new Boundary_Test() );
       interdependent2.addTest( new SplitBoundaryInterface_Test() );
       interdependent2.addTest( new SplitBoundary_Test() );
       interdependent2.addTest( new ANSYS_SplitBoundaryMatch_Test() );
-      interdependent2.addTest( new PropertyHandle_Test() );    // TODO: refactor without ANSYS model
-      interdependent2.addTest( new IntegrationPointToNodePropertyVisitor_Test() ); // insufficient accuracy for IsoLinPyra
-      interdependent2.addTest( new CopyReplaceVisitor_Test( &model ) );
+      interdependent2.addTest( new PropertyHandle_Test() );
+      interdependent2.addTest( new PropertyHandle_MathTest() );
       // interfaces
       interdependent2.addTest( new InputDataManager_Test());
       interdependent2.addTest( new ANSYS_Model3D_Test() );
       interdependent2.addTest( new ANSYS_Model2D_Test() );
-      interdependent2.addTest( new VTU_Interface_Test() ); // TODO: needs refactoring
+      interdependent2.addTest( new VTU_Interface_Test() );
       interdependent2.addTest( new StatisticalAnalyzer_Test() );
       // running unit tests and reporting errors
       interdependent2.run();
@@ -433,16 +476,17 @@ int main( int argc, char* argv[] )
         cout <<"\n"<<"4. Input & output interfaces of CSMP: running tests..."<< endl;
         TestSuite interfaces("CSMP-refactored code unit-test suite", &cout );
 
-        interfaces.addTest( new TRIANGLE_Interface_Test() ); // FAILED ASSERTION ON COLLOCATED NODES
-        interfaces.addTest( new ANSYS_SplitBoundaryMatch_Test() );   // WORKS 11/11/2024
-        interfaces.addTest( new ANSYS_Model2D_Test() );              // WORKS 11/11/2024
-        interfaces.addTest( new ANSYS_Model3D_Test() );              // WORKS 22/10/2024
+        interfaces.addTest( new TRIANGLE_Interface_Test() );
+        interfaces.addTest( new ANSYS_SplitBoundaryMatch_Test() );
+        interfaces.addTest( new ANSYS_Model2D_Test() );
+        interfaces.addTest( new ANSYS_Model3D_Test() );
 
         interfaces.addTest( new VTU_Interface_Test() );
         interfaces.addTest( new UG4_UGX_FileExport_Test() );
 
-// TODO: write and create tests for interfaces: Gmsh, GeoModeller, Eclipse, Matlab, Maple, JPEG, Rhino, Tecplot etc. here
-// TODO: SKUA NEEDS RECREATION of binary files:  composite.addTest( new SKUA_FiniteElementMeshInterface_Test() );
+// TODO: write missing tests for: Gmsh, GeoModeller, Eclipse, Matlab, Maple, JPEG, Rhino, Tecplot etc.
+// TODO: SKUA interface needs recreation of binary files:
+        // composite.addTest( new SKUA_FiniteElementMeshInterface_Test() );
     
         // actually running the test
         interfaces.run();
@@ -457,10 +501,11 @@ int main( int argc, char* argv[] )
     // =========================================================================================================
     //
     //             COMPOSITE FUNCTIONALITY
+    //             Run performance tests only in release mode (NDEBUG==true)
     //
     // =========================================================================================================
     if ( test_composite ) {
-      // creating test models
+      // creating 2D and 3D test models
       VSet<2U> vset2D;
       ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset2D );
       vset2D.RemoveData("element variable"); // not needed here
@@ -473,29 +518,45 @@ int main( int argc, char* argv[] )
       cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
 
-      // vistors
-      Visitor_TestSuite visitorTests( composite );
-      visitorTests.run();
-      composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
+      // visitors
+      composite.addTest( new IntegrationPointToNodePropertyVisitor_Test() );
+      composite.addTest( new CopyReplaceVisitor_Test( &model3D ) );
+      composite.addTest( new PropertyAtPointVisitor_Test(verbose) );
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
-      composite.addTest( new PropertyConstraints_Test() );
-      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+      composite.addTest( new MohrCoulombFailure_Visitor_Test() );
 
       // computations
       composite.addTest( new PDE_Integrator_Test( model2D ) );
       composite.addTest( new PDE_Integrator_Transient_Test() );
+      composite.addTest( new PDE_Integrator_Computation_Test() );
+      composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
+      composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
+
       // misc
       composite.addTest( new RegionMonitor_Test() );
       composite.addTest( new ModelComparator_Test() );
 
       // constitutive relationships
       composite.addTest( new ExponentialTransferFunction_Test() );
-      composite.addTest( new PropertyStorageSpeed_Test( &clog ) ); // luxury extra
+      composite.addTest( new StressInvariants_Test() );
 
       // constitutive relations
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
       composite.addTest( new TwoPhaseModelwithHysteresis_Test() );
+      
+      // speed tests (run only in the optimised RELEASE version of the code)
+#ifdef NDEBUG
+      composite.addTest( new VariableStorageSpeed_Test() );
+      composite.addTest( new AccumulationSpeedProfiling_Test() );
+      composite.addTest( new VariableBenchmarking_Test() );
+      composite.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+      composite.addTest( new FiniteVolumeStencilSpeed_Test() );
+      composite.addTest( new JaggedArray3D_Comparison_Test() );
+      composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+      composite.addTest( new VariableStorageSpeed_Test() );
+#endif
+
       // running unit tests and reporting errors
       composite.run();
       fails_composite = composite.report();
@@ -509,16 +570,7 @@ int main( int argc, char* argv[] )
       cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
       TestSuite new_developments("new tests of the CSMP base library", &cout );
       
-       new_developments.addTest( new PropertyStorageSpeed_Test( &cout ) );
-       new_developments.addTest( new VariableStorageSpeed_Test() );
-       new_developments.addTest( new JaggedArray3D_Comparison_Test() );
-       new_developments.addTest( new FiniteVolumeStencilSpeed_Test() );
-       new_developments.addTest( new AccumulationSpeedProfiling_Test() );
        new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
-
-  //     new_developments.addTest( new VariableBenchmarking_Test() );  // FAIL
-  //     new_developments.addTest( new SplitBoundaryPressureDiffusion_Test() );
-
    
       // running unit tests and reporting errors
       new_developments.run();

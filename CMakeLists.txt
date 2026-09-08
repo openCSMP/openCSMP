@@ -83,9 +83,13 @@ include(FetchContent)
 FetchContent_Declare(
         plf_colony
         GIT_REPOSITORY https://github.com/mattreecebentley/plf_colony.git
-        GIT_TAG        921cd38   # last stable release — avoids C++23 regression in master
+		GIT_TAG        master
+		GIT_SHALLOW    TRUE
+		CONFIGURE_COMMAND ""
+		BUILD_COMMAND     ""
+		INSTALL_COMMAND   ""
 )
-FetchContent_MakeAvailable(plf_colony)
+FetchContent_Populate(plf_colony)
 message(STATUS "plf_colony source: ${plf_colony_SOURCE_DIR}")
 
 
@@ -780,7 +784,9 @@ if(BUILD_TESTING)
             Suite_Composite
             PROPERTIES
             WORKING_DIRECTORY "${TEST_WORKING_DIR}"
-            ENVIRONMENT       "LD_LIBRARY_PATH=/root/OpenCSMP/external_support_libs/samg/linux;CSMP_DATA_ROOT=${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset"
+            ENVIRONMENT       "DYLD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/macosx"
+                              "LD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/linux"
+                              "CSMP_DATA_ROOT=${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset"
     )
 
     # Strict sequential dependency chain
