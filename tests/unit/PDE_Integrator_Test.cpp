@@ -99,7 +99,7 @@ This creates a simple test model and stores it in @a model_.
 
 */
 PDE_Integrator_Test::PDE_Integrator_Test()
-: model_( nullptr ), delete_model_( true ) {
+: model_( nullptr ) {
     // 0. creates test model with 4 elements and 6 Face objects for the box boundaries
     VSet<2U> vset;
     ModelTopology topo = create_SimplePolyElement2DModel( vset );
@@ -109,18 +109,9 @@ PDE_Integrator_Test::PDE_Integrator_Test()
 
 
 
-/** Constructor of PDE_Integrator_Test with input Model.
-*/
-PDE_Integrator_Test::PDE_Integrator_Test( Model<2U>& model )
-: model_( &model ), delete_model_( false ) {
-}
-
-
 
 PDE_Integrator_Test::~PDE_Integrator_Test() {
-    if( delete_model_ ) {
-        delete model_;
-    }
+   delete model_;
 }
 
 

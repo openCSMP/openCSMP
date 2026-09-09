@@ -73,13 +73,13 @@ void TwoPhaseModel_TestSuite::run()
 
   vector<size_t>   elms;
   elms.reserve( N_ELEMENTS );
-  for ( uint32_t i = 0; i < 40; ++i )
+  for ( size_t i = 0; i < 40; ++i )
     elms.push_back(i);
-  for ( uint32_t i = 60; i < N_ELEMENTS; ++i )
+  for ( size_t i = 60; i < N_ELEMENTS; ++i )
     elms.push_back(i);
   fracture_rock_model_->FormRegionFrom( "ROCK", elms );
   elms.erase( elms.begin(), elms.end() );
-  for ( uint32_t i=40; i<60; i++ )
+  for ( size_t i=40; i<60; i++ )
     elms.push_back(i);
   fracture_rock_model_->FormRegionFrom( "FRACTURE", elms );
 

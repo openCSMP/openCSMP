@@ -1,13 +1,11 @@
 #include "ExponentialTransferFunction_Test.h"
 
+#include "CSMP_definitions.h"
 #include "ExponentialFractureMatrixTransfer.h"
-
-#include <iostream>
-#include <limits>
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void ExponentialTransferFunction_Test::run()
 {
@@ -29,8 +27,6 @@ void ExponentialTransferFunction_Test::run()
     _equal( FMTfct.CurrentTransferRate( 48000., SWM, SWF ), 2.23401E-06, TOLERANCE );
     _equal( FMTfct.CurrentTransferRate( 54000., SWM, SWF ), 2.10624E-06, TOLERANCE );
     _equal( FMTfct.CurrentTransferRate( 60000., SWM, SWF ), 6.31873E-06, TOLERANCE );
-
-
 }
 
 } //csmp

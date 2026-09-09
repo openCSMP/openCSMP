@@ -386,16 +386,10 @@ int main()
     //
     // =========================================================================================================
     if ( test_interdependent2 ) {
-      // making a test model for the following two tests
-      VSet<3U> vset;
-      ModelTopology topo = create_FracBox( vset );
-      const bool convert_side_surfs_into_boundaries{true};
-      Model<3U> model( topo, vset, "CSMP-variables.txt", convert_side_surfs_into_boundaries );
-      // creating the test suite
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
       interdependent2.addTest( new INDEXandVariables_Test() );
-      interdependent2.addTest( new ModelTopology_Test() ); // TODO: tests only minor functionality
+      interdependent2.addTest( new ModelTopology_Test() ); 
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );
@@ -465,28 +459,18 @@ int main()
     //
     // =========================================================================================================
     if ( test_composite ) {
-      // creating test models
-      VSet<2U> vset2D;
-      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset2D );
-      vset2D.RemoveData("element variable"); // not needed here
-      bool treat_domains_as_regions{true};
-      Model<2U> model2D( topo, vset2D, "CSMP-1phase-variables.txt", treat_domains_as_regions );
-      VSet<3U> vset3D;
-      topo = create_FracBox( vset3D );
-      Model<3U> model3D( topo, vset3D, "CSMP-1phase-variables.txt", treat_domains_as_regions );
-      
       cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
 
       // vistors
       composite.addTest( new IntegrationPointToNodePropertyVisitor_Test() );
-      composite.addTest( new CopyReplaceVisitor_Test( &model ) );
+      composite.addTest( new CopyReplaceVisitor_Test() );
       composite.addTest( new PropertyAtPointVisitor_Test(verbose) );
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
       composite.addTest( new MohrCoulombFailure_Visitor_Test() );
 
       // computations
-      composite.addTest( new PDE_Integrator_Test( model2D ) );
+      composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
       composite.addTest( new PDE_Integrator_Computation_Test() );
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );

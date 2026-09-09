@@ -107,7 +107,6 @@ TODO
 class PDE_Integrator_Test : public Test {
   public:
     PDE_Integrator_Test();
-    explicit PDE_Integrator_Test( Model<2U>& model );
     ~PDE_Integrator_Test();
     
     void run();
@@ -117,16 +116,16 @@ class PDE_Integrator_Test : public Test {
 
   private:
     Model<2U>* model_{nullptr}; // any dimension is fully sufficient
-    bool delete_model_{false}; // in case an existing model was passed in
     
     /// checks that element matrices and vectors end up in the right place
     void TestAssembly();
+    void ResetModelProperties();
+    
     void TestAssemblySingleScalarNoDirichlet( bool debug );
     void TestAssemblySingleScalarDirichlet( bool debug );
     void TestAssemblySingleVectorNoDirichlet( bool debug );
     void TestAssemblySingleVectorDirichlet( bool debug );
     
-    // SKM test development
     void TestAssemblyTwoScalarVariablesNoDirichlet( bool debug );
     void TestAssemblyTwoScalarVariablesDirichlet( bool debug );
     
@@ -139,12 +138,6 @@ class PDE_Integrator_Test : public Test {
     /// Test dataset for model TINY
     void GenerateTinyPoromechanicsTestSystem( CompressedRowMatrix& A_reduced, std::vector<double>& b_reduced );
     void PrintTinyTestSystem( const CompressedRowMatrix& A_reduced, const std::vector<double>& b_reduced );
-    
-    // remaining methods from Luat
-    void ResetModelProperties();
-    void TestSingleVariable() {}       // TODO: reinstate method
-    void TestTwoScalarVariables() {}   // TODO: reinstate method
-    void TestOutputSingleVariable() {} // TODO: reinstate method
     
     /// testing accumulation inside of the PDE_Integrator
     template<uint32_t dim,

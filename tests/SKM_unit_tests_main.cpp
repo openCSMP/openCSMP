@@ -231,6 +231,7 @@ int main()
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
         refactored.addTest( new ModelSubDomain_Test() );
+
 //        refactored.addTest( new VariableBenchmarking_Test() ); // @TODO: only achieves desired speed in RELEASE mode without sanitizers!
 //        refactored.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true/*verbose*/) );
 //        refactored.addTest( new FiniteVolumeStencilSpeed_Test() );
@@ -240,6 +241,7 @@ int main()
         // VARIABLE STORAGE TEST BUNDLE
 //        refactored.addTest( new LocalVariableStorage_Test() );
 //        refactored.addTest( new Variables_Test("FracBox") );
+//      refactored.addTest( new INDEXandVariables_Test() );
 //#ifdef NDEBUG
 //        refactored.addTest( new VariableStorageSpeed_Test() );
 //#endif
@@ -419,16 +421,11 @@ int main()
     //
     // =========================================================================================================
     if ( test_interdependent2 ) {
-      // making a test model for the following two tests
-      VSet<3U> vset;
-      ModelTopology topo = create_FracBox( vset );
-      const bool convert_side_surfs_into_boundaries{true};
-      Model<3U> model( topo, vset, "CSMP-variables.txt", convert_side_surfs_into_boundaries );
       // creating the test suite
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
       interdependent2.addTest( new INDEXandVariables_Test() );
-      interdependent2.addTest( new ModelTopology_Test() ); // TODO: tests only minor functionality
+      interdependent2.addTest( new ModelTopology_Test() );
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );
@@ -445,8 +442,7 @@ int main()
       interdependent2.addTest( new ANSYS_SplitBoundaryMatch_Test() );
       interdependent2.addTest( new PropertyHandle_Test() );    
       interdependent2.addTest( new PropertyHandle_MathTest() );
-      interdependent2.addTest( new IntegrationPointToNodePropertyVisitor_Test() ); // insufficient accuracy for IsoLinPyra
-      interdependent2.addTest( new CopyReplaceVisitor_Test( &model ) );
+      interdependent2.addTest( new PropertyConstraints_Test() );
       // interfaces
       interdependent2.addTest( new InputDataManager_Test());
       interdependent2.addTest( new ANSYS_Model3D_Test() );
@@ -500,16 +496,6 @@ int main()
     //
     // =========================================================================================================
     if ( test_composite ) {
-      // creating test models
-      VSet<2U> vset2D;
-      ModelTopology topo = create_MeshPatchWithLineElements_VSet( vset2D );
-      vset2D.RemoveData("element variable"); // not needed here
-      bool treat_domains_as_regions{true};
-      Model<2U> model2D( topo, vset2D, "CSMP-1phase-variables.txt", treat_domains_as_regions );
-      VSet<3U> vset3D;
-      topo = create_FracBox( vset3D );
-      Model<3U> model3D( topo, vset3D, "CSMP-1phase-variables.txt", treat_domains_as_regions );
-      
       cout <<"\n4. Composite-dependent functionality: running tests..."<< endl;
       TestSuite composite("CSMP-dependent-unit test suite", &cout );
 
@@ -517,10 +503,11 @@ int main()
       composite.addTest( new PropertyAtPointVisitor_Test(verbose) ); // PASS
       composite.addTest( new PointPropertyToCellMapper2D_Test() );
       composite.addTest( new MohrCoulombFailure_Visitor_Test() );
-      composite.addTest( new PropertyConstraints_Test() );
+      composite.addTest( new IntegrationPointToNodePropertyVisitor_Test() ); // insufficient accuracy for IsoLinPyra
+      composite.addTest( new CopyReplaceVisitor_Test() );
 
       // computations
-      composite.addTest( new PDE_Integrator_Test( model2D ) );
+      composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
       composite.addTest( new PDE_Integrator_Computation_Test() );
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
@@ -532,12 +519,12 @@ int main()
       composite.addTest( new ModelComparator_Test() );
 
       // constitutive relationships
-      composite.addTest( new ExponentialTransferFunction_Test() );
       composite.addTest( new StressInvariants_Test() );
 
       // constitutive relations
       TwoPhaseModel_TestSuite  twoPhaseModelTests( composite );
       twoPhaseModelTests.run();
+      composite.addTest( new ExponentialTransferFunction_Test() );
       composite.addTest( new TwoPhaseModelwithHysteresis_Test() );
       
       // speed tests (run only in the optimised RELEASE version of the code

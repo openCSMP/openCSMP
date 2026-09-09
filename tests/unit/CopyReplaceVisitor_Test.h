@@ -12,22 +12,20 @@ namespace csmp {
 class CopyReplaceVisitor_Test : public Test
 {
 public:
-  explicit CopyReplaceVisitor_Test( Model<3U>* model ) : model_( model ) {}
-  ~CopyReplaceVisitor_Test();
+  CopyReplaceVisitor_Test() {}
+
   virtual void run();
 
 private:
 
   template<class V>
-  void testNodes( Model<3>* model, const V& value, const char* propertyName );
+  void TestNodes( Model<2>& model, const V& value, const char* propertyName );
 
   template<class V>
-  void testElements( Model<3>* model, const V& value, const char* propertyName );
+  void TestElements( Model<2>& model, const V& value, const char* propertyName );
 
   template<class V>
-  void testElementIntegrationPoints( Model<3>* model, const V& value, const char* propertyName );
-
-  Model<3U>* model_;
+  void TestElementIntegrationPoints( Model<2>& model, const V& value, const char* propertyName );
 };
 
 
