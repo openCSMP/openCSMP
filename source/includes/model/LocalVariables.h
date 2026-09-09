@@ -7,7 +7,7 @@ namespace csmp {
 struct LocalVariables {
 
   // TODO: investigate which type is best for performance
-  using int_type = uint16_t; ///< unsigned integer type that is big enough to hold 'totalDataDepth'
+  using int_type = uint32_t; ///< unsigned integer type that is big enough to hold 'totalDataDepth'
 
   LocalVariables()
     : scalars           (0),

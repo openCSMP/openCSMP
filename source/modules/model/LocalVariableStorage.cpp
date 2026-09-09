@@ -81,7 +81,7 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariables& lv, const IntegrationPointVariables& ipv )
   {
-    const pair<uint32_t, uint32_t> newContainerSize = localVariableDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
+    const auto newContainerSize = localVariableDispatch::containerNewSize( static_cast<const STOREE<dim>*>(this), lv, ipv );
     ResizePropertyStorage(newContainerSize.first, newContainerSize.second);
 
 // initialise auxiliary parameters for debugging
@@ -173,8 +173,8 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     // Resize to new state (this already supports ip vars)
     const auto newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
-    const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
-    const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
+    const auto dataSize = static_cast<int_type>(data_.data.size());
+    const auto flagSize = static_cast<int_type>(data_.flags.size());
 
     // Offset
     const auto newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
@@ -793,7 +793,7 @@ void LocalVariableStorage<dim,STOREE>::Read( const csmp::Index& idx, FlaggedArra
 template<uint32_t dim, template<uint32_t> class STOREE>
 double LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx ) const
   {
-    const int_type offset(DATA_OFFSET_IP);
+    const uint32_t offset(DATA_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -809,8 +809,8 @@ double LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& i
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx, ScalarVariable& sc ) const
   {
-    const int_type offset(DATA_OFFSET_IP);
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t offset(DATA_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -828,8 +828,8 @@ void LocalVariableStorage<dim,STOREE>::Read( uint32_t ip, const csmp::Index& idx
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& idx, const ScalarVariable& sc )
   {
-    const int_type offset(DATA_OFFSET_IP);
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t offset(DATA_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -847,7 +847,7 @@ void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& id
 template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx ) const
   {
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -863,7 +863,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
 template<uint32_t dim, template<uint32_t> class STOREE>
 VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, int_type i ) const
   {
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -880,7 +880,7 @@ VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp:
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, VARIABLE_FLAG flag )
   {
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -896,7 +896,7 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
   {
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -913,8 +913,8 @@ void LocalVariableStorage<dim,STOREE>::Status( uint32_t ip, const csmp::Index& i
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::Store( uint32_t ip, const csmp::Index& idx, const VectorVariable<dim>& vc )
   {
-    const int_type offset(DATA_OFFSET_IP);
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t offset(DATA_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -1139,8 +1139,8 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
 template<uint32_t dim, template<uint32_t> class STOREE>
 VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t ip, const csmp::Index& idx ) const
  {
-    const int_type dataOffset(DATA_OFFSET_IP);
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t dataOffset(DATA_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -1165,8 +1165,8 @@ VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t ip, c
 template<uint32_t dim, template<uint32_t> class STOREE>
 TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t ip, const csmp::Index& idx ) const
  {
-    const int_type dataOffset(DATA_OFFSET_IP);
-    const int_type flagOffset(FLAG_OFFSET_IP);
+    const uint32_t dataOffset(DATA_OFFSET_IP);
+    const uint32_t flagOffset(FLAG_OFFSET_IP);
 
 #if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
@@ -1194,8 +1194,8 @@ TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t ip, c
 template<uint32_t dim, template<uint32_t> class STOREE>
 vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t ip, const csmp::Index& idx ) const
  {
-    const int_type dataOffset(DATA_OFFSET_IP);
-    const int_type arraySize( idx.dataDepth );
+    const uint32_t dataOffset(DATA_OFFSET_IP);
+    const uint32_t arraySize( idx.dataDepth );
 
 #if !defined(NDEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
   AssertIntegrationPointPlacement(idx);
