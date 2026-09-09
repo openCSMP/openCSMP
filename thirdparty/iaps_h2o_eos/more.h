@@ -1,3 +1,8 @@
+// SPDX-FileCopyrightText: © 1998 Olaf Bauer <o.bauer@tu-harburg.de>
+// SPDX-FileContributor: Erika Mustermann
+//
+// SPDX-License-Identifier: LGPL-2.0-only
+
 /*------------------------------------------------------------*- C -*-
 # $Id: more.h,v 1.2 2006/10/11 19:31:13 mattha2k Exp $
 #---------------------------------------------------------------------
