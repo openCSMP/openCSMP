@@ -117,7 +117,7 @@ void ModelTopology_Test::run()
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_2", isoparametric, dim ) );
   femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "BAR_3", isoparametric, dim ) );
 // POLYGON does not exist:  femTypes.insert( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "POLYGON", isoparametric, dim ) );
-  for( auto i = 0; i < 23; ++i )
+  for( size_t i = 0; i < 23; ++i )
     elmIDS.push_back( i );
   ModelTopology topology6( topology2 );
   _test( topology6.AddDomain( "Region3", femTypes, elmIDS ) );
@@ -129,31 +129,25 @@ void ModelTopology_Test::run()
   topTypes.ChangeCellType( oldType, fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim ) );
   set<string> region3Types;
   topTypes.CellTypesOfDomain( "Region3", region3Types );
-  for( set<string>::const_iterator it = region3Types.begin(); it != region3Types.end(); ++it )
+  for( auto it = region3Types.begin(); it != region3Types.end(); ++it )
     _test( *it != fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("HEXA_27", isoparametric, dim ) );
-  // ISSUES, check with stephan
-  topology6.EliminateLineCells(); // FAIL
+
   set<string> top6types;
   topology6.CellTypesOfDomain( "Region3", top6types );
-  // ISSUES, check with stephan
-  /*
-  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_2",isoparametric,dim) ) == top6types.end() );
-  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("BAR_3",isoparametric,dim) ) == top6types.end() );
-  _test( top6types.find( fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName("POLYGON",isoparametric,dim) ) == top6types.end() );
-  */
+
   if ( verbose_ ) cout << "\n" << getName() << ": ANSYS FEM Types(stored in ModelTopology:\n";
-  for( set<string>::const_iterator it = top6types.begin(); it != top6types.end(); ++it )
+  for( auto it = top6types.begin(); it != top6types.end(); ++it )
     if ( verbose_ ) cout << *it << endl;
   set<string> csmpTypes;
   topology6.FiniteElementTypes( csmpTypes );
   if ( verbose_ ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
-  for( set<string>::const_iterator it = csmpTypes.begin(); it != csmpTypes.end(); ++it )
+  for( auto it = csmpTypes.begin(); it != csmpTypes.end(); ++it )
     if ( verbose_ ) cout << *it << endl;
-  set<int32_t> csmpTypesENUM;
+  set<CSMP_FEM_TYPE> csmpTypesENUM;
   topology6.FiniteElementTypes( csmpTypesENUM );
   if ( verbose_ ) cout << "\n" << getName() << ": CSMP FEM Types(converted from ModelTopology):\n";
-  for( set<int32_t>::const_iterator it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
-    if ( verbose_ ) cout << *it << endl;
+  for( auto it = csmpTypesENUM.begin(); it != csmpTypesENUM.end(); ++it )
+    if ( verbose_ ) cout << parseFiniteElementType(*it) << endl;
   set<string> typesCheck;
   _test( topTypes.FiniteElementTypes( typesCheck ) == 21 );
   oldType = fem_specs::CSMP_TypeNameFrom_ANSYS_TypeName( "HEXA_20", isoparametric, dim );
@@ -207,12 +201,319 @@ void ModelTopology_Test::run()
   _test( topology7.SolidModel() );
   _test( !topology7.LineModel() );
   _test( !topology7.SurfaceModel() );
-  _test( topology7.MinimumSpatialDimensionOfDomain( "Region1" ) == 0U );
+  _test( topology7.MinimumSpatialDimensionOfDomain( "Region1" ) == 3U ); // only volume elements contained
   _test( topology7.IsoparametricFiniteElements() == false );
   _test( topology7.QuadraticElementMesh() == false );
   _test( topology7.LinearElementMesh() == true );
   topology7.UseIsoparametricFiniteElementTypes();
   _test( topology7.IsoparametricFiniteElements() == true );
+
+    // ========================================================================
+    // TEST 1: Construction and basic state
+    // ========================================================================
+    {
+        ModelTopology mt;
+        _test( mt.ModelDomains() == 0 );
+        _test( mt.Cells() == 0 );
+        _test( !mt.IsoparametricFiniteElements() );
+        _test( mt.ModelName() == "not initialized" );
+    }
+
+    // ========================================================================
+    // TEST 2: AddDomain / Contains / RemoveDomain
+    // ========================================================================
+    {
+        ModelTopology mt;
+        set<string> types = { "TETRA4" };
+        vector<size_t> ids = { 0, 1, 2, 3, 4 };
+
+        _test( mt.AddDomain( "rock", types, ids ) );
+        _test( mt.Contains( "rock" ) );
+        _test( mt.ModelDomains() == 1 );
+        _test( mt.Cells() == 5 );
+        _test( mt.CellsWithinDomain( "rock" ) == 5 );
+
+        // duplicate domain should fail
+        _test( !mt.AddDomain( "rock", types, ids ) );
+
+        mt.RemoveDomain( "rock" );
+        _test( !mt.Contains( "rock" ) );
+        _test( mt.ModelDomains() == 0 );
+    }
+
+    // ========================================================================
+    // TEST 3: AddDomainCellId / AddDomainCellIds / AddDomainCellType
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "fractures", "TRIA3" );
+        mt.AddDomainCellId( "fractures", 10 );
+        mt.AddDomainCellId( "fractures", 11 );
+        mt.AddDomainCellIds( "fractures", { 12, 13, 14 } );
+
+        _test( mt.Contains( "fractures" ) );
+        _test( mt.CellsWithinDomain( "fractures" ) == 5 );
+        _test( mt.IsWithinDomain( "fractures", 12 ) );
+        _test( !mt.IsWithinDomain( "fractures", 99 ) );
+    }
+
+    // ========================================================================
+    // TEST 4: ModelName
+    // ========================================================================
+    {
+        ModelTopology mt( "test_model", false );
+        _test( mt.ModelName() == "test_model" );
+        mt.ModelName( "renamed_model" );
+        _test( mt.ModelName() == "renamed_model" );
+    }
+
+    // ========================================================================
+    // TEST 5: SolidModel / SurfaceModel / LineModel
+    // ========================================================================
+    {
+        ModelTopology mt_solid;
+        mt_solid.AddDomainCellType( "rock", "LINEAR_TETRAHEDRON" );
+        _test( mt_solid.SolidModel() );
+        _test( !mt_solid.SurfaceModel() );
+        _test( !mt_solid.LineModel() );
+
+        ModelTopology mt_surface;
+        mt_surface.AddDomainCellType( "surface", "LINEAR_TRIANGLE" );
+        _test( !mt_surface.SolidModel() );
+        _test( mt_surface.SurfaceModel() );
+        _test( !mt_surface.LineModel() );
+
+        ModelTopology mt_line;
+        mt_line.AddDomainCellType( "well", "LINEAR_BAR" );
+        _test( !mt_line.SolidModel() );
+        _test( mt_line.SurfaceModel() );  // line is also surface (no volumes)
+        _test( mt_line.LineModel() );
+    }
+
+    // ========================================================================
+    // TEST 6: IsoparametricFiniteElements
+    // ========================================================================
+    {
+        ModelTopology mt_iso( true );
+        _test( mt_iso.IsoparametricFiniteElements() );
+
+        ModelTopology mt_std( false );
+        _test( !mt_std.IsoparametricFiniteElements() );
+        mt_std.UseIsoparametricFiniteElementTypes();
+        _test( mt_std.IsoparametricFiniteElements() );
+    }
+
+    // ========================================================================
+    // TEST 7: EliminateCellType / EliminateLineCells / EliminateSurfaceCells
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "rock",     "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellType( "surface",  "LINEAR_TRIANGLE" );
+        mt.AddDomainCellType( "well",     "LINEAR_BAR" );
+
+        mt.EliminateLineCells();
+        _test( !mt.Contains( "well" ) );
+        _test( mt.Contains( "rock" ) );
+        _test( mt.Contains( "surface" ) );
+
+        mt.EliminateSurfaceCells();
+        _test( !mt.Contains( "surface" ) );
+        _test( mt.Contains( "rock" ) );
+    }
+
+    // ========================================================================
+    // TEST 8: EliminateVolumeCells
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "rock",    "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellType( "surface", "LINEAR_TRIANGLE" );
+
+        mt.EliminateVolumeCells();
+        _test( !mt.Contains( "rock" ) );
+        _test( mt.Contains( "surface" ) );
+    }
+
+    // ========================================================================
+    // TEST 9: OutputAll / OutputRegions / OutputBoundaries
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "rock",              "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellType( "BOUNDARY_BOTTOM",   "LINEAR_TRIANGLE" );
+        mt.AddDomainCellType( "SPLITBOUNDARY_FRAC","LINEAR_TRIANGLE" );
+
+        list<string> all;
+        mt.OutputAll( all );
+        _test( all.size() == 3 );
+
+        list<string> regions;
+        mt.OutputRegions( regions );
+        _test( regions.size() == 1 );
+        _test( regions.front() == "rock" );
+
+        list<string> boundaries;
+        mt.OutputBoundaries( boundaries );
+        _test( boundaries.size() == 1 );
+        _test( boundaries.front() == "BOUNDARY_BOTTOM" );
+
+        list<string> split_boundaries;
+        mt.OutputSplitBoundaries( split_boundaries );
+        _test( split_boundaries.size() == 1 );
+        _test( split_boundaries.front() == "SPLITBOUNDARY_FRAC" );
+    }
+
+    // ========================================================================
+    // TEST 10: ReduceToDomains
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "rock",     "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellType( "fracture", "LINEAR_TRIANGLE" );
+        mt.AddDomainCellType( "well",     "LINEAR_BAR" );
+
+        set<string> keep = { "rock", "fracture" };
+        mt.ReduceToDomains( keep );
+
+        _test( mt.Contains( "rock" ) );
+        _test( mt.Contains( "fracture" ) );
+        _test( !mt.Contains( "well" ) );
+        _test( mt.ModelDomains() == 2 );
+    }
+
+    // ========================================================================
+    // TEST 11: ChangeDomainName
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "old_name", "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellId( "old_name", 0 );
+
+        _test( mt.ChangeDomainName( "old_name", "new_name" ) );
+        _test( mt.Contains( "new_name" ) );
+        _test( !mt.Contains( "old_name" ) );
+        _test( mt.CellsWithinDomain( "new_name" ) == 1 );
+
+        // non-existent domain should return false
+        _test( !mt.ChangeDomainName( "does_not_exist", "anything" ) );
+    }
+
+    // ========================================================================
+    // TEST 12: CheckCellNumbering
+    // ========================================================================
+    {
+        // Consecutive numbering: should pass
+        ModelTopology mt_ok;
+        mt_ok.AddDomainCellIds( "rock", { 0, 1, 2, 3, 4 } );
+        _test( mt_ok.CheckCellNumbering() );
+
+        // Non-consecutive: should fail
+        ModelTopology mt_bad;
+        mt_bad.AddDomainCellIds( "rock", { 0, 1, 3, 4 } );  // gap at 2
+        _test( !mt_bad.CheckCellNumbering() );
+
+        // Not starting at 0: should fail
+        ModelTopology mt_bad2;
+        mt_bad2.AddDomainCellIds( "rock", { 1, 2, 3, 4 } );
+        _test( !mt_bad2.CheckCellNumbering() );
+    }
+
+    // ========================================================================
+    // TEST 13: CreateNewCellNumbers
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellIds( "rock",     { 0, 2, 4 } );
+        mt.AddDomainCellIds( "fracture", { 1, 3, 5 } );
+
+        map<size_t,size_t> mapping;
+        mt.CreateNewCellNumbers( mapping );
+
+        // All 6 elements should be mapped to 0..5
+        _test( mapping.size() == 6 );
+        set<size_t> new_ids;
+        for ( const auto& p : mapping ) new_ids.insert( p.second );
+        _test( *new_ids.begin() == 0 );
+        _test( *new_ids.rbegin() == 5 );
+    }
+
+    // ========================================================================
+    // TEST 14: ExportSelectionTo
+    // ========================================================================
+    {
+        ModelTopology mt_src;
+        mt_src.AddDomainCellType( "rock",     "LINEAR_TETRAHEDRON" );
+        mt_src.AddDomainCellType( "fracture", "LINEAR_TRIANGLE" );
+        mt_src.AddDomainCellType( "well",     "LINEAR_BAR" );
+
+        list<string> selection = { "rock", "fracture" };
+        ModelTopology mt_dst;
+        mt_src.ExportSelectionTo( selection, mt_dst );
+
+        _test( mt_dst.Contains( "rock" ) );
+        _test( mt_dst.Contains( "fracture" ) );
+        _test( !mt_dst.Contains( "well" ) );
+        _test( mt_dst.ModelDomains() == 2 );
+    }
+
+    // ========================================================================
+    // TEST 15: BoxShapedModel / RectangleShapedModel
+    // ========================================================================
+    {
+        ModelTopology mt_box;
+        for ( const char* b : { "BOTTOM","TOP","LEFT","RIGHT","FRONT","BACK" } )
+            mt_box.AddDomainCellType( b, "LINEAR_TRIANGLE" );
+        _test( mt_box.BoxShapedModel() );
+
+        ModelTopology mt_rect;
+        for ( const char* b : { "BOTTOM","TOP","LEFT","RIGHT" } )
+            mt_rect.AddDomainCellType( b, "LINEAR_BAR" );
+        _test( mt_rect.RectangleShapedModel() );
+
+        // Incomplete box: should fail
+        ModelTopology mt_incomplete;
+        for ( const char* b : { "BOTTOM","TOP","LEFT","RIGHT" } )
+            mt_incomplete.AddDomainCellType( b, "LINEAR_TRIANGLE" );
+        _test( !mt_incomplete.BoxShapedModel() );
+    }
+
+    // ========================================================================
+    // TEST 16: Out() and InputFromTextFile() round-trip
+    // ========================================================================
+    {
+        ModelTopology mt_out;
+        mt_out.ModelName( "round_trip_test" );
+        mt_out.AddDomainCellType( "rock", "LINEAR_TETRAHEDRON" );
+        mt_out.AddDomainCellIds( "rock", { 0, 1, 2 } );
+        mt_out.AddDomainCellType( "fracture", "LINEAR_TRIANGLE" );
+        mt_out.AddDomainCellIds( "fracture", { 3, 4 } );
+
+        const char* test_file = "test_topology.asc";
+        mt_out.Out( test_file );
+
+        ModelTopology mt_in;
+        _test( mt_in.InputFromTextFile( test_file ) );
+        _test( mt_in.Contains( "rock" ) );
+        _test( mt_in.Contains( "fracture" ) );
+        _test( mt_in.CellsWithinDomain( "rock" ) == 3 );
+        _test( mt_in.CellsWithinDomain( "fracture" ) == 2 );
+    }
+
+    // ========================================================================
+    // TEST 17: Erase
+    // ========================================================================
+    {
+        ModelTopology mt;
+        mt.AddDomainCellType( "rock", "LINEAR_TETRAHEDRON" );
+        mt.AddDomainCellType( "fracture", "LINEAR_TRIANGLE" );
+        _test( mt.ModelDomains() == 2 );
+
+        mt.Erase();
+        _test( mt.ModelDomains() == 0 );
+        _test( mt.Cells() == 0 );
+        _test( mt.ModelName() == "erased" );
+    }
 
 } // run
 

@@ -30,7 +30,6 @@ PropertyHandle_MathTest::PropertyHandle_MathTest(
 
 PropertyHandle_MathTest::~PropertyHandle_MathTest()
 {
-    delete model_;
 }
 
 // ============================================================================

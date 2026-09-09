@@ -202,8 +202,12 @@ private:
 
   private:
 
-    // --- model ---
-    csmp::Model<3>* model_;
+    // -----------------------------------------------------------------------
+    //  Model — declared FIRST so it is destroyed LAST
+    //  PropertyHandle members are destroyed before model_ because
+    //  members are destroyed in reverse declaration order.
+    // -----------------------------------------------------------------------
+    std::unique_ptr<csmp::Model<3>>  model_;  ///< owns the model
 
     const double TOLERANCE;
     const bool   verbose_;

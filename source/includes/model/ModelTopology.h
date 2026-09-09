@@ -92,7 +92,7 @@ class ModelTopology {
     
     /// return total number and CSMP names of FE-types in the model
     size_t      FiniteElementTypes( std::set<std::string>& etypes ) const;
-    size_t      FiniteElementTypes( std::set<int32_t>& etypes ) const;
+    size_t      FiniteElementTypes( std::set<CSMP_FEM_TYPE>& etypes ) const;
     
     // Since Regions consist of Elements, Boundaries of Faces, and SplitBoundaries of InterFaces, all these are just referred to as Cells
     
@@ -245,12 +245,6 @@ class ModelTopology {
     /// deduces node boundary flags from BOX_BOUNDARY and other regions the name of which contains 'BOUNDARY'
     bool  FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const;
     bool  FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const;
-
-    /// Boundary Flag nodes on lowerdimensional elements to INTERNAL - ATTENTION - THIS OVERWRITES, SO IT SHOULD BE DONE BEFORE BOXBOUNDARY FLAGS ARE SET
-    //E.P Experimental 08.2022 - This is not used or tested, but may be needed to set TOPO Flags correctly, since they rely on INTERNAL flag being set.
-    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const;
-    bool  FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const;
-
 
   private:
     //       region name           etypes-of-region      ids of elements in region

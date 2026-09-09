@@ -117,7 +117,7 @@ MohrCoulombFailure_Visitor<dim>::MohrCoulombFailure_Visitor( Model<dim>& model, 
                   
     // setting failure criteria to zero
     model.InputPropertyValue("failure", makeScalar(ANY,0.) );
-    model.InputPropertyValue("failure01", makeScalar(ANY,0.) );
+    model.InputPropertyValue("tensile failure", makeScalar(ANY,0.) );
 }
 
 

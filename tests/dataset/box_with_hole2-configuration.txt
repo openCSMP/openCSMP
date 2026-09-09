@@ -3,7 +3,7 @@
 # ---------------------------------------------------------------
 # 1. global  & fluid properties as well as initial conditions
 # ---------------------------------------------------------------
-# ZONE_0
+# ROCK
 porosity				0.08
 permeability			1.0E-15
 thermal conductivity	2.
@@ -42,10 +42,10 @@ density				2.7e+3
 # ----------------------------------------------------------------------
 # 2. Assign properties and variable values to model subdomains = regions
 # ----------------------------------------------------------------------
-ZONE_0	complete	permeability			1.0E-15
-ZONE_0	complete	porosity				0.15
-ZONE_0	complete	Poissons ratio			0.3
-ZONE_0	complete	Youngs modulus			7.0e10
+ROCK	complete	permeability			1.0E-15
+ROCK	complete	porosity				0.15
+ROCK	complete	Poissons ratio			0.3
+ROCK	complete	Youngs modulus			7.0e10
 
 # ----------------------------------------------------------------------
 # 3. regional variable flags

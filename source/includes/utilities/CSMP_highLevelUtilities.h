@@ -20,6 +20,8 @@ template<uint32_t> class Element;
 @{
 */
 
+// STRING MANIPULATION
+
 /// utility that tokenises string into substrings using the supplied delimiter(s).
 std::vector<std::string> splitString( std::string str, char delimiter );
 
@@ -57,13 +59,36 @@ inline std::string numberToString( const T& value, bool verbose=false ) {
       if ( verbose ) std::cout <<"\nmain: floating point value: "<< fstring <<" vs. "<< value << std::endl;
       return fstring;
     }
-// SKM_FIX  return number_to_string( value );
+  // fall back
   return std::to_string( value );
 }
 
 
-/// evaluates the distance between 2 points
-bool areFartherApartThan( const double* pn, const double* pw, double distance );
+
+
+// MISC
+
+/**
+   Checks whether a pointer value looks like a sanitiser fill pattern indicating freed or uninitialised memory.
+*/
+template<typename T>
+inline bool IsValidPointer( const T* ptr )
+{
+    if ( ptr == nullptr ) return true;  // null is valid (means no neighbour)
+    
+    const uintptr_t addr = reinterpret_cast<uintptr_t>( ptr );
+    
+    // Known fill patterns
+    if ( addr == 0xbebebebebebebeULL ) return false;  // freed (sanitiser)
+    if ( addr == 0xdeaddeaddeaddeadULL ) return false;  // freed
+    if ( addr == 0xcdcdcdcdcdcdcdcdULL ) return false;  // uninitialised heap
+    if ( addr == 0xfefefefefefefefeULL ) return false;  // uninitialised stack
+    
+    // Alignment check
+    if ( addr % alignof(T) != 0 ) return false;
+    
+    return true;
+}
 
 
 /// renumber node index values for a range of elements in
@@ -76,6 +101,7 @@ size_t  renumberElementNodes( std::vector<Element<2U>*>::iterator first,
 
 size_t  renumberElementNodes( std::vector<Element<3U>*>::iterator first,
                               std::vector<Element<3U>*>::iterator last );
+
 
 
 /**

@@ -288,6 +288,12 @@ class LocalVariableStorage {
     const Data LVS() const { return data_; }
 
   private:
+    /// Computes final data and flag offsets for FV integration point access
+    std::pair<int_type,int_type> FVIPOffsets( const STOREE<dim>* storeePtr,
+                                              uint32_t           sector_or_facet,
+                                              uint32_t           ip,
+                                              const csmp::Index& idx ) const noexcept;
+
     Data data_; ///< data and flag containers
 };
 
@@ -298,7 +304,45 @@ class LocalVariableStorage {
 // -----------------------------------------------------------------------------------------------------------------------
 // SKM 20/6/2020
 // nodes, elements, faces, interfaces
-  
+
+/** Helper: computes the final data and flag offsets for a FV integration point access.
+    Called by all Read/Store/Status methods for SECTOR_INTEGRATION_POINT and
+    FACET_INTEGRATION_POINT variables.
+    @return {dataOffset, flagOffset} into data_.data and data_.flags
+*/
+template<uint32_t dim, template<uint32_t> class STOREE>
+inline std::pair<LocalVariables::int_type,LocalVariables::int_type>
+LocalVariableStorage<dim,STOREE>::FVIPOffsets( const STOREE<dim>* storeePtr,
+                                               uint32_t           sector_or_facet,
+                                               uint32_t           ip,
+                                               const csmp::Index& idx ) const noexcept
+{
+    // Base offsets from container layout
+    const auto [baseData, baseFlag] = localVariableDispatch::containerOffset( storeePtr, idx );
+
+    // Stride depends on whether this is a sector or facet IP variable
+    // Factor out (sector_or_facet + ip) since it is the same for both data and flag
+    const int_type combined = static_cast<int_type>( sector_or_facet )
+                            + static_cast<int_type>( ip );
+
+    const bool is_sector = ( idx.place == SECTOR_INTEGRATION_POINT      ||
+                             idx.place == FACE_SECTOR_INTEGRATION_POINT  ||
+                             idx.place == INTER_FACE_SECTOR_INTEGRATION_POINT );
+
+    const int_type dataStride = is_sector
+        ? static_cast<int_type>( idx.integrationPointVariables.ipvSector.totalDataDepth )
+        : static_cast<int_type>( idx.integrationPointVariables.ipvFacet.totalDataDepth  );
+
+    const int_type flagStride = is_sector
+        ? static_cast<int_type>( idx.integrationPointVariables.ipvSector.totalFlagDepth )
+        : static_cast<int_type>( idx.integrationPointVariables.ipvFacet.totalFlagDepth  );
+
+    return { static_cast<int_type>(baseData) + combined * dataStride,
+             static_cast<int_type>(baseFlag) + combined * flagStride };
+}
+
+
+
 /**
 double Read( const csmp::INDEX<SCALAR,NODE>& ) const;
 */

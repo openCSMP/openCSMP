@@ -111,6 +111,7 @@
 #include "vsetMakers_Test.h"
 #include "VSet_Test1.h"
 #include "VSet_Test2.h"
+#include "ModelTopology_Test.h"
 
 // --- interfaces to other software: exporting ---
 #include "ModelComparator_Test.h"
@@ -228,96 +229,24 @@ int main()
     if ( test_refactoring ) {
         cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
-        
-        refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
-// FAIL        refactored.addTest( new BoreHole_stability2D_VVCase("box_with_hole2") );
-//        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
 
-// TODO:       refactored.addTest( new IsoparametricLinearPyramid_Test() ); // pyramid is correct but test fails
-// TODO:       refactored.addTest( new BoundaryInterface_Test() );          // - test alternative BREP flagging approaches
-       
+        refactored.addTest( new ModelSubDomain_Test() );
+//        refactored.addTest( new VariableBenchmarking_Test() ); // @TODO: only achieves desired speed in RELEASE mode without sanitizers!
+//        refactored.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true/*verbose*/) );
+//        refactored.addTest( new FiniteVolumeStencilSpeed_Test() );
+//        refactored.addTest( new MohrCoulombFailure_Visitor_Test() );
+//        refactored.addTest( new StressInvariants_Test() );
 
-// TODO: does not run transient problem yet; compare analytic with num integrals
-//        refactored.addTest( new PDE_Integrator_Transient_Test() ); // OK (Anne-Laure Tertois) granite_model1
-//          refactored.addTest( new PDE_Integrator_Computation_Test() ); // OK, but only one Test
-// TODO: test PDE_Integrator with periodic boundary conditions
-
-
-//        refactored.addTest( new PDE_Integrator_Test() ); // refactored and passed 2/2/26
-//        refactored.addTest( new NodeManifold_Test() ); refactored and passed 3/5/26
-//        refactored.addTest( new SplitBoundary_Test() ); passed 2/5/2026 (only 2D version tested)
-//        refactored.addTest( new ModelSubDomain_Test() );  passed 1/5/2026 (detected need to improve CreatSplitBoundaryBetween() method
-//        refactored.addTest( new VData_Test() ); passed: 27/4/2026
-//        refactored.addTest( new VSet_Test2() ); passed: 27/4/2026
-//       refactored.addTest( new FiniteElement_Test( new IsoparametricQuadraticTriangle(2), "IsoparametricQuadraticTriangle.txt", verbose ) );
-
-
-
-// Exact integration
-// -----------------
-// LHS
-//          refactored.addTest( new Integral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
-//          refactored.addTest( new Integral_dNT_lhsop_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
-//          refactored.addTest( new Integral_NT_lhsop_N_dV_Test(true) );     // tested: OK
-//          refactored.addTest( new Integral_var_NT_lhsop_N_dV_Test(true) ); // tested: OK
-// RHS
-//          refactored.addTest( new Integral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
-//          refactored.addTest( new Integral_dNT_rhsop_dV_Test(true) );    // gradient operand, tested: OK
-//          refactored.addTest( new Integral_var_NT_rhsop_N_dV_Test(true) ); // tested: OK
-          
-// Numeric integration
-// -------------------
-// LHS
-//          refactored.addTest( new NumIntegral_dNT_op_dN_NT_v_dN_dV_Test(true) ); // advection-dispersion, tested: OK
-//          refactored.addTest( new NumIntegral_dNT_op_dV_Test(true) ); // tested: OK
-//          refactored.addTest( new NumIntegral_dNT_lhsop_dN_dV_Test(true) ); // tested: OK
-//          refactored.addTest( new NumIntegral_NT_lhsop_N_dV_Test(true) ); // tested: OK
-// RHS
-//          refactored.addTest( new NumIntegral_dNT_rhsop_dN_dV_Test(true) ); // tested: OK
-//          refactored.addTest( new NumIntegral_NT_rhsop_N_dV_Test(true) ); // tested: OK
-
-
-        // SplitBoundary related testing
-        // -----------------------------
-        // OK: refactored.addTest( new ModelSubDomain_Test() );
-        
-        // read and write SplitBoundary to file (SplitBasic22: TestWriteModelToDiskAndReadBackWithInterfaces())
-        // OK: refactored.addTest( new ModelBasics_Test() );
-        
-        // creation of 2D SplitBoundary during simulation and reading and writing from file
-        // OK: refactored.addTest( new ANSYS_Model2D_Test() );
-        
-        // creates 3D model with multiple split boundaries 'ModelDykeAllLayersSplit' writing it to disk and bringing it back and comparing them
-        // OK: refactored.addTest( new ANSYS_Model3D_Test() );
-        
-        // creating a model that was split already in ANSYS, matching up node-matched but disconnected boundaries
-        // OK: refactored.addTest( new ANSYS_SplitBoundaryMatch_Test() );
-        
-        // insert lower-dim fracture into split boundary and test it
-        // OK: LFEM refactored.addTest( new SplitBoundary_Test() ); // 2D only
-        
-        // 2 and 3D testing of creation methods for split boundaries: TODO: revisit correctness and reinstate all component tests
-        // OK: refactored.addTest( new SplitBoundaryInterface_Test() );
-
-//        refactored.addTest( new MeshManagementUtilities_Test() ); // TODO: complete this test
-        
-        /*
-            Compares physical space with parametric space computations
-            Not using test framework yet but printing everything to std::cerr
-        */
-//        refactored.addTest( new GFVT_ParametricSpaceComputation_Test() );  // TODO: understand why test is failing for non-simplex elements
-//        ex         refactored.addTest( new GenericFiniteVolumeTransport_Test() );
-
-
-// TODO: no satisfactorily fast access yet; compare with access of a fictious rock-type to determine whether improvement would pay off
-// tested: 6/1/26: no speed-up from extra inlining, complications when attempting to remove macros in LocalVariableStorageArithmetic
-// added new method to read vecs, tensors and arrays using declarative programming
+        // VARIABLE STORAGE TEST BUNDLE
+//        refactored.addTest( new LocalVariableStorage_Test() );
+//        refactored.addTest( new Variables_Test("FracBox") );
+//#ifdef NDEBUG
 //        refactored.addTest( new VariableStorageSpeed_Test() );
-                
-        
-   // TODO: uncomment and fix failing tests listed below
-   // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_lhsop_N_dV_Test( verbose ) );
-   // fail - needs refactoring      interdependent1.addTest( new Integral_var_NT_rhsop_N_dV_Test( verbose ) );
+//#endif
+
+// TODO: refactored.addTest( new IsoparametricLinearPyramid_Test() ); // pyramid is correct but test fails
+// TODO: PDE_Integrator_Transient_Test does not run transient problem yet; compare analytic with num integrals
+// TODO: test PDE_Integrator with periodic boundary conditions
 
         // actually running the test
         refactored.run();
@@ -613,13 +542,13 @@ int main()
       
       // speed tests (run only in the optimised RELEASE version of the code
 #ifdef NDEBUG
-        refactored.addTest( new AccumulationSpeedProfiling_Test() );
-        refactored.addTest( new VariableBenchmarking_Test() );
-        refactored.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
-        refactored.addTest( new FiniteVolumeStencilSpeed_Test() );
-        refactored.addTest( new JaggedArray3D_Comparison_Test() );
-        refactored.addTest( new PropertyStorageSpeed_Test( &cout ) );
-        refactored.addTest( new VariableStorageSpeed_Test() );
+        composite.addTest( new AccumulationSpeedProfiling_Test() );
+        composite.addTest( new VariableBenchmarking_Test() );
+        composite.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+        composite.addTest( new FiniteVolumeStencilSpeed_Test() );
+        composite.addTest( new JaggedArray3D_Comparison_Test() );
+        composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
+        composite.addTest( new VariableStorageSpeed_Test() );
 #endif
      
       // running unit tests and reporting errors

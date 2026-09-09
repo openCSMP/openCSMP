@@ -43,33 +43,6 @@ void replaceWhiteSpaceBy( string& p, char ascii_char )
 
 
 
-/**
-
-Evaluates distance between 2 points. If it is smaller that supplied
-value, the method returns false, else it returns true.
-
-@section arguments Input Arguments 
-
-The locations of the points that shall be evaluated.
-
-@return The minimum distance that the points should be apart from one another.
-*/
-bool areFartherApartThan( const double* pn, const double* pw, double distance )
- {
-    double dx = pn[0] - pw[0];
-    double dy = pn[1] - pw[1];
-    double dz = pn[2] - pw[2];
-    
-    double separation = sqrt( dx*dx + dy*dy + dz*dz );
-    
-    if ( distance < separation ) return true;
-    
-    return false;
-    
- } // end
-
-
-
 
 
 /**
@@ -93,8 +66,7 @@ size_t  renumberElementNodes( vector<Element<1U>*>::iterator first,
     uint32_t       counts(0);
     
     while ( first != last ) {
-         for ( vector<Node<1U>*>::const_iterator
-               nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
+         for ( auto nit=(*first)->NodesBegin(); nit!=(*first)->NodesEnd(); nit++ ) {
               pair<set<uint32_t>::iterator,bool>
               sit=node_numbers.insert(counts);
               if ( sit.second == true ) (*nit)->Idx( counts++ );
@@ -198,7 +170,7 @@ void printRangeOf( const vector<pair<double,double> >&  data )
   
 
 /**
-   @todo document this function
+   @TODO document this time-tokenisation and formatting function
 */
 #if defined _MSC_VER || defined __MINGW32__
 const char* strp_weekdays[] =

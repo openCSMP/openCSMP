@@ -433,7 +433,7 @@ int main( int argc, char* argv[] )
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
       interdependent2.addTest( new INDEXandVariables_Test() );
-      interdependent2.addTest( new ModelTopology_Test() ); // TODO: extend to cover all functionality
+      interdependent2.addTest( new ModelTopology_Test() ); 
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );

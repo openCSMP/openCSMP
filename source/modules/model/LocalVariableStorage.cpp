@@ -98,7 +98,15 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( const LocalVariabl
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( int_type newDataComponentCount, int_type newFlagComponentCount )
   {
-    // needed?
+    // In debug builds: catch any upstream logic errors that produce
+    // unreasonable sizes. This is free in release builds.
+    assert( newDataComponentCount < 1'000'000'000UL &&
+            "ResizePropertyStorage: data count suspiciously large — "
+            "check for unsigned underflow upstream" );
+    assert( newFlagComponentCount < 1'000'000'000UL &&
+            "ResizePropertyStorage: flag count suspiciously large — "
+            "check for unsigned underflow upstream" );
+
     if( data_.flags.size() == newFlagComponentCount && data_.data.size() == newDataComponentCount )
       return;
 
@@ -107,8 +115,8 @@ void LocalVariableStorage<dim,STOREE>::ResizePropertyStorage( int_type newDataCo
     data_.data.resize( newDataComponentCount, numeric_limits<double>::quiet_NaN() );
 
     // trimming excess capacity
-    vector<VARIABLE_FLAG>( data_.flags ).swap( data_.flags );
-    vector<double>( data_.data ).swap( data_.data );
+    data_.flags.shrink_to_fit();
+    data_.data.shrink_to_fit();
   }
 
 
@@ -157,47 +165,41 @@ void LocalVariableStorage<dim, STOREE>::StoreLocalState(const LocalVariables& lv
 
 
 /// Creates an empty space in the storage preserving the original variable values. LocalVariables in Index have to reflect NEW state (incl added)
-/**
-@todo (2-F) Integration point properties not supported
-*/
 template<uint32_t dim, template<uint32_t> class STOREE>
 void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key )
   {
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    /// @todo (2-F) Asserts missing
 
     // Resize to new state (this already supports ip vars)
-    const pair<uint32_t,uint32_t> newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
+    const auto newTotaDataDepth = localVariableDispatch::containerTotalDataDepth( storeePtr, prop_key );
     ResizePropertyStorage( newTotaDataDepth.first, newTotaDataDepth.second );
     const uint32_t dataSize = static_cast<uint32_t>(data_.data.size());
     const uint32_t flagSize = static_cast<uint32_t>(data_.flags.size());
 
-    /// Roman, 2013: with ipvs support
-
     // Offset
-    const pair<uint32_t,uint32_t> newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
-    const uint32_t dataOffset         ( newOffset.first       );
-    const uint32_t flagOffset         ( newOffset.second      );
+    const auto newOffset = localVariableDispatch::containerOffset( storeePtr, prop_key );
+    const auto dataOffset{ newOffset.first  };
+    const auto flagOffset{ newOffset.second };
 
     // DataDepth
-    const uint32_t dataDepth          ( prop_key.dataDepth    );
-    const uint32_t flagDepth          ( prop_key.flagDepth    );
+    const auto dataDepth{ prop_key.dataDepth };
+    const auto flagDepth{ prop_key.flagDepth };
 
     // Cycles
-    const pair<int_type,int_type> newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
-    const int_type nipCycles1            ( newCycles.first       );
-    const int_type nipCycles2            ( newCycles.second      );
+    const auto newCycles = localVariableDispatch::containerIPCycles( storeePtr, prop_key );
+    const auto nipCycles1{ newCycles.first  };
+    const auto nipCycles2{ newCycles.second };
 
-    const pair<int_type,int_type> newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
-    const int_type ipCycle1DataOffset    ( newCycles1Data.first  );
-    const int_type ipCycle1FlagOffset    ( newCycles1Data.second );
+    const auto newCycles1Data = localVariableDispatch::containerIPCycle1Offset( storeePtr, prop_key );
+    const auto ipCycle1DataOffset{ newCycles1Data.first  };
+    const auto ipCycle1FlagOffset{ newCycles1Data.second };
 
-    const pair<int_type,int_type> newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
-    const int_type ipCycle2DataOffset    ( newCycles2Data.first  );
-    const int_type ipCycle2FlagOffset    ( newCycles2Data.second );
+    const auto newCycles2Data = localVariableDispatch::containerIPCycle2Offset( storeePtr, prop_key );
+    const auto ipCycle2DataOffset{ newCycles2Data.first  };
+    const auto ipCycle2FlagOffset{ newCycles2Data.second };
 
     // Data and Flag Bounds
-    vector<vector<pair<int_type,int_type> > > dataBounds( nipCycles1, vector<pair<int_type,int_type> >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
+    vector<vector<pair<int_type,int_type> > > dataBounds( nipCycles1, vector<pair<int_type,int_type>     >(nipCycles2+1,pair<int_type,int_type>(0,0)) );
     for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
     {
         for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
@@ -243,26 +245,45 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
     flagBounds[nipCycles1-1][nipCycles2].second = flagSize;
 
     // Moving data (same for all types) note: decrementing unsigned int avoiding comparison with zero
-    for ( auto cycle1=nipCycles1; cycle1-- > 0; ){
-        for ( auto cycle2=nipCycles2; cycle2-- > 0; ){
-            const auto dataStart = dataBounds[ cycle1 ][ cycle2     ].second;
-            const auto dataEnd   = dataBounds[ cycle1 ][ cycle2 + 1 ].second;
+    for (auto cycle1 = nipCycles1; cycle1 != 0; )
+    {
+        --cycle1;
+
+        for (auto cycle2 = nipCycles2; cycle2 != 0; )
+        {
+            --cycle2;
+
+            const auto dataStart = dataBounds[cycle1][cycle2].second;
+            const auto dataEnd   = dataBounds[cycle1][cycle2 + 1].second;
+
             const int_type stride = (cycle1 + 1) * (cycle2 + 1) * dataDepth;
-            for ( int_type i=dataEnd; i-- > dataStart; )
-              data_.data[i] = data_.data[i-stride];
+
+            for (int_type i = dataEnd; i != dataStart; ) {
+                --i;
+                data_.data[i] = data_.data[i - stride];
+            }
         }
     }
     // Moving flags (same for all types)
-    for ( auto cycle1 = nipCycles1; cycle1-- > 0; ){
-        for ( auto cycle2 = nipCycles2; cycle2-- > 0; ){
-            const auto flagsStart = flagBounds[ cycle1 ][ cycle2     ].second;
-            const auto flagsEnd   = flagBounds[ cycle1 ][ cycle2 + 1 ].second;
+    for (auto cycle1 = nipCycles1; cycle1 != 0; )
+    {
+        --cycle1;
+
+        for (auto cycle2 = nipCycles2; cycle2 != 0; )
+        {
+            --cycle2;
+
+            const auto flagsStart = flagBounds[cycle1][cycle2].second;
+            const auto flagsEnd   = flagBounds[cycle1][cycle2 + 1].second;
+
             const int_type stride = (cycle1 + 1) * (cycle2 + 1) * flagDepth;
-            for ( int_type i = flagsEnd; i-- > flagsStart; )
+
+            for (int_type i = flagsEnd; i != flagsStart; ) {
+                --i;
                 data_.flags[i] = data_.flags[i - stride];
+            }
         }
     }
-    
     // Adding non-initialized data of new variable
     for ( int_type cycle1=0; cycle1<nipCycles1; ++cycle1  )
         for ( int_type cycle2=0; cycle2<nipCycles2; ++cycle2  )
@@ -279,8 +300,7 @@ void LocalVariableStorage<dim,STOREE>::AddProperty( const csmp::Index& prop_key 
 #ifndef NDEBUG
     StoreLocalState(prop_key.localVariables);
 #endif
-  } // end AddProperty
-
+} // end AddProperty
 
 
 
@@ -403,6 +423,8 @@ void LocalVariableStorage<dim,STOREE>::DeleteProperty( const csmp::Index& prop_k
 
 
 
+
+
 template<uint32_t dim, template<uint32_t> class STOREE>
 bool LocalVariableStorage<dim,STOREE>::EmptyLVS() const
   {
@@ -446,7 +468,7 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
 
     if ( data_.tensors > 0U ) {
       cout <<"\n\n\tstored tensor variables: ";
-      const uint32_t  tensors( data_.tensors );
+      const int_type  tensors( data_.tensors );
       csmp::Index  idx(TENSOR,varPlacement,0U);
       TensorVariable<dim>  ts;
       while ( idx.index < tensors ) {
@@ -459,8 +481,8 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
       
     if ( data_.arrays > 0U ) {
         cout <<"\n\n\tstored array variables: ";
-        const uint32_t  array_variables( data_.arrays );
-        for ( auto i{0U}; i<array_variables; ++i )
+        const int_type  array_variables( data_.arrays );
+        for ( int_type i{0U}; i<array_variables; ++i )
           {
              csmp::Index    idx(ARRAY,varPlacement,i);
              ArrayVariable  ary( idx.dataDepth ); 
@@ -471,8 +493,8 @@ void LocalVariableStorage<dim,STOREE>::OutLVS() const
       
     if ( data_.flaggedArrays > 0U ) {
         cout <<"\n\n\tstored array variables: ";
-        const uint32_t  flaggged_array_variables( data_.flaggedArrays );
-        for ( auto i{0U}; i<flaggged_array_variables; ++i )
+        const int_type  flaggged_array_variables( data_.flaggedArrays );
+        for ( int_type i{0U}; i<flaggged_array_variables; ++i )
           {
              csmp::Index           idx(FLAGGEDARRAY,varPlacement,i);
              FlaggedArrayVariable  ary( idx.dataDepth ); 
@@ -1078,28 +1100,36 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( const csmp::Index& idx,
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
  AssertPlacement(idx);
 #endif
-    if ( idx.type == SCALAR ) {
-      const double val = Read( idx );
-      return ( val >= vmin and val <= vmax ) ? true : false;
-      }
-    if ( idx.type == VECTOR ) {
-      VectorVariable<dim> vc = ReadVector( idx );
-      return vc.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == TENSOR ) {
-      TensorVariable<dim>  ts = ReadTensor( idx );
-      return ts.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == ARRAY ) {
-      vector<double> av = ReadArray( idx );
-      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
-      return *min_it >= vmin && *max_it <= vmax;
-      }
-    if ( idx.type == FLAGGEDARRAY ) {
-      FlaggedArrayVariable  fa;
-      Read( idx, fa );
-      return fa.IsWithinRange( vmin, vmax );
-      }
+    switch ( idx.type )
+    {
+        case SCALAR: {
+            const double val = Read( idx );
+            return val >= vmin && val <= vmax;
+        }
+        case VECTOR: {
+            const VectorVariable<dim> vc = ReadVector( idx );
+            return vc.IsWithinRange( vmin, vmax );
+        }
+        case TENSOR: {
+            const TensorVariable<dim> ts = ReadTensor( idx );
+            return ts.IsWithinRange( vmin, vmax );
+        }
+        case ARRAY: {
+            const auto av = ReadArray( idx );
+            const auto [min_it, max_it] = std::ranges::minmax_element( av );
+            return *min_it >= vmin && *max_it <= vmax;
+        }
+        case FLAGGEDARRAY: {
+            FlaggedArrayVariable fa;
+            Read( idx, fa );
+            return fa.IsWithinRange( vmin, vmax );
+        }
+        default:
+            cerr << "\nLocalVariableStorage::IsWithinRange: "
+                 << "range check could not be performed for type "
+                 << idx.type << "\n";
+            return false;
+    }
 
     std::cerr <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
     return false;
@@ -1179,37 +1209,57 @@ vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t ip, const c
 
 
 template<uint32_t dim, template<uint32_t> class STOREE>
-bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::Index& idx,
-                                                      double vmin, double vmax ) const
-  {
+bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t           ip,
+                                                      const csmp::Index& idx,
+                                                      double             vmin,
+                                                      double             vmax ) const
+{
 #if defined(DEBUG) && defined(CSMP_VARIABLE_STORAGE_DEBUG)
-  AssertIntegrationPointPlacement(idx);
+    AssertIntegrationPointPlacement( idx );
 #endif
-    if ( idx.type == SCALAR ) {
-      const double val = Read( ip, idx );
-      return ( val >= vmin and val <= vmax ) ? true : false;
-      }
-    if ( idx.type == VECTOR ) {
-      VectorVariable<dim> vc = ReadVector( ip, idx );
-      return vc.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == TENSOR ) {
-      TensorVariable<dim>  ts = ReadTensor( ip, idx );
-      return ts.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == ARRAY ) {
-      vector<double> av = ReadArray( ip, idx );
-      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
-      return *min_it >= vmin && *max_it <= vmax;
-      }
-    if ( idx.type == FLAGGEDARRAY ) {
-      FlaggedArrayVariable  fa;
-      Read( ip, idx, fa );
-      return fa.IsWithinRange( vmin, vmax );
-      }
-    std::cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< std::endl;
-    return false;
-  }
+
+    switch ( idx.type )
+    {
+        case SCALAR:
+        {
+            const double val = Read( ip, idx );
+            return val >= vmin && val <= vmax;
+        }
+
+        case VECTOR:
+        {
+            const VectorVariable<dim> vc = ReadVector( ip, idx );
+            return vc.IsWithinRange( vmin, vmax );
+        }
+
+        case TENSOR:
+        {
+            const TensorVariable<dim> ts = ReadTensor( ip, idx );
+            return ts.IsWithinRange( vmin, vmax );
+        }
+
+        case ARRAY:
+        {
+            const auto av = ReadArray( ip, idx );
+            const auto [min_it, max_it] = std::ranges::minmax_element( av );
+            return *min_it >= vmin && *max_it <= vmax;
+        }
+
+        case FLAGGEDARRAY:
+        {
+            FlaggedArrayVariable fa;
+            Read( ip, idx, fa );
+            return fa.IsWithinRange( vmin, vmax );
+        }
+
+        default:
+            cerr << "\nLocalVariableStorage<" << dim
+                 << ">::IsWithinRange: range check could not be performed "
+                 << "for variable type " << idx.type << "\n";
+            return false;
+    }
+}
+
 
 
 
@@ -1225,551 +1275,482 @@ bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t ip, const csmp::I
 /** 
     Scalar variable value at sector or facet integration points only.
 */
+/// Scalar variable value at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-double LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
-  {
+double LocalVariableStorage<dim,STOREE>::Read( uint32_t           sector_or_facet,
+                                               uint32_t           ip,
+                                               const csmp::Index& idx ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    // offset to first instance of idx variable in the data vector
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == SCALAR );
-  assert( offsetData.first < data_.data.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == SCALAR );
 #endif
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth; // for facet integration points only
-    ///                                                                                    ^^^^^^^^
-    return data_.data[offsetData.first + sector_ip_offset];
-  }
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff < data_.data.size() );
+    return data_.data[ dataOff ];
+}
 
 
-
-/// Scalar variable at facet or sector integration point
+/// Scalar variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ScalarVariable& sc ) const
-  {
+void LocalVariableStorage<dim,STOREE>::Read( uint32_t           sector_or_facet,
+                                             uint32_t           ip,
+                                             const csmp::Index& idx,
+                                             ScalarVariable&    sc ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == SCALAR );
-  assert( offset < data_.data.size() );
-  assert( flagOffset < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == SCALAR );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
-    sc.Flag() = data_.flags[flagOffset + sector_ip_flag_offset];
-    sc        = data_.data[offset + sector_ip_offset];
-  }
+    assert( dataOff < data_.data.size()  );
+    assert( flagOff < data_.flags.size() );
+
+    sc.Flag() = data_.flags[ flagOff ];
+    sc        = data_.data[  dataOff ];
+}
 
 
-
-
-/// Scalar variable at facet or sector integration point
+/// Scalar variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ScalarVariable& sc )
-  {
+void LocalVariableStorage<dim,STOREE>::Store( uint32_t              sector_or_facet,
+                                              uint32_t              ip,
+                                              const csmp::Index&    idx,
+                                              const ScalarVariable& sc )
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == SCALAR );
-  assert( offset < data_.data.size() );
-  assert( flagOffset < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == SCALAR );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
-    data_.flags[flagOffset + sector_ip_flag_offset] = sc.Flag();
-    data_.data[offset + sector_ip_offset]           = sc();
-  }
+    assert( dataOff < data_.data.size()  );
+    assert( flagOff < data_.flags.size() );
+
+    data_.flags[ flagOff ] = sc.Flag();
+    data_.data[  dataOff ] = sc();
+}
 
 
-
-
-
-/// Scalar & Array variable flag at facet or sector integration point
+/// Scalar & Array variable flag at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
-  {
+VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t           sector_or_facet,
+                                                        uint32_t           ip,
+                                                        const csmp::Index& idx ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == SCALAR || idx.type == ARRAY );
-  assert( offsetData.second < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == SCALAR || idx.type == ARRAY );
 #endif
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-    
-    return data_.flags[offsetData.second + sector_ip_offset];
-  }
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( flagOff < data_.flags.size() );
+    return data_.flags[ flagOff ];
+}
 
 
-
-
-/// Vector, Tensor, FlaggedArray variable flag at integration point
+/// Scalar & Array variable flag setter at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, int_type i ) const
-  {
+void LocalVariableStorage<dim,STOREE>::Status( uint32_t           sector_or_facet,
+                                               uint32_t           ip,
+                                               const csmp::Index& idx,
+                                               VARIABLE_FLAG      flag )
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type,int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx);
-    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
-  assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
-  assert( flagOffset+i < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == SCALAR || idx.type == ARRAY );
 #endif
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-    
-    return data_.flags[ flagOffset + sector_ip_offset + i ];
-  }
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( flagOff < data_.flags.size() );
+    data_.flags[ flagOff ] = flag;
+}
 
 
-
-
-/// Scalar & Array variable flag at facet or sector integration point (note that the Array has only a single flag)
+/// Vector variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VARIABLE_FLAG flag )
-  {
+void LocalVariableStorage<dim,STOREE>::Read( uint32_t              sector_or_facet,
+                                             uint32_t              ip,
+                                             const csmp::Index&    idx,
+                                             VectorVariable<dim>&  vc ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type flagOffset(offsetData.second);
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == SCALAR  || idx.type == ARRAY );
-  assert( flagOffset < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == VECTOR );
+    assert( dataOff + dim - 1 < data_.data.size()  );
+    assert( flagOff + dim - 1 < data_.flags.size() );
 #endif
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[flagOffset + sector_ip_offset] = flag;
-  }
+    for ( uint32_t i{0u}; i < dim; ++i ) {
+        vc.Flag(i) = data_.flags[ flagOff + i ];
+        vc(i)      = data_.data[  dataOff + i ];
+    }
+}
 
 
-
-/// Vector, Tensor, FlaggedArray variable flag at integration point
+/// Vector variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Status( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, int_type i, VARIABLE_FLAG flag )
-  {
+void LocalVariableStorage<dim,STOREE>::Store( uint32_t                   sector_or_facet,
+                                              uint32_t                   ip,
+                                              const csmp::Index&         idx,
+                                              const VectorVariable<dim>& vc )
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
-  assert( (i < dim)&&(idx.type != FLAGGEDARRAY) || (i < idx.dataDepth )&&(idx.type == FLAGGEDARRAY) );
-  assert( flagOffset+i < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == VECTOR );
 #endif
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    data_.flags[ flagOffset + sector_ip_offset + i ] = flag;
-  }
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + dim - 1 < data_.data.size()  );
+    assert( flagOff + dim - 1 < data_.flags.size() );
+
+    for ( uint32_t i{0u}; i < dim; ++i ) {
+        data_.flags[ flagOff + i ] = vc.Flag(i);
+        data_.data[  dataOff + i ] = vc[i];
+    }
+}
 
 
-
-
-/// Vector variable at integration point
+/// Vector, Tensor, FlaggedArray flag at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const VectorVariable<dim>& vc )
-  {
+VARIABLE_FLAG LocalVariableStorage<dim,STOREE>::Status( uint32_t           sector_or_facet,
+                                                        uint32_t           ip,
+                                                        const csmp::Index& idx,
+                                                        int_type           i ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == VECTOR );
-  assert( offset+dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
+    assert( (i < dim && idx.type != FLAGGEDARRAY) || (i < idx.dataDepth && idx.type == FLAGGEDARRAY) );
 #endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
-    for ( uint32_t i(0); i<dim; ++i ) {
-         data_.flags[ flagOffset + sector_ip_flag_offset + i ] = vc.Flag(i);
-         data_.data[ offset + sector_ip_offset + i ]            = vc[i];
-      }
-  }
+    assert( flagOff + i < data_.flags.size() );
+    return data_.flags[ flagOff + i ];
+}
 
 
-
-
-/// Vector variable at facet or sector integration point
+/// Vector, Tensor, FlaggedArray flag setter at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, VectorVariable<dim>& vc ) const
-  {
+void LocalVariableStorage<dim,STOREE>::Status( uint32_t           sector_or_facet,
+                                               uint32_t           ip,
+                                               const csmp::Index& idx,
+                                               int_type           i,
+                                               VARIABLE_FLAG      flag )
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == VECTOR );
-  assert( offset+dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == VECTOR || idx.type == TENSOR || idx.type == FLAGGEDARRAY );
+    assert( (i < dim && idx.type != FLAGGEDARRAY) || (i < idx.dataDepth && idx.type == FLAGGEDARRAY) );
 #endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
-    for ( uint32_t i(0); i<dim; ++i ) {
-         vc.Flag(i) = data_.flags[ flagOffset + sector_ip_flag_offset + i ];
-         vc(i)      = data_.data[ offset + sector_ip_offset + i ];
-      }
-  }
-
-
+    assert( flagOff + i < data_.flags.size() );
+    data_.flags[ flagOff + i ] = flag;
+}
 
 
 /// Tensor variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const TensorVariable<dim>& ts )
-  {
+void LocalVariableStorage<dim,STOREE>::Read( uint32_t              sector_or_facet,
+                                             uint32_t              ip,
+                                             const csmp::Index&    idx,
+                                             TensorVariable<dim>&  ts ) const
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<uint32_t, uint32_t> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const uint32_t offset(offsetData.first);
-    const uint32_t flagOffset(offsetData.second);
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == TENSOR );
-  assert( offset+dim*dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == TENSOR );
 #endif
-    const uint32_t sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
 
-    const uint32_t sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
 
-    for ( auto i{0U}; i<dim; ++i ) {
-          data_.flags[ flagOffset + sector_ip_flag_offset + i ] = ts.Flag(i);
-          for ( uint32_t j{0U}; j<dim; ++j )
-            data_.data[ offset + sector_ip_offset + i*dim + j ] = ts(i,j);
-      }
- }
+    assert( dataOff + dim*dim - 1 < data_.data.size()  );
+    assert( flagOff + dim     - 1 < data_.flags.size() );
 
-
-/// Tensor variable at facet or sector integration point
-template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, TensorVariable<dim>& ts ) const
-  {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == TENSOR );
-  assert( offset+dim*dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-
-    for ( uint32_t i{0U}; i<dim; ++i ) {
-          ts.Flag(i) = data_.flags[flagOffset + sector_ip_flag_offset + i];
-          for ( uint32_t j{0U}; j<dim; ++j )
-            ts(i,j) = data_.data[ offset + sector_ip_offset + i*dim + j ];
-      }
-  }
-
-
-/// Array variable at sector or facet integration poin
-template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const ArrayVariable& av )
-  {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-    const int_type arraySize( idx.dataDepth );
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( av.Size() == idx.dataDepth );
-  assert( idx.type == ARRAY );
-  assert( offset+arraySize-1 < data_.data.size() );
-  assert( flagOffset< data_.flags.size() );
-#endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-
-    for ( uint32_t i(0u); i < arraySize; ++i )
-      data_.data[ offset + sector_ip_offset + i ]     = av[i];
-    data_.flags[ flagOffset + sector_ip_flag_offset ] = av.Flag();
-  }
-
-
-
-
-
-/// Array variables at sector or facet integration points
-template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, ArrayVariable& av ) const
-  {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-    const int_type arraySize( idx.dataDepth );
-    av.Resize( idx.dataDepth );
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( av.Size() == idx.dataDepth );
-  assert( idx.type == ARRAY );
-  assert( offset+arraySize-1 < data_.data.size() );
-  assert( flagOffset< data_.flags.size() );
-#endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-
-    for ( uint32_t i(0); i < arraySize; ++i )
-      av(i) = data_.data[ offset + sector_ip_offset + i ];
-    av.Flag( data_.flags[flagOffset + sector_ip_flag_offset] );
-  }
-
-
-
-/// FlaggedArray variable at facet or sector integration point
-template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Store( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, const FlaggedArrayVariable& av )
-  {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-    const int_type arraySize( idx.dataDepth );
-
-#ifndef NDEBUG  
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( av.Size() == idx.dataDepth );
-  assert( idx.type == FLAGGEDARRAY );
-  assert( offset+arraySize-1 < data_.data.size() );
-  assert( flagOffset+arraySize-1 < data_.flags.size() );
-#endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-
-    for ( uint32_t i(0u); i < arraySize; ++i ) {
-         data_.data[ offset     + sector_ip_offset + i ]      = av[i];
-         data_.flags[flagOffset + sector_ip_flag_offset + i ] = av.Flag(i);
-      }
-  }
-
-
-
-/// FlaggedArray variables
-template<uint32_t dim, template<uint32_t> class STOREE>
-void LocalVariableStorage<dim,STOREE>::Read( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx, FlaggedArrayVariable& av ) const
-  {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type offset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-    const int_type arraySize( idx.dataDepth );
-    av.Resize( idx.dataDepth );
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( av.Size() == idx.dataDepth );
-  assert( idx.type == FLAGGEDARRAY );
-  assert( offset+arraySize-1 < data_.data.size() );
-  assert( flagOffset+arraySize-1 < data_.flags.size() );
-#endif
-    const int_type sector_ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                         (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type sector_ip_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-
-    for ( uint32_t i(0); i < arraySize; ++i ) {
-         av(i) = data_.data[ offset + sector_ip_offset + i ];
-         av.Flag( i, data_.flags[flagOffset + sector_ip_flag_offset + i] );
-      }
-  }
-
-
-template<uint32_t dim, template<uint32_t> class STOREE>
-VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
- {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type dataOffset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == VECTOR );
-  assert( dataOffset+dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
-    const int_type ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-    if constexpr( dim == 3U )
-      return VectorVariable<3U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ], data_.flags[ flagOffset+ip_flag_offset+2 ],
-                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ], data_.data[ dataOffset+ip_data_offset+2 ] );
-
-    else if constexpr( dim == 2U )
-      return VectorVariable<2U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ],
-                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ] );
-
-    else if constexpr( dim == 1U )
-      return VectorVariable<1U>( data_.flags[ flagOffset+ip_flag_offset ], data_.data[ dataOffset+ip_data_offset ] );
- }
-
-
-template<uint32_t dim, template<uint32_t> class STOREE>
-TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
- {
-    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type dataOffset(offsetData.first);
-    const int_type flagOffset(offsetData.second);
-
-#ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == TENSOR );
-  assert( dataOffset+dim*dim-1 < data_.data.size() );
-  assert( flagOffset+dim-1 < data_.flags.size() );
-#endif
-    const int_type ip_flag_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalFlagDepth :
-                                     (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalFlagDepth;
-
-    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
-    if constexpr ( dim == 3U )
-      return TensorVariable<3U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ], data_.flags[ flagOffset+ip_flag_offset+2 ],
-                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ], data_.data[ dataOffset+ip_data_offset+2 ],
-                                 data_.data[ dataOffset+ip_data_offset+dim ], data_.data[ dataOffset+ip_data_offset+dim+1 ], data_.data[ dataOffset+ip_data_offset+dim+2 ],
-                                 data_.data[ dataOffset+ip_data_offset+2*dim ], data_.data[ dataOffset+ip_data_offset+2*dim+1 ], data_.data[ dataOffset+ip_data_offset+2*dim+2 ] );
-
-    else if constexpr ( dim == 2U )
-      return TensorVariable<2U>( data_.flags[ flagOffset+ip_flag_offset ], data_.flags[ flagOffset+ip_flag_offset+1 ],
-                                 data_.data[ dataOffset+ip_data_offset ], data_.data[ dataOffset+ip_data_offset+1 ],
-                                 data_.data[ dataOffset+ip_data_offset+dim ], data_.data[ dataOffset+ip_data_offset+dim+1 ] );
-
-    else if constexpr ( dim == 1U )
-      return TensorVariable<1U>( data_.flags[ flagOffset+ip_flag_offset ], data_.data[ dataOffset+ip_data_offset ] );
+    for ( uint32_t i{0U}; i < dim; ++i ) {
+        ts.Flag(i) = data_.flags[ flagOff + i ];
+        for ( uint32_t j{0U}; j < dim; ++j )
+            ts(i,j) = data_.data[ dataOff + i*dim + j ];
+    }
 }
 
 
+/// Tensor variable at sector or facet integration point
 template<uint32_t dim, template<uint32_t> class STOREE>
-vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t sector_or_facet, uint32_t ip, const csmp::Index& idx ) const
- {
+void LocalVariableStorage<dim,STOREE>::Store( uint32_t                   sector_or_facet,
+                                              uint32_t                   ip,
+                                              const csmp::Index&         idx,
+                                              const TensorVariable<dim>& ts )
+{
     const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-    const pair<int_type, int_type> offsetData = localVariableDispatch::containerOffset( storeePtr, idx );
-    const int_type dataOffset(offsetData.first);
-    const int_type arraySize( idx.dataDepth );
 
 #ifndef NDEBUG
-  localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
-  AssertFiniteVolumeIntegrationPointPlacement(idx);
-  assert( idx.type == ARRAY );
-  assert( dataOffset+arraySize <= data_.data.size() );
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == TENSOR );
 #endif
-    const int_type ip_data_offset = (idx.place == SECTOR_INTEGRATION_POINT) ?
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvSector.totalDataDepth :
-                                    (sector_or_facet + ip) * idx.integrationPointVariables.ipvFacet.totalDataDepth;
 
-    return std::vector<double>( next(data_.data.begin(),dataOffset+ip_data_offset), next(data_.data.begin(),dataOffset+ip_data_offset+arraySize) );
- }
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + dim*dim - 1 < data_.data.size()  );
+    assert( flagOff + dim     - 1 < data_.flags.size() );
+
+    for ( uint32_t i{0U}; i < dim; ++i ) {
+        data_.flags[ flagOff + i ] = ts.Flag(i);
+        for ( uint32_t j{0U}; j < dim; ++j )
+            data_.data[ dataOff + i*dim + j ] = ts(i,j);
+    }
+}
+
+
+/// Array variable at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+void LocalVariableStorage<dim,STOREE>::Read( uint32_t           sector_or_facet,
+                                             uint32_t           ip,
+                                             const csmp::Index& idx,
+                                             ArrayVariable&     av ) const
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const int_type arraySize = static_cast<int_type>( idx.dataDepth );
+    av.Resize( idx.dataDepth );
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == ARRAY );
+    assert( av.Size() == idx.dataDepth );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + arraySize - 1 < data_.data.size()  );
+    assert( flagOff               < data_.flags.size() );
+
+    for ( uint32_t i{0u}; i < arraySize; ++i )
+        av(i) = data_.data[ dataOff + i ];
+    av.Flag( data_.flags[ flagOff ] );
+}
+
+
+/// Array variable at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+void LocalVariableStorage<dim,STOREE>::Store( uint32_t              sector_or_facet,
+                                              uint32_t              ip,
+                                              const csmp::Index&    idx,
+                                              const ArrayVariable&  av )
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const int_type arraySize = static_cast<int_type>( idx.dataDepth );
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == ARRAY );
+    assert( av.Size() == idx.dataDepth );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + arraySize - 1 < data_.data.size()  );
+    assert( flagOff               < data_.flags.size() );
+
+    for ( uint32_t i{0u}; i < arraySize; ++i )
+        data_.data[ dataOff + i ] = av[i];
+    data_.flags[ flagOff ] = av.Flag();
+}
+
+
+/// FlaggedArray variable at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+void LocalVariableStorage<dim,STOREE>::Read( uint32_t                sector_or_facet,
+                                             uint32_t                ip,
+                                             const csmp::Index&      idx,
+                                             FlaggedArrayVariable&   av ) const
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const int_type arraySize = static_cast<int_type>( idx.dataDepth );
+    av.Resize( idx.dataDepth );
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == FLAGGEDARRAY );
+    assert( av.Size() == idx.dataDepth );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + arraySize - 1 < data_.data.size()  );
+    assert( flagOff + arraySize - 1 < data_.flags.size() );
+
+    for ( uint32_t i{0u}; i < arraySize; ++i ) {
+        av(i)      = data_.data[  dataOff + i ];
+        av.Flag(i) = data_.flags[ flagOff + i ];
+    }
+}
+
+
+/// FlaggedArray variable at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+void LocalVariableStorage<dim,STOREE>::Store( uint32_t                     sector_or_facet,
+                                              uint32_t                     ip,
+                                              const csmp::Index&           idx,
+                                              const FlaggedArrayVariable&  av )
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const int_type arraySize = static_cast<int_type>( idx.dataDepth );
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == FLAGGEDARRAY );
+    assert( av.Size() == idx.dataDepth );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + arraySize - 1 < data_.data.size()  );
+    assert( flagOff + arraySize - 1 < data_.flags.size() );
+
+    for ( uint32_t i{0u}; i < arraySize; ++i ) {
+        data_.data[  dataOff + i ] = av[i];
+        data_.flags[ flagOff + i ] = av.Flag(i);
+    }
+}
+
+
+/// ReadVector at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+VectorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadVector( uint32_t           sector_or_facet,
+                                                                   uint32_t           ip,
+                                                                   const csmp::Index& idx ) const
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == VECTOR );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + dim - 1 < data_.data.size()  );
+    assert( flagOff + dim - 1 < data_.flags.size() );
+
+    if constexpr ( dim == 3U )
+        return VectorVariable<3U>( data_.flags[flagOff],   data_.flags[flagOff+1], data_.flags[flagOff+2],
+                                   data_.data[dataOff],    data_.data[dataOff+1],  data_.data[dataOff+2]  );
+    else if constexpr ( dim == 2U )
+        return VectorVariable<2U>( data_.flags[flagOff],   data_.flags[flagOff+1],
+                                   data_.data[dataOff],    data_.data[dataOff+1]   );
+    else
+        return VectorVariable<1U>( data_.flags[flagOff],   data_.data[dataOff]     );
+}
+
+
+/// ReadTensor at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+TensorVariable<dim> LocalVariableStorage<dim,STOREE>::ReadTensor( uint32_t           sector_or_facet,
+                                                                   uint32_t           ip,
+                                                                   const csmp::Index& idx ) const
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == TENSOR );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + dim*dim - 1 < data_.data.size()  );
+    assert( flagOff + dim     - 1 < data_.flags.size() );
+
+    if constexpr ( dim == 3U )
+        return TensorVariable<3U>(
+            data_.flags[flagOff], data_.flags[flagOff+1], data_.flags[flagOff+2],
+            data_.data[dataOff],   data_.data[dataOff+1],  data_.data[dataOff+2],
+            data_.data[dataOff+3], data_.data[dataOff+4],  data_.data[dataOff+5],
+            data_.data[dataOff+6], data_.data[dataOff+7],  data_.data[dataOff+8] );
+    else if constexpr ( dim == 2U )
+        return TensorVariable<2U>(
+            data_.flags[flagOff], data_.flags[flagOff+1],
+            data_.data[dataOff],   data_.data[dataOff+1],
+            data_.data[dataOff+2], data_.data[dataOff+3] );
+    else
+        return TensorVariable<1U>( data_.flags[flagOff], data_.data[dataOff] );
+}
+
+
+/// ReadArray at sector or facet integration point
+template<uint32_t dim, template<uint32_t> class STOREE>
+vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t           sector_or_facet,
+                                                            uint32_t           ip,
+                                                            const csmp::Index& idx ) const
+{
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    const int_type arraySize = static_cast<int_type>( idx.dataDepth );
+
+#ifndef NDEBUG
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
+    assert( idx.type == ARRAY );
+#endif
+
+    const auto [dataOff, flagOff] = FVIPOffsets( storeePtr, sector_or_facet, ip, idx );
+
+    assert( dataOff + arraySize <= data_.data.size() );
+
+    // Return a span-based copy — no index arithmetic needed
+    const auto data_span = std::span{ data_.data };
+    const auto sub       = data_span.subspan( dataOff, arraySize );
+    return vector<double>( sub.begin(), sub.end() );
+}
+
+
 
 
 
@@ -1782,41 +1763,59 @@ vector<double> LocalVariableStorage<dim,STOREE>::ReadArray( uint32_t sector_or_f
      @todo refactor: for vectors, tensors and array variables this method is terribly inefficient as it creates temporaries for the checking.
 */
 template<uint32_t dim, template<uint32_t> class STOREE>
-bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t sector_or_facet, uint32_t ip,
+bool LocalVariableStorage<dim,STOREE>::IsWithinRange( uint32_t           sector_or_facet,
+                                                      uint32_t           ip,
                                                       const csmp::Index& idx,
-                                                      double vmin, double vmax ) const
-  {
+                                                      double             vmin,
+                                                      double             vmax ) const
+{
 #ifndef NDEBUG
-   const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
-   localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip);
-   AssertFiniteVolumeIntegrationPointPlacement(idx);
+    const STOREE<dim>* const storeePtr = static_cast<const STOREE<dim>*>(this);
+    localVariableDispatch::assertFiniteVolumeIntegrationPointIndex( storeePtr, sector_or_facet, ip );
+    AssertFiniteVolumeIntegrationPointPlacement( idx );
 #endif
-    if ( idx.type == SCALAR ) {
-      const double val = Read( sector_or_facet, ip, idx );
-      return ( val >= vmin and val <= vmax ) ? true : false;
-      }
-    if ( idx.type == VECTOR ) {
-      VectorVariable<dim> vc = ReadVector( sector_or_facet, ip, idx );
-      return vc.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == TENSOR ) {
-      TensorVariable<dim>  ts = ReadTensor( sector_or_facet, ip, idx );
-      return ts.IsWithinRange( vmin, vmax );
-      }
-    if ( idx.type == ARRAY ) {
-      vector<double> av = ReadArray( sector_or_facet, ip, idx );
-      auto [min_it, max_it] = minmax_element(av.begin(), av.end());
-      return *min_it >= vmin && *max_it <= vmax;
-      }
-    if ( idx.type == FLAGGEDARRAY ) {
-      FlaggedArrayVariable  fa;
-      Read( sector_or_facet, ip, idx, fa );
-      return fa.IsWithinRange( vmin, vmax );
-      }
 
-    cout <<"\nLocalVariableStorage<dim,STOREE>::IsWithinRange: range check could not be performed."<< endl;
-    return false;
-  }
+    switch ( idx.type )
+    {
+        case SCALAR:
+        {
+            const double val = Read( sector_or_facet, ip, idx );
+            return val >= vmin && val <= vmax;
+        }
+
+        case VECTOR:
+        {
+            const VectorVariable<dim> vc = ReadVector( sector_or_facet, ip, idx );
+            return vc.IsWithinRange( vmin, vmax );
+        }
+
+        case TENSOR:
+        {
+            const TensorVariable<dim> ts = ReadTensor( sector_or_facet, ip, idx );
+            return ts.IsWithinRange( vmin, vmax );
+        }
+
+        case ARRAY:
+        {
+            const auto av = ReadArray( sector_or_facet, ip, idx );
+            const auto [min_it, max_it] = std::ranges::minmax_element( av );
+            return *min_it >= vmin && *max_it <= vmax;
+        }
+
+        case FLAGGEDARRAY:
+        {
+            FlaggedArrayVariable fa;
+            Read( sector_or_facet, ip, idx, fa );
+            return fa.IsWithinRange( vmin, vmax );
+        }
+
+        default:
+            cerr << "\nLocalVariableStorage<" << dim
+                 << ">::IsWithinRange: range check could not be performed "
+                 << "for variable type " << idx.type << "\n";
+            return false;
+    }
+}
   
   
   

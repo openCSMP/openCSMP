@@ -1164,7 +1164,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void floodFill( CELL<dim>* const eptr, set<CELL<dim>*>& elements_contiguous_subset )
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-    if ( eptr == nullptr ) {
+    if ( !eptr ) {
          csmp_error.Note( ERROR, "floodFill", "root cell pointer is a nullptr; nothing was done.");
          return;
       }

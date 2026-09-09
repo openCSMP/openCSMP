@@ -34,7 +34,8 @@ class NumIntegral_dNT_op_dN_NT_v_dN_dV final : public MathOperatorLHS<dim,CELL> 
     NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>(*this); }
 
   private:
-    DenseMatrix<DM_MIN>  DN, DNT, VIP, NT3;
+    DenseMatrix<DM_MIN>  DN, DNT, NT3;
+    DenseMatrix<DM12>    VIP;
     std::vector<double>  IPOL;    ///< basis function values (at integration point)
     VectorVariable<dim>  velo_;   ///< Darcy flow velocity
     csmp::Index          adv_key; ///< index of the variable that shall be advected

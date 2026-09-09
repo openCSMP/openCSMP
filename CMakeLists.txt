@@ -737,6 +737,25 @@ if(BUILD_TESTING)
     # Links against the core library (inherits all its PUBLIC dependencies)
     target_link_libraries(openCSMP-tests PRIVATE openCSMP)
 
+	if ( CSMP_WITH_UBSAN )
+		target_compile_options( csmp PRIVATE
+			-fsanitize=undefined
+			-fno-sanitize-recover=undefined
+		)
+		target_link_options( csmp PRIVATE
+			-fsanitize=undefined
+		)
+		# Suppress known false positives in Apple libc++
+		if ( APPLE )
+			target_compile_options( csmp PRIVATE
+				-fsanitize-ignorelist=${CMAKE_SOURCE_DIR}/ubsan.supp
+			)
+			target_link_options( csmp PRIVATE
+				-fsanitize-ignorelist=${CMAKE_SOURCE_DIR}/ubsan.supp
+			)
+		endif()
+	endif()
+
     # -----------------------------------------------------------------------
     # Test Runtime Data
     #   Copies the tests/dataset directory into the build tree so tests can

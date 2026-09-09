@@ -195,9 +195,8 @@ PropertyHandle<dim>::PropertyHandle( const PropertyHandle<dim>& other )
 template<uint32_t dim>
 PropertyHandle<dim>::~PropertyHandle()
 {
-    if ( owns_variable_ &&
-         model_.Database().IsDefined( var_name_.c_str() ) )
-        model_.DeleteProperty( var_name_.c_str() );
+    if ( owns_variable_ && model_.Database().IsDefined( var_name_.c_str() ) )
+      model_.DeleteProperty( var_name_.c_str() );
 }
 
 // ============================================================================

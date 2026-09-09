@@ -96,9 +96,9 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e
    
     // 2. read element advection variable
     // -----------------------------------
-    e.Read( adv_key, velo_ );
-    
-    
+    if ( adv_key.place == ELEMENT )
+      e.Read( adv_key, velo_ );
+        
 } // end GetOperands
 
 
@@ -107,75 +107,122 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e
 
 
 /**
- 
-@section application Application
+    @brief Computes the element contribution to the advection-diffusion stiffness matrix.
 
-In linear elasticity computations.  
+    Evaluates the combined integral:
+
+        K_jk = ∫_Ω (∇N_j)ᵀ [σ] ∇N_k dV  +  ∫_Ω N_j (v · ∇N_k) dV
+
+    The first term is the diffusive contribution — the standard conductance
+    matrix weighted by the material operand [σ] (scalar, vector or tensor
+    diffusivity / conductivity / permeability).
+
+    The second term is the advective contribution — the Petrov-Galerkin
+    upwind term weighted by the advection velocity v. It is assembled as
+    the outer product:
+
+        A_jk = N_j · (v · ∇N_k) = N_j · Σ_d v_d · ∂N_k/∂x_d
+
+    Both terms are integrated using the same full Gauss quadrature loop
+    over all element integration points. This is essential for bilinear
+    quadrilateral elements where the product N_j · (v · ∇N_k) is quadratic
+    and requires at least a 2×2 rule for exact integration.
+
+    @note NT3 is zeroed at the start of each integration point iteration.
+    Without this reset, stale values from the previous integration point
+    accumulate into the current one, producing a systematic error of
+    exactly 1/8 per entry for Q4 elements with a 2×2 Gauss rule.
+
+    @note The material operand [σ] may be element-placed (constant over
+    the element, using MTRL[0]) or integration-point-placed (varying,
+    using MTRL[i]). The advection velocity v is always element-placed.
+
+    @param e  The cell over which the contribution is computed.
+              Must be an isoparametric element (UsesLocalCoordinates() == true).
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL<dim>& e )
- {
-    // initialize output matrix
+{
+    // initialise output matrix to zero
     MathOperatorLHS<dim,CELL>::LHS.Resize( e.Nodes(), e.Nodes() );
     MathOperatorLHS<dim,CELL>::LHS.Zero();
-    
-    NT3.Resize(e.Nodes(),dim);
 
-    // 1. Two cases exist: The first is when the material property is an
-    //    element property. In this case the material property matrix can
-    //    be used as is.
-    // ------------------------------------------------------------------
-    for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ )
+    for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
       {
-        // 1. Compute "diffusion" matrix DNT_K_DN_DV
-        // -----------------------------------------
-        // getting global intpol. function derivative matrix and determinant of
-        // byproduct Jacobian matrix (DN is already in global coordinates)
+        // ----------------------------------------------------------------
+        // 1. Diffusive contribution: ∫ (∇N)ᵀ [σ] ∇N dV
+        //
+        // Compute the global shape function derivative matrix DN and the
+        // Jacobian determinant detJ at integration point i.
+        // DN is already expressed in global (physical) coordinates.
+        // ----------------------------------------------------------------
         double detJ = e.dN_AtIntegrationPoint( DN, i, SCALAR );
 
-        // transposing DN -> DNT and saving it in DIFF (diffusion matrix)
+        // transpose DN → DNT
         DN.Transposed( DNT );
 
-        // multiply  DNT . MTRL
+        // multiply DNT · [σ]
+        // use MTRL[0] for element-placed operand, MTRL[i] for ip-placed
         if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
-          DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
-        else // integration point variable
-          DNT *= MathOperatorLHS<dim,CELL>::MTRL[i];
+            DNT *= MathOperatorLHS<dim,CELL>::MTRL[0];
+        else
+            DNT *= MathOperatorLHS<dim,CELL>::MTRL[i];
 
-        // multiplying DNT . DN
+        // multiply DNT · DN  →  (∇N)ᵀ [σ] ∇N
         DNT *= DN;
 
-        // multiplying with determinant and weights
+        // scale by quadrature weight and Jacobian determinant
         DNT *= e.WeightAtIntegrationPoint(i) * detJ;
 
-        // accumulating ME Gauss point integral contributions into element
-        // contribution to global conductance matrix
+        // accumulate diffusive contribution into element stiffness
         MathOperatorLHS<dim,CELL>::LHS += DNT;
 
-        // 2. Compute "velocity" 'VIP' matrix NT3 NTNTNT_V at integration point
-        // --------------------------------------------------------------------
+        // ----------------------------------------------------------------
+        // 2. Advective contribution: ∫ N_j (v · ∇N_k) dV
+        //
+        // Assemble as the outer product:
+        //   A_jk = N_j · (v · ∇N_k)
+        //        = N_j · Σ_d v_d · DN(d,k)
+        //
+        // ----------------------------------------------------------------
+        // build diagonal velocity matrix VIP = diag(v_x, v_y [, v_z])
         VIP.Zero();
-        for ( uint32_t j{0U}; j<dim; j++ ) VIP(j,j) = velo_[j];
+        if  ( adv_key.place == ELEMENT_INTEGRATION_POINT ||
+              adv_key.place == FACE_INTEGRATION_POINT ) {
+             e.Read( adv_key, velo_ );
+          }
+        for ( uint32_t j{0U}; j < dim; ++j ) VIP(j,j) = velo_[j];
 
+        // evaluate shape functions at integration point i
         e.N_AtIntegrationPoint( i, IPOL );
 
-        NT3.Resize(e.Nodes(),dim);
-        for ( uint32_t j{0U}; j<e.Nodes(); j++ ) {
-             NT3(j,0) = IPOL[j];
-             if ( dim == 2U ) NT3(j,1) = IPOL[j];
-             if ( dim == 3U ) NT3(j,2) = IPOL[j];
-          }
+        // NT3 (n_nodes × dim) is zeroed at the start of each integration
+        // point to prevent stale values from the previous point accumulating
+        // into the current one — this was the source of the ±1/8 error.
+        NT3.Resize( e.Nodes(), dim );
+        NT3.Zero();
+        // fill NT3: column d of NT3 = N_j for all nodes j
+        // after multiplication by VIP this gives NT3(j,d) = N_j · v_d
+        for ( uint32_t j{0U}; j < e.Nodes(); ++j ) {
+            NT3(j,0) = IPOL[j];
+            if constexpr ( dim >= 2U ) NT3(j,1) = IPOL[j];
+            if constexpr ( dim == 3U ) NT3(j,2) = IPOL[j];
+        }
 
+        // NT3 (n_nodes × dim) · VIP (dim × dim) → NT3(j,d) = N_j · v_d
         NT3 *= VIP;
 
-        // 3. Multiply with DN, integrate with weight and detJ, and add to element contribution
-        // ------------------------------------------------------------------------------------
+        // NT3 (n_nodes × dim) · DN (dim × n_nodes) → NT3(j,k) = N_j · (v · ∇N_k)
+        // DN was already computed at this integration point in step 1
         NT3 *= DN;
+
+        // scale by quadrature weight and Jacobian determinant
         NT3 *= e.WeightAtIntegrationPoint(i) * detJ;
 
+        // accumulate advective contribution into element stiffness
         MathOperatorLHS<dim,CELL>::LHS += NT3;
 
-      }
+      } // end integration point loop
 
 } // end ComputeContribution
 

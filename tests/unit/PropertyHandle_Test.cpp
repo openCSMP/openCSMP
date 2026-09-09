@@ -118,7 +118,6 @@ PropertyHandle_Test::PropertyHandle_Test( double tolerance, bool verbose )
 
 PropertyHandle_Test::~PropertyHandle_Test()
 {
-    delete model_;
 }
 
 // ============================================================================

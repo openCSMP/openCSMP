@@ -7941,6 +7941,7 @@ set<uint32_t> MeshManager<dim>::OrderOfShapeFunctions() const
 
 /**
     Performs a node-to-node, breadth-first traversal to identify whether the model consists  of disconnected mesh patches.
+    Requires neighbor-connectivity of regions.
     
     @note use sparingly! - this test can be quite memory intensive and slow for large models.
     
@@ -7956,56 +7957,20 @@ bool  MeshManager<dim>::IsContiguous() const
     equi_dim_elmts.reserve( Elements() );
     for ( const auto& it : elements_ )
      if ( it.IsEquidimensional() )
-       equi_dim_elmts.push_back( &it );
-       
+       // equi_dim_elmts.push_back( &it ); - but overriding any potential overloads of operator&
+       equi_dim_elmts.push_back( std::addressof(it) );
+
     // performing the floodfill
     set<Element<dim>*> elements_contiguous_subset;
     floodFill( const_cast<Element<dim>*>(*equi_dim_elmts.begin()), elements_contiguous_subset );
  
+    // if not all of the equidimensional elements can be reached, the model contains disconnected element patches
     if ( elements_contiguous_subset.size() < equi_dim_elmts.size() ) return false;
     return true;
 
  } // end IsContiguous
 
 
-/* COLLECTION OF FAILED TRIALS
-
-// produces the same results
-   set<Node<dim>*> node_pointers;
-   findInterconnectedNodeCluster<dim>( const_cast<Node<dim>*>(&(*nodes_.begin())), node_pointers );
-
-    // creating a set of corner node-pointer pairs representing the element edges
-    fail = always true!
-    set<pair<const Node<dim>*,const Node<dim>*>> validEdges;
-    vector<uint32_t>  snids;
-    
-    for ( const auto& element : elements_ ) {
-         for ( uint32_t segm_id{0u}; segm_id<element.Segments(); ++segm_id )
-           element.FE()->NodesOfSegment( segm_id, snids );
-         // ignoring any mid-side nodes
-         validEdges.insert( make_pair( element.N(snids[0]), element.N(snids[1]) ) );
-      }
- 
-    auto interconnected_nodes = findInterconnectedNodes( nodes_, validEdges );
-
-   if ( interconnected_nodes < Nodes() ) return false;
-   return true;
-   
-    // Perform union-find
-  UnionFind<const Element<dim>*> unionFind;
-  for ( const auto& eit : elements_ ) {
-      const Element<dim>* e = &eit;
-      const uint32_t neighbors( e->Neighbors() );
-      for ( uint32_t i = 0U; i<neighbors; i++ )
-        if ( e->Neighbor( i ) != nullptr )
-          unionFind.SameComponent( e, e->Neighbor( i ) );
-    }
-  deque<pair<size_t,const Element<dim>*>> components;
-  unionFind.Components( components );
-  
-  if ( components.size() <= 1 ) return true;
-
-*/
 
 
 

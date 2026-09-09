@@ -1,9 +1,9 @@
 'BOX40x3x10m-regions.txt' domain selection file
 no property
-MATRIX              TETRA_4                 0               15861
-FRONT               TRI_3                   0                 249
-BACK                TRI_3                   0                 249
-BOTTOM              TRI_3                   0                 926
-RIGHT               TRI_3                   0                  78
-TOP                 TRI_3                   0                 929
-LEFT                TRI_3                   0                  83
+MATRIX
+FRONT
+BACK
+BOTTOM
+RIGHT
+TOP
+LEFT

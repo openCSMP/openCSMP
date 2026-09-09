@@ -683,9 +683,6 @@ bool PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EstablishMatrixSetup( const ModelS
    // -------------------------------------------
     dof_per_node_    = 0U;
     target_.nodes    = gref.Nodes();
-    // target_.elements = gref.Cells();
-    // region-specific numbering for the accumulation is applied following the call to this method
-
 
    // ---------------------------------------------------------------------------------
    // 2. if the PDE_Integrator is setup for first time or if its rebuild is necessary,

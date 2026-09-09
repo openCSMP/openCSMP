@@ -769,8 +769,8 @@ private:
     whether the destructor calls model_.DeleteProperty.
     */
     bool                 owns_variable_;
-
 };
+
 
 // ============================================================================
 //  Inline template member definitions

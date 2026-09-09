@@ -109,84 +109,146 @@ void  ModelTopology::Out( const char* output_file, const std::string header ) co
 
 
 /**
+    Reads topological information from a user specified text file. Format is as
+    produced by method ModelTopology::Out().
 
-Reads topological information from a user specified text file. Format is as
-produced by method ModelTopology::Out().
-
-@param file_dot_asc The name of the textfile containing topological information
-to be read.
+    @param file_dot_asc The name of the textfile containing topological information
+    to be read.
 */
-bool ModelTopology::InputFromTextFile( const char* file_dot_asc ) {
-	string file( file_dot_asc );
-    if( file.rfind( ".asc" ) != file.length() - 4 ) {
-	    file += ".asc";
-    }
+bool ModelTopology::InputFromTextFile( const char* file_dot_asc )
+{
+    string file( file_dot_asc );
+    if ( file.rfind( ".asc" ) != file.length() - 4 )
+        file += ".asc";
 
-	ifstream  ifs(file.c_str());
+    ifstream ifs( file.c_str() );
+    if ( !ifs.is_open() ) return false;
 
-	if (!ifs.is_open()) return false;
-
-    // erasing all regions
+    // Erasing all regions
     Erase();
 
-    char text_line[NAME_STRING];
+    char text_line[256];
 
+    // ========================================================================
+    // Skip comment lines to find model name line
+    // ========================================================================
     do ifs.getline( text_line, 256 );
-    while ( (isCommentLine(text_line) && !ifs.eof()) );
+    while ( isCommentLine(text_line) && !ifs.eof() );
 
+    // Skip the blank line before model name
     ifs.getline( text_line, 256 );
-    string text_str( text_line );
-    string::size_type pos = text_str.find( '\'' );
-    assert( pos != string::npos );
-    model_name_ = text_str.substr( pos + 1, text_str.length() - pos - 2 );
 
-    const char* const word_delims = " ,\',\n";
-    while( !ifs.eof() ) {
-        do ifs.getline( text_line, 256 );
-        while ( (isCommentLine(text_line) && !ifs.eof()) );
-        ifs.getline( text_line, 256 );
-        if( ifs.eof() ) break;
-        text_str = string( text_line );
-        pos = text_str.find( '\'' ); // skip "Domain:"
-        assert( pos != string::npos );
-        char* domain = strtok( &text_line[pos+1], word_delims );
-        string domain_string( domain );
-        strtok( NULL, word_delims ); // skip "of"
-        set<string> etypes;
-        string type( strtok( NULL, word_delims ) );
-        while( type != "finite" ) {
-            etypes.insert( type );
-            type = string( strtok( NULL, word_delims ) );
-        }
-        ifs.getline( text_line, 256 );
-        string num_elements( text_line );
-        pos = num_elements.rfind( ' ' );
-        assert( pos != string::npos );
-        size_t nb_el = stoi( num_elements.substr( pos + 1, num_elements.length() - 1 ) );
-        vector<size_t> cell_ids;
-        cell_ids.reserve( nb_el );
-        ifs.getline( text_line, 256 ); // skip "Cell ID numbers: " 
-        char ch[12];
-        while( ifs.peek() != '\n' ) {
-            int c = 0;
-            ch[c] = ifs.get();
-            while( ch[c] != ' ' && ifs.peek() != '\n' ) ch[++c] = ifs.get();
-            string ch_string( &ch[0], c );
-            size_t cell = stoi( string( &ch[0], c ) );
-            cell_ids.push_back( cell );
-        }
-        assert( cell_ids.size() == nb_el );
-        model_domains_.insert(
-            make_pair( domain_string,
-                make_pair( etypes, cell_ids )
-            )
-        );
-        ifs.getline( text_line, 256 );
+    // Extract model name from: "ModelTopology::Out: Model: 'name'"
+    {
+        const string line( text_line );
+        const string::size_type pos1 = line.find( '\'' );
+        assert( pos1 != string::npos );
+        const string::size_type pos2 = line.rfind( '\'' );
+        assert( pos2 != string::npos && pos2 != pos1 );
+        model_name_ = line.substr( pos1 + 1, pos2 - pos1 - 1 );
     }
 
-	cout << "\nModelTopology::InputFromTextFile: ModelTopology has been successfully read from: " << file << endl;
+    while ( !ifs.eof() )
+    {
+        // ====================================================================
+        // Skip comment lines and blank lines to find next domain header
+        // ====================================================================
+        do ifs.getline( text_line, 256 );
+        while ( !ifs.eof() && ( isCommentLine(text_line) || strlen(text_line) == 0 ) );
 
-	return true;
+        if ( ifs.eof() ) break;
+
+        // ====================================================================
+        // Parse domain name and element types from:
+        // "Domain: 'name' of TYPE1 TYPE2 finite elements"
+        // ====================================================================
+        {
+            const string line( text_line );
+
+            const string::size_type pos1 = line.find( '\'' );
+            if ( pos1 == string::npos ) break;
+
+            const string::size_type pos2 = line.find( '\'', pos1 + 1 );
+            assert( pos2 != string::npos );
+            const string domain_name = line.substr( pos1 + 1, pos2 - pos1 - 1 );
+
+            // Extract element types: everything between "of " and " finite"
+            const string::size_type of_pos     = line.find( " of ", pos2 );
+            const string::size_type finite_pos = line.find( " finite", of_pos );
+            assert( of_pos != string::npos && finite_pos != string::npos );
+
+            set<string> etypes;
+            {
+                const string types_str = line.substr( of_pos + 4,
+                                                      finite_pos - of_pos - 4 );
+                istringstream types_stream( types_str );
+                string etype;
+                while ( types_stream >> etype )
+                    etypes.insert( etype );
+            }
+
+            // ================================================================
+            // Parse number of elements from:
+            // "Number of elements in region: N"
+            // ================================================================
+            ifs.getline( text_line, 256 );
+            const size_t nb_el = [&]() -> size_t {
+                const string num_line( text_line );
+                const string::size_type colon_pos = num_line.rfind( ':' );
+                assert( colon_pos != string::npos );
+                return stoul( num_line.substr( colon_pos + 1 ) );
+            }();
+
+            // ================================================================
+            // Skip "Cell ID numbers:" label line
+            // ================================================================
+            ifs.getline( text_line, 256 );  // "Cell ID numbers:"
+
+            // ================================================================
+            // Read the actual cell IDs from the NEXT line
+            // ================================================================
+            ifs.getline( text_line, 256 );  // "0 1 2 3 ..."
+
+            // Strip Windows-style carriage return if present
+            {
+                const size_t len = strlen( text_line );
+                if ( len > 0 && text_line[len-1] == '\r' )
+                    text_line[len-1] = '\0';
+            }
+
+            vector<size_t> cell_ids;
+            cell_ids.reserve( nb_el );
+            {
+                istringstream id_stream( text_line );
+                size_t cell_id;
+                while ( id_stream >> cell_id )
+                    cell_ids.push_back( cell_id );
+            }
+
+            if ( cell_ids.size() != nb_el )
+            {
+                string msg( "expected " );
+                msg += to_string( nb_el );
+                msg += " cell IDs for domain '";
+                msg += domain_name;
+                msg += "' but read ";
+                msg += to_string( cell_ids.size() );
+                throw csmp::Exception( ERROR,
+                                       "ModelTopology::InputFromTextFile",
+                                       msg.c_str() );
+            }
+
+            model_domains_.insert(
+                make_pair( domain_name,
+                           make_pair( etypes, cell_ids ) )
+            );
+        }
+    }
+
+    cout << "\nModelTopology::InputFromTextFile: ModelTopology successfully "
+         << "read from: " << file << endl;
+
+    return true;
 
 } // end InputFromTextFile
 
@@ -265,7 +327,7 @@ pyramids or prisms, the method returns true, else false.
 bool ModelTopology::SolidModel() const
  {
     for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ )
-      for ( set<string>::const_iterator sit=(*it).second.first.begin();
+      for ( auto sit=(*it).second.first.begin();
             sit!=(*it).second.first.end(); sit++ )
         if ( fem_specs::VolumeElement( (*sit) ) ) return true;
       
@@ -307,7 +369,7 @@ size_t  ModelTopology::MinimumSpatialDimensionOfDomain( const char* region ) con
     
     // if the target region exists, its element types are used to establish
     // its minimum spatial dimension
-    uint32_t min_dim(0U);
+    uint32_t min_dim(numeric_limits<uint32_t>::max());
      
     for ( set<string>::const_iterator sit=(*it).second.first.begin();
           sit!=(*it).second.first.end(); sit++ )
@@ -462,11 +524,10 @@ size_t  ModelTopology::FiniteElementTypes( set<string>& etypes ) const
      return etypes.size();
  }
 
-size_t  ModelTopology::FiniteElementTypes( set<int32_t>& etypes ) const
+size_t  ModelTopology::FiniteElementTypes( set<CSMP_FEM_TYPE>& etypes ) const
  {
      for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ )
-       for ( set<string>::const_iterator sit=(*it).second.first.begin();
-             sit!=(*it).second.first.end(); sit++ )
+       for ( auto sit=(*it).second.first.begin(); sit!=(*it).second.first.end(); sit++ )
          etypes.insert( fem_specs::CSMP_Type(*sit) );
      return etypes.size();
  }
@@ -541,8 +602,7 @@ void  ModelTopology::EliminateCellType( const char* etype )
         }
 
     // erasing regions of etype from 'model regions'
-    for ( list<string>::iterator
-          dit=to_cull.begin(); dit!=to_cull.end(); dit++ ) model_domains_.erase( (*dit) );
+    for ( auto dit=to_cull.begin(); dit!=to_cull.end(); dit++ ) model_domains_.erase( (*dit) );
 
  } // end EliminateCellType
 
@@ -924,41 +984,40 @@ bool  doesDomainsFileExist( const char* regions_file )
 }
 
 
-void  readDesiredDomains( const char* regions_file,
-                          set<string>& desired_regions )
+void readDesiredDomains( const char*  regions_file,
+                         set<string>& desired_regions )
 {
-    char         text_line[256];
-    char*        token(0);
-    const char* const delims =" ,\t,:,\n,\r";
-
-    strcpy( text_line, regions_file );
-    strcat( text_line, "-regions.txt" );
-    string  file_name(text_line);
-    ifstream ifs(file_name.c_str());
+    const string file_name = string(regions_file) + "-regions.txt";
+    ifstream ifs(file_name);
 
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR,
-                             "readDesiredDomains:", text_line,
-                             "ASCII geometry input file could not be opened");
+        throw csmp::Exception( FATAL_ERROR,
+                               "readDesiredDomains:", file_name.c_str(),
+                               "ASCII geometry input file could not be opened" );
 
-    // 1. reading and discarding file header
-    ifs.getline( text_line, 500 );
+    string line;
 
-    // 2. reading the names of the properties
-    ifs.getline( text_line, 500 );
+    // discard line 1
+    getline( ifs, line );
 
-    // 3. reading the region descriptors from file
-    while ( !ifs.eof() )
-      {
-         ifs.getline( text_line, 256 );
-         if ( strlen(text_line) == 0 ) break;
-         // only the first token is used which allows the user to add comments
-         token = strtok( text_line, delims );
-         if( token!= NULL )
-            desired_regions.insert( token );
-      }
-    ifs.close();
+    // discard line 2
+    getline( ifs, line );
+
+    // read region names
+    while ( getline( ifs, line ) )
+    {
+        auto not_space = []( unsigned char c ){ return !std::isspace(c); };
+        line.erase( line.begin(),
+                    find_if( line.begin(), line.end(), not_space ) );
+        line.erase( find_if( line.rbegin(), line.rend(), not_space ).base(),
+                    line.end() );
+
+        if ( line.empty() ) continue;
+
+        desired_regions.insert( line );
+    }
 }
+
 
 
 
@@ -1110,7 +1169,7 @@ bool  ModelTopology::Contains( const char* region ) const
  {
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
 
-    if ( region == NULL ) {
+    if ( region == nullptr ) {
          csmp_error.Note( WARNING, "ModelTopology::Contains",
                            "method was passed empty const char* string" );
          return false;
@@ -1203,16 +1262,16 @@ void  ModelTopology::ReduceToDomains( const char* regions_file )
 */
 void  ModelTopology::ReduceToDomains( const set<string>& desired_regions )
  {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
+    ErrorHandler& csmp_error ( ErrorHandler::Instance() );
 
-    set<string>::const_iterator ritEnd = desired_regions.end();
+    const set<string>::const_iterator ritEnd = desired_regions.end();
     for( auto rit = desired_regions.begin(); rit != ritEnd; rit++ )
         if ( !Contains( (*rit).c_str() ) ) {
           string errorMessage("unrecognized region in region file");
           string token_message("token: ");
           token_message += (*rit);
-          csmp_error.Note( ERROR, "ModelTopology::ReduceToDomains:",
-                             token_message.c_str(), errorMessage.c_str() );
+          throw csmp::Exception( ERROR, "ModelTopology::ReduceToDomains:",
+                                 token_message.c_str(), errorMessage.c_str() );
         }
 
     set<string> undesired_regions;
@@ -1257,6 +1316,8 @@ bool ModelTopology::AddDomain( const char* rname,
 
     return true;
  }
+ 
+ 
 
 void ModelTopology::AddDomainCellType( const char* rname,
                                        const string& fem_type )
@@ -1268,7 +1329,7 @@ void ModelTopology::AddDomainCellType( const char* rname,
 }
 
 void ModelTopology::AddDomainCellTypes( const char* rname,
-                                           const set<string>& fem_types )
+                                        const set<string>& fem_types )
  {
     const pair<set<string>,vector<size_t> >  empty_region;
     pair<map<string,pair<set<string>,vector<size_t> > >::iterator,bool>
@@ -1277,7 +1338,7 @@ void ModelTopology::AddDomainCellTypes( const char* rname,
 }
 
 void ModelTopology::AddDomainCellId( const char* rname,
-                                        size_t elm )
+                                     size_t elm )
  {
     const pair<set<string>,vector<size_t> >  empty_region;
     pair<map<string,pair<set<string>,vector<size_t> > >::iterator,bool>
@@ -1286,7 +1347,7 @@ void ModelTopology::AddDomainCellId( const char* rname,
  }
 
 void ModelTopology::AddDomainCellIds( const char* rname,
-                                         const vector<size_t>& elms )
+                                      const vector<size_t>& elms )
  {
     const pair<set<string>,vector<size_t> >  empty_region;
     pair<map<string,pair<set<string>,vector<size_t> > >::iterator,bool>
@@ -1376,8 +1437,7 @@ bool ModelTopology::AddDomains( const multimap<string,string>& object_specs,
     // 1. make a unique set of region names
     // ------------------------------------
     set<string>  unique_names;
-    for ( multimap<string,string>::const_iterator
-          it=object_specs.begin(); it!=object_specs.end(); it++ ) unique_names.insert( (*it).first );
+    for ( auto it=object_specs.begin(); it!=object_specs.end(); it++ ) unique_names.insert( (*it).first );
 
     // 2. collapse region names and elements into new list
     // ---------------------------------------------------
@@ -1385,8 +1445,7 @@ bool ModelTopology::AddDomains( const multimap<string,string>& object_specs,
     // --------------------------------------------------------------------
     // for each region that is unique by name
     const pair<set<string>,vector<size_t> >  empty_region;
-    for ( set<string>::const_iterator
-          sit=unique_names.begin(); sit!=unique_names.end(); sit++ ) {
+    for ( auto sit=unique_names.begin(); sit!=unique_names.end(); sit++ ) {
           // get range iterators for the two multimaps with FE-names and element numbers
           multimap<string,string>::const_iterator eit1(object_specs.lower_bound( (*sit) ));
           multimap<string,string>::const_iterator eit2(object_specs.upper_bound( (*sit) ));
@@ -1417,7 +1476,7 @@ bool ModelTopology::AddDomains( const multimap<string,string>& object_specs,
             }
         }
 
-    return AddDomains( model_domains_ );
+    return true; // <-- was: return AddDomains( model_domains_ );
 
  } // end AddDomains
 
@@ -1434,8 +1493,7 @@ bool ModelTopology::AddDomainsWithEquidimensionalCheck( const multimap<string,st
     // 1. make a unique set of region names
     // ------------------------------------
     set<string>  unique_names;
-    for ( multimap<string,string>::const_iterator
-          it=object_specs.begin(); it!=object_specs.end(); it++ )
+    for ( auto it=object_specs.begin(); it!=object_specs.end(); it++ )
         unique_names.insert( (*it).first );
 
     // 2. collapse region names and elements into new list
@@ -1446,8 +1504,7 @@ bool ModelTopology::AddDomainsWithEquidimensionalCheck( const multimap<string,st
     // lower spatial dimension will be ignored.
     // --------------------------------------------------------------------
     const pair<set<string>,vector<size_t> >  empty_region;
-    for ( set<string>::const_iterator
-          sit=unique_names.begin(); sit!=unique_names.end(); sit++ ) {
+    for ( auto sit=unique_names.begin(); sit!=unique_names.end(); sit++ ) {
           // get range iterators for the two multimaps
           multimap<string,string>::const_iterator eit1(object_specs.lower_bound( (*sit) ));
           multimap<string,string>::const_iterator eit2(object_specs.upper_bound( (*sit) ));
@@ -1493,7 +1550,7 @@ bool ModelTopology::AddDomainsWithEquidimensionalCheck( const multimap<string,st
             }
       }
 
-    return AddDomains( model_domains_ );
+    return true; // was recursive -> AddDomains( model_domains_ );
 
  } // end AddDomainsWithEquidimensionalCheck
 
@@ -1514,13 +1571,11 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
         /// find highest dimension for elements in current region
         uint32_t elmtdim = 0U;
         set<string>::const_iterator etype_endit = (*rit).second.first.end();
-        for( set<string>::const_iterator
-             etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
+        for( auto etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
            elmtdim = max( elmtdim, fem_specs::MinimumSpatialDimension( *etype_it ) );
         /// remove types of low dim elements
         vector<string> remove_types;
-        for( set<string>::const_iterator
-             etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
+        for( auto etype_it = (*rit).second.first.begin(); etype_it != etype_endit; ++etype_it )
             if ( fem_specs::MinimumSpatialDimension( *etype_it ) != elmtdim )
                 remove_types.push_back( *etype_it );
 // TODO: as it stands this method removes equidimensional elements as well when boundary creation is not requested
@@ -1548,8 +1603,15 @@ void ModelTopology::RemoveLowDimCellsFromDomains( csmp::VSet<dim>& vset )
             cerr <<" were excluded from region "<< (*rit).first << endl;
             for( size_t i{0ul}; i< remove_types.size(); ++i )
               (*rit).second.first.erase( remove_types[i] );
-            for( size_t i{0ul}; i < remove_eids.size(); ++i )
-              (*rit).second.second.erase( (*rit).second.second.begin() + ( remove_eids[i] - i ) );
+            // collect elements to keep
+            vector<size_t> kept_ids;
+            kept_ids.reserve( (*rit).second.second.size() - remove_eids.size() );
+            set<size_t> remove_set( remove_eids.begin(), remove_eids.end() );
+            for ( size_t i{0U}; i < (*rit).second.second.size(); ++i )
+                if ( remove_set.find(i) == remove_set.end() )
+                    kept_ids.push_back( (*rit).second.second[i] );
+            (*rit).second.second = std::move( kept_ids );
+            
             // TODO: deleting regions if they have become empty
         }
     }
@@ -1601,77 +1663,183 @@ the regions to which they are assigned.
 The method expects that the file name has the appendage and extension
 '-regions.txt'.
 */
-void  ModelTopology::PropertiesOfDomains( const char* regions_file,
-                                          list<string>& properties,
-                                          map<string,list<double> >& props ) const
- {
-    char               text_line[500];
-    char*              token(0);
-    const char* const  delims ="\t,:,\n,\r";
-    const char* const  delims2 =" ,\t,\n,\r";
-    strcpy( text_line, regions_file );
-    strcat( text_line, "-regions.txt" );
-    ifstream        ifs(text_line);
-    list<double>  prop_vals;
-    double             val;
-    string          region;
+/**
+    Read material properties from '*-regions.txt' file and associate them
+    with the regions storage. The property values are constant throughout
+    the regions to which they are assigned.
 
+    File format:
+    - Line 1: header (discarded)
+    - Line 2: tab-separated property names
+    - Lines 3+: region name followed by tab-separated property values
+
+    @param regions_file  Base filename; '-regions.txt' is appended automatically.
+    @param properties    Output list of property names read from line 2.
+    @param props         Output map of region name -> list of property values.
+
+    @section thread_safety Thread Safety
+
+    This method is thread-safe. All parsing uses std::istringstream
+    rather than strtok, which relies on a global static buffer.
+
+    @section messages Messages
+
+    Throws FATAL_ERROR if the file cannot be opened.
+    Throws ERROR if an unrecognised region name is encountered.
+    Throws INFO if the supplied props map is not empty on entry.
+*/
+void ModelTopology::PropertiesOfDomains( const char*              regions_file,
+                                         list<string>&            properties,
+                                         map<string,list<double>>& props ) const
+{
+    // ========================================================================
+    // 1. Build the filename
+    // ========================================================================
+
+    const string file_name = string( regions_file ) + "-regions.txt";
+
+    ifstream ifs( file_name );
     if ( !ifs.is_open() )
-      throw csmp::Exception( FATAL_ERROR, "ModelTopology::PropertiesOfDomains:", text_line,
-                                      "ASCII geometry input file could not be opened");
+        throw csmp::Exception( FATAL_ERROR,
+                               "ModelTopology::PropertiesOfDomains:",
+                               file_name.c_str(),
+                               "ASCII geometry input file could not be opened" );
 
     if ( !props.empty() )
-      throw csmp::Exception( INFO, "ModelTopology::PropertiesOfDomains:", regions_file,
-                            "Supplied non-empty regions map is erased");
+        throw csmp::Exception( INFO,
+                               "ModelTopology::PropertiesOfDomains:",
+                               regions_file,
+                               "Supplied non-empty regions map is erased" );
 
-    // 1. reading and discarding file header
-    ifs.getline( text_line, 500 );
+    // ========================================================================
+    // 2. Discard line 1 (file header)
+    // ========================================================================
 
-    // 2. reading the names of the properties
-    ifs.getline( text_line, 500 );
-    properties.push_back( strtok( text_line, delims ) );
+    string line;
+    if ( !getline( ifs, line ) )
+        throw csmp::Exception( FATAL_ERROR,
+                               "ModelTopology::PropertiesOfDomains:",
+                               file_name.c_str(),
+                               "File is empty or could not be read" );
 
-    while ( (token=strtok( NULL, delims )) != NULL )
-        properties.push_back( token );
+    // ========================================================================
+    // 3. Read property names from line 2 (tab-separated)
+    //    Thread-safe: uses istringstream, not strtok
+    // ========================================================================
 
-    // 3. reading region descriptors and associated properties from file
-    while ( !ifs.eof() )
-      {
-         ifs.getline( text_line, 256 );
-         if ( strlen(text_line) == 0 ) break;
-         // region name
-         region = strtok( text_line, delims2 );
-         // if the region is part of the current model its properties are read
-         if ( Contains(region.c_str()) ) {
-               for ( auto i{0U}; i<properties.size(); i++ ) {
-                    val = atof( strtok( NULL, delims2 ) );
-                    prop_vals.push_back( val );
-                 }
-               props[ region ] = prop_vals;
-               prop_vals.erase( prop_vals.begin(), prop_vals.end() );
-           }
-         else
-         throw csmp::Exception( ERROR, "\nModelTopology::PropertiesOfDomains",
-                           "Domain file contains unrecognized region, e.g.", region.c_str() );
-      }
+    if ( !getline( ifs, line ) )
+        throw csmp::Exception( FATAL_ERROR,
+                               "ModelTopology::PropertiesOfDomains:",
+                               file_name.c_str(),
+                               "File does not contain a property name line" );
+
+    // Strip Windows-style carriage return if present
+    if ( !line.empty() && line.back() == '\r' )
+        line.pop_back();
+
+    {
+        istringstream prop_stream( line );
+        string        prop_name;
+        while ( getline( prop_stream, prop_name, '\t' ) )
+        {
+            // Trim leading/trailing whitespace from property name
+            const auto first = prop_name.find_first_not_of( " \t\r\n" );
+            const auto last  = prop_name.find_last_not_of(  " \t\r\n" );
+            if ( first != string::npos )
+                properties.push_back( prop_name.substr( first, last - first + 1 ) );
+        }
+    }
+
+    if ( properties.empty() )
+        throw csmp::Exception( FATAL_ERROR,
+                               "ModelTopology::PropertiesOfDomains:",
+                               file_name.c_str(),
+                               "No property names found on line 2" );
+
+    const size_t n_properties = properties.size();
+
+    // ========================================================================
+    // 4. Read region names and property values
+    //    Thread-safe: uses istringstream, not strtok
+    // ========================================================================
+
+    while ( getline( ifs, line ) )
+    {
+        // Strip Windows-style carriage return if present
+        if ( !line.empty() && line.back() == '\r' )
+            line.pop_back();
+
+        // Skip empty lines
+        if ( line.empty() ) continue;
+
+        // Skip comment lines
+        if ( line.front() == '#' ) continue;
+
+        istringstream line_stream( line );
+
+        // First token is the region name (space-separated)
+        string region;
+        if ( !( line_stream >> region ) ) continue;
+
+        // Check that the region exists in this topology
+        if ( !Contains( region.c_str() ) )
+            throw csmp::Exception( ERROR,
+                                   "ModelTopology::PropertiesOfDomains:",
+                                   "Domain file contains unrecognised region:",
+                                   region.c_str() );
+
+        // Read property values for this region
+        list<double> prop_vals;
+        double       val;
+        size_t       count{ 0U };
+
+        while ( line_stream >> val )
+        {
+            prop_vals.push_back( val );
+            ++count;
+        }
+
+        // Verify that the correct number of property values was read
+        if ( count != n_properties )
+        {
+            string msg( "region '" );
+            msg += region;
+            msg += "' has ";
+            msg += to_string( count );
+            msg += " property values but ";
+            msg += to_string( n_properties );
+            msg += " were expected";
+            throw csmp::Exception( ERROR,
+                                   "ModelTopology::PropertiesOfDomains:",
+                                   msg.c_str() );
+        }
+
+        props[ region ] = prop_vals;
+    }
+
     ifs.close();
 
-    // 4. screen output of read properties
-    cout <<"\nModelTopology::PropertiesOfDomains: Input properties read from text file '";
-    cout << regions_file <<"':\n\n\t";
-    for ( list<string>::const_iterator
-          pit=properties.begin(); pit!=properties.end(); pit++ ) cout << (*pit) <<" ";
-    cout <<"\n\nValues of these properties for listed regions: "<< endl;
-    for ( map<string,list<double> >::const_iterator
-          it=props.begin(); it!=props.end(); it++ ) {
-         cout <<"\t"<< (*it).first <<": ";
-         for ( list<double>::const_iterator
-               dit=(*it).second.begin(); dit!=(*it).second.end(); dit++ )
-           cout << (*dit) <<"  ";
-         cout << endl;
-      }
+    // ========================================================================
+    // 5. Screen output of read properties
+    // ========================================================================
 
- } // end PropertiesOfDomains
+    cout << "\nModelTopology::PropertiesOfDomains: Input properties read from '"
+         << file_name << "':\n\n\t";
+
+    for ( const auto& p : properties )
+        cout << p << " ";
+
+    cout << "\n\nValues of these properties for listed regions:\n";
+
+    for ( const auto& it : props )
+    {
+        cout << "\t" << it.first << ": ";
+        for ( const double v : it.second )
+            cout << v << "  ";
+        cout << "\n";
+    }
+
+} // end PropertiesOfDomains
 
 
 
@@ -1762,90 +1930,165 @@ template void ModelTopology::AssignMaterialProperties( VSet<3U>&,const multimap<
 
 
 
-
-/*
-    Numbering
- */
-
 /**
- 
-Tests whether the element numbers stored in ModelTopology are in a format
-suitable for reorganising the VSet. The following tests are made:
+    Tests whether the element numbers stored in ModelTopology are in a format
+    suitable for reorganising the VSet. The following tests are made:
 
-- does the element numbering start with zero?
-- is the largest element number equivalent to the number of elements-1?
-- are the elements numbered consecutively?
-- are the elemnt ids' within each Domain consecutive.
-- are there any duplicate elements?
- 
-The method assumes that that each element can only belong to a single
-region.
+    1. Does the element numbering start with zero?
+    2. Is the largest element number equal to the total number of elements - 1?
+    3. Are the element IDs within each domain consecutive?
+    4. Are there any duplicate element IDs across all domains?
+    5. Does each element belong to exactly one domain?
 
-@return Boolean. If any of the tests fails the method returns false.
+    The method assumes that each element can only belong to a single region
+    and verifies this.
 
-@section messages Messages
+    @return true if all checks pass, false if any check fails.
 
-The method complains if the element numbering does not start at 0
-or the largest element number is not equal to nn-elements-1.  
+    @section messages Messages
 
+    The method reports the specific failure reason via the ErrorHandler.
 */
-bool  ModelTopology::CheckCellNumbering() const
- {
-    ErrorHandler&    csmp_error( ErrorHandler::Instance() );
-    set<size_t> element_ids;
+bool ModelTopology::CheckCellNumbering() const
+{
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
-    // all numbers of elements from all the current regions are inserted into one set 
-    for ( auto rit=model_domains_.begin(); rit!=model_domains_.end(); rit++ )
-      {
-         auto litp1(++((*rit).second.second.begin()));
-         const auto litEnd( (*rit).second.second.end() );
-         for ( auto lit=(*rit).second.second.begin(); lit!=litEnd; lit++ )
-           {
-              // sequence is not consecutive if the next element has not got a number that is en+1
-              if ( litp1 != (*rit).second.second.end() and (*lit+1U) != *litp1 )
-              {
-                  if( csmp_error.Verbose() )
-                      csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
-                  return false;
-              }
-              // sequence is not consecutive if next element number cannot be inserted into it because it is non-unique
-              pair<set<size_t>::iterator,bool> it=element_ids.insert(*lit);
-              if ( it.second == false )
-              {
-                  if( csmp_error.Verbose() )
-                      csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", "Sequence of elemnt id's within the Domain is not consecutive." );
-                  return false;
-              }
-              if( litp1 != litEnd ) ++litp1;
-           }
-      }
+    // ========================================================================
+    // 1. Check that each domain's element IDs are consecutive
+    // ========================================================================
 
-    // if the first element is not numbered zero
-    if ( (*element_ids.begin()) != 0U ) {
-          if( csmp_error.Verbose() ) {
-                string  err_msg("first element number ");
-                err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
-                err_msg +=" is not equal to zero.";
-                csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
+    for ( const auto& domain : model_domains_ )
+    {
+        const string&         domain_name = domain.first;
+        const vector<size_t>& ids         = domain.second.second;
+
+        if ( ids.empty() ) continue;
+
+        for ( size_t i{1U}; i < ids.size(); ++i )
+        {
+            if ( ids[i] != ids[i-1] + 1U )
+            {
+                if ( csmp_error.Verbose() )
+                {
+                    string msg( "element IDs in domain '" );
+                    msg += domain_name;
+                    msg += "' are not consecutive: ";
+                    msg += to_string( ids[i-1] );
+                    msg += " -> ";
+                    msg += to_string( ids[i] );
+                    csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", msg.c_str() );
+                }
+                return false;
             }
-          return false;
-      }
-      
-    // if the last element number is not equivalent to the total number of contained elements - 1
-    if ( (*max_element(element_ids.begin(),element_ids.end())) != element_ids.size()-1U ) {
-          if ( csmp_error.Verbose() ) {
-                string  err_msg("largest element number ");
-                err_msg += to_string( (*max_element(element_ids.begin(),element_ids.end())) );
-                err_msg +="-1 is not equal to the total number of elements ";
-                err_msg += to_string( element_ids.size() );
-                csmp_error.Note( ERROR, "ModelTopology::CheckCellNumbering:", err_msg.c_str() );
+        }
+    }
+
+    // ========================================================================
+    // 2. Collect all element IDs across all domains
+    //    and simultaneously check for duplicates (elements in multiple domains)
+    // ========================================================================
+
+    set<size_t>  all_ids;
+    size_t       total_cells{ 0U };
+
+    for ( const auto& domain : model_domains_ )
+    {
+        const string&         domain_name = domain.first;
+        const vector<size_t>& ids         = domain.second.second;
+
+        for ( const size_t id : ids )
+        {
+            auto result = all_ids.insert( id );
+            if ( !result.second )
+            {
+                // Element ID already seen in another domain
+                if ( csmp_error.Verbose() )
+                {
+                    string msg( "element ID " );
+                    msg += to_string( id );
+                    msg += " appears in more than one domain (including '";
+                    msg += domain_name;
+                    msg += "')";
+                    csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", msg.c_str() );
+                }
+                return false;
             }
-          return false;
-      }
-     
+        }
+        total_cells += ids.size();
+    }
+
+    // ========================================================================
+    // 3. Check that the global numbering starts at zero
+    // ========================================================================
+
+    if ( all_ids.empty() )
+    {
+        csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:",
+                         "no element IDs found across all domains." );
+        return false;
+    }
+
+    if ( *all_ids.begin() != 0U )
+    {
+        if ( csmp_error.Verbose() )
+        {
+            string msg( "element numbering does not start at zero; first ID is " );
+            msg += to_string( *all_ids.begin() );
+            csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", msg.c_str() );
+        }
+        return false;
+    }
+
+    // ========================================================================
+    // 4. Check that the largest element number equals total elements - 1
+    //    (i.e. no gaps in the global numbering)
+    // ========================================================================
+
+    const size_t max_id = *all_ids.rbegin();
+
+    if ( max_id != total_cells - 1U )
+    {
+        if ( csmp_error.Verbose() )
+        {
+            string msg( "largest element ID " );
+            msg += to_string( max_id );
+            msg += " does not equal total elements - 1 = ";
+            msg += to_string( total_cells - 1U );
+            msg += "; there are gaps in the global element numbering.";
+            csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", msg.c_str() );
+        }
+        return false;
+    }
+
+    // ========================================================================
+    // 5. Verify global numbering is consecutive (no gaps between domains)
+    //    This is implied by checks 1, 3 and 4 together, but we verify
+    //    explicitly for robustness.
+    // ========================================================================
+
+    {
+        size_t expected{ 0U };
+        for ( const size_t id : all_ids )
+        {
+            if ( id != expected )
+            {
+                if ( csmp_error.Verbose() )
+                {
+                    string msg( "gap in global element numbering: expected " );
+                    msg += to_string( expected );
+                    msg += " but found ";
+                    msg += to_string( id );
+                    csmp_error.Note( WARNING, "ModelTopology::CheckCellNumbering:", msg.c_str() );
+                }
+                return false;
+            }
+            ++expected;
+        }
+    }
+
     return true;
- 
- } // end CheckCellNumbering
+
+} // end CheckCellNumbering
  
 
 
@@ -2056,7 +2299,7 @@ bool ModelTopology::EstablishTopology( VSet<dim>& vset,
      }
      
     // 4. correct surface mesh orientation
-    // ---------------------------------------
+    // -----------------------------------
     // SKM note: this functionality also deals with surface mesh in 3D meshes 
     if constexpr ( dim == 2U ) {
         if ( correct_orientation_of_surface_elements )
@@ -2411,43 +2654,43 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
      // 3. finding the corners of a box-shaped model, if any
      // ----------------------------------------------------
      if ( !nodes_left.empty() && !nodes_bottom.empty() ) {
-          vector<int64_t> cnr;
+          vector<size_t> cnr;
           set_intersection( nodes_left.begin(), nodes_left.end(),
                             nodes_bottom.begin(), nodes_bottom.end(),
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( static_cast<size_t>(cnr[0]), CNR1 );
+          vset.BFlag( cnr[0], CNR1 );
        }
 
      if ( !nodes_right.empty() && !nodes_bottom.empty() ) {
-          vector<int64_t> cnr;
+          vector<size_t> cnr;
           set_intersection( nodes_right.begin(), nodes_right.end(),
                             nodes_bottom.begin(), nodes_bottom.end(),
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( static_cast<size_t>(cnr[0]), CNR2 );
+          vset.BFlag( cnr[0], CNR2 );
        }
 
      if ( !nodes_right.empty() && !nodes_top.empty() ) {
-          vector<int64_t> cnr;
+          vector<size_t> cnr;
           set_intersection( nodes_right.begin(), nodes_right.end(),
                             nodes_top.begin(), nodes_top.end(),
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( static_cast<size_t>(cnr[0]), CNR3 );
+          vset.BFlag( cnr[0], CNR3 );
        }
 
      if ( !nodes_left.empty() && !nodes_top.empty() ) {
-          vector<int64_t> cnr;
+          vector<size_t> cnr;
           set_intersection( nodes_left.begin(), nodes_left.end(),
                             nodes_top.begin(), nodes_top.end(),
                             back_inserter( cnr ) );
          
           assert( !cnr.empty() );
-          vset.BFlag( static_cast<size_t>(cnr[0]), CNR4 );
+          vset.BFlag( cnr[0], CNR4 );
        }
 
      // 4. potential corners with an irregular boundary
@@ -2456,40 +2699,40 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<2U>& vset ) const
      // if there is an irregular boundary on the model top instead of TOP
      if ( !nodes_irregular.empty() && nodes_top.empty() ) {
          if ( !nodes_left.empty() ) {
-              vector<int64_t> cnr;
+              vector<size_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( static_cast<size_t>(cnr[0]), CNR4 );
+              vset.BFlag( cnr[0], CNR4 );
            }
          if ( !nodes_right.empty() ) {
-              vector<int64_t> cnr;
+              vector<size_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( static_cast<size_t>(cnr[0]), CNR3 );
+              vset.BFlag( cnr[0], CNR3 );
            }
        }
 
      // if there is an irregular boundary on the model bottom instead of BOTTOM
      if ( !nodes_irregular.empty() && nodes_bottom.empty() ) {
          if ( !nodes_left.empty() ) {
-              vector<int64_t> cnr;
+              vector<size_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_left.begin(), nodes_left.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( static_cast<size_t>(cnr[0]), CNR1 );
+              vset.BFlag( cnr[0], CNR1 );
            }
          if ( !nodes_right.empty() ) {
-              vector<int64_t> cnr;
+              vector<size_t> cnr;
               set_intersection( nodes_irregular.begin(), nodes_irregular.end(),
                                 nodes_right.begin(), nodes_right.end(),
                                 back_inserter( cnr ) );
              
-              vset.BFlag( static_cast<size_t>(cnr[0]), CNR2 );
+              vset.BFlag( cnr[0], CNR2 );
            }
        }
 
@@ -2751,7 +2994,7 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
      // The -Z axis (backward) facing plane of the model
      // CNR1
      {
-       deque<uint32_t> corner;
+       deque<size_t> corner;
        set_intersection( back_left.begin(), back_left.end(),
                          back_bottom.begin(), back_bottom.end(), back_inserter(corner) );
 
@@ -2842,117 +3085,6 @@ bool ModelTopology::FlagNodesUsingBoundaryDomains( VSet<3U>& vset ) const
 //       cerr <<" "<< counter <<":"<< parseBoundary( static_cast<BOX_BOUNDARY>(*it) );
 //    }
 //cerr << endl << endl;
-
-
-
-
-
-
-/**
-
-Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
-If poly-element regions exists, then these are ignored.
-
-The method ignores regions on Box Boundaries (including IRREGULAR)
-
-*/
-bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<2U>& vset ) const
- {
-    std::deque<size_t> internal_nodes;
-
-    // getting the lower_dim regions which have line elements
-    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
-      if ( !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are not on a boundary
-        if ( (*it).second.first.size() == 1U && fem_specs::LineElement( (*(*it).second.first.begin()) ) )  //
-          {
-              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
-              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
-              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
-
-              //save all node id's
-              for (auto eid : (*it).second.second ){
-                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
-                  //adding nodes of element with id "eid" to deque
-                  internal_nodes.push_back(*vit);
-                }
-              }
-          }
-    }
-
-    sort( internal_nodes.begin(), internal_nodes.end() );
-    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
-
-    //setting nodes boundary flags to internal
-    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
-
-    return true;
-
-
- } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
-
-
-
-/**
-
-Finds all lower dimensional elements, and sets their nodes to Bflag INTERNAL
-If poly-element regions exists, then these are ignored.
-
-The method ignores regions on Box Boundaries (including IRREGULAR)
-
-*/
-bool ModelTopology::FlagNodesOnLowerDimensionalElementsAsINTERNAL( VSet<3U>& vset ) const
- {
-    std::deque<size_t> internal_nodes;
-
-    // getting the lower_dim regions which have line elements
-    for ( auto it=model_domains_.begin(); it!=model_domains_.end(); it++ ){
-      if (  !isDiagnosticBoxBoundaryClassifier( (*it).first ) ) //only if we are NOT on a boundary
-        if ( (*it).second.first.size() == 1U && (fem_specs::LineElement( (*(*it).second.first.begin()) ) || fem_specs::SurfaceElement( (*(*it).second.first.begin()) ) ) )  // take line and surface elements
-          {
-              cout <<"\nModelTopology::FoundLowerDimensionalRegion: ";
-              cout <<" Setting nodes of elements of type '"<< (*(*it).second.first.begin()) <<" from region '"<< (*it).first;
-              cout <<"' from model topology '"<< model_name_ <<"'"<< endl;
-
-              //save all node id's
-              for (auto eid : (*it).second.second ){
-                for ( auto vit=vset.PlistBegin(eid); vit!=vset.PlistEnd(eid); vit++ ){
-                  //adding nodes of element with id "eid" to deque
-                  internal_nodes.push_back(*vit);
-                }
-              }
-          }
-    }
-
-    sort( internal_nodes.begin(), internal_nodes.end() );
-    internal_nodes.erase( unique( internal_nodes.begin(), internal_nodes.end() ), internal_nodes.end() );
-
-    //setting nodes boundary flags to internal
-    for ( auto& it : internal_nodes ) vset.BFlag( it, INTERNAL );
-
-    return true;
-
-
- } // end FlagNodesOnLowerDimensionalElementsAsINTERNAL
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
  
  } // end namespace csmp

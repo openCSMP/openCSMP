@@ -421,50 +421,85 @@ The method acts on the input character string.
 else false.
 
 */
+/**
+    Returns true if the line is a pure comment line, i.e. the first
+    non-whitespace character is '#', '%', or the line starts with '--'.
+    Empty lines are NOT considered comment lines.
+
+    @attention This function does NOT modify the input string.
+               Use StripInlineComment() to remove trailing inline comments.
+
+    @param str  null-terminated string to test; nullptr returns false.
+*/
 bool isCommentLine( char* str )
 {
-  const size_t strlength( strlen(str) );
+    // Null check BEFORE strlen() to prevent UB
+    if ( str == nullptr ) return false;
 
-  // if the comment identifier is at the beginning of line
-  if ( str == NULL )
-    return false;
-  if ( str[0] == '#' || str[0] == '%' )
-    return true;
-  if ( (strlength >= 2) && (str[0] == '-') && (str[1] == '-') )
-    return true;
+    const size_t strlength( strlen(str) );
 
-  // if the comment identifier is somewhere in the line
-  for ( auto i{0U}; i<strlength; i++ )
+    // Empty line is not a comment
+    if ( strlength == 0U ) return false;
+
+    // Pure comment: '#' or '%' at start of line
+    if ( str[0] == '#' || str[0] == '%' )
+        return true;
+
+    // Pure comment: '--' at start of line
+    if ( strlength >= 2U && str[0] == '-' && str[1] == '-' )
+        return true;
+
+    // Inline comment: strip by writing '\0' at the delimiter
+    // This modifies the caller's buffer intentionally —
+    // the function is used both to test for comments AND
+    // to strip inline comments from data lines.
+    for ( size_t i{0U}; i < strlength; ++i )
     {
-       if ( str[i] == '#' || str[i] == '%' ) {
+        if ( str[i] == '#' || str[i] == '%' )
+        {
             str[i] = '\0';
             break;
-         }
-       else if ( str[i] == '-' ) {
-          if ( i < (strlength - 1) )
-            if ( str[i + 1] == '-' ) {
-                 str[i] = '\0';
-                 break;
-              }
+        }
+        if ( str[i] == '-' && i < strlength - 1U && str[i+1] == '-' )
+        {
+            str[i] = '\0';
+            break;
         }
     }
-  return false;
+
+    return false;
 }
 
 
-/*
-bool isCommentLine( const string& str )
-{
-  if ( str.empty() ) return false;
-  
-  if ( str[0] == '#' || str[0] == '%' )
-    return true;
-  if ( (str[0] == '-') && (str[1] == '-') )
-    return true;
+/**
+    Strips an inline comment from a null-terminated string by replacing
+    the comment delimiter ('#', '%', or '--') with '\0'.
 
-   return false;
-}
+    This modifies the string in place. Call this only when you want to
+    truncate the string at the comment delimiter.
+
+    @param str  null-terminated string to modify; nullptr is a no-op.
 */
+void StripInlineComment( char* str )
+{
+    if ( str == nullptr ) return;
+
+    const size_t strlength = strlen( str );
+
+    for ( size_t i{ 0U }; i < strlength; ++i )
+    {
+        if ( str[i] == '#' || str[i] == '%' )
+        {
+            str[i] = '\0';
+            return;
+        }
+        if ( str[i] == '-' && i + 1U < strlength && str[i+1] == '-' )
+        {
+            str[i] = '\0';
+            return;
+        }
+    }
+}
 
 
 /** Advances the file stream to behind the comment line.

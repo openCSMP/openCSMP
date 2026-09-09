@@ -60,6 +60,7 @@ bool readKeywordsAndParameters( std::ifstream& ifs, char* text_line, size_t line
 bool isBlankLine( const char* str );
 /// detects lines beginning with #, %, --; char* not constant because first comment char gets replaced by '\0'
 bool isCommentLine( char* str );
+void StripInlineComment( char* str );
 void advancePastCommentLine( std::ifstream& ifs );
 int  yes_or_no( const std::string& );
 bool isYES( const std::string& );

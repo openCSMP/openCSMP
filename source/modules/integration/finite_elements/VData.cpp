@@ -2582,73 +2582,171 @@ pair<double,double>  VData::Z_Range() const
       
       @attention method does not touch the line elements
 */
+/**
+    Reorders element node lists to ensure counter-clockwise orientation
+    for all 2D triangular and quadrilateral elements.
+
+    For linear elements (<=4 nodes): reverses the entire node list.
+    For quadratic triangles (6-7 nodes): reverses corner nodes (0-2)
+        and midside nodes (3-5) separately; bubble node (6) stays.
+    For quadratic quadrilaterals (8-9 nodes): reverses corner nodes (0-3)
+        and midside nodes (4-7) separately; bubble node (8) stays.
+
+    @return number of elements whose orientation was corrected.
+
+    @attention px and py must be sized to the global node count.
+    @attention pfverts must either be empty or have the same size as pelmt.
+*/
 size_t VData::RenumberElementsCounterClockwise2D()
- {
-    size_t orientation_changes(0U);
-    CSMP_FEM_TYPE   etype = (HybridElementTypeMesh()==false) ? parseFiniteElementTypeEnum( ElementType(0) ) : UNKNOWN;
-    bool      is_triangle = (etype != UNKNOWN) ? isTriangularElement( etype ) : false;
-    bool is_quadrilateral = (etype != UNKNOWN) ? isQuadrilateralElement( etype ) : false;
-    
-    // 1. processing the elements that have the same dimension as the 2D mesh (with at least 3 nodes)
-    // ----------------------------------------------------------------------------------------------
-    const vector<int8_t>::const_iterator end = PelmtEnd();
-    vector<int8_t>::const_iterator       eit = PelmtBegin();
-    deque<vector<size_t> >::iterator     pls = PlistBegin();
-    deque<vector<int64_t> >::iterator    pfv = PfvertsBegin();
-    
-    while( eit != end ) {
-         // if this is a triangle or quadrilateral
-         if ( HybridElementTypeMesh() ) {
-              etype = parseFiniteElementTypeEnum(*eit);
-              is_triangle      = isTriangularElement( etype );
-              is_quadrilateral = isQuadrilateralElement( etype ); 
-           }
-         if ( is_triangle or is_quadrilateral ) {
-              // computing (signed) cross product=normal of vector from origin node to next (clockwise) and origin backwards (ccw)
-              const double v1x = px[ (*pls)[2] ] - px[ (*pls)[1] ];
-              const double v1y = py[ (*pls)[2] ] - py[ (*pls)[1] ];
-              const double v2x = px[ (*pls)[0] ] - px[ (*pls)[1] ];
-              const double v2y = py[ (*pls)[0] ] - py[ (*pls)[1] ];
-              const double crossProduct = v1x * v2y - v1y * v2x;
-              // if this product is not positive, the element node numbering must be flipped
-              if ( crossProduct < 0. ) {
-                   // linear elements (less than or equal to 4 nodes)
-                   const size_t nodes = (*pls).size();
-                   // reverse plist and pfverts of linear elements
-                   if ( nodes <= 4 ) {
-                        reverse( (*pls).begin(), (*pls).end() );  
-                     }
-                   // else quadratic triangles or quads thus far 
-                   else {
-                        if ( is_triangle ) {
-                             // reverse corner nodes, then midside nodes, bubble node stays in barycentric element 
-                             assert( nodes <= 7 );
-                             reverse( (*pls).begin(), next((*pls).begin(),3) );
-                             reverse( next((*pls).begin(),4), next((*pls).begin(),6) );
-                          }
-                        else { // quadratic quadrilateral with and without bubble node
-                             assert( nodes <= 9 );
-                             reverse( (*pls).begin(), next((*pls).begin(),8) );  
-                          }
-                     }
-                   // in all cases, the neighbor numbering has to be reversed as well
-                   if ( !pfverts.empty() and !(*pfv).empty() ) reverse( (*pfv).begin(), (*pfv).end() );
-                   orientation_changes++;  
+{
+    // ========================================================================
+    // Precondition checks
+    // ========================================================================
+
+    if ( px.empty() || py.empty() )
+    {
+        cerr << "\nVData::RenumberElementsCounterClockwise2D: "
+             << "px or py coordinate arrays are empty; nothing was done.\n";
+        return 0U;
+    }
+
+    // pfverts must either be empty or match pelmt in size
+    const bool has_pfverts = !pfverts.empty();
+    if ( has_pfverts && pfverts.size() != pelmt.size() )
+        throw csmp::Exception( ERROR,
+                               "VData::RenumberElementsCounterClockwise2D",
+                               "pfverts size does not match pelmt size" );
+
+    // ========================================================================
+    // Determine element type for uniform meshes (avoids per-element lookup)
+    // ========================================================================
+
+    CSMP_FEM_TYPE etype           = UNKNOWN;
+    bool          is_triangle     = false;
+    bool          is_quadrilateral = false;
+
+    if ( !HybridElementTypeMesh() )
+    {
+        etype            = parseFiniteElementTypeEnum( ElementType(0) );
+        is_triangle      = isTriangularElement( etype );
+        is_quadrilateral = isQuadrilateralElement( etype );
+    }
+
+    // ========================================================================
+    // Main loop
+    // ========================================================================
+
+    size_t orientation_changes{ 0U };
+
+    const auto end = PelmtEnd();
+    auto       eit = PelmtBegin();
+    auto       pls = PlistBegin();
+    auto       pfv = has_pfverts ? PfvertsBegin() : decltype(PfvertsBegin()){};
+
+    while ( eit != end )
+    {
+        // For hybrid meshes, determine element type per element
+        if ( HybridElementTypeMesh() )
+        {
+            etype            = parseFiniteElementTypeEnum( *eit );
+            is_triangle      = isTriangularElement( etype );
+            is_quadrilateral = isQuadrilateralElement( etype );
+        }
+
+        if ( is_triangle || is_quadrilateral )
+        {
+            const size_t nodes = (*pls).size();
+
+            // Bounds check: need at least 3 nodes for cross product
+            if ( nodes < 3U )
+            {
+                cerr << "\nVData::RenumberElementsCounterClockwise2D: "
+                     << "element has fewer than 3 nodes (" << nodes
+                     << "); skipping.\n";
+                ++eit;
+                ++pls;
+                if ( has_pfverts ) ++pfv;
+                continue;
+            }
+
+            // Bounds check: node IDs must be within coordinate array bounds
+            const size_t n0 = (*pls)[0];
+            const size_t n1 = (*pls)[1];
+            const size_t n2 = (*pls)[2];
+
+            if ( n0 >= px.size() || n1 >= px.size() || n2 >= px.size() )
+            {
+                cerr << "\nVData::RenumberElementsCounterClockwise2D: "
+                     << "node ID out of bounds for px/py arrays "
+                     << "(n0=" << n0 << ", n1=" << n1 << ", n2=" << n2
+                     << ", px.size()=" << px.size() << "); skipping.\n";
+                ++eit;
+                ++pls;
+                if ( has_pfverts ) ++pfv;
+                continue;
+            }
+
+            // Compute signed cross product to determine orientation
+            // Positive = counter-clockwise (correct), negative = clockwise (needs flip)
+            const double v1x = px[n2] - px[n1];
+            const double v1y = py[n2] - py[n1];
+            const double v2x = px[n0] - px[n1];
+            const double v2y = py[n0] - py[n1];
+            const double crossProduct = v1x * v2y - v1y * v2x;
+
+            if ( crossProduct < 0. )
+            {
+                if ( nodes <= 4U )
+                {
+                    // Linear triangle (3 nodes) or linear quadrilateral (4 nodes):
+                    // reverse entire node list
+                    reverse( (*pls).begin(), (*pls).end() );
                 }
-           }
-         eit++;
-         pls++;
-         pfv++;
-      }
-      
-    if ( orientation_changes > 0 ) {
-         cerr <<"\nVData::RenumberElementsCounterClockwise2D: flipped node numbering of "<< orientation_changes;
-         cerr <<" surface elements from clockwise to counter-clockwise.\n";
-      }
-    
+                else if ( is_triangle )
+                {
+                    // Quadratic triangle: 6 nodes, or barycentric: 7 nodes
+                    // Layout: [c0, c1, c2, m01, m12, m20, (bubble)]
+                    // Reverse corner nodes: [c0,c1,c2] -> [c2,c1,c0]
+                    // Reverse midside nodes: [m01,m12,m20] -> [m20,m12,m01]
+                    // Bubble node (index 6) stays in place
+                    assert( nodes <= 7U );
+                    reverse( (*pls).begin(),                    next((*pls).begin(), 3) );
+                    reverse( next((*pls).begin(), 3),           next((*pls).begin(), 6) );
+                }
+                else
+                {
+                    // Quadratic quadrilateral: 8 nodes, or with bubble: 9 nodes
+                    // Layout: [c0,c1,c2,c3, m01,m12,m23,m30, (bubble)]
+                    // Reverse corner nodes: [c0,c1,c2,c3] -> [c3,c2,c1,c0]
+                    // Reverse midside nodes: [m01,m12,m23,m30] -> [m30,m23,m12,m01]
+                    // Bubble node (index 8) stays in place
+                    assert( nodes <= 9U );
+                    reverse( (*pls).begin(),                    next((*pls).begin(), 4) );
+                    reverse( next((*pls).begin(), 4),           next((*pls).begin(), 8) );
+                }
+
+                // Reverse neighbour face vertex list to match new node ordering
+                if ( has_pfverts && !(*pfv).empty() )
+                    reverse( (*pfv).begin(), (*pfv).end() );
+
+                ++orientation_changes;
+            }
+        }
+
+        ++eit;
+        ++pls;
+        if ( has_pfverts ) ++pfv;
+
+    } // end while
+
+    if ( orientation_changes > 0 )
+        cerr << "\nVData::RenumberElementsCounterClockwise2D: flipped node "
+             << "numbering of " << orientation_changes
+             << " surface elements from clockwise to counter-clockwise.\n";
+
     return orientation_changes;
- 
- } // end RenumberElementsCounterClockwise2D
+
+} // end RenumberElementsCounterClockwise2D
  
  
  
