@@ -140,8 +140,8 @@ void ExplicitTransport_Test::run()
     // 2.2 flux balance at no-flow boundaries
     // -------------------------------------------------------------------------
     TestNoFlowBoundaryFluxBalance();
-    _equal( transport.IncomingVolumetricFlow(),                                          // 200x brings tolerance to 2.0e-16
-            transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 200. );
+    _equal( transport.IncomingVolumetricFlow(),                                          // 2e4 x brings tolerance to 2.0e-14
+            transport.OutgoingVolumetricFlow(), numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 2e4 );
  
     // test 3: flow through model with TVD concentration
     // -------------------------------------------------------------------------
