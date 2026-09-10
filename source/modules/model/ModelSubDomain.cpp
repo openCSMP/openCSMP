@@ -311,6 +311,9 @@ template<uint32_t dim, template<uint32_t> class CELL>
 uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t cell_idx, uint32_t face ) const
  {
 #if defined(DEBUG)
+    assert( cell_vec_.data() != nullptr || cell_vec_.size() == 0U );
+    assert( bd_face_vec_.data() != nullptr || bd_face_vec_.size() == 0U );
+
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( cell_idx < InteriorCells() ) {
          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be equal to or greater than InteriorCells()" );
@@ -6077,7 +6080,7 @@ size_t ModelSubDomain<dim,CELL>::SharedPerimeterNodes( typename vector<csmp::Nod
     if ( start == end ) return 0U;
  
     auto first1 = PerimeterNodesBegin();
-    auto last1  = NodesEnd();
+    auto last1  = NodesEnd(); // = PerimeterNodesEnd()
 
     size_t shared_nodes = 0U;
 
