@@ -354,7 +354,7 @@ class ModelSubDomain {
     std::vector<CELL<dim>*>             cell_vec_;               ///< doubly sorted, interior cells first
     std::vector<std::vector<uint32_t> > bd_face_vec_;            ///< matching second sorted range of cell_vec_
     std::vector<csmp::Node<dim>*>       node_vec_;               ///< doubly sorted, interior nodes first
-    size_t                              first_bd_node_  = std::numeric_limits<size_t>::max(); ///< begin of the perimeter nodes
+    size_t                              first_bd_node_  = 0;     ///< begin of the perimeter nodes
     inline static int32_t               domain_count_   = 0;     ///< instance-counting to get unique identifiers regions, boundaries and splitboundaries (seperate counts)
     int32_t                             domain_idx_     = 0;     ///< unique subdomain identifier (1..n), created during region, boundary or splitboundary construction
     bool                                rebuilt_needed_ = false; ///< parameter set when mesh gets modified by MeshManager so that update can be prompted
@@ -440,7 +440,7 @@ inline void  ModelSubDomain<dim,CELL>::Name( const std::string& name ) noexcept
 template<uint32_t dim, template<uint32_t> class CELL>
 inline csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const noexcept
  {
-    assert( node_vec_.data() != nullptr && !node_vec_.empty() );
+    assert( !node_vec_.empty() );
     assert( nd < node_vec_.size() );
     return node_vec_[nd];
  }
@@ -449,7 +449,7 @@ inline csmp::Node<dim>*  ModelSubDomain<dim,CELL>::N( size_t nd ) const noexcept
 template<uint32_t dim, template<uint32_t> class CELL>
 inline CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const noexcept
  {
-    assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
+    assert( !cell_vec_.empty() );
     assert( e < cell_vec_.size() );
     return cell_vec_[e];
  }
@@ -458,32 +458,26 @@ inline CELL<dim>*  ModelSubDomain<dim,CELL>::E( size_t e ) const noexcept
 template<uint32_t dim, template<uint32_t> class CELL>
 inline const typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() const noexcept
  {
-    assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
     return cell_vec_;
  }
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<CELL<dim>*>&  ModelSubDomain<dim,CELL>::CellVector() noexcept
  {
-    assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
     return cell_vec_;
  }
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline const typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() const noexcept
   {
-    assert( node_vec_.data() != nullptr && !node_vec_.empty() );
     return node_vec_;
   }
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector() noexcept
   {
-    assert( node_vec_.data() != nullptr && !node_vec_.empty() );
     return node_vec_;
   }
-
-
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const noexcept
@@ -496,8 +490,8 @@ inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<di
 template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterNodesBegin() const noexcept
  {
-    assert( node_vec_.data() != nullptr && !node_vec_.empty() );
-    assert( bd_face_vec_.data() != nullptr && !bd_face_vec_.empty() );
+    assert( !node_vec_.empty() );
+    if ( bd_face_vec_.empty() ) return node_vec_.end();
     return std::next( node_vec_.begin(), static_cast<long>(InteriorNodes()) );
  }
 
@@ -513,7 +507,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<CELL<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::PerimeterCellsBegin() const noexcept
   {
      assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
-     assert( bd_face_vec_.data() != nullptr && !bd_face_vec_.empty() );
+     if ( bd_face_vec_.empty() ) return cell_vec_.end();
      return std::next( cell_vec_.begin(), static_cast<long>(InteriorCells()) );
   }
    
@@ -538,7 +532,8 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline size_t ModelSubDomain<dim,CELL>::PerimeterNodes() const noexcept
   {
 //     static_assert( !std::is_same_v<CELL<dim>,InterFace<dim>>, "ModelSubDomain<dim,InterFace>::PerimeterNodes: not support for SplitBoundary" );
-     assert( node_vec_.data() != nullptr && !node_vec_.empty() );
+     assert( !node_vec_.empty() );
+     if ( first_bd_node_ == 0 ) return node_vec_.size(); // works also for split boundaries without nodes
      return node_vec_.size() - InteriorNodes();
   }
 
@@ -552,7 +547,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline size_t ModelSubDomain<dim,CELL>::InteriorCells() const noexcept
   {
      assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
-     assert( bd_face_vec_.data() != nullptr && !bd_face_vec_.empty() );
+     if ( bd_face_vec_.empty() ) return cell_vec_.size();
      return cell_vec_.size() - bd_face_vec_.size();
   }
 
@@ -560,7 +555,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline size_t ModelSubDomain<dim,CELL>::PerimeterCells() const noexcept
   {
      assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
-     assert( bd_face_vec_.data() != nullptr && !bd_face_vec_.empty() );
+     if ( bd_face_vec_.empty() ) return 0ul;
      return bd_face_vec_.size();
   }
 
