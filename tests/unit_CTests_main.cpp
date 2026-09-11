@@ -342,7 +342,7 @@ int main( int argc, char* argv[] )
       fails_fundamentals = basic.report();
       total_failures += fails_fundamentals;
       basic.free();
-      cerr << "\nunit_tests_main: 1. CSMP fundamentals: test failures: " << fails_fundamentals << endl;
+      cerr << "\nunit_CTests_main: 1. CSMP fundamentals: test failures: " << fails_fundamentals << endl;
     }
     
 
@@ -413,7 +413,7 @@ int main( int argc, char* argv[] )
       fails_interdependent1 = interdependent1.report();
       total_failures += fails_interdependent1;
       interdependent1.free();
-      cerr << "\nunit_tests_main: 2. CSMP interdependent-functionality1: test failures: " << fails_interdependent1 << endl;
+      cerr << "\nunit_CTests_main: 2. CSMP interdependent-functionality1: test failures: " << fails_interdependent1 << endl;
     }
 
 
@@ -457,7 +457,7 @@ int main( int argc, char* argv[] )
       fails_interdependent2 = interdependent2.report();
       total_failures += fails_interdependent2;
       interdependent2.free();
-      cerr << "\nunit_tests_main: 3. CSMP Model-related, interdependent-functionality2: test failures: " << fails_interdependent2 << endl;
+      cerr << "\nunit_CTests_main: 3. CSMP Model-related, interdependent-functionality2: test failures: " << fails_interdependent2 << endl;
     }
 
 
@@ -487,7 +487,7 @@ int main( int argc, char* argv[] )
         interfaces.run();
         total_failures += fails_interfaces;
         interfaces.free();
-        cerr << "\nunit_tests_main: 4. input & output interfaces: Total unit test failures: " << fails_interfaces << endl;
+        cerr << "\nunit_CTests_main: 4. input & output interfaces: Total unit test failures: " << fails_interfaces << endl;
         
     } // end refactoring
 
@@ -549,7 +549,7 @@ int main( int argc, char* argv[] )
       fails_composite = composite.report();
       total_failures += fails_composite;
       composite.free();
-      cerr << "\nunit_tests_main: 4. CSMP-dependent-functionality: test failures: " << fails_composite << endl;
+      cerr << "\nunit_CTests_main: 4. CSMP-dependent-functionality: test failures: " << fails_composite << endl;
     }
         
     // tests related to code that is currently being refactored
@@ -564,13 +564,13 @@ int main( int argc, char* argv[] )
       fails_new_developments = new_developments.report();
       total_failures += fails_new_developments;
       new_developments.free();
-      cerr << "\nunit_tests_main: 6. New functionality: test failures: " << fails_new_developments << endl;
+      cerr << "\nunit_CTests_main: 6. New functionality: test failures: " << fails_new_developments << endl;
     }
     
     auto t1 = chrono::high_resolution_clock::now();
 	  cout <<"\n\t"<<"Time taken to run the comprensive suite of unit tests: "<< chrono::duration_cast<chrono::seconds>(t1-t0).count() << " seconds." << endl;
    
-    cout << "\nunit_tests_main: Total unit test failures: ";
+    cout << "\nunit_CTests_main: Total unit test failures: ";
     total_failures = fails_fundamentals + fails_interdependent1 + fails_interdependent2 + fails_interfaces + fails_composite + fails_new_developments;
     cerr << total_failures << endl;
     if ( fails_fundamentals > 0 )     cerr <<"\nfundamental functionality tests failed.";
