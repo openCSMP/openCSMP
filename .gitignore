@@ -116,3 +116,6 @@ build*/
 cmake-build-debug/
 cmake-build-release/
 cmake-build-*/
+
+# FetchContent downloaded dependencies — never commit these
+cmake-build-*/_deps/
