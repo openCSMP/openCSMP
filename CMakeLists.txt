@@ -266,25 +266,35 @@ endif()
 #   Fallback: headers from external_support_libs/cgns (no linking)
 #
 #   Discovery is attempted in order:
-#     1. find_package  (works if CMake config files are present)
-#     2. pkg-config    (works on most Linux systems)
-#     3. Manual search (Homebrew path on macOS)
-#     4. Fallback      (header-only from external_support_libs)
+#     1. pkg-config       (works on most Linux systems)
+#     2. find_library      (avoids CMake package configs with broken or
+#                           incomplete imported targets — e.g. Arch's cgns
+#                           package declares a CGNS::cgns_static target for
+#                           a libcgns.a it never actually ships, which makes
+#                           find_package(CGNS) abort with a FATAL_ERROR)
+#     3. Manual search     (Homebrew path on macOS)
+#     4. Fallback          (header-only from external_support_libs)
 # -----------------------------------------------------------------------
 
 set( CGNS_FOUND_USABLE FALSE )
 
-# 1. Try find_package first
-find_package( CGNS QUIET )
-if ( CGNS_FOUND )
-    message( STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}" )
-    set( CGNS_FOUND_USABLE TRUE )
-
-# 2. Try pkg-config
-elseif ( PKG_CONFIG_FOUND )
+# 1. Try pkg-config first
+if ( PKG_CONFIG_FOUND )
     pkg_check_modules( CGNS QUIET cgns )
     if ( CGNS_FOUND )
         message( STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}" )
+        set( CGNS_FOUND_USABLE TRUE )
+    endif()
+endif()
+
+# 2. Try find_library/find_path directly
+if ( NOT CGNS_FOUND_USABLE )
+    find_library( CGNS_LIBRARY     NAMES cgns )
+    find_path(    CGNS_INCLUDE_DIR NAMES cgnslib.h )
+    if ( CGNS_LIBRARY AND CGNS_INCLUDE_DIR )
+        message( STATUS "CGNS found via find_library: ${CGNS_LIBRARY}" )
+        set( CGNS_INCLUDE_DIRS "${CGNS_INCLUDE_DIR}" )
+        set( CGNS_LIBRARIES    "${CGNS_LIBRARY}" )
         set( CGNS_FOUND_USABLE TRUE )
     endif()
 endif()

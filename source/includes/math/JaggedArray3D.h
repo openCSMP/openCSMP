@@ -54,11 +54,11 @@ class JaggedArray3D {
     using key = std::tuple<uint32_t, uint32_t, uint32_t>;
     using umap = std::unordered_map<key,T,TupleHash>;
     // ref
-    using reference       = typename std::unordered_map<key,T>::reference;
-    using const_reference = typename std::unordered_map<key,T>::const_reference;
+    using reference       = typename umap::reference;
+    using const_reference = typename umap::const_reference;
     // iter
-    using iterator       = typename std::unordered_map<key,T>::iterator;
-    using const_iterator = typename std::unordered_map<key,T>::const_iterator;
+    using iterator       = typename umap::iterator;
+    using const_iterator = typename umap::const_iterator;
 
     /// default constructor constructs an empty array
     JaggedArray3D() = default;

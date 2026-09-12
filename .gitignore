@@ -105,6 +105,9 @@ Release/
 # CLion IDE project files
 .idea/
 
+# VSCode IDE project files
+.vscode/
+
 #build directory 
 thebuild/
 thebuild_dbg/
