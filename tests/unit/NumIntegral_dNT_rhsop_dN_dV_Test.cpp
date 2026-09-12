@@ -1,7 +1,7 @@
 // NumIntegral_dNT_rhsop_dN_dV_Test.cpp
 #include "NumIntegral_dNT_rhsop_dN_dV_Test.h"
 
-#include "NumIntegral_dNT_rhsop_dN_dV.h"
+#include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "TRIANGLE_Interface.h"
 #include "Exception.h"
 

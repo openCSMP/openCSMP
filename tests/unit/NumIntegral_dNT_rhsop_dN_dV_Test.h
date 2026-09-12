@@ -5,7 +5,7 @@
 #include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
-#include "NumIntegral_dNT_rhsop_dN_dV.h"
+#include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {

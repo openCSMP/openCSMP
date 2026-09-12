@@ -115,4 +115,7 @@ build/
 build*/
 *-build/
 
+# VSCode IDE project files
+.vscode/
+
 

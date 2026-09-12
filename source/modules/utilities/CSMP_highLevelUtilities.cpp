@@ -558,6 +558,7 @@ static void test_createUniqueCombinations()
  
  
  
+#ifdef __APPLE__
 #include <sys/sysctl.h>
 
 // is the executable compiled for the Rosetta X86 replacement environment on Apple Silicon
@@ -575,6 +576,7 @@ inline bool running_under_Rosetta()
     }
     return false;
 }
+#endif
  
  
  

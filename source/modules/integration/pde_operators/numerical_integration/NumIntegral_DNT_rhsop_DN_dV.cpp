@@ -1,4 +1,4 @@
-#include "NumIntegral_dNT_rhsop_dN_dV.h"
+#include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "PropertyDatabase.h"
 #include "Element.h"
 #include "Face.h"

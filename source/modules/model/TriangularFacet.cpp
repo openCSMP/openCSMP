@@ -1,4 +1,4 @@
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 #include "Point.h"
 
 namespace csmp {

@@ -3,6 +3,8 @@
 #ifndef CSMP_PROPERTY_HANDLE4_H
 #define CSMP_PROPERTY_HANDLE4_H
 
+#include <atomic>
+
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
 #include "TensorVariable.h"

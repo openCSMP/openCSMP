@@ -6,7 +6,7 @@
 #include "Test.h"
 #include "Model.h"
 #include "Integral_dNT_rhsop_dN_dV.h"
-#include "NumIntegral_dNT_rhsop_dN_dV.h"
+#include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "MathOperatorRHS.h"
 
 namespace csmp {

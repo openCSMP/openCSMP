@@ -7,7 +7,7 @@
 #include "Node.h"
 
 #include "QuadrilateralFacet.h"
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 
 #include "DenseMatrix.h"
 #include "ScalarVariable.h"

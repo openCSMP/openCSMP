@@ -1,6 +1,6 @@
 #include "IsoparametricLinearTetrahedron.h"
 #include "Exception.h"
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 
 #include <cassert>
 #include <cstring>   // strcpy, strcat

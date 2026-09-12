@@ -4,7 +4,7 @@
 #include "Model.h"
 #include "PDE_Integrator.h"
 #include "NumIntegral_dNT_lhsop_dN_dV.h"
-#include "NumIntegral_dNT_rhsop_dN_dV.h"
+#include "NumIntegral_DNT_rhsop_DN_dV.h"
 #include "PropertyDatabase.h"
 
 using namespace std;

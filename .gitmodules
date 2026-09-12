@@ -1,0 +1,6 @@
+[submodule "thirdparty/eigen"]
+	path = thirdparty/eigen
+	url = https://gitlab.com/libeigen/eigen.git
+[submodule "thirdparty/cgns/CGNS"]
+	path = thirdparty/cgns/CGNS
+	url = https://github.com/CGNS/CGNS.git

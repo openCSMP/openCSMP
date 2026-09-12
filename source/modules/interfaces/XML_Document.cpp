@@ -1,7 +1,8 @@
 #include "XML_Document.h"
 
-#include <fstream>
 #include <cassert>
+#include <cstring>
+#include <fstream>
 
 using namespace std;
 

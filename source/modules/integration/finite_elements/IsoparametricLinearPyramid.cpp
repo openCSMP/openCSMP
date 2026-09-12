@@ -1,7 +1,7 @@
 #include "IsoparametricLinearPyramid.h"
 
 #include "Exception.h"
-#include "triangularFacet.h"
+#include "TriangularFacet.h"
 #include "QuadrilateralFacet.h"
 
 using namespace std;

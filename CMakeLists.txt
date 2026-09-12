@@ -277,7 +277,10 @@ if(BUILD_EXAMPLES)
     # 4. Create Executable
     if(EXAMPLES_SRC)
         add_executable(open-csmp-examples ${EXAMPLES_SRC})
-        
+        if(IPO_SUPPORTED)
+            set_target_properties(open-csmp-examples PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+        endif()
+
         target_include_directories(open-csmp-examples PRIVATE
           "${CMAKE_CURRENT_SOURCE_DIR}"
           "${CMAKE_CURRENT_SOURCE_DIR}/examples/source/interrelations"
@@ -354,6 +357,9 @@ if(BUILD_TESTING)
     list(FILTER TEST_FILES EXCLUDE REGEX "/deprecated/")
 
     add_executable(open-csmp-tests ${CMAKE_CURRENT_SOURCE_DIR}/tests/unit_CTests_main.cpp ${TEST_FILES})
+    if(IPO_SUPPORTED)
+        set_target_properties(open-csmp-tests PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
+    endif()
     target_include_directories(open-csmp-tests PRIVATE
           "${CMAKE_CURRENT_SOURCE_DIR}/tests"
           "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
