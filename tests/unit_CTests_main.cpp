@@ -166,6 +166,7 @@
 
 // --- integration tests ---
 #include "DirichletPressureBoxModel_VVCase.h"
+#include "PeriodicBoundaryCondition_Test.h"
 #include "ExplicitTransport_Test.h"
 #include "GravityInducedFluidPressure_Test.h"
 #include "Geothermal_1D_VVCase.h"
@@ -514,6 +515,7 @@ int main( int argc, char* argv[] )
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
       composite.addTest( new PDE_Integrator_Computation_Test() );
+      composite.addTest( new PeriodicBoundaryCondition_Test() );
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
