@@ -2151,7 +2151,9 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( Model<dim>& model,
                                                   bool debug )
  {
     // 1. configure operators and linear algebraic system
-    if ( EstablishMatrixSetup( domain, model.Database().StorageKey("master_node_id") ) == true ) {
+    const Index periodic_key = model.Database().IsDefined("master_node_id")?
+                               model.Database().StorageKey("master_node_id") : Index();
+    if ( EstablishMatrixSetup( domain, periodic_key ) == true ) {
          // collecting Faces and InterFaces if boundary integrals need to be accumulated
          if ( !rhs_boundary_operators_.empty() ) {
               if constexpr ( is_same<CELLTYPE<dim>,Element<dim>>::value )
