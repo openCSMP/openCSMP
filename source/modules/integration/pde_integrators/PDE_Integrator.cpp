@@ -1983,10 +1983,15 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
             case SCALAR:
               while (gfirst != gref.NodesEnd()) {
                   position = (*gfirst)->Idx() + offset;
-                  position = DOF_indexes_[position];
-                  if (position != NULL_IDX) {
-                    const double sc = this->x_[position];
-                    (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
+                  const auto DOF_index = DOF_indexes_[position];
+                  if (DOF_index!= NULL_IDX) {
+                    const double sc = this->x_[DOF_index];
+                    if(DOF_masters_[position] == position){
+                      (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc));
+                    }
+                    else{
+                      (*gfirst)->Store(prop_key, makeScalar((*gfirst)->Status(prop_key), sc+(*gfirst)->Read(prop_key)));
+                    }
                   }
                   gfirst++;
                 }
@@ -1997,8 +2002,15 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
                   (*gfirst)->Read(prop_key, vc);
                   for ( uint32_t i{0U}; i < dim; i++) {
                       position = (*gfirst)->Idx() * dim + i + offset;
-                      position = DOF_indexes_[position];
-                      if (position != NULL_IDX) vc(i) = this->x_[position];
+                      const auto DOF_index = DOF_indexes_[position];
+                      if (DOF_index != NULL_IDX){
+                        if(DOF_masters_[position] == position){
+                          vc(i) = this->x_[DOF_index];
+                        }
+                        else{
+                          vc(i) = this->x_[DOF_index] + vc(i);
+                        }
+                      } 
                     }
                   (*gfirst)->Store(prop_key, vc);
                   gfirst++;
@@ -2012,8 +2024,15 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
                   for ( uint32_t i{0U}; i < dim; i++)
                     for ( uint32_t k{0U}; k < dim; k++) {
                          position = (*gfirst)->Idx() * dim2 + i * dim + k + offset;
-                         position = DOF_indexes_[position];
-                         if (position != NULL_IDX) ts(i, k) = this->x_[position];
+                         const auto DOF_index = DOF_indexes_[position];
+                         if (DOF_index != NULL_IDX){
+                            if(DOF_masters_[position] == position){
+                              ts(i,k) = this->x_[DOF_index];
+                            }
+                            else{
+                              ts(i,k) = this->x_[DOF_index] + ts(i,k);
+                            }
+                         }
                       }
                   (*gfirst)->Store(prop_key, ts);
                   gfirst++;
@@ -2026,8 +2045,15 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
                  (*gfirst)->Read(prop_key, ar);
                  for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
                      position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
-                     position = DOF_indexes_[position];
-                     if (position != NULL_IDX) ar(i) = this->x_[position];
+                     const auto DOF_index = DOF_indexes_[position];
+                     if (DOF_index != NULL_IDX){
+                       if(DOF_masters_[position] == position){
+                         ar(i) = this->x_[DOF_index];
+                       }
+                       else{
+                         ar(i) = this->x_[DOF_index] + ar(i);
+                       }
+                     } 
                    }
                  (*gfirst)->Store(prop_key, ar);
                  gfirst++;
@@ -2040,8 +2066,15 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
                   (*gfirst)->Read(prop_key, ar);
                   for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
                       position = (*gfirst)->Idx() * prop_key.dataDepth + i + offset;
-                      position = DOF_indexes_[position];
-                      if (position != NULL_IDX) ar(i) = this->x_[position];
+                      const auto DOF_index = DOF_indexes_[position];
+                      if (DOF_index != NULL_IDX){
+                        if(DOF_masters_[DOF_index] == DOF_index){
+                          ar(i) = this->x_[DOF_index];
+                        }
+                        else{
+                          ar(i) = this->x_[DOF_index] + ar(i);
+                        }
+                      } 
                     }
                   (*gfirst)->Store(prop_key, ar);
                   gfirst++;
