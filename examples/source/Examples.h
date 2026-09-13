@@ -28,6 +28,7 @@
 #include "ModelANSYS_Example.h"                                 ///< ANSYS mesh import
 #include "ParallelPlateFracture_Example.h"                      ///< fracture permeability, linear or quadratic pressure
 #include "PassiveAdvectionOfTracer_Example.h"                   ///< single-phase passive tracer advection in 3D
+#include "PeriodicBoundaryCondition_Example.h"                  ///< steady-state Darcy flow with a periodic boundary condition
 #include "PermeabilityTensor_Example.h"                         ///< trivial application of CSMP tensor variables
 #include "PETSc_Example.h"                                      ///< PETSc linear solver integration
 #include "PolicyBased_Example.h"                                ///< policy-based C++ design example

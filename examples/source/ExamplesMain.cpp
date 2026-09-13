@@ -76,6 +76,7 @@ int main()
             examplesSuite.RegisterExample( new StatisticalAnalyzer_Example() );
 
       // SIMULATION OF PHYSICAL PROCESSES
+            examplesSuite.RegisterExample( new PeriodicBoundaryCondition_Example() );
             examplesSuite.RegisterExample( new PressureDiffusion_Example() );
             examplesSuite.RegisterExample( new TransientPressure_Example() );
             examplesSuite.RegisterExample( new ParallelPlateFracture_Example() );

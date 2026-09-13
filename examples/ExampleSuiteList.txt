@@ -45,6 +45,7 @@ Simulation of Physical Processes
   15.) 1D vertical hydrostatic fluid-pressure profile taking into acount p,T-dependent H2O density (2)
   16.) Thermal convection with H2O equation of state and advanced spatial discretization (3)
   17.) Geothermal circulation in box-shaped model (2)
+  18.) Steady-state Darcy flow through a fracture network with a periodic boundary condition (3)
 
 ======================
 Software Functionality

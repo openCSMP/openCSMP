@@ -1,9 +1,9 @@
 
-====================================
+===========================================
 
-CSMP Example Suite 'CSMP EXAMPLES'
+CSMP Example Suite 'Open-CSMP++ EXAMPLES'
 
-====================================
+===========================================
 
 ===
 C++
@@ -11,7 +11,32 @@ C++
 
   1.) Curiously recurring template pattern (2)
   2.) Policy-based class design (2)
-  3.) TDD - (1)
+  3.) Test-Driven Development=TDD of unit tests (1)
+
+==================
+CSMP for Beginners
+==================
+
+  1.) Experimental_Example (1)
+
+=========================
+Input / Output Interfaces
+=========================
+
+  1.) Build CSMP native format models using various interfaces (1)
+  2.) EclipseMeshInterface_Example (1)
+  3.) Intrepid_Example (1)
+  4.) SKUA_Example (1)
+
+==================
+Meshing Interfaces
+==================
+
+  1.) ANSYS_Model3D: loading mesh created by ANSY (1)
+  2.) Triangulator based meshing of image files (1)
+  3.) Creation of a regular quadrilateral grid and export of model to CSMP native binary file (1)
+  4.) RhinoSurfaceReader: Input of triangulated surfaces from Rhinoceros (2)
+  5.) Output of CSMP Model to ProMesh Pre-Processor for UG4 (1)
 
 =================
 Numerical Methods
@@ -23,63 +48,56 @@ Numerical Methods
   4.) Stokes discrepancy measure (2)
   5.) Stokes discrepancy measure quadratic (2)
   6.) Finite-difference time-stepping approaches (2)
+  7.) Pore-radius and capillary pressure computation (1)
 
 ================================
 Simulation of Physical Processes
 ================================
 
-  1.) Transient pressure diffusion in a rectangular domain (3)
-  2.) Transient pressure diffusion around a well (3)
-  3.) Parallel-plate-fracture permeability and fluid pressure distribution (3)
-  4.) Pressure diffusion through fracture network in low permeability brittle shale. (3)
-  5.) Streamfunction from velocity field. Function can be contoured to get streamlines (3)
-  6.) Topography-driven flow (2)
-  7.) parallelPlatePermeabilityFromChannelWidth: fracture permeability, pressure and flow computed with quadratic FEM in 2D (2)
-  8.) FVM passive advection of concentration in FEM velocity field (3)
-  9.) 2D Passive advection of concentration using DES (3)
-  10.) 3D Passive advection of concentration using DES (3)
-  11.) Two phase slightly compressible flow simulation using DES (3)
-  12.) Two phase slightly compressible flow simulation with splitboundaries, using DES (3)
-  13.) Linear Elasticity (3)
-  14.) Fluid pressure and stress distribution in hill slope (2)
-  15.) 1D vertical hydrostatic fluid-pressure profile taking into acount p,T-dependent H2O density (2)
-  16.) Thermal convection with H2O equation of state and advanced spatial discretization (3)
-  17.) Geothermal circulation in box-shaped model (2)
+  1.) Steady-state Darcy flow with a periodic boundary condition (3)
+  2.) Transient pressure diffusion in a rectangular domain (3)
+  3.) Transient pressure diffusion around a well (3)
+  4.) Parallel-plate-fracture permeability and fluid pressure distribution (3)
+  5.) Pressure diffusion through fracture network in low permeability brittle shale. (3)
+  6.) Streamfunction from velocity field. Function can be contoured to get streamlines (3)
+  7.) Topography-driven flow (2)
+  8.) parallelPlatePermeabilityFromChannelWidth: fracture permeability, pressure and flow computed with quadratic FEM in 2D (2)
+  9.) FVM passive advection of concentration in FEM velocity field (3)
+  10.) 2D Passive advection of concentration using DES (3)
+  11.) 3D Passive advection of concentration using DES (3)
+  12.) Two phase slightly compressible flow simulation using DES (3)
+  13.) Two phase slightly compressible flow simulation with splitboundaries, using DES (3)
+  14.) Linear Elasticity (3)
+  15.) Pore pressure and effective stress distribution in a hill slope (2)
+  16.) Biot poromechanics — coupled displacement and fluid pressure (4)
+  17.) 1D vertical hydrostatic fluid-pressure profile taking into acount p,T-dependent H2O density (2)
+  18.) Thermal convection with H2O equation of state and advanced spatial discretization (3)
+  19.) Geothermal circulation in box-shaped model (2)
+  20.) Staggered-grid 2-step Stokes equation solver (3)
+  21.) Calculating Pressure dependent properties for Black Oil form Lookup Tables (2)
+  22.) Tractions_Example (1)
 
 ======================
 Software Functionality
 ======================
 
-  1.) Experimental_Example (1)
-  2.) Basic Variable Operations (1)
-  3.) Variable Operations (1)
-  4.) How to templatize Index class to permit static polymorphic handling of variables (1)
-  5.) Management of variables in CSMP native binary files (1)
-  6.) Extrapolation & Averaging (2)
-  7.) Permeability tensor calculations (1)
-  8.) Visitor (2)
-  9.) Operations involving csmp::Region objects (3)
-  10.) Properties associated with csmp::Region objects (2)
+  1.) Basic Variable Operations (1)
+  2.) Variable Operations (1)
+  3.) How to templatize Index class to permit static polymorphic handling of variables (1)
+  4.) Management of variables in CSMP native binary files (1)
+  5.) Extrapolation & Averaging (2)
+  6.) Permeability tensor calculations (1)
+  7.) Visitor (2)
+  8.) Operations involving csmp::Region objects (3)
+  9.) Properties associated with csmp::Region objects (2)
+  10.) Demonstration of RegionMonitor class (1)
   11.) StatisticalAnalyzer: creation of flow velocity histograms (2)
-
-===================
-Software Interfaces
-===================
-
-  1.) Build CSMP native format models using various interfaces (1)
-  2.) ANSYS_Model3D: loading mesh created by ANSY (1)
-  3.) Triangulator based meshing of image files (1)
-  4.) Creation of a regular quadrilateral grid and export of model to CSMP native binary file (1)
-  5.) EclipseMeshInterface_Example (1)
-  6.) Intrepid_Example (1)
-  7.) RhinoSurfaceReader: Input of triangulated surfaces from Rhinoceros (2)
-  8.) SKUA_Example (1)
 
 ===================================
 Tutorials (composite functionality)
 ===================================
 
   1.) Tutorial 1: Transient fluid-pressure diffusion (3)
-  2.) Tutorial 2: Diffusion - advection (3)
+  2.) Tutorial 2: classic Advection - Diffusion Equation (3)
   3.) Tutorial 3: Incompressible 2-phase flow (3)
   4.) Tutorial 4: Stokes lubrication equation (3)
