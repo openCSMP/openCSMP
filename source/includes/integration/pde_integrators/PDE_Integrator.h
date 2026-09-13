@@ -303,7 +303,7 @@ class PDE_Integrator {
     bool          Transient() const;
   
     /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
-    void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
+    void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, const Index& periodic_key=Index(), bool debug=false );
 
     /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
     void          IntegrateOver( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
@@ -359,10 +359,10 @@ class PDE_Integrator {
     std::list<std::string> IdentifySharedSplitBoundaries( const Model<dim>&, const ModelSubDomain<dim,CELLTYPE>& ) const;
   
     /// resizes sparse solution matrix and establishes variable offsets if a system of equations will be solved, but without boundary or splitboundary integrals
-    virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& );
+    virtual bool EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>&, const csmp::Index& periodic_key=Index() );
 
     /// for the elimination of Dirichlet constraints from the solution matrix; called after EstablishMatrixSetup but before accumulation
-    void  EliminateEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset );
+    void  EliminateEssentialConditions( const ModelSubDomain<dim,CELLTYPE>&, size_t max_offset, const csmp::Index& periodic_key );
   
     /// in time-dependent calculations this method assigns initial conditions to the RHS; uses node numbering
     virtual void  AssignInitialConditions( const ModelSubDomain<dim,CELLTYPE>& );
@@ -421,6 +421,7 @@ class PDE_Integrator {
     std::vector<double>   rh_;          ///< righthand vector
     std::vector<double>   x_;           ///< solution vector
     std::vector<size_t>   DOF_indexes_; ///< indices of DOFs, but only of the non-Dirichlet dofs, size enumerated 0 - DOF-1 (including Dirich DOF)
+    std::vector<size_t>   DOF_masters_; 
     std::vector<double>   pivotVector_; ///< full-system DOF (including Dirich); accumulates products of eliminated Dirichlet rows and RHS DIrich entries
 
     Solver*               solver_ = nullptr;

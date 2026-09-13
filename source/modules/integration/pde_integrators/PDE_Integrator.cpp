@@ -653,7 +653,7 @@ TODO: consider case where one might want to retain the right-hand vector, but no
 TODO: rather than throwing the entire matrix away, one might just remove off-diagonal elements
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-bool PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& gref )
+bool PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EstablishMatrixSetup( const ModelSubDomain<dim,CELLTYPE>& gref, const Index& periodic_key )
  {
    // -------------------------------------------------------------------
    // 0. PDE_Integrator re-use: (and has not been reset by
@@ -926,7 +926,7 @@ bool PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EstablishMatrixSetup( const ModelS
    // ------------------------------------------------------------------------------
    // 5. Sizing 'G' and righthand vector 'rh' eliminating Dirichlet rows and columns
    // ------------------------------------------------------------------------------
-   EliminateEssentialConditions( gref, offset );
+   EliminateEssentialConditions( gref, offset, periodic_key );
 
    return true;
    
@@ -2084,10 +2084,10 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
     9. Postprocessing (if respective pde operators were added to the PDE_Integrator) and writing related results to model.
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& domain, bool debug )
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& domain, const Index& periodic_key, bool debug )
  {
     // 1. configure algorithm
-    EstablishMatrixSetup( domain );
+    EstablishMatrixSetup( domain, periodic_key );
     
     if ( domain.Name() != "Model" ) {
          if ( !rhs_boundary_operators_.empty() ||
@@ -2151,7 +2151,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( Model<dim>& model,
                                                   bool debug )
  {
     // 1. configure operators and linear algebraic system
-    if ( EstablishMatrixSetup( domain ) == true ) {
+    if ( EstablishMatrixSetup( domain, model.Database().StorageKey("master_node_id") ) == true ) {
          // collecting Faces and InterFaces if boundary integrals need to be accumulated
          if ( !rhs_boundary_operators_.empty() ) {
               if constexpr ( is_same<CELLTYPE<dim>,Element<dim>>::value )
@@ -2341,8 +2341,29 @@ list<string>  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IdentifySharedSplitBounda
     return contained_splitboundaries;
 }
 
-
-
+void SetDOF(bool iscorner, csmp::VARIABLE_FLAG status, size_t position, size_t master_position, size_t offset, vector<size_t>& DOF_indexes_, size_t& DOF, vector<size_t>& DOF_masters_, vector<std::tuple<size_t,size_t>>& slave_and_master, csmp::Index periodic_key) {
+  assert( position < DOF_indexes_.size() );
+  if(iscorner && status == PERIODIC){
+    DOF_indexes_[position] = NULL_IDX;
+  }
+  else{
+    if (status == DIRICH){
+      DOF_indexes_[position] = NULL_IDX;
+    } 
+    else if ( status == PERIODIC ){
+      if(position == master_position){
+        DOF_indexes_[position] = DOF++;
+      }
+      else{
+        assert( master_position < DOF_indexes_.size() );
+        slave_and_master.emplace_back(position, master_position);
+      }
+    }
+    else {
+      DOF_indexes_[position] = DOF++;
+    }
+  }
+}
 
 
 // ============================================================================
@@ -2366,12 +2387,17 @@ list<string>  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IdentifySharedSplitBounda
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
 void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( const ModelSubDomain<dim,CELLTYPE>& gref,
-                                                                              size_t total_degrees_of_freedom )
+                                                                              size_t total_degrees_of_freedom, const csmp::Index& periodic_key )
  {
     // Uses offset = total_degrees_of_freedom of system of equations, called after EstablishMatrixSetup
     DOF_indexes_.resize(total_degrees_of_freedom);
+    DOF_masters_.resize(total_degrees_of_freedom);
     fill( DOF_indexes_.begin(), DOF_indexes_.end(), NULL_IDX );
-    if ( trim_vectors_ ) DOF_indexes_.shrink_to_fit();
+    fill( DOF_masters_.begin(), DOF_masters_.end(), NULL_IDX );
+    if ( trim_vectors_ ) {
+      DOF_indexes_.shrink_to_fit();
+      DOF_masters_.shrink_to_fit();
+    }
 
     if (!this->setup_established_)
       throw csmp::Exception(ERROR, 
@@ -2395,104 +2421,81 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
         auto        niter(gref.NodesBegin());
         csmp::Index prop_key = it.first.key;
         size_t      offset = it.second;
-
         if (prop_key.place != NODE)
           throw csmp::Exception(ERROR, 
             "PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EliminateEssentialConditions",
             "So far no conditions are assigned to elements, faces, segments");
 
         size_t  position{0U};
+        std::vector<std::tuple<size_t,size_t>> slave_and_master;
+
         switch (prop_key.type) {
             case SCALAR:
               while (niter != gref.NodesEnd()) {
-                  position = (*niter)->Idx() + offset;
-                  assert( position < DOF_indexes_.size() );
-                  if ((*niter)->Status(prop_key) == DIRICH) 
-                    DOF_indexes_[position] = NULL_IDX;
-                  else {
-                      DOF_indexes_[position] = DOF;
-                      DOF = DOF + 1U;
-                    }
-                  niter++;
-                }
+                position = (*niter)->Idx() + offset;
+                const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
+                size_t master_position = master_node_id + offset;
+                DOF_masters_[position] = master_position;
+                SetDOF(isCorner((*niter)->AtBoundary()), (*niter)->Status(prop_key), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
+                niter++;
+              }
               break;
             case VECTOR:
               while ( niter != gref.NodesEnd()) {
-                     for ( uint32_t i{0U}; i < dim; ++i ) {
-                          position = (*niter)->Idx() * dim + i + offset;
-                          assert( position < DOF_indexes_.size() );
-                          if ( (*niter)->Status(prop_key,i) == DIRICH ) 
-                            DOF_indexes_[position] = NULL_IDX;
-                          else {
-                               DOF_indexes_[position] = DOF;
-                               DOF = DOF + 1U;
-                            }
-                       }
-                    niter++;
-                 }
+                const auto is_corner = isCorner((*niter)->AtBoundary());
+                const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
+                for ( uint32_t i{0U}; i < dim; ++i ) {
+                  position = (*niter)->Idx() * dim + i + offset;
+                  size_t master_position = master_node_id * dim + i + offset;
+                  DOF_masters_[position] = master_position;
+                  SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
+                }
+                niter++;
+              }
               break;
             case TENSOR: {
                 constexpr uint32_t dim2(dim * dim);
                 // tensors have flags only for their diagonal elements
-                while ( niter != gref.NodesEnd() )
-                  {
-                     for ( uint32_t i{0U}; i < dim; i++) {
-                        if ( (*niter)->Status(prop_key,i) == DIRICH )
-                          for ( uint32_t j{0U}; j < dim; j++ ) {
-                               position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                               assert( position < DOF_indexes_.size() );
-                               DOF_indexes_[position] = NULL_IDX;
-                            }
-                        else for ( uint32_t j{0U}; j < dim; j++) {
-                                  position = (*niter)->Idx() * dim2 + i * dim + j + offset;
-                                  assert( position < DOF_indexes_.size() );
-                                  DOF_indexes_[position] = DOF;
-                                  DOF = DOF + 1U;
-                               }
-
-                       }
-                    niter++;
+                while ( niter != gref.NodesEnd() ){
+                  const auto is_corner = isCorner((*niter)->AtBoundary());
+                  const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
+                  for ( uint32_t i{0U}; i < dim; i++) {
+                    for ( uint32_t j{0U}; j < dim; j++ ) {
+                      position = (*niter)->Idx() * dim2 + i * dim + j + offset;
+                      size_t master_position = master_node_id * dim2 + i * dim + j + offset;
+                      DOF_masters_[position] = master_position;
+                      SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
+                    }
                   }
+                  niter++;
                 }
+              }
               break;
             case ARRAY:
               // array variables only have a single flag
               while (niter != gref.NodesEnd()) {
-                  if ( (*niter)->Status(prop_key) == DIRICH )
-                    {
-                      for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
-                        position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                        assert( position < DOF_indexes_.size() );
-                        DOF_indexes_[position] = NULL_IDX;
-                      }
-                    }
-                  else {
-                      for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
-                        position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                        assert( position < DOF_indexes_.size() );
-                        DOF_indexes_[position] = DOF;
-                        DOF = DOF + 1U;
-                      }
-                    }// end if
-                  niter++;
-                } // end while
+                const auto is_corner = isCorner((*niter)->AtBoundary());
+                const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
+                for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
+                  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                  size_t master_position = master_node_id * prop_key.dataDepth + i + offset;
+                  DOF_masters_[position] = master_position;
+                  SetDOF(is_corner, (*niter)->Status(prop_key), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
+                }
+                niter++;
+              } // end while
               break;
             case FLAGGEDARRAY:
-              while ( niter != gref.NodesEnd() )
-                {
-                   for ( uint32_t i{0U}; i < prop_key.dataDepth; i++ )
-                      if ( (*niter)->Status(prop_key,i) == DIRICH ) {
-                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                           assert( position < DOF_indexes_.size() );
-                           DOF_indexes_[position] = NULL_IDX;
-                        }
-                      else {
-                           position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
-                           assert( position < DOF_indexes_.size() );
-                           DOF_indexes_[position] = DOF;
-                           DOF = DOF + 1U;
-                        }
-                   niter++;
+              while ( niter != gref.NodesEnd() ) {
+                const auto is_corner = isCorner((*niter)->AtBoundary());
+                const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
+                for ( uint32_t i{0U}; i < prop_key.dataDepth; i++ ) {
+                  position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
+                  size_t master_position = master_node_id * prop_key.dataDepth + i + offset;
+                  DOF_masters_[position] = master_position;
+                  SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
+                }
+                niter++;
                 }
            break;
             default:
@@ -2500,7 +2503,42 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 "PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EliminateEssentialConditions",
                 "Variable type not recognised by this method");
             }
-          
+          // now slave indexes are known - we can copy the DOF indexes from the respective masters
+          // this is needed for periodic boundary conditions
+          for(const auto& [slave_position, master_position] : slave_and_master){
+            switch (prop_key.type) {
+              case SCALAR:{
+                DOF_indexes_[slave_position] = DOF_indexes_[master_position];
+                break;
+              }
+              case VECTOR:{
+                for ( auto i{0U}; i < dim; ++i ) {
+                  DOF_indexes_[slave_position] = DOF_indexes_[master_position];
+                }
+                break;
+              }
+              case TENSOR:{
+                constexpr uint32_t dim2(dim * dim);
+                for (auto i{0U}; i < dim; i++) {
+                  for ( auto j{0U}; j < dim; j++ ) {
+                    DOF_indexes_[slave_position] = DOF_indexes_[master_position];
+                  }
+                }
+                break;
+              }
+              case ARRAY:case FLAGGEDARRAY:{
+                for (auto i{0U}; i < prop_key.dataDepth; i++) {
+                  DOF_indexes_[slave_position] = DOF_indexes_[master_position];
+                }
+                break;
+              }
+              default:{
+                throw csmp::Exception(FATAL_ERROR,
+                  "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
+                  "Variable type not recognised by this method");
+            }
+          }
+        }
       } // end for (all Dirichlet flagged variables)
 
     // ========================================================================
