@@ -2668,12 +2668,7 @@ template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 {
   for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
-    if(this->Database().IsDefined("master_node_id")){
-      problem.IntegrateOver( (*it).second, debug, this->Database().StorageKey("master_node_id") );
-    }
-    else{
       problem.IntegrateOver((*it).second, debug);
-    }
 }
 
 
