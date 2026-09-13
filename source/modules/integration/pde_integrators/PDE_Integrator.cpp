@@ -2505,41 +2505,10 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 "PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::EliminateEssentialConditions",
                 "Variable type not recognised by this method");
             }
-          // now slave indexes are known - we can copy the DOF indexes from the respective masters
-          // this is needed for periodic boundary conditions
-          for(const auto& [slave_position, master_position] : slave_and_master){
-            switch (prop_key.type) {
-              case SCALAR:{
-                DOF_indexes_[slave_position] = DOF_indexes_[master_position];
-                break;
-              }
-              case VECTOR:{
-                for ( auto i{0U}; i < dim; ++i ) {
-                  DOF_indexes_[slave_position] = DOF_indexes_[master_position];
-                }
-                break;
-              }
-              case TENSOR:{
-                constexpr uint32_t dim2(dim * dim);
-                for (auto i{0U}; i < dim; i++) {
-                  for ( auto j{0U}; j < dim; j++ ) {
-                    DOF_indexes_[slave_position] = DOF_indexes_[master_position];
-                  }
-                }
-                break;
-              }
-              case ARRAY:case FLAGGEDARRAY:{
-                for (auto i{0U}; i < prop_key.dataDepth; i++) {
-                  DOF_indexes_[slave_position] = DOF_indexes_[master_position];
-                }
-                break;
-              }
-              default:{
-                throw csmp::Exception(FATAL_ERROR,
-                  "PDE_Integrator<dim,CELLTYPE>::ReduceSystemSizeEliminatingEssentialConditions",
-                  "Variable type not recognised by this method");
-            }
-          }
+        // now slave indexes are known - we can copy the DOF indexes from the respective masters
+        // this is needed for periodic boundary conditions
+        for(const auto& [slave_position, master_position] : slave_and_master){
+          DOF_indexes_[slave_position] = DOF_indexes_[master_position];
         }
       } // end for (all Dirichlet flagged variables)
 
