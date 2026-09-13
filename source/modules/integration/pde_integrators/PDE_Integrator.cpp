@@ -1210,7 +1210,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::Accumulate( const ModelSubDomain<d
              it_lhs.second->ComputeContribution( *(*git) );
              if ( it_lhs.second->MultiplyWithTimeIncrement() )
                it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-             it_lhs.second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_);
+             it_lhs.second->AssignToGlobal(*(*git), this->G_, pivotVector_, DOF_indexes_, DOF_masters_);
            }
 
     // accumulating into the righhand vector 'rhs'
@@ -1523,7 +1523,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals( 
             it_lhs.second->ComputeContribution( *git );
             if ( it_lhs.second->MultiplyWithTimeIncrement() )
                 it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_, DOF_masters_ );
             did_lhs_accumulation = true;
         }
     }
@@ -1599,7 +1599,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::AccumulateSplitBoundaryIntegrals()
             it_lhs.second->ComputeContribution( *git );
             if ( it_lhs.second->MultiplyWithTimeIncrement() )
                 it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_, DOF_masters_ );
         }
     }
 
@@ -1665,7 +1665,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegra
             it_lhs.second->ComputeContribution( *git );
             if ( it_lhs.second->MultiplyWithTimeIncrement() )
                 it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ , DOF_masters_ );
             did_lhs_accumulation = true;
         }
     }
@@ -1739,7 +1739,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::LateAccumulateSplitBoundaryIntegra
             it_lhs.second->ComputeContribution( *git );
             if ( it_lhs.second->MultiplyWithTimeIncrement() )
                 it_lhs.second->MultiplyWithTimeFactor( time_increment_ );
-            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_ );
+            it_lhs.second->AssignToGlobal( *git, this->G_, pivotVector_, DOF_indexes_, DOF_masters_ );
         }
     }
 
@@ -2345,14 +2345,16 @@ list<string>  PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IdentifySharedSplitBounda
 
 void SetDOF(bool iscorner, csmp::VARIABLE_FLAG status, size_t position, size_t master_position, size_t offset, vector<size_t>& DOF_indexes_, size_t& DOF, vector<size_t>& DOF_masters_, vector<std::tuple<size_t,size_t>>& slave_and_master, csmp::Index periodic_key) {
   assert( position < DOF_indexes_.size() );
+  DOF_masters_[position] = position;
   if(iscorner && status == PERIODIC){
     DOF_indexes_[position] = NULL_IDX;
   }
   else{
     if (status == DIRICH){
       DOF_indexes_[position] = NULL_IDX;
-    } 
+    }
     else if ( status == PERIODIC ){
+      DOF_masters_[position] = master_position;
       if(position == master_position){
         DOF_indexes_[position] = DOF++;
       }
@@ -2437,7 +2439,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 position = (*niter)->Idx() + offset;
                 const auto master_node_id = periodic_key.place==UNDEFINED? std::numeric_limits<size_t>::quiet_NaN():(*niter)->Read(periodic_key);
                 size_t master_position = master_node_id + offset;
-                DOF_masters_[position] = master_position;
                 SetDOF(isCorner((*niter)->AtBoundary()), (*niter)->Status(prop_key), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
                 niter++;
               }
@@ -2449,7 +2450,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 for ( uint32_t i{0U}; i < dim; ++i ) {
                   position = (*niter)->Idx() * dim + i + offset;
                   size_t master_position = master_node_id * dim + i + offset;
-                  DOF_masters_[position] = master_position;
                   SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
                 }
                 niter++;
@@ -2465,7 +2465,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                     for ( uint32_t j{0U}; j < dim; j++ ) {
                       position = (*niter)->Idx() * dim2 + i * dim + j + offset;
                       size_t master_position = master_node_id * dim2 + i * dim + j + offset;
-                      DOF_masters_[position] = master_position;
                       SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
                     }
                   }
@@ -2481,7 +2480,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 for ( uint32_t i{0U}; i < prop_key.dataDepth; i++) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   size_t master_position = master_node_id * prop_key.dataDepth + i + offset;
-                  DOF_masters_[position] = master_position;
                   SetDOF(is_corner, (*niter)->Status(prop_key), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
                 }
                 niter++;
@@ -2494,7 +2492,6 @@ void PDE_Integrator<dim, CELLTYPE, MATRIXTYPE>::EliminateEssentialConditions( co
                 for ( uint32_t i{0U}; i < prop_key.dataDepth; i++ ) {
                   position = (*niter)->Idx() * prop_key.dataDepth + i + offset;
                   size_t master_position = master_node_id * prop_key.dataDepth + i + offset;
-                  DOF_masters_[position] = master_position;
                   SetDOF(is_corner, (*niter)->Status(prop_key, i), position, master_position, offset, DOF_indexes_, DOF, DOF_masters_, slave_and_master, periodic_key);
                 }
                 niter++;

@@ -421,7 +421,7 @@ class PDE_Integrator {
     std::vector<double>   rh_;          ///< righthand vector
     std::vector<double>   x_;           ///< solution vector
     std::vector<size_t>   DOF_indexes_; ///< indices of DOFs, but only of the non-Dirichlet dofs, size enumerated 0 - DOF-1 (including Dirich DOF)
-    std::vector<size_t>   DOF_masters_; 
+    std::vector<size_t>   DOF_masters_; ///< for periodic boundary conditions, the master node of a slave node; for non-periodic nodes, the master is the node itself
     std::vector<double>   pivotVector_; ///< full-system DOF (including Dirich); accumulates products of eliminated Dirichlet rows and RHS DIrich entries
 
     Solver*               solver_ = nullptr;

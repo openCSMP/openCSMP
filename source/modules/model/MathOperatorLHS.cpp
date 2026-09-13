@@ -840,7 +840,8 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
                                                  SparseMatrix& G,
                                                  vector<double>& pivotVector,
-                                                 const vector<size_t>& DOF_indexes )
+                                                 const vector<size_t>& DOF_indexes,
+                                                 const vector<size_t>& DOF_masters )
 {
     const auto n_nodes{ e.Nodes() };
 
@@ -854,14 +855,12 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
         transformNodeIndexVector( BasicOperandKey(), IDB );
     for ( uint32_t i{0U}; i < IDB.size(); ++i ) {
         IDB[i] += this->BasicOperandOffset();
-        IDB[i]  = DOF_indexes[ IDB[i] ];
     }
 
     if ( TestOperandType() != SCALAR )
         transformNodeIndexVector( TestOperandKey(), IDT );
     for ( uint32_t i{0U}; i < IDT.size(); ++i ) {
         IDT[i] += this->TestOperandOffset();
-        IDT[i]  = DOF_indexes[ IDT[i] ];
     }
 
 #ifdef DEBUG
@@ -897,41 +896,43 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
                                "MathOperatorLHS<dim>::AssignToGlobal(SparseMatrix):",
                                "Multiply Accumulate not supported yet" );
     }
-    else if ( add_accumulate_ || add_accumulate_later_ )
-    {
-        assert( IDB.size() == LHS.Cols() );
-        assert( IDT.size() == LHS.Rows() );
-
-        for ( uint32_t i{0U}; i < LHS.Rows(); ++i ) {
-            if ( IDT[i] == NULL_IDX ) continue;
-            for ( uint32_t j{0U}; j < LHS.Cols(); ++j ) {
-                if ( IDB[j] == NULL_IDX )
-                    pivotVector[ IDT[i] ] -= LHS(i,j) * top_variable_node_values[j] * factor_;
-                else
-                    G.Add( IDT[i], IDB[j], LHS(i,j) * factor_ );
-            }
+    for (uint32_t i{0U}; i < LHS.Rows(); i++){
+      if(DOF_indexes[IDB[i]] == NULL_IDX){ // if the base node is on a dirichlet boundary
+        continue;
+      }
+      for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+        if(DOF_indexes[IDT[j]] == NULL_IDX){ // if the test node is on a dirichlet boundary
+          if ( add_accumulate_ || add_accumulate_later_ ){
+            pivotVector[DOF_indexes[IDB[i]]] -= LHS(i, j) * top_variable_node_values[j] * factor_ ;
+          }
+          else if ( subtract_accumulate_ || subtract_accumulate_later_ ){
+            pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[j] * factor_ ;
+          }
+          else{
+            throw csmp::Exception( ERROR,
+                                    "MathOperatorLHS<dim>::AssignToGlobal(SparseMatrix):",
+                                    "Accumulation mode not recognised." );
+          }
+          
+          if(DOF_masters[IDB[i]] != IDB[i]){
+            pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[i] * factor_;
+          }
         }
-    }
-    else if ( subtract_accumulate_ || subtract_accumulate_later_ )
-    {
-        assert( IDB.size() == LHS.Cols() );
-        assert( IDT.size() == LHS.Rows() );
-
-        for ( uint32_t i{0U}; i < LHS.Rows(); ++i ) {
-            if ( IDT[i] == NULL_IDX ) continue;
-            for ( uint32_t j{0U}; j < LHS.Cols(); ++j ) {
-                if ( IDB[j] == NULL_IDX )
-                    pivotVector[ IDT[i] ] += LHS(i,j) * top_variable_node_values[j] * factor_;
-                else
-                    G.Add( IDT[i], IDB[j], LHS(i,j) * factor_ );
+        else{
+          G.Add( DOF_indexes[IDB[i]], DOF_indexes[IDT[j]], LHS(i, j) * factor_);
+          if(DOF_masters[IDB[i]]!=IDB[i]){
+            if(DOF_masters[IDB[j]]==IDB[j]){
+              pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[i] * factor_;
             }
+          }
+          else{
+            if(DOF_masters[IDT[j]] != IDT[j]){
+              pivotVector[DOF_indexes[IDB[i]]] -= LHS(i, j) * top_variable_node_values[j] * factor_;
+            }
+          }
         }
+      }
     }
-    else
-        throw csmp::Exception( ERROR,
-                               "MathOperatorLHS<dim>::AssignToGlobal(SparseMatrix):",
-                               "Accumulation mode not recognised." );
-
 } // end AssignToGlobal (SparseMatrix)
 
 
@@ -945,7 +946,8 @@ template<uint32_t dim, template<uint32_t> class CELL>
 void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
                                                 CompressedRowMatrix& G,
                                                 vector<double>& pivotVector,
-                                                const vector<size_t>& DOF_indexes )
+                                                const vector<size_t>& DOF_indexes,
+                                                const vector<size_t>& DOF_masters)
 {
     const auto n_nodes{ e.Nodes() };
 
@@ -959,14 +961,12 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
         transformNodeIndexVector( BasicOperandKey(), IDB );
     for ( uint32_t i{0U}; i < IDB.size(); ++i ) {
         IDB[i] += this->BasicOperandOffset();
-        IDB[i]  = DOF_indexes[ IDB[i] ];
     }
 
     if ( TestOperandType() != SCALAR )
         transformNodeIndexVector( TestOperandKey(), IDT );
     for ( uint32_t i{0U}; i < IDT.size(); ++i ) {
         IDT[i] += this->TestOperandOffset();
-        IDT[i]  = DOF_indexes[ IDT[i] ];
     }
 
 #ifdef DEBUG
@@ -1004,41 +1004,44 @@ void MathOperatorLHS<dim,CELL>::AssignToGlobal( const CELL<dim>& e,
                                "MathOperatorLHS<dim>::AssignToGlobal(CompressedRowMatrix):",
                                "Multiply Accumulate not supported yet" );
     }
-    else if ( add_accumulate_ || add_accumulate_later_ )
-    {
-        assert( IDB.size() == LHS.Cols() );
-        assert( IDT.size() == LHS.Rows() );
 
-        for ( uint32_t i{0U}; i < LHS.Rows(); ++i ) {
-            if ( IDT[i] == NULL_IDX ) continue;
-            for ( uint32_t j{0U}; j < LHS.Cols(); ++j ) {
-                if ( IDB[j] == NULL_IDX )
-                    pivotVector[ IDT[i] ] -= LHS(i,j) * top_variable_node_values[j] * factor_;
-                else // if there is a pre-allocated space in the CRM
-                    G.AddIf( IDT[i], IDB[j], LHS(i,j) * factor_ );
-            }
+    for (uint32_t i{0U}; i < LHS.Rows(); i++){
+      if(DOF_indexes[IDB[i]] == NULL_IDX){ // if the base node is on a dirichlet boundary
+        continue;
+      }
+      for (uint32_t j{0U}; j < LHS.Cols(); j++) {
+        if(DOF_indexes[IDT[j]] == NULL_IDX){ // if the test node is on a dirichlet boundary
+          if ( add_accumulate_ || add_accumulate_later_ ){
+            pivotVector[DOF_indexes[IDB[i]]] -= LHS(i, j) * top_variable_node_values[j] * factor_ ;
+          }
+          else if ( subtract_accumulate_ || subtract_accumulate_later_ ){
+            pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[j] * factor_ ;
+          }
+          else{
+            throw csmp::Exception( ERROR,
+                                    "MathOperatorLHS<dim>::AssignToGlobal(SparseMatrix):",
+                                    "Accumulation mode not recognised." );
+          }
+
+          if(DOF_masters[IDB[i]] != IDB[i]){
+            pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[i] * factor_;
+          }
         }
-    }
-    else if ( subtract_accumulate_ || subtract_accumulate_later_ )
-    {
-        assert( IDB.size() == LHS.Cols() );
-        assert( IDT.size() == LHS.Rows() );
-
-        for ( uint32_t i{0U}; i < LHS.Rows(); ++i ) {
-            if ( IDT[i] == NULL_IDX ) continue;
-            for ( uint32_t j{0U}; j < LHS.Cols(); ++j ) {
-                if ( IDB[j] == NULL_IDX )
-                    pivotVector[ IDT[i] ] += LHS(i,j) * top_variable_node_values[j] * factor_;
-                else
-                    G.AddIf( IDT[i], IDB[j], LHS(i,j) * factor_ );
+        else{
+          G.AddIf( DOF_indexes[IDB[i]], DOF_indexes[IDT[j]], LHS(i, j) * factor_);
+          if(DOF_masters[IDB[i]]!=IDB[i]){
+            if(DOF_masters[IDB[j]]==IDB[j]){
+              pivotVector[DOF_indexes[IDB[i]]] += LHS(i, j) * top_variable_node_values[i] * factor_;
             }
+          }
+          else{
+            if(DOF_masters[IDT[j]] != IDT[j]){
+              pivotVector[DOF_indexes[IDB[i]]] -= LHS(i, j) * top_variable_node_values[j] * factor_;
+            }
+          }
         }
+      }
     }
-    else
-        throw csmp::Exception( ERROR,
-                               "MathOperatorLHS<dim>::AssignToGlobal(CompressedRowMatrix):",
-                               "Accumulation mode not recognised." );
-
 } // end AssignToGlobal (CompressedRowMatrix)
 
 

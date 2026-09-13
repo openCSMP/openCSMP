@@ -144,10 +144,20 @@ class MathOperatorLHS {
     void AssignToGlobal( const CELL<dim>&, SparseMatrix& );
 
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector
-    void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    void AssignToGlobal( const CELL<dim>& e, SparseMatrix& spm, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes){
+        std::vector<size_t> DOF_masters(DOF_indexes.size());
+        std::iota(DOF_masters.begin(), DOF_masters.end(), 0);
+        AssignToGlobal( e, spm, rhs, DOF_indexes, DOF_masters );
+    }
+    void AssignToGlobal( const CELL<dim>&, SparseMatrix&, std::vector<double>&, const std::vector<size_t>&, const std::vector<size_t>&);
 
     /// used by PDE_Integrator_CRM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions)
-    void AssignToGlobal( const CELL<dim>&, CompressedRowMatrix&, std::vector<double>&, const std::vector<size_t>& );
+    void AssignToGlobal( const CELL<dim>& e, CompressedRowMatrix& crm, std::vector<double>& rhs, const std::vector<size_t>& DOF_indexes){
+        std::vector<size_t> DOF_masters(DOF_indexes.size());
+        std::iota(DOF_masters.begin(), DOF_masters.end(), 0);
+        AssignToGlobal( e, crm, rhs, DOF_indexes, DOF_masters);
+    }
+    void AssignToGlobal( const CELL<dim>&, CompressedRowMatrix&, std::vector<double>&, const std::vector<size_t>&, const std::vector<size_t>&);
 
     virtual MathOperatorLHS<dim,CELL>* clone() const = 0;
 
