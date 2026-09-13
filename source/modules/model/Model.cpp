@@ -2655,10 +2655,10 @@ template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, bool debug )
 {
   if(this->Database().IsDefined("master_node_id")){
-    problem.IntegrateOver( this->Region( "Model" ), this->Database().StorageKey("master_node_id"), debug );
+    problem.IntegrateOver( this->Region( "Model" ), debug, this->Database().StorageKey("master_node_id") );
   }
   else{
-    problem.IntegrateOver( this->Region( "Model" ), Index(), debug );
+    problem.IntegrateOver( this->Region( "Model" ), debug );
   }
 }
 
@@ -2669,10 +2669,10 @@ void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, bool debug )
 {
   for ( auto it = this->BoundariesBegin(); it != this->BoundariesEnd(); ++it )
     if(this->Database().IsDefined("master_node_id")){
-      problem.IntegrateOver( (*it).second, this->Database().StorageKey("master_node_id"), debug );
+      problem.IntegrateOver( (*it).second, debug, this->Database().StorageKey("master_node_id") );
     }
     else{
-      problem.IntegrateOver((*it).second, Index(), debug);
+      problem.IntegrateOver((*it).second, debug);
     }
 }
 
@@ -2689,7 +2689,7 @@ void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, const char* region
   if ( string("Model") != region_name && problem.HasBoundaryIntegrals() )
     problem.IntegrateOver( *this, this->Region( region_name ), debug );
   else // cheaper version without boundary searcn
-    problem.IntegrateOver( this->Region( region_name ), this->Database().StorageKey("master_node_id"), debug );
+    problem.IntegrateOver( this->Region( region_name ), debug );
 }
 
 
@@ -2698,7 +2698,7 @@ void Model<dim>::Apply( PDE_Integrator<dim,Element>& problem, const char* region
 template<uint32_t dim>
 void Model<dim>::Apply( PDE_Integrator<dim,Face>& problem, const string& boundary_name, bool debug )
 {
-  problem.IntegrateOver( this->Boundary( boundary_name ), this->Database().StorageKey("master_node_id"), debug );
+  problem.IntegrateOver( this->Boundary( boundary_name ), debug );
 
 } // Apply (PDE_Integrator)
 

@@ -3571,7 +3571,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
         cout << " Computing '" << "steady state fluid pressure" << "'" << endl;
       }
 
-    steady_pressure.IntegrateOver(computation_domain);
+    steady_pressure.IntegrateOver(computation_domain, false);
 
     delete gravity;
 
@@ -3652,7 +3652,7 @@ void DES2PhaseSlightlyCompressibleTransport<dim,FLOW_FUNCTIONS>::SolveNimbleRegi
         cout << " Computing '" << "transient fluid pressure" << "'" << endl;
       }
 
-    transient_pressure.IntegrateOver(computation_domain);
+    transient_pressure.IntegrateOver(computation_domain, false);
 
     delete gravity;
 

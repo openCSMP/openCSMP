@@ -2084,7 +2084,7 @@ void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::OutputResults( ModelSubDomain<dim,
     9. Postprocessing (if respective pde operators were added to the PDE_Integrator) and writing related results to model.
 */
 template<uint32_t dim, template<uint32_t> class CELLTYPE, class MATRIXTYPE>
-void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& domain, const Index& periodic_key, bool debug )
+void PDE_Integrator<dim,CELLTYPE,MATRIXTYPE>::IntegrateOver( ModelSubDomain<dim,CELLTYPE>& domain, bool debug, const Index& periodic_key )
  {
     // 1. configure algorithm
     EstablishMatrixSetup( domain, periodic_key );

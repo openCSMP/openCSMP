@@ -303,7 +303,7 @@ class PDE_Integrator {
     bool          Transient() const;
   
     /// accumulates, assembles, and solves PDEs in domain of interest; @param debug prompts output of solution matrices to file; uses node numbering
-    void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, const Index& periodic_key=Index(), bool debug=false );
+    void          IntegrateOver( ModelSubDomain<dim,CELLTYPE>&, bool debug=false, const Index& periodic_key=Index() );
 
     /// also considers  "dS" pde operators from Boundary or SplitBoundary objects if these share nodes with domain on which the solution is obtained
     void          IntegrateOver( Model<dim>&, ModelSubDomain<dim,CELLTYPE>&, bool debug=false );
