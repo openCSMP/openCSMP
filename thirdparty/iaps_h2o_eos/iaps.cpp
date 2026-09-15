@@ -1,9 +1,13 @@
+// SPDX-FileCopyrightText: © 1998 Olaf Bauer <o.bauer@tu-harburg.de>
+// SPDX-FileCopyrightText: © 1998 Ole Engel <engel@tu-harburg.de>
+//
+// SPDX-License-Identifier: LGPL-2.0-only
+
 /*------------------------------------------------------------*- C -*-
 # $Id: iaps.cpp,v 1.1.1.1 2006/08/09 13:48:38 apaluszn Exp $
 #---------------------------------------------------------------------
 # author(s):  Olaf Bauer
 # maintainer: Ole Engel <engel@tu-harburg.de>
-# copyright:  GNU LIBRARY GENERAL PUBLIC LICENSE (see COPYING.LIB-2.0)
 #---------------------------------------------------------------------
 # IAPS formulation 1984
 # main part of PROST (PROperties of water and STeam)

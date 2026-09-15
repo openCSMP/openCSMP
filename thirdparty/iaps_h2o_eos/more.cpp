@@ -1,10 +1,14 @@
+// SPDX-FileCopyrightText: © 1998 Olaf Bauer <o.bauer@tu-harburg.de>
+// SPDX-FileCopyrightText: © 1998 Ole Engel <engel@tu-harburg.de>
+//
+// SPDX-License-Identifier: LGPL-2.0-only
+
 /*------------------------------------------------------------*- C -*-
 # $Id: more.cpp,v 1.2 2006/10/11 19:31:13 mattha2k Exp $
 #---------------------------------------------------------------------
 # author(s):  Olaf Bauer
 #             Ole Engel
 # maintainer: Ole Engel <engel@tu-harburg.de>
-# copyright:  GNU LIBRARY GENERAL PUBLIC LICENSE (see COPYING.LIB-2.0)
 #---------------------------------------------------------------------
 # Part of PROST (PROperties of water and STeam)
 #-------------------------------------------------------------------*/
