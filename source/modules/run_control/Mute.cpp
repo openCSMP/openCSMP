@@ -1,9 +1,11 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
-//  Mute.cpp
-//  CSMP_GitHub
+// SPDX-License-Identifier: LGPL-3.0-only
 //
-//  Created by Stephan Matthai on 7/08/2016.
-//  Copyright © 2016 Stephan Matthai. All rights reserved.
+// Mute.cpp
+// CSMP_GitHub
+//
+// Created by Stephan Matthai on 7/08/2016.
 //
 
 #include "Mute.h"

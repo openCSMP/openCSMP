@@ -1,10 +1,12 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
-//  license.h
+// SPDX-License-Identifier: LGPL-3.0-only
 //
-//  for the compilation of the binary library to be shipped with a CSMP application
+// license.h
 //
-//  Created by Stephan Matthai on 8/16/13.
-//  Copyright (c) 2013 Stephan Matthai. All rights reserved.
+// for the compilation of the binary library to be shipped with a CSMP application
+//
+// Created by Stephan Matthai on 8/16/13.
 //
 
 #ifndef CSMP_LICENSE_H
