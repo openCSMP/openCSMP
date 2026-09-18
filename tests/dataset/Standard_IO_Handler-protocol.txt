@@ -1,0 +1,14 @@
+
+Standard_IO_Handler::Out: File 'Standard_IO_Handler-protocol.txt'
+Would you like to restrict computation to group 'rock' -> false.
+Would you like to restrict computation to group 'rock' -> false.
+Would you like to model 'plane stress' -> true.
+Would you like to model 'plane stress' -> true.
+Would you like to model 'boundary stresses' -> true.
+Would you like to model 'boundary stresses' -> true.
+Would you like to model 'body forces' -> true.
+Would you like to model 'body forces' -> true.
+Would you like to model 'pore pressure' -> true.
+Would you like to model 'pore pressure' -> true.
+Would you like to model 'volume strains' -> true.
+Would you like to model 'volume strains' -> true.

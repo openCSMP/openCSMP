@@ -1,0 +1,127 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_FV_PARAMETER_H
+#define CSMP_FV_PARAMETER_H
+
+#include "VectorVariable.h"
+
+namespace csmp {
+
+/// storage for the sector volumes, facet area and projected velocities
+/// so that these do not have to be recompute each timecrement
+class FV_Parameter {
+  public:
+    FV_Parameter() {}
+    FV_Parameter( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
+  
+    // mutators
+    void Resize( size_t sectors, size_t facets, uint32_t dim, bool with_normals=false );
+    void SectorVolume( size_t sector, double vol );
+    void FacetArea( size_t facet, double area );
+    void FacetNormal( size_t facet, const std::vector<double>& fnxyz );
+    void FacetNormalVelocity( size_t facet, double flux );
+    void Initialize( size_t facet, double flux, double area );
+    
+    // accessors
+    size_t Sectors() const;
+    size_t Facets() const;
+    double SectorVolume( size_t sector ) const;
+    double FacetArea( size_t facet ) const;
+    double FacetNormalVelocity( size_t facet ) const;
+    double FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const;
+    double FacetNormalProjection( size_t facet, const std::vector<double>& cxyz ) const;
+    // universal versions
+    double FacetNormalProjection( size_t facet, const VectorVariable<1U>& cxyz ) const;
+    double FacetNormalProjection( size_t facet, const VectorVariable<2U>& cxyz ) const;
+    double FacetNormalProjection( size_t facet, const VectorVariable<3U>& cxyz ) const;
+
+    size_t Bytes() const;
+    void   Out() const;
+    
+  private:
+    ///< velocites projected on facet normals and facet areas
+    std::vector<double>                     sector_volume_;
+    ///< velocites projected on facet normals and facet areas
+    std::vector<std::pair<double,double> >  facet_v_and_A_;
+    std::vector<std::vector<double> >       facet_unit_normal_;
+};
+
+
+
+inline void FV_Parameter::SectorVolume( size_t sector, double vol )
+ { sector_volume_[sector] = vol; }
+
+
+inline void FV_Parameter::FacetNormalVelocity( size_t facet, double flux )
+ { facet_v_and_A_[facet].first = flux; }
+
+
+inline void FV_Parameter::FacetArea( size_t facet, double area )
+ { facet_v_and_A_[facet].second = area; }
+
+
+// assign the facet unit normal for the facet
+inline void FV_Parameter::FacetNormal( size_t facet, const std::vector<double>& fnxyz )
+ {
+    facet_unit_normal_[facet] = fnxyz;
+ }
+
+inline void FV_Parameter::Initialize( size_t facet, double flux, double area )
+ { 
+    facet_v_and_A_[facet].first  = flux;
+    facet_v_and_A_[facet].second = area; 
+ }
+
+
+inline size_t FV_Parameter::Sectors() const
+ { return sector_volume_.size(); }
+ 
+ 
+inline size_t FV_Parameter::Facets() const
+ { return facet_v_and_A_.size(); }
+
+
+inline double FV_Parameter::SectorVolume( size_t sector ) const
+ { return sector_volume_[sector]; }
+
+
+inline double FV_Parameter::FacetNormalVelocity( size_t facet ) const
+ { return facet_v_and_A_[facet].first; }
+
+
+inline double FV_Parameter::FacetNormalComponent( size_t facet, size_t x_or_y_or_z ) const
+ {
+    return facet_unit_normal_[facet][x_or_y_or_z];
+ }
+
+
+/// universal versions of projection functions
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<1U>& vc ) const
+ {
+    // dot product fn . vc
+    return facet_unit_normal_[facet][0] * vc[0];
+ }
+
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<2U>& vc ) const
+ {
+    // dot product fn . vc
+    return facet_unit_normal_[facet][0] * vc[0] + facet_unit_normal_[facet][1] * vc[1];
+ }
+
+inline double FV_Parameter::FacetNormalProjection( size_t facet, const VectorVariable<3U>& vc ) const
+ {
+    // dot product fn . vc
+    return facet_unit_normal_[facet][0] * vc[0] + facet_unit_normal_[facet][1] * vc[1] + facet_unit_normal_[facet][2] * vc[2];
+ }
+
+
+
+inline double FV_Parameter::FacetArea( size_t facet ) const
+ { return facet_v_and_A_[facet].second; }
+
+
+} // end namespace csmp
+
+#endif

@@ -1,0 +1,10 @@
+'hex1_3-regions.txt' example configuration file for Lingli's models
+no properties
+IN_FRACTURE
+MATRIX
+TOP
+BOTTOM
+LEFT
+RIGHT
+FRONT
+BACK

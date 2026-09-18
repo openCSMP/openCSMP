@@ -1,0 +1,10 @@
+no properties
+
+PORES
+PORE_EDGE
+TOP
+BOTTOM
+FRONT
+BACK
+LEFT
+RIGHT

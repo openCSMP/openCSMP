@@ -1,0 +1,28 @@
+Needs 'CSMP-1phase-variables.txt' for testing automated time stepping
+
+# (1) global material properties
+permeability							6.987e-10
+vertical permeability						6.987e-10
+#tensor permeability							3.849e-11 0. 0. 1.9245e-11
+porosity								0.43
+fluid volume source						0.0
+fluid pressure							0.0
+nodal fluid volume source		0.0
+nodal concentration source		0.0
+thickness	0.023
+acceleration gravity	9.8061
+concentration				0.0
+rocktype	9.0
+
+# (2) local material properties 
+UPPER_REGION		complete	concentration			2.0
+UPPER_REGION		complete	rocktype			1.0
+
+# (3) boundary conditions on model boundaries
+BOTTOM	Dirichlet	fluid pressure		116358.		116358.		116358.		116358.
+BOTTOM	Dirichlet	concentration		0.		0.		0.		0.
+
+# ----------------------------------------------------------------------
+# (4) regional variable flags		
+# ----------------------------------------------------------------------
+UPPER_REGION	complete	concentration	Dirichlet

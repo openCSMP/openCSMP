@@ -1,0 +1,34 @@
+'box2d_well-configuration.txt' for testing automated time stepping
+
+# (1) global material properties
+permeability							1.0e-12
+vertical permeability							1.0e-12
+porosity								0.25
+fluid volume source						0.0
+nodal fluid volume source						0.0
+fluid pressure							0.0
+saturation carbonic phase							0.1
+saturation aqueous phase						0.9
+viscosity carbonic phase							0.5e-03
+viscosity aqueous phase							1.0e-03
+density carbonic phase								600.
+density aqueous phase								1000.
+residual saturation aqueous phase		0.0
+residual saturation carbonic phase	0.0
+brooks corey parameter					3.0
+entry pressure							300. 
+thickness							1.0
+acceleration gravity						9.8061
+
+# (2) local material properties 
+FAULT	complete	permeability			1.0e-17
+FAULT	complete	vertical permeability			1.0e-17
+FAULT	complete	porosity				0.02
+
+# (3) boundary conditions on model boundaries
+LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6
+RIGHT	Dirichlet	fluid pressure		0.		0.
+LEFT	Dirichlet	saturation aqueous phase	0.1		0.1
+LEFT	Dirichlet	saturation carbonic phase		0.9		0.9
+RIGHT	Dirichlet	saturation aqueous phase	0.9		0.9
+RIGHT	Dirichlet	saturation carbonic phase		0.1		0.1

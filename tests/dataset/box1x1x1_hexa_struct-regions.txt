@@ -1,0 +1,9 @@
+Simple Cube
+no properties
+MATRIX
+BACK
+FRONT
+LEFT
+RIGHT
+TOP
+BOTTOM

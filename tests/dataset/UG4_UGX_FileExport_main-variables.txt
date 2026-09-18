@@ -1,0 +1,10 @@
+name	MParameter	unit	index	min.	max.	place
+node number		nN	none	1	0.	1e8	node
+element number		nE	none	1	0.	1e8	element
+face number		nF	none	1	0.	1e8	face
+interface number	nIF	none	1	0.	1e8	interface
+rocktype			RRT	int	1	0	256	element
+thickness	Thi	m	1	1.00E-06	1.00E+06	element
+porosity					PHI	X	1	1.00E-05	1.00E+00	element
+permeability					K	m2	1	1.00E-25	1.00E+00	element
+entry pressure	pd	Pa	1	1.00E+00	5.00E+07	element

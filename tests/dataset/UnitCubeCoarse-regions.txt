@@ -1,0 +1,9 @@
+‘UnitCubeCoarse_Test' domain selection file
+no properties
+MATRIX
+LEFT
+RIGHT
+TOP
+BOTTOM
+FRONT
+BACK

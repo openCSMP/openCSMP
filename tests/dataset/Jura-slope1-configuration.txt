@@ -1,0 +1,198 @@
+‘Jura-slope1-configuration.txt' - vertical well (diameter 1.5m, 5x5x1m box)
+
+# ---------------------------------------------------------------
+# 1. global rock & fluid properties as well as initial conditions
+# ---------------------------------------------------------------
+porosity				0.08
+permeability				1.0E-12
+thermal conductivity			2.
+acceleration gravity			9.80665
+energy source				0.0
+one					1.0
+# N-S
+trend					0.
+# ------------------------------------
+# fluid properties 
+# ------------------------------------
+fluid volume source		0.
+total dissolved solids	0.
+fluid viscosity			0.547E-3 
+fluid density			1000.
+volume flux			0.
+fluid pressure			100325.
+# assigning general material properties to the model
+bulk density			2770
+dry rock density		2700
+# mechanical properties
+Poissons ratio			0.23
+Youngs modulus			2.5e+10
+Biot alpha				1.
+# next two vars are only initialized for visualisation of boundary conditions
+displacement			0.	0.	0.
+force					0.	0.	0.
+dilatation				0.
+Neumann stress			0.	0.	0.
+# density (2700 kg/m3) * g (-9.80665 m/s2) acting opposite Y-axis
+# gravity force			0.0	-26477.955	0.
+# fluid flow-related properties
+storativity			1.0e-9
+density				2.7e+3
+
+# ----------------------------------------------------------------------
+# 2. Assign properties and variable values to model subdomains = regions
+# ----------------------------------------------------------------------
+# CRETACEOUS_MARL
+CRETACEOUS_MARL		complete	permeability			5.0E-13
+CRETACEOUS_MARL		complete	porosity			0.3
+CRETACEOUS_MARL		complete	Poissons ratio			0.25
+CRETACEOUS_MARL		complete	Youngs modulus			10.0e9
+CRETACEOUS_MARL		complete	Biot alpha			1.0
+CRETACEOUS_MARL		complete	dry rock density		2300.0
+# REEF_DOLOMITE
+REEF_DOLOMITE	complete	permeability			5.0E-12
+REEF_DOLOMITE	complete	porosity			0.15
+REEF_DOLOMITE	complete	Poissons ratio			0.2
+REEF_DOLOMITE	complete	Youngs modulus			25.0e9
+REEF_DOLOMITE	complete	Biot alpha			0.4
+REEF_DOLOMITE	complete	dry rock density		2600.0
+# REEF_LIMESTONE
+REEF_LIMESTONE	complete	permeability			5.0E-15
+REEF_LIMESTONE	complete	porosity			0.10
+REEF_LIMESTONE	complete	Poissons ratio			0.2
+REEF_LIMESTONE	complete	Youngs modulus			20.0e9
+REEF_LIMESTONE	complete	Biot alpha			0.4
+REEF_LIMESTONE	complete	dry rock density		2500.0
+# UPPER_MARLY_LST
+UPPER_MARLY_LST		complete	permeability			5.0E-15
+UPPER_MARLY_LST		complete	porosity			0.10
+UPPER_MARLY_LST		complete	Poissons ratio			0.3
+UPPER_MARLY_LST		complete	Youngs modulus			15.0e9
+UPPER_MARLY_LST		complete	Biot alpha			0.8
+UPPER_MARLY_LST		complete	dry rock density		2600.0
+# WERK_LIMESTONE
+WERK_LIMESTONE		complete	permeability			1.0E-15
+WERK_LIMESTONE		complete	porosity			0.15
+WERK_LIMESTONE		complete	Poissons ratio			0.2
+WERK_LIMESTONE		complete	Youngs modulus			20.0e9
+WERK_LIMESTONE		complete	Biot alpha			0.8
+WERK_LIMESTONE		complete	dry rock density		2600.0
+# MARLY_LIMESTONE
+MARLY_LIMESTONE		complete	permeability			1.0E-15
+MARLY_LIMESTONE		complete	porosity			0.15
+MARLY_LIMESTONE		complete	Poissons ratio			0.25
+MARLY_LIMESTONE		complete	Youngs modulus			18.0e9
+MARLY_LIMESTONE		complete	Biot alpha			0.8
+MARLY_LIMESTONE		complete	dry rock density		2600.0
+# OOLITE_CLAY
+OOLITE_CLAY		complete	permeability			1.0E-16
+OOLITE_CLAY		complete	porosity			0.09
+OOLITE_CLAY		complete	Poissons ratio			0.3
+OOLITE_CLAY		complete	Youngs modulus			15.0e9
+OOLITE_CLAY		complete	Biot alpha			1.0
+OOLITE_CLAY		complete	dry rock density		2650.0
+# IRON_SANDSTONE
+IRON_SANDSTONE	complete	permeability			5.0E-13
+IRON_SANDSTONE	complete	porosity			0.2
+IRON_SANDSTONE	complete	Poissons ratio			0.2
+IRON_SANDSTONE	complete	Youngs modulus			30.0e9
+IRON_SANDSTONE	complete	Biot alpha			0.4
+IRON_SANDSTONE	complete	dry rock density		2500.0
+# OPALINUS_CLAY
+OPALINUS_CLAY		complete	permeability			1.0E-16
+OPALINUS_CLAY		complete	porosity			0.09
+OPALINUS_CLAY		complete	Poissons ratio			0.3
+OPALINUS_CLAY		complete	Youngs modulus			15.0e9
+OPALINUS_CLAY		complete	Biot alpha			1.0
+OPALINUS_CLAY		complete	dry rock density		2650.0
+# POSIDONIA_SHALE
+POSIDONIA_SHALE		complete	permeability			1.0E-16
+POSIDONIA_SHALE		complete	porosity			0.09
+POSIDONIA_SHALE		complete	Poissons ratio			0.3
+POSIDONIA_SHALE		complete	Youngs modulus			15.0e9
+POSIDONIA_SHALE		complete	Biot alpha			1.0
+POSIDONIA_SHALE		complete	dry rock density		2650.0
+# AMALTHEA_CLAY
+AMALTHEA_CLAY		complete	permeability			1.0E-16
+AMALTHEA_CLAY		complete	porosity			0.09
+AMALTHEA_CLAY		complete	Poissons ratio			0.3
+AMALTHEA_CLAY		complete	Youngs modulus			15.0e9
+AMALTHEA_CLAY		complete	Biot alpha			1.0
+AMALTHEA_CLAY		complete	dry rock density		2650.0
+# NUMISMALIS_MARL
+NUMISMALIS_MARL		complete	permeability			1.0E-15
+NUMISMALIS_MARL		complete	porosity			0.15
+NUMISMALIS_MARL		complete	Poissons ratio			0.25
+NUMISMALIS_MARL		complete	Youngs modulus			18.0e9
+NUMISMALIS_MARL		complete	Biot alpha			0.8
+NUMISMALIS_MARL		complete	dry rock density		2600.0
+# RHAET_SANDSTONE
+RHAET_SANDSTONE	complete	permeability			5.0E-13
+RHAET_SANDSTONE	complete	porosity			0.2
+RHAET_SANDSTONE	complete	Poissons ratio			0.2
+RHAET_SANDSTONE	complete	Youngs modulus			30.0e9
+RHAET_SANDSTONE	complete	Biot alpha			0.4
+RHAET_SANDSTONE	complete	dry rock density		2500.0
+# RHAET_MUDSTONE
+RHAET_MUDSTONE		complete	permeability			1.0E-15
+RHAET_MUDSTONE		complete	porosity			0.15
+RHAET_MUDSTONE		complete	Poissons ratio			0.25
+RHAET_MUDSTONE		complete	Youngs modulus			18.0e9
+RHAET_MUDSTONE		complete	Biot alpha			0.8
+RHAET_MUDSTONE		complete	dry rock density		2600.0
+# FEUERLETTEN
+FEUERLETTEN		complete	permeability			1.0E-16
+FEUERLETTEN		complete	porosity			0.09
+FEUERLETTEN		complete	Poissons ratio			0.3
+FEUERLETTEN		complete	Youngs modulus			15.0e9
+FEUERLETTEN		complete	Biot alpha			1.0
+FEUERLETTEN		complete	dry rock density		2650.0
+# BURG_SANDSTEIN
+BURG_SANDSTEIN	complete	permeability			5.0E-13
+BURG_SANDSTEIN	complete	porosity			0.2
+BURG_SANDSTEIN	complete	Poissons ratio			0.2
+BURG_SANDSTEIN	complete	Youngs modulus			30.0e9
+BURG_SANDSTEIN	complete	Biot alpha			0.4
+BURG_SANDSTEIN	complete	dry rock density		2500.0
+
+# ----------------------------------------------------------------------
+# 3. box-shaped model boundary conditions
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# 4. regional variable flags
+# ----------------------------------------------------------------------
+
+# ----------------------------------------------------------------------
+# 5. BOUNDARY: 
+# ----------------------------------------------------------------------
+# overburden stress exerted by (dry) rock skeleton (15% porosity) AND
+# temperature that is simply imposed and FEM-interpolated across the model
+IRREGULAR		complete	Dirichlet	temperature		8.
+BOTTOM			complete	Dirichlet	temperature		15.
+# fluid pressure (top is hydrostatic at 1-km depth)
+# IRREGULAR		complete	Dirichlet	fluid pressure		100325.
+# LEFT			complete	Dirichlet	fluid pressure		100325.
+BOTTOM			complete	Dirichlet	fluid pressure		7.30486e+06
+# the fluid in the pore space acting on the top surface of the model
+IRREGULAR		complete	Dirichlet	overburden pressure	100325.
+# displacement boundary conditions
+BOTTOM	complete	Dirichlet	displacement	Plain		Dirichlet		Plain		0.	0.	0.
+RIGHT	complete	Dirichlet	displacement	Dirichlet	Plain			Plain		0.	0.	0.
+
+# ----------------------------------------------------------------------
+# 5. computational settings
+# ----------------------------------------------------------------------
+time stepping	daring
+duration	86400.
+output time	86400.
+
+
+
+
+
+
+# 6. any useful comments that are ignored by the simulator after at least 2 blank lines
+
+
+
+

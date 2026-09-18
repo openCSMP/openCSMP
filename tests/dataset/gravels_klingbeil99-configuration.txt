@@ -1,0 +1,119 @@
+'gravels_klingbeil99' from Ralf Klingbeil (Teutsch group Tuebingen) 2D-DES
+
+#----------------------------------------------------------------
+# (1) global material properties
+#----------------------------------------------------------------
+# gets applied to region UNDEFINED
+permeability					1.0e-10
+porosity					0.3
+density water					1000.
+density oil					500.
+viscosity water					1.0e-3
+viscosity oil					1.5e-4
+saturation water				1.0
+saturation oil					0.0
+brooks corey parameter				2.
+entry pressure					100.
+fluid pressure					0.
+residual saturation wetting phase		0.1
+residual saturation non-wetting phase		0.2
+nodal fluid volume source			0.0
+saturation					0.
+boundary source					0.
+fluid volume source				0.
+oil volume source				0.
+water volume source				0.
+volume modifier					1.
+
+#----------------------------------------------------------------
+# (2) local material properties (of the fractures and matrix)
+#----------------------------------------------------------------
+BM	complete	permeability		1.160E-10
+BM	complete	porosity		0.3
+BM	complete	entry pressure		2000.
+BM	complete	brooks corey parameter	1.5
+BM	complete	residual saturation non-wetting phase	0.3
+M	complete	permeability	5.370E-10
+M	complete	porosity	0.27
+M	complete	entry pressure		800.
+M	complete	brooks corey parameter	2.5
+M	complete	residual saturation non-wetting phase	0.25
+OW	complete	permeability	2.520E-07
+OW	complete	porosity	0.36
+OW	complete	entry pressure		10.
+OW	complete	brooks corey parameter	3.
+OW	complete	residual saturation non-wetting phase	0.05
+P_T_H	complete	permeability	3.960E-09
+P_T_H	complete	porosity	0.27
+P_T_H	complete	entry pressure		50.
+P_T_H	complete	brooks corey parameter	2.5
+P_T_H	complete	residual saturation non-wetting phase	0.25
+S	complete	permeability	1.100E-09
+S	complete	porosity	0.42
+S	complete	entry pressure		1000.
+S	complete	brooks corey parameter	1.5
+S	complete	residual saturation non-wetting phase	0.15
+
+#----------------------------------------------------------------
+# (3) essential conditions on model boundaries
+#----------------------------------------------------------------
+# inflow boundary
+LEFT		Neumann		boundary source	1.0e-3	1.0e-3
+LEFT		Dirichlet	saturation	1.	1.
+# constant pressure outflow boundary
+RIGHT		Dirichlet	fluid pressure	1.5e7	1.5e7
+# no flow boundaries
+TOP		Dirichlet	saturation	0.	0.
+BOTTOM		Dirichlet	saturation	0.	0.
+
+#----------------------------------------------------------------
+# (4) essential flags
+#----------------------------------------------------------------
+
+#----------------------------------------------------------------
+# (5) computational settings
+#----------------------------------------------------------------
+time stepping	conservative
+duration	10000.
+output time	10
+output time	20
+output time	50
+output time	100
+output time	150
+output time	200
+output time	250
+output time	300
+output time	400
+output time	500
+output time	600
+output time	700
+output time	800
+output time	900
+output time	1000
+output time	1050
+output time	1100
+output time	1150
+output time	1200
+output time	1250
+output time	1300
+output time	1350
+output time	1400
+output time	1450
+output time	1500
+output time	1550
+output time	1600
+output time	1650
+output time	1700
+output time	1750
+output time	1800
+output time	1850
+output time	1900
+output time	2000
+output time	3000
+output time	4000
+output time	5000
+output time	6000
+output time	7000
+output time	8000
+output time	9000
+output time	10000

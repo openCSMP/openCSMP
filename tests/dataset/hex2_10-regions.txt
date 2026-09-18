@@ -1,0 +1,11 @@
+'hex2_10-configuration.txt' shell test case
+no properties
+MATRIX
+IN_FRACTURE
+LEFT
+RIGHT
+TOP
+BOTTOM
+FRONT
+BACK
+

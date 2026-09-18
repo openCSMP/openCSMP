@@ -1,0 +1,18 @@
+'example21.1-configuration.txt' extremely basic test model
+
+# definition of model subregions with specific property values
+# name of group  property   min-value    max-value (tab-separated columns)
+fractures	permeability	1.0e-10		1.0e-10
+rock		permeability	1.0e-15		1.0e-15
+
+# assigning material properties to the overall model
+porosity							0.25
+fluid volume source					0.0
+fluid pressure						1.0e7
+
+# property assignment to model subregions (complete, interior, boundary)
+fractures	complete	porosity		1.0
+
+# essential conditions on model boundaries
+LEFT	Dirichlet	fluid pressure	1.0e7	1.0e7
+RIGHT	Dirichlet	fluid pressure	0.0	0.0

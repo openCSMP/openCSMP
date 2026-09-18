@@ -1,0 +1,11 @@
+nbox20-regions.txt - test model that will have no boundaries
+no properties
+MATRIX
+SIDE1
+SIDE2
+SIDE3
+SIDE4
+SIDE5
+SIDE6
+SET1_EW
+SET2_NNW_SSE

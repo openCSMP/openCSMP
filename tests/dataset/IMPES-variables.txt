@@ -1,0 +1,33 @@
+name	MParameter	unit	index	min.	max.	place
+
+fluid pressure				PF		Pa		1	1.0E+05		5.0E+08		node
+permeability				K		m2		1	1.0E-21		1.0E-07		element
+vertical permeability			Kv		m2		1	1.0E-21		1.0E-07		element
+oil volume source			QOV		m3 m-3 s-1	1	0.		1.0E+03		element
+fluid volume source			QFV		m3 m-3 s-1	1	-1.0E+03	0.		element
+water volume source			QWV		m3 m-3 s-1	1	0.		1.0E+03		element
+nodal fluid volume source		NQV		m3 s-1		1	-1.0E+02	1.0E+02		node
+nodal oil volume source			NOV		m3 s-1		1	-1.0E+02	1.0E+02		node
+nodal water volume source		NWV		m3 s-1		1	-1.0E+02	1.0E+02		node
+total mobility				TM		m2		1	1.0E-19		1.0E+02		element
+density oil				RHOO		kg m-3		1	1.0E-01		2.0E+03		element
+density water				RHOW		kg m-3		1	1.0E-01		2.0E+03		element
+viscosity oil				MUO		Pa s		1	1.0E-06		1.00E-01	element
+viscosity water				MUW		Pa s		1	1.0E-06		1.60E-01	element
+saturation oil				SO		X		1	-5.00E-02	1.05E+00	element
+saturation water			SW		X		1	-5.00E-02	1.05E+00	element
+brooks corey parameter			BC		NA		1	0.0		10.0		element
+entry pressure				PD		Pa		1	1.0E+00		5.0E+07		element
+residual saturation wetting phase	SWR		X		1	0.00E+00	5.00E-01	element
+residual saturation non-wetting phase	SNR		X		1	0.00E+00	5.00E-01	element
+gravity term				GT		kg Pa-1 s-3	2	-1.0E+05	1.0E+05		element
+capillary term				CT		m s-1		2	-1.0E+05	1.0E+05		element
+porosity				PHI		X		1	1.0E-05		1.00E+00	element
+velocity				VT		m s-1		2	-1.0E+02	1.00E+02	element
+velocity oil				VO		m s-1		2	-1.0E+02	1.00E+02	element
+saturation				SO		X		1	-5.00E-02	1.05E+00	node
+boundary source				NS		m3 m-2 s-1	1	-1.E+03		1.0E+03		node
+divergence				DG		X		1	-1.0E+03	1.00E+03	element
+volume modifier				VM		X		1	1.0e-6		1.00E+02	element
+rock type				RT		X		1	0.		1.00E+02	element
+element number				NE		none		1	0.		1.00E+10	element

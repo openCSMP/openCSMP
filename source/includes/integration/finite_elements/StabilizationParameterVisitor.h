@@ -1,0 +1,42 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef STABILIZATION_PARAMETER_VISITOR_H
+#define STABILIZATION_PARAMETER_VISITOR_H
+
+#include "Visitor.h"
+#include "PropertyDatabase.h"
+#include "ScalarVariable.h"
+
+namespace csmp {
+
+/// for Stokes-lubrication equation where the same basis functions are used for pressure and velocity
+template<uint32_t dim>
+class StabilizationParameterVisitor : public Visitor<dim> {
+  public:
+    /// constant viscosity version
+    StabilizationParameterVisitor( Model<dim>&,
+                                   double mu,    ///< constant viscosity
+                                   double coeff, ///< stabilization coefficient
+                                   const char* stab_param );
+
+    /// for 'viscosity' as element variable varying from element to element
+    StabilizationParameterVisitor( Model<dim>&,
+                                   double coeff,
+                                   const char* stab_param );
+    
+    void Visit( Element<dim>* ) override final;
+    
+  private:
+    csmp::Index stparam_key_;
+    csmp::Index visc_key_;
+    
+    double viscosity_;
+    double coefficient_;
+    std::vector<double> segments_;
+};
+
+} // namespace csmp
+
+#endif

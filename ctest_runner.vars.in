@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: © 2026 The openCSMP project
+#
+# SPDX-License-Identifier: LGPL-3.0-only
+
+set(CMAKE_GENERATOR "${CMAKE_GENERATOR}")
+set(CMAKE_SOURCE_DIR "${CMAKE_SOURCE_DIR}")
+set(CMAKE_BINARY_DIR "${CMAKE_BINARY_DIR}")

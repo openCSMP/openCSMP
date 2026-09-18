@@ -1,0 +1,14 @@
+name	MParameter	unit	index	min.	max.	place
+
+compressibility		C	Pa-1	1	1.00E-25	1.00E-05	element
+permeability		k	m2		1	1.00E-25	1.00E-02	element
+porosity			PHI	X		1	1.00E-05	1.00E+01	element
+entry_pressure		e	Pa		1	-3.40282e+38	3.40282e+38	element
+grain_size			g	m		1	-3.40282e+38	3.40282e+38	element
+node number			nn	none	1	0.	1e30	node
+element number		en	none	1	0.	1e30	element
+face number			fn	none	1	0.	1e30	face
+interface number	ifn	none	1	0.	1e30	interface
+node variable		nv	unknown	1	-1.0e30	1e30	node
+element variable	ev	unknown	1	-1.0e30	1e30	element
+

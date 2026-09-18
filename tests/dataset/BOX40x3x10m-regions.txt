@@ -1,0 +1,9 @@
+'BOX40x3x10m-regions.txt' domain selection file
+no property
+MATRIX
+FRONT
+BACK
+BOTTOM
+RIGHT
+TOP
+LEFT

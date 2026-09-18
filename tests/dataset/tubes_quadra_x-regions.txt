@@ -1,0 +1,6 @@
+no properties
+
+PORES
+PORE_EDGE
+LEFT
+RIGHT

@@ -1,0 +1,58 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef NumIntegral_BT_D_B_dV_h
+#define NumIntegral_BT_D_B_dV_h
+
+#include "CSMP_definitions.h"
+#include "MathOperatorLHS.h"
+#include "Operand.h"
+
+namespace csmp {
+
+/**
+    Elastic stiffness matrix
+    
+    K_jk = ∫_Ω Bⱼᵀ D(E, ν) Bₖ dV
+ 
+    D involves Two scalar element variables — Young's modulus and Poisson's ratio.
+    D is assembled internally from these two parameters.
+    
+    Test operand is the node-placed vector variable displacement.
+    
+    Use for linear elasticity / geomechanics.
+
+    @attention special case: if nu=0.5 a purely viscous (incompressible) fluid is modeled
+    this requires a special material property matrix, see Zienkiewicz Vol II
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_BT_D_B_dV : public MathOperatorLHS<dim,CELL> {
+  public:
+    NumIntegral_BT_D_B_dV( const PropertyDatabase<dim>&, 
+                           const char* oper1, const char* oper2, 
+                           const char* basic, const char* test,
+                           bool plane_strain=true );
+    
+    void GetOperands( const CELL<dim>& ) override final;
+    
+    void ComputeContribution( const CELL<dim>& ) override final;
+    
+    ///< relevant only in 2D; the default is plane strain
+    void PlaneStress( bool yes_no=true );
+  ///
+    NumIntegral_BT_D_B_dV<dim,CELL>* clone() const override final { return new NumIntegral_BT_D_B_dV<dim,CELL> (*this); }
+    
+  private:
+    csmp::Index          nu_key_;   ///< Poisson's ratio
+    std::vector<double>  E_, nu_;   ///< variable in which Poisson's ratio will be stored
+    DenseMatrix<DM_MIN>  B, BT;  ///< material property matrix
+    static constexpr auto MATDIM = (dim == 3) ? DM6 : DM3;
+    DenseMatrix<MATDIM>  D;
+    bool                 plane_strain_;
+};
+
+
+} // csmp
+
+#endif

@@ -1,0 +1,66 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef NUM_INTEGRAL_DNT_OP_DV_H
+#define NUM_INTEGRAL_DNT_OP_DV_H
+
+#include "CSMP_definitions.h"
+#include "MathOperatorRHS.h"
+#include "Operand.h"
+
+namespace csmp {
+
+template<uint32_t> class Element;
+
+/**
+    To integrate over a gradient represented by a vector property.
+    
+    f_j = ∫_Ω (∇N_j)ᵀ [f] dV
+
+    where [f] is a vector body force (e.g. ρg for fluid body force in the pressure equation).
+    The gradient of the test function is contracted with the body force vector.
+
+    Operand: Vector — element-placed.
+
+    Test variable: Scalar, node-placed.
+
+    Application: Fluid body force in the pressure diffusion equation, gravity term in Darcy flow.
+
+    @example Compute   gravityTerm = rho_w * gravityVector
+    and project it onto the dip-vector of a lower dimensional element.
+    The resulting vector goes into the righthandside integrated numerically via this integral:
+    
+    NumIntegral_dNT_op_dV(  model.Database(), "gravity term", "fluid pressure" );,
+
+    This is $\int_\Omega \nabla N^T \cdot \mathbf{f} , dV$ — the divergence form, which is correct for a body force
+    that enters via integration by parts from the left-hand side flux term. Specifically, starting from:
+
+    ∫ Ω ∇NT⋅K∇p  dV = −∫Ω∇NT⋅ρf g ez K dV + boundary terms
+
+    ∫ Ω​ ∇N T ⋅K∇pdV=−∫ Ω​ ∇N T ⋅ρ f​ ge z KdV + boundary terms
+    
+    the right-hand side body force integral is  $\int_\Omega \nabla N^T \cdot \mathbf{f} , dV$,
+    which matches what NumIntegral_dNT_op_dV computes. So the operator itself is correct for this formulation.
+    
+    @author Shaho Bazr-Afkan
+    @date 2011
+*/
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_dNT_op_dV final : public MathOperatorRHS<dim,CELL> {
+  public:
+    NumIntegral_dNT_op_dV( const PropertyDatabase<dim>&,
+                           const char* oper,    ///< (vector) gradient property, e.g., rho g grad z
+                           const char* test );  ///< scalar, for instance fluid pressure
+    
+    void ComputeContribution( const CELL<dim>& ) override final;
+    
+    NumIntegral_dNT_op_dV<dim,CELL>* clone() const override final { return new NumIntegral_dNT_op_dV<dim,CELL> (*this); }
+    
+  private:
+    DenseMatrix<DM_MIN>  B_, BT_; 
+};
+
+} // csmp
+
+#endif

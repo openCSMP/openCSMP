@@ -1,0 +1,128 @@
+# omit SAMG library because it is already compiled
+lib/samg/
+
+# Windows image file caches
+Thumbs.db
+ehthumbs.db
+
+# Windows folder config file
+Desktop.ini
+
+# Recycle Bin used on file shares
+$RECYCLE.BIN/
+
+# Windows installer files
+*.cab
+*.msi
+*.msm
+*.msp
+
+# Windows shortcuts
+*.lnk
+
+# OSX specific files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# OSX folder icons
+Icon^M^M
+
+# OSX thumbnails
+._*
+
+# OSX files that might appear in the root of a volume
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+
+# Directories potentially created on remote AFP share
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
+
+# DOXYGEN
+doxygen_doc/*
+doxygen_objdb_*.tmp
+doxygen_sqlite3.db
+doxygen.log
+searchdata.xml
+search/
+
+# CVS
+/CVS/*
+**/CVS/*
+.cvsignore
+*/.cvsignore
+
+# SVN
+.svn/
+
+# Compiled object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled headers
+*.gch
+*.pch
+
+# Compiled dynamic libraries
+*.dll
+
+# Fortran module files
+*.mod
+
+# Compiled static libraries
+*.lai
+*.la
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# CMake
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+CMakeLists.txt.user*
+Makefile
+cmake_install.cmake
+install_manifest.txt
+build/
+bin/
+Debug/
+Release/
+
+# CLion IDE project files
+.idea/
+
+#build directory 
+thebuild/
+thebuild_dbg/
+build/
+build*/
+*-build/
+
+# CMake build directories
+cmake-build-debug/
+cmake-build-release/
+cmake-build-*/
+
+# FetchContent downloaded dependencies — never commit these
+cmake-build-*/_deps/
+
+# CVFEM_testing
+#tests/data-tests_CVFEM/**/*.bin
+#tests/data-tests_CVFEM/**/*.vtu
+#tests/data-tests_CVFEM/**/*.log
+#tests/data-tests_CVFEM/**/PhysicalVariables.txt
+tests/data-tests_CVFEM/*

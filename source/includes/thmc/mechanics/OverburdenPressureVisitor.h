@@ -1,0 +1,69 @@
+// Copyright (c) 2014 Stephan K. Matthai. All rights reserved.
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef OVERBURDEN_PRESSURE_VISITOR_H
+#define OVERBURDEN_PRESSURE_VISITOR_H
+
+#include "Visitor.h"
+
+namespace csmp {
+
+template<uint32_t> class VectorVariable;
+template<uint32_t> class Element;
+template<uint32_t> class Model;
+
+/** 
+     For a given Sv (overburden stress at the model top),
+     this visitor computes:
+     
+     - the (hydraulic) 'conductivity' from the element 'permeability' and (nodal) 'fluid viscosity'
+     
+     - (nodal) 'gravity force' scalar variable as the product of g (specified by user) and the
+       'dry rock density' specified as element property.
+       
+     - the (element) 'gravity term' vector variable used in for the integration
+       of the fluid density via the corresponding PDE operator.
+     
+     @todo SKM: this visitor should include the influence of pore pressure.
+ 
+*/
+template<uint32_t dim>
+class OverburdenPressureVisitor final : public Visitor<dim> {
+  public:
+    /// for the computation of nodal 'gravity force'
+    OverburdenPressureVisitor( Model<dim>&, double acc_gravity ); ///< local constant for reservoir
+  
+    /// this method computes all the element properties 'K' and 'gravity term', etc.
+    void Visit( Element<dim>* ) override final;
+
+    /// nothing needs to be done at the level of the model
+    void Visit( Model<dim>* ) override final {}
+
+  private:
+    double dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity );
+
+  private:
+    const csmp::Index    rhof_key_, rhor_key_,     ///< (nodal) fluid  and dry rock densities (scalars)
+                         rhob_key_, phi_key_,      ///< bulk- (fluid+rock) density and porosity
+                         k_key_, mu_key_, K_key_,  ///< (element) permeability, (nodal) 'fluid viscosity' and hydraulic 'conductivity' (scalar)
+                         gf_key_, gt_key_;         ///< (nodal) gravity force and (elemental) 'gravity term' (vector)
+    const double         acc_gravity_;
+    VectorVariable<dim>  gravity_;
+};
+
+
+/// calculation ignoring the weight of air.
+template<uint32_t dim>
+inline double OverburdenPressureVisitor<dim>::dryDensityFromBulkDensity( double rho_bulk, double rho_fluid, double porosity )
+ {
+    return rho_bulk - porosity * rho_fluid;
+ }
+
+
+} // end csmp
+
+#endif /* defined(OVERBURDEN_PRESSURE_VISITOR_H) */
+
+

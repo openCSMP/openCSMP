@@ -1,0 +1,24 @@
+'prism_test1-regions.txt' test model for single-phase flow analysis in 3D
+
+# (1) global material properties
+permeability				1.0e-12
+porosity				0.25
+fluid volume source			0.0
+nodal fluid volume source		0.0
+#concentration				0.0
+fluid pressure				1.e6
+relative permeability model 0.
+density oil		5.0e-3
+density water	1.0e-3
+residual saturation wetting phase	0.2
+residual saturation non-wetting phase	0.3
+
+# (2) local material properties (of the fractures)
+FRAC_VOLUMES	complete	permeability	1.0e-10
+FRAC_VOLUMES	complete	porosity	1.0
+FRAC_VOLUMES	complete	fluid pressure	1.0e6
+
+# essential conditions on model boundaries
+LEFT	Dirichlet	fluid pressure		2.0e6	2.0e6	2.0e6	2.0e6
+RIGHT	Dirichlet	fluid pressure		1.5e6	1.5e6	1.5e6	1.5e6
+#LEFT	Plain		concentration		3.	3.	3.	3.

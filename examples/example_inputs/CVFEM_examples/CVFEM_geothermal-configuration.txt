@@ -1,0 +1,90 @@
+GEOTHERMAL SIMULATOR INPUT FILE
+
+# (block2) default property values
+#############################################################
+#############################################################
+## Default Model Values
+permeability			1.e-15				# [m2]
+vertical permeability		1.e-15				# [m2] used in case of an anisotropic permeability
+horizontal permeability		1.e-15				# [m2] used in case of an anisotropic permeability
+porosity			0.05				# [-]
+nodal porosity			0.05				# [-]
+salinity			0.				# [wt%] initial fluid salinity of the simulation domain
+thermal conductivity		2.				# [W m-1 K-1] Could be anything between 1–6. 2 seems to be a reasonable average covering various rock types (Fig. 11, doi.org/10.1007/s10712-009-9058-2)
+nodal heat capacity rock	830.				# [J kg-1 K-1] Varies between ~800–1000. granite ~830, basalt ~880. Values for a range of rock types are listed in (table 3, 4, page 1766, doi.org/10.1007/978-3-030-58631-7)
+with custom latent heat		0
+heat capacity melt		1365.				# [J kg-1 K-1] Depends melt composition.
+latent heat of fusion		300000.				# [J kg-1] Depends melt composition.
+nodal density rock		2650.				# [kg m-3] Values for a range of rock types are listed in (table 3, page 1766, doi.org/10.1007/978-3-030-58631-7)
+gravity flag			1.
+nodal heat flux bottom		0.				# needs to be initialised to 0. 
+temperature			10.
+fluid pressure			101325.
+lithostatic pressure		101325.
+#############################################################
+#############################################################
+## General Model Setup
+with magma chamber			1
+with temperature halo			1
+initial T diffusion time		1000.			# initial time [years] of temperature diffusion before starting the simulation and fluid transport
+with lithostatic pressure		1			# sets fluid pressure to lithostatic at T>T_solidus and log_k <= -22
+with salinity				0
+open top				1
+salinity top				0.			# [wt% NaCl]
+cfl scaling				1.			# cfl scaling = 1 is save to use. Values < 1 increase sensitivity to reduce the time-step. Values > 1. are not recommended.
+no standard output			1
+#############################################################
+#############################################################
+## Permeability Visitor and Hydrofracturing
+with anisotropic permeability		0			# bool; 1 = use anisotropic permeability tensor defined by vertical and horizontal permeability
+permeability anisotropy factor		1.			# factor=1: kV=kH; factor>1: kV*factor --> kV>kH; factor<1: kH/factor --> kV<kH; This is used in case a depth-dependent permeability is calculated (... needs approvement)
+depth dependent permeability		0			# after Manning & Ingebritsen (1999)
+with reference depth			0			# bool; set to 1 if surface is not at y=0
+reference depth				10000.			# y-coordinate of the surface; used for kD if "with reference depth" = 1
+temperature dependent permeability	1			# after Hayba & Ingebritsen (1997) 
+pore fluid factor dependent permeability	0		# after Cox (2005, SEG 100th Anniversary Volume; Fig. 9)
+hydrofracturing				1			# after Cox (2010, Geofluids)
+immediate fracture closure		1			# closes immediately after fluid pressure < failure pressure
+change BDT temperature			1			# Use brittle-ductile-transition temperatures defined below
+near critically pressured		1			# if selected (=1), cohesion and differential stress is calculated in the FailureModeVisitor
+temperature dependent differential stress flag	1		# calculate differential stress based on defined brittle-ductile-transition temperature
+BDT start temperature			360.			# [deg C] see Hayba & Ingebritsen (1997); 360 = quartz-rich rock; >~450 = mafic rock or silicic rock at high tectonic strain rates
+BDT ductile temperature			400.			# [deg C] see Hayba & Ingebritsen (1997); adjust according to BDT start tempertaure
+BDT end temperature			500.			# [deg C] see Hayba & Ingebritsen (1997); adjust according to BDT start tempertaure
+BDT start log permeability		-15.			# [log m2] log permeability at T<=BDT start temperature
+BDT ductile log permeability		-17.			# [log m2] log permeability at BDT start temperature >= T <= BDT end temperature
+BDT end log permeability		-22.			# [log m2] log permeability T > BDT end temperature
+maximum log permeability model		-10.			# [log m2] permeability will be limited to this maximum log value
+differential stress			0.			# [Pa] used in case "temperature dependent differential stress flag" = 0
+cohesion				1.00E+07		# [Pa] used in case "temperature dependent differential stress flag" = 0
+#############################################################
+#############################################################
+## Intrusion
+crystallization curve			2			# define the crystallization curve used for enthalpy and heat capacity (Rock.cpp, MagmaModel.cpp); 0 = power law, 1 = error function, 2 = marxer ulmer
+crystallization curve exponent		1.			# If "power law" crystallization is used, b is the "power law" exponent
+sigma1 MagmaModel			1.			# If power law = 0, "erf law" crystallization is used. possible values: 2/3, 1, 3/2 (Marsh, 1981; doi.org/10.1007/BF00371146)
+nodal compressibility rock		1.e-10			# [Pa-1] no reference found but everyone uses this value ... e.g. doi.org/10.1016/j.epsl.2014.06.047
+compressibility magma			1.e-8			# [Pa-1] e.g., see: doi.org/10.1016/B978-0-12-385938-9.00005-5; doi.org/10.1007/BF01052866; doi.org/10.1016/0016-7037(95)00381-9; doi.org/10.1016/j.epsl.2014.06.047
+initial intrusion temperature		950.			# [degC] should be above liquidus temperature and below 1000 degC
+liquidus temperature			950.			# [degC] depends on the melt composition
+solidus temperature			680.			# [degC] depends on the melt composition
+
+# (block3) regional property values
+HOST		complete	region ID	0.		# used for easy post processing in paraview/python
+HOST		complete	permeability	1.E-15
+HOST		complete	porosity	0.05
+CHAMBER		complete	region ID	1.
+CHAMBER		complete	permeability	1.E-15
+CHAMBER		complete	porosity	0.05
+
+# (block6) boundary conditions for arbitrary-shaped model
+TOP	complete	DIRICH	temperature		10.		# [deg C]
+TOP	complete	DIRICH	fluid pressure		101325.		# [Pa]
+TOP	complete	DIRICH	lithostatic pressure	101325.		# [Pa]
+BOTTOM	complete	DIRICH	nodal heat flux bottom	0.1		# [W m-2]. used to define the geothermal gradient. bottom heat flux = thermal conductivity * temperature gradient. 
+# 									# E.g., 0.065 W m-2 and 2 W m-1 K-1 results in 0.0325 deg C per m representative of the average continental crust
+
+# (block7) run settings
+duration	20000.		# total simulation time in years
+time increment	1.		# largest timestep in years. 1 year is save to use. Should not significantly exceed 1 year in case of fluid advection.
+output time	100.		# create output files (.vtu) every X years

@@ -1,0 +1,49 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef NUMINTEGRAL_SET_RHS_TO_ONE_H
+#define NUMINTEGRAL_SET_RHS_TO_ONE_H
+
+#include "MathOperatorRHS.h"
+
+namespace csmp {
+
+template<uint32_t> class Element;
+
+/// for a scalar solution variable this operator creates a unit vector for accumulation into righthand side vector
+template<uint32_t dim, template<uint32_t> class CELL=Element>
+class NumIntegral_SetRHS_to_One : public MathOperatorRHS<dim,CELL> {
+  public:
+    NumIntegral_SetRHS_to_One( const PropertyDatabase<dim>&,
+                               const char* test );
+    
+    ~NumIntegral_SetRHS_to_One();
+    
+    /// since there is no material Operand nothing needs to be done
+    void GetOperands( const CELL<dim>& ) override final {}
+
+    void ComputeContribution( const CELL<dim>& ) override final;
+
+    NumIntegral_SetRHS_to_One<dim,CELL>* clone() const override final { return new NumIntegral_SetRHS_to_One<dim,CELL> (*this); }
+};
+
+} // csmp
+
+#endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

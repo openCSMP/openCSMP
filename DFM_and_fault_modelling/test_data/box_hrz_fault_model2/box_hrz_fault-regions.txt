@@ -1,0 +1,10 @@
+box_hz_fault-regions.txt
+no properties
+MATRIX
+BACK
+BOTTOM
+FRONT
+LEFT
+RIGHT
+TOP
+FRACTURE

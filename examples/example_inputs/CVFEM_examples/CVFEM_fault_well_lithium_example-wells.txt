@@ -1,0 +1,190 @@
+# ============================================================================
+# Well configuration — WellTracesAndFault6C
+#
+# One [well] section per well, named after its region in the mesh. Entries may
+# appear in any order; anything you leave out keeps its default, so a section
+# can be as short as a single 'completion' line.
+#
+# '#' starts a comment. Tokens are separated by spaces or tabs. Depths are
+# ABSOLUTE, in the same datum as the mesh, negative downward.
+#
+# NOT set here: wellhead pressure and temperature, target rates and injection
+# rates. Those are operating conditions that change during a run and are set
+# through the scheme's Set_well_* methods.
+#
+# GRT-1 and GRT-2 share the same casing programme and the same completion, so
+# the two sections differ only in skin and initial salt mass fraction.
+# ============================================================================
+
+[well]	INJECTOR
+
+# ---- Geometry --------------------------------------------------------------
+# Radius as a function of depth, as two parallel lists. The first radius applies
+# from the well top down to the first depth, the next from there to the second,
+# and the LAST radius continues to the toe — so 'radius values' has exactly one
+# more entry than 'radius depths'. Depths must be strictly decreasing.
+# For a uniform well, omit 'radius depths' and give a single radius.
+#
+# The radius enters the well index only through log(re/rw), so it is a weak
+# parameter there; it matters more for the flow equations, through the
+# cross-sectional area.
+radius depths		-1100.	-1900.
+radius values		0.17	0.12	0.11
+
+# Pipe roughness [m], for the friction factor.
+pipe roughness		0.003
+
+# ---- Completions -----------------------------------------------------------
+# 'completion  <top depth>  <bottom depth>  [skin]'
+# Repeat the line for a multi-completion well. A node is perforated if it falls
+# inside ANY interval; overlaps are allowed and the first match wins. ONLY
+# perforated nodes exchange with the reservoir, so this list is the well's
+# connection to the model, not a detail.
+#
+# The optional third value is the skin for that interval. Omit it and the
+# interval uses 'default skin' below.
+completion		-1900.	-10000.
+
+# Skin for this well. Two things to know about it:
+#
+#   - It applies to every perforated node EXCEPT those in an interval that gave
+#     its own skin as the optional third value on its 'completion' line. So you
+#     do NOT have to set a skin per completion; set one here and override only
+#     where an interval differs.
+#
+#   - It is a STARTING value. It seeds the 'well skin' node property, which the
+#     model re-reads every timestep, so the skin can be changed during a run by
+#     writing that property (e.g. to model progressive damage or a workover).
+#     Changing this line mid-run does nothing.
+default skin		0.
+
+# How the completion length of each perforated node is obtained. It scales the
+# well index LINEARLY, so it matters considerably more than the radius does.
+# Two options:
+#
+#   element lengths  Half of each adjoining well element, so a node between two
+#                    100 m elements gets 100 m. The toe node gets half of its one
+#                    element. This is the default and the usual choice.
+#
+#   host thickness   Per node, check whether its host reservoir element is
+#                    lower-dimensional — a surface element, i.e. a fault mid-
+#                    region. Where it is, use that element's 'thickness', which
+#                    for a fault is the aperture. Where it is not, fall back to
+#                    element lengths.
+#
+#                    So a well crossing a fault gets the aperture at the fault
+#                    node and element lengths everywhere else. Use this when the
+#                    fault is represented as a discrete discontinuity: a node
+#                    sitting in a 1 m aperture should not be credited with a
+#                    100 m contact length.
+completion length	host thickness
+
+# Fraction of the full 2*PI radial flow angle available to this well.
+# LEAVE AT 1 unless the well lies ON a model boundary plane (a symmetry model of
+# half or a quarter of a pattern): 0.5 on a face, 0.25 on an edge, 0.125 in a
+# corner. Not auto-detected — a well that merely touches a boundary is not the
+# same thing.
+angle fraction		1.
+
+# ---- Discretisation --------------------------------------------------------
+# Well elements are subdivided into segments of about this length [m].
+target segment length	50.
+
+# Segments modelled ABOVE the top of the mesh, for a domain that does not reach
+# the surface. UNTESTED: this has been 0 for a long time and nothing exercises
+# those branches. Leave at 0 unless you are prepared to verify the result.
+virtual top segments	0
+
+# Radius of those virtual segments [m]; negative means 'use the topmost radius'.
+virtual top radius	-1.
+
+# ---- Initial state ---------------------------------------------------------
+# How the well temperature is set up at t = 0. One of:
+#   follow reservoir            Twell = Treservoir
+#   uniform <degC>              Twell = value everywhere
+#   reservoir minimum <degC>    Twell = max(Treservoir, value)
+initial temperature	follow reservoir
+
+# Initial bulk SALT mass fraction in the well [kg NaCl / kg bulk]. 0.09 is 9 wt%
+# NaCl, matching the brine this injector re-injects. ("smf" is salt mass
+# fraction — one of the well model's four primary variables, not a steam
+# fraction.)
+init bulk smf		0.09
+
+# Starting values at the top of the well. The run-time wellhead conditions are
+# set separately, through the scheme.
+top pressure		101325.
+top temperature		15.
+
+# ---- Physics ---------------------------------------------------------------
+# Each of these has a working alternative; the defaults are what every result to
+# date was produced with. The comments give the usual magnitude of each term.
+with friction				true	# wall friction
+with gravitational potential energy	true	# generally important
+with kinetic energy			true	# generally negligible
+with inertial terms			true	# generally very negligible
+with radial heat			true	# conduction to the formation
+
+# How that conduction is computed:
+#   shape factor  Steady shape factor to the first reservoir control volume —
+#                 2*pi*kappa*(Twell-Tnode)/ln(re/rw), the thermal analogue of the
+#                 Peaceman well index used for mass. Needs no time variable and
+#                 tightens as the mesh is refined. The default and the right
+#                 choice when the mesh resolves the near-well formation.
+#   ramey         Ramey (1962) transient line source. For meshes that do NOT
+#                 resolve the near-well rock. A long-time approximation: it
+#                 returns zero below roughly alpha*t/rw^2 = 1.
+radial heat model	shape factor
+
+# Formation thermal conductivity [W/(m.K)] for the heat-loss model. Set it to
+# match the reservoir's own value (2.0 here). It is not read from the reservoir
+# automatically because 'thermal conductivity' is an ELEMENT property and the
+# well model only has nodal values to hand.
+formation thermal conductivity	2.0
+
+# Formation thermal diffusivity [m2/s], alpha = kappa/(rho*c). Used ONLY by the
+# ramey model. 9.3e-7 for kappa 2, rho 2500, c 860.
+formation thermal diffusivity	9.3e-7
+
+# NOTE: water-table displacement is NOT set here. It is switched on together with
+# the depth it starts from, through Set_well_water_table(), which is also how it
+# changes during a run. It defaults to off, and is intended for use with top
+# injection rather than target-rate control.
+
+# Advanced. Where a node's reservoir exchange is placed among the sub-segments
+# of its well element. false: all of it on the last sub-segment (what every
+# result to date used). true: spread evenly over the element's sub-segments,
+# which represents a distributed completion better. Re-check global mass balance
+# if you change it.
+spread source				false
+
+
+# ============================================================================
+[well]	PRODUCER
+
+radius depths		-1100.	-1900.
+radius values		0.17	0.12	0.11
+pipe roughness		0.003
+
+completion		-1900.	-10000.
+default skin		0.
+completion length	host thickness
+angle fraction		1.
+
+target segment length	50.
+virtual top segments	0
+
+initial temperature	follow reservoir
+init bulk smf		0.
+top pressure		101325.
+top temperature		15.
+
+with friction				true
+with gravitational potential energy	true
+with kinetic energy			true
+with inertial terms			true
+with radial heat			true
+radial heat model	shape factor
+formation thermal conductivity	2.0
+formation thermal diffusivity	9.3e-7
+spread source				false

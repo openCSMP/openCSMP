@@ -1,0 +1,46 @@
+name	MParameter	unit	index	min.	max.	place
+
+fluid pressure				PF	Pa			1	0.00E+00	1.00E+10	node
+porosity					PHI	X			1	0.00		1.00E+00	element
+finite volume				FV	m3			1	0.		1e10		node
+FV pore volume				FVP	m3			1	0.		1e10		node
+permeability				K	m2			1	1.00E-21	1.00E-09	element
+rock compressibility			BR	Pa-1			1	0.00E-15	1.00E-09	element
+fluid compressibility			BF	Pa-1			1	0.00E-10	1.00E-00	node
+total compressibility			BT	Pa-1			1	0.00E-15	1.00E-00	element integration point
+fluid viscosity				MUF	Pa s-1		1	1.00E-07	1.00E-02	node
+fluid density				RF	kg m-3		1	1.00E+00	2.00E+03	node
+density liquid				RHOl	kg m-3		1	1.00E+02	1.20E+03	node
+sector density liquid			RHOsl	kg m-3		1	1.00E+02	1.20E+03	sector integration point
+fluid volume source			QV	kg kg-1 s-1		1	-1.00E+00	1.00E+00	element
+nodal fluid volume source		nQV	kg kg-1 s-1		1	-1.00E+00	1.00E+00	node
+fluid mass source			QmT	kg s-1		1	-1.00E+04	1.00E+04	element
+conductivity				K	m2 s-1		1	1.00E-18	1.00E-06	element
+mass conductivity			rK	m2 s-1		1	1.00E-15	1.00E-03	element integration point
+gravity term				gt	kg m-3 s-1		2	-1.00E+10	1.00E+10	element integration point
+thermal conductivity			KT	J kg-1 oC-1		1	1.00E-00	1.00E+01	element
+face thermal conductivity		fKT	J kg-1 oC-1		1	1.00E-00	1.00E+01	face
+rock density				RR	kg m-3		1	1.00E+03	1.00E+04	element
+rock heat capacity			CPR	J kg-1 oC-1		1	1.00E+02	2.00E+03	element
+fluid heat capacity			CPF	J kg-1 oC-1		1	4.00E+03	1.00E+06	node
+total heat capacity			CPT	J kg-1 oC-1		1	1.00E+03	1.00E+07	element integration point
+temperature					T	oC			1	0.00E+00	1.00E+03	node
+heat source					QH	J kg-1 s-1		1	-1.00E+00	1.00E+00	element
+nodal heat source			QHn	J kg-1 s-1		1	-1.00E+00	1.00E+00	node
+enthalpy liquid				Hl	J kg-1		1	0.00E+00	1.00E+07	node
+thickness					THK	m			1	1.00E-06	1.00E+02	element
+gravity vector				GV	m s-2			2	0.		1.0e+1	element
+mass flux					qm	kg s-1		2	0.		1.0e+7	element integration point
+Darcy velocity				vD	m/s			2	0.		1.0e+3	element
+average mass flux			qma	kg s-1		2	0.		1.0e+7	element
+basal heat flow				HFU	W m-2			1	0.		1.5		face
+test variable				T	X			1	-1e12		1e12		node
+zero node					ZN	X			1	0.		0.00001	node
+volumetric enthalpy liquid		VHl	J m-3			1	0.00E+00	2.00E+20	node
+enthalpy content liquid		CHl	J m-3			1	0.00E+00	2.00E+20	node
+sector enthalpy content liquid	CHSl	J m-3			1	0.00E+00	2.00E+20	sector integration point
+previous sector enthalpy content liquid	PCHSl	J m-3		1	0.00E+00	2.00E+20	sector integration point
+sector enthalpy change			dhS	J			1	-2.00E+20	2.0e+20	sector integration point
+sector volume				VS	m3			1	0.		2.0e+10	sector integration point
+sector weight				sW	X			1	0.		2.0e+10	sector integration point
+

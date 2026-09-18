@@ -1,0 +1,11 @@
+tubes_quadra-regions.txt - QFEM mesh of 3 orthogonal tubes in rock matrix
+no properties
+PORES
+PORE_EDGE
+GRAINS
+LEFT
+RIGHT
+TOP
+BOTTOM
+FRONT
+BACK

@@ -1,0 +1,11 @@
+box_with_hole2-regions.txt
+no properties
+ROCK
+WELL
+TOP
+BOTTOM
+LEFT
+BACK
+RIGHT
+FRONT
+BOUNDARY_WELL

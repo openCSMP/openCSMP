@@ -1,0 +1,3 @@
+'test_3_frac-permeability-modeling-data.txt' fault regions to be included into fault property modeling.
+
+3 FRACTURE1 FRACTURE2 FRACTURE3  -50 2700 2.6e+07 1 0.85 0.68 45

@@ -1,0 +1,73 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef GENERIC_NODE_PROPERTY_GRADIENT_LIMITER_H
+#define GENERIC_NODE_PROPERTY_GRADIENT_LIMITER_H
+
+#include "GenericNodePropertyGradient.h"
+#include "finiteVolumeAuxiliaryFunctions.h"
+#include "FiniteVolumeStencilManager.h"
+#include "PropertyHandle.h"
+#include "ErrorHandler.h"
+
+namespace csmp {
+
+/** 
+
+@brief GenericNodePropertyGradientLimiter - limits the nodal (finite-volume) gradient 
+of target variable.
+
+If a property (saturation, solute concentration, etc...) is advected with second
+order accuarcy, some sort of slope limiting is required to avoid spurious oscillations. This
+objects computes the slope limiting factor phi using the MINMOD limiter for the nodal gradients
+that were computed employing the object  NodePropertyGradient. This procedure
+is usually carreid out automatically int the various FiniteVolume<fT, dim>Visitor objects.
+The resulting gradient limiter is stored automatically in the CSP_PropertyDatabase
+using the CSP_Operands.
+
+The FiniteVolumeManager<fT, dim> and the FiniteVolume<fT, dim> classes are participants.
+
+The GenericNodePropertyGradientLimiter object collaborates with the FiniteVolume<fT, dim>AdvectionVisitor,
+the FiniteVolume<fT, dim>GradientVisitor, and the FiniteVolume<fT, dim>FluidPhaseVisitor
+
+A single GenericNodePropertyGradientLimiter object is automatically constructed when
+one of the above-mentioned visitors is constructed. The GenericNodePropertyGradientLimiter
+object should not be constructed from the main() file
+
+copyright (c) 2001 by Sebastian Geiger, Stephan K. Matthaei & Stephen G. Roberts 
+
+*/
+template<uint32_t dim>
+class GenericNodePropertyGradientLimiter {
+       
+  public:
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, const char* prop ="node property gradient" );
+    GenericNodePropertyGradientLimiter( Model<dim>&, const char* region, std::vector<char*> prop_names );
+  
+    ~GenericNodePropertyGradientLimiter(); 
+    
+    // computation of property gradient
+    void CalculateGenericNodalGradient();
+
+    // compute the gradient limiter
+    void CalculateSlopeLimiter( const Region<dim>&, const std::vector<std::pair<double,double> >& MINMAX, int counter = 1 );
+
+    // setting the property key
+    void SetPropertyKey( csmp::Index& key );
+    
+    // returning the size of the object
+    double SizeOf() const;
+
+    
+  private:
+    std::vector<PropertyHandle<dim>*>  limiter;
+    GenericNodePropertyGradient<dim>   node_prop_grad;
+    double                             tolerance;
+    csmp::Index                        u_key;
+    const csmp::Index                  grad_key, lim_key, mctr_key;
+ };
+
+}
+
+#endif

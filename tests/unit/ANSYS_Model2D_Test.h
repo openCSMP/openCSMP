@@ -1,0 +1,37 @@
+#ifndef ANSYS_MODEL2D_TEST_H
+#define ANSYS_MODEL2D_TEST_H
+
+#include "Test.h"
+
+namespace csmp {
+
+// P. Lang 2011
+class ANSYS_Model2D_Test : public Test
+  {
+    const bool verbose_ = true;
+    
+    public:
+      virtual void run();
+      
+      /// misc checks on boundary flags etc.
+      void Test_ANSYS_ModelConstructionAndSaving2D( const std::string& input_file_name="HorFracs2D" );
+      
+      /// using line element VSet
+      void Test_printLineElementRegion();
+       
+      /// same test as in VData_Test, but with a more realistic model created in ANSYS
+      void Test_CreateConsistentLineElementOrientations2D();
+      
+      /// tests the creation of an internal boundary from the line-element regions
+      void Test_CreateInternalBoundary();
+
+      /// tests the creation of an internal split boundaries from the line-element region and between domains
+      void Test_CreateSplitBoundaries();
+      
+      /// tests creation of SplitBoundaries between all regions of a model ('Fluid_Flower')
+      void Test_CreateSplitBoundariesBetweenUniqueRegions();
+  };
+
+} // csmp
+
+#endif // ANSYS_MODEL2D_TEST_H

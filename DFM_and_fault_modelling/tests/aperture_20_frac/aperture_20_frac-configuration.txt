@@ -1,0 +1,30 @@
+‘aperture_20_frac-configuration.txt’  - test model 100x100x100m centered on origin
+
+# model has 4407 nodes and 632 boundary nodes
+#default properties
+permeability	6.0e-17
+porosity		0.5
+thickness		1.
+# mechanical properties of the formation and fractures
+Youngs modulus		4.5e10
+shear modulus		1.5e10
+failure			0.
+# watch out! - spelling with apostrophe does not work
+Poissons ratio		0.2
+tensile strength	1.0e7
+friction coefficient	0.6
+cohesion		5.0e6
+unconfined compressive strength	5.0e7
+# currently not used
+joint roughness coefficient	5.
+fluid viscosity		1.0e-3
+# 1000-m depth, pf between overburden and SHmax pressures (0.9 Sv)
+fluid pressure		23814000.
+
+# regional properties: fractures
+SET1_EW		complete	permeability	8.33E-14
+SET1_EW		complete	thickness	1.0e-4
+SET1_EW		complete	porosity	1.
+SET2_NNW_SSE	complete	permeability	8.33E-14
+SET2_NNW_SSE	complete	thickness	1.0e-4
+SET2_NNW_SSE	complete	porosity	1.

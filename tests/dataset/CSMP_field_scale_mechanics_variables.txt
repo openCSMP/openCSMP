@@ -1,0 +1,73 @@
+name		MParameter	unit	index	min.		max.		place	usage
+							
+acceleration gravity	g	m s-2	1	9.7639		9.8337		model	input
+overburden stress	Sv	Pa	1	1.00E+05	1.00E+08	model	input
+rock type		RRT	code	1	0		100		region	input
+thickness		V	m3	1	1.00E-10	1.00E+08	element	computed
+volume			V	m3	1	1.00E-10	1.00E+08	element	computed
+Darcy velocity		vD	m s-1	2	0.		1.0e-5		element	computed
+Darcy velocity node	vDn	m s-1	2	0.		1.0e-5		node	computed
+volume flux		VF	m s-1	1	-1.00E+10	1.00E+10	element	computed
+deformed volume		VD	m3	1	1.00E-10	1.00E+08	element	computed
+volume change		VDELTA	m3	1	1.00E-10	1.00E+08	element	computed
+fluid pressure		PF	Pa	1	0.00E+00	1.00E+09	node	computed
+overburden pressure	CP	Pa	1	0.00E+00	1.00E+09	node	computed
+gravity force		GF	N	2	-1.00E+15	1.00E+15	element	computed
+gravity term		GT	m	2	-1.00E+08	1.00E+08	element	computed
+permeability		k	m2	1	1.00E-25	1.00E+02	element	input
+conductivity		K	m s-1	1	1.00E-25	1.00E+02	element	computed
+bulk density		RHOR	kg m-3	1	2.00E+02	1.00E+04	element	input
+dry rock density	RHOR	kg m-3	1	2.00E+02	1.00E+04	element	computed
+fluid density		RHOF	kg m-3	1	2.00E+02	1.00E+04	node	computed
+fluid viscosity		MUF	Pa s	1	1.00E-06	1.00E-02	node	computed
+total dissolved solids	TDS	kg m-3	1	0.		300.		node	input
+porosity		PHI	m3	1	1.00E-06	1.00E+00	element	input
+fluid volume source	QV	m3	1	-1.00E+08	1.00E+08	element	input
+Youngs modulus		E	Pa-1	1	0.00E+00	1.00E+15	ipoint	input
+Poissons ratio		NU	Pa-1	1	0.00E+00	1.00E+06	ipoint	input
+displacement		UV	m	2	-1.00E+03	1.00E+03	node	computed
+force			F	N	2	-1.00E+12	1.00E+12	node	computed
+strain			EPS	Pa m-2	3	-1.00E+03	1.00E+03	ipoint	computed
+strain1			E1	Pa m-2	2	-1.00E+03	1.00E+03	ipoint	computed
+strain2			E2	Pa m-2	2	-1.00E+03	1.00E+03	ipoint	computed
+strain3			E3	Pa m-2	2	-1.00E+03	1.00E+03	ipoint	computed
+dilatation		DI	X	1	-1.00E+03	1.00E+03	ipoint	computed
+stress			SI	Pa m-2	3	-1.00E+12	1.00E+12	ipoint	computed
+sigma1			SI1	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+sigma2			SI2	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+sigma3			SI3	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+stress-y		SY	Pa m-2	1	-1.00E+12	1.00E+12	ipoint	computed
+mean stress		SM	Pa m-2	1	-1.00E+12	1.00E+12	ipoint	computed
+max shear stress	SSmax	Pa n-2	1	-1.00E+10	1.00E+10	ipoint	computed
+normal stress		SN	Pa	1	-1.00E+12	1.00E+12	face	input
+shear stress		SS	Pa	2	-1.00E+08	1.00E+08	face	input
+stress-xy		Sxy	Pa	1	-1.00E+08	1.00E+08	ipoint	input
+principal stress		SP	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+principal strain		EP	Pa m-2	2	-1.00E+12	1.00E+12	ipoint	computed
+computed face normal stress		CFNS	Pa	1	-1.00E+12	1.00E+12	face	computed
+computed face shear stress		CFSS	Pa	2	-1.00E+12	1.00E+12	face	computed
+temperature		T	oC	1	1.		400.		node	computed
+thermal conductivity	KT	Wm-1K-1	1	1.		5.5		element	input
+energy source		QT	Wm-3	1	0.		1.0e-4		element	input
+Biot alpha		alpha	X	1	0.		1.		element	input
+Biot term		BT	Pa	1	0.		1.0e8		element	computed
+cohesion		C	Pa	1	0.		1.0e8		element	input
+friction angle		ALPHA	o	1	0.		90.		element	input
+failure			F	X	1	-10		10		element	computed
+tensile failure		F1	X	1	-10		10		element	computed
+Neumann stress		SN	Pa m-2	2	-1.00E+12	1.00E+12	element	computed
+storativity		BC	m3 Pa-1	1	1.00E-12	1.00E-06	element	computed
+density		RHO		kg m-3	1	2.00E+02	1.00E+04	element	computed
+vertical stress	SV	N m-2	1	-1.00E+08	1.00E+12	node	input
+max horizontal stress ratio	SH	N m-2	1	-1.0	1.0	model	input
+min horizontal stress ratio	Sh	N m-2	1	-1.0	1.0	model	input
+trend	theta			X	1	0	360	model	input
+fluid compressibility		B	Pa-1		1	0.00E+00	1.00E-03	node	computed
+fluid expansivity		A	oC-1		1	-2.00E+00	2.00E+00	node	computed
+fluid enthalpy			H	J kg-1	1	1.00E+02	1.00E+09		node	computed
+fluid heat capacity		CP	J kg-1 oC-1	1	1.00E+02	1.00E+09	node	computed
+thermal expansion		QT	m3 s-1	1	-1.00E+00	1.00E+00	element		computed
+saturation steam		SAT	X		1	0.00E+00	1.00E+00	node	computed
+elevation			E	m	1	0.	10000.	node	computed
+hydraulic head			H	m	1	0.	1e8	node	computed
+one				U	X	1	0.	1.	element	computed

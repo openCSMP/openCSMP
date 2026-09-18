@@ -1,0 +1,39 @@
+name	MParameter	unit	index	min.	max.	place	usage	explanation	reference
+									
+area				AE	m2		1	 1.00E-05	1.00E+08	element	CSP variable	see documentation	CSP User's Guide
+new area			AEN	m2		1	 1.00E-05	1.00E+08	element	CSP variable	see documentation	CSP User's Guide
+inner radius		IR	m		1	 1.00E-25	1.00E+02	element	CSP variable	see documentation	CSP User's Guide
+fluid pressure		PF	Pa		1	 0.00E+00	1.00E+10	node	CSP variable	see documentation	CSP User's Guide
+gravity force		GF	N		2	-1.00E+15	1.00E+15	node	CSP variable	see documentation	CSP User's Guide
+confining pressure	PC	Pa		1	-1.00E+15	1.00E+15	element	CSP variable	see documentation	CSP User's Guide
+permeability		k	m2		1	 1.00E-25	1.00E+02	element	CSP variable	see documentation	CSP User's Guide
+conductivity		K	m s-1		1	 1.00E-25	1.00E+02	element	CSP variable	see documentation	CSP User's Guide
+storativity			BC	m3 Pa-1	1	 1.00E-12	1.00E-06	element	CSP variable	see documentation	CSP User's Guide
+density			RHO	kg m-3		1	 0.20E+03	1.00E+04	element	CSP variable	see documentation	CSP User's Guide
+fluid density			RHO	kg m-3	1	 0.20E+03	1.00E+04	element	CSP variable	see documentation	CSP User's Guide
+porosity			PHI	m3	1	 1.00E-03	1.00E+01	element	CSP variable	see documentation	CSP User's Guide
+fluid volume source	QV	m3		1	-1.00E+08	1.00E+08	element	CSP variable	see documentation	CSP User's Guide
+Young's modulus		E	Pa-1		1	 0.00E+00	1.00E+15	ipoint	CSP variable	see documentation	CSP User's Guide
+Poisson's ratio		NU	Pa-1		1	 0.00E+00	1.00E+06	element	CSP variable	see documentation	CSP User's Guide
+displacement		UV	m		2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+prescribed displacement	UVP	m	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+force			F	N		2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+strain			EPS	Pa m-2	3	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+strain1			E1	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+strain2			E2	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+strain3			E3	Pa m-2	2	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+velocity		VEL	m s-1	2	-1.00E+10	1.00E+10	element	CSP variable	see documentation	CSP User's Guide
+volume flux		VF	m s-1	1	-1.00E+10	1.00E+10	element	CSP variable	see documentation	CSP User's Guide
+pore velocity		PVEL	m s-1	2	-1.00E+10	1.00E+10	element	CSP variable	see documentation	CSP User's Guide
+dilatation		DI	X	1	-1.00E+03	1.00E+03	node	CSP variable	see documentation	CSP User's Guide
+stress			SI	Pa m-2	3	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+sigma1			SI1	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+sigma2			SI2	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+sigma3			SI3	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-y		SY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+stress-xy		SXY	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+mean stress		SM	Pa m-2	1	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+principal stress	SP	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+principal strain	EP	Pa m-2	2	-1.00E+12	1.00E+12	node	CSP variable	see documentation	CSP User's Guide
+Neumann stress		SN	Pa m-2	1	-1.00E+12	1.00E+12	face	CSP variable	see documentation	CSP User's Guide
+y-coordinate		YC	m	1	-1.00E+06	1.00E+06	node	CSP variable	see documentation	CSP User's Guide
