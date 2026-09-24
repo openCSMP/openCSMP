@@ -43,7 +43,7 @@ CVFEM_geothermal_cooling_magma_chamber_example<dim>::CVFEM_geothermal_cooling_ma
     config_file_name_  (argc > 2 ? argv[2] : "CVFEM_geothermal"),
     output_path_  (argc > 3 ? argv[3] : "./"),
     output_name_  (argc > 4 ? argv[4] : "CVFEM_geothermal_example"),
-    vars_name_("PhysicalVariables.txt"),
+    vars_name_("PhysicalVariables.txt"), // created by the ModelBuilder
 
     model(nullptr),
     pd_ref(nullptr),
@@ -59,40 +59,6 @@ CVFEM_geothermal_cooling_magma_chamber_example<dim>::CVFEM_geothermal_cooling_ma
 
     solver_kind      = SolverKind::PETSc; // change solver here
     well_solver_kind = SolverKind::PETSc; // change solver here
-
-    //! Get setter boolean variables to define key model options
-    open_top                        = GetBoolFromConfigFile("open top");
-    with_magma_chamber              = GetBoolFromConfigFile("with magma chamber");
-
-    // permeability options
-    depth_dependent                 = GetBoolFromConfigFile("depth dependent permeability");
-    temperature_dependent           = GetBoolFromConfigFile("temperature dependent permeability");
-    pore_fluid_factor_dependent     = GetBoolFromConfigFile("pore fluid factor dependent permeability");
-    hydrofracturing                 = GetBoolFromConfigFile("hydrofracturing");
-    anisotropic_k                   = GetBoolFromConfigFile("with anisotropic permeability");
-    T_dependent_differential_stress = GetBoolFromConfigFile("temperature dependent differential stress flag");
-
-    //! Create model and reference to property database
-    // Create PhysicalVariables file
-    ModelBuilder<dim> builder;
-    builder.CreateVariablesFile(false, false, false, false, false, false);
-    builder.CreateLimiterLogFile();
-
-    // Create Model
-    model  = CreateANSYSModel(geometry_name_, geometry_name_, vars_name_);
-    pd_ref = &(model->Database());
-    model->InstantiateFiniteVolumes();
-
-    //! Read config file
-    InputDataManager<dim> model_configuration;
-    model_configuration.ConfigureFromFile(*model, config_file_name_.c_str(),
-                                          false,    ///< regionname from parameter range
-                                          true,     ///< default property values
-                                          true,     ///< regional property values
-                                          false,    ///< boundary conditions for box-shaped model
-                                          false,    ///< regional property conditions
-                                          true,     ///< boundary conditions for arbitrary-shaped model
-                                          run_settings );
 
 } // end constructor
 
@@ -127,8 +93,11 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::Specifications() {
 template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::Run() {
 
+    //! Create Model and read *-configuration.txt file
+    // CreateModel();
+
     //! Time variables and objects
-    double& model_time  = ModelTime::Instance().modelTime; // JK: test model time
+    double& model_time  = ModelTime::Instance().modelTime;
 
     SetTimeVariables();
 
@@ -279,6 +248,48 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::Run() {
 
 
 // Helper functions are defined below Run().
+
+/// Create model
+
+template<uint32_t dim>
+void CVFEM_geothermal_cooling_magma_chamber_example<dim>::CreateModel()
+{
+    //! Get setter boolean variables to define key model options
+    open_top                        = GetBoolFromConfigFile("open top");
+    with_magma_chamber              = GetBoolFromConfigFile("with magma chamber");
+
+    // permeability options
+    depth_dependent                 = GetBoolFromConfigFile("depth dependent permeability");
+    temperature_dependent           = GetBoolFromConfigFile("temperature dependent permeability");
+    pore_fluid_factor_dependent     = GetBoolFromConfigFile("pore fluid factor dependent permeability");
+    hydrofracturing                 = GetBoolFromConfigFile("hydrofracturing");
+    anisotropic_k                   = GetBoolFromConfigFile("with anisotropic permeability");
+    T_dependent_differential_stress = GetBoolFromConfigFile("temperature dependent differential stress flag");
+
+    //! Create model and reference to property database
+    // Create PhysicalVariables file
+    ModelBuilder<dim> builder;
+    builder.CreateVariablesFile(false, false, false, false, false, false);
+    builder.CreateLimiterLogFile();
+
+    // Create Model
+    model  = CreateANSYSModel(geometry_name_, geometry_name_, vars_name_);
+    pd_ref = &(model->Database());
+    model->InstantiateFiniteVolumes();
+
+    //! Read config file
+    InputDataManager<dim> model_configuration;
+    model_configuration.ConfigureFromFile(*model, config_file_name_.c_str(),
+                                          false,    ///< regionname from parameter range
+                                          true,     ///< default property values
+                                          true,     ///< regional property values
+                                          false,    ///< boundary conditions for box-shaped model
+                                          false,    ///< regional property conditions
+                                          true,     ///< boundary conditions for arbitrary-shaped model
+                                          run_settings );
+} // end CreateModel()
+
+
 /// Used to read 'with'-booleans (e.g. with magma model, with gold, ...) before initialising the model based on the config-file.
 /// These booleans are used in the ModelBuilder (creates PhysicalVariables.txt) to only create variables actually used.
 template<uint32_t dim>
@@ -396,6 +407,7 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::InstatiateCVFEM()
     // bulk steam mass fraction) live in this file now.
     // WellConfigurationFile::WriteTemplate(well_file) writes a commented
     // template with the defaults.
+    // No wells used in this example.
     const string well_file("");
     const std::map<std::string, WellConfiguration> well_configs =
         wells_list.empty() ? std::map<std::string, WellConfiguration>()
@@ -403,11 +415,11 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::InstatiateCVFEM()
 
     //! Instantiate CVFEM Scheme
     CVFEM_PHX = new CVFEM_PHX_Scheme<dim>(*model, with_gravity, true,
-                                                                 wells_list,
-                                                                 false, false,      // with_zinc, with_lithium
-                                                                 solver_kind,       // reservoir pressure/temperature systems
-                                                                 well_solver_kind,  // well Newton Jacobian
-                                                                 well_configs);
+                                          wells_list,
+                                          false, false,      // with_zinc, with_lithium
+                                          solver_kind,       // reservoir pressure/temperature systems
+                                          well_solver_kind,  // well Newton Jacobian
+                                          well_configs);
 
     CVFEM_PHX->  SetEquilibratorConvergenceSpeedUpTo(true);
     CVFEM_PHX->  Adjust_CFL_Criterion(cfl_scaling, true); //true = pore velocity based; false = velocity based
@@ -514,7 +526,7 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::ActivateFracturing(boo
     permeability_visitor->Hydrofracturing(hydrofracturing, log_max_perm, log_min_perm);
     permeability_visitor->SetImmediateClosureTo(immediate_closure);
     if (hydrofracturing)
-            model->Accept(*failure_mode);
+        model->Accept(*failure_mode);
 }
 
 template<uint32_t dim>
@@ -556,7 +568,7 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::AddMagmaticIntrusion()
 
 
     //! Read variables
-    double  starting_temperature        = model->Read( model->Database().StorageKey( "initial intrusion temperature" ) );  // At the moment IT HAS TO BE >= LIQUIDUS
+    double  starting_temperature        = model->Read( model->Database().StorageKey( "initial intrusion temperature" ) );
     bool    with_temperature_halo       = model->Read( pd_ref->StorageKey( "with temperature halo" ) );
     double  initial_T_diffusion_time    = model->Read( pd_ref->StorageKey( "initial T diffusion time" ) );
     initial_T_diffusion_time            *= time_multiplier;
@@ -610,7 +622,7 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::AddMagmaticIntrusion()
 template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::InitializeHydrostaticPressure()
 {
-SolverBundle init_bundle(solver_kind);
+    SolverBundle init_bundle(solver_kind);
 #if defined(CSMP_WITH_PETSC_SOLVER)
     if (solver_kind == SolverKind::PETSc) {
         // The three initialisation systems are one-off STEADY solves at ~10k DOF:
@@ -1095,9 +1107,9 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::CreateOutputFile(
 
 template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::OutputToVTU(string model_name,
-                                                             const list<string> &props,
-                                                             size_t timestep,
-                                                             std::vector<std::string> additional_region) const
+                                                                      const list<string> &props,
+                                                                      size_t timestep,
+                                                                      std::vector<std::string> additional_region) const
 {
     static VTU_Interface<dim> vtu(*model);
     vtu.OmitZeroInFileName(false);
