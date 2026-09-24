@@ -145,6 +145,7 @@ private:
                                         const std::string& region,
                                         const std::string& vars);
 
+    void CreateModel();
     bool GetBoolFromConfigFile(const std::string& var);
     void SetTimeVariables();
     void InstatiateCVFEM();
