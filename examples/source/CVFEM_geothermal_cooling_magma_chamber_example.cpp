@@ -94,7 +94,7 @@ template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::Run() {
 
     //! Create Model and read *-configuration.txt file
-    // CreateModel();
+    CreateModel();
 
     //! Time variables and objects
     double& model_time  = ModelTime::Instance().modelTime;
