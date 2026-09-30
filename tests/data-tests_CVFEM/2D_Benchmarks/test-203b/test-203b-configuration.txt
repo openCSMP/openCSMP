@@ -1,0 +1,43 @@
+CVFEM
+
+# (block2) default property values
+fluid pressure			101325.
+temperature			10.
+permeability			1.e-15
+vertical permeability		1.e-15
+horizontal permeability		1.e-15
+porosity			0.1
+nodal porosity			0.1
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	880.
+heat capacity rock		880.
+total heat capacity		2138400.
+nodal heat capacity		2138400.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		101325.
+nodal compressibility rock	1.e-15
+gravity flag			1.
+thickness			1.
+no standard output		1
+cfl scaling			0.1
+
+# (block3) regional property values
+HOT_BOTTOM	complete	nodal heat flux bottom	0.05
+
+# (block4) boundary conditions for box-shaped model
+TOP	DIRICH	fluid pressure		101325.	101325.
+TOP	DIRICH	lithostatic pressure	101325.	101325.
+TOP	DIRICH	temperature		10.	10.
+TOP	DIRICH	salinity		0.	0.
+BOTTOM	DIRICH	nodal heat flux bottom	0.05	0.05
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+duration	2000.
+time increment	1.
+output time	500.

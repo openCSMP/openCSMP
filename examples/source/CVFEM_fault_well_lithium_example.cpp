@@ -20,11 +20,11 @@
 //  and SetPorosity(); see Table 2 of the paper for the case values.
 //
 //  Required input files (same directory):
-//    - WellTracesAndFault6C.asc / .dat   (ANSYS-ICEM mesh)
-//    - WellTracesAndFault6C-regions.txt (list of regions in mesh)
-//    - PhysicalVariablesBenchmarks.txt   (material property table)
-//    - WellTracesAndFault6C-wells.txt    (well configuration, one [well] per well)
-//    - CVFEM_fault_well_lithium_example.h                        (header)
+//    - CVFEM_fault_well_lithium_example_mesh.asc / .dat    (ANSYS-ICEM mesh)
+//    - CVFEM_fault_well_lithium_example-regions.txt        (list of regions in mesh)
+//    - PhysicalVariables.txt                               (material property table)
+//    - CVFEM_fault_well_lithium_example-wells.txt          (well configuration, one [well] per well)
+//    - CVFEM_fault_well_lithium_example.h                  (header)
 //
 //  Linear solvers: chosen near the top of Run() (search "LINEAR SOLVER
 //  SELECTION"), separately for the reservoir and for the well Newton
@@ -99,7 +99,7 @@ void CVFEM_fault_well_lithium_example::Run() {
 
     string region_file("CVFEM_fault_well_lithium_example");
 
-    string phys_var_file("PhysicalVariablesBenchmarks.txt");  // Physical variables file
+    string phys_var_file("PhysicalVariables.txt");  // Physical variables file
 
     // Well configuration, named after the mesh like the regions file:
     //   <mesh>-regions.txt   list of regions
@@ -334,7 +334,7 @@ void CVFEM_fault_well_lithium_example::Run() {
     // ---------------------------------------------------
     // Create extra properties and input initial values
     PoreVolumeVisitor<MODEL_DIM> Pore_Volume_Visitor(model, "nodal porosity", "bulk volume", "pore volume", "thickness");
-    // Properties not declared in PhysicalVariablesBenchmarks.txt, plus the
+    // Properties not declared in PhysicalVariables.txt, plus the
     // starting value of every field. See InitialiseProperties() below.
     InitialiseProperties(model, params);
 
@@ -889,7 +889,7 @@ void CVFEM_fault_well_lithium_example::assignKtensor(Model<MODEL_DIM> &model) {
 // Assign each node the maximum permeability of its parent (non-line)
 // elements, giving a nodal permeability field for the wellbore coupling.
 
-// Create the properties that PhysicalVariablesBenchmarks.txt does not declare (here none),
+// Create the properties that PhysicalVariables.txt does not declare (here none),
 // and give every field its starting value. Runs once, after the split boundary
 // exists, so the split-region and well properties can be created for the regions
 // that the split produced.
@@ -898,7 +898,7 @@ void CVFEM_fault_well_lithium_example::InitialiseProperties(Model<MODEL_DIM> &mo
                                                       const RunParameters &p) {
 
     // NOTE (Benoit DD/MM/YYYY): this function creates no properties. They are all
-    // declared in PhysicalVariablesBenchmarks.txt, which is the single
+    // declared in PhysicalVariables.txt, which is the single
     // declaration point — creating them in code lost the unit, the min/max bounds
     // and the short name. Below is only the assignment of starting VALUES; a
     // property missing from the file fails at its InputPropertyValue call.
@@ -1007,7 +1007,7 @@ void CVFEM_fault_well_lithium_example::InitialiseProperties(Model<MODEL_DIM> &mo
         model.InputPropertyValue("vapor tracer mobility", ScalarVariable(ANY, 0.));
     }
 
-    // Split-region coupling fields. Declared in PhysicalVariablesBenchmarks.txt;
+    // Split-region coupling fields. Declared in PhysicalVariables.txt;
     // only their starting values are set here.
     {
         model.InputPropertyValue("split region diffused heat source", ScalarVariable(ANY, 0.));

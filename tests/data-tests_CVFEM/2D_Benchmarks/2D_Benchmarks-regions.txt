@@ -1,0 +1,7 @@
+no properties
+TOP
+BOTTOM
+LEFT
+RIGHT
+HOT_BOTTOM
+HOST

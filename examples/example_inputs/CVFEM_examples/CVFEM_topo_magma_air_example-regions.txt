@@ -1,7 +1,6 @@
 no properties
 
 HOST
-CHAMBER
 LEFT
 RIGHT
 BOTTOM

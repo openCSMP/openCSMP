@@ -1,0 +1,8 @@
+pure water single-phase flow
+Increased local heat flux
+Figure 9a-c in Weis et al., 2014 (Geofluids)
+
+pressure_top		1 bar
+temperature_top		10 degC
+bottom heat flux	0.05 W m-2
+increased BHF		5 W m-2

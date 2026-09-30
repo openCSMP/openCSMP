@@ -33,6 +33,8 @@ Simulator-level features built on top of the CVFEM layer, organized by process:
 - `permeability_porosity/` — different permeability models, porosity change, and a simplified permeability-porosity coupling.
 - `tracer_models/` — different tracer models (`TracerModel`, `TracerVisitor`, `LithiumModel`, `LithiumVisitor`, `QuartzModel`).
 
+## Lookup Tables
+The CVFEM transport scheme uses **Lookup Tables** for fluid properties of pure water (Haar et al., 1984; using the [PROST software package](https://fluidos.industriales.upm.es/faculty/Jaime_Carpio/Fumatas_negas/PROST%20Properties%20of%20Water%20and%20Steam.htm)) and H2O-NaCl ([Driesner & Heinrich, 2007](https://doi.org/10.1016/j.gca.2006.01.033), [Driesner, 2007](https://doi.org/10.1016/j.gca.2007.05.026)). These tables are required when using CVFEM for hydrothermal flow simulations and need to be located in the working directory — i.e. the directory the simulation is run from. If the tables are not available in the working directory, they will be created automatically; however, this process can take a couple of hours. We therefore suggest calculating the tables once, storing them in a dedicated folder, and creating symbolic links to these files in your working directory before starting new simulations. 
 
 ## Benchmarks
 
@@ -73,18 +75,20 @@ examples/source/CVFEM_fault_well_lithium_example.cpp / .h
 examples/source/CVFEM_topo_magma_air_example.cpp / .h
 ```
 
+`CVFEM_fault_well_lithium_example` demonstrates how to configure and run a simulation with a fault combined with injection and production wells. The fault is represented as a split-boundary object and a LithiumModel is applied to simulate metal transport via the brine. It reads the following input files:
+- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example-wells.txt` — configuration of wells.
+- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example_mesh.dat / .asc` — unstructured grid.
+- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example-regions.txt` — list of regions within the model.
+- `examples/example_inputs/CVFEM_examples/PhysicalVariables.txt` — list of physical variables.
+
+`CVFEM_topo_magma_air_example` demonstrates how to configure and run a simulation with unsaturated flow using a mesh with topography and magmatic intrusion. It reads the following input files:
+- `examples/example_inputs/CVFEM_examples/CVFEM_topo_magma_air_example_mesh.dat / .asc` — unstructured grid.
+- `examples/example_inputs/CVFEM_examples/CVFEM_topo_magma_air_example-regions.txt` — list of regions within the model.
+- `examples/example_inputs/CVFEM_examples/PhysicalVariables.txt` — list of physical variables.
+
 `CVFEM_geothermal_cooling_magma_chamber_example` demonstrates how to configure and run a simulation with a magmatic intrusion that drives hydrothermal convection. It reads the following input files:
 - `examples/example_inputs/CVFEM_examples/CVFEM_geothermal-configuration.txt` — configuration of initial values and boundary conditions.
 - `examples/example_inputs/CVFEM_examples/2D_intrusion.dat / .asc` — unstructured grid.
 - `examples/example_inputs/CVFEM_examples/2D_intrusion-regions.txt` — list of regions within the model.
 
-`CVFEM_fault_well_lithium_example` demonstrates how to configure and run a simulation with a fault combined with injection and production wells. The fault is represented as a split-boundary object and a LithiumModel is applied to simulate metal transport via the brine. It reads the following input files:
-- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example-wells.txt` — configuration of wells.
-- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example_mesh.dat / .asc` — unstructured grid.
-- `examples/example_inputs/CVFEM_examples/CVFEM_fault_well_lithium_example-regions.txt` — list of regions within the model.
-
-`CVFEM_topo_magma_air_example` demonstrates how to configure and run a simulation with unsaturated flow using a mesh with topography and magmatic intrusion. It reads the following input files:
-- `examples/example_inputs/CVFEM_examples/CVFEM_topo_magma_air_example_mesh.dat / .asc` — unstructured grid.
-- `examples/example_inputs/CVFEM_examples/CVFEM_topo_magma_air_example-regions.txt` — list of regions within the model.
-
-These examples are built and run as part of the example suite (`examples/source/ExamplesMain.cpp`), and serve as a starting point for setting up hydrothermal system simulations with this codebase. CVFEM examples can be found in the CVFEM Examples categorie when running `ExamplesMain`. Please copy the required input files listed above into your working directory. 
+These examples are built and run as part of the example suite (`examples/source/ExamplesMain.cpp`), and serve as a starting point for setting up hydrothermal system simulations with this codebase. CVFEM examples can be found in the `CVFEM Examples` category when running `ExamplesMain`. Please copy the required input files listed above into your working directory. Note that the working directory also need to include the `Lookup Tables`. 

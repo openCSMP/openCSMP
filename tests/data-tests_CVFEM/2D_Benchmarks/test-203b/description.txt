@@ -1,0 +1,11 @@
+Salt water multi-phase flow
+Point source
+Figures 14, 15 in Weis et al., 2014 (Geofluids)
+
+pressure_top		1 bar
+temperature_top		10 degC
+bottom heat flux	0.05 W m-2
+Point source 		0.04 kg s-1 fluid source
+			3.0 MJ kg-1 fuid enthalpy
+			0.0004 kg s-1 NaCl
+			

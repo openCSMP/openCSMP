@@ -135,10 +135,10 @@ private:
         YEARS
     };
 
-    const double  year   = 31536000.0;     //  in sec
-    const double  day    = 86400.0;        //  in sec
-    const double  hour   = 3600.0;         //  in sec
-    const double  minute = 60.0;           //  in sec
+    static constexpr double  year   = 31536000.0;     //  in sec
+    static constexpr double  day    = 86400.0;        //  in sec
+    static constexpr double  hour   = 3600.0;         //  in sec
+    static constexpr double  minute = 60.0;           //  in sec
 
 
     static Model<dim>* CreateANSYSModel(const std::string& mesh,

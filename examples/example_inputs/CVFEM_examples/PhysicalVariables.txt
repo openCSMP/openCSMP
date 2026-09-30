@@ -1,0 +1,580 @@
+name					MParameter	unit		index	min.		max.		place
+thickness					h		m		1	1.00E-25	1.00E+25	element
+barycenter depth				Edepth		m		1	-1.00E+25	1.00E+25	element
+nodal depth					Ndepth		m		1	-1.00E+25	1.00E+25	node
+coordinate x					xC		m		1	-1.00E+25	1.00E+25	node
+coordinate y					yC		m		1	-1.00E+25	1.00E+25	node
+coordinate z					zC		m		1	-1.00E+25	1.00E+25	node
+aperture					A		m		1	0.00E+00	1.00E-01	element
+
+permeability					k		m2		1	1.00E-25	1.00E+00	element
+permeability anisotropy factor			ka		-		1	0.00E-00	1.00E+10	element
+permeability ID					kID		-		1	-2.00E+00	2.00E+01	element
+region ID					RID		-		1	-2.00E+10	2.00E+10	element
+BDT start permeability element			kBDT0		m2		1	1.00E-25	1.00E+00	element
+log permeability increase			klogi		-		1	-1.00E+02	1.00E+02	element
+log vertical permeability increase		klogiv		-		1	-1.00E+02	1.00E+02	element
+log horizontal permeability increase		klogih		-		1	-1.00E+02	1.00E+02	element
+previous permeability				pk		m2		1	1.00E-25	1.00E+00	element
+previous previous permeability			ppk		m2		1	1.00E-25	1.00E+00	element
+vertical permeability				kv		m2		1	1.00E-25	1.00E+00	element
+horizontal permeability				kh		m2		1	1.00E-25	1.00E+00	element
+permeability tensor				kT		m2		3	1.00E-25	1.00E+00	element
+nodal permeability				nk		m2		1	1.00E-25	1.00E+00	node
+permeability increase				ki		m2		1	0.00E+00	1.00E+20	element
+permeability log increase			kli		m2		1	0.00E+00	1.00E+20	element
+permeability decrease				kd		m2		1	0.00E+00	1.00E+20	element
+permeability log decrease			kld		m2		1	0.00E+00	1.00E+20	element
+permeability time integral			kti		m2		1	0.00E+00	1.00E+20	element
+permeability change time integral		kcti		m2		1	0.00E+00	1.00E+20	element
+
+porosity					PHI		X		1	0.00E+00	1.00E+00	element
+nodal porosity					nPHI		X		1	0.00E+00	1.00E+00	node
+previous nodal porosity				npPHI		X		1	0.00E+00	1.00E+00	node
+pore volume					PV		m3		1	0.00E+00	1.00E+20	node
+previous pore volume				pPV		m3		1	0.00E+00	1.00E+10	node
+initial pore volume				PV0		m3		1	0.00E+00	1.00E+10	node
+bulk volume					BV		m3		1	0.00E+00	1.00E+10	node
+previous bulk volume				pBV		m3		1	0.00E+00	1.00E+10	node
+initial bulk volume				BV0		m3		1	0.00E+00	1.00E+10	node
+pore volume element				PVe		m3		1	0.00E+00	1.00E+20	element
+bulk volume element				BVe		m3		1	0.00E+00	1.00E+20	element
+diffusivity					Diff		X		1	0.00E+00	1.00E+00	element
+
+temperature					T		oC		1	0.00E+00	1.00E+03	node
+previous temperature				pT		oC		1	0.00E+00	1.00E+03	node
+temperature element				ET		oC		1	0.00E+00	1.00E+03	element
+previous temperature element				ET		oC		1	0.00E+00	1.00E+03	element
+liquidus temperature				Tl		oC		1	0.00E+00	1.00E+03	node
+solidus temperature				Ts		oC		1	0.00E+00	1.00E+03	node
+previous liquidus temperature			pTl		oC		1	0.00E+00	1.00E+03	node
+previous solidus temperature			pTs		oC		1	0.00E+00	1.00E+03	node
+
+total heat capacity				CPT		J kg-1 oC-1	1	0.00E+00	1.00E+20	element
+nodal heat capacity				nCPT		J kg-1 oC-1	1	0.00E+00	1.00E+20	node
+nodal heat capacity rock			nCPR		J kg-1 oC-1	1	0.00E+00	2.00E+03	node
+thermal conductivity				KT		W m-1 oC-1	1	0.00E+00	1.00E+02	element
+fluid heat capacity				CPF		J kg-1 oC-1	1	0.00E+00	1.00E+04	node
+nodal heat flux bottom				QHB		W m-2		1	-1.00E+10	1.00E+10	node
+
+previous total heat capacity				CPT		J kg-1 oC-1	1	0.00E+00	1.00E+20	element
+previous nodal heat capacity				nCPT		J kg-1 oC-1	1	0.00E+00	1.00E+20	node
+previous nodal heat capacity rock			nCPR		J kg-1 oC-1	1	0.00E+00	2.00E+03	node
+previous thermal conductivity				KT		W m-1 oC-1	1	0.00E+00	1.00E+02	element
+previous fluid heat capacity				CPF		J kg-1 oC-1	1	0.00E+00	1.00E+04	node
+previous nodal heat flux bottom				QHB		W m-2		1	-1.00E+10	1.00E+10	node
+
+compressibility					B		Pa-1		1	0.00E+00	1.00E-03	node
+reference compressibility			rB		Pa-1		1	0.00E+00	1.00E-03	node
+nodal total compressibility			nCT		Pa-1		1	1.00E-17	1.00E-03	node
+nodal compressibility air			nBa		Pa-1		1	1.00E-17	1.00E-03	node
+nodal compressibility rock			BR		Pa-1		1	0.00E+00	1.00E-03	node
+gas mix compressibility				Bgm		Pa-1		1	0.00E+00	1.00E-03	node
+
+previous compressibility			pB		Pa-1		1	0.00E+00	1.00E-03	node
+previous reference compressibility			rB		Pa-1		1	0.00E+00	1.00E-03	node
+previous nodal total compressibility			nCT		Pa-1		1	1.00E-17	1.00E-03	node
+previous nodal compressibility air			nBa		Pa-1		1	1.00E-17	1.00E-03	node
+previous nodal compressibility rock			BR		Pa-1		1	0.00E+00	1.00E-03	node
+previous gas mix compressibility				Bgm		Pa-1		1	0.00E+00	1.00E-03	node
+
+fluid pressure					p		Pa		1	0.00E+00	1.00E+09	node
+previous fluid pressure				pp		Pa		1	0.00E+00	1.00E+09	node
+previous previous fluid pressure		ppp		Pa		1	0.00E+00	1.00E+09	node
+stash pressure					sp		Pa		1	0.00E+00	1.00E+09	node
+test fluid pressure				tp		Pa		1	0.00E+00	1.00E+09	node
+reference pressure				rp		Pa		1	0.00E+00	1.00E+09	node
+failure pressure				fp		Pa		1	0.00E+00	1.00E+09	node
+threshold pressure				thp		Pa		1	0.00E+00	1.00E+09	node
+threshold overpressure				thOp		Pa		1	0.00E+00	1.00E+09	node
+failure overpressure				fOp		Pa		1	0.00E+00	1.00E+09	node
+lithostatic pressure				Lp		Pa		1	0.00E+00	1.00E+09	node
+magma pressure					Mp		Pa		1	0.00E+00	1.00E+09	node
+partial pressure air				pa		Pa		1	0.00E+00	1.00E+09	node
+partial pressure vapor				pv		Pa		1	0.00E+00	1.00E+09	node
+
+fluid density					RF		kg m-3		1	0.00E+00	1.00E+07	node
+previous fluid density				pRF		kg m-3		1	0.00E+00	1.00E+07	node
+bulk fluid density				BRF		kg m-3		1	0.00E+00	2.00E+03	node
+fluid mass					MF		kg m-3		1	0.00E+00	1.00E+07	node
+previous fluid mass				pMF		kg m-3		1	0.00E+00	1.00E+07	node
+fluid mass liquid				Ml		kg m-3		1	0.00E+00	3.00E+09	node
+fluid mass vapor				Mv		kg m-3		1	0.00E+00	3.00E+09	node
+fluid mass air					Ma		kg m-3		1	0.00E+00	3.00E+09	node
+previous fluid mass liquid			pMl		kg m-3		1	0.00E+00	3.00E+09	node
+previous fluid mass vapor			pMv		kg m-3		1	0.00E+00	3.00E+09	node
+previous fluid mass air				pMa		kg m-3		1	0.00E+00	3.00E+09	node
+
+saturation liquid				Sl		X		1	0.00E+00	1.00E+00	node
+saturation vapor				Sv		X		1	0.00E+00	1.00E+00	node
+saturation air					Sa		X		1	0.00E+00	1.00E+00	node
+density liquid					RHOl		kg m-3		1	1.00E+00	2.00E+03	node
+density vapor					RHOv		kg m-3		1	1.00E+00	2.00E+03	node
+density air					RHOa		kg m-3		1	0.00E+00	2.00E+03	node
+gas mix density					RHOgm		kg m-3		1	0.00E+00	2.00E+03	node
+density rock					RHOR		kg m-3		1	1.00E-05	1.00E+04	element
+nodal density rock				nRHOR		kg m-3		1	1.00E-05	1.00E+04	node
+previous nodal density rock			pnRHOR		kg m-3		1	1.00E-05	1.00E+04	node
+density liquid transport			RHOlT		kg m-3		1	1.00E+00	2.00E+08	node
+density vapor transport				RHOvT		kg m-3		1	1.00E+00	2.00E+08	node
+density air transport				RHOaT		kg m-3		1	1.00E+00	2.00E+08	node
+viscosity liquid				MUl		Pa s		1	1.00E-07	1.00E-03	node
+viscosity vapor					MUv		Pa s		1	1.00E-07	1.00E-03	node
+viscosity air					MUa		Pa s		1	1.00E-07	1.00E-03	node
+fluid viscosity					MUf		Pa s		1	1.00E-07	1.00E-03	node
+gas mix viscosity				MUgm		Pa s		1	1.00E-07	1.00E-03	node
+
+previous saturation liquid				Sl		X		1	0.00E+00	1.00E+00	node
+previous saturation vapor				Sv		X		1	0.00E+00	1.00E+00	node
+previous saturation air					Sa		X		1	0.00E+00	1.00E+00	node
+previous density liquid					RHOl		kg m-3		1	1.00E+00	2.00E+03	node
+previous density vapor					RHOv		kg m-3		1	1.00E+00	2.00E+03	node
+previous density air					RHOa		kg m-3		1	0.00E+00	2.00E+03	node
+previous gas mix density					RHOgm		kg m-3		1	0.00E+00	2.00E+03	node
+previous density rock					RHOR		kg m-3		1	1.00E-05	1.00E+04	element
+previous nodal density rock				nRHOR		kg m-3		1	1.00E-05	1.00E+04	node
+
+previous density liquid transport			RHOlT		kg m-3		1	1.00E+00	2.00E+08	node
+previous density vapor transport				RHOvT		kg m-3		1	1.00E+00	2.00E+08	node
+previous density air transport				RHOaT		kg m-3		1	1.00E+00	2.00E+08	node
+previous viscosity liquid				MUl		Pa s		1	1.00E-07	1.00E-03	node
+previous viscosity vapor					MUv		Pa s		1	1.00E-07	1.00E-03	node
+previous viscosity air					MUa		Pa s		1	1.00E-07	1.00E-03	node
+previous fluid viscosity					MUf		Pa s		1	1.00E-07	1.00E-03	node
+previous gas mix viscosity				MUgm		Pa s		1	1.00E-07	1.00E-03	node
+
+fluid state					FS		-		1	-1.00E+00	1.00E+01	node
+previous fluid state				pFS		-		1	-0.1	1.00E+01	node
+
+fluid enthalpy					HF		J kg-1		1	0.00E+00	1.00E+09	node
+enthalpy liquid					Hl		J kg-1		1	1.00E+02	1.00E+20	node
+enthalpy vapor					Hv		J kg-1		1	1.00E+02	1.00E+20	node
+enthalpy air					Ha		J kg-1		1	1.00E+02	1.00E+20	node
+gas mix enthalpy				Hgm		J kg-1		1	0.00E+00	1.00E+09	node
+volumetric enthalpy liquid			VHl		J m-3		1	0.00E+00	2.00E+20	node
+volumetric enthalpy vapor			VHv		J m-3		1	0.00E+00	2.00E+20	node
+volumetric enthalpy air				VHa		J m-3		1	0.00E+00	2.00E+20	node
+
+previous fluid enthalpy					HF		J kg-1		1	0.00E+00	1.00E+09	node
+previous enthalpy liquid					Hl		J kg-1		1	1.00E+02	1.00E+20	node
+previous enthalpy vapor					Hv		J kg-1		1	1.00E+02	1.00E+20	node
+previous enthalpy air					Ha		J kg-1		1	1.00E+02	1.00E+20	node
+previous gas mix enthalpy				Hgm		J kg-1		1	0.00E+00	1.00E+09	node
+previous volumetric enthalpy liquid			VHl		J m-3		1	0.00E+00	2.00E+20	node
+previous volumetric enthalpy vapor			VHv		J m-3		1	0.00E+00	2.00E+20	node
+previous volumetric enthalpy air				VHa		J m-3		1	0.00E+00	2.00E+20	node
+
+enthalpy content liquid				CHl		J m-3		1	0.00E+00	2.00E+20	node
+enthalpy content vapor				CHv		J m-3		1	0.00E+00	2.00E+20	node
+enthalpy content air				CHa		J m-3		1	0.00E+00	2.00E+20	node
+previous enthalpy content liquid		PCHl		J m-3		1	0.00E+00	2.00E+20	node
+previous enthalpy content vapor			PCHv		J m-3		1	0.00E+00	2.00E+20	node
+previous enthalpy content air			PCHa		J m-3		1	0.00E+00	2.00E+20	node
+previous total enthalpy				Htp		J m-3		1	0.00E+00	2.00E+20	node
+previous previous total enthalpy		Htpp		J m-3		1	0.00E+00	2.00E+20	node
+
+liquid mass mobility				mobl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor mass mobility				mobv		m2 s-1		1	0.00E+00	1.00E+20	node
+air mass mobility				moba		m2 s-1		1	0.00E+00	1.00E+20	node
+liquid mass mobility density			mobdl		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+vapor mass mobility density			mobdv		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+air mass mobility density			mobda		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+liquid enthalpy mobility			hKl		m2 s-1		1	1.00E-25	1.00E+10	node
+vapor enthalpy mobility				hKv		m2 s-1		1	1.00E-25	1.00E+10	node
+air enthalpy mobility				hKa		m2 s-1		1	1.00E-25	1.00E+10	node
+liquid enthalpy mobility density		hKld		m2 s-1		1	1.00E-25	1.00E+10	node
+vapor enthalpy mobility density			hKvd		m2 s-1		1	1.00E-25	1.00E+10	node
+air enthalpy mobility density			hKad		m2 s-1		1	1.00E-25	1.00E+10	node
+relperm viscosity liquid			MUl_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+relperm viscosity vapor				MUv_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+relperm viscosity air				MUa_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+
+previous liquid mass mobility				mobl		m2 s-1		1	0.00E+00	1.00E+20	node
+previous vapor mass mobility				mobv		m2 s-1		1	0.00E+00	1.00E+20	node
+previous air mass mobility				moba		m2 s-1		1	0.00E+00	1.00E+20	node
+previous liquid mass mobility density			mobdl		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+previous vapor mass mobility density			mobdv		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+previous air mass mobility density			mobda		kg s-1 m-1	1	0.00E+00	1.00E+20	node
+previous liquid enthalpy mobility			hKl		m2 s-1		1	1.00E-25	1.00E+10	node
+previous vapor enthalpy mobility				hKv		m2 s-1		1	1.00E-25	1.00E+10	node
+previous air enthalpy mobility				hKa		m2 s-1		1	1.00E-25	1.00E+10	node
+previous liquid enthalpy mobility density		hKld		m2 s-1		1	1.00E-25	1.00E+10	node
+previous vapor enthalpy mobility density			hKvd		m2 s-1		1	1.00E-25	1.00E+10	node
+previous air enthalpy mobility density			hKad		m2 s-1		1	1.00E-25	1.00E+10	node
+previous relperm viscosity liquid			MUl_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+previous relperm viscosity vapor				MUv_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+previous relperm viscosity air				MUa_inv		s Pa-1		1	1.00E-07	1.00E+07	node
+
+velocity					V		m s-1		2	-1.00E+03	1.00E+03	element
+pore velocity					Vpore		m s-1		2	-1.00E+03	1.00E+03	element
+velocity liquid					Vl		m s-1		2	-1.00E+03	1.00E+03	element
+velocity vapor					Vv		m s-1		2	-1.00E+03	1.00E+03	element
+velocity air					Va		m s-1		2	-1.00E+03	1.00E+03	element
+pore velocity liquid				PVl		m s-1		2	-1.00E+03	1.00E+03	element
+pore velocity vapor				PVv		m s-1		2	-1.00E+03	1.00E+03	element
+pore velocity air				PVa		m s-1		2	-1.00E+03	1.00E+03	element
+nodal pore velocity				pvn		m s-1		2	-1.00E+03	1.00E+03	node
+gradP scaling					gradP_sc	-		1	1.00E-10	1.00E+10	element
+volume factor					OPF		Pa		1	0.00E+00	1.00E+10	node
+
+KgradP						KgradP		m2 Pa m-1	2	1.00E-10	1.00E+10	element
+previous KgradP						KgradP		m2 Pa m-1	2	1.00E-10	1.00E+10	element
+
+nodal fluid volume source			nQT		kg		1	-1.00E+20	1.00E+20	node
+previous nodal fluid volume source		pnQT		kg		1	-1.00E+20	1.00E+20	node
+fluid source rate				fsr		kg s-1		1	0.00E+00	1.00E+10	node
+fluid source h					fsh		J s-1		1	0.00E+00	1.00E+20	node
+fluid source wt					fsw		kg s-1		1	0.00E+00	1.00E+10	node
+
+previous fluid source rate				fsr		kg s-1		1	0.00E+00	1.00E+10	node
+previous fluid source h					fsh		J s-1		1	0.00E+00	1.00E+20	node
+previous fluid source wt					fsw		kg s-1		1	0.00E+00	1.00E+10	node
+
+nodal source liquid				nSl		kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+nodal source vapor				nSv		kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+nodal source air				nSa		kg kg-1 s-1	1	-1.00E+00	1.00E+00	node
+
+boundary flow mass				bfm		kg m-3		1	-1.00E+09	1.00E+09	node
+boundary flow enthalpy				bfH		J m-3		1	-1.00E+09	1.00E+09	node
+boundary flow salt				bfss		kg m-3		1	-1.00E+09	1.00E+09	node
+boundary flow air				bfa		kg m-3		1	-1.00E+09	1.00E+09	node
+
+courant liquid					cfl_l		s		1	1.00E-10	1.00E+20	element
+courant vapor					cfl_v		s		1	1.00E-10	1.00E+20	element
+courant air					cfl_a		s		1	1.00E-10	1.00E+20	element
+upwind control liquid				uc_l		-		1	0	30	element
+upwind control vapor				uc_v		-		1	0	30	element
+upwind control air				uc_a		-		1	0	30	element
+
+salinity					S		Wt. NaCl	1	0.00E+00	1.00E+02	node
+previous salinity				pS		Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction fluid				XF		Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction liquid				Xl		Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction vapor				Xv		Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt fraction halite				Xh		Wt. NaCl	1	0.00E+00	1.00E+02	node
+salt content fluid				CXf		kg m-3		1	0.00E+00	1.00E+09	node
+salt content liquid				CXl		kg m-3		1	0.00E+00	1.00E+09	node
+salt content vapor				CXv		kg m-3		1	0.00E+00	1.00E+09	node
+salt content halite				CXh		kg m-3		1	0.00E+00	1.00E+09	node
+previous salt content fluid			pCXf		kg m-3		1	0.00E+00	1.00E+09	node
+previous salt content liquid			pCXl		kg m-3		1	0.00E+00	1.00E+09	node
+previous salt content vapor			pCXv		kg m-3		1	0.00E+00	1.00E+09	node
+previous mass salt				pms		kg		1	0.00E+00	1.00E+09	node
+
+liquid salt mobility				sKl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor salt mobility				sKv		m2 s-1		1	0.00E+00	1.00E+20	node
+previous liquid salt mobility				sKl		m2 s-1		1	0.00E+00	1.00E+20	node
+previous vapor salt mobility				sKv		m2 s-1		1	0.00E+00	1.00E+20	node
+
+saturation halite				Sh		X		1	0.00E+00	1.00E+00	node
+density halite					RHOh		kg m-3		1	1.00E+00	2.00E+03	node
+solid mass halite				Mh		kg m-3		1	0.00E+00	1.00E+04	node
+enthalpy halite					Hh		J kg-1		1	1.00E+02	1.00E+20	node
+volumetric enthalpy halite			VHh		J m-3		1	0.00E+00	2.00E+20	node
+enthalpy content halite				CHh		J m-3		1	0.00E+00	2.00E+20	node
+volumetric salinity liquid			VXl		kg m-3		1	0.00E+00	1.00E+09	node
+volumetric salinity vapor			VXv		kg m-3		1	0.00E+00	1.00E+09	node
+volumetric salinity halite			VXh		kg m-3		1	0.00E+00	1.00E+09	node
+
+previous saturation halite				Sh		X		1	0.00E+00	1.00E+00	node
+previous density halite					RHOh		kg m-3		1	1.00E+00	2.00E+03	node
+previous solid mass halite				Mh		kg m-3		1	0.00E+00	1.00E+04	node
+previous enthalpy halite					Hh		J kg-1		1	1.00E+02	1.00E+20	node
+previous volumetric enthalpy halite			VHh		J m-3		1	0.00E+00	2.00E+20	node
+previous enthalpy content halite				CHh		J m-3		1	0.00E+00	2.00E+20	node
+previous volumetric salinity liquid			VXl		kg m-3		1	0.00E+00	1.00E+09	node
+previous volumetric salinity vapor			VXv		kg m-3		1	0.00E+00	1.00E+09	node
+previous volumetric salinity halite			VXh		kg m-3		1	0.00E+00	1.00E+09	node
+
+NaCl KCl ratio					NaKrat		-		1	0.00E+00	1.00E+00	node
+liquid salt mobility KCl			sKl_KCl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor salt mobility KCl				sKv_KCl		m2 s-1		1	0.00E+00	1.00E+20	node
+salt content liquid KCl				KCl_CXl		kg m-3		1	0.00E+00	1.00E+09	node
+salt content vapor KCl				KCl_CXv		kg m-3		1	0.00E+00	1.00E+09	node
+salt content halite KCl				KCl_CXh		kg m-3		1	0.00E+00	1.00E+09	node
+mass KCl					mKCl		kg m-3		1	0.00E+00	1.00E+07	node
+previous mass KCl				pmKCl		kg m-3		1	0.00E+00	1.00E+07	node
+previous salt content liquid KCl		KCl_pCXl	kg m-3		1	0.00E+00	1.00E+09	node
+previous salt content vapor KCl			KCl_pCXv	kg m-3		1	0.00E+00	1.00E+09	node
+previous salt content halite KCl		KCl_pCXh	kg m-3		1	0.00E+00	1.00E+09	node
+
+magmatic salt content liquid			mCXl		kg m-3		1	0.00E+00	1.00E+09	node
+magmatic salt content vapor			mCXv		kg m-3		1	0.00E+00	1.00E+09	node
+magmatic salt content halite			mCXh		kg m-3		1	0.00E+00	1.00E+09	node
+previous magmatic salt content liquid		mCXlp		kg m-3		1	0.00E+00	1.00E+09	node
+previous magmatic salt content vapor		mCXvp		kg m-3		1	0.00E+00	1.00E+09	node
+previous magmatic salt content halite		mCXhp		kg m-3		1	0.00E+00	1.00E+09	node
+magmatic mass salt				mms		kg		1	0.00E+00	1.00E+09	node
+previous magmatic mass salt			pmms		kg		1	0.00E+00	1.00E+09	node
+magmatic liquid salt mobility			msKl		m2 s-1		1	0.00E+00	1.00E+20	node
+magmatic vapor salt mobility			msKv		m2 s-1		1	0.00E+00	1.00E+20	node
+
+magmatic fluid mass				mMf		kg m-3		1	0.00E+00	1.00E+07	node
+magmatic fluid mass liquid			mMl		kg m-3		1	0.00E+00	3.00E+09	node
+magmatic fluid mass vapor			mMv		kg m-3		1	0.00E+00	3.00E+09	node
+previous magmatic fluid mass			mMfp		kg m-3		1	0.00E+00	1.00E+07	node
+previous magmatic fluid mass liquid		mMlp		kg m-3		1	0.00E+00	3.00E+09	node
+previous magmatic fluid mass vapor		mMvp		kg m-3		1	0.00E+00	3.00E+09	node
+magmatic liquid mass mobility			mrKl		m2 s-1		1	0.00E+00	1.00E+20	node
+magmatic vapor mass mobility			mrKv		m2 s-1		1	0.00E+00	1.00E+20	node
+magmatic ratio					magR		-		1	0.00E+00	1.00E+00	node
+magmatic water ratio				magWR		-		1	0.00E+00	1.00E+00	node
+magmatic salt ratio				magSR		-		1	0.00E+00	1.00E+00	node
+magmatic production rate			mpr		kg s-1		1	0.00E+00	1.00E+20	node
+total magmatic fluid				tmf		kg		1	0.00E+00	1.00E+20	node
+total fluid injected				tfi		kg		1	0.00E+00	1.00E+20	node
+
+gas mix molar fraction air			molfa		-		1	0.00E+00	1.00E+00	node
+gas mix molar fraction vapor			molfv		-		1	0.00E+00	1.00E+00	node
+
+liquid copper mobility				cuKl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor copper mobility				cuKv		m2 s-1		1	0.00E+00	1.00E+20	node
+copper content fluid				cuCf		kg m-3		1	0.00E+00	1.00E+07	node
+copper content liquid				cuCl		kg m-3		1	0.00E+00	3.00E+09	node
+copper content vapor				cuCv		kg m-3		1	0.00E+00	3.00E+09	node
+previous copper content fluid			pcuCf		kg m-3		1	0.00E+00	1.00E+07	node
+previous copper content liquid			pcuCl		kg m-3		1	0.00E+00	3.00E+09	node
+previous copper content vapor			pcuCv		kg m-3		1	0.00E+00	3.00E+09	node
+copper fraction fluid				cuFr		-		1	0.00E+00	1.00E+00	node
+copper precipitation				cuP		kg m-3		1	0.00E+00	1.00E+20	node
+
+liquid zinc mobility				znKl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor zinc mobility				znKv		m2 s-1		1	0.00E+00	1.00E+20	node
+zinc content fluid				znCf		kg m-3		1	0.00E+00	3.01E+08	node
+zinc content liquid				znCl		kg m-3		1	0.00E+00	3.02E+08	node
+zinc content vapor				znCv		kg m-3		1	0.00E+00	3.03E+08	node
+previous zinc content fluid			pznCf		kg m-3		1	0.00E+00	3.00E+08	node
+previous zinc content liquid			pznCl		kg m-3		1	0.00E+00	3.00E+08	node
+previous zinc content vapor			pznCv		kg m-3		1	0.00E+00	3.00E+08	node
+zinc solid					znS		kg m-3		1	0.00E+00	4.00E+08	node
+previous zinc solid				pznS		kg m-3		1	0.00E+00	4.00E+08	node
+zinc solubility liquid				znSolL		kg kg-1		1	0.00E+00	1.00E+30	node
+zinc solubility vapor				znSolV		kg kg-1		1	0.00E+00	1.00E+30	node
+zinc concentration liquid			znConL		kg kg-1		1	0.00E+00	1.00E+30	node
+zinc concentration vapor			znConV		kg kg-1		1	0.00E+00	1.00E+30	node
+zinc bulk volumic mass				znBvm		kg m-3		1	0.00E+00	1.00E+20	node
+zinc tracer					zt		-		1	0.00E+00	1.00E+20	node
+zinc mass out precip				znMop		kg		1	0.00E+00	1.00E+20	node
+total zinc mass out precip			tznMop		kg		1	0.00E+00	1.00E+20	node
+previous total zinc mass out precip		ptznMop		kg		1	0.00E+00	1.00E+20	node
+zinc mass out					znMo		kg		1	0.00E+00	1.00E+20	node
+total zinc mass out				tznMo		kg		1	0.00E+00	1.00E+20	node
+previous total zinc mass out			ptznMo		kg		1	0.00E+00	1.00E+20	node
+
+zinc t1 content fluid				zn1Cf		kg m-3		1	0.00E+00	2.01E+08	node
+zinc t1 content liquid				zn1Cl		kg m-3		1	0.00E+00	2.02E+08	node
+zinc t1 content vapor				zn1Cv		kg m-3		1	0.00E+00	2.03E+08	node
+zinc t1 solid					zn1S		kg m-3		1	0.00E+00	2.04E+08	node
+previous zinc t1 content fluid			pzn1Cf		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t1 content liquid			pzn1Cl		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t1 content vapor			pzn1Cv		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t1 solid				pzn1S		kg m-3		1	0.00E+00	1.00E+07	node
+liquid zinc t1 mobility				zn1Kl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor zinc t1 mobility				zn1Kv		m2 s-1		1	0.00E+00	1.00E+20	node
+zinc t1 mass out precip				zn1Mop		kg		1	0.00E+00	1.00E+20	node
+total zinc t1 mass out precip			tzn1Mop		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t1 mass out precip		ptzn1Mop	kg		1	0.00E+00	1.00E+20	node
+zinc t1 mass out				zn1Mo		kg		1	0.00E+00	1.00E+20	node
+total zinc t1 mass out				tzn1Mo		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t1 mass out			ptzn1Mo		kg		1	0.00E+00	1.00E+20	node
+
+zinc t2 content fluid				zn2Cf		kg m-3		1	0.00E+00	2.05E+08	node
+zinc t2 content liquid				zn2Cl		kg m-3		1	0.00E+00	2.06E+08	node
+zinc t2 content vapor				zn2Cv		kg m-3		1	0.00E+00	2.07E+08	node
+zinc t2 solid					zn2S		kg m-3		1	0.00E+00	2.08E+08	node
+previous zinc t2 content fluid			pzn2Cf		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t2 content liquid			pzn2Cl		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t2 content vapor			pzn2Cv		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t2 solid				pzn2S		kg m-3		1	0.00E+00	1.00E+07	node
+liquid zinc t2 mobility				zn2Kl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor zinc t2 mobility				zn2Kv		m2 s-1		1	0.00E+00	1.00E+20	node
+zinc t2 mass out precip				zn2Mop		kg		1	0.00E+00	1.00E+20	node
+total zinc t2 mass out precip			tzn2Mop		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t2 mass out precip		ptzn2Mop	kg		1	0.00E+00	1.00E+20	node
+zinc t2 mass out				zn2Mo		kg		1	0.00E+00	1.00E+20	node
+total zinc t2 mass out				tzn2Mo		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t2 mass out			ptzn2Mo		kg		1	0.00E+00	1.00E+20	node
+
+zinc t3 content fluid				zn3Cf		kg m-3		1	0.00E+00	2.09E+08	node
+zinc t3 content liquid				zn3Cl		kg m-3		1	0.00E+00	2.10E+08	node
+zinc t3 content vapor				zn3Cv		kg m-3		1	0.00E+00	2.11E+08	node
+zinc t3 solid					zn3S		kg m-3		1	0.00E+00	2.12E+08	node
+previous zinc t3 content fluid			pzn3Cf		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t3 content liquid			pzn3Cl		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t3 content vapor			pzn3Cv		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t3 solid				pzn3S		kg m-3		1	0.00E+00	1.00E+07	node
+liquid zinc t3 mobility				zn3Kl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor zinc t3 mobility				zn3Kv		m2 s-1		1	0.00E+00	1.00E+20	node
+zinc t3 mass out precip				zn3Mop		kg		1	0.00E+00	1.00E+20	node
+total zinc t3 mass out precip			tzn3Mop		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t3 mass out precip		ptzn3Mop	kg		1	0.00E+00	1.00E+20	node
+zinc t3 mass out				zn3Mo		kg		1	0.00E+00	1.00E+20	node
+total zinc t3 mass out				tzn3Mo		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t3 mass out			ptzn3Mo		kg		1	0.00E+00	1.00E+20	node
+
+zinc t4 content fluid				zn4Cf		kg m-3		1	0.00E+00	2.13E+08	node
+zinc t4 content liquid				zn4Cl		kg m-3		1	0.00E+00	2.14E+08	node
+zinc t4 content vapor				zn4Cv		kg m-3		1	0.00E+00	2.15E+08	node
+zinc t4 solid					zn4S		kg m-3		1	0.00E+00	2.16E+08	node
+previous zinc t4 content fluid			pzn4Cf		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t4 content liquid			pzn4Cl		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t4 content vapor			pzn4Cv		kg m-3		1	0.00E+00	1.00E+07	node
+previous zinc t4 solid				pzn4S		kg m-3		1	0.00E+00	1.00E+07	node
+liquid zinc t4 mobility				zn4Kl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor zinc t4 mobility				zn4Kv		m2 s-1		1	0.00E+00	1.00E+20	node
+zinc t4 mass out precip				zn4Mop		kg		1	0.00E+00	1.00E+20	node
+total zinc t4 mass out precip			tzn4Mop		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t4 mass out precip		ptzn4Mop	kg		1	0.00E+00	1.00E+20	node
+zinc t4 mass out				zn4Mo		kg		1	0.00E+00	1.00E+20	node
+total zinc t4 mass out				tzn4Mo		kg		1	0.00E+00	1.00E+20	node
+previous total zinc t4 mass out			ptzn4Mo		kg		1	0.00E+00	1.00E+20	node
+
+liquid lithium mobility				liKl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor lithium mobility				liKv		m2 s-1		1	0.00E+00	1.00E+20	node
+lithium content fluid				liCf		kg m-3		1	0.00E+00	3.00E+08	node
+lithium content liquid				liCl		kg m-3		1	0.00E+00	3.00E+08	node
+lithium content vapor				liCv		kg m-3		1	0.00E+00	3.00E+08	node
+previous lithium content fluid			pliCf		kg m-3		1	0.00E+00	3.00E+08	node
+previous lithium content liquid			pliCl		kg m-3		1	0.00E+00	3.00E+08	node
+previous lithium content vapor			pliCv		kg m-3		1	0.00E+00	3.00E+08	node
+lithium solid					liS		kg m-3		1	0.00E+00	4.00E+08	node
+previous lithium solid				pliS		kg m-3		1	0.00E+00	4.00E+08	node
+lithium solubility liquid			liSolL		kg kg-1		1	0.00E+00	1.00E+30	node
+lithium solubility vapor			liSolV		kg kg-1		1	0.00E+00	1.00E+30	node
+lithium concentration liquid			liConL		kg kg-1		1	0.00E+00	1.00E+30	node
+lithium concentration vapor			liConV		kg kg-1		1	0.00E+00	1.00E+30	node
+lithium bulk volumic mass			liBvm		kg m-3		1	0.00E+00	1.00E+20	node
+
+liquid tracer mobility				trKl		m2 s-1		1	0.00E+00	1.00E+20	node
+vapor tracer mobility				trKv		m2 s-1		1	0.00E+00	1.00E+20	node
+tracer content fluid				trCf		kg m-3		1	0.00E+00	3.00E+08	node
+tracer content liquid				trCl		kg m-3		1	0.00E+00	3.00E+08	node
+tracer content vapor				trCv		kg m-3		1	0.00E+00	3.00E+08	node
+tracer concentration				trC		kg kg-1		1	0.00E+00	3.00E+08	node
+previous tracer content fluid			ptrCf		kg m-3		1	0.00E+00	3.00E+08	node
+previous tracer content liquid			ptrCl		kg m-3		1	0.00E+00	3.00E+08	node
+previous tracer content vapor			ptrCv		kg m-3		1	0.00E+00	3.00E+08	node
+
+energy flux per second				Efps		J m-3 s-1	1	0.00E+00	1.00E+20	node
+energy flux integral				EfI		J m-3		1	0.00E+00	1.00E+20	node
+energy flux					Ef		J m-3		1	0.00E+00	1.00E+20	node
+fluid flux per second				ffps		kg m-3 s-1	1	0.00E+00	1.00E+20	node
+fluid flux integral				ffoI		kg m-3		1	0.00E+00	1.00E+20	node
+fluid flux					ffo		kg m-3		1	0.00E+00	1.00E+20	node
+fluid flux in					ffi		kg m-3		1	0.00E+00	1.00E+20	node
+salt flux per second				Sfps		kg m-3 s-1	1	0.00E+00	1.00E+20	node
+salt flux integral				SfI		kg m-3		1	0.00E+00	1.00E+20	node
+salt flux					Sf		kg m-3		1	0.00E+00	1.00E+20	node
+magmatic fluid flux integral			mffI		kg m-3		1	0.00E+00	1.00E+20	node
+magmatic fluid flux				mff		kg m-3		1	0.00E+00	1.00E+20	node
+shell magmatic fluid flux integral		smffI		kg m-3		1	0.00E+00	1.00E+20	node
+shell magmatic fluid flux			smff		kg m-3		1	0.00E+00	1.00E+20	node
+previous fluid flux integral			pffI		kg m-3		1	0.00E+00	1.00E+20	node
+previous salt flux integral			pSfI		kg m-3		1	0.00E+00	1.00E+20	node
+previous energy flux integral			pEfI		J m-3		1	0.00E+00	1.00E+20	node
+previous magmatic fluid flux integral		pmffI		kg m-3		1	0.00E+00	1.00E+20	node
+previous shell magmatic fluid flux integral	psffI		kg m-3		1	0.00E+00	1.00E+20	node
+fluid flux with direction integral		cffdI		-		2	-1.00E+25	1.00E+25	node
+previous fluid flux with direction integral	pcffdI		-		2	-1.00E+25	1.00E+25	node
+fluid flux with direction			cffd		-		2	-1.00E+25	1.00E+25	node
+
+force						F		N		2	-1.00E+12	1.00E+12	node
+gravity force					GF		N		2	-1.00E+15	1.00E+15	node
+displacement					UV		m		2	-1.00E+03	1.00E+03	node
+test displacement				tUV		m		2	-1.00E+03	1.00E+03	node
+previous displacement				pUV		m		2	-1.00E+03	1.00E+03	node
+displacement iter				UVit		m		2	-1.00E+03	1.00E+03	node
+sub displacement iter				sUVit		m		2	-1.00E+03	1.00E+03	node
+reverse displacement iter			rUVit		m		2	-1.00E+03	1.00E+03	node
+Young's modulus					E		Pa		1	0.00E+00	1.00E+15	element
+Poisson's ratio					NU		-		1	-1.00E+00	5.00E-01	element
+dilatation					Dil		X		1	-1.00E+03	1.00E+03	node
+stress						SIG		Pa		3	-1.00E+12	1.00E+12	node
+effective stress				SIGe		Pa		3	-1.00E+12	1.00E+12	node
+sigma1						SI1		Pa		2	-1.00E+12	1.00E+12	node
+sigma2						SI2		Pa		2	-1.00E+12	1.00E+12	node
+sigma3						SI3		Pa		2	-1.00E+12	1.00E+12	node
+stress-y					SY		Pa		1	-1.00E+12	1.00E+12	node
+stress-xy					SXY		Pa		1	-1.00E+12	1.00E+12	node
+mean stress					SM		Pa		1	-1.00E+12	1.00E+12	node
+sub mean stress					sSM		Pa		1	-1.00E+12	1.00E+12	node
+previous mean stress				pSM		Pa		1	-1.00E+12	1.00E+12	node
+principal stress				SP		Pa		2	-1.00E+12	1.00E+12	node
+strain						EPS		-		3	-1.00E+03	1.00E+03	node
+strain1						E1		-		2	-1.00E+03	1.00E+03	node
+strain2						E2		-		2	-1.00E+03	1.00E+03	node
+principal strain				EP		-		2	-1.00E+03	1.00E+03	node
+
+fracturing reference				cf		-		1	0.00E+00	3.00E+01	element
+fracturing events				fe		-		1	0.00E+00	1.00E+20	element
+
+quartz solubility				QS		mol kg-1	1	-1.00E+20	1.00E+20	node
+dangerous phase change				DPC		-		1	0.00E+00	1.00E+03	node
+after phasechange counter			APC		-		1	0.00E+00	2.00E+01	node
+
+specific enthalpy liquid top			rhlT		J kg-1		1	0.00E+00	1.00E+07	node
+specific enthalpy vapor top			rhvT		J kg-1		1	0.00E+00	1.00E+07	node
+specific enthalpy air top			rhaT		J kg-1		1	0.00E+00	1.00E+07	node
+mass fraction inflow vapor in air top		mfvT		-		1	0.00E+00	1.00E+00	node
+mass fraction inflow air top			mfaT		-		1	0.00E+00	1.00E+00	node
+rain recharge top				rain		mm yr-1		1	0.00E+00	1.00E+05	node
+
+reference specific enthalpy top			rhT		J kg-1		1	0.00E+00	1.00E+07	node
+
+dt						dt		s		1	0.00E+00	1.00E+20	node
+time factor					tf		-		1	0.00E+00	1.01E+00	node
+
+mass						M		kg		1	0.00E+00	1.00E+20	node
+enthalpy					H		J		1	0.00E+00	1.00E+20	node
+previous mass					pM		kg		1	0.00E+00	1.00E+20	node
+previous enthalpy				pH		J		1	0.00E+00	1.00E+20	node
+
+wellhead pressure				whp		Pa		1	0.00E+00	1.00E+09	element
+well fluid pressure				wellfp		Pa		1	0.00E+00	1.00E+09	element
+well enthalpy liquid				wellhl		J/kg		1	-1.00E+08	1.00E+08	element
+well enthalpy vapor				wellhv		J/kg		1	-1.00E+08	1.00E+08	element
+well enthalpy fluid				wellhf		J/kg		1	-1.00E+08	1.00E+08	element
+well salt fraction liquid			welllmf		-		1	0.00E+00	1.00E+00	element
+well salt fraction vapor			wellvmf		-		1	0.00E+00	1.00E+00	element
+well salt fraction fluid			wellfmf		-		1	0.00E+00	1.00E+00	element
+well velocity liquid				wellvl		m/s		1	-1.00E+03	1.00E+03	element
+well velocity vapor				wellvv		m/s		1	-1.00E+03	1.00E+03	element
+well velocity fluid				wellvm		m/s		1	-1.00E+03	1.00E+03	element
+well density liquid				wellrl		kg/m3		1	0.00E+00	1.00E+04	element
+well density vapor				wellrv		kg/m3		1	0.00E+00	1.00E+04	element
+well density fluid				wellrf		kg/m3		1	0.00E+00	1.00E+04	element
+well viscosity fluid				wellmuf		Pa.s		1	0.00E+00	1.00E+02	element
+well Re number					wellRe		-		1	0.00E+00	1.00E+12	element
+well saturation liquid				wellSl		-		1	0.00E+00	1.00E+00	element
+well saturation vapor				wellSv		-		1	0.00E+00	1.00E+00	element
+well saturation halite				wellSh		-		1	0.00E+00	1.00E+00	element
+well temperature				wellT		oC		1	-1.00E+03	2.00E+03	element
+well cross area					wellA		m2		1	0.00E+00	1.00E+03	element
+well friction factor				wellFric	-		1	0.00E+00	1.00E+03	element
+well fluid state				wellState	-		1	0.00E+00	1.00E+02	element
+well completion					well_comp	-		1	0.00E+00	1.00E+00	node
+well completion length				well_comp_L	m		1	0.00E+00	1.00E+05	node
+well effective radius				well_re		m		1	0.00E+00	1.00E+05	node
+well injectivity				wellINtvt	-		1	-1.00E+25	1.00E+25	node
+well mass transfer rate				wellM		kg/s		1	-1.00E+09	1.00E+09	node
+well tracer mass transfer rate			wellTM		kg/s		1	-1.00E+09	1.00E+09	node
+well energy transfer rate liquid		wellEl		W		1	-1.00E+15	1.00E+15	node
+well energy transfer rate vapor			wellEv		W		1	-1.00E+15	1.00E+15	node
+well energy transfer rate			wellE		W		1	-1.00E+15	1.00E+15	node
+well salt mass transfer rate			wellS		kg/s		1	-1.00E+09	1.00E+09	node
+well index					wellWI		-		1	0.00E+00	1.00E+25	node
+well skin					wellSk		-		1	-1.00E+02	1.00E+03	node
+well reservoir radial heat			wellqr_exchg	W		1	-1.00E+15	1.00E+15	node
+total mass exchanged				wellm_exchg	kg		1	-1.00E+20	1.00E+20	node
+split region diffused heat source		qh		W		1	-1.00E+15	1.00E+15	node
+split region nodal area				nA		m2		1	0.00E+00	1.00E+10	node
+split region mass source			qm		kg/s		1	-1.00E+09	1.00E+09	node
+split region energy source			qe		W		1	-1.00E+15	1.00E+15	node
+split region salt source			qs		kg/s		1	-1.00E+09	1.00E+09	node
+split region hydraulic conductivity		sph		-		1	0.00E+00	1.00E+25	element
+split region gravity mass source		grav_mass_source	kg/s	1	-1.00E+09	1.00E+09	node
+split region potential gradient l		split_grad_pot_l	Pa/m	1	-1.00E+15	1.00E+15	node
+split region potential gradient v		split_grad_pot_v	Pa/m	1	-1.00E+15	1.00E+15	node
+split region relperm l				split_relperm_l	-		1	0.00E+00	1.00E+00	node
+split region relperm v				split_relperm_v	-		1	0.00E+00	1.00E+00	node
+split region perm anisotropy			spa		-		1	0.00E+00	1.00E+25	element

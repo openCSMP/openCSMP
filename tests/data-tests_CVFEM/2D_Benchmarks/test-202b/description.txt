@@ -1,0 +1,9 @@
+pure water two-phase flow
+Points source
+Figure 10b in Weis et al., 2014 (Geofluids)
+
+pressure_top		1 bar
+temperature_top		10 degC
+bottom heat flux	0.05 W m-2
+Point source 		0.04 kg s-1
+			1.5 MJ kg-1

@@ -843,7 +843,7 @@ void CVFEM_geothermal_cooling_magma_chamber_example<dim>::InitializeAllNaNsToZer
 template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::InitializeParameters ()
 {
-    double    largest_time_step    = run_settings.TimeIncrement() * YEARS; // largest timestep in seconds
+    double    largest_time_step    = run_settings.TimeIncrement() * time_multiplier; // largest timestep in seconds
 
     // Input
     // coordinates
