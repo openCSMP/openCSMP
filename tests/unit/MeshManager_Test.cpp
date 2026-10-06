@@ -3,6 +3,7 @@
 //  CSMP_GitHub_UnitTests-Intel
 //
 //  Created by Stephan Matthai on 23/08/2018.
+//  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
 #include <ranges>
@@ -172,12 +173,12 @@ void MeshManager_Test::run()
       cout << "\nMeshManager_Test::TestBasics";
       cout << "\n----------------------------";
       // ==========
-//      TestBasics();
+      TestBasics();
       // ==========
    }
 
   // testing hex element consistency for meshes from ANSYS
-//  _test(TestNeigbourVersusFaceConsistency());
+  _test(TestNeigbourVersusFaceConsistency());
   
   _test( Test_BuildConnectivity() );
   _test( Test_UpdateConnectivity() );

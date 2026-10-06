@@ -2475,6 +2475,12 @@ void create_Prism_VSet(VSet<3U>& vset, bool bSkewed)
     size_t nNodes = nx * ny * nz;
     size_t nCells = (nx-1)*(ny-1)*(nz-1) * 2; // two prisms per brick
 
+    // resize necessitates element type to be defined
+    IsoparametricLinearPrism iso_prism;
+    vset.SingleElementType(iso_prism.ElementType());
+    vset.Resize( iso_prism.Nodes(), iso_prism.Neighbors(), static_cast<int8_t>(iso_prism.ElementType()),
+            nNodes, nCells );
+
     // --- Coordinates ---
     std::deque<double> px(nNodes), py(nNodes), pz(nNodes);
     for (size_t k = 0; k < nz; ++k)

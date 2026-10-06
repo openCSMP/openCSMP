@@ -3,6 +3,7 @@
 //  Open CSMP++SAMG
 //
 //  Created by Stephan Matthai on 29/5/2024.
+//  Copyright © 2024 The University of Melbourne. All rights reserved.
 //
 
 #include "vsetMakers_Test.h"
@@ -61,12 +62,12 @@ void vsetMakers_Test::run()
        create_Tetra_VSet( vset );
        TestConnectedElementNeighborNumbering( vset );
 
-       create_Prism_VSet( vset, bSkewed );
+       create_Prism_VSet( vset, bSkewed ); 
        TestConnectedElementNeighborNumbering( vset );
 
        create_Pyramid_VSet( vset, bSkewed );
        TestConnectedElementNeighborNumbering( vset );
-
+       
        create_Hexahedra_VSet( vset );
        TestConnectedElementNeighborNumbering( vset );
 
@@ -121,6 +122,8 @@ void vsetMakers_Test::run()
     }
 
  } // end run
+ 
+ 
 
 
 /**
@@ -174,7 +177,7 @@ template bool vsetMakers_Test::TestConsistencyWithCSMP_Conventions( const VSet<2
 
 
 
-    /// for the supplied vset, method checks whether the assigned neighbor Element objects are contained in the overall element range
+/// for the supplied vset, method checks whether the assigned neighbor Element objects are contained in the overall element range
 template<uint32_t dim>
 void vsetMakers_Test::TestConnectedElementNeighborNumbering(  const VSet<dim>& vset )
  {

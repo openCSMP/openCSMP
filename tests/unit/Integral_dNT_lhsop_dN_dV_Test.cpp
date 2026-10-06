@@ -26,7 +26,7 @@ Integral_dNT_lhsop_dN_dV_Test::Integral_dNT_lhsop_dN_dV_Test( bool verbose )
       cout << "\nIntegral_dNT_lhsop_dN_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
+    // do not renumber nodes
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_->InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );

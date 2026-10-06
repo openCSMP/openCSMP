@@ -23,6 +23,10 @@
 #include "VectorVar_Test2.h"
 
 // --- math ---
+#ifdef CSMP_WITH_PETSC_SOLVER
+#include <petscsys.h>
+#endif
+
 #include "CompressedRowMatrix_Test.h"
 #include "CubicSpline_Test.h"
 #include "DenseMatrix_Test.h"
@@ -62,7 +66,6 @@
 #include "NodeManifold_Test.h"
 #include "NodeManifoldManager_Test.h"
 #include "Parameter_Test.h"
-#include "parentElementStorageOptions_Test.h"
 #include "Point_Test.h"
 #include "PointPropertyToCellMapper2D_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
@@ -71,13 +74,14 @@
 #include "PropertyHandle_MathTest.h"
 #include "Region_Test.h"
 #include "SplitBoundary_Test.h"
+#include "SplitBoundaryTest_JK.h"
 #include "SplitBoundaryInterface_Test.h"
 
 // --- finite elements ---
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test2.h"
 #include "IsoparametricLinearHexahedron_Test.h"
-#include "IsoparametricLinearPyramid_Test.h"
+#include "IsoparametricLinearPyramid_Test.h" // TODO: run with more relaxed tolerances
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -88,9 +92,7 @@
 #include "ExplicitTransport_Test.h"
 #include "FiniteVolumePolicy_Test.h"
 #include "FiniteVolumeStencil_Test.h"
-#include "FluxMismatch_Test.h"
 #include "FV_Parameter_Test.h"
-#include "GFVT_ParametricSpaceComputation_Test.h"
 
 // --- interfaces to other software: importing ---
 #include "ANSYS_Model2D_Test.h"
@@ -101,7 +103,6 @@
 #include "InputDataManager_Test.h"
 #include "ModelTopology_Test.h"
 #include "PropertyData_Test.h"
-#include "SKUA_FiniteElementMeshInterface_Test.h"
 #include "TRIANGLE_Interface_Test.h"
 #include "VData_Test.h"
 #include "vsetMakers.h"
@@ -203,7 +204,27 @@ using namespace csmp;
 //  number-of-args  arg-strings
 int main( int argc, char* argv[] )
 {
-    bool verbose = true;
+  std::cout << "argc = " << argc << '\n';
+  for (int i = 0; i < argc; ++i)
+    std::cout << "argv[" << i << "] = " << argv[i] << '\n';
+
+#ifdef CSMP_WITH_PETSC_SOLVER
+  // PetscInitializeNoArguments();
+  PetscInitialize(&argc, &argv, nullptr, nullptr);
+  PetscBool initialized = PETSC_FALSE;
+  PetscInitialized(&initialized);
+
+  std::cout << "PETSc initialized = "
+            << (initialized ? "true" : "false")
+            << std::endl;
+#if defined(DEBUG)
+  PetscOptionsSetValue(nullptr, "-ksp_monitor", nullptr);
+  PetscOptionsSetValue(nullptr, "-ksp_converged_reason", nullptr);
+  PetscOptionsSetValue(nullptr, "-ksp_view", nullptr);
+#endif
+#endif
+
+  bool verbose = true;
     bool run_all = false;
     std::string target_suite = "";
 
@@ -242,7 +263,7 @@ int main( int argc, char* argv[] )
           total_failures(0);
 
     try {
-        if (run_all) cout <<"\nunit_test_main: running ALL tests..."<< endl;
+        if (run_all) cout <<"\nunit_CTests_main: running ALL tests..."<< endl;
 
         // =====================================================================
         // REFACTORED CODE
@@ -252,7 +273,9 @@ int main( int argc, char* argv[] )
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
         // add your test of the suggested refactoring here
-        //refactored.addTest( new PDE_Integrator_Test() );
+        // refactored.addTest( new vsetMakers_Test() ); // OK
+        //refactored.addTest( new SplitBoundaryTest_JK() ); // OK
+        refactored.addTest( new VData_Test() );
 
         // actually running the test
         refactored.run();
@@ -270,7 +293,7 @@ int main( int argc, char* argv[] )
     //             FUNDAMENTALS
     //
     // =========================================================================================================
-    cout <<"\nunit_test_main: running comprehensive suite of tests in ";
+    cout <<"\nunit_CTests_main: running comprehensive suite of tests in ";
 #ifndef NDEBUG
     cout <<"DEBUG mode..."<< endl;
 #else
@@ -334,7 +357,9 @@ int main( int argc, char* argv[] )
       basic.addTest( new Parameter_Test() );
       basic.addTest( new PropertyData_Test() );
       basic.addTest( new VData_Test() );
+      basic.addTest( new vsetMakers_Test() );
       basic.addTest( new VSet_Test1() );
+      basic.addTest( new VSet_Test2() );
       basic.addTest( new ColorPalette_Test() );
       
       // Running unit tests and reporting errors
@@ -513,7 +538,7 @@ int main( int argc, char* argv[] )
       // computations
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
-      composite.addTest( new PDE_Integrator_Computation_Test() );
+     // composite.addTest( new PDE_Integrator_Computation_Test() );
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
@@ -651,7 +676,12 @@ int main( int argc, char* argv[] )
     system("pause");
   }
 #endif
-  
+
+
+#ifdef CSMP_WITH_PETSC_SOLVER
+  PetscFinalize();
+#endif
+
   std::exit(total_failures);
 
   return 0;

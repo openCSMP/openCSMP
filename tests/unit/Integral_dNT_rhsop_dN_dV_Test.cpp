@@ -26,7 +26,6 @@ Integral_dNT_rhsop_dN_dV_Test::Integral_dNT_rhsop_dN_dV_Test( bool verbose )
       cout << "\nIntegral_dNT_rhsop_dN_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_->InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
@@ -146,7 +145,6 @@ void Integral_dNT_rhsop_dN_dV_Test::matchesNumericalTest()
     mesh_container.EstablishElementConnectivity2D();
 
     Model<2U> sg_iso( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_iso.Region("Model").RenumberNodes();
     sg_iso.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_iso.InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
 
@@ -161,9 +159,9 @@ void Integral_dNT_rhsop_dN_dV_Test::matchesNumericalTest()
       uint32_t i{0U};
       for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
         (*it)->Store( key_d, ScalarVariable( PLAIN, dvals[i++] ) );
-      i = 0U;
+
       for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it )
-        (*it)->Store( key_u, makeScalar( PLAIN, uvals[i++] ) );
+        (*it)->Store( key_u, makeScalar( PLAIN, uvals[ (*it)->Idx() ] ) );
     }
 
     // also set on the analytical model (sg_) for consistency
@@ -239,9 +237,9 @@ void Integral_dNT_rhsop_dN_dV_Test::setNodeVariable( const vector<double>& val, 
           "Integral_dNT_rhsop_dN_dV_Test::setNodeVariable",
           var_name, "Variable size does not match number of nodes." );
 
-    uint32_t i{0U};
+    // parameterise nodes in VSet order: but interior node now is the first node, but should be node 4
     for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it )
-      (*it)->Store( key, makeScalar( PLAIN, val[i++] ) );
+      (*it)->Store( key, makeScalar( PLAIN, val[ (*it)->Idx() ] ) );
  }
 
 

@@ -236,17 +236,14 @@ void Integral_var_NT_rhsop_N_dV_Test::showNodeVariable(const char* var_name) {
     }
 }
 
-void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable( const vector<double>& var, const char* var_name) {
-    //std::deque<Node<2U> >::iterator it;
-    const csmp::Index key(sg_->Database().StorageKey(var_name));
-    Region<2U>& domain{ sg_->Region("Model") };
+void Integral_var_NT_rhsop_N_dV_Test::setNodeVariable(
+    const vector<double>& var, const char* var_name )
+{
+    const csmp::Index key( sg_->Database().StorageKey( var_name ) );
+    Region<2U>& domain( sg_->Region("Model") );
 
-    unsigned int i = 0;
-    
-    for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it ) {
-        (*it)->Store(key,ScalarVariable(PLAIN, static_cast<double>(var[i])));
-        ++i;
-    }
+    for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it )
+        (*it)->Store( key, makeScalar( PLAIN, var[ (*it)->Idx() ] ) );
 }
 
 void Integral_var_NT_rhsop_N_dV_Test::setElementVariable( const vector<double>& var, const char* var_name) {

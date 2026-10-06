@@ -68,7 +68,6 @@
 #include "NodeManifold_Test.h"
 #include "NodeManifoldManager_Test.h"
 #include "Parameter_Test.h"
-#include "parentElementStorageOptions_Test.h"
 #include "Point_Test.h"
 #include "PointPropertyToCellMapper2D_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
@@ -95,10 +94,7 @@
 #include "ExplicitTransport_Test.h"
 #include "FiniteVolumePolicy_Test.h"
 #include "FiniteVolumeStencil_Test.h"
-#include "FluxMismatch_Test.h"
 #include "FV_Parameter_Test.h"
-#include "GenericFiniteVolumeTransport_Test.h" // TODO: from Andrew Bromage: test fails for any non-simplex elements
-#include "GFVT_ParametricSpaceComputation_Test.h"
 
 // --- interfaces to other software: importing ---
 #include "ANSYS_Model2D_Test.h"
@@ -109,7 +105,6 @@
 #include "InputDataManager_Test.h"
 #include "ModelTopology_Test.h"
 #include "PropertyData_Test.h"
-#include "SKUA_FiniteElementMeshInterface_Test.h"
 #include "TRIANGLE_Interface_Test.h"
 // TODO: test Quadrilaterator
 #include "VData_Test.h"
@@ -188,6 +183,9 @@ constexpr bool COMPREHENSIVE_TESTING = true;
 
 int main()
 {
+#ifdef CSMP_WITH_PETSC_SOLVER
+  PetscInitializeNoArguments();
+#endif
   constexpr bool verbose(false);
 
   const bool is_comp = (COMPREHENSIVE_TESTING == true) ? true : false;
@@ -610,7 +608,10 @@ int main()
     system("pause");
   }
 #endif
-  
+
+#ifdef CSMP_WITH_PETSC_SOLVER
+  PetscFinalize();
+#endif
   std::exit(total_failures);
 
 } // end main 

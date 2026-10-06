@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include "VData.h"
 #include "Box.h"
 #include "FiniteElement.h"
@@ -2537,7 +2533,7 @@ bool VData::WithNeighbourConnectivity() const
     for ( const auto& it : pfverts ) {
          uint32_t valid_nbors{0u};
          for ( const auto& pfit : it )
-           if ( pfit >= 0 ) valid_nbors++;
+           if ( pfit >= 0 || pfit >= static_cast<int64_t>(REGION_BOUNDARY) ) valid_nbors++;
          if ( valid_nbors == it.size() ) return true;
       }
     return false;

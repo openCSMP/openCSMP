@@ -24,7 +24,6 @@ NumIntegral_NT_lhsop_N_dV_Test::NumIntegral_NT_lhsop_N_dV_Test( bool verbose )
       cout << "\nNumIntegral_NT_lhsop_N_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     sg_->InputPropertyValue( "fluid pressure",            makeScalar( PLAIN, 1.0 ) );
     sg_->InputPropertyValue( "diffusivity",               makeScalar( PLAIN, 1.0 ) );
@@ -303,9 +302,8 @@ void NumIntegral_NT_lhsop_N_dV_Test::setNodeVariable( const vector<double>& var,
       throw csmp::Exception( ERROR, "NumIntegral_NT_lhsop_N_dV_Test::setNodeVariable",
                              var_name, "Variable size does not match number of nodes." );
 
-    uint32_t i{0U};
     for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it )
-      (*it)->Store( key, makeScalar( PLAIN, var[i++] ) );
+      (*it)->Store( key, makeScalar( PLAIN, var[ (*it)->Idx() ] ) );
  }
 
 

@@ -552,6 +552,7 @@ inline size_t ModelSubDomain<dim,CELL>::InteriorCells() const noexcept
   {
      assert( cell_vec_.data() != nullptr && !cell_vec_.empty() );
      if ( bd_face_vec_.empty() ) return cell_vec_.size();
+     if ( cell_vec_.empty() ) return 0;
      return cell_vec_.size() - bd_face_vec_.size();
   }
 
@@ -669,6 +670,39 @@ inline void ModelSubDomain<dim,CELL>::UpdateMemberIndexes() const noexcept
 
 
 /**
+      Uses binary_search on both ranges of the sorted cell vector to find the cell in question.
+      returns true or false.
+*/
+template<uint32_t dim, template<uint32_t> class CELL>
+inline bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const noexcept
+{
+    assert( eptr != nullptr );
+    // assert( !rebuilt_needed_ );
+
+    // Verify each sub-range is independently sorted
+    const auto interior_cells = static_cast<long>( InteriorCells() );
+
+    assert( std::is_sorted( cell_vec_.begin(), next( cell_vec_.begin(), interior_cells ) ) &&
+            "interior cell range is not sorted" );
+
+    assert( std::is_sorted( next( cell_vec_.begin(), interior_cells ), cell_vec_.end() ) &&
+            "perimeter cell range is not sorted" );
+
+    // search perimeter first
+    if ( binary_search( next(cell_vec_.begin(),interior_cells), cell_vec_.end(), eptr ) )
+       return true;
+
+    if ( binary_search( cell_vec_.begin(), next(cell_vec_.begin(),interior_cells), eptr ) )
+       return true;
+
+    return false;
+
+ } // end
+
+
+
+
+/**
     Uses binary_search on both ranges of the sorted node vector to find the node in question.
     returns true or false.
 */
@@ -676,14 +710,24 @@ template<uint32_t dim, template<uint32_t> class CELL>
 inline bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) const noexcept
  {
     assert( nptr != nullptr );
+    assert( !rebuilt_needed_ );
     assert( node_vec_.data() != nullptr && !node_vec_.empty() );
 
+    const auto interior_nds = static_cast<long>( InteriorNodes() );
+
+    // Verify each sub-range is independently sorted
+    assert( std::is_sorted( node_vec_.begin(), next( node_vec_.begin(), interior_nds ) ) &&
+            "interior node range is not sorted" );
+
+    assert( std::is_sorted( next( node_vec_.begin(), interior_nds ), node_vec_.end() ) &&
+            "perimeter node range is not sorted" );
+
     // perimeter nodes first
-    if ( binary_search( next(node_vec_.begin(), static_cast<long>(InteriorNodes())), node_vec_.end(), nptr ) )
+    if ( binary_search( next(node_vec_.begin(), interior_nds), node_vec_.end(), nptr ) )
        return true;
 
     // interior nodes next
-    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), static_cast<long>(InteriorNodes())), nptr ) )
+    if ( binary_search( node_vec_.begin(), next(node_vec_.begin(), interior_nds), nptr ) )
        return true;
 
     return false;
@@ -739,4 +783,5 @@ inline bool  ModelSubDomain<dim,CELL>::IsPerimeterCell( size_t e ) const
 } // end namespace
 
 #endif
+
 

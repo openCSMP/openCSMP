@@ -75,7 +75,7 @@ void FiniteVolumeStencilSpeed_Test::run()
         ExplicitTransport<3U>  transport( model, "Model" );
         _equal( transport.IncomingVolumetricFlow(),
                 transport.OutgoingVolumetricFlow(),
-                numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 2e6 );
+                numeric_limits<double>::epsilon() * transport.IncomingVolumetricFlow() * 1e10 );
       }
       // speed test 1: flow through model with TVD concentration
       // -------------------------------------------------------

@@ -30,7 +30,6 @@ Integral_dNT_rhsop_dV_Test::Integral_dNT_rhsop_dV_Test( bool verbose )
       cout << "\nIntegral_dNT_rhsop_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_->CreateProperty( "gravity term", "GT", "Pa/m", VECTOR, ELEMENT );
@@ -213,7 +212,6 @@ void Integral_dNT_rhsop_dV_Test::matchesNumericalTest()
     mesh_container_num.EstablishElementConnectivity2D();
 
     Model<2U> sg_num( mesh_container_num, "CSMP-1phase-variables.txt" );
-    sg_num.Region("Model").RenumberNodes();
     sg_num.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_num.CreateProperty( "gravity term", "GT", "Pa/m", VECTOR, ELEMENT );
     sg_num.InputPropertyValue( "gravity term", makeVector( PLAIN, PLAIN, 0.0, 0.0 ) );

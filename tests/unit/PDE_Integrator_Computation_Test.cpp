@@ -108,6 +108,7 @@ void PDE_Integrator_Computation_Test::run()
                                            "conductivity", "permeability", dynamic_viscosity );
     model_ptr_->Apply(conductivity);
     printRangeOfVariable( *model_ptr_, "conductivity" );
+    printRangeOfVariable( *model_ptr_, "fluid volume source" );
 
 
     // -----------------------------------------------------------------------

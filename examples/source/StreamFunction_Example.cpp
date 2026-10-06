@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include "StreamFunction_Example.h"
 
 #include "Model.h"
@@ -204,17 +200,6 @@ void StreamFunction_Example::Run()
    monitor.ScalarPropertyIntegrals( model, model_time );
    monitor.ScalarPropertyRanges( model, model_time );
    monitor.Out( "CSMP-monitored-regions" );
-
-
-// TESTING VTK OUTPUT OF QUADRATIC TRIANGLE ELEMENTS
-const csmp::Index pf_key = model.Database().StorageKey("fluid pressure");
-Region<2U>&       rref   = model.Region("Model");
-rref.E(5)->CoordinateMatrix();
-DenseMatrix<DM_MIN> DATA;
-DATA.Resize(1,6);
-// nodal fluid pressure
-for ( auto j=0; j<rref.E(5)->Nodes(); j++ ) DATA(0,j) = rref.E(5)->N(j)->Read( pf_key );
-rref.E(5)->FE()->OutputNodeDataToVTK( "test_e", "fluid_pressure", DATA );
 
 
  // ------------------------------------------------------------------------------------

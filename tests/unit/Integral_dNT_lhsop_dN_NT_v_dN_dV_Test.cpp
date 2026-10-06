@@ -28,7 +28,7 @@ Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::Integral_dNT_lhsop_dN_NT_v_dN_dV_Test( bo
       cout << "\nIntegral_dNT_lhsop_dN_NT_v_dN_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
+    // do not renumber nodes
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_->InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
@@ -327,7 +327,6 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::matchesNumericalTest()
     mesh_container_num.EstablishElementConnectivity2D();
 
     Model<2U> sg_num( mesh_container_num, "CSMP-1phase-variables.txt" );
-    sg_num.Region("Model").RenumberNodes();
     sg_num.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_num.InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
     sg_num.InputPropertyValue( "velocity",       makeVector( PLAIN, PLAIN, 0.0, 0.0 ) );

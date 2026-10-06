@@ -3,6 +3,7 @@
 //  CSMP_GitHub_UnitTests
 //
 //  Created by Stephan Matthai on 25/12/2016.
+//  Copyright © 2016 Stephan Matthai. All rights reserved.
 //
 
 #include <ranges>    // C++20 ranges

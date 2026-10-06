@@ -3,6 +3,7 @@
 //  CSMP_unit_tests
 //
 //  Created by Stephan Matthai on 26/1/2022.
+//  Copyright © 2022 Stephan Matthai. All rights reserved.
 //
 
 #include "VData_Test.h"
@@ -601,7 +602,7 @@ void VData_Test::Test_RecreateConnectivityOfPrismMesh()
       vset.EstablishElementConnectivity3D();
       if ( verbose_ ) cout <<"\n"<<"VData_Test::Test_RecreateConnectivityOfPrismMesh: testing model 'Prism_VSet' (54 prisms)..."<< endl;
       _test( vset == vset_backup );
-      }
+    }
  }
 
 

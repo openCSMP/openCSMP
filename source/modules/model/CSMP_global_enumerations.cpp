@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include "CSMP_global_enumerations.h"
 #include "ScalarVariable.h"
 #include "VectorVariable.h"
@@ -205,136 +201,113 @@ template<>  PLACEMENT parsePlacement<1U,Model>() noexcept { return MODEL; }
 template<>  PLACEMENT parsePlacement<2U,Model>() noexcept { return MODEL; }
 template<>  PLACEMENT parsePlacement<3U,Model>() noexcept { return MODEL; }
 
-// Helper: normalise string (lowercase)
-static std::string normalise(std::string_view str) noexcept {
-    std::string result(str);
-    std::ranges::transform(result, result.begin(), 
-                          [](unsigned char c) { return std::tolower(c); });
-    return result;
-}
-// Static map for placement parsing
-PLACEMENT parsePlacement(const char* placement) noexcept {
-    static const std::unordered_map<std::string, PLACEMENT> placementMap{
-        // Uppercase variants
-        {"NODE", NODE},
-        {"ELEMENT_INTEGRATION_POINT", ELEMENT_INTEGRATION_POINT},
-        {"INTEGRATION_POINT", ELEMENT_INTEGRATION_POINT},
-        {"SECTOR_INTEGRATION_POINT", SECTOR_INTEGRATION_POINT},
-        {"FACET_INTEGRATION_POINT", FACET_INTEGRATION_POINT},
-        {"FACE_INTEGRATION_POINT", FACE_INTEGRATION_POINT},
-        {"FACE_SECTOR_INTEGRATION_POINT", FACE_SECTOR_INTEGRATION_POINT},
-        {"FACE_FACET_INTEGRATION_POINT", FACE_FACET_INTEGRATION_POINT},
-        {"INTER_FACE_INTEGRATION_POINT", INTER_FACE_INTEGRATION_POINT},
-        {"INTER_FACE_SECTOR_INTEGRATION_POINT", INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {"INTER_FACE_FACET_INTEGRATION_POINT", INTER_FACE_FACET_INTEGRATION_POINT},
-        {"FACE", FACE},
-        {"INTER_FACE", INTER_FACE},
-        {"INTERFACE", INTER_FACE},
-        {"ELEMENT", ELEMENT},
-        {"REGION", REGION},
-        {"BOUNDARY", BOUNDARY},
-        {"SPLIT_BOUNDARY", SPLIT_BOUNDARY},
-        {"MODEL", MODEL},
-        
-        // Lowercase variants
-        {"node", NODE},
-        {"cpoint", ELEMENT_INTEGRATION_POINT},
-        {"ipoint", ELEMENT_INTEGRATION_POINT},
-        {"integration point", ELEMENT_INTEGRATION_POINT},
-        {"integration_point", ELEMENT_INTEGRATION_POINT},
-        {"simplex integration point", ELEMENT_INTEGRATION_POINT},
-        {"simplex_integration_point", ELEMENT_INTEGRATION_POINT},
-        {"element integration point", ELEMENT_INTEGRATION_POINT},
-        {"element_integration_point", ELEMENT_INTEGRATION_POINT},
-        {"sector integration point", SECTOR_INTEGRATION_POINT},
-        {"sector_integration_point", SECTOR_INTEGRATION_POINT},
-        {"facet integration point", FACET_INTEGRATION_POINT},
-        {"facet_integration_point", FACET_INTEGRATION_POINT},
-        {"face integration point", FACE_INTEGRATION_POINT},
-        {"face_integration_point", FACE_INTEGRATION_POINT},
-        {"face sector integration point", FACE_SECTOR_INTEGRATION_POINT},
-        {"face_sector_integration_point", FACE_SECTOR_INTEGRATION_POINT},
-        {"face facet integration point", FACE_FACET_INTEGRATION_POINT},
-        {"face_facet_integration_point", FACE_FACET_INTEGRATION_POINT},
-        {"interface integration point", INTER_FACE_INTEGRATION_POINT},
-        {"inter face integration point", INTER_FACE_INTEGRATION_POINT},
-        {"inter_face_integration_point", INTER_FACE_INTEGRATION_POINT},
-        {"interface sector integration point", INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {"inter face sector integration point", INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {"inter_face_sector_integration_point", INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {"inter face facet integration point", INTER_FACE_FACET_INTEGRATION_POINT},
-        {"interface facet integration point", INTER_FACE_FACET_INTEGRATION_POINT},
-        {"inter_face_facet_integration_point", INTER_FACE_FACET_INTEGRATION_POINT},
-        {"face", FACE},
-        {"interface", INTER_FACE},
-        {"inter face", INTER_FACE},
-        {"inter_face", INTER_FACE},
-        {"iface", INTER_FACE},
-        {"element", ELEMENT},
-        {"elmt", ELEMENT},
-        {"region", REGION},
-        {"boundary", BOUNDARY},
-        {"splitboundary", SPLIT_BOUNDARY},
-        {"model", MODEL},
-        
-        // PascalCase variants
-        {"Node", NODE},
-        {"IntegrationPoint", ELEMENT_INTEGRATION_POINT},
-        {"SimplexIntegrationPoint", ELEMENT_INTEGRATION_POINT},
-        {"FacetIntegrationPoint", FACET_INTEGRATION_POINT},
-        {"SectorIntegrationPoint", SECTOR_INTEGRATION_POINT},
-        {"FaceIntegrationPoint", FACE_INTEGRATION_POINT},
-        {"FaceFacetIntegrationPoint", FACE_FACET_INTEGRATION_POINT},
-        {"FaceSectorIntegrationPoint", FACE_SECTOR_INTEGRATION_POINT},
-        {"InterFaceIntegrationPoint", INTER_FACE_INTEGRATION_POINT},
-        {"InterFaceFacetIntegrationPoint", INTER_FACE_FACET_INTEGRATION_POINT},
-        {"InterFaceSectorIntegrationPoint", INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {"Face", FACE},
-        {"InterFace", INTER_FACE},
-        {"Element", ELEMENT},
-        {"Region", REGION},
-        {"Boundary", BOUNDARY},
-        {"SplitBoundary", SPLIT_BOUNDARY},
-        {"Model", MODEL},
-    };
-    if (auto it = placementMap.find(placement); it != placementMap.end()) {
-        return it->second;
-    }
-    std::cerr << "\nparsePlacement(const char*): unable to parse: '" 
-              << placement << "' returning MODEL\n";
+
+
+PLACEMENT parsePlacement( const char* placement ) noexcept
+{
+    if ( !placement ) return MODEL;
+
+    // normalise: lowercase + spaces → underscores
+    // collapses all variants into a single canonical form:
+    //   "Element Integration Point" → "element_integration_point"
+    //   "ELEMENT_INTEGRATION_POINT" → "element_integration_point"
+    //   "element integration point" → "element_integration_point"
+    //   "InterFace"                 → "interface"
+    std::string n( placement );
+    std::transform( n.begin(), n.end(), n.begin(),
+                    []( unsigned char c ) {
+                        return c == ' ' ? '_' : static_cast<char>( std::tolower(c) );
+                    } );
+
+    using sv = std::string_view;
+
+    constexpr std::array<std::pair<sv, PLACEMENT>, 38> lookup {{
+        { sv{"node"},                                NODE                                },
+        { sv{"element"},                             ELEMENT                             },
+        { sv{"elmt"},                                ELEMENT                             },
+        { sv{"ipoint"},                              ELEMENT_INTEGRATION_POINT           },
+        { sv{"cpoint"},                              ELEMENT_INTEGRATION_POINT           },
+        { sv{"integration_point"},                   ELEMENT_INTEGRATION_POINT           },
+        { sv{"integrationpoint"},                    ELEMENT_INTEGRATION_POINT           },
+        { sv{"element_integration_point"},           ELEMENT_INTEGRATION_POINT           },
+        { sv{"simplex_integration_point"},           ELEMENT_INTEGRATION_POINT           },
+        { sv{"simplexintegrationpoint"},             ELEMENT_INTEGRATION_POINT           },
+        { sv{"sector_integration_point"},            SECTOR_INTEGRATION_POINT            },
+        { sv{"sectorintegrationpoint"},              SECTOR_INTEGRATION_POINT            },
+        { sv{"facet_integration_point"},             FACET_INTEGRATION_POINT             },
+        { sv{"facetintegrationpoint"},               FACET_INTEGRATION_POINT             },
+        { sv{"face"},                                FACE                                },
+        { sv{"face_integration_point"},              FACE_INTEGRATION_POINT              },
+        { sv{"faceintegrationpoint"},                FACE_INTEGRATION_POINT              },
+        { sv{"face_sector_integration_point"},       FACE_SECTOR_INTEGRATION_POINT       },
+        { sv{"facesectorintegrationpoint"},          FACE_SECTOR_INTEGRATION_POINT       },
+        { sv{"face_facet_integration_point"},        FACE_FACET_INTEGRATION_POINT        },
+        { sv{"facefacetintegrationpoint"},           FACE_FACET_INTEGRATION_POINT        },
+        { sv{"interface"},                           INTER_FACE                          },
+        { sv{"inter_face"},                          INTER_FACE                          },
+        { sv{"iface"},                               INTER_FACE                          },
+        { sv{"inter_face_integration_point"},        INTER_FACE_INTEGRATION_POINT        },
+        { sv{"interface_integration_point"},         INTER_FACE_INTEGRATION_POINT        },
+        { sv{"interfaceintegrationpoint"},           INTER_FACE_INTEGRATION_POINT        },
+        { sv{"inter_face_sector_integration_point"}, INTER_FACE_SECTOR_INTEGRATION_POINT },
+        { sv{"interface_sector_integration_point"},  INTER_FACE_SECTOR_INTEGRATION_POINT },
+        { sv{"interfacesectorintegrationpoint"},     INTER_FACE_SECTOR_INTEGRATION_POINT },
+        { sv{"inter_face_facet_integration_point"},  INTER_FACE_FACET_INTEGRATION_POINT  },
+        { sv{"interface_facet_integration_point"},   INTER_FACE_FACET_INTEGRATION_POINT  },
+        { sv{"interfacefacetintegrationpoint"},      INTER_FACE_FACET_INTEGRATION_POINT  },
+        { sv{"region"},                              REGION                              },
+        { sv{"boundary"},                            BOUNDARY                            },
+        { sv{"split_boundary"},                      SPLIT_BOUNDARY                      },
+        { sv{"splitboundary"},                       SPLIT_BOUNDARY                      },
+        { sv{"model"},                               MODEL                               },
+    }};
+
+    const sv ns( n );
+    for ( const auto& p : lookup )
+        if ( p.first == ns ) return p.second;
+
+    std::cerr << "\nparsePlacement: unable to parse: '"
+              << placement << "' — returning MODEL\n";
     return MODEL;
 }
 
 
-std::string parsePlacement(PLACEMENT placement) noexcept {
-    static const std::unordered_map<PLACEMENT, std::string> reverseMap{
-        {NODE, "NODE"},
-        {ELEMENT_INTEGRATION_POINT, "ELEMENT_INTEGRATION_POINT"},
-        {FACET_INTEGRATION_POINT, "FACET_INTEGRATION_POINT"},
-        {SECTOR_INTEGRATION_POINT, "SECTOR_INTEGRATION_POINT"},
-        {FACE_INTEGRATION_POINT, "FACE_INTEGRATION_POINT"},
-        {FACE_FACET_INTEGRATION_POINT, "FACE_FACET_INTEGRATION_POINT"},
-        {FACE_SECTOR_INTEGRATION_POINT, "FACE_SECTOR_INTEGRATION_POINT"},
-        {INTER_FACE_INTEGRATION_POINT, "INTER_FACE_INTEGRATION_POINT"},
-        {INTER_FACE_FACET_INTEGRATION_POINT, "INTER_FACE_FACET_INTEGRATION_POINT"},
-        {INTER_FACE_SECTOR_INTEGRATION_POINT, "INTER_FACE_SECTOR_INTEGRATION_POINT"},
-        {FACE, "FACE"},
-        {INTER_FACE, "INTER_FACE"},
-        {ELEMENT, "ELEMENT"},
-        {REGION, "REGION"},
-        {BOUNDARY, "BOUNDARY"},
-        {SPLIT_BOUNDARY, "SPLIT_BOUNDARY"},
-        {MODEL, "MODEL"},
-    };
 
-    if (auto it = reverseMap.find(placement); it != reverseMap.end()) {
-        return it->second;
+
+/**
+    @brief Converts a PLACEMENT enum value to its string representation.
+
+    @param placement  The PLACEMENT value to convert.
+    @return           String name of the enum value, or "MODEL" if not recognised
+                      (with a diagnostic message to stderr).
+*/
+std::string parsePlacement( PLACEMENT placement ) noexcept
+{
+    switch ( placement ) {
+        case NODE:                                return "NODE";
+        case ELEMENT:                             return "ELEMENT";
+        case ELEMENT_INTEGRATION_POINT:           return "ELEMENT_INTEGRATION_POINT";
+        case SECTOR_INTEGRATION_POINT:            return "SECTOR_INTEGRATION_POINT";
+        case FACET_INTEGRATION_POINT:             return "FACET_INTEGRATION_POINT";
+        case FACE:                                return "FACE";
+        case FACE_INTEGRATION_POINT:              return "FACE_INTEGRATION_POINT";
+        case FACE_SECTOR_INTEGRATION_POINT:       return "FACE_SECTOR_INTEGRATION_POINT";
+        case FACE_FACET_INTEGRATION_POINT:        return "FACE_FACET_INTEGRATION_POINT";
+        case INTER_FACE:                          return "INTER_FACE";
+        case INTER_FACE_INTEGRATION_POINT:        return "INTER_FACE_INTEGRATION_POINT";
+        case INTER_FACE_SECTOR_INTEGRATION_POINT: return "INTER_FACE_SECTOR_INTEGRATION_POINT";
+        case INTER_FACE_FACET_INTEGRATION_POINT:  return "INTER_FACE_FACET_INTEGRATION_POINT";
+        case REGION:                              return "REGION";
+        case BOUNDARY:                            return "BOUNDARY";
+        case SPLIT_BOUNDARY:                      return "SPLIT_BOUNDARY";
+        case MODEL:                               return "MODEL";
+        default:
+            std::cerr << "\nparsePlacement(PLACEMENT): unable to parse: "
+                      << static_cast<int>( placement ) << '\n';
+            return "MODEL";
     }
-
-    std::cerr << "\nparsePlacement(PLACEMENT): unable to parse: " 
-              << static_cast<int>(placement) << '\n';
-    return "MODEL";
 }
+
  
  
  
@@ -381,91 +354,112 @@ bool isPlacedOnIntegrationPoint(PLACEMENT p) noexcept {
  
  
 
-PLACEMENT intToPLACEMENT(int i) noexcept {
-    static const std::unordered_map<int, PLACEMENT> intMap{
-        {0, NODE},
-        {1, ELEMENT_INTEGRATION_POINT},
-        {2, SECTOR_INTEGRATION_POINT},
-        {3, FACET_INTEGRATION_POINT},
-        {5, FACE},
-        {6, INTER_FACE},
-        {7, ELEMENT},
-        {8, REGION},
-        {9, BOUNDARY},
-        {10, SPLIT_BOUNDARY},
-        {11, MODEL},
-        {12, FACE_INTEGRATION_POINT},
-        {13, FACE_SECTOR_INTEGRATION_POINT},
-        {14, FACE_FACET_INTEGRATION_POINT},
-        {15, INTER_FACE_INTEGRATION_POINT},
-        {16, INTER_FACE_SECTOR_INTEGRATION_POINT},
-        {17, INTER_FACE_FACET_INTEGRATION_POINT},
-    };
+/**
+    @brief Converts an integer to the corresponding PLACEMENT enum value.
 
-    if (auto it = intMap.find(i); it != intMap.end()) {
-        return it->second;
+    The integer encoding matches the internal CSMP binary storage format.
+    Note that value 4 is not assigned — it is a legacy gap in the encoding.
+
+    @param i  Integer to convert.
+    @return   Corresponding PLACEMENT value, or MODEL if not recognised
+              (with a diagnostic message to stderr).
+*/
+PLACEMENT intToPLACEMENT( int i ) noexcept
+{
+    switch ( i ) {
+        case  0: return NODE;
+        case  1: return ELEMENT_INTEGRATION_POINT;
+        case  2: return SECTOR_INTEGRATION_POINT;
+        case  3: return FACET_INTEGRATION_POINT;
+        // case 4: not assigned — legacy gap in encoding
+        case  5: return FACE;
+        case  6: return INTER_FACE;
+        case  7: return ELEMENT;
+        case  8: return REGION;
+        case  9: return BOUNDARY;
+        case 10: return SPLIT_BOUNDARY;
+        case 11: return MODEL;
+        case 12: return FACE_INTEGRATION_POINT;
+        case 13: return FACE_SECTOR_INTEGRATION_POINT;
+        case 14: return FACE_FACET_INTEGRATION_POINT;
+        case 15: return INTER_FACE_INTEGRATION_POINT;
+        case 16: return INTER_FACE_SECTOR_INTEGRATION_POINT;
+        case 17: return INTER_FACE_FACET_INTEGRATION_POINT;
+        default:
+            std::cerr << "\nintToPlacement: unable to parse integer: "
+                      << i << '\n';
+            return MODEL;
     }
-
-    std::cerr << "\nintToPlacement(int): unable to parse integer: " << i << '\n';
-    return MODEL;
 }
+
 
 
 
 // VARIABLE FLAG
 
-VARIABLE_FLAG intToVARIABLE_FLAG(int i) noexcept {
-    static const std::unordered_map<int, VARIABLE_FLAG> flagMap{
-        {0, PLAIN},
-        {1, ANY},
-        {2, INIT_GUESS},
-        {3, INIT_COND},
-        {4, FIELD_DATA},
-        {5, PERIODIC},
-        {6, DIRICH},
-        {7, NEUMANN},
-        {8, ROBIN},
-        {9, CONSTANT_FLUX},
-    };
+/**
+    @brief Converts an integer to the corresponding VARIABLE_FLAG enum value.
 
-    if (auto it = flagMap.find(i); it != flagMap.end()) {
-        return it->second;
+    The integer encoding matches the internal CSMP binary storage format.
+
+    @param i  Integer to convert.
+    @return   Corresponding VARIABLE_FLAG value, or ANY if not recognised
+              (with a diagnostic message to stderr).
+*/
+VARIABLE_FLAG intToVARIABLE_FLAG( int i ) noexcept
+{
+    switch ( i ) {
+        case 0: return PLAIN;
+        case 1: return ANY;
+        case 2: return INIT_GUESS;
+        case 3: return INIT_COND;
+        case 4: return FIELD_DATA;
+        case 5: return PERIODIC;
+        case 6: return DIRICH;
+        case 7: return NEUMANN;
+        case 8: return ROBIN;
+        case 9: return CONSTANT_FLUX;
+        default:
+            std::cerr << "\nintToVARIABLE_FLAG: unable to parse integer: "
+                      << i << '\n';
+            return ANY;
     }
-
-    std::cerr << "\nintToVARIABLE_FLAG(int): unable to parse integer: " << i << '\n';
-    return ANY;
 }
 
 
-VARIABLE_FLAG parseStatus(const char* status) noexcept {
-    static const std::unordered_map<std::string, VARIABLE_FLAG> statusMap{
-        {"ANY", ANY},
-        {"any", ANY},
-        {"PLAIN", PLAIN},
-        {"Plain", PLAIN},
-        {"plain", PLAIN},
-        {"DIRICH", DIRICH},
-        {"DIRICHLET", DIRICH},
-        {"Dirichlet", DIRICH},
-        {"NEUMANN", NEUMANN},
-        {"Neumann", NEUMANN},
-        {"PERIODIC", PERIODIC},
-        {"periodic", PERIODIC},
-        {"ROBIN", ROBIN},
-        {"Robin", ROBIN},
-        {"FIELD_DATA", FIELD_DATA},
-        {"field data", FIELD_DATA},
-        {"INIT_GUESS", INIT_GUESS},
-        {"initial guess", INIT_GUESS},
-        {"INIT_COND", INIT_COND},
-        {"initial condition", INIT_COND},
+
+VARIABLE_FLAG parseStatus( const char* status ) noexcept
+{
+    using sv = std::string_view;
+    constexpr std::array lookup {
+        std::pair{sv{"ANY"},               ANY        },
+        std::pair{sv{"any"},               ANY        },
+        std::pair{sv{"PLAIN"},             PLAIN      },
+        std::pair{sv{"Plain"},             PLAIN      },
+        std::pair{sv{"plain"},             PLAIN      },
+        std::pair{sv{"DIRICH"},            DIRICH     },
+        std::pair{sv{"DIRICHLET"},         DIRICH     },
+        std::pair{sv{"Dirichlet"},         DIRICH     },
+        std::pair{sv{"NEUMANN"},           NEUMANN    },
+        std::pair{sv{"Neumann"},           NEUMANN    },
+        std::pair{sv{"PERIODIC"},          PERIODIC   },
+        std::pair{sv{"periodic"},          PERIODIC   },
+        std::pair{sv{"ROBIN"},             ROBIN      },
+        std::pair{sv{"Robin"},             ROBIN      },
+        std::pair{sv{"FIELD_DATA"},        FIELD_DATA },
+        std::pair{sv{"field_data"},        FIELD_DATA },
+        std::pair{sv{"INIT_GUESS"},        INIT_GUESS },
+        std::pair{sv{"initial_guess"},     INIT_GUESS },
+        std::pair{sv{"INIT_COND"},         INIT_COND  },
+        std::pair{sv{"initial_condition"}, INIT_COND  },
     };
 
-    if (auto it = statusMap.find(status); it != statusMap.end()) {
-        return it->second;
-    }
+    if ( !status ) return ANY;
+    const sv s( status );
+    for ( const auto& p : lookup )
+        if ( p.first == s ) return p.second;
 
-    std::cerr << "\nparseStatus(const char*): unable to parse: '" << status << "'\n";
+    std::cerr << "\nparseStatus: unable to parse: '" << status << "'\n";
     return ANY;
 }
 
@@ -495,69 +489,75 @@ std::string parseStatus(VARIABLE_FLAG status) noexcept {
 
 
 /**
+    @brief Interprets a string as a CSMP variable boundary condition flag.
 
-Interprets the supplied string as an essential (boundary) condition.
-Possible values are given in 'CSMP_definitions.h'
-and MULTIPLE. The last type can be used to specify Cauchy or
-Robbin conditions.
+    Input is normalised to uppercase before matching so the comparison
+    is case-insensitive. Both underscore and space-separated variants
+    are accepted (e.g. "INITIAL_CONDITION" and "INITIAL CONDITION").
 
-@section arguments Input Arguments
-
-The string that shall be interpreted as boundary condition.
+    @param s  String to interpret (e.g. "DIRICH", "Neumann", "plain").
+    @return   Corresponding VARIABLE_FLAG value.
+    @throws   csmp::Exception (FATAL_ERROR) if the string is not recognised.
 */
-VARIABLE_FLAG parseCondition(std::string_view s) {
-    static const std::unordered_map<std::string, VARIABLE_FLAG> conditionMap{
-        {"PLAIN", PLAIN},
-        {"ANY", ANY},
-        {"INIT_GUESS", INIT_GUESS},
-        {"INITIAL GUESS", INIT_GUESS},
-        {"INIT_COND", INIT_COND},
-        {"INITIAL CONDITION", INIT_COND},
-        {"FIELD_DATA", FIELD_DATA},
-        {"FIELD DATA", FIELD_DATA},
-        {"PERIODIC", PERIODIC},
-        {"DIRICH", DIRICH},
-        {"DIRICHLET", DIRICH},
-        {"NEUMANN", NEUMANN},
-        {"NATURAL", NEUMANN},
-        {"ROBIN", ROBIN},
-        {"CONST_FLUX", CONSTANT_FLUX},
-        {"CONSTANT_FLUX", CONSTANT_FLUX},
-        {"CONSTANT FLUX", CONSTANT_FLUX},
-    };
+VARIABLE_FLAG parseCondition( std::string_view s )
+{
+    using sv = std::string_view;
 
-    // Normalise input to uppercase
-    std::string normalized(s);
-    std::ranges::transform(normalized, normalized.begin(),
-                          [](unsigned char c) { return std::toupper(c); });
+    // compile-time lookup table — no runtime initialisation, no hashing, no UB
+    constexpr std::array<std::pair<std::string_view, VARIABLE_FLAG>, 20> lookup {{
+        std::pair{sv{"ANY"},               ANY           },
+        std::pair{sv{"PLAIN"},             PLAIN         },
+        std::pair{sv{"DIRICH"},            DIRICH        },
+        std::pair{sv{"DIRICHLET"},         DIRICH        },
+        std::pair{sv{"NEUMANN"},           NEUMANN       },
+        std::pair{sv{"NATURAL"},           NEUMANN       },
+        std::pair{sv{"ROBIN"},             ROBIN         },
+        std::pair{sv{"PERIODIC"},          PERIODIC      },
+        std::pair{sv{"INIT_GUESS"},        INIT_GUESS    },
+        std::pair{sv{"INITIAL_GUESS"},     INIT_GUESS    },
+        std::pair{sv{"init_guess"},        INIT_GUESS    },
+        std::pair{sv{"INIT_COND"},         INIT_COND     },
+        std::pair{sv{"INITIAL_CONDITION"}, INIT_COND     },
+        std::pair{sv{"init_cond"},         INIT_COND     },
+        std::pair{sv{"FIELD_DATA"},        FIELD_DATA    },
+        std::pair{sv{"field_data"},        FIELD_DATA    },
+        std::pair{sv{"CONST_FLUX"},        CONSTANT_FLUX },
+        std::pair{sv{"CONSTANT_FLUX"},     CONSTANT_FLUX },
+        std::pair{sv{"const_flux"},        CONSTANT_FLUX },
+    }};
 
-    if (auto it = conditionMap.find(normalized); it != conditionMap.end()) {
-        return it->second;
-    }
+    // normalise input to uppercase
+    std::string n( s );
+    std::ranges::transform( n, n.begin(),
+                            []( unsigned char c ) { return std::toupper(c); } );
 
-    throw csmp::Exception(FATAL_ERROR,
-                         "parseCondition:",
-                         normalized.c_str(),
-                         ": boundary condition type specifier was not recognised");
+    const sv normalised( n );
+    for ( const auto& p : lookup )
+        if ( p.first == normalised ) return p.second;
+
+    throw csmp::Exception( FATAL_ERROR,
+                           "parseCondition:",
+                           n.c_str(),
+                           ": boundary condition type specifier was not recognised" );
 }
 
 
 
+
 /**
-    To print enum INTERFACE_SIDE.
+    @brief Converts an INTERFACE_SIDE enum value to its string representation.
+
+    @param side  The INTERFACE_SIDE value to convert.
+    @return      String name of the enum value, or "UNDEFINED" if not recognised.
 */
-std::string parseSide(INTERFACE_SIDE side) noexcept {
-    static const std::unordered_map<INTERFACE_SIDE, std::string> sideMap{
-        {INSIDE, "INSIDE"},
-        {OUTSIDE, "OUTSIDE"},
-        {MIDDLE, "MIDDLE"},
-    };
-
-    if (auto it = sideMap.find(side); it != sideMap.end()) {
-        return it->second;
+std::string parseSide( INTERFACE_SIDE side ) noexcept
+{
+    switch ( side ) {
+        case INSIDE:  return "INSIDE";
+        case OUTSIDE: return "OUTSIDE";
+        case MIDDLE:  return "MIDDLE";
+        default:      return "UNDEFINED";
     }
-
-    return "UNDEFINED";
 }
 
 

@@ -3,6 +3,7 @@
 //  Open CSMP++SAMG
 //
 //  Created by Stephan Matthai on 6/7/2026.
+//  Copyright © 2026 Stephan Matthai. All rights reserved.
 //
 
 // NumIntegral_NT_rhsop_N_dV_Test.cpp
@@ -32,7 +33,6 @@ NumIntegral_NT_rhsop_N_dV_Test::NumIntegral_NT_rhsop_N_dV_Test( bool verbose )
       cout << "\nNumIntegral_NT_rhsop_N_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     if ( verbose_ )
       printNodeCoordinates<2>( sg_->Region("Model").NodesBegin(),

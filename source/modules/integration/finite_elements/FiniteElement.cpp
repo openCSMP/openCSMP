@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include "FiniteElement.h"
 #include "CSMP_definitions.h"
 #include "ErrorHandler.h"
@@ -1043,71 +1039,89 @@ CSMP_FEM_TYPE  parseFiniteElementTypeEnum( int8_t etype ) noexcept
 
 
 
- /// converts enum names into text
-CSMP_FEM_TYPE  parseFiniteElementType( const std::string& etype ) noexcept
-  {
-    // static map so it is initialized only once
-    static const std::unordered_map<std::string, CSMP_FEM_TYPE> typeMap {
-        {"UNKNOWN", UNKNOWN},
-        {"LINEAR_RECTANGLE", LINEAR_RECTANGLE},
-        {"LINEAR_CUBOID", LINEAR_CUBOID},
-        {"LINEAR_BAR", LINEAR_BAR},
-        {"QUADRATIC_BAR", QUADRATIC_BAR},
-        {"CUBIC_BAR", CUBIC_BAR},
-        {"LINEAR_TRIANGLE", LINEAR_TRIANGLE},
-        {"LINEAR_TRIANGLE3D", LINEAR_TRIANGLE3D},
-        {"BARYCENTRIC_LINEAR_TRIANGLE", BARYCENTRIC_LINEAR_TRIANGLE},
-        {"QUADRATIC_TRIANGLE", QUADRATIC_TRIANGLE},
-        {"BARYCENTRIC_QUADRATIC_TRIANGLE", BARYCENTRIC_QUADRATIC_TRIANGLE},
-        {"CUBIC_TRIANGLE", CUBIC_TRIANGLE},
-        {"LINEAR_TETRAHEDRON", LINEAR_TETRAHEDRON},
-        {"QUADRATIC_TETRAHEDRON", QUADRATIC_TETRAHEDRON},
-        {"BARYCENTRIC_QUADRATIC_TETRAHEDRON", BARYCENTRIC_QUADRATIC_TETRAHEDRON},
-        {"CUBIC_TETRAHEDRON", CUBIC_TETRAHEDRON},
-        {"ISOPARAMETRIC_LINEAR_BAR", ISOPARAMETRIC_LINEAR_BAR},
-        {"ISOPARAMETRIC_QUADRATIC_BAR", ISOPARAMETRIC_QUADRATIC_BAR},
-        {"ISOPARAMETRIC_CUBIC_BAR", ISOPARAMETRIC_CUBIC_BAR},
-        {"ISOPARAMETRIC_LINEAR_TRIANGLE", ISOPARAMETRIC_LINEAR_TRIANGLE},
-        {"ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE", ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE},
-        {"ISOPARAMETRIC_QUADRATIC_TRIANGLE", ISOPARAMETRIC_QUADRATIC_TRIANGLE},
-        {"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE", ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE},
-        {"ISOPARAMETRIC_CUBIC_TRIANGLE", ISOPARAMETRIC_CUBIC_TRIANGLE},
-        {"ISOPARAMETRIC_LINEAR_TETRAHEDRON", ISOPARAMETRIC_LINEAR_TETRAHEDRON},
-        {"ISOPARAMETRIC_QUADRATIC_TETRAHEDRON", ISOPARAMETRIC_QUADRATIC_TETRAHEDRON},
-        {"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON", ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON},
-        {"ISOPARAMETRIC_CUBIC_TETRAHEDRON", ISOPARAMETRIC_CUBIC_TETRAHEDRON},
-        {"ISOPARAMETRIC_LINEAR_PYRAMID", ISOPARAMETRIC_LINEAR_PYRAMID},
-        {"ISOPARAMETRIC_QUADRATIC_PYRAMID13", ISOPARAMETRIC_QUADRATIC_PYRAMID13},
-        {"ISOPARAMETRIC_QUADRATIC_PYRAMID14", ISOPARAMETRIC_QUADRATIC_PYRAMID14},
-        {"ISOPARAMETRIC_CUBIC_PYRAMID", ISOPARAMETRIC_CUBIC_PYRAMID},
-        {"ISOPARAMETRIC_LINEAR_PRISM", ISOPARAMETRIC_LINEAR_PRISM},
-        {"ISOPARAMETRIC_QUADRATIC_PRISM15", ISOPARAMETRIC_QUADRATIC_PRISM15},
-        {"ISOPARAMETRIC_QUADRATIC_PRISM18", ISOPARAMETRIC_QUADRATIC_PRISM18},
-        {"ISOPARAMETRIC_CUBIC_PRISM", ISOPARAMETRIC_CUBIC_PRISM},
-        {"ISOPARAMETRIC_LINEAR_QUADRILATERAL", ISOPARAMETRIC_LINEAR_QUADRILATERAL},
-        {"ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL", ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL},
-        {"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL", ISOPARAMETRIC_QUADRATIC_QUADRILATERAL},
-        {"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL", ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL},
-        {"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9", ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9},
-        {"ISOPARAMETRIC_CUBIC_QUADRILATERAL", ISOPARAMETRIC_CUBIC_QUADRILATERAL},
-        {"ISOPARAMETRIC_LINEAR_HEXAHEDRON", ISOPARAMETRIC_LINEAR_HEXAHEDRON},
-        {"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20", ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20},
-        {"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27", ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27},
-        {"ISOPARAMETRIC_CUBIC_HEXAHEDRON", ISOPARAMETRIC_CUBIC_HEXAHEDRON},
-        {"ZERO_DIMENSIONAL_FACE", ZERO_DIMENSIONAL_FACE},
-        {"POINT_ELEMENT", POINT_ELEMENT},
-        {"POLYGONAL_ELEMENT", POLYGONAL_ELEMENT},
-        {"POLYHEDRAL_ELEMENT", POLYHEDRAL_ELEMENT},
-        {"EXPERIMENTAL_ELEMENT", EXPERIMENTAL_ELEMENT}
-    };
+/**
+    @brief Converts a string to the corresponding CSMP_FEM_TYPE enum value.
 
-    auto it = typeMap.find(etype);
-    if (it != typeMap.end()) return it->second;
+    @param etype  String name of the finite element type.
+    @return       Corresponding CSMP_FEM_TYPE value, or UNKNOWN if not
+                  recognised (with a diagnostic message to stderr).
+*/
+CSMP_FEM_TYPE parseFiniteElementType( const std::string& etype ) noexcept
+{
+    using sv = std::string_view;
 
-    std::cerr << "\nparseFiniteElementType: Could not identify element type: " << etype << std::endl;
+    constexpr std::array<std::pair<sv, CSMP_FEM_TYPE>, 51> lookup {{
+        // --- non-isoparametric ---
+        { sv{"UNKNOWN"},                                          UNKNOWN                                        },
+        { sv{"LINEAR_RECTANGLE"},                                 LINEAR_RECTANGLE                               },
+        { sv{"LINEAR_CUBOID"},                                    LINEAR_CUBOID                                  },
+        { sv{"LINEAR_BAR"},                                       LINEAR_BAR                                     },
+        { sv{"QUADRATIC_BAR"},                                    QUADRATIC_BAR                                  },
+        { sv{"CUBIC_BAR"},                                        CUBIC_BAR                                      },
+        { sv{"LINEAR_TRIANGLE"},                                  LINEAR_TRIANGLE                                },
+        { sv{"LINEAR_TRIANGLE3D"},                                LINEAR_TRIANGLE3D                              },
+        { sv{"BARYCENTRIC_LINEAR_TRIANGLE"},                      BARYCENTRIC_LINEAR_TRIANGLE                    },
+        { sv{"QUADRATIC_TRIANGLE"},                               QUADRATIC_TRIANGLE                             },
+        { sv{"BARYCENTRIC_QUADRATIC_TRIANGLE"},                   BARYCENTRIC_QUADRATIC_TRIANGLE                 },
+        { sv{"CUBIC_TRIANGLE"},                                   CUBIC_TRIANGLE                                 },
+        { sv{"LINEAR_TETRAHEDRON"},                               LINEAR_TETRAHEDRON                             },
+        { sv{"QUADRATIC_TETRAHEDRON"},                            QUADRATIC_TETRAHEDRON                          },
+        { sv{"BARYCENTRIC_QUADRATIC_TETRAHEDRON"},                BARYCENTRIC_QUADRATIC_TETRAHEDRON              },
+        { sv{"CUBIC_TETRAHEDRON"},                                CUBIC_TETRAHEDRON                              },
+        // --- isoparametric bar ---
+        { sv{"ISOPARAMETRIC_LINEAR_BAR"},                         ISOPARAMETRIC_LINEAR_BAR                       },
+        { sv{"ISOPARAMETRIC_QUADRATIC_BAR"},                      ISOPARAMETRIC_QUADRATIC_BAR                    },
+        { sv{"ISOPARAMETRIC_CUBIC_BAR"},                          ISOPARAMETRIC_CUBIC_BAR                        },
+        // --- isoparametric triangle ---
+        { sv{"ISOPARAMETRIC_LINEAR_TRIANGLE"},                    ISOPARAMETRIC_LINEAR_TRIANGLE                  },
+        { sv{"ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE"},        ISOPARAMETRIC_BARYCENTRIC_LINEAR_TRIANGLE      },
+        { sv{"ISOPARAMETRIC_QUADRATIC_TRIANGLE"},                 ISOPARAMETRIC_QUADRATIC_TRIANGLE               },
+        { sv{"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE"},     ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TRIANGLE   },
+        { sv{"ISOPARAMETRIC_CUBIC_TRIANGLE"},                     ISOPARAMETRIC_CUBIC_TRIANGLE                   },
+        // --- isoparametric tetrahedron ---
+        { sv{"ISOPARAMETRIC_LINEAR_TETRAHEDRON"},                 ISOPARAMETRIC_LINEAR_TETRAHEDRON               },
+        { sv{"ISOPARAMETRIC_QUADRATIC_TETRAHEDRON"},              ISOPARAMETRIC_QUADRATIC_TETRAHEDRON            },
+        { sv{"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON"},  ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_TETRAHEDRON},
+        { sv{"ISOPARAMETRIC_CUBIC_TETRAHEDRON"},                  ISOPARAMETRIC_CUBIC_TETRAHEDRON                },
+        // --- isoparametric pyramid ---
+        { sv{"ISOPARAMETRIC_LINEAR_PYRAMID"},                     ISOPARAMETRIC_LINEAR_PYRAMID                   },
+        { sv{"ISOPARAMETRIC_QUADRATIC_PYRAMID13"},                ISOPARAMETRIC_QUADRATIC_PYRAMID13              },
+        { sv{"ISOPARAMETRIC_QUADRATIC_PYRAMID14"},                ISOPARAMETRIC_QUADRATIC_PYRAMID14              },
+        { sv{"ISOPARAMETRIC_CUBIC_PYRAMID"},                      ISOPARAMETRIC_CUBIC_PYRAMID                    },
+        // --- isoparametric prism ---
+        { sv{"ISOPARAMETRIC_LINEAR_PRISM"},                       ISOPARAMETRIC_LINEAR_PRISM                     },
+        { sv{"ISOPARAMETRIC_QUADRATIC_PRISM15"},                  ISOPARAMETRIC_QUADRATIC_PRISM15                },
+        { sv{"ISOPARAMETRIC_QUADRATIC_PRISM18"},                  ISOPARAMETRIC_QUADRATIC_PRISM18                },
+        { sv{"ISOPARAMETRIC_CUBIC_PRISM"},                        ISOPARAMETRIC_CUBIC_PRISM                      },
+        // --- isoparametric quadrilateral ---
+        { sv{"ISOPARAMETRIC_LINEAR_QUADRILATERAL"},               ISOPARAMETRIC_LINEAR_QUADRILATERAL             },
+        { sv{"ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL"},   ISOPARAMETRIC_BARYCENTRIC_LINEAR_QUADRILATERAL },
+        { sv{"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL"},            ISOPARAMETRIC_QUADRATIC_QUADRILATERAL          },
+        { sv{"ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL"},ISOPARAMETRIC_BARYCENTRIC_QUADRATIC_QUADRILATERAL},
+        { sv{"ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9"},           ISOPARAMETRIC_QUADRATIC_QUADRILATERAL9         },
+        { sv{"ISOPARAMETRIC_CUBIC_QUADRILATERAL"},                ISOPARAMETRIC_CUBIC_QUADRILATERAL              },
+        // --- isoparametric hexahedron ---
+        { sv{"ISOPARAMETRIC_LINEAR_HEXAHEDRON"},                  ISOPARAMETRIC_LINEAR_HEXAHEDRON                },
+        { sv{"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20"},             ISOPARAMETRIC_QUADRATIC_HEXAHEDRON20           },
+        { sv{"ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27"},             ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27           },
+        { sv{"ISOPARAMETRIC_CUBIC_HEXAHEDRON"},                   ISOPARAMETRIC_CUBIC_HEXAHEDRON                 },
+        // --- special ---
+        { sv{"ZERO_DIMENSIONAL_FACE"},                            ZERO_DIMENSIONAL_FACE                          },
+        { sv{"POINT_ELEMENT"},                                    POINT_ELEMENT                                  },
+        { sv{"POLYGONAL_ELEMENT"},                                POLYGONAL_ELEMENT                              },
+        { sv{"POLYHEDRAL_ELEMENT"},                               POLYHEDRAL_ELEMENT                             },
+        { sv{"EXPERIMENTAL_ELEMENT"},                             EXPERIMENTAL_ELEMENT                           },
+    }};
+
+    const sv s( etype );
+    for ( const auto& p : lookup )
+        if ( p.first == s ) return p.second;
+
+    std::cerr << "\nparseFiniteElementType: could not identify element type: "
+              << etype << "\n";
     return UNKNOWN;
 
- } // end parseFiniteElementType
+} // end parseFiniteElementType
 
  
  

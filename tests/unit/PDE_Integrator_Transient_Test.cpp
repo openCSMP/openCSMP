@@ -53,10 +53,6 @@ namespace csmp {
 
 void PDE_Integrator_Transient_Test::run()
 {
-#ifdef CSMP_WITH_PETSC_SOLVER
-      PetscInitializeNoArguments();
-#endif
-
     // -----------------------------------------------------------------------
     // 1. Mesh and model setup
     // -----------------------------------------------------------------------
@@ -228,10 +224,6 @@ void PDE_Integrator_Transient_Test::run()
     vtk_output.OutputDataToVTK(model, "fluid_pressure", "fluid pressure", 0);
 
     cout << "\nPDE_Integrator_Transient_Test: all tests passed.\n";
-
-#ifdef CSMP_WITH_PETSC_SOLVER
-    PetscFinalize();
-#endif
 
 } // end run
 

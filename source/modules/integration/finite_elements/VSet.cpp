@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include "VSet.h"
 #include "ANSYS_ElementSpecifications.h"
 #include "Exception.h"
@@ -231,10 +227,12 @@ void VSet<dim>::AddPfverts( typename map<size_t, vector<int64_t> >::const_iterat
 	*/
 template<uint32_t dim>
 void VSet<dim>::AddPfverts( typename deque<vector<int64_t> >::const_iterator first,
-						                typename deque<vector<int64_t> >::const_iterator last )
+                            typename deque<vector<int64_t> >::const_iterator last )
 {
-	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
+  assert( distance(first,last) == distance(PfvertsBegin(),PfvertsEnd()) );
 
+	typename deque<vector<int64_t> >::iterator it = PfvertsBegin();
+  
 	while (first != last && it != PfvertsEnd())
     {
       (*it) = (*first);
@@ -245,10 +243,11 @@ void VSet<dim>::AddPfverts( typename deque<vector<int64_t> >::const_iterator fir
 } // end
 
 
-	/**
+
+/**
 	Adds a map that stores the indices of the boundary nodes as keys and
 	BOX_BOUNDARY flags as values.
-	*/
+*/
 template<uint32_t dim>
 void VSet<dim>::AddBFlags( typename vector<std::int8_t>::const_iterator first,
                            typename vector<std::int8_t>::const_iterator last )
@@ -461,27 +460,29 @@ in 'binaryReadWrite.h'. These can read and write all CSMP type of datasets.
 template<uint32_t dim>
 bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 {
-    char num[32];
-    snprintf( num, sizeof(num), "%f", time );
-    size_t  records(0);
+	char file_name[200], num[20];
+  snprintf( num, sizeof(num), "%f", time );
+	strcpy(file_name, bin_file);
+	size_t  records(0);
 
-    // 1. opening the file
-    fstream fp(bin_file, ios::out | ios::binary);
-    if (!fp.is_open()) {
-        cout << "\nVSet<dim>::OutputTo: File: " << bin_file;
-        cout << " could not be opened" << endl;
-        return false;
-    }
+	// 1. opening the file
+	fstream fp(file_name, ios::out | ios::binary);
+	if (!fp.is_open()) {
+		cout << "\nVSet<dim>::OutputTo: File: " << file_name;
+		cout << " could not be opened" << endl;
+		return false;
+	}
 
-    // 2. writing the file header
-    {
-        BinaryFileSectionWrite sect(fp, "VSETHEDR");
-        std::string heading = "VSet<dim>::OutputTo: Binary version of VSet: ";
-        heading += bin_file;
-        heading += " saved at time: ";
-        heading += num;
-        binaryFileWrite(fp, heading);
-    }
+	// 2. writing the file header
+	{
+		BinaryFileSectionWrite sect(fp, "VSETHEDR");
+		char heading[200];
+		strcpy(heading, "VSet<dim>::OutputTo: Binary version of VSet: ");
+		strcat(heading, bin_file);
+		strcat(heading, " saved at time: ");
+		strcat(heading, num);
+		binaryFileWrite(fp, heading);
+	}
 
 	// 3. Writing the mesh connectivity to file
 	{
@@ -526,7 +527,7 @@ bool  VSet<dim>::OutputTo( const char* bin_file, double time ) const
 
 	fp.close();
 	cout << "\nVSet<" << dim << ">::OutputTo: VSet has been successfully written to: ";
-    cout << bin_file << endl;
+	cout << file_name << endl;
 
 	return true;
 
@@ -660,24 +661,25 @@ TODO: @todo Refactor to work with PropertyData based variable storage
 template<uint32_t dim>
 bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t first_outerhalo) const
 {
-    char num[32];
-    snprintf( num, sizeof(num), "%zu", static_cast<size_t>(time) );
-    std::string heading = "VSet<dim>::OutputTo: Binary version of VSet: ";
-    heading += bin_file;
-    heading += " saved at time: ";
-    heading += num;
-    snprintf( num, sizeof(num), "%zu", first_outerhalo );
-    heading += ", first outerhalo: ";
-    heading += num;
+	char file_name[200], num[20];
+  snprintf( num, sizeof(num), "%zu", static_cast<size_t>(time) );
+	strcpy(file_name, bin_file);
+	char heading[200];
+	strcpy(heading, "VSet<dim>::OutputTo: Binary version of VSet: ");
+	strcat(heading, bin_file);
+	strcat(heading, " saved at time: ");
+	strcat(heading, num);
+  snprintf( num, sizeof(num), "%zu", first_outerhalo );
+	strcat(heading, ", first outerhalo: ");
+	strcat(heading, num);
 
-    // 1. opening the file
-    fstream fp(bin_file, ios::out | ios::binary);
-    if (!fp.is_open()) {
-        cout << "\nVSet<dim>::ParallelOutputTo: File: " << bin_file;
-        cout << " could not be opened" << endl;
-        return false;
-    }
-
+	// 1. opening the file
+	fstream fp(file_name, ios::out | ios::binary);
+	if (!fp.is_open()) {
+		cout << "\nVSet<dim>::ParallelOutputTo: File: " << file_name;
+		cout << " could not be opened" << endl;
+		return false;
+	}
 	// 2. writing the file header   
 	binaryFileWrite(fp, heading);
 
@@ -689,7 +691,7 @@ bool  VSet<dim>::ParallelOutputTo(const char* bin_file, double time, size_t firs
 	// 5. cleaning up
 	fp.close();
 	cout << "\nVSet<" << dim << ">::ParallelOutputTo: VSet has been successfully written to: ";
-    cout << bin_file << endl;
+	cout << file_name << endl;
 
 	return true;
 } // end ParallelOutputTo

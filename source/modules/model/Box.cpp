@@ -1,7 +1,3 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 #include <numbers>
 #include "Box.h"
 #include "Region.h"
@@ -1529,7 +1525,38 @@ BOX_BOUNDARY atBoundary( const set<BOX_BOUNDARY>& flags, uint32_t boundary_face_
               }
         }
         // if the face is equidimensional (a triangle or quadrilateral)
-        if ( boundary_face_corner_nodes > 2U ) {
+        if ( boundary_face_corner_nodes > 2U )
+          {
+            // for triangular faces with only edge and corner flags,
+            // find the common side implied by all flags
+            if ( boundary_face_corner_nodes == 3U ) {
+                // collect all sides implied by each flag
+                // a flag implies a side if the node lies on that side
+                auto impliesSide = []( BOX_BOUNDARY flag, BOX_BOUNDARY side ) -> bool {
+                    switch ( side ) {
+                        case BACK:   return flag==BACK  || flag==EDGE1 || flag==EDGE2 || flag==EDGE3 || flag==EDGE4
+                                           || flag==CNR1 || flag==CNR2 || flag==CNR3 || flag==CNR4;
+                        case FRONT:  return flag==FRONT || flag==EDGE9 || flag==EDGE10|| flag==EDGE11|| flag==EDGE12
+                                           || flag==CNR5 || flag==CNR6 || flag==CNR7 || flag==CNR8;
+                        case BOTTOM: return flag==BOTTOM|| flag==EDGE1 || flag==EDGE9 || flag==EDGE5 || flag==EDGE6
+                                           || flag==CNR1 || flag==CNR2 || flag==CNR5 || flag==CNR6;
+                        case TOP:    return flag==TOP   || flag==EDGE3 || flag==EDGE11|| flag==EDGE7 || flag==EDGE8
+                                           || flag==CNR3 || flag==CNR4 || flag==CNR7 || flag==CNR8;
+                        case LEFT:   return flag==LEFT  || flag==EDGE4 || flag==EDGE12|| flag==EDGE5 || flag==EDGE8
+                                           || flag==CNR1 || flag==CNR4 || flag==CNR5 || flag==CNR8;
+                        case RIGHT:  return flag==RIGHT || flag==EDGE2 || flag==EDGE10|| flag==EDGE6 || flag==EDGE7
+                                           || flag==CNR2 || flag==CNR3 || flag==CNR6 || flag==CNR7;
+                        default:     return false;
+                    }
+                };
+
+                for ( BOX_BOUNDARY side : { BACK, FRONT, BOTTOM, TOP, LEFT, RIGHT } ) {
+                    bool all_imply_side = true;
+                    for ( const auto& bit : flags )
+                        if ( !impliesSide( bit, side ) ) { all_imply_side = false; break; }
+                    if ( all_imply_side ) return side;
+                }
+            }
             // Prioritize side flags
             for ( const auto& bit : flags ) if (isSide(bit)) return bit;
             // When there are only corners

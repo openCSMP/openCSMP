@@ -27,7 +27,6 @@ NumIntegral_dNT_rhsop_dN_dV_Test::NumIntegral_dNT_rhsop_dN_dV_Test( bool verbose
       cout << "\nNumIntegral_dNT_rhsop_dN_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 1.0 ) );
     sg_->InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
@@ -206,7 +205,7 @@ void NumIntegral_dNT_rhsop_dN_dV_Test::uniformTest()
 // =============================================================================
 
 void NumIntegral_dNT_rhsop_dN_dV_Test::setNodeVariable( const vector<double>& val,
-                                                         const char* var_name )
+                                                        const char* var_name )
  {
     const csmp::Index key( sg_->Database().StorageKey( var_name ) );
     Region<2>& domain( sg_->Region("Model") );
@@ -215,9 +214,8 @@ void NumIntegral_dNT_rhsop_dN_dV_Test::setNodeVariable( const vector<double>& va
       throw csmp::Exception( ERROR, "NumIntegral_dNT_rhsop_dN_dV_Test::setNodeVariable",
                              var_name, "Variable size does not match number of nodes." );
 
-    uint32_t i{0U};
     for ( auto it = domain.NodesBegin(); it != domain.NodesEnd(); ++it )
-      (*it)->Store( key, makeScalar( PLAIN, val[i++] ) );
+      (*it)->Store( key, makeScalar( PLAIN, val[ (*it)->Idx() ] ) );
  }
 
 

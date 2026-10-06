@@ -1,7 +1,9 @@
 #include "FluxMismatch_Test.h"
+
 #include "FiniteVolumeStencil.h"
 #include "AP_testUtilities.h"
 #include "vsetMakers.h"
+#include "Index.h"
 #include "Model.h"
 #include "Region.h"
 #include "SteadyStateDiffusor.h"
@@ -16,9 +18,21 @@ using namespace std;
 
 namespace csmp {
 
-// testing whether there is a flux mismatch when integrating velocity fields 
+void FluxMismatch_Test::run()
+ {
+    constexpr bool bPrescribedVelocity{true};
+    
+    FluxMismatch( bPrescribedVelocity );
+    
+    // precomputed divergence-free velocity field
+    FluxMismatch( !bPrescribedVelocity );
+ }
+
+
+
+// testing whether there is a flux mismatch when integrating velocity fields
 // with the node-centered FV scheme
-int flux_mismatch( bool bPrescribedVelocity ) 
+int FluxMismatch_Test::FluxMismatch( bool bPrescribedVelocity )
   {
     const bool verbose(false);
     
@@ -91,8 +105,9 @@ int flux_mismatch( bool bPrescribedVelocity )
   
     if ( verbose ) cout << "\nflux_mismatch: Measuring the time required to build basic transport algorithm: ";
 	  clock_t ticks = clock();
-    NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg, "porosity", "concentration", "velocity", 
-                                                         "nodal fluid volume source",false, false );
+    sg.InstantiateFiniteVolumes();
+    NodeCenteredFiniteVolumeTransport<3U>  advector( "Model", sg, "porosity", "concentration", "velocity",
+                                                     "nodal fluid volume source",false, false );
     ticks = clock() - ticks;
 	  if ( verbose ) cout << ticks << endl << endl;
       
@@ -135,7 +150,7 @@ int flux_mismatch( bool bPrescribedVelocity )
            cout <<"\ntestNodeCenteredFiniteVolumeTransport: worst finite volume: " << (*it)->Read( prop_key ) << endl;
            (*it)->Out();
            cout <<"\ncomposed of the element types: "<< endl;
-           for ( auto i{0}; i<(*it)->Parents(); i++ )
+           for ( uint32_t i{0}; i<(*it)->Parents(); i++ )
              {
                cout << (*it)->Parent(i) << " ";             
                cout << parseFiniteElementType( (*it)->Parent(i)->FE()->ElementType() ) << endl;       
@@ -167,7 +182,6 @@ int flux_mismatch( bool bPrescribedVelocity )
   
 } // end 
 
- 
  
 } // namespace csmp
 

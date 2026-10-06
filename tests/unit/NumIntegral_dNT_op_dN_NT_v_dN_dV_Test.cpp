@@ -25,7 +25,6 @@ NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::NumIntegral_dNT_op_dN_NT_v_dN_dV_Test( bo
       cout << "\nNumIntegral_dNT_op_dN_NT_v_dN_dV_Test: Building Model..." << endl;
 
     sg_ = new Model<2U>( mesh_container, "CSMP-1phase-variables.txt" );
-    sg_->Region("Model").RenumberNodes();
 
     sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
     sg_->InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );

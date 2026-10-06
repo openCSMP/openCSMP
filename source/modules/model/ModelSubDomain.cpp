@@ -1,11 +1,8 @@
-// SPDX-FileCopyrightText: © 2026 The openCSMP project
-//
-// SPDX-License-Identifier: LGPL-3.0-only
-
 /*
  *  ModelSubDomain.cpp
  *
  *  Created by Stephan Matthai on 7/18/10.
+ *  Copyright 2010 SKM. All rights reserved.
  *
  */
 #include <type_traits>
@@ -82,6 +79,11 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
    domain_idx_(ed.domain_idx_), // watch out! - ed becomes defunct but still exists!
    is_unique_(ed.is_unique_) // since argument object gets destroyed there is no incrementation of domain_idx_
  {
+    // Zero out source scalar members to prevent accidental use
+    ed.first_bd_node_   = 0;
+    ed.rebuilt_needed_  = true;
+    ed.domain_idx_      = std::numeric_limits<decltype(ed.domain_idx_)>::max();
+
     ++domain_count_;
     if ( verbose_ ) cout <<"\nModelSubDomain(idx="<< domain_idx_ <<"): called move constructor.\n";
  }
@@ -2185,36 +2187,6 @@ size_t ModelSubDomain<dim,CELL>::FacetIntegrationPoints() const noexcept
 
   return cpoints;
   }
-
-
-
-
-
-
-
-
-// ACCESSORY
-
-/**
-    Uses binary_search on both ranges of the sorted cell vector to find the cell in question.
-    returns true or false.
-*/
-template<uint32_t dim, template<uint32_t> class CELL>
-bool ModelSubDomain<dim,CELL>::Contains( const CELL<dim>* const eptr ) const noexcept
- {
-    assert( eptr != nullptr );
-
-    // search perimeter first
-    if ( binary_search( next(cell_vec_.begin(),static_cast<long>(InteriorCells())), cell_vec_.end(), eptr ) )
-       return true;
-
-    if ( binary_search( cell_vec_.begin(), next(cell_vec_.begin(),static_cast<long>(InteriorCells())), eptr ) )
-       return true;
-
-    return false;
-
- } // end
-
 
 
 
