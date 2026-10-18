@@ -53,30 +53,38 @@ void Integral_dNT_rhsop_dN_v_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     assert( e.FE()->UsesLocalCoordinates() == false );
 
     // only if the property is an element property  something is done here
-    if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
-         MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == REGION )
-      {
-         MathOperatorRHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-         MathOperatorRHS<dim,CELL>::MTRL[0].Zero();
-      
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) ); 
-           }
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-              VectorVariable<dim>  vc;
-              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
-              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc ); 
-           }
-         if ( MathOperatorRHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-              TensorVariable<dim>  ts;
-              e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
-              MathOperatorRHS<dim,CELL>::MTRL[0] = ts;
-           }
-      }
-    else throw csmp::Exception( FATAL_ERROR, "Integral_dNT_rhsop_dN_v_dV::GetOperands", 
-                               "The current finite element is analytically integrated and therefore has no integration points",
-                                        "Hence, nodal properties cannot be integrated. Use numerically integrated elements in stead.");
-   VAR.Resize(e.Nodes(),1);   
+    const csmp::Index& key = MathOperatorRHS<dim,CELL>::MaterialOperandKey();
+
+    switch ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+        case REGION:
+        case ELEMENT:
+        case FACE:
+            switch ( MathOperatorRHS<dim,CELL>::MaterialOperandType() )
+            {
+                case SCALAR:
+                    MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+                    break;
+                case VECTOR:
+                    MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+                    break;
+                case TENSOR:
+                    MathOperatorRHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default: // integration-point placed variable
+            const auto loc = std::source_location::current();
+            std::cerr << loc.file_name() << ":" << loc.line()
+                      << " [" << loc.function_name() << "]"
+                      << " Error: material operand placement not recognised\n";
+            break;
+    }
+
+   VAR.Resize(e.Nodes(),1);
    // the gradient variable
    for ( uint32_t i{0}; i<e.Nodes(); i++ )
      VAR(i,0) = e.N(i)->Read( grad_key );   

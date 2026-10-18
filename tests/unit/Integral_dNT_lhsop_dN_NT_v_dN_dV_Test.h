@@ -5,6 +5,7 @@
 #include "CSMP_definitions.h"
 #include "Test.h"
 #include "Model.h"
+#include "Region.h"
 #include "SparseMatrix.h"
 #include "Integral_dNT_op_dN_NT_v_dN_dV.h"
 #include "MathOperatorLHS.h"
@@ -47,8 +48,8 @@ class Integral_dNT_lhsop_dN_NT_v_dN_dV_Test : public Test {
     void matchesNumericalTest();///< must match NumIntegral counterpart exactly
 
   private:
-    void setElementScalar( const std::vector<double>& val,  const char* var_name );
-    void setElementVector( const std::array<double,2>& v,   const char* var_name );
+    void setElementScalar( Region<2>& domain, const std::vector<double>& val,  const char* var_name );
+    void setElementVector( Region<2>& domain, const std::array<double,2>& v,   const char* var_name );
     void calculateGlobalMatrix( SparseMatrix& sm, MathOperatorLHS<2U>& oper );
 
     double     tol_;

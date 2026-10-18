@@ -147,56 +147,47 @@ void NumIntegral_dNT_op_dN_NT_op_dop_dN_dV<dim,CELL>::GetOperands( const CELL<di
 
     // 1. read Operand
     // ---------------
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
-      {
-         MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-         MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
-      
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              ScalarVariable  sc;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), sc );
-              for ( auto i{0U}; i<dim; i++ )
-                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc();
-           }
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-              VectorVariable<dim>  vc;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-              for ( auto i{0U}; i<dim; i++ )
-                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
-           }
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-              TensorVariable<dim>  ts;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-              for ( auto i{0U}; i<dim; i++ )
-                for ( auto j{0U}; j<dim; j++ )
-                  MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
-           }
-      }
-    else // if a nodal variable is dealt with
-      {
-         if ( e.FE()->IntegrationPoints() == 0 ) 
-           throw csmp::Exception( FATAL_ERROR, "MathOperatorLHS<dim>::GetOperands", 
-                                        "The current finite element has no integration points",
-                                        "Therefore nodal properties cannot be integrated.");
-      
-         for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ )
-           MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
-                                                                  i, MathOperatorLHS<dim,CELL>::MTRL[i] );
-      }
-   
+    const csmp::Index& key = MathOperatorLHS<dim,CELL>::MaterialOperandKey();
+
+    switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+      case ELEMENT:
+        switch ( MathOperatorLHS<dim,CELL>::MaterialOperandType() )
+        {
+          case SCALAR:
+            MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+            break;
+          case VECTOR:
+            MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+            break;
+          case TENSOR:
+            MathOperatorLHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+            break;
+          default:
+            break;
+        }
+        break;
+
+      default: // integration-point placed variable
+        for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
+          MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint(
+              e, key, i, MathOperatorLHS<dim,CELL>::MTRL[i] );
+        break;
+    }
+
     // 2. if body force operand 'gravity' was specified
     // -------------------------------------------------
     if ( with_gravity ) {
          e.NodePropertyVector( rrho_key, rrho_vec );
-         RDENS.resize(e.FE()->IntegrationPoints());
-         for ( auto j{0U}; j<e.FE()->IntegrationPoints(); j++ ) RDENS[j] = 0.0;
+         RDENS.resize(e.IntegrationPoints());
+         for ( auto j{0U}; j<e.IntegrationPoints(); j++ ) RDENS[j] = 0.0;
       }
 
     // 3. read node variable which must be a scalar
     // --------------------------------------------
     NT3.resize(e.FE()->IntegrationPoints());
 
-    for ( uint32_t i{0U}; i<e.FE()->IntegrationPoints(); i++ ) {
+    for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ ) {
          e.N_AtIntegrationPoint( i, IPOL );
          NT3[i].Resize(e.Nodes(),dim);
          for ( uint32_t j{0U}; j<e.Nodes(); j++ )

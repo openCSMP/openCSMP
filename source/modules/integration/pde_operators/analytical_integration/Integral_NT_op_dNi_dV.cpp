@@ -85,7 +85,7 @@ void Integral_NT_op_dNi_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
         e.NodePropertyVector( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), OP );
         e.N_AtBaryCenter( IPOL );
         prop1() = 0.0;
-        for ( auto i{0U}; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
+        for ( uint32_t i{0U}; i<e.Nodes(); i++ ) prop1 += IPOL[i] * OP[i];
      }
      
    // reading the material property variable (for instance conductivity)

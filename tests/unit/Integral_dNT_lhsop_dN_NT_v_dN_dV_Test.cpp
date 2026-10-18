@@ -67,8 +67,8 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::dispersionOnlyTest()
                                                   "fluid pressure",
                                                   "fluid pressure" );
 
-    setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
-    setElementVector( { 0.0, 0.0 },            "velocity"    );
+    setElementScalar( sg_->Region("Model"), { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
+    setElementVector( sg_->Region("Model"), { 0.0, 0.0 },            "velocity"    );
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -120,8 +120,8 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::advectionOnlyTest()
                                                   "fluid pressure",
                                                   "fluid pressure" );
 
-    setElementScalar( { 0.0, 0.0, 0.0, 0.0 }, "diffusivity" );
-    setElementVector( { 1.0, 0.0 },            "velocity"    );
+    setElementScalar( sg_->Region("Model"), { 0.0, 0.0, 0.0, 0.0 }, "diffusivity" );
+    setElementVector( sg_->Region("Model"), { 1.0, 0.0 },            "velocity"    );
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -182,8 +182,8 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::combinedTest()
                                                   "fluid pressure",
                                                   "fluid pressure" );
 
-    setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
-    setElementVector( { 1.0, 0.0 },            "velocity"    );
+    setElementScalar( sg_->Region("Model"), { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
+    setElementVector( sg_->Region("Model"), { 1.0, 0.0 },            "velocity"    );
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -244,8 +244,8 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::nonSymmetryTest()
                                                   "fluid pressure",
                                                   "fluid pressure" );
 
-    setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
-    setElementVector( { 1.0, 0.0 },            "velocity"    );
+    setElementScalar( sg_->Region("Model"), { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
+    setElementVector( sg_->Region("Model"), { 1.0, 0.0 },            "velocity"    );
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -275,8 +275,8 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::zeroVelocityTest()
                                                   "fluid pressure",
                                                   "fluid pressure" );
 
-    setElementScalar( { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
-    setElementVector( { 0.0, 0.0 },            "velocity"    );
+    setElementScalar( sg_->Region("Model"), { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
+    setElementVector( sg_->Region("Model"), { 0.0, 0.0 },            "velocity"    );
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -316,40 +316,37 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::zeroVelocityTest()
 // matchesNumericalTest — analytical result must match numerical counterpart
 // =============================================================================
 
-void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::matchesNumericalTest()
- {
-    // build a second model with ISOPARAMETRIC_LINEAR_TRIANGLE for the
-    // numerical operator
-    TRIANGLE_Interface triangle_mesh_reader;
-    VSet<2> mesh_container_num;
-    triangle_mesh_reader.ReadTriangle2DMesh( "iso.1", mesh_container_num );
-    mesh_container_num.SingleElementType( ISOPARAMETRIC_LINEAR_TRIANGLE );
-    mesh_container_num.EstablishElementConnectivity2D();
+void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::matchesNumericalTest() {
+  // build a second model with ISOPARAMETRIC_LINEAR_TRIANGLE for the
+  // numerical operator
+  TRIANGLE_Interface triangle_mesh_reader;
+  VSet<2> mesh_container_num;
+  triangle_mesh_reader.ReadTriangle2DMesh( "iso.1", mesh_container_num );
+  mesh_container_num.SingleElementType( ISOPARAMETRIC_LINEAR_TRIANGLE );
+  mesh_container_num.EstablishElementConnectivity2D();
 
-    Model<2U> sg_num( mesh_container_num, "CSMP-1phase-variables.txt" );
-    sg_num.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
-    sg_num.InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
-    sg_num.InputPropertyValue( "velocity",       makeVector( PLAIN, PLAIN, 0.0, 0.0 ) );
+  Model<2U> sg_num( mesh_container_num, "CSMP-1phase-variables.txt" );
+  sg_num.InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
+  sg_num.InputPropertyValue( "diffusivity",    makeScalar( PLAIN, 1.0 ) );
+  sg_num.InputPropertyValue( "velocity",       makeVector( PLAIN, PLAIN, 0.0, 0.0 ) );
 
-    // set identical operands on both models
-    setElementScalar( { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
-    setElementVector( { 1.0, 0.5 },            "velocity"    );
+  // set identical operands on both models
+  sg_->InputPropertyValue( "fluid pressure", makeScalar( PLAIN, 0.0 ) );
+  setElementScalar( sg_->Region("Model"), { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
+  setElementVector( sg_->Region("Model"), { 1.0, 0.5 },            "velocity"    );
+  if ( verbose_ ) {
+     printRangeOfVariable( *sg_, "fluid pressure" );
+     printRangeOfVariable( *sg_, "diffusivity" );
+     printRangeOfVariable( *sg_, "velocity" );
+  }
 
-    // set same values on numerical model
-    {
-      const csmp::Index key_d( sg_num.Database().StorageKey( "diffusivity" ) );
-      const csmp::Index key_v( sg_num.Database().StorageKey( "velocity"    ) );
-      Region<2>& domain( sg_num.Region("Model") );
-      const std::vector<double> dvals{ 1.0, 2.0, 3.0, 4.0 };
-      uint32_t i{0U};
-      for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
-        {
-          (*it)->Store( key_d, ScalarVariable( PLAIN, dvals[i++] ) );
-          VectorVariable<2U> vc;  vc(0) = 1.0;  vc(1) = 0.5;
-          (*it)->Store( key_v, vc );
-        }
-    }
-
+  setElementScalar( sg_num.Region("Model"), { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
+  setElementVector( sg_num.Region("Model"), { 1.0, 0.5 },            "velocity"    );
+  if ( verbose_ ) {
+    printRangeOfVariable( *sg_, "fluid pressure" );
+    printRangeOfVariable( sg_num, "diffusivity" );
+    printRangeOfVariable( sg_num, "velocity" );
+  }
     // analytical operator
     Integral_dNT_op_dN_NT_v_dN_dV<2U> analytical( sg_->Database(),
                                                     "diffusivity",
@@ -420,35 +417,29 @@ void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::matchesNumericalTest()
 // Helper methods
 // =============================================================================
 
-void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::setElementScalar(
+void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::setElementScalar( Region<2>& domain,
     const vector<double>& val, const char* var_name )
  {
     const csmp::Index key( sg_->Database().StorageKey( var_name ) );
-    Region<2>& domain( sg_->Region("Model") );
 
     if ( val.size() != domain.Cells() )
       throw csmp::Exception( ERROR,
           "Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::setElementScalar",
           var_name, "Variable size does not match number of elements." );
 
-    uint32_t i{0U};
     for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
-      (*it)->Store( key, ScalarVariable( PLAIN, val[i++] ) );
+      (*it)->Store( key, ScalarVariable( PLAIN, val[ (*it)->Idx() ] ) );
  }
 
 
-void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::setElementVector(
+void Integral_dNT_lhsop_dN_NT_v_dN_dV_Test::setElementVector( Region<2>& domain,
     const array<double,2>& v, const char* var_name )
  {
     const csmp::Index key( sg_->Database().StorageKey( var_name ) );
-    Region<2>& domain( sg_->Region("Model") );
 
     for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
       {
-        VectorVariable<2U> vc;
-        vc(0) = v[0];
-        vc(1) = v[1];
-        (*it)->Store( key, vc );
+        (*it)->Store( key, makeVector( PLAIN, PLAIN, v[0], v[1] ) );
       }
  }
 
