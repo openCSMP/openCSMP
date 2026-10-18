@@ -39,7 +39,6 @@ class NumIntegral_dNT_rhsop_dN_dV final : public MathOperatorRHS<dim,CELL> {
                                  const char* test );
     
     void GetOperands( const CELL<dim>& ) override final;
-
     void ComputeContribution( const CELL<dim>& ) override final;
   
     NumIntegral_dNT_rhsop_dN_dV<dim,CELL>* clone() const override final

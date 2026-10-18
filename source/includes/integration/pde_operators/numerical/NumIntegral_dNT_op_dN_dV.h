@@ -13,16 +13,16 @@ template<uint32_t> class Element;
 
 /// PDE operator:  oper div^2 N - interpolation functions squared.
 template<uint32_t dim, template<uint32_t> class CELL=Element>
-class NumIntegral_dNT_op_dN_dV : public MathOperatorLHS<dim,CELL> {
+class NumIntegral_dNT_op_dN_dV final : public MathOperatorLHS<dim,CELL> {
   public:
     NumIntegral_dNT_op_dN_dV( const PropertyDatabase<dim>&, 
                               const char* oper,
                               const char* basic,
-                               const char* test);
+                              const char* test);
                               
-    virtual ~NumIntegral_dNT_op_dN_dV();
+    virtual ~NumIntegral_dNT_op_dN_dV() = default;
     
-    virtual void ComputeContribution( const CELL<dim>& );
+    void ComputeContribution( const CELL<dim>& ) override final;
   
     virtual NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const { return new NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
     

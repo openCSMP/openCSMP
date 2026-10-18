@@ -23,7 +23,8 @@ namespace csmp
 };
   
 /// checks whether the neighbor information matches the boundary face info for region "Model"
-bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& );
+template<uint32_t dim>
+bool consistencyCheckNeighborVersusPerimeterFaces( const Model<dim>& );
   
 } // end csmp
 

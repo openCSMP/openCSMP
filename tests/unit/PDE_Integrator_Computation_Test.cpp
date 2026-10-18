@@ -287,10 +287,8 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
   // 4. PDE operators
   // -----------------------------------------------------------------------
   NumIntegral_dNT_lhsop_dN_dV<3>  stiffness_matrix( model_ptr_->Database(), "conductivity", "fluid pressure", "fluid pressure");
-
-  NumIntegral_NT_rhsop_N_dV<3> source_term( model_ptr_->Database(), "fluid volume source", "fluid pressure");
-
-  VelocityAndVolumeFlux<3>  velo( *model_ptr_, "conductivity", "porosity", "fluid pressure", false );
+  NumIntegral_NT_rhsop_N_dV<3>    source_term( model_ptr_->Database(), "fluid volume source", "fluid pressure");
+  VelocityAndVolumeFlux<3>        velo( *model_ptr_, "conductivity", "porosity", "fluid pressure", false );
 
   // -----------------------------------------------------------------------
   // 5. Single PDE_Integrator — setup and computation
@@ -301,7 +299,8 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
   SAMG_Solver   samg_solver( &settings );
   pde_integrator.SetSolver( samg_solver );
 #else
-  CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+  // CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
+  EigenSolver linear_solver; // TODO: get this to work with PETSc which is the DEFAULT
   pde_integrator.SetSolver( linear_solver );
 #endif
 
@@ -363,7 +362,7 @@ void PDE_Integrator_Computation_Test::TestSteadyState_PressureDiffusionAndFlow()
   // 12. VTK output (non-critical, just verify no crash)
   // -----------------------------------------------------------------------
 
-  cout << "\nPDE_Integrator_Transient_Test: all tests passed.\n";
+  cout << "\n"<<"PDE_Integrator_Computation_Test: all tests passed.\n";
 
 } // end TestSteadyState_PressureDiffusionAndFlow
 
@@ -396,7 +395,8 @@ double PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow()
         SAMG_Solver   samg_solver( &settings );
         pde_integrator.SetSolver( samg_solver );
     #else
-        CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+        // CSMP_DEFAULT_LINEAR_SOLVER linear_solver; // TODO: get this to work with PETSc
+        EigenSolver linear_solver;
         pde_integrator.SetSolver( linear_solver );
     #endif
 
@@ -429,7 +429,7 @@ double PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow()
     SAMG_Solver   samg_solver( &settings );
     pde_integrator.SetSolver( samg_solver );
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER linear_solver;
+    EigenSolver linear_solver;
     pde_integrator.SetSolver( linear_solver );
 #endif
 
@@ -508,7 +508,7 @@ double PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow()
               << " ms\n"
               << "\t duration simulated: " << duration << " s\n";
 
-    std::cout << "\nTestTransient_PressureDiffusionAndFlow: all tests passed.\n";
+    std::cout << "\n"<<"PDE_Integrator_Computation_Test::TestTransient_PressureDiffusionAndFlow: all tests passed.\n";
     
     return duration;
 

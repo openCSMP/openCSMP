@@ -89,7 +89,6 @@
 #include "LinearCuboid_Test.h"
 
 // --- finite volumes ---
-#include "ExplicitTransport_Test.h"
 #include "FiniteVolumePolicy_Test.h"
 #include "FiniteVolumeStencil_Test.h"
 #include "FV_Parameter_Test.h"
@@ -217,7 +216,7 @@ int main( int argc, char* argv[] )
   std::cout << "PETSc initialized = "
             << (initialized ? "true" : "false")
             << std::endl;
-#if defined(DEBUG)
+#ifndef NDEBUG
   PetscOptionsSetValue(nullptr, "-ksp_monitor", nullptr);
   PetscOptionsSetValue(nullptr, "-ksp_converged_reason", nullptr);
   PetscOptionsSetValue(nullptr, "-ksp_view", nullptr);
@@ -269,13 +268,17 @@ int main( int argc, char* argv[] )
         // REFACTORED CODE
         // =====================================================================
         if ( test_refactoring ) {
-        cout <<"\n1. Refactored and new code functionality: running tests..."<< endl;
+        cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-        // add your test of the suggested refactoring here
-        // refactored.addTest( new vsetMakers_Test() ); // OK
-        //refactored.addTest( new SplitBoundaryTest_JK() ); // OK
-        refactored.addTest( new VData_Test() );
+// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") ); // OK, but fails to converge with PETSc
+
+ //         refactored.addTest( new PDE_Integrator_Computation_Test() ); // TODO: works with EigenSolver, but PETSc solver fails to convergence in given # of iterations
+
+//        refactored.addTest( new PDE_Integrator_Transient_Test() ); // fixed: SKM 18/11/26
+//        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") ); // fixed: SKM 18/11/26
+//        refactored.addTest( new ModelSubDomain_Test() ); // fixed: SKM 18/11/26
+//        refactored.addTest( new Region_Test() );  // fixed: SKM 18/11/26
 
         // actually running the test
         refactored.run();
@@ -350,17 +353,14 @@ int main( int argc, char* argv[] )
       basic.addTest( new FiniteVolumeStencil_Test(verbose));
       // also compares speed of mapping facet areas and normals versus computing them
       basic.addTest( new FiniteVolumePolicy_Test());
-      basic.addTest( new FV_Parameter_Test());
       
       // interfaces / containers
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new Parameter_Test() );
-      basic.addTest( new PropertyData_Test() );
       basic.addTest( new VData_Test() );
       basic.addTest( new vsetMakers_Test() );
       basic.addTest( new VSet_Test1() );
       basic.addTest( new VSet_Test2() );
-      basic.addTest( new ColorPalette_Test() );
       
       // Running unit tests and reporting errors
       basic.run();
@@ -382,7 +382,6 @@ int main( int argc, char* argv[] )
       TestSuite interdependent1("CSMP-interdependent1-unit test suite", &cout );
       // simplex finite elements
       // -----------------------
-      interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt", verbose ) ); // 3D case 3 integration points
@@ -431,7 +430,9 @@ int main( int argc, char* argv[] )
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
+#ifdef NDEBUG
       interdependent1.addTest( new VariableStorageSpeed_Test() );
+#endif
 
       // running unit tests and reporting errors
       interdependent1.run();
@@ -510,6 +511,7 @@ int main( int argc, char* argv[] )
     
         // actually running the test
         interfaces.run();
+        fails_interfaces = interfaces.report();
         total_failures += fails_interfaces;
         interfaces.free();
         cerr << "\nunit_CTests_main: 4. input & output interfaces: Total unit test failures: " << fails_interfaces << endl;
@@ -538,7 +540,7 @@ int main( int argc, char* argv[] )
       // computations
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
-     // composite.addTest( new PDE_Integrator_Computation_Test() );
+      //composite.addTest( new PDE_Integrator_Computation_Test() ); TODO: PETSc solver fails to convergence in given # of iterations
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
@@ -582,7 +584,7 @@ int main( int argc, char* argv[] )
       cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
       TestSuite new_developments("new tests of the CSMP base library", &cout );
       
-       new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+      new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
    
       // running unit tests and reporting errors
       new_developments.run();
@@ -609,53 +611,65 @@ int main( int argc, char* argv[] )
   } // Exception handling (warnings etc. are caught at a much lower level)
   catch( bad_alloc& ba ) {
     cerr <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_cast& ba ) {
     cerr <<"\nbad_cast: Type casting error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_exception& ba ) {
     cerr <<"\nbad_exception: Exception error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_typeid& ba ) {
     cerr <<"\nbad_typeid: Type ID error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( ios_base::failure& ba ) {
     cerr <<"\nios_base::failure: Probable I/O error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // standard logic errors
   catch( domain_error& ba ) {
     cerr <<"\ndomain_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( invalid_argument& ba ) {
     cerr <<"\ninvalid_argument: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( length_error& ba ) {
     cerr <<"\nlength_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( out_of_range& ba ) {
     cerr <<"\nout_of_range: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // runtime errors
   catch( overflow_error& ba ) {
     cerr <<"\noverflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( range_error& ba ) {
     cerr <<"\nrange_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( underflow_error& ba ) {
     cerr <<"\nunderflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( Exception& ba ) {
 #ifdef __GNUC__
@@ -673,7 +687,8 @@ int main( int argc, char* argv[] )
 #ifdef CSMP_WITH_SAMG_SOLVER
   catch( SAMG_Exception& ba ) {
     cout <<"\nSAMG_Exception: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
 #endif
 

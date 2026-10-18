@@ -73,6 +73,9 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <unordered_set>
 #include <unordered_map>
 #include <ranges>
+// C++20, std::source_location.current() gives source location for error messages
+#include <source_location>
+
 
 /*
 =====================================================

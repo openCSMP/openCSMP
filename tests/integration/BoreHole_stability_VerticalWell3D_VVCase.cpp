@@ -12,11 +12,11 @@
 #include "ExtractTensorVariableComponent.h"
 #include "BoreHole_stability_VerticalWell3D_VVCase.h"
 #include "Test.h"
+#include "ModelTopology.h"
 #include "VSet.h"
 #include "VSetConverter.h"
 #include "ANSYS_Interface.h"
 #include "MohrCoulombFailure_Visitor.h"
-#include "VTK_Interface.h"
 #include"ScalarVariable.h"
 #include "PropertyHandle.h"
 
@@ -104,14 +104,14 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
     // =========================================================================
     //  Model setup
     // =========================================================================
-    // TODO: needs a quadratic finite element formulation with failure placed on integration points
+    // TODO: needs a failure placed on integration points
     // TODO: failure must be classified according to the categories defined for CSMP
-    
     string input_file_name( prefix_ );
 
-    ANSYS_Model3D model( input_file_name.data(),
-                         this->getName().c_str(),
-                         "BoreHole_stability_VerticalWell3D_VVCase-variables.txt" );
+    VSet<3U>  vset;
+    const bool isoparametric_elements( true );
+    ANSYS_Model3D model( input_file_name.c_str(), input_file_name.c_str(), "BoreHole_stability_VerticalWell3D_VVCase-variables.txt" );
+    model.Name(input_file_name.c_str());
 
     VTU_Interface<3U> vtu( model );
     vtu.OmitZeroInFileName( true );
@@ -225,7 +225,7 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
     SAMG_Solver solver( &settings );
     PDE_Integrator<3U,Element> deformation( solver );
 #else
-    CSMP_DEFAULT_LINEAR_SOLVER solver;
+    EigenSolver solver;
     PDE_Integrator<3U,Element> deformation( solver );
 #endif
 
@@ -311,6 +311,7 @@ void BoreHole_stability_VerticalWell3D_VVCase::run()
     //   F_mc = p_eff * sin(phi) - c * cos(phi) + q * K(theta)
     // where p_eff = p - alpha * Pp is the Biot effective mean stress.
     // Results are stored in "failure" (F_mc value) and "tensile failure" (F01).
+    // TODO: visitor produces failure on a continuous scale but it should be categorised according to classification on fault modelling toolkit
     MohrCoulombFailure_Visitor<3U> failureTest( model, ELEMENT );
 
     // restrict failure assessment to the rock matrix — the borehole void

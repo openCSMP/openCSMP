@@ -59,7 +59,8 @@ project(openCSMP
         DESCRIPTION "openCSMP library"
         LANGUAGES   CXX
 )
-
+# enable testing (using Google's CTest framework)
+include(CTest)
 
 # ===============================================================================================
 # C++ Standard — set globally as project default; also applied per-target via
@@ -68,6 +69,7 @@ project(openCSMP
 set(CMAKE_CXX_STANDARD          23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS        OFF)
+
 
 # AddressSanitizer — toggle with -DCSMP_WITH_ASAN=ON when configuring.
 # Applies globally (before any target is defined)
@@ -173,8 +175,7 @@ else()
     endif()
 
     # Restore BUILD_TESTING for openCSMP's own tests
-    set(BUILD_TESTING ${_saved_build_testing} CACHE BOOL
-            "Enable building tests" FORCE)
+    set(BUILD_TESTING ${_saved_build_testing})
     unset(_saved_build_testing)
 
 endif() # Eigen
@@ -475,12 +476,12 @@ set_target_properties(opennurbs PROPERTIES
     CXX_EXTENSIONS        OFF
 )
 
-if(APPLE)
-    target_link_libraries(opennurbs PUBLIC
-        "-framework CoreFoundation"
-        "-framework Foundation"
-    )
-endif()
+    if(OPENNURBS_AVAILABLE AND APPLE)
+        target_link_libraries(opennurbs PUBLIC
+                "-framework CoreFoundation"
+                "-framework Foundation"
+        )
+    endif()
 
 find_package(ZLIB REQUIRED)
 target_link_libraries(opennurbs PUBLIC ZLIB::ZLIB)
@@ -496,10 +497,6 @@ target_link_libraries(opennurbs PUBLIC ZLIB::ZLIB)
 
     if(NOT TARGET opennurbs)
         message(FATAL_ERROR ...)
-    endif()
-
-    if(APPLE)
-        target_link_libraries(opennurbs PUBLIC ...)
     endif()
 
     set(OPENNURBS_AVAILABLE TRUE)
@@ -843,15 +840,27 @@ if(SAMG_ENABLE)
     endif()
 endif()
 
+if(APPLE AND SAMG_ENABLE)
+    if(NOT CMAKE_OSX_ARCHITECTURES STREQUAL "x86_64")
+        message(FATAL_ERROR
+                "SAMG requires an x86_64 build on macOS. "
+                "Configure with -DCMAKE_OSX_ARCHITECTURES=x86_64")
+    endif()
+endif()
 
 # ===============================================================================================
 # Link-Time Optimisation (LTO / IPO)
 # ===============================================================================================
-include(CheckIPOSupported)
-check_ipo_supported(RESULT IPO_SUPPORTED)
-if(IPO_SUPPORTED)
-    set_target_properties(openCSMP PROPERTIES INTERPROCEDURAL_OPTIMIZATION TRUE)
-    message(STATUS "Link-time optimisation enabled")
+option(CSMP_WITH_LTO "Enable link-time optimisation" OFF)
+
+if(CSMP_WITH_LTO)
+    include(CheckIPOSupported)
+    check_ipo_supported(RESULT IPO_SUPPORTED)
+
+    if(IPO_SUPPORTED)
+        set_target_properties(openCSMP PROPERTIES
+                INTERPROCEDURAL_OPTIMIZATION TRUE)
+    endif()
 endif()
 
 
@@ -996,26 +1005,26 @@ if(BUILD_TESTING)
 
 # Individual test infrastructure files (not covered by the recursive globs)
 set(TEST_INFRASTRUCTURE_FILES
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.h"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/Test.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/TestSuite.cpp"
 )
 
 # Recursive glob for unit and integration test sources
 file(GLOB_RECURSE TEST_UNIT_FILES CONFIGURE_DEPENDS
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit/*.h"
 )
 file(GLOB_RECURSE TEST_INTEGRATION_FILES CONFIGURE_DEPENDS
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.cpp"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.h"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.cpp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration/*.h"
 )
 
 set(TEST_FILES
-${TEST_INFRASTRUCTURE_FILES}
-${TEST_UNIT_FILES}
-${TEST_INTEGRATION_FILES}
+    ${TEST_INFRASTRUCTURE_FILES}
+    ${TEST_UNIT_FILES}
+    ${TEST_INTEGRATION_FILES}
 )
 
 list(FILTER TEST_FILES EXCLUDE REGEX "/deprecated/")
@@ -1032,15 +1041,15 @@ add_executable(openCSMP-tests
 
 target_compile_features(openCSMP-tests PRIVATE cxx_std_23)
 set_target_properties(openCSMP-tests PROPERTIES
-CXX_STANDARD_REQUIRED ON
-CXX_EXTENSIONS        OFF
+    CXX_STANDARD_REQUIRED ON
+    CXX_EXTENSIONS        OFF
 )
 
 target_include_directories(openCSMP-tests PRIVATE
-${CSMP_CONSUMER_INCLUDE_DIRS}
-"${CMAKE_CURRENT_SOURCE_DIR}/tests"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
-"${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
+    ${CSMP_CONSUMER_INCLUDE_DIRS}
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/unit"
+    "${CMAKE_CURRENT_SOURCE_DIR}/tests/integration"
 )
 
 target_link_libraries(openCSMP-tests PRIVATE openCSMP)
@@ -1065,7 +1074,7 @@ add_dependencies(openCSMP-tests copy_test_data)
 # Also copy at configure time for IDE runs (XCode, CLion etc.)
 file(GLOB TEST_INPUT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset/*")
 if(TEST_INPUT_FILES)
-file(COPY ${TEST_INPUT_FILES} DESTINATION ${TEST_WORKING_DIR})
+    file(COPY ${TEST_INPUT_FILES} DESTINATION ${TEST_WORKING_DIR})
 endif()
 
 # -----------------------------------------------------------------------

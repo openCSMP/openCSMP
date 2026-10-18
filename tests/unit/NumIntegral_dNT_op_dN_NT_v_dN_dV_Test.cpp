@@ -66,6 +66,11 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::dispersionOnlyTest()
 
     setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
     setElementVector( { 0.0, 0.0 },            "velocity"    );
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -138,6 +143,11 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::advectionOnlyTest()
 
     setElementScalar( { 0.0, 0.0, 0.0, 0.0 }, "diffusivity" );
     setElementVector( { 1.0, 0.0 },            "velocity"    );
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -218,6 +228,17 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::combinedTest()
 
     setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
     setElementVector( { 1.0, 0.0 },            "velocity"    );
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
+
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -319,6 +340,11 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::nonSymmetryTest()
 
     setElementScalar( { 1.0, 1.0, 1.0, 1.0 }, "diffusivity" );
     setElementVector( { 1.0, 0.0 },            "velocity"    );
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -372,6 +398,11 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::zeroVelocityTest()
 
     setElementScalar( { 1.0, 2.0, 3.0, 4.0 }, "diffusivity" );
     setElementVector( { 0.0, 0.0 },            "velocity"    );
+    if ( verbose_ ) {
+      printRangeOfVariable( *sg_, "fluid pressure" );
+      printRangeOfVariable( *sg_, "diffusivity" );
+      printRangeOfVariable( *sg_, "velocity" );
+    }
 
     const size_t n{ sg_->Region("Model").Nodes() };
     SparseMatrix sm( n );
@@ -431,20 +462,15 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::setElementScalar(
  }
 
 
-void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::setElementVector(
-    const array<double,2>& v, const char* var_name )
- {
-    const csmp::Index key( sg_->Database().StorageKey( var_name ) );
-    Region<2>& domain( sg_->Region("Model") );
+  void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::setElementVector(
+      const std::array<double,2>& v, const char* var_name )
+{
+  const csmp::Index key( sg_->Database().StorageKey( var_name ) );
+  Region<2>& domain( sg_->Region("Model") );
 
-    for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
-      {
-        VectorVariable<2U> vc;
-        vc(0) = v[0];
-        vc(1) = v[1];
-        (*it)->Store( key, vc );
-      }
- }
+  for ( auto it = domain.CellsBegin(); it != domain.CellsEnd(); ++it )
+    (*it)->Store( key, makeVector( PLAIN, PLAIN, v[0], v[1] ) );
+}
 
 
 void NumIntegral_dNT_op_dN_NT_v_dN_dV_Test::calculateGlobalMatrix(
