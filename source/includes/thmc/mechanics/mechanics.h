@@ -142,6 +142,32 @@ inline void convertTo( const std::vector<double>& INP,
  }
 
 
+/** Extracts linearly stored engineering strain vector into a TensorVariable,
+ *  correctly halving the engineering shear strain gamma_xy to obtain
+ *  the tensorial shear strain eps_xy = gamma_xy / 2.
+ */
+inline void convertStrainTo( const std::vector<double>& INP,
+                             uint32_t ip, TensorVariable<2U>& ts )
+{
+    const uint32_t components(3U);
+    ts(0,0) = INP[ ip * components ];
+    ts(1,1) = INP[ ip * components + 1U ];
+    ts(0,1) = ts(1,0) = INP[ ip * components + 2U ] / 2.0;  // gamma -> eps
+}
+
+/** Extracts column of DenseMatrix containing engineering strain components
+ *  into a TensorVariable, halving the shear component.
+ */
+template<uint32_t DM_SIZE>
+inline void convertStrainColumnTo( const DenseMatrix<DM_SIZE>& INP,
+                                   uint32_t column, TensorVariable<2U>& ts )
+{
+    static_assert( DM_SIZE >= 2U, "ERROR: convertStrainColumnTo: INP matrix too small");
+    ts(0,0) = INP(0,column);
+    ts(1,1) = INP(1,column);
+    ts(0,1) = ts(1,0) = INP(2,column) / 2.0;  // gamma -> eps
+}
+
 } // end namespace csmp
 
 #endif

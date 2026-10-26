@@ -38,6 +38,7 @@ option(BUILD_SHARED_LIBS      "Build shared libraries (OFF = static)"           
 option(CSMP_WITH_IMAGE_OUTPUT "Enable image output support via libjpeg"            ON )
 option(SAMG_ENABLE            "Enable Fraunhofer SAMG algebraic multigrid solver"  OFF)
 option(CSMP_WITH_PETSC_SOLVER "Enable PETSc solver"                                ON )
+option(OPENNURBS_ENABLE       "Enable OpenNURBS NURBS geometry kernel"             OFF)
 option(BUILD_CVFEM_TESTS      "Enable building CVFEM verification & validation tests" OFF)
 
 
@@ -412,8 +413,6 @@ message(STATUS ">>> rapidxml.hpp exists = ${rapidxml_SOURCE_DIR}/rapidxml.hpp")
 #      Linux:  sudo apt install zlib1g-dev
 #      macOS:  brew install zlib  (usually already present via Xcode)
 # ------------------------------------------------------------------------------------------------
-option(OPENNURBS_ENABLE "Enable OpenNURBS NURBS geometry kernel" OFF)
-
 set(OPENNURBS_SOURCE_DIR "${CSMP_EXTERNAL_LIBS}/opennurbs")
 set(OPENNURBS_AVAILABLE  FALSE)
 
@@ -495,24 +494,25 @@ target_link_libraries(opennurbs PUBLIC ZLIB::ZLIB)
             "${CMAKE_BINARY_DIR}/opennurbs"
     )
 
-    if(NOT TARGET opennurbs)
-        message(FATAL_ERROR ...)
+	if(NOT TARGET opennurbs)
+		message(FATAL_ERROR
+				"OpenNURBS target was not created by add_subdirectory.\n"
+				"Check the generated CMakeLists.txt at: ${OPENNURBS_SOURCE_DIR}/CMakeLists.txt")
+	endif()
+
+    # macOS framework dependencies — inside the guard where the target exists
+    if(APPLE)
+        target_link_libraries(opennurbs PUBLIC
+                "-framework CoreFoundation"
+                "-framework Foundation"
+        )
     endif()
 
     set(OPENNURBS_AVAILABLE TRUE)
     message(STATUS "OpenNURBS available: ${OPENNURBS_SOURCE_DIR}")
 
 else()
-    message(STATUS "OpenNURBS disabled ...")
-endif()
-
-
-# macOS framework dependencies required by OpenNURBS  ← THIS IS OUTSIDE
-if(APPLE)
-    target_link_libraries(opennurbs PUBLIC          ← FAILS when OPENNURBS_ENABLE=OFF
-            "-framework CoreFoundation"
-            "-framework Foundation"
-    )
+    message(STATUS "OpenNURBS disabled")
 endif()
 
 

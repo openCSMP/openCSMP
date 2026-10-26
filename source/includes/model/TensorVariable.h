@@ -348,7 +348,8 @@ public:
     Eigenvectors are stored as columns of @p eigenVecs.
     */
     bool EigenSymmetric( VectorVariable<3U>& eigenVals,
-                         TensorVariable<3U>& eigenVecs ) const;
+                         TensorVariable<3U>& eigenVecs,
+                         bool bNormalise = true ) const;
 
     /**
     Computes eigenvalues and eigenvectors for a weakly non-symmetric

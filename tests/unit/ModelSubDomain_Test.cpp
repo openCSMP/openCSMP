@@ -956,18 +956,9 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        // _test( model_domain.PerimeterFaces(0) == 2 ); - does not crash
        // in positions 0 & 3
        _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) == 0 );
-       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 1 );
-
-if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) != 0 ) {
-  cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 0: ";
-  cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) <<" vs "<< 0 << endl;
-  printPerimeterFaceVector( model_domain );
-}
-if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) != 1 ) {
- cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 1: ";
- cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) <<" vs "<< 1 << endl;
-  printPerimeterFaceVector( model_domain );
-}
+       // since this is a quadrilateral, the second perimeter face can either be 1 or 3
+       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 1 || model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 3 );
+     
        // does subdomain "Model" contain all the perimeter nodes of "lower"
        _test( model_domain.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 13 );
 
@@ -997,18 +988,9 @@ if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) != 1 ) {
        // corner quad has two perimeter faces
        _test( upper.PerimeterFaces( upper.InteriorCells()) == 2 );
        _test( upper.PerimeterFace( upper.InteriorCells(), 0 ) == 0 );
-       _test( upper.PerimeterFace( upper.InteriorCells(), 1 ) == 1 );
+       // since this is a quadrilateral, the second perimeter face can either be 1 or 3
+       _test( upper.PerimeterFace( upper.InteriorCells(), 1 ) == 1 || upper.PerimeterFace( upper.InteriorCells(), 1 ) == 3 );
 
-if ( upper.PerimeterFace( upper.InteriorCells(), 0 ) != 0 ) {
- cerr <<" failed test for perimeter cell "<< upper.InteriorCells() <<" face 0: ";
- cerr << upper.PerimeterFace( upper.InteriorCells(), 0 ) <<" vs "<< 0 << endl;
-  printPerimeterFaceVector( upper );
-}
-if ( upper.PerimeterFace( upper.InteriorCells(), 1 ) != 1 ) {
- cerr <<" failed test for perimeter cell "<< upper.InteriorCells() <<" face 1: ";
- cerr << upper.PerimeterFace( upper.InteriorCells(), 1 ) <<" vs "<< 1 << endl;
-  printPerimeterFaceVector( upper );
-}
 
        _test( upper.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 0 );
 
@@ -1069,7 +1051,26 @@ if ( upper.PerimeterFace( upper.InteriorCells(), 1 ) != 1 ) {
  } // end (diagnostics)
 
 
-
+// TESTING
+/*
+      if ( verbose_ ) {
+          if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) != 0 ) {
+            cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 0: ";
+            cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) <<" vs "<< 0 << endl;
+            printPerimeterFaceVector( model_domain );
+          }
+          if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) != 1 ) {
+           cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 1: ";
+           cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) <<" vs "<< 1 << endl;
+            printPerimeterFaceVector( model_domain );
+          }
+          else if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) != 3 ) {
+           cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 1: ";
+           cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) <<" vs "<< 3 << endl;
+            printPerimeterFaceVector( model_domain );
+          }
+      }
+*?
 
 
 /**

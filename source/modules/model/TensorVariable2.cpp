@@ -146,21 +146,22 @@ bool TensorVariable<2U>::EigenSymmetric(
         eigenVecs(1,0) = 0.0;  eigenVecs(1,1) = 1.0;
         return true;
     }
-
+    // First eigenvector — stored in row 0
     {
         VectorVariable<2U> v;
         v(0) = -( data[1][1] - eigenVals(0) ) / f01;
         v(1) = 1.0;
         if ( bNormalize ) v.EuclideanNormalize();
-        eigenVecs(0,0) = v(0);
-        eigenVecs(1,0) = v(1);
+        eigenVecs(0,0) = v(0); // row 0, col 0
+        eigenVecs(0,1) = v(1); // row 0, col 1
     }
+    // Second eigenvector — stored in row 1
     {
         VectorVariable<2U> v;
         v(0) = -( data[1][1] - eigenVals(1) ) / f01;
         v(1) = 1.0;
         if ( bNormalize ) v.EuclideanNormalize();
-        eigenVecs(0,1) = v(0);
+        eigenVecs(1,0) = v(0);
         eigenVecs(1,1) = v(1);
     }
 
@@ -181,8 +182,8 @@ bool TensorVariable<2U>::EigenWeaklyNonSymmetric(
     const double normW = std::sqrt( 2.0 * W01 * W01 );
 
     const double asymmetry = ( normS > std::numeric_limits<double>::epsilon() )
-                             ? normW / normS
-                             : normW;
+                           ? normW / normS
+                           : 0.0;    // zero tensor — asymmetry undefined, treat as zero
 
     const bool within_tolerance = ( asymmetry <= tolerance );
 

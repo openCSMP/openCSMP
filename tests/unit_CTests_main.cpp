@@ -81,7 +81,8 @@
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test2.h"
 #include "IsoparametricLinearHexahedron_Test.h"
-#include "IsoparametricLinearPyramid_Test.h" // TODO: run with more relaxed tolerances
+#include "IsoparametricLinearPyramid_Test.h"
+#include "IsoparametricQuadraticPyramid_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -174,29 +175,6 @@
 #include "BoreHole_stability_VerticalWell3D_VVCase.h"
 
 
-/**
-    Finds the directory where the test data are stored
-
-    Usage: Inside your test:
-    
-        @code
-    void testSomething() {
-        std::string meshPath = getTestDataPath("IsoparametricLinearTetrahedron1P.txt");
-        // Open file using meshPath...
-    }
-       @endcode
-*/
-std::string getTestDataPath(const std::string& filename) {
-    const char* dataRoot = std::getenv("CSMP_DATA_ROOT");
-    if (dataRoot == nullptr) {
-        // Fallback or other directory for when you run tests manually in Xcode without CTest
-        return "./fallback_data/" + filename;
-      }
-    return std::string(dataRoot) + "/" + filename;
-}
-
-
-
 using namespace std;
 using namespace csmp;
 
@@ -273,9 +251,12 @@ int main( int argc, char* argv[] )
 
 // refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") ); // OK, but fails to converge with PETSc
 
- //         refactored.addTest( new PDE_Integrator_Computation_Test() ); // TODO: works with EigenSolver, but PETSc solver fails to convergence in given # of iterations
+// refactored.addTest( new PDE_Integrator_Transient_Test() ); // fine
 
-//        refactored.addTest( new PDE_Integrator_Transient_Test() ); // fixed: SKM 18/11/26
+refactored.addTest( new IsoparametricQuadraticPyramid_Test() );
+//refactored.addTest( new IsoparametricLinearPyramid_Test() ); // retested: 26/10/26
+//refactored.addTest( new SplitBoundary_Test() );
+
 //        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") ); // fixed: SKM 18/11/26
 //        refactored.addTest( new ModelSubDomain_Test() ); // fixed: SKM 18/11/26
 //        refactored.addTest( new Region_Test() );  // fixed: SKM 18/11/26
@@ -395,6 +376,8 @@ int main( int argc, char* argv[] )
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      interdependent1.addTest( new IsoparametricLinearPyramid_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPyramid_Test() );
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
       interdependent1.addTest( new ElementPolicyIntegrity_Test() );
@@ -540,7 +523,7 @@ int main( int argc, char* argv[] )
       // computations
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
-      //composite.addTest( new PDE_Integrator_Computation_Test() ); TODO: PETSc solver fails to convergence in given # of iterations
+      composite.addTest( new PDE_Integrator_Computation_Test() ); // TODO: use PETSc instead of Eigen
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
