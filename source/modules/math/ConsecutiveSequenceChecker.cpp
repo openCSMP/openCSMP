@@ -13,7 +13,7 @@
 #include <unordered_set>
 #include <type_traits>
 #include <cassert>
-#include <ciso646>
+#include <version>
 #include <string>
 #include "ConsecutiveSequenceChecker.h"
 
