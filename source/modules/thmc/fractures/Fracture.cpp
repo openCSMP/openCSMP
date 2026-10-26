@@ -18,7 +18,7 @@
 
 
 //need to provide and link GSL library if you want to use this functionality
-#define gsl_sf_hyperg_2F1(X,Y,Z,C) NAN;
+#define gsl_sf_hyperg_2F1(X,Y,Z,C) NAN
 
 
 namespace csmp {
