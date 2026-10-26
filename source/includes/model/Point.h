@@ -215,7 +215,7 @@ class Point<2U> {
     explicit Point( const std::vector<double>& );
 
     ///  caller can move if they wish
-    explicit Point<2U>( std::vector<double>&& v )
+    explicit Point( std::vector<double>&& v )
         : x_( v[0] ), y_( v[1] ) {
         assert( v.size() == 2U );
         // v is discarded after this; no copy of the vector's buffer occurs
@@ -290,7 +290,7 @@ class Point<3U> {
     explicit Point( const std::vector<double>& );
 
     ///  caller can move if they wish
-    explicit Point<3U>( std::vector<double>&& v )
+    explicit Point( std::vector<double>&& v )
         : x_( v[0] ), y_( v[1] ), z_( v[2] ) {
         assert( v.size() == 3U );
         // v is discarded after this; no copy of the vector's buffer occurs
