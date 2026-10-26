@@ -420,25 +420,25 @@ namespace csmp
     // indeed in the T-P range for VL coexistence; if this is not the case (e.g., if
     // T and P were in the VH field, this appraoch is very likely to FAIL!
     //
-    // Geometry is as follows (CAN CHANGE IF RESOLUTION OF LOOKUP TABLES IS CHANGED!!!):
-    //
-    //     |                 |
-    //   --D-----------------C-- 
-    //     |         VL      |
-    //     |                 |
-    //     |   tmax,pmax     |
-    //     |       *         |
-    //     |      / \        |
-    //   -D/A---/----\------C/B- ip_p_max // wrong: +1
-    //     | _/       V\     |
-    //     |/           L\   |
-    //   _/|              H\ |  
-    //  /  |       VH          \ 
-    //     |                 | \
-    //   --A-----------------B-- ip_p_max // needs: -1
-    //     |                 |
-    //   it_p_max
-    //     
+    /* Geometry is as follows (CAN CHANGE IF RESOLUTION OF LOOKUP TABLES IS CHANGED!!!):
+
+           |                 |
+         --D-----------------C--
+           |         VL      |
+           |                 |
+           |   tmax,pmax     |
+           |       *         |
+           |      / \        |
+         -D/A---/----\------C/B- ip_p_max // wrong: +1
+           | _/       V\     |
+           |/           L\   |
+         _/|              H\ |
+        /  |       VH          \
+           |                 | \
+         --A-----------------B-- ip_p_max // needs: -1
+           |                 |
+         it_p_max
+    */
 
     // iA etc. have already been determined when this function is called
     if( ip == ip_p_max /*+1*/ ) // in this case, ABDC in the above figure are moved up by one cell
