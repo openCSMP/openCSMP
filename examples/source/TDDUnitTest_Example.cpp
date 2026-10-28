@@ -43,7 +43,7 @@ class FooFunction_Test : public Test {
   {
     SetTitle( "Test-Driven Development=TDD of unit tests" );
     SetDifficulty( 1 );
-    SetCategory( "C++" );
+    SetCategory( "Programming in C++" );
     AddAuthor( "SKM" );
     AddDescription( "source in: TDDUnitTest_Example.cpp" );
     AddDescription( "how to use a unit test for test driven development" );

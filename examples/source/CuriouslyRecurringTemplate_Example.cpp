@@ -27,7 +27,7 @@ void CuriouslyRecurringTemplate_Example::Specifications()
 {
   SetTitle( "Curiously recurring template pattern" );
   SetDifficulty( 2 );
-  SetCategory( "C++" );
+  SetCategory( "Programming in C++" );
   AddAuthor( "P. Lang" );
   AddDescription( "source in: CuriouslyRecurringTemplate_Example.cpp" );
   AddDescription( "combined with safe-by-design static cast" );

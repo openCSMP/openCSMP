@@ -101,7 +101,7 @@ void Experimental_Example::Run()
 
 
   // 2. Build a transient fluid pressure algorithm using Backward-Euler time-stepping
-  // ------------------------------------------------------------------------------------
+  // --------------------------------------------------------------------------------
   // ([C] + dt[K]){p}t+dt = [C]{p}t + dt {Q}t+dt
   PDE_Integrator<2,Element>  transient_pressure;
 #ifdef CSMP_WITH_SAMG_SOLVER

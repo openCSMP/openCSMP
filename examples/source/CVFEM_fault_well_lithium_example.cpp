@@ -63,7 +63,7 @@ namespace csmp {
 void CVFEM_fault_well_lithium_example::Specifications() {
     SetTitle("CVFEM Rittershofen-like with fault, wells and lithium");
     SetDifficulty(0);
-    SetCategory("CVFEM Examples");
+    SetCategory("Hydrothermal Systems (CVFEM)");
     AddAuthor("BLC");
     AddDescription("source file in: CVFEM_fault_well_lithium_example");
 }

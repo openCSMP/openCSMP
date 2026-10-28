@@ -12,6 +12,12 @@
 /// a specific CSMP capability. Add new examples here in alphabetical order.
 ///
 /// @note ReadingBinaries_Example.h is deprecated and excluded.
+///
+// CSMP for beginners
+#include "CplusplusInCSMP_Example.h"
+#include "BuildingACSMPModel_Example.h"
+#include "CSMP_PhysicalVariables_Example.h"
+#include "SteadyStateHeatConduction_Example.h"
 
 #include "Averaging_Example.h"                                  ///< averaging of distributed variables
 #include "CuriouslyRecurringTemplate_Example.h"                 ///< C++ CRTP technique
