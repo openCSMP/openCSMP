@@ -40,6 +40,14 @@ FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>
    flux_key_(database.StorageKey(volume_flux)),
    swi_key_(database.StorageKey(sw_initial)),
    r_key_(database.StorageKey(block_radius)),
+   pd_( 0.0 ),
+   lambda_( 0.0 ), // like linear mode
+   phim_( 0.0 ),
+   phif_( 1.0 ),   // avoid division by zero in krw_Phase/krn_Phase
+   Af_( 1.0 ),
+   qfqm_( 1.0 ),   // avoid division by zero
+   qv_( 0.0 ),
+   radius_( 1.0e-3 ),
    TwoPhaseModel<dim>(database, permeability,
                          visc_nw, visc_w,
                          rho_nw, rho_w,
@@ -75,6 +83,14 @@ FractureMatrixUpscaled<dim>::FractureMatrixUpscaled( const PropertyDatabase<dim>
    flux_key_(database.StorageKey(volume_flux)),
    swi_key_(database.StorageKey(sw_initial)),
    r_key_(database.StorageKey(block_radius)),
+   pd_( 0.0 ),
+   lambda_( 0.0 ), // like linear mode
+   phim_( 0.0 ),
+   phif_( 1.0 ),   // avoid division by zero in krw_Phase/krn_Phase
+   Af_( 1.0 ),
+   qfqm_( 1.0 ),   // avoid division by zero
+   qv_( 0.0 ),
+   radius_( 1.0e-3 ),
    TwoPhaseModel<dim>(database, permeability,
                       visc_nw, visc_w,
                       rho_nw, rho_w,

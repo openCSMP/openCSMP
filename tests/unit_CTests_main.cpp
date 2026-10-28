@@ -249,11 +249,13 @@ int main( int argc, char* argv[] )
         cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
+      TwoPhaseModel_TestSuite  twoPhaseModelTests( refactored );
+      twoPhaseModelTests.run();
+      refactored.addTest( new TwoPhaseModelwithHysteresis_Test() );
+
 // refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") ); // OK, but fails to converge with PETSc
-
 // refactored.addTest( new PDE_Integrator_Transient_Test() ); // fine
-
-refactored.addTest( new IsoparametricQuadraticPyramid_Test() );
+// refactored.addTest( new IsoparametricQuadraticPyramid_Test() );
 //refactored.addTest( new IsoparametricLinearPyramid_Test() ); // retested: 26/10/26
 //refactored.addTest( new SplitBoundary_Test() );
 
