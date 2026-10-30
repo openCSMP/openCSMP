@@ -99,8 +99,8 @@ void SteadyStateHeatConduction_Example::Specifications()
                                        integral of (grad N)^T * lambda * grad N dV
         NumIntegral_NT_rhsop_N_dV -- source term (RHS)
                                      integral of N^T * q * N dV
-        NumIntegral_NT_op_dS    -- boundary flux (RHS, on Boundary faces)
-                                   integral of N^T * q_n dS
+        NumIntegral_NT_op_N_dS    -- boundary flux (RHS, on Boundary faces)
+                                     integral of N^T * q_n dS
 
     @section requirements Requirements
 

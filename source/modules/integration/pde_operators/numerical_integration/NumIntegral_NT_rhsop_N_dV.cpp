@@ -12,7 +12,7 @@ namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_rhsop_N_dV<dim,CELL>::NumIntegral_NT_rhsop_N_dV( const PropertyDatabase<dim>& pref,
-                                                           const char* oper, const char* test )
+                                                                const char* oper, const char* test )
   : MathOperatorRHS<dim,CELL>( pref, oper, test ),
     op_( 1U, 1.0 )
  {

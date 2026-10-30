@@ -19,38 +19,11 @@ namespace csmp {
 template<uint32_t> class Model;
 
 
-class  Experimental_Example : public Example {
+class  Experimental_Example final : public Example {
 public:
-  virtual void Run();
-  virtual void Specifications();
+  void Run() override;
+  void Specifications() override;
 };
-
-
-/*
-class  Experimental_Example : public Example {
-public:
-    virtual void Run();
-    virtual void Specifications();
-
-protected:
-    bool ImportModelAndRunChecks( const std::string& model_name, const std::string& variables_file ) const;
-    bool RunChecks( const Model<3U>& model ) const;
-
-private:
-    void RunSimulation( Model<3U>& model ) const;
-
-    template<class FLOW_FUNCTIONS>
-    void Compute2PhaseFlowProperties(
-        Model<3U>& mdl, FLOW_FUNCTIONS& flowfunctions,
-        bool with_gravity, bool with_tensor_k
-    ) const;
-
-    void ComputeSteadyStatePressure(
-        Model<3U>& mdl, bool with_gravity, bool with_tensor_k
-    ) const;
-};
-*/
-
 
 } // csmp
 

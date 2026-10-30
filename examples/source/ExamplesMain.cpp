@@ -30,13 +30,15 @@ int main()
       PetscInitializeNoArguments();
 #endif
       // instantiating suite
-      ExampleSuite examplesSuite( "Open-CSMP++ EXAMPLES", &cout );
+      ExampleSuite examplesSuite( "CSMP++ EXAMPLES", &cout );
 
       // CSMP FOR BEGINNERS
             examplesSuite.RegisterExample( new CplusplusInCSMP_Example() );
             examplesSuite.RegisterExample( new BuildingACSMPModel_Example );
             examplesSuite.RegisterExample( new CSMP_PhysicalVariables_Example() );
             examplesSuite.RegisterExample( new SteadyStateHeatConduction_Example() );
+            examplesSuite.RegisterExample( new InputDataManager_Example() );
+            examplesSuite.RegisterExample( new AtmosphericPressureDiffusion_Example() );
       /*
             examplesSuite.RegisterExample( new CSMP_Variables_Example() );
             examplesSuite.RegisterExample( new CSMP_Model_Example() );
