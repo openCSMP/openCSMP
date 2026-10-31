@@ -122,6 +122,9 @@ void LinearElasticity_Example::Run()
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
 #endif
+    model.EstablishBoxBoundariesFromOrientation();
+    model.RegionsOut();
+    model.BoundariesOut();
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'

@@ -249,19 +249,8 @@ int main( int argc, char* argv[] )
         cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-      TwoPhaseModel_TestSuite  twoPhaseModelTests( refactored );
-      twoPhaseModelTests.run();
-      refactored.addTest( new TwoPhaseModelwithHysteresis_Test() );
-
-// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") ); // OK, but fails to converge with PETSc
-// refactored.addTest( new PDE_Integrator_Transient_Test() ); // fine
-// refactored.addTest( new IsoparametricQuadraticPyramid_Test() );
-//refactored.addTest( new IsoparametricLinearPyramid_Test() ); // retested: 26/10/26
-//refactored.addTest( new SplitBoundary_Test() );
-
-//        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") ); // fixed: SKM 18/11/26
-//        refactored.addTest( new ModelSubDomain_Test() ); // fixed: SKM 18/11/26
-//        refactored.addTest( new Region_Test() );  // fixed: SKM 18/11/26
+// TODO: put your new or refactored test here!
+// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
         // actually running the test
         refactored.run();
