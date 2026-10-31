@@ -76,6 +76,8 @@ void Experimental_Example::Run()
   string model_name    = "Jura-slope1";
   string variable_file = "CSMP_field_scale_mechanics_variables.txt";
   string config_file = model_name;
+  //find the name of this current example source file
+  string file_name = GetExampleFileName(__FILE__);
   //create of directory with current example name, go into this directory, and copy input files into it.
   CreateWorkingDirectoryAndCopyInputModelFiles(example_name, model_name, variable_file, config_file);
 
@@ -205,7 +207,8 @@ void Experimental_Example::Run()
   vtu_output.OutputDataToVTU( (string(model.Name()) + "_mtrl_properties").c_str(), material_props, model.Region( "Model" ), 0 );
 
   Standard_IO_Handler stdio;
-  const double day(86400.);  // 1 day in seconds, max time 1 million years.
+  constexpr double day(86400.);  // 1 day in seconds, max-time 100 years
+  constexpr double max_time_increment(day * 365. * 10.);     // 14 days
   double       model_time{0.}, maxtime{1e6 * 365. * day}, time_increment{5.}, well_pressure{0.};
   size_t       timestep{1}, save_counter{0}, save_frequency{5};
 
@@ -253,7 +256,7 @@ void Experimental_Example::Run()
       save_counter++;
       
       // gradually increasing the time increment
-      time_increment *= 1.2;
+      if ( time_increment < max_time_increment ) time_increment *= 1.2;
 
       // writing the fluid pressure to the txt file
       cout << model_time << "\t" << well_pressure << endl;

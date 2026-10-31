@@ -148,7 +148,7 @@ double analytical_pressure( double z, double t,
 */
 void AtmosphericPressureDiffusion_Example::Run()
 {
-    string example_name  = "Experimental_Example";
+    string example_name  = "AtmosphericPressureDiffusion_Example";
     string model_name    = "Jura-slope1";
     string variable_file = "CSMP_field_scale_mechanics_variables.txt";
     string config_file = model_name;
@@ -238,7 +238,8 @@ void AtmosphericPressureDiffusion_Example::Run()
     pause();
 
     keypoint(
-"The storage term [S]/dt appears on BOTH sides of the equation.\n"
+"The hydraulic diffusivity related storage term [S]/dt (S ~= beta_t)\n"
+" appears on BOTH sides of the time-discretized equation.\n"
 "LHS: capacitance_lhs -- the implicit part (unknown p^{t+dt})\n"
 "RHS: capacitance_rhs -- the explicit part (known p^t)\n"
 "LumpedFormulation(true) uses volume-weighted nodal lumping.\n"
@@ -257,7 +258,7 @@ void AtmosphericPressureDiffusion_Example::Run()
 "Air pressure in Southern Germany varies between approximately\n"
 "960 hPa (deep low) and 1040 hPa (strong high) over the year.\n"
 "\n"
-"We model a sudden pressure drop from a high to a low:\n"
+"We model a sudden pressure drop from a high to a low as transmitted to the pore pressure:\n"
 "    p_high = 104000 Pa  (1040 hPa -- strong anticyclone)\n"
 "    p_low  =  96000 Pa  ( 960 hPa -- deep cyclone)\n"
 "    Delta p = 8000 Pa   (  80 hPa)\n"
@@ -592,6 +593,7 @@ void AtmosphericPressureDiffusion_Example::Run()
             vtu_1d.OutputDataToVTU( "1D_verification",
                                     output_vars, gref_1d, 0 );
             output( "Written: 1D_verification_0.vtu  (initial state)" );
+            output( "\n   Check results and BE PATIENT: we are using very small time-steps and a serial direct solver..." );
             pause();
 
             // ------------------------------------------------------------------
@@ -772,17 +774,17 @@ void AtmosphericPressureDiffusion_Example::Run()
     // ========================================================================
     // Step 5: Hydraulic diffusivity of the Jura formations
     // ========================================================================
-    heading( 5, 10, "Hydraulic diffusivity of the Jura formations" );
+    heading( 5, 10, "Hydraulic diffusivity of Jurassic succession in southern Germany" );
 
     explain(
 "The Jura-slope1 model contains five geological formations\n"
 "with very different hydraulic properties:\n"
 "\n"
-"  AMALTHEA_CLAY    -- Amalthea member, soft clay\n"
-"  OPALINUS_CLAY    -- Opalinus Clay (Mont Terri nuclear waste site)\n"
-"  IRON_SANDSTONE   -- Iron-cemented sandstone (Dogger beta)\n"
-"  RHAET_SANDSTONE  -- Rhaetian sandstone (important aquifer)\n"
 "  REEF_DOLOMITE    -- Reef dolomite (stiff carbonate)\n"
+"  IRON_SANDSTONE   -- Iron-cemented sandstone (Dogger beta)\n"
+"  OPALINUS_CLAY    -- Opalinus Clay (like in Mont Terri nuclear waste site)\n"
+"  AMALTHEA_CLAY    -- Amalthea member, soft clay\n"
+"  RHAET_SANDSTONE  -- Rhaetian sandstone (important aquifer)\n"
 "\n"
 "The contrast in hydraulic diffusivity spans 7 orders of magnitude."
     );
@@ -827,19 +829,19 @@ void AtmosphericPressureDiffusion_Example::Run()
 "FIELD_DATA means: 'this value comes from measured/computed data\n"
 "and should not be overwritten by the solver or post-processing.'\n"
 "\n"
-"This prevents the PDE_Integrator from accidentally overwriting\n"
-"the storativity values during the assembly process.\n"
+"This can be used to prevent computations from accidentally overwriting\n"
+"storativity values.\n"
 "\n"
-"It is good practice to flag material properties as FIELD_DATA\n"
-"to distinguish them from computed solution variables (PLAIN)."
+"It is good practice to flag property values as FIELD_DATA when they represent actual measurements\n"
+"to distinguish them from variables computed via constitutive relationships or computations (ANY)."
     );
     pause();
 
     keypoint(
-"Storativity beta_t = phi*beta_f + Kb combines fluid and rock compressibility.\n"
+"Storativity beta_t = phi * beta_f + (1-phi) * Kb combines fluid and rock compressibility.\n"
 "Use FIELD_DATA flag for material properties -- prevents accidental overwrite.\n"
 "The 7-order-of-magnitude contrast in D across the Jura formations\n"
-"means the pressure signal penetrates metres in clay but km in dolomite."
+"means that atmospheric pressure variations penetrates cm in clay but hm in dolomite."
     );
     pause();
 
@@ -850,11 +852,11 @@ void AtmosphericPressureDiffusion_Example::Run()
     heading( 6, 10, "Stage 2: loading the Jura-slope1 model" );
 
     explain(
-"The Jura-slope1 model is a 2D cross-section of the Swiss Jura\n"
-"Mountains, oriented perpendicular to the fold axes.\n"
+"The Jura-slope1 model is a 2D cross-section of the German Jura\n"
+"table-top mountains south of Stuttgart, oriented perpendicular to their slope.\n"
 "\n"
 "The model represents a slope where the geological formations\n"
-"dip toward the valley. The surface boundary (IRREGULAR) follows\n"
+"dip to the south away from the valley. The surface boundary (IRREGULAR) follows\n"
 "the topography and is where the atmospheric pressure BC is applied.\n"
 "\n"
 "The model is loaded from CSMP binary files and configured\n"
@@ -883,7 +885,7 @@ void AtmosphericPressureDiffusion_Example::Run()
 "Two derived properties must be computed before the PDE solve:\n"
 "\n"
 "  1. Hydraulic conductivity = k / mu\n"
-"     Computed from permeability using a ConstantFactor interrelation.\n"
+"     Computed from permeability using a ConstantFactor -> Interrelation subclass.\n"
 "\n"
 "  2. Storativity = phi*beta_f + Kb\n"
 "     Assigned per region using the values derived in Step 5."
@@ -954,8 +956,8 @@ void AtmosphericPressureDiffusion_Example::Run()
 
         explain(
 "The transient pressure solver uses Backward Euler time-stepping.\n"
-"This is unconditionally stable -- any time step size is allowed.\n"
-"However, accuracy requires dt << L^2/D (diffusion timescale).\n"
+"This is unconditionally stable -- however, time step size is capped to 14 days.\n"
+"This is because accuracy requires dt << L^2/D (diffusion timescale).\n"
 "\n"
 "We start with a small time step (5 seconds) and gradually\n"
 "increase it by a factor of 1.2 each step. This geometric\n"
@@ -1063,8 +1065,9 @@ void AtmosphericPressureDiffusion_Example::Run()
 "Backward Euler: storage appears on BOTH LHS and RHS.\n"
 "LHS capacitance_lhs: implicit term (unknown p^{t+dt})\n"
 "RHS capacitance_rhs: explicit term (known p^t)\n"
-"MultiplyWithTimeIncrement(true): operator stores beta_t, integrator divides by dt.\n"
-"AddAccumulateLater(): source term added after initial conditions."
+"MultiplyWithTimeIncrement(true): operator stores total systems compressibility, beta_t.\n"
+"                                 integrator divides by dt.\n"
+"AddAccumulateLater(): source term is added to RHS after initial conditions."
         );
         pause();
 
@@ -1087,7 +1090,7 @@ void AtmosphericPressureDiffusion_Example::Run()
 "  - Early times: small steps needed (sharp gradients)\n"
 "  - Late times: large steps acceptable (smooth solution)\n"
 "  - Total steps: ~log(t_max/t_0) / log(1.2) ~ 200 steps\n"
-"    to cover 6 orders of magnitude in time"
+"    to cover 4 orders of magnitude in time"
         );
         pause();
 
@@ -1095,7 +1098,7 @@ void AtmosphericPressureDiffusion_Example::Run()
         code(
 "const double day           = 86400.;          // 1 day in seconds\n"
 "double       model_time    = 0.;\n"
-"double       maxtime       = 1e6 * 365. * day; // 1 million years\n"
+"double       maxtime       = 100. * 365. * day; // 100 years\n"
 "double       time_increment = 5.;              // start: 5 seconds\n"
 "size_t       timestep      = 1;\n"
 "size_t       save_counter  = 0;\n"
@@ -1138,15 +1141,12 @@ void AtmosphericPressureDiffusion_Example::Run()
 "Here we use:\n"
 "    model.Apply( transient_pressure );\n"
 "\n"
-"Both work, but model.Apply() is preferred in time loops because:\n"
-"  - It reuses the matrix structure from the previous step\n"
-"    (setup_established_ = true after the first call)\n"
-"  - Only the RHS is rebuilt each step -- the LHS matrix\n"
+"Both work, but model.Apply() is preferred for this simple model:\n"
+"  - Only the RHS needs to be rebuilt each step -- the LHS matrix\n"
 "    structure is retained (RetainGlobalSolutionMatrix)\n"
 "  - This is significantly faster for many time steps\n"
 "\n"
-"IntegrateOver() rebuilds everything from scratch each call.\n"
-"model.Apply() is the efficient choice for time loops."
+"IntegrateOver() is more versatile, see advanced examples."
         );
         pause();
 
@@ -1167,7 +1167,7 @@ void AtmosphericPressureDiffusion_Example::Run()
 "We now run the full transient simulation.\n"
 "You will be asked how often to save output files.\n"
 "\n"
-"The simulation runs from t=0 to t=1 million years,\n"
+"The simulation runs from t=0 to t=100 years,\n"
 "but the interesting physics happens in the first few years:\n"
 "  - Days to weeks: signal enters the sandstone layers\n"
 "  - Months to years: signal penetrates tens of metres\n"
@@ -1226,8 +1226,9 @@ void AtmosphericPressureDiffusion_Example::Run()
                                          first_range_property );
 
             // Time loop parameters
-            const double day            = 86400.;
-            const double maxtime        = 1e6 * 365. * day;
+            constexpr double day                = 86400.;            //   1 day in seconds, max-time 100 years
+            constexpr double max_time_increment =  14. * day;        //   1 fortnight
+            constexpr double maxtime            = 100. * 365. * day; // 100 years
             double       model_time     = 0.;
             double       time_increment = 5.;   // start: 5 seconds
             size_t       timestep       = 1;
@@ -1272,8 +1273,8 @@ void AtmosphericPressureDiffusion_Example::Run()
                 }
 
                 // 6. Advance time
-                model_time      += time_increment;
-                time_increment  *= 1.2;
+                model_time += time_increment;
+                if ( time_increment < max_time_increment ) time_increment  *= 1.2;
                 timestep++;
                 save_counter++;
             }
@@ -1303,16 +1304,13 @@ void AtmosphericPressureDiffusion_Example::Run()
 "\n"
 "  Jura-slope1_output_*.vtu  (time series)\n"
 "    -- 'fluid pressure': CSMP transient solution\n"
-"    -- 'analytical pressure': 1D error function solution\n"
 "\n"
 "What to look for:\n"
-"  1. The pressure drop enters the sandstone layers first\n"
+"  1. The pressure drop enters the dolomite and sandstone layers first\n"
 "     (high diffusivity -- signal propagates quickly)\n"
 "  2. The clay layers act as barriers\n"
 "     (low diffusivity -- signal barely penetrates)\n"
 "  3. The dolomite equilibrates rapidly at depth\n"
-"  4. The analytical solution matches CSMP in the sandstone\n"
-"     but diverges in the clay (1D vs 2D geometry)\n"
 "\n"
 "Use ParaView's 'Plot Over Line' filter to extract a 1D profile\n"
 "of 'fluid pressure'."
@@ -1353,7 +1351,7 @@ void AtmosphericPressureDiffusion_Example::Run()
          << "    - 'analytical pressure' variable enables direct VTU comparison\n"
          << "    - FIELD_DATA flag protects material properties\n"
          << "    - 7-order-of-magnitude contrast in D across Jura formations\n\n"
-         << "  Next: Example 7 -- Coupled Thermo-Hydraulic Simulation\n\n";
+         << "  Next: Example 7 -- Mesh convergence study\n\n";
     divider();
     pause( "  [ Press ENTER to exit ]" );
 
