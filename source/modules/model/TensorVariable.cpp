@@ -160,83 +160,84 @@ bool TensorVariable<3U>::In( fstream& fp )
   Cubic root finding algorithm using Cardano's formula and the eigenvectors
   are calculated via LU-backsubstitution.
 
-  @test SKM - observed, by comparison with Maple, that all the values are
-  the same, but that the first element of the
-  second Eigenvector always has the opposite sign (does this matter?)
+  @test by comparison with Maple, all the values are
+  the same, but the first element of the
+  second Eigenvector always has the opposite sign.
 
   */
 bool TensorVariable<3U>::Eigen( VectorVariable<3U>& evals, TensorVariable<3U>& evecs, bool bNormalize ) const
 {
-  //calculate eigenvalues
-  //set eigenvalues
-  if ( !EigenValues( evals ) ) return false;
+    if ( !EigenValues( evals ) ) return false;
 
-  //suppose tensor is symmetric, by averaging the non diagonal elements
-  const double f_0_1( (data[1][0] + data[0][1]) / 2. ); //=1_0
-  const double f_0_2( (data[2][0] + data[0][2]) / 2. ); //=2_0
-  const double f_1_2( (data[1][2] + data[2][1]) / 2. ); //=1_2
+    // Symmetrise off-diagonal elements
+    const double f_0_1( (data[1][0] + data[0][1]) / 2. );
+    const double f_0_2( (data[2][0] + data[0][2]) / 2. );
+    const double f_1_2( (data[1][2] + data[2][1]) / 2. );
 
-                                                          //EigenValueCalculation(Ev0_, Ev1_, Ev2_);
-  TensorVariable<3U> Ev0_I( ANY, evals( 0 ) );
-  TensorVariable<3U> Ev1_I( ANY, evals( 1 ) );
-  TensorVariable<3U> Ev2_I( ANY, evals( 2 ) );
+    TensorVariable<3U> Ev0_I( ANY, evals( 0 ) );
+    TensorVariable<3U> Ev1_I( ANY, evals( 1 ) );
+    TensorVariable<3U> Ev2_I( ANY, evals( 2 ) );
 
-  TensorVariable<3U> A( ANY, data[0][0], f_0_1, f_0_2, f_0_1, data[1][1], f_1_2, f_0_2, f_1_2, data[2][2] );
-  //A.Out();
+    TensorVariable<3U> A( ANY, data[0][0], f_0_1, f_0_2,
+                                f_0_1, data[1][1], f_1_2,
+                                f_0_2, f_1_2, data[2][2] );
 
-  TensorVariable<3U> A_Ev0_I = A - Ev0_I;
-  TensorVariable<3U> A_Ev1_I = A - Ev1_I;
-  TensorVariable<3U> A_Ev2_I = A - Ev2_I;
+    TensorVariable<3U> A_Ev0_I = A - Ev0_I;
+    TensorVariable<3U> A_Ev1_I = A - Ev1_I;
+    TensorVariable<3U> A_Ev2_I = A - Ev2_I;
 
-  TensorVariable<3U> AEv0byAEv1 = A_Ev0_I * A_Ev1_I;
-  TensorVariable<3U> AEv0byAEv2 = A_Ev0_I * A_Ev2_I;
-  TensorVariable<3U> AEv1byAEv2 = A_Ev1_I * A_Ev2_I;
+    TensorVariable<3U> AEv0byAEv1 = A_Ev0_I * A_Ev1_I;
+    TensorVariable<3U> AEv0byAEv2 = A_Ev0_I * A_Ev2_I;
+    TensorVariable<3U> AEv1byAEv2 = A_Ev1_I * A_Ev2_I;
 
-  VectorVariable<3U> LEvec( ANY, ANY, ANY,
-                            sqrt( AEv1byAEv2( 0, 0 )*AEv1byAEv2( 0, 0 ) + AEv1byAEv2( 1, 0 )*AEv1byAEv2( 1, 0 ) + AEv1byAEv2( 2, 0 )*AEv1byAEv2( 2, 0 ) ),
-                            sqrt( AEv0byAEv2( 0, 1 )*AEv0byAEv2( 0, 1 ) + AEv0byAEv2( 1, 1 )*AEv0byAEv2( 1, 1 ) + AEv0byAEv2( 2, 1 )*AEv0byAEv2( 2, 1 ) ),
-                            sqrt( AEv0byAEv1( 0, 2 )*AEv0byAEv1( 0, 2 ) + AEv0byAEv1( 1, 2 )*AEv0byAEv1( 1, 2 ) + AEv0byAEv1( 2, 2 )*AEv0byAEv1( 2, 2 ) ) );
+    // Compute candidate column lengths for each eigenvector
+    VectorVariable<3U> LEvec( ANY, ANY, ANY,
+        sqrt( AEv1byAEv2(0,0)*AEv1byAEv2(0,0) + AEv1byAEv2(1,0)*AEv1byAEv2(1,0) + AEv1byAEv2(2,0)*AEv1byAEv2(2,0) ),
+        sqrt( AEv0byAEv2(0,1)*AEv0byAEv2(0,1) + AEv0byAEv2(1,1)*AEv0byAEv2(1,1) + AEv0byAEv2(2,1)*AEv0byAEv2(2,1) ),
+        sqrt( AEv0byAEv1(0,2)*AEv0byAEv1(0,2) + AEv0byAEv1(1,2)*AEv0byAEv1(1,2) + AEv0byAEv1(2,2)*AEv0byAEv1(2,2) ) );
 
-  uint32_t EvecLengthColID[3] = { 0, 1, 2 };
+    uint32_t EvecLengthColID[3] = { 0, 1, 2 };
 
-  for ( uint32_t i( 0 ); i < 3; i++ ) {
-    uint32_t j = i;
-    if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
-      j++;
-      if ( j > 2 ) { j = 0; }
-      LEvec( i ) = sqrt( AEv1byAEv2( 0, j )*AEv1byAEv2( 0, j ) + AEv1byAEv2( 1, j )*AEv1byAEv2( 1, j ) + AEv1byAEv2( 2, j )*AEv1byAEv2( 2, j ) );
-      if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
-        j++;
-        if ( j > 2 ) { j = 0; }
-        LEvec( i ) = sqrt( AEv1byAEv2( 0, j )*AEv1byAEv2( 0, j ) + AEv1byAEv2( 1, j )*AEv1byAEv2( 1, j ) + AEv1byAEv2( 2, j )*AEv1byAEv2( 2, j ) );
-      }
-      EvecLengthColID[i] = j;
+    for ( uint32_t i( 0 ); i < 3; i++ ) {
+        uint32_t j = i;
+        if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
+            j++;
+            if ( j > 2 ) j = 0;
+            LEvec( i ) = sqrt( AEv1byAEv2(0,j)*AEv1byAEv2(0,j) + AEv1byAEv2(1,j)*AEv1byAEv2(1,j) + AEv1byAEv2(2,j)*AEv1byAEv2(2,j) );
+            if ( LEvec( i ) < numeric_limits<double>::epsilon() ) {
+                j++;
+                if ( j > 2 ) j = 0;
+                LEvec( i ) = sqrt( AEv1byAEv2(0,j)*AEv1byAEv2(0,j) + AEv1byAEv2(1,j)*AEv1byAEv2(1,j) + AEv1byAEv2(2,j)*AEv1byAEv2(2,j) );
+            }
+            EvecLengthColID[i] = j;
+        }
     }
-  }
 
-  // Normalised eigen vectors. Each column of the following matrix is the eigenvector for the corresponding eigenvalue.
-  for ( uint32_t i( 0 ); i < 3; i++ ) {
-    evecs( i, 0 ) = AEv1byAEv2( i, EvecLengthColID[0] ) / LEvec( EvecLengthColID[0] );
-    evecs( i, 1 ) = AEv0byAEv2( i, EvecLengthColID[1] ) / LEvec( EvecLengthColID[1] );
-    evecs( i, 2 ) = AEv0byAEv1( i, EvecLengthColID[2] ) / LEvec( EvecLengthColID[2] );
-  }
-
-  // Not Normalised eignvectors; i.e. vectors of principal stresses/strains.
-  if ( !bNormalize ) {
-    for ( uint32_t j( 0 ); j< 3; j++ ) {
-      for ( uint32_t i( 0 ); i < 3; i++ ) {
-        evecs( i, j ) *= evals( j );
-      }
+    // ---------------------------------------------------------------
+    // Store eigenvectors in ROWS — consistent with EigenSymmetric.
+    // evecs(k, j) = component j of eigenvector k.
+    // Previously stored in columns — this was the bug.
+    // ---------------------------------------------------------------
+    for ( uint32_t j( 0 ); j < 3; j++ ) {
+        evecs( 0, j ) = AEv1byAEv2( j, EvecLengthColID[0] ) / LEvec( EvecLengthColID[0] );
+        evecs( 1, j ) = AEv0byAEv2( j, EvecLengthColID[1] ) / LEvec( EvecLengthColID[1] );
+        evecs( 2, j ) = AEv0byAEv1( j, EvecLengthColID[2] ) / LEvec( EvecLengthColID[2] );
     }
-  }
 
-  // evecs inherits the flags from the original tensor variable
-  evecs.flag[0] = flag[0];
-  evecs.flag[1] = flag[1];
-  evecs.flag[2] = flag[2];
+    // Scale eigenvectors by eigenvalues if normalisation is not requested
+    if ( !bNormalize ) {
+        for ( uint32_t k( 0 ); k < 3; k++ )        // eigenvector index = row
+            for ( uint32_t j( 0 ); j < 3; j++ )    // component index   = col
+                evecs( k, j ) *= evals( k );
+    }
 
-  return true;
+    // Eigenvectors inherit flags from the original tensor
+    evecs.flag[0] = flag[0];
+    evecs.flag[1] = flag[1];
+    evecs.flag[2] = flag[2];
 
+    return true;
+    
 } // end Eigen
 
 
@@ -267,11 +268,10 @@ bool TensorVariable<3U>::Eigen( VectorVariable<3U>& evals, TensorVariable<3U>& e
   Auto. Comp., Vol.ii-Linear Algebra, and the corresponding
   Fortran subroutine in EISPACK.
 
-  @author Lukas Mosser?
-
   */
 bool TensorVariable<3U>::EigenSymmetric( VectorVariable<3U>& eigenVals,
-                                         TensorVariable<3U>& eigenVecs ) const
+                                         TensorVariable<3U>& eigenVecs,
+                                         bool bNormalize ) const
 {
     // This method implements the Householder tridiagonalisation + symmetric
     // tridiagonal QL algorithm.  It requires the input tensor to be symmetric.
@@ -519,7 +519,14 @@ bool TensorVariable<3U>::EigenSymmetric( VectorVariable<3U>& eigenVals,
     {
         eigenVals(i) = d[i];
         for ( uint32_t j = 0; j < n; ++j )
-            eigenVecs(i,j) = V[i][j];
+            eigenVecs(i,j) = V[j][i]; // note the necessary row->col transformation
+    }
+
+    // Scale eigenvectors by eigenvalues if not normalising
+    if ( !bNormalize ) {
+        for ( uint32_t k = 0; k < n; ++k )
+            for ( uint32_t j = 0; j < n; ++j )
+                eigenVecs(k,j) *= eigenVals(k);
     }
 
     return true;

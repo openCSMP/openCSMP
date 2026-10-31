@@ -26,8 +26,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -51,8 +50,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -78,8 +76,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -103,8 +100,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(mo.lump_matrices_),
       application_cycles_(mo.application_cycles_),
       application_cycle_(mo.application_cycle_),
-      time_multiply_(mo.time_multiply_),
-      time_divide_(mo.time_divide_)
+      time_multiply_(mo.time_multiply_)
   {
   }
 
@@ -130,7 +126,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
       application_cycles_ = mo.application_cycles_;
       application_cycle_ = mo.application_cycle_;
       time_multiply_ = mo.time_multiply_;
-      time_divide_ = mo.time_divide_;
       factor_ = mo.factor_;
     }
     return *this;
@@ -503,14 +498,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::DivideByTimeIncrement(bool divide) noexcept
-  {
-    time_divide_ = divide;
-  }
-
-
-
-template<uint32_t dim, template<uint32_t> class CELL>
   bool MathOperatorRHS<dim,CELL>::Add() const noexcept
   {
     return add_accumulate_;
@@ -593,12 +580,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 
-template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::DivideByTimeIncrement() const noexcept
-  {
-    return time_divide_;
-  }
-
 
   /// ===================================  Main Computational Procedure Functions ========================================================================
 
@@ -609,116 +590,141 @@ void MathOperatorRHS<dim,CELL>::PropertyAtIntegrationPoint( const CELL<dim>& e_r
                                                             const csmp::Index& idx,
                                                             uint32_t ip,
                                                             DenseMatrix<dim>& M )
-  {
-    if (!e_ref.UsesLocalCoordinates())
-      throw csmp::Exception(FATAL_ERROR,
-        "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
-        "Current element does not support numerical integration.");
+{
+    if ( !e_ref.UsesLocalCoordinates() )
+        throw csmp::Exception( FATAL_ERROR,
+            "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
+            "Current element does not support numerical integration." );
 
-    // 0. If the property is a constraint point variable a one-to-one mapping
-    //    can be performed; no interpolation is needed
-    if (idx.place == ELEMENT_INTEGRATION_POINT) {
-      if (idx.type == SCALAR) {
-          M.AssignToDiagonalAndZeroOffDiagonal( dim, e_ref.Read(ip,idx) );
-        }
-      else if (idx.type == VECTOR) {
-          // TODO: change LocalVariableStorage so that vector gets returned directly
-          VectorVariable<dim> vc;
-          e_ref.Read(ip, idx, vc );
-          M.AssignToDiagonal( vc );
-        }
-      else if (idx.type == TENSOR) {
-          TensorVariable<dim> ts;
-          e_ref.Read(ip, idx, ts );
-          M = ts;
-        }
-      else if (idx.type == ARRAY)
+    switch ( idx.place ) {
+      // ----------------------------------------------------------------
+      // 0. Integration-point variable — direct one-to-one mapping,
+      //    no interpolation needed
+      // ----------------------------------------------------------------
+      case ELEMENT_INTEGRATION_POINT:
+      case FACE_INTEGRATION_POINT:
+        switch ( idx.type )
         {
-           ArrayVariable ar( idx.dataDepth );
-           e_ref.Read(ip, idx, ar );
-           M.AssignToDiagonal( ar );
+          case SCALAR:
+            M.AssignToDiagonalAndZeroOffDiagonal( dim, e_ref.Read( ip, idx ) );
+            return;
+          case VECTOR:
+            M.AssignToDiagonal( e_ref.ReadVector( ip, idx ) );
+            return;
+          case TENSOR:
+            M = e_ref.ReadTensor( ip, idx );
+            return;
+          case ARRAY:
+          {
+            ArrayVariable ar( idx.dataDepth );
+            e_ref.Read( ip, idx, ar );
+            M.AssignToDiagonal( ar );
+            return;
+          }
+          case FLAGGEDARRAY:
+          {
+            FlaggedArrayVariable fr( idx.dataDepth );
+            e_ref.Read( ip, idx, fr );
+            M.AssignToDiagonal( fr );
+            return;
+          }
+          default:
+            break;
         }
-      else if (idx.type == FLAGGEDARRAY)
+        break;
+
+        // ----------------------------------------------------------------
+        // 1. Element or region variable — constant over element,
+        //    no interpolation needed
+        // ----------------------------------------------------------------
+      case ELEMENT:
+      case REGION:
+        switch ( idx.type )
         {
-          FlaggedArrayVariable fr( idx.dataDepth );
-          e_ref.Read(ip, idx, fr );
-          M.AssignToDiagonal( fr );
+          case SCALAR:
+            M.AssignToDiagonalAndZeroOffDiagonal( dim, e_ref.Read( idx ) );
+            return;
+          case VECTOR:
+            M.AssignToDiagonal( e_ref.ReadVector( idx ) );
+            return;
+          case TENSOR:
+            M = e_ref.ReadTensor( idx );
+            return;
+          case ARRAY:
+          {
+            ArrayVariable ar( idx.dataDepth );
+            e_ref.Read( idx, ar );
+            M.AssignToDiagonal( ar );
+            return;
+          }
+          case FLAGGEDARRAY:
+          {
+            FlaggedArrayVariable fr( idx.dataDepth );
+            e_ref.Read( idx, fr );
+            M.AssignToDiagonal( fr );
+            return;
+          }
+          default:
+            break;
         }
-      return;
+        break;
+
+        // ----------------------------------------------------------------
+        // 2. Node variable — must be interpolated to the integration point
+        // ----------------------------------------------------------------
+      case NODE:
+        switch ( idx.type )
+        {
+          case SCALAR:
+          {
+            ScalarVariable sc;
+            e_ref.PropertyValueAtIntegrationPoint( idx, ip, sc );
+            M.AssignToDiagonal( dim, sc );
+            return;
+          }
+          case VECTOR:
+          {
+            VectorVariable<dim> vc;
+            e_ref.PropertyValueAtIntegrationPoint( idx, ip, vc );
+            M.AssignToDiagonal( vc );
+            return;
+          }
+          case TENSOR:
+          {
+            TensorVariable<dim> ts;
+            e_ref.PropertyValueAtIntegrationPoint( idx, ip, ts );
+            M = ts;
+            return;
+          }
+          case ARRAY:
+          {
+            ArrayVariable ar( idx.dataDepth );
+            e_ref.PropertyValueAtIntegrationPoint( idx, ip, ar );
+            M.AssignToDiagonal( ar );
+            return;
+          }
+          case FLAGGEDARRAY:
+          {
+            FlaggedArrayVariable fr( idx.dataDepth );
+            e_ref.PropertyValueAtIntegrationPoint( idx, ip, fr );
+            M.AssignToDiagonal( fr );
+            return;
+          }
+          default:
+            break;
+        }
+        break;
+
+        // ----------------------------------------------------------------
+        // Integration-point variables on faces cannot be interpolated
+        // ----------------------------------------------------------------
+      default:
+        throw csmp::Exception( FATAL_ERROR,
+            "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
+            "This method cannot interpolate IntegrationPoint variables." );
     }
 
-    // 1. If the property is an element variable it is constant over the
-    //    element, such that no interpolation is needed
-    if (idx.place == ELEMENT || idx.place == REGION)
-      {
-        if (idx.type == SCALAR) {
-            M.AssignToDiagonalAndZeroOffDiagonal(dim, e_ref.Read(idx));
-          }
-        else if (idx.type == VECTOR) {
-            VectorVariable<dim> vc;
-            e_ref.Read(idx, vc );
-            M.AssignToDiagonal( vc );
-          }
-        else if (idx.type == TENSOR) {
-            TensorVariable<dim> ts;
-            e_ref.Read(idx, ts );
-            M = ts;
-          }
-        else if (idx.type == ARRAY)
-          {
-            ArrayVariable ar( idx.dataDepth );
-            e_ref.Read(idx, ar );
-            M.AssignToDiagonal( ar );
-          }
-        else if (idx.type == FLAGGEDARRAY)
-          {
-            FlaggedArrayVariable fr( idx.dataDepth );
-            e_ref.Read(idx, fr );
-            M.AssignToDiagonal( fr );
-          }
-        return;
-      }
-
-    // 2. If the property is a node property, it must be interpolated to the
-    //    integration point
-    if (idx.place == NODE)
-      {
-        // interpolating properties
-        if (idx.type == SCALAR) {
-            ScalarVariable sc;
-            e_ref.PropertyValueAtIntegrationPoint(idx, ip, sc );
-            M.AssignToDiagonal(dim, sc );
-          }
-        else if (idx.type == VECTOR) {
-            VectorVariable<dim> vc;
-            e_ref.PropertyValueAtIntegrationPoint(idx, ip, vc );
-            M.AssignToDiagonal( vc );
-          }
-        else if (idx.type == TENSOR) {
-            TensorVariable<dim> ts;
-            e_ref.PropertyValueAtIntegrationPoint(idx, ip, ts );
-            M = ts;
-          }
-        else if (idx.type == ARRAY)
-          {
-            ArrayVariable ar( idx.dataDepth );
-            e_ref.PropertyValueAtIntegrationPoint(idx, ip, ar );
-            M.AssignToDiagonal( ar );
-          }
-        else if (idx.type == FLAGGEDARRAY)
-          {
-            FlaggedArrayVariable fr( idx.dataDepth );
-            e_ref.PropertyValueAtIntegrationPoint(idx, ip, fr );
-            M.AssignToDiagonal( fr );
-          }
-        return;
-      }
-
-    throw csmp::Exception(FATAL_ERROR,
-      "MathOperatorRHS<dim,CELL>::PropertyValueAtIntegrationPoint",
-      "This method cannot interpolate IntegrationPoint variables.");
-
-  } // end PropertyValueAtIntegrationPoint( CELL )
+} // end PropertyAtIntegrationPoint
 
 
 
@@ -747,16 +753,13 @@ void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
               break;
             case VECTOR:
               {
-                VectorVariable<dim>  vc;
-                e_ref.Read(MaterialOperandKey(), vc);
-                MTRL[0].AssignToDiagonal(vc);
+                MTRL[0].Zero();
+                MTRL[0].AssignToDiagonal(e_ref.ReadVector(MaterialOperandKey()));
               }
               break;
             case TENSOR:
               {
-                TensorVariable<dim>  ts;
-                e_ref.Read(MaterialOperandKey(), ts);
-                MTRL[0] = ts;
+                MTRL[0] = e_ref.ReadTensor(MaterialOperandKey() );
               }
               break;
             default:
@@ -781,16 +784,13 @@ void MathOperatorRHS<dim,CELL>::GetOperands( const CELL<dim>& e_ref )
                       break;
                     case VECTOR:
                       {
-                        VectorVariable<dim>  vc;
-                        e_ref.Read(i, MaterialOperandKey(), vc);
-                        MTRL[i].AssignToDiagonal(vc);
+                        MTRL[i].Zero();
+                        MTRL[i].AssignToDiagonal( e_ref.ReadVector( i, MaterialOperandKey() ));
                       }
                       break;
                     case TENSOR:
                       {
-                        TensorVariable<dim>  ts;
-                        e_ref.Read(i, MaterialOperandKey(), ts);
-                        MTRL[i] = ts;
+                        MTRL[i] = e_ref.ReadTensor( i, MaterialOperandKey() );
                       }
                       break;
                     default:

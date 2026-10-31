@@ -124,7 +124,6 @@ class MathOperatorLHS {
     void          ApplicationCycles ( uint32_t ) noexcept;
     void          MultiplyBy( double factor ) noexcept;
     void          MultiplyWithTimeIncrement( bool multiply ) noexcept;
-    void          DivideByTimeIncrement( bool divide ) noexcept;
 
     /// interpolation of property if isoparametric elements are used
     void          PropertyAtIntegrationPoint( const CELL<dim>&,
@@ -184,7 +183,6 @@ class MathOperatorLHS {
     uint32_t                         application_cycle_;
     // time-dependent multipliers
     bool                             time_multiply_;
-    bool                             time_divide_;
 
   private:
 

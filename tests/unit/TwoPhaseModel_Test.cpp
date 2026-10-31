@@ -103,7 +103,7 @@ void TwoPhaseModel_Test::run()
 
     // write data
     twoPhaseModel_->Initialize( *(*it) ); // just in case
-    for( auto i{0};i<(*it)->Nodes();i++)
+    for( uint32_t i{0};i<(*it)->Nodes();i++)
     {
         twoPhaseModel_->InitializeForNode( *(*it), i );
         twoPhaseModel_->EffectiveSaturation();

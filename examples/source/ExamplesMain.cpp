@@ -30,10 +30,20 @@ int main()
       PetscInitializeNoArguments();
 #endif
       // instantiating suite
-      ExampleSuite examplesSuite( "Open-CSMP++ EXAMPLES", &cout );
+      ExampleSuite examplesSuite( "CSMP++ EXAMPLES", &cout );
 
-      // write your own
-      examplesSuite.RegisterExample( new Experimental_Example() );
+      // CSMP FOR BEGINNERS
+            examplesSuite.RegisterExample( new CplusplusInCSMP_Example() );
+            examplesSuite.RegisterExample( new BuildingACSMPModel_Example );
+            examplesSuite.RegisterExample( new CSMP_PhysicalVariables_Example() );
+            examplesSuite.RegisterExample( new SteadyStateHeatConduction_Example() );
+            examplesSuite.RegisterExample( new InputDataManager_Example() );
+            examplesSuite.RegisterExample( new AtmosphericPressureDiffusion_Example() );
+      /*
+            examplesSuite.RegisterExample( new CSMP_Variables_Example() );
+            examplesSuite.RegisterExample( new CSMP_Model_Example() );
+            examplesSuite.RegisterExample( new ModelSubdomainTypes_Example() );
+      */
 
       // this is where your examples go (they will be ordered alphabetically when listed)
   
@@ -113,6 +123,8 @@ int main()
             examplesSuite.RegisterExample( new Tutorial3_Example() );
             examplesSuite.RegisterExample( new Tutorial4_Example() );
             
+      // WRITE YOUR OWN EXAMPLES
+            examplesSuite.RegisterExample( new Experimental_Example() );
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI

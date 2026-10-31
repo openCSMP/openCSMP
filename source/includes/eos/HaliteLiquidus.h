@@ -24,13 +24,13 @@ namespace csmp
     public:
       HaliteLiquidus( const double& externaltemperature,
                       const double& externalpressure );
-			~HaliteLiquidus();
+			~HaliteLiquidus() = default;
       
       double         MassFractionNaCl();
       double         MoleFractionNaCl();
 
     private:
-      HaliteLiquidus(); // disable default construction
+      HaliteLiquidus() = delete; // disable default construction
 
       const double&  temperature_;        ///< reference to temperature [C] in flow code
       const double&  pressure_;           ///< reference to fluid pressure [Pa] in flow code

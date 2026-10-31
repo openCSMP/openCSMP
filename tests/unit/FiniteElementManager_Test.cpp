@@ -93,7 +93,7 @@ void FiniteElementManager_Test::TestBasicFunctionality()
         _test( mgr.LinearTetrahedronElement() == nullptr );
         _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_HEXAHEDRON27 ) == 27u );
         _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_PRISM18 ) == 18u );
-        _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) == 14u ); // one node in centre of base plane
+        _test( mgr.NodesOfElementType( ISOPARAMETRIC_QUADRATIC_PYRAMID13 ) == 13u ); 
         _test( mgr.ContainsElementType(ISOPARAMETRIC_QUADRATIC_TRIANGLE) );
         list<CSMP_FEM_TYPE> etypes;
         mgr.CurrentElementTypes(etypes);

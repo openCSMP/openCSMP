@@ -48,18 +48,27 @@ void MohrCoulombFailure<dim>::Calculate()
     double  ta   = Theta( ts_, t );
     double  gt   = G_OfTheta( ta );
     
+    // Mohr-Coulomb yield function F (Zienkiewicz II, p. 89):
+    //   F < 0 — elastic (no failure)
+    //   F = 0 — on the yield surface
+    //   F > 0 — failed / plastic
     double  F = sm * sin(phi) - ch_() * cos(phi) + sd / gt;
     
-    CRIT = 1.0;
+    // Store the yield function value directly as the failure indicator:
+    //   negative = intact, zero = yield surface, positive = failed
+    CRIT = F;
     
-    cout <<"\nMohrCoulombFailure::Calculate: Friction Criterion F: "<< F << endl;
-    cout <<"\nParameters mean-, deviatoric-stress, lode angle: ";
-    cout << sm <<", "<< sd <<", "<< ta << endl;
-    
+ } // end Calculate
+
+// DEBUGGING
+/*
     MS.AssignTo( ch_ );
     cout <<"\nactual mean stress: "<< ch_ << endl;
 
- } // end Calculate
+    cout <<"\nMohrCoulombFailure::Calculate: Friction Criterion F: "<< F << endl;
+    cout <<"\nParameters mean-, deviatoric-stress, lode angle: ";
+    cout << sm <<", "<< sd <<", "<< ta << endl;
+*/
 
 
 
@@ -72,10 +81,22 @@ double MohrCoulombFailure<dim>::Theta( const TensorVariable<dim>& ts, double t )
   
     if constexpr ( dim == 2 )
       {
-         // 2D case not sure yet, search reference
-         double sx  = (2*ts(0,0) - ts(1,1)) / 2.;
-         double sy  = (2*ts(1,1) - ts(0,0)) / 2.;
-         J3  = sx * sy + 2.* ts(0,1);
+        // Compute mean stress — include sigma_zz = 0 (plane stress)
+        // For plane strain sigma_zz = nu*(sxx+syy) but nu is not available
+        // here so we use plane stress approximation (sigma_zz = 0).
+        // For full plane strain support pass nu and plane condition as
+        // constructor arguments.
+        const double p   = ( ts(0,0) + ts(1,1) ) / 3.;
+
+        // Deviatoric components
+        const double sx  = ts(0,0) - p;
+        const double sy  = ts(1,1) - p;
+        const double sz  = -p;          // sigma_zz = 0 => s_z = 0 - p = -p
+
+        // J3 = det(s) with sigma_xz = sigma_yz = 0
+        // J3 = sx*sy*sz - sz*sigma_xy^2
+        J3  = sx * sy * sz
+            - sz * ts(0,1) * ts(0,1);
       }
 
     if constexpr ( dim == 3 )
@@ -114,8 +135,8 @@ template<uint32_t dim>
 double  MohrCoulombFailure<dim>::MeanStress( const TensorVariable<dim>& ts ) 
  {
     // Smith & Griffiths, p. 233
-    if ( dim == 2 ) return (ts(0,0) + ts(1,1)) / std::sqrt(3.);
-    return (ts(0,0) + ts(1,1) + ts(2,2)) / std::sqrt(3.);
+    if constexpr ( dim == 2 ) return (ts(0,0) + ts(1,1)) / 3.; // std::sqrt(3.);
+    return (ts(0,0) + ts(1,1) + ts(2,2)) / 3.;
     
  } // end
 

@@ -213,7 +213,7 @@ int main()
     // REFACTORING: tests related to code that is currently being refactored
     // ---------------------------------------------------------------------
     if ( test_refactoring ) {
-        cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
+        cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
         
         refactored.addTest(new ANSYS_SplitBoundaryMatch_Test(true));
@@ -541,53 +541,65 @@ int main()
   // ------------------
   catch( bad_alloc& ba ) {
     cerr <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_cast& ba ) {
     cerr <<"\nbad_cast: Type casting error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_exception& ba ) {
     cerr <<"\nbad_exception: Exception error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_typeid& ba ) {
     cerr <<"\nbad_typeid: Type ID error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( ios_base::failure& ba ) {
     cerr <<"\nios_base::failure: Probable I/O error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // standard logic errors
   catch( domain_error& ba ) {
     cerr <<"\ndomain_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( invalid_argument& ba ) {
     cerr <<"\ninvalid_argument: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( length_error& ba ) {
     cerr <<"\nlength_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( out_of_range& ba ) {
     cerr <<"\nout_of_range: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // runtime errors
   catch( overflow_error& ba ) {
     cerr <<"\noverflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( range_error& ba ) {
     cerr <<"\nrange_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( underflow_error& ba ) {
     cerr <<"\nunderflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( Exception& ba ) {
 #ifdef __GNUC__
@@ -605,7 +617,8 @@ int main()
 #ifdef CSMP_WITH_SAMG_SOLVER
   catch( SAMG_Exception& ba ) {
     cout <<"\nSAMG_Exception: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
 #endif
 

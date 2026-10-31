@@ -316,6 +316,7 @@ void StressesAndStrains<3U>::ComputeContribution( const Element<3U>& e )
              
              // compute strain e_i = [B]_i{d}_i 3x12 * 12x1 -> 3x1 (in 2D)
              EGP_ *= DISPL_;
+             EGP_ *= -1.; // geomechanics convention
 
              // compute {sigma} = [E]([B]{d})
              if ( MathOperatorLHS<3U,Element>::MaterialOperandPlacement() == ELEMENT )
@@ -474,7 +475,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
         
         if ( principal_e_and_sigma_ ) {
              // principal strains
-             if ( !IP_STRAIN_TENSOR_.Eigen( evals_, evecs_, false ) ) {
+             if ( !IP_STRAIN_TENSOR_.Eigen( evals_, evecs_, true ) ) {
                     e.Out();
                     IP_STRAIN_TENSOR_.Out();
                     throw csmp::Exception( ERROR, "StressesAndStrains<3U>::WriteOperands:",
@@ -484,17 +485,14 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
              e.Store( strain1_key_, evecs_.Row(0) );
              e.Store( strain2_key_, evecs_.Row(1) );
              e.Store( strain3_key_, evecs_.Row(2) );
-             e.Store( dilat_key_, makeScalar(PLAIN,evals_[0]+evals_[1]+evals_[2]) );
-             // principal stresses
-             if ( !IP_STRESS_TENSOR_.Eigen( evals_, evecs_, false ) ) {
+             e.Store( dilat_key_, makeScalar(PLAIN, -(evals_[0]+evals_[1]+evals_[2]) ) );
+             // principal stresses (eigenvectors are normalised while eigenvalues contain exact stress magnitudes)
+             if ( !IP_STRESS_TENSOR_.EigenSymmetric( evals_, evecs_ ) ) {
                   e.Out();
                   IP_STRESS_TENSOR_.Out();
                   throw csmp::Exception( ERROR, "StressesAndStrains<3U>::WriteOperands:",
                                         "Eigen decompostion of stress tensor failed.");
                }
-             sortEigenVectorsAndValues( evals_, evecs_ );
-             // geomechanics convention: changing the sign of the stresses
-             evals_ *= -1.;
              // assuming that each row contains one Eigenvector
              e.Store( sigma1_key_, evecs_.Row(0) );
              e.Store( sigma2_key_, evecs_.Row(1) );
@@ -522,7 +520,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
             if ( principal_e_and_sigma_ ) {
                  // principal strains = stretches in the principal elongation 
                  // directions = Eigenvalues of strain tensor   
-                 ts_.Eigen( evals_, evecs_, true ); // do not normalize but scale by eigenvalues
+                 ts_.Eigen( evals_, evecs_, true );
                  sortEigenVectorsAndValues( evals_, evecs_ );
                   vc_ = evecs_.Row(0);
                   e.Store( i, strain1_key_, vc_ ); 
@@ -533,7 +531,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                  // dilatation = sum of principal strains 
                  // -------------------------------------
-                 sc_() = evals_[0] + evals_[1] + evals_[2];
+                 sc_() = -(evals_[0] + evals_[1] + evals_[2]);
                  e.Store( i, dilat_key_, sc_ );
               }
             
@@ -542,10 +540,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
             // principal stresses
             // ------------------
             if ( principal_e_and_sigma_ ) {
-                  ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                  sortEigenVectorsAndValues( evals_, evecs_ );
-                  // geomechanics_conventions_
-                  evals_ *= -1.;
+                  ts_.EigenSymmetric( evals_, evecs_ ); // do not normalize but scale by eigenvalues
                   vc_ = evecs_.Row(0);
                   e.Store( i, sigma1_key_, vc_ ); 
                   vc_ = evecs_.Row(1);
@@ -587,7 +582,7 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
                      // principal strains
                      // -----------------
                      convertColumnTo( STRAIN_, i, ts_ );
-                     ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
+                     ts_.Eigen( evals_, evecs_, true );
                      sortEigenVectorsAndValues( evals_, evecs_ );
                      vc_ = evecs_.Row(0);
                      e.N(i)->Store( strain1_key_, vc_ ); 
@@ -598,16 +593,13 @@ void StressesAndStrains<3U>::WriteOperands( Element<3U>& e )
 
                      // dilatation = sum of principal strains 
                      // -------------------------------------
-                     sc_() = evals_[0] + evals_[1] + evals_[2];
+                     sc_() = -(evals_[0] + evals_[1] + evals_[2]);
                      e.N(i)->Store( dilat_key_, sc_ );
                        
                      // principal stresses
                      // ------------------
                      convertColumnTo( STRESS_, i, ts_ );
-                     ts_.Eigen( evals_, evecs_, false ); // do not normalize but scale by eigenvalues
-                     sortEigenVectorsAndValues( evals_, evecs_ );
-                     // geomechanics_conventions
-                     evals_ *= -1.;
+                     ts_.EigenSymmetric( evals_, evecs_ );
                      vc_ = evecs_.Row(0);
                      e.N(i)->Store( sigma1_key_, vc_ ); 
                      vc_ = evecs_.Row(1);

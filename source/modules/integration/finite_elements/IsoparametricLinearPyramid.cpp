@@ -14,7 +14,6 @@ namespace csmp {
 
 /// @todo (3) Check streched PYRS? - PhysicalToParametric fails???
 /// @note Barycenter of pyramid?
-
 IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoints )
   // CSMP_FEM_TYPE, isoparametric(y/n), uses_local_coordinates(y/n), order_of_shape_functions
   : FiniteElement( ISOPARAMETRIC_LINEAR_PYRAMID, true, true, 1U ),
@@ -81,8 +80,8 @@ IsoparametricLinearPyramid::IsoparametricLinearPyramid( uint32_t integrationPoin
         GenerateIntegrationPoints(IP,W);
     else
     {
-        cerr<<"IsoparametricLinearPyramid::IsoparametricLinearHexahedron: Number of integration points should be 1 or 8"<<endl;
-        throw std::range_error("***ERROR: IsoparametricLinearPyramid::IsoparametricLinearHexahedron: N of integration points should be 1 or 8");
+        cerr<<"IsoparametricLinearPyramid(ctor): Number of integration points should be 5 or 8"<<endl;
+        throw std::range_error("***ERROR: IsoparametricLinearPyramid(ctor): N of integration points should be 5 or 8");
     }
 
 }
@@ -224,13 +223,6 @@ void IsoparametricLinearPyramid::dNr ( double,
         DNR[2] = 0.25*( 1.-t+s)/(1.-t);
         DNR[3] =-0.25*( 1.-t+s)/(1.-t);
         DNR[4] = 0.;
-        /* text book
-        DNR[0] = -0.25 * (1. - s) / (1. - t);
-        DNR[1] =  0.25 * (1. - s) / (1. - t);
-        DNR[2] =  0.25 * (1. + s) / (1. - t);
-        DNR[3] = -0.25 * (1. + s) / (1. - t);
-        DNR[4] =  0.;
-        */
      }
    else {//t==1
         DNR[0] =-0.25;
@@ -238,25 +230,7 @@ void IsoparametricLinearPyramid::dNr ( double,
         DNR[2] = 0.25;
         DNR[3] =-0.25;
         DNR[4] = 0.;
-        /*
-        DNR[0] = 0.;
-        DNR[1] = 0.;
-        DNR[2] = 0.;
-        DNR[3] = 0.;
-        DNR[4] = 0.;
-        */
      }
-
-//   // alternative approximation
-//   const double sPlus(1.0+s);
-//   const double sMinus(1.0-s);
-//   const double tMinus(1.-t);
-
-//   DNR[0] = -0.25*sMinus*tMinus;
-//   DNR[1] =  0.25*sMinus*tMinus;
-//   DNR[2] =  0.25*sPlus *tMinus;
-//   DNR[3] = -0.25*sPlus *tMinus;
-//   DNR[4] =  0.0;
 
 }
 
@@ -274,13 +248,6 @@ void IsoparametricLinearPyramid::dNs(
         DNS[2] = 0.25*( 1.-t+r)/(1.-t);
         DNS[3] =-0.25*(-1.+t+r)/(1.-t);
         DNS[4] = 0.;
-        /*
-        DNS[0] = -0.25 * (1. - r) / (1. - t);
-        DNS[1] = -0.25 * (1. + r) / (1. - t);
-        DNS[2] =  0.25 * (1. + r) / (1. - t);
-        DNS[3] =  0.25 * (1. - r) / (1. - t);
-        DNS[4] =  0.;
-        */
    }
    else {//t==1
         DNS[0] =-0.25;
@@ -288,25 +255,8 @@ void IsoparametricLinearPyramid::dNs(
         DNS[2] = 0.25;
         DNS[3] = 0.25;
         DNS[4] = 0.0;
-        /*
-        DNS[0] = 0.;
-        DNS[1] = 0.;
-        DNS[2] = 0.;
-        DNS[3] = 0.;
-        DNS[4] = 0.;
-        */
    }
 
-//   // alternative approximation
-//   const double rPlus(1.+r);
-//   const double rMinus(1.-r);
-//   const double tMinus(1.-t);
-
-//   DNS[0] = -0.25*rMinus*tMinus;
-//   DNS[1] = -0.25*rPlus *tMinus;
-//   DNS[2] =  0.25*rPlus *tMinus;
-//   DNS[3] =  0.25*rMinus*tMinus;
-//   DNS[4] =  0.0;
 
 }
 
@@ -327,13 +277,6 @@ void IsoparametricLinearPyramid::dNt(
        DNT[2] = -0.25+0.25*RST;
        DNT[3] = -0.25-0.25*RST;
        DNT[4] =  1.;
-       /*
-       DNT[0] = -0.25 * (1. - r) / (1. - s);
-       DNT[1] = -0.25 * (1. + r) / (1. - s);
-       DNT[2] = -0.25 * (1. + r) / (1. + s);
-       DNT[3] = -0.25 * (1. - r) / (1. + s);
-       DNT[4] =  1.;
-       */
    }
    else { //t==1
        DNT[0] =-0.25;
@@ -341,26 +284,7 @@ void IsoparametricLinearPyramid::dNt(
        DNT[2] =-0.25;
        DNT[3] =-0.25;
        DNT[4] = 1.0;
-       /*
-       DNT[0] = 0.;
-       DNT[1] = 0.;
-       DNT[2] = 0.;
-       DNT[3] = 0.;
-       DNT[4] = 1.;
-       */
     }
-
-//   // alternative approximation
-//   const double rPlus(1.+r);
-//   const double sPlus(1.+s);
-//   const double rMinus(1.-r);
-//   const double sMinus(1.-s);
-
-//   DNT[0] = -0.25*rMinus*sMinus;
-//   DNT[1] = -0.25*rPlus *sMinus;
-//   DNT[2] = -0.25*rPlus *sPlus;
-//   DNT[3] = -0.25*rMinus*sPlus;
-//   DNT[4] =  1.0;
 
 }
 
@@ -510,10 +434,11 @@ uint32_t IsoparametricLinearPyramid::NodesPerFace( uint32_t face_id ) const noex
         case 2: return 3U;
         case 3: return 3U;
         case 4: return 4U;
+      default:
+          cerr << "\nIsoparametricLinearPyramid::NodesPerFace: face " << face_id << " does not exist.";
+          return npf;
       }
-    cerr <<"\nIsoparametricLinearPyramid::NodesPerFace: face "<< face_id <<" does not exist.";
-    return npf;
- }
+  }
 
 
 
@@ -523,7 +448,7 @@ vector<uint32_t>  IsoparametricLinearPyramid::NodesOfFace( uint32_t face_id ) co
         case 0: return vector<uint32_t>{0,1,4};
         case 1: return vector<uint32_t>{1,2,4};
         case 2: return vector<uint32_t>{2,3,4};
-        case 3: return vector<uint32_t>{0,4,3};
+        case 3: return vector<uint32_t>{3,0,4};
         case 4: return vector<uint32_t>{0,3,2,1};
       }
     cerr <<"\nIsoparametricLinearPyramid::NodesOfFace: face "<< face_id <<" does not exist.";
@@ -635,51 +560,25 @@ For degenerate configurations?
                      0=>2  1=>0  2==1
 
 @warning Coordinate axes mapped, but work for cube at COFC?? */
-double
-IsoparametricLinearPyramid::VolumeOfTetra(
-                            uint32_t verticeIndex1,
-                            uint32_t verticeIndex2,
-                            uint32_t verticeIndex3,
-                            uint32_t verticeIndex4
-                            )
+double IsoparametricLinearPyramid::VolumeOfTetra(
+                            uint32_t i,
+                            uint32_t j,
+                            uint32_t k,
+                            uint32_t l
+                            ) const noexcept
 {
-
-    uint32_t i=verticeIndex1,j=verticeIndex2,k=verticeIndex3,l=verticeIndex4;
-
-    double d1Times1=	 XY(j,2)*XY(k,0)*XY(l,1)-XY(j,2)*XY(k,1)*XY(l,0)-XY(j,0)*XY(k,2)*XY(l,1)+
-                         XY(j,0)*XY(k,1)*XY(l,2)+XY(j,1)*XY(k,2)*XY(l,0)-XY(j,1)*XY(k,0)*XY(l,2);
-
-    if(d1Times1<0.0) cout<<" IsoparametricLinearPyramid::VolTetra d1 <0.0 "<<endl;
-    //if(d1Times1<0.0)	throw std::range_error(" LinearHexahedron::VolTetra d1 <0.0 ");
-
-    double d2TimesXYi0=	-XY(i,2)*XY(k,0)*XY(l,1)+XY(i,2)*XY(k,1)*XY(l,0)+XY(i,2)*XY(j,0)*XY(l,1)-
-                         XY(i,2)*XY(j,0)*XY(k,1)-XY(i,2)*XY(j,1)*XY(l,0)+XY(i,2)*XY(j,1)*XY(k,0);
-
-    if(d2TimesXYi0<0.0)	cout<<" IsoparametricLinearPyramid::VolTetra d2TimesXYi0 <0.0"<<endl;
-    //if(d2TimesXYi0<0.0) throw std::range_error(" LinearHexahedron::VolTetra d2TimesXYi0 <0.0");
-
-    double d3TimesXYi1= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
-                         XY(i,1)*XY(j,2)*XY(k,0)-XY(i,1)*XY(j,0)*XY(l,2)+XY(i,1)*XY(j,0)*XY(k,2);
-
-    if(d3TimesXYi1<0.0) cout<<" IsoparametricLinearPyramid::VolTetra D3TimesXYi1 <0.0"<<endl;
-    // throw std::range_error(" LinearHexahedron::VolTetra D3TimesXYi1 <0.0");
-
-    double d4TimesXYi2= -XY(i,1)*XY(k,2)*XY(l,0)+XY(i,1)*XY(k,0)*XY(l,2)+XY(i,1)*XY(j,2)*XY(l,0)-
-                         XY(i,1)*XY(j,2)*XY(k,0)-XY(i,1)*XY(j,0)*XY(l,2)+XY(i,1)*XY(j,0)*XY(k,2);
-
-    if(d4TimesXYi2<0.0) cout<< " IsoparametricLinearPyramid::VolTetra d4TimesXYi2 <0.0"<<endl;
-    //if(d4TimesXYi2<0.0) throw std::range_error(" LinearHexahedron::VolTetra d4TimesXYi2 <0.0");
-
-    double volume =fabs(d1Times1) + fabs(d2TimesXYi0) + fabs(d3TimesXYi1) + fabs(d4TimesXYi2);
-
-    return volume/6.0;
+    // V = |det[b-a, c-a, d-a]| / 6
+    const double ax = XY(j,0)-XY(i,0), ay = XY(j,1)-XY(i,1), az = XY(j,2)-XY(i,2);
+    const double bx = XY(k,0)-XY(i,0), by = XY(k,1)-XY(i,1), bz = XY(k,2)-XY(i,2);
+    const double cx = XY(l,0)-XY(i,0), cy = XY(l,1)-XY(i,1), cz = XY(l,2)-XY(i,2);
+    return std::fabs( ax*(by*cz - bz*cy)
+                    - ay*(bx*cz - bz*cx)
+                    + az*(bx*cy - by*cx) ) / 6.0;
 }
 
 
-
 /// @warning Not applicable for irregular pyramid
-double
-IsoparametricLinearPyramid::VolumeOfPyramid()
+double IsoparametricLinearPyramid::VolumeOfPyramid()
 {
     //double volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(0,2,3,4);
     double volume= VolumeOfTetra(0,1,2,4)+VolumeOfTetra(3,0,2,4);
@@ -1011,10 +910,9 @@ IsoparametricLinearPyramid::PhysicalToParametric(
                 (rstHatK[0]<rstHatK[2]-1.0) || (rstHatK[0]>1.0-rstHatK[2]) ||
                 (rstHatK[1]<rstHatK[2]-1.0) || (rstHatK[1]>1.0-rstHatK[2])  )
             {
-                rstHatK[2] = 0.0;
-                rstHatK[2] = 0.0;
+                rstHatK[0] = 0.0;
+                rstHatK[1] = 0.0;
                 rstHatK[2] = 2.0;
-
                 break;
             }
 
@@ -1401,11 +1299,8 @@ This method attempts to calculate the inner radius of the curved-sided
 quad by talking 1/2 of the perimeter and dividing this measure by
 the area of the quad.
 
-The procedure is empirically based giving a good match if the quadss
-are relatively even-sided and have straight edges. Requires further check
-for the case of the hexahedron, as it is directly borrowed from the
-Tetrahedron
-
+The procedure is empirically based giving a good match if the quad is
+are relatively even-sided and have straight edges.
 @section arguments Input Arguments
 
 The parent element is queried for its node coordinates.
@@ -1440,7 +1335,6 @@ void
 IsoparametricLinearPyramid::MidSideNodes(std::vector<uint32_t>& ids) const
  {
     cerr<<"\nIsoparametricLinearPyramid::MidSideNodes WARNING: linear element has no MidSideNodes.\n"<<endl;
-    ids[0]=0;
  }
  
  
@@ -1546,10 +1440,17 @@ const
    NVAR.resize( npe * nvars );
   // Define nodal values as bi-linear variation of the integration points values
   // See Zienkewitch, pp. 351, for example
-    for ( uint32_t i{0U}; i<npe; i++ )
-      for ( uint32_t k{0U}; k<nvars; k++ )
-        NVAR[i*nvars + k] = IVAR[k];
-
+    for ( uint32_t i{0U}; i<npe; i++ ) {
+        std::vector<double> Ni(npe);
+        Nrst( NXYZ(i,0), NXYZ(i,1), NXYZ(i,2), Ni );
+        for ( uint32_t k{0U}; k<nvars; k++ ) {
+            double val = 0.0;
+            for ( uint32_t ip{0U}; ip<gpe; ip++ )
+                val += Ni[ip] * IVAR[ip*nvars + k];
+            NVAR[i*nvars + k] = val;
+        }
+    }
+    
 } // end ExtrapolateIntegrationPointVariableToNodes (vectors)
 
 
