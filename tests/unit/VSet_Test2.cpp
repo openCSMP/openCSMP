@@ -55,22 +55,22 @@ bool VSet_Test2::Test_ModelConstructionAndSaving2D()
       // as face numbers as these will be converted later
       PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
       elmt_nums.Reserve( vset.Elements() );
-      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
       vset.AddData( "element number", elmt_nums );
       // face numbers
       PropertyData face_nums( FACE, SCALAR, 2U );
       face_nums.Reserve( vset.Faces() );
-      for ( size_t i{ vset.Elements() }; i<vset.Elements() + vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, i ) );
+      for ( size_t i{ vset.Elements() }; i<vset.Elements() + vset.Faces(); ++i ) pushBack( face_nums, makeScalar( ANY, static_cast<double>(i) ) );
       vset.AddData( "face number", face_nums );
       // interface numbers
       PropertyData iface_nums( INTER_FACE, SCALAR, 2U );
       iface_nums.Reserve( vset.Interfaces() );
-      for ( size_t i{ vset.Elements() + vset.Faces() }; i<vset.Cells(); ++i ) pushBack( iface_nums, makeScalar( ANY, i ) );
+      for ( size_t i{ vset.Elements() + vset.Faces() }; i<vset.Cells(); ++i ) pushBack( iface_nums, makeScalar( ANY, static_cast<double>(i) ) );
       vset.AddData( "interface number", iface_nums );
       // node numbers
       PropertyData node_nums( NODE, SCALAR, 2U );
       node_nums.Reserve( vset.Vertices() );
-      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+      for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
       vset.AddData( "node number", node_nums );
     }
     // ----------------------------------------------------

@@ -39,6 +39,7 @@ int main()
             examplesSuite.RegisterExample( new SteadyStateHeatConduction_Example() );
             examplesSuite.RegisterExample( new InputDataManager_Example() );
             examplesSuite.RegisterExample( new AtmosphericPressureDiffusion_Example() );
+            examplesSuite.RegisterExample( new MeshConvergence_Example() );
       /*
             examplesSuite.RegisterExample( new CSMP_Variables_Example() );
             examplesSuite.RegisterExample( new CSMP_Model_Example() );

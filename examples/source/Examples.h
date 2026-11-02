@@ -18,6 +18,7 @@
 #include "BuildingACSMPModel_Example.h"
 #include "CSMP_PhysicalVariables_Example.h"
 #include "SteadyStateHeatConduction_Example.h"
+#include "MeshConvergence_Example.h"
 #include "InputDataManager_Example.h"
 #include "AtmosphericPressureDiffusion_Example.h"
 
