@@ -12,7 +12,7 @@ namespace csmp {
 
 template<uint32_t dim, template<uint32_t> class CELL>
 NumIntegral_NT_rhsop_N_dV<dim,CELL>::NumIntegral_NT_rhsop_N_dV( const PropertyDatabase<dim>& pref,
-                                                           const char* oper, const char* test )
+                                                                const char* oper, const char* test )
   : MathOperatorRHS<dim,CELL>( pref, oper, test ),
     op_( 1U, 1.0 )
  {
@@ -39,41 +39,41 @@ PropertyAtIntegrationPoint.
 */
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_NT_rhsop_N_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
- {
+{
+    const csmp::Index& key = MathOperatorRHS<dim,CELL>::MaterialOperandKey();
+
     switch ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() )
-      {
+    {
         case ELEMENT:
         case FACE:
         case REGION:
-          op_.resize( 1U );
-          op_[0U] = e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
-          break;
+            if ( op_.size() != 1U ) op_.resize( 1U );
+            op_[0U] = e.Read( key );
+            break;
 
         case ELEMENT_INTEGRATION_POINT:
         case FACE_INTEGRATION_POINT:
-          {
-            const auto n_ip{ e.IntegrationPoints() };
-            op_.resize( n_ip );
-            for ( uint32_t i{0U}; i < n_ip; ++i )
-              op_[i] = e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey() );
-          }
-          break;
-
         case NODE:
-          {
-            const auto n_ip{ e.IntegrationPoints() };
-            op_.resize( n_ip );
-            for ( uint32_t i{0U}; i < n_ip; ++i )
-              op_[i] = e.PropertyValueAtIntegrationPoint( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), i );
-          }
-          break;
+        {
+            const uint32_t n_ip{ e.IntegrationPoints() };
+            if ( op_.size() != n_ip ) op_.resize( n_ip );
+
+            if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == NODE )
+                for ( uint32_t i{0U}; i < n_ip; ++i )
+                    op_[i] = e.PropertyValueAtIntegrationPoint( key, i );
+            else
+                for ( uint32_t i{0U}; i < n_ip; ++i )
+                    op_[i] = e.Read( i, key );
+            break;
+        }
 
         default:
-          throw csmp::Exception( FATAL_ERROR, "NumIntegral_NT_rhsop_N_dV::GetOperands",
-                                 "Unsupported material operand placement." );
-      }
+            throw csmp::Exception( FATAL_ERROR,
+                "NumIntegral_NT_rhsop_N_dV::GetOperands",
+                "Unsupported material operand placement." );
+    }
 
- } // end GetOperands
+} // end GetOperands
 
 
 /**

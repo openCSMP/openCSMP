@@ -20,7 +20,7 @@ typedef FiniteVolumePolicy<3U,Element> EFT3;
 
 void rhinoOutput( const Model<3U>& sgroup )
  {
-    system( "del iso_lin_*.txt" );
+    // TODO: delete potential earlier versions: system( "del iso_lin_*.txt" );
     
     const Region<3U>& sg(sgroup.Region("Model")); 
   
@@ -58,11 +58,11 @@ void rhinoOutput( const Model<3U>& sgroup )
  
 
 
-static void writeSurfaceFacet(std::stringstream & ss, const EFT3& efvt, const Element<3U>& e, uint32_t iFacet)
+static void writeSurfaceFacet(std::stringstream & ss, const EFT3&, const Element<3U>& e, uint32_t iFacet)
  {
    ss << "\nSrfPt ";
      
-   for(auto iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
+   for( uint32_t iPoint = 0; iPoint < e.FV()->FacetPoints(iFacet); iPoint++ )
    {
     const Point<3U> pt( e.RstToXYZ(e.FV()->FacetPoint(iFacet,iPoint)) );
     ss << pt[0] << "," << pt[1] << "," << pt[2] << " ";
@@ -244,7 +244,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
    
    vector< string > nodes (sg.Region("Model").Nodes());
    
-   for ( auto i = 0; i < nodes.size(); i++ )
+   for ( size_t i = 0; i < nodes.size(); i++ )
    {
     stringstream s;
     createLayer( s, "FV", i );
@@ -280,7 +280,7 @@ void printElement( const Element<3U>& e, const string& sNameOfFile )
  
   ofstream ofs("finite_volumes.txt", ios::out|ios::trunc);
   
-	for ( auto i = 0; i < nodes.size(); i++ )
+	for ( size_t i = 0; i < nodes.size(); i++ )
 	  ofs << nodes[i] << "\n";
   
   ofs.close();

@@ -2511,74 +2511,96 @@ inline double triangleArea( const Point<1U>&, const Point<1U>&, const Point<1U>&
   }
 
 /**
-Computes the perimeter (2D) or the surface area (3D) of a model subdomain object.
+Computes the perimeter length (2D) or the surface area (3D) of a model subdomain object.
 To compute the surface area, only elements of dim-1 are considered.
 
 @attention method assumes that the first nodes in higher-order elements are the corner nodes.
 
-@todo SKM: method will produce nonsense if line elements intersect the boundary.
-
 */
 template<uint32_t dim>
-double  Region<dim>::SurfaceArea() const
+double Region<dim>::SurfaceArea() const
 {
-  ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-  // in 1D there is no meaningful surface area
-  if ( dim == 1U ) {
-    csmp_error.Note( WARNING, "Region<1U>::SurfaceArea:",
-                       "is not defined in one-dimensional model; returning NaN" );
-    return std::numeric_limits<double>::signaling_NaN();
-  }
+    ErrorHandler& csmp_error( ErrorHandler::Instance() );
 
-  auto    bit( this->bd_face_vec_.begin() );
-  double  area{0.};
+    // In 1D there is no meaningful surface area
+    if constexpr ( dim == 1U ) {
+        csmp_error.Note( WARNING, "Region<1U>::SurfaceArea:",
+                         "is not defined in one-dimensional model; returning NaN" );
+        return std::numeric_limits<double>::signaling_NaN();
+    }
 
-  // in 3D we are computing the surface area of volumetric regions
-  if constexpr ( dim == 3U ) {
-      // for all elements located on the region boundary
-      for ( auto i = this->InteriorCells(); i<this->Cells(); ++i, ++bit )
-        // since each element can have multiple boundary faces
-        for ( uint32_t j{0U}; j<(*bit).size(); j++ ) {
-          const uint32_t face( (*bit)[j] );
-          auto fnids = this->cell_vec_[i]->FE()->NodesOfFace( face );
-          const CSMP_FEM_TYPE etype( this->cell_vec_[i]->FE()->ElementTypeOfFace( face ) );
-          // triangular face (works also for quadratic mesh since the corner nodes come first)
-          if ( isTriangular(etype) )
-            area += triangleArea( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
-                                  this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
-                                  this->cell_vec_[i]->N( fnids[2U] )->Coordinate() );
-          // quadrilateral face
-          else if ( isQuadrilateral(etype) )
-            area += facetArea4( this->cell_vec_[i]->N( fnids[0U] )->Coordinate(),
-                                this->cell_vec_[i]->N( fnids[1U] )->Coordinate(),
-                                this->cell_vec_[i]->N( fnids[2U] )->Coordinate(),
-                                this->cell_vec_[i]->N( fnids[3U] )->Coordinate() );
-                                
-          // linear face (perimeter length is accumulated)
-          else if ( isLineElement(etype) ) {
-            area += distance( this->cell_vec_[i]->N(0U)->Coordinate(), this->cell_vec_[i]->N(1U)->Coordinate() );
-          }
+    double area{0.};
+
+    // -----------------------------------------------------------------------------
+    // 3D: compute surface area from boundary faces of volumetric perimeter elements
+    // -----------------------------------------------------------------------------
+    if constexpr ( dim == 3U ) {
+
+        if ( this->bd_face_vec_.empty() ) {
+            csmp_error.Note( ERROR, "Region<3U>::SurfaceArea:",
+                             "bd_face_vec_ is empty; returning 0." );
+            return 0.;
+        }
+
+        for ( size_t eid = this->InteriorCells(); eid < this->Cells(); ++eid )
+        {
+            // only volume elements have faces on the 3D region boundary
+            if ( !this->cell_vec_[eid]->IsVolume() ) continue;
+
+            for ( uint32_t j{0U}; j < this->PerimeterFaces(eid); ++j )
+            {
+                const uint32_t      face ( this->PerimeterFace( eid, j ) );
+                auto                fnids( this->cell_vec_[eid]->FE()->NodesOfFace( face ) );
+                const CSMP_FEM_TYPE etype( this->cell_vec_[eid]->FE()->ElementTypeOfFace( face ) );
+
+                if ( isTriangular( etype ) ) {
+                    assert( fnids.size() >= 3U );
+                    area += triangleArea(
+                        this->cell_vec_[eid]->N( fnids[0U] )->Coordinate(),
+                        this->cell_vec_[eid]->N( fnids[1U] )->Coordinate(),
+                        this->cell_vec_[eid]->N( fnids[2U] )->Coordinate() );
+                }
+                else if ( isQuadrilateral( etype ) ) {
+                    assert( fnids.size() >= 4U );
+                    area += facetArea4(
+                        this->cell_vec_[eid]->N( fnids[0U] )->Coordinate(),
+                        this->cell_vec_[eid]->N( fnids[1U] )->Coordinate(),
+                        this->cell_vec_[eid]->N( fnids[2U] )->Coordinate(),
+                        this->cell_vec_[eid]->N( fnids[3U] )->Coordinate() );
+                }
+                else {
+                    cerr << "\nRegion<3U>::SurfaceArea: unrecognised face element type for volume element "
+                         << parseFiniteElementType( etype )
+                         << " on element " << eid << ", face " << face << "; skipping.\n";
+                }
+            }
         }
     }
-  // in 2D we are computing the perimeter (length) of surface objects
-  else if constexpr ( dim == 2U ) {
-      // for all surface elements on the region boundary (excluding line elements)
-      for ( size_t eid = this->InteriorCells(); eid<this->Cells(); ++eid )
-        // for this to work, elements must be surface elements
-        if ( this->cell_vec_[eid]->IsSurface() ) {
-            for ( uint32_t face{0u}; face<this->PerimeterFaces(eid); ++face ) {
-                 // returns local face id of face #face that lies on perimeter of model subdomain
-                 auto fnids = this->cell_vec_[eid]->CornerNodesOfFace( this->PerimeterFace( eid, face ) );
-                 area += distance( (*fnids.begin())->Coordinate(), (*fnids.rbegin())->Coordinate() );
-              }
-          }
-        // error the cross-sectional area of a line element region without special attribute is meaningless
-        else return numeric_limits<double>::signaling_NaN();
+
+    // -------------------------------------------------------------------------
+    // 2D: compute perimeter length from boundary faces of perimeter elements
+    // -------------------------------------------------------------------------
+    else if constexpr ( dim == 2U ) {
+
+        for ( size_t eid = this->InteriorCells(); eid < this->Cells(); ++eid )
+        {
+            // only surface elements have edges on the 2D region boundary
+            if ( !this->cell_vec_[eid]->IsSurface() )  continue;
+
+            for ( uint32_t face{0U}; face < this->PerimeterFaces(eid); ++face ) {
+                auto fnids = this->cell_vec_[eid]->CornerNodesOfFace(
+                                 this->PerimeterFace( eid, face ) );
+                assert( fnids.size() >= 2U );
+                area += distance( (*fnids.begin())->Coordinate(),
+                                  (*fnids.rbegin())->Coordinate() );
+            }
+        }
     }
 
-  return area;
+    return area;
 
 } // end SurfaceArea
+
 
        /*
         if ( this->cell_vec_[i]->FE()->IsSurface() )

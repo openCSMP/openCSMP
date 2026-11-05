@@ -68,7 +68,7 @@ class ModelSubDomain {
     /// constructs incomplete subdomain for later initialisation with suitable methods in subclasses
     ModelSubDomain( const std::string& subdomain_name, const PropertyDatabase<dim>&, bool unique );
     ModelSubDomain( const ModelSubDomain& );
-    ModelSubDomain( ModelSubDomain&& );
+    ModelSubDomain( ModelSubDomain&& ) noexcept;
   
     virtual ~ModelSubDomain() noexcept;
     
@@ -154,14 +154,15 @@ class ModelSubDomain {
     /// reference to container of finite cell pointers to either Element, Face or InterFace objects; @note used for boolean operations
     const typename std::vector<CELL<dim>*>&  CellVector() const noexcept;
     
-    /// do not remove!;  used for boolean operations
+    /// direct access to cells
     typename std::vector<CELL<dim>*>&        CellVector() noexcept;
   
-    /// reference to const Node pointer vector
+    /// direct access to nodes (except for SplitBoundary which does not store nodes
     const typename std::vector<Node<dim>*>&  NodeVector() const noexcept;
-
-    /// reference to Node pointer vector
     typename std::vector<Node<dim>*>&        NodeVector() noexcept;
+
+    // acces to perimeter face vector<vector<uint32_t>> storing the local numbers of the faces of the perimenter cells that lie on subdomain boundary
+    const typename std::vector<std::vector<uint32_t>>&  PerimeterFaceVector() const noexcept;
 
     /// const iterators (cell and node pointers cannot be modified but the nodes and cells can!)
     typename std::vector<csmp::Node<dim>*>::const_iterator  NodesBegin() const noexcept;
@@ -366,7 +367,7 @@ class ModelSubDomain {
     static constexpr bool               verbose_ = false;
 
   private:
-    ModelSubDomain();
+    ModelSubDomain() = default;
 };
 
 
@@ -406,13 +407,32 @@ void readDomainIndexesFromBinaryFile( std::fstream&, SubDomainInfo& );
 
 
 
-
-
-
-
-
-
 // INLINE FUNCTIONS NOT COVERED BY EXPLICIT TEMPLATE INSTANTIATIONS
+
+template<uint32_t dim, template<uint32_t> class CELL>
+inline void printPerimeterFaceVector( const ModelSubDomain<dim,CELL>& subdomain )
+{
+    const auto& bd_face_vec = subdomain.PerimeterFaceVector();
+    std::cout << "perimeterFaceVector: '"<< subdomain.Name() <<"'\n[\n";
+    for ( std::size_t i = 0; i < bd_face_vec.size(); ++i ) {
+        const auto& inner = bd_face_vec[i];
+        // Row index / outer vector index
+        std::cout << "  [" << std::setw(4) << i << "] { ";
+        for ( std::size_t j = 0; j < inner.size(); ++j ) {
+            std::cout << inner[j];
+            // Separate entries with a comma, except the last
+            if ( j + 1 < inner.size() ) std::cout << ", ";
+        }
+        std::cout << " }\n";
+    }
+    std::cout << "]\n"<< "  Outer size : " << bd_face_vec.size()  << "\n";
+
+    // Optional: report total number of face indices stored
+    std::size_t total = 0;
+    for ( const auto& inner : bd_face_vec ) total += inner.size();
+    std::cout << "  Total entries : " << total << "\n";
+}
+
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline void  ModelSubDomain<dim,CELL>::ScheduleForRebuild() noexcept
@@ -482,6 +502,13 @@ inline typename std::vector<Node<dim>*>&  ModelSubDomain<dim,CELL>::NodeVector()
   {
     return node_vec_;
   }
+
+    // acces to perimeter face vector<vector<uint32_t>> storing the local numbers of the faces of the perimenter cells that lie on subdomain boundary
+template<uint32_t dim, template<uint32_t> class CELL>
+inline const typename std::vector<std::vector<uint32_t>>&   ModelSubDomain<dim,CELL>::PerimeterFaceVector() const noexcept {
+   return bd_face_vec_;
+}
+
 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline typename std::vector<csmp::Node<dim>*>::const_iterator  ModelSubDomain<dim,CELL>::NodesBegin() const noexcept
@@ -632,10 +659,8 @@ inline std::vector<size_t>  ModelSubDomain<dim,CELL>::MemberCellIndexes() const 
 template<uint32_t dim, template<uint32_t> class CELL>
 inline size_t ModelSubDomain<dim,CELL>::RenumberNodes() const noexcept
  {
-    size_t  counter(0U);
-
+    size_t  counter{0U};
     for ( auto& it : node_vec_ ) it->Idx( counter++ );
-
     return counter;
  }
 
@@ -715,7 +740,6 @@ inline bool ModelSubDomain<dim,CELL>::Contains( const Node<dim>* const nptr ) co
 
     const auto interior_nds = static_cast<long>( InteriorNodes() );
 
-    // Verify each sub-range is independently sorted
     assert( std::is_sorted( node_vec_.begin(), next( node_vec_.begin(), interior_nds ) ) &&
             "interior node range is not sorted" );
 

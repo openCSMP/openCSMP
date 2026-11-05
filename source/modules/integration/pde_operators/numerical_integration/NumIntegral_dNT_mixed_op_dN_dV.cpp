@@ -67,27 +67,34 @@ void NumIntegral_dNT_mixed_op_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     assert( e.FE()->Isoparametric() == true );
 
     // only if the property is an element property  something is done here
-     MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-     MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
-  
-     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-          double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
-          MathOperatorLHS<dim,CELL>::MTRL[0](0,0) =  sc;
-          if constexpr ( dim != 1U ) MathOperatorLHS<dim,CELL>::MTRL[0](1,1) = sc;
-          if constexpr ( dim == 3U ) MathOperatorLHS<dim,CELL>::MTRL[0](2,2) = sc;
-       }
-     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-          VectorVariable<dim>  vc;
-          e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-          MathOperatorLHS<dim,CELL>::MTRL[0](0,0) = vc[0];
-          if constexpr ( dim != 1U ) MathOperatorLHS<dim,CELL>::MTRL[0](1,1) = vc[1];
-          if constexpr ( dim == 3U ) MathOperatorLHS<dim,CELL>::MTRL[0](2,2) = vc[2];
-       }
-     if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-          TensorVariable<dim>  ts;
-          e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-          MathOperatorLHS<dim,CELL>::MTRL[0] = ts;
-       }
+      const csmp::Index& key = MathOperatorLHS<dim,CELL>::MaterialOperandKey();
+
+      switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+      {
+         case ELEMENT:
+            switch ( MathOperatorLHS<dim,CELL>::MaterialOperandType() )
+            {
+               case SCALAR:
+                  MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+                  break;
+               case VECTOR:
+                  MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+                  break;
+               case TENSOR:
+                  MathOperatorLHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+                  break;
+               default:
+                  break;
+            }
+            break;
+
+         default: // integration-point placed variable
+            for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
+               MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint(
+                   e, key, i, MathOperatorLHS<dim,CELL>::MTRL[i] );
+            break;
+      }
+
 
     // 2. read the nodal operand multiplier and interpolate it to integration points
     // ------------------------------------

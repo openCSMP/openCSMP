@@ -81,7 +81,8 @@
 #include "FiniteElement_Test.h"
 #include "FiniteElement_Test2.h"
 #include "IsoparametricLinearHexahedron_Test.h"
-#include "IsoparametricLinearPyramid_Test.h" // TODO: run with more relaxed tolerances
+#include "IsoparametricLinearPyramid_Test.h"
+#include "IsoparametricQuadraticPyramid_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -89,7 +90,6 @@
 #include "LinearCuboid_Test.h"
 
 // --- finite volumes ---
-#include "ExplicitTransport_Test.h"
 #include "FiniteVolumePolicy_Test.h"
 #include "FiniteVolumeStencil_Test.h"
 #include "FV_Parameter_Test.h"
@@ -175,29 +175,6 @@
 #include "BoreHole_stability_VerticalWell3D_VVCase.h"
 
 
-/**
-    Finds the directory where the test data are stored
-
-    Usage: Inside your test:
-    
-        @code
-    void testSomething() {
-        std::string meshPath = getTestDataPath("IsoparametricLinearTetrahedron1P.txt");
-        // Open file using meshPath...
-    }
-       @endcode
-*/
-std::string getTestDataPath(const std::string& filename) {
-    const char* dataRoot = std::getenv("CSMP_DATA_ROOT");
-    if (dataRoot == nullptr) {
-        // Fallback or other directory for when you run tests manually in Xcode without CTest
-        return "./fallback_data/" + filename;
-      }
-    return std::string(dataRoot) + "/" + filename;
-}
-
-
-
 using namespace std;
 using namespace csmp;
 
@@ -217,7 +194,7 @@ int main( int argc, char* argv[] )
   std::cout << "PETSc initialized = "
             << (initialized ? "true" : "false")
             << std::endl;
-#if defined(DEBUG)
+#ifndef NDEBUG
   PetscOptionsSetValue(nullptr, "-ksp_monitor", nullptr);
   PetscOptionsSetValue(nullptr, "-ksp_converged_reason", nullptr);
   PetscOptionsSetValue(nullptr, "-ksp_view", nullptr);
@@ -269,13 +246,11 @@ int main( int argc, char* argv[] )
         // REFACTORED CODE
         // =====================================================================
         if ( test_refactoring ) {
-        cout <<"\n1. Refactored and new code functionality: running tests..."<< endl;
+        cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-        // add your test of the suggested refactoring here
-        // refactored.addTest( new vsetMakers_Test() ); // OK
-        //refactored.addTest( new SplitBoundaryTest_JK() ); // OK
-        refactored.addTest( new VData_Test() );
+// TODO: put your new or refactored test here!
+// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
         // actually running the test
         refactored.run();
@@ -350,17 +325,14 @@ int main( int argc, char* argv[] )
       basic.addTest( new FiniteVolumeStencil_Test(verbose));
       // also compares speed of mapping facet areas and normals versus computing them
       basic.addTest( new FiniteVolumePolicy_Test());
-      basic.addTest( new FV_Parameter_Test());
       
       // interfaces / containers
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new Parameter_Test() );
-      basic.addTest( new PropertyData_Test() );
       basic.addTest( new VData_Test() );
       basic.addTest( new vsetMakers_Test() );
       basic.addTest( new VSet_Test1() );
       basic.addTest( new VSet_Test2() );
-      basic.addTest( new ColorPalette_Test() );
       
       // Running unit tests and reporting errors
       basic.run();
@@ -383,7 +355,6 @@ int main( int argc, char* argv[] )
       // simplex finite elements
       // -----------------------
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
-      interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(1), "IsoparametricLinearTetrahedron1P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTetrahedron(4), "IsoparametricLinearTetrahedron4P.txt", verbose ) );
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(3,3), "IsoparametricLinearTriangle3D3IP.txt", verbose ) ); // 3D case 3 integration points
       interdependent1.addTest( new FiniteElement_Test( new IsoparametricLinearTriangle(2,3), "IsoparametricLinearTriangle3IP.txt", verbose ) );   // 2D case 3 integration points
@@ -396,6 +367,8 @@ int main( int argc, char* argv[] )
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      interdependent1.addTest( new IsoparametricLinearPyramid_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPyramid_Test() );
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
       interdependent1.addTest( new ElementPolicyIntegrity_Test() );
@@ -431,7 +404,9 @@ int main( int argc, char* argv[] )
       
       // variables but now tested on a full-fledged model
       interdependent1.addTest( new Variables_Test("FracBox") );
+#ifdef NDEBUG
       interdependent1.addTest( new VariableStorageSpeed_Test() );
+#endif
 
       // running unit tests and reporting errors
       interdependent1.run();
@@ -510,6 +485,7 @@ int main( int argc, char* argv[] )
     
         // actually running the test
         interfaces.run();
+        fails_interfaces = interfaces.report();
         total_failures += fails_interfaces;
         interfaces.free();
         cerr << "\nunit_CTests_main: 4. input & output interfaces: Total unit test failures: " << fails_interfaces << endl;
@@ -538,7 +514,7 @@ int main( int argc, char* argv[] )
       // computations
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
-     // composite.addTest( new PDE_Integrator_Computation_Test() );
+      composite.addTest( new PDE_Integrator_Computation_Test() ); // TODO: use PETSc instead of Eigen
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
@@ -582,7 +558,7 @@ int main( int argc, char* argv[] )
       cout <<"\n5. Refactored and new code functionality: running tests..."<< endl;
       TestSuite new_developments("new tests of the CSMP base library", &cout );
       
-       new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
+      new_developments.addTest( new ExactVersusNumericIntegrationSpeed_Test() );
    
       // running unit tests and reporting errors
       new_developments.run();
@@ -609,53 +585,65 @@ int main( int argc, char* argv[] )
   } // Exception handling (warnings etc. are caught at a much lower level)
   catch( bad_alloc& ba ) {
     cerr <<"\nbad_alloc: Memory allocation error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_cast& ba ) {
     cerr <<"\nbad_cast: Type casting error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_exception& ba ) {
     cerr <<"\nbad_exception: Exception error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( bad_typeid& ba ) {
     cerr <<"\nbad_typeid: Type ID error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( ios_base::failure& ba ) {
     cerr <<"\nios_base::failure: Probable I/O error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // standard logic errors
   catch( domain_error& ba ) {
     cerr <<"\ndomain_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( invalid_argument& ba ) {
     cerr <<"\ninvalid_argument: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( length_error& ba ) {
     cerr <<"\nlength_error: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( out_of_range& ba ) {
     cerr <<"\nout_of_range: Logic error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   // runtime errors
   catch( overflow_error& ba ) {
     cerr <<"\noverflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( range_error& ba ) {
     cerr <<"\nrange_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( underflow_error& ba ) {
     cerr <<"\nunderflow_error: Runtime error caused by: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
   catch( Exception& ba ) {
 #ifdef __GNUC__
@@ -673,7 +661,8 @@ int main( int argc, char* argv[] )
 #ifdef CSMP_WITH_SAMG_SOLVER
   catch( SAMG_Exception& ba ) {
     cout <<"\nSAMG_Exception: "<< ba.what() << endl;
-    system("pause");
+    cout << "Press Enter to continue...";
+    cin.get();
   }
 #endif
 

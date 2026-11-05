@@ -2,20 +2,22 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-only
 
-#ifndef STOKESDISCREPANCYMEASURE_EXAMPLE_H
-#define STOKESDISCREPANCYMEASURE_EXAMPLE_H
+#ifndef STOKES_DISCREPANCY_MEASURE_EXAMPLE_H
+#define STOKES_DISCREPANCY_MEASURE_EXAMPLE_H
 
 #include "Example.h"
 
 namespace csmp {
 
-class  StokesDiscrepancyMeasure_Example : public Example{
-public:
-  virtual void Run();
-  virtual void Specifications();
+class  StokesDiscrepancyMeasure_Example final : public Example{
+  public:
+    ~StokesDiscrepancyMeasure_Example() override = default;
+    
+    void Run() override;
+    void Specifications() override;
 };
 
 } // csmp
 
 
-#endif // STOKESDISCREPANCYMEASURE_EXAMPLE_H
+#endif // STOKES_DISCREPANCY_MEASURE_EXAMPLE_H

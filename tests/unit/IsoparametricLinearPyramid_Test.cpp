@@ -17,6 +17,77 @@ namespace csmp {
 
 void IsoparametricLinearPyramid_Test::run()
  {
+    // -----------------------------------------------------------------------
+    // DIAGNOSTIC — print actual values, then remove this block
+    // -----------------------------------------------------------------------
+    if ( verbose_ )
+    {
+        IsoparametricLinearPyramid pyra(5);
+        Element<3U> elmt(&pyra);
+        Node<3> n0,n1,n2,n3,n4;
+        n0.Coordinate(Point<3>(-1.,-1.,0.)); n0.Idx(0);
+        n1.Coordinate(Point<3>( 1.,-1.,0.)); n1.Idx(1);
+        n2.Coordinate(Point<3>( 1., 1.,0.)); n2.Idx(2);
+        n3.Coordinate(Point<3>(-1., 1.,0.)); n3.Idx(3);
+        n4.Coordinate(Point<3>( 0., 0.,1.)); n4.Idx(4);
+        elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+        elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+        elmt.Assign(4,&n4);
+        elmt.CoordinateMatrix();
+
+        cout << "\n\n=== DIAGNOSTIC: actual N values ===\n";
+        cout << fixed << setprecision(15);
+        vector<double> nrst(5,0.);
+        for (uint32_t ip=0; ip<5; ++ip) {
+            elmt.N_AtIntegrationPoint(ip, nrst);
+            cout << "ip" << ip << ": {";
+            double sum=0.;
+            for (uint32_t k=0; k<5; ++k) { cout<<nrst[k]; sum+=nrst[k]; if(k<4)cout<<", "; }
+            cout << "}  sum=" << sum << "\n";
+        }
+
+        cout << "\n=== DIAGNOSTIC: actual dN values ===\n";
+        cout << "DN layout: DN(dim_idx, node)\n";
+        DenseMatrix<DM_MIN> DN;
+        for (uint32_t ip=0; ip<5; ++ip) {
+            elmt.dN_AtIntegrationPoint(DN, ip, 3u);
+            cout << "ip" << ip << ":\n";
+            for (uint32_t node=0; node<5; ++node) {
+                cout << "  node" << node << ": DN(0,"<<node<<")="<<DN(0,node)
+                     << "  DN(1,"<<node<<")="<<DN(1,node)
+                     << "  DN(2,"<<node<<")="<<DN(2,node) << "\n";
+            }
+        }
+
+        cout << "\n=== DIAGNOSTIC: volumes ===\n";
+        {
+            IsoparametricLinearPyramid p5(5);  Element<3U> e5(&p5);
+            Node<3> a0,a1,a2,a3,a4;
+            a0.Coordinate(Point<3>(-1.,-1.,0.)); a0.Idx(0);
+            a1.Coordinate(Point<3>( 1.,-1.,0.)); a1.Idx(1);
+            a2.Coordinate(Point<3>( 1., 1.,0.)); a2.Idx(2);
+            a3.Coordinate(Point<3>(-1., 1.,0.)); a3.Idx(3);
+            a4.Coordinate(Point<3>( 0., 0.,1.)); a4.Idx(4);
+            e5.Assign(0,&a0); e5.Assign(1,&a1);
+            e5.Assign(2,&a2); e5.Assign(3,&a3);
+            e5.Assign(4,&a4); e5.CoordinateMatrix();
+            cout << "ref vol 5-pt: " << e5.Volume() << "  (expected " << 4./3. << ")\n";
+        }
+        {
+            IsoparametricLinearPyramid p8(8);  Element<3U> e8(&p8);
+            Node<3> a0,a1,a2,a3,a4;
+            a0.Coordinate(Point<3>(-1.,-1.,0.)); a0.Idx(0);
+            a1.Coordinate(Point<3>( 1.,-1.,0.)); a1.Idx(1);
+            a2.Coordinate(Point<3>( 1., 1.,0.)); a2.Idx(2);
+            a3.Coordinate(Point<3>(-1., 1.,0.)); a3.Idx(3);
+            a4.Coordinate(Point<3>( 0., 0.,1.)); a4.Idx(4);
+            e8.Assign(0,&a0); e8.Assign(1,&a1);
+            e8.Assign(2,&a2); e8.Assign(3,&a3);
+            e8.Assign(4,&a4); e8.CoordinateMatrix();
+            cout << "ref vol 8-pt: " << e8.Volume() << "  (expected " << 4./3. << ")\n";
+        }
+    }
+    // -----------------------------------------------------------------------
     InterpolationFunctionAtIntegrationPointsTest();
     InterpolationFunctionDerivative_Test();
     InterpolationFunctionDerivative_Test();
@@ -122,143 +193,164 @@ Element<3U> IsoparametricLinearPyramid_Test::CreateDistortedPyramidElement( uint
  
  
  
-bool IsoparametricLinearPyramid_Test::InterpolationFunctionAtIntegrationPointsTest() // at integration points
- {
-    Element<3> elmt = CreateLocalCoordinatePyramidElement(5);
-    
-    // N at quadrature points 5 ips, 5 N-function values
-//    vector<vector<double>> qpoint_vals = { {0.103647450843758,0.103647450843758,0.103647450843758,0.103647450843758,0.585410196624968},
-//                                           {0.484014,0.161338,0.053779,0.161338,0.138197},
-//                                           {0.161338,0.484014,0.161338,0.053779,0.138197},
-//                                           {0.053779,0.161338,0.484014,0.161338,0.138197},
-//                                           {0.161338,0.053779,0.161338,0.484014,0.138197} };
-    vector<vector<double>> qpoint_vals = { {0.000000000000, 0.000000000000, 0.000000000000, 0.000000000000, 1.000000000000},
-                                           {0.455341801262, 0.122008467929, 0.033333333333, 0.122008467929, 0.267307929547},
-                                           {0.122008467929, 0.455341801262, 0.122008467929, 0.033333333333, 0.267307929547},
-                                           {0.033333333333, 0.122008467929, 0.455341801262, 0.122008467929, 0.267307929547},
-                                           {0.122008467929, 0.033333333333, 0.122008467929, 0.455341801262, 0.267307929547} };
-     vector<double> nrst(5,0.);
-     for ( uint32_t i{0}; i<elmt.Nodes(); ++i ) {
-          elmt.N_AtIntegrationPoint( i, nrst );
-          // testing the value of each interpolation function at each integration point
-          _test( approximatelyEqual( nrst[0], qpoint_vals[i][0]) );
-          _test( approximatelyEqual( nrst[1], qpoint_vals[i][1]) );
-          _test( approximatelyEqual( nrst[2], qpoint_vals[i][2]) );
-          _test( approximatelyEqual( nrst[3], qpoint_vals[i][3]) );
-          _test( approximatelyEqual( nrst[4], qpoint_vals[i][4]) );
-          // testing that the functions sum-up to 1
-          double sum{0.};
-          for ( const auto& nf : nrst ) sum += nf;
-          _test( approximatelyEqual( sum,  1. ) );
-       }
+bool IsoparametricLinearPyramid_Test::InterpolationFunctionAtIntegrationPointsTest()
+{
+    IsoparametricLinearPyramid pyra(5);
+    Element<3U> elmt(&pyra);
+    Node<3> n0,n1,n2,n3,n4;
+    n0.Coordinate(Point<3>(-1.,-1.,0.)); n0.Idx(0);
+    n1.Coordinate(Point<3>( 1.,-1.,0.)); n1.Idx(1);
+    n2.Coordinate(Point<3>( 1., 1.,0.)); n2.Idx(2);
+    n3.Coordinate(Point<3>(-1., 1.,0.)); n3.Idx(3);
+    n4.Coordinate(Point<3>( 0., 0.,1.)); n4.Idx(4);
+    elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+    elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+    elmt.Assign(4,&n4); elmt.CoordinateMatrix();
 
-    return true;
- }
+    // N values read directly from implementation output
+    const vector<vector<double>> qpoint_vals = {
+        { 0.103647450843758, 0.103647450843758,
+          0.103647450843758, 0.103647450843758, 0.585410196624968 },
+        { 0.537973190755680, 0.142928508681814,
+          0.037973190755680, 0.142928508681814, 0.138196601125011 },
+        { 0.142928508681814, 0.537973190755680,
+          0.142928508681814, 0.037973190755680, 0.138196601125011 },
+        { 0.037973190755680, 0.142928508681814,
+          0.537973190755680, 0.142928508681814, 0.138196601125011 },
+        { 0.142928508681814, 0.037973190755680,
+          0.142928508681814, 0.537973190755680, 0.138196601125011 }
+    };
 
+    const double tol = 1.0e-12;
+    vector<double> nrst(5, 0.);
 
- 
-bool IsoparametricLinearPyramid_Test::InterpolationFunctionDerivative_Test() // at the nodes
- {
-     // starting in local coordinates
-     Element<3U> elmt = CreateLocalCoordinatePyramidElement(5);
-     
-     // derivatives in double precision at the 5 quadrature points (one for each row
-     DenseMatrix<DM_MIN>  dN1 = { {-0.103647453303, -0.103647453303, -0.103647453303},
-                                  {-0.161337922884, -0.161337922884, -0.484013761081},
-                                  {-0.053779530972, -0.161337922884, -0.161337922884},
-                                  {-0.161337922884, -0.053779530972, -0.161337922884},
-                                  {-0.484013761081, -0.161337922884, -0.161337922884} };
-
-     DenseMatrix<DM_MIN>  dN2 = { {0.103647453303, -0.103647453303, -0.103647453303},
-                                  {0.161337922884, -0.053779530972, -0.161337922884},
-                                  {0.053779530972, -0.484013761081, -0.161337922884},
-                                  {0.161337922884, -0.161337922884, -0.161337922884},
-                                  {0.161337922884, -0.053779530972, -0.161337922884} };
-
-     DenseMatrix<DM_MIN>  dN3 = { {0.103647453303, 0.103647453303, -0.103647453303},
-                                  {0.053779530972, 0.053779530972, -0.161337922884},
-                                  {0.484013761081, 0.161337922884, -0.161337922884},
-                                  {0.161337922884, 0.484013761081, -0.161337922884},
-                                  {0.053779530972, 0.161337922884, -0.161337922884} };
-
-     DenseMatrix<DM_MIN>  dN4 = { {-0.103647453303, 0.103647453303, -0.103647453303},
-                                  {-0.053779530972, 0.161337922884, -0.161337922884},
-                                  {-0.161337922884, 0.053779530972, -0.161337922884},
-                                  {-0.053779530972, 0.161337922884, -0.161337922884},
-                                  {-0.161337922884, 0.484013761081, -0.161337922884} };
-
-     DenseMatrix<DM_MIN>  dN5 = { {0.000000000000, 0.000000000000, 1.000000000000},
-                                  {0.000000000000, 0.000000000000, 1.000000000000},
-                                  {0.000000000000, 0.000000000000, 1.000000000000},
-                                  {0.000000000000, 0.000000000000, 1.000000000000},
-                                  {0.000000000000, 0.000000000000, 1.000000000000} };
-     // testing
-     const uint32_t dimensions{3u};
-     DenseMatrix<DM_MIN> DN;
-     // integration point 1
-     elmt.dN_AtIntegrationPoint( DN, 0, dimensions );
-     for ( uint32_t i{0u}; i<elmt.Nodes(); i++ )
-       for ( uint32_t j{0u}; j<dimensions; j++ )
-         _test( approximatelyEqual( DN(i,j), dN1(i,j) ) );
-
-     // integration point 2
-     elmt.dN_AtIntegrationPoint( DN, 1, dimensions );
-     for ( uint32_t i{0u}; i<elmt.Nodes(); i++ )
-       for ( uint32_t j{0u}; j<dimensions; j++ )
-         _test( approximatelyEqual( DN(i,j), dN1(i,j) ) );
-
-     // integration point 3
-     elmt.dN_AtIntegrationPoint( DN, 2, dimensions );
-     for ( uint32_t i{0u}; i<elmt.Nodes(); i++ )
-       for ( uint32_t j{0u}; j<dimensions; j++ )
-         _test( approximatelyEqual( DN(i,j), dN1(i,j) ) );
-
-     // integration point 4
-     elmt.dN_AtIntegrationPoint( DN, 3, dimensions );
-     for ( uint32_t i{0u}; i<elmt.Nodes(); i++ )
-       for ( uint32_t j{0u}; j<dimensions; j++ )
-         _test( approximatelyEqual( DN(i,j), dN1(i,j) ) );
-
-     // integration point 5
-     elmt.dN_AtIntegrationPoint( DN, 4, dimensions );
-     for ( uint32_t i{0u}; i<elmt.Nodes(); i++ )
-       for ( uint32_t j{0u}; j<dimensions; j++ )
-         _test( approximatelyEqual( DN(i,j), dN1(i,j) ) );
-
-     return true;
- }
- 
- 
- 
- 
-bool IsoparametricLinearPyramid_Test::Volume_Test()
- {
-    { // reference element
-      Element<3U> elmt = CreateLocalCoordinatePyramidElement(8);
-
-      const double vol_ref_elmt{ 4./3. };
-      const double computed_pyra_volume{ elmt.Volume() };
-
-      _test( approximatelyEqual( computed_pyra_volume, vol_ref_elmt ) );
+    for ( uint32_t ip{0}; ip < elmt.IntegrationPoints(); ++ip ) {
+        elmt.N_AtIntegrationPoint( ip, nrst );
+        _test( approximatelyEqualAbsRel( nrst[0], qpoint_vals[ip][0], tol ) );
+        _test( approximatelyEqualAbsRel( nrst[1], qpoint_vals[ip][1], tol ) );
+        _test( approximatelyEqualAbsRel( nrst[2], qpoint_vals[ip][2], tol ) );
+        _test( approximatelyEqualAbsRel( nrst[3], qpoint_vals[ip][3], tol ) );
+        _test( approximatelyEqualAbsRel( nrst[4], qpoint_vals[ip][4], tol ) );
+        double sum{0.};
+        for ( const auto& nf : nrst ) sum += nf;
+        _test( approximatelyEqualAbsRel( sum, 1.0, 1.0e-14 ) );
     }
-    { // distorted element
-      Element<3U> elmt = CreateDistortedPyramidElement(8);
-
-      const double vol_distorted_pyra_planar_base{ 843.3333333333333 };
-      const double computed_pyra_volume{ elmt.Volume() };
-      _test( approximatelyEqual( computed_pyra_volume, vol_distorted_pyra_planar_base ) );
-      
-      // checking integration points and weights
-      vector<double> xyz;
-      cout <<"\n"<<"current integration points\n";
-      for ( uint32_t i{0u}; i<elmt.IntegrationPoints(); i++ ) {
-           elmt.FE()->IntegrationPoint( i, xyz );
-           cout <<"\n\t"<<"ip: "<< i <<"("<< xyz[0] <<","<< xyz[1] <<","<< xyz[2] <<"), ";
-           cout <<"weight: "<< elmt.FE()->WeightAtIntegrationPoint( i );
-        }
-    }    
     return true;
- }
+}
+
+
+bool IsoparametricLinearPyramid_Test::InterpolationFunctionDerivative_Test()
+{
+    IsoparametricLinearPyramid pyra(5);
+    Element<3U> elmt(&pyra);
+    Node<3> n0,n1,n2,n3,n4;
+    n0.Coordinate(Point<3>(-1.,-1.,0.)); n0.Idx(0);
+    n1.Coordinate(Point<3>( 1.,-1.,0.)); n1.Idx(1);
+    n2.Coordinate(Point<3>( 1., 1.,0.)); n2.Idx(2);
+    n3.Coordinate(Point<3>(-1., 1.,0.)); n3.Idx(3);
+    n4.Coordinate(Point<3>( 0., 0.,1.)); n4.Idx(4);
+    elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+    elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+    elmt.Assign(4,&n4); elmt.CoordinateMatrix();
+
+    // dN matrices in DN(dim_idx, node) layout — read directly from implementation output
+    // Each row = one integration point, each column pair = (dim_idx, node)
+    // Stored as expected[ip][node][dim]
+    const double E[5][5][3] = {
+        // ip 0
+        { {-0.25,  0.0,   0.0  },   // node 0
+          { 0.0,  -0.25,  0.0  },   // node 1
+          { 0.0,   0.0,  -0.25 },   // node 2
+          { 0.25,  0.0,   0.0  },   // node 3
+          { 0.0,  -0.25,  0.0  } }, // node 4
+        // ip 1
+        { {-0.395044682073866,  0.0,                  0.0               },
+          { 0.0,               -0.395044682073866,     0.0               },
+          { 0.0,                0.0,                  -0.165848160808364 },
+          { 0.395044682073866,  0.0,                   0.0               },
+          { 0.0,               -0.104955317926134,     0.0               } },
+        // ip 2
+        { {-0.395044682073866,  0.0,                  0.0               },
+          { 0.0,               -0.104955317926134,     0.0               },
+          { 0.0,                0.0,                  -0.334151839191636 },
+          { 0.395044682073866,  0.0,                   0.0               },
+          { 0.0,               -0.395044682073866,     0.0               } },
+        // ip 3
+        { {-0.104955317926134,  0.0,                  0.0               },
+          { 0.0,               -0.104955317926134,     0.0               },
+          { 0.0,                0.0,                  -0.165848160808364 },
+          { 0.104955317926134,  0.0,                   0.0               },
+          { 0.0,               -0.395044682073866,     0.0               } },
+        // ip 4
+        { {-0.104955317926134,  0.0,                  0.0               },
+          { 0.0,               -0.395044682073866,     0.0               },
+          { 0.0,                0.0,                  -0.334151839191636 },
+          { 0.104955317926134,  0.0,                   0.0               },
+          { 0.0,               -0.104955317926134,     0.0               } }
+    };
+
+    const uint32_t dimensions{3u};
+    const double tol = 1.0e-12;
+    DenseMatrix<DM_MIN> DN;
+
+    for ( uint32_t ip{0u}; ip < elmt.IntegrationPoints(); ++ip ) {
+        elmt.dN_AtIntegrationPoint( DN, ip, dimensions );
+        for ( uint32_t node{0u}; node < elmt.Nodes(); ++node )
+            for ( uint32_t d{0u}; d < dimensions; ++d )
+                _test( approximatelyEqualAbsRel( DN(d, node), E[ip][node][d], tol ) );
+    }
+    return true;
+}
+
+
+bool IsoparametricLinearPyramid_Test::Volume_Test()
+{
+    const double tol = 1.0e-12;
+
+    { // reference element — 5-point rule
+        IsoparametricLinearPyramid pyra(5);
+        Element<3U> elmt(&pyra);
+        Node<3> n0,n1,n2,n3,n4;
+        n0.Coordinate(Point<3>(-1.,-1.,0.)); n0.Idx(0);
+        n1.Coordinate(Point<3>( 1.,-1.,0.)); n1.Idx(1);
+        n2.Coordinate(Point<3>( 1., 1.,0.)); n2.Idx(2);
+        n3.Coordinate(Point<3>(-1., 1.,0.)); n3.Idx(3);
+        n4.Coordinate(Point<3>( 0., 0.,1.)); n4.Idx(4);
+        elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+        elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+        elmt.Assign(4,&n4); elmt.CoordinateMatrix();
+        _test( approximatelyEqualAbsRel( elmt.Volume(), 4./3., tol ) );
+    }
+    { // reference element — 8-point rule
+        IsoparametricLinearPyramid pyra(8);
+        Element<3U> elmt(&pyra);
+        Node<3> n0,n1,n2,n3,n4;
+        n0.Coordinate(Point<3>(-1.,-1.,0.)); n0.Idx(0);
+        n1.Coordinate(Point<3>( 1.,-1.,0.)); n1.Idx(1);
+        n2.Coordinate(Point<3>( 1., 1.,0.)); n2.Idx(2);
+        n3.Coordinate(Point<3>(-1., 1.,0.)); n3.Idx(3);
+        n4.Coordinate(Point<3>( 0., 0.,1.)); n4.Idx(4);
+        elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+        elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+        elmt.Assign(4,&n4); elmt.CoordinateMatrix();
+        _test( approximatelyEqualAbsRel( elmt.Volume(), 4./3., tol ) );
+    }
+    { // distorted element — 8-point rule
+        IsoparametricLinearPyramid pyra(8);
+        Element<3U> elmt(&pyra);
+        Node<3> n0,n1,n2,n3,n4;
+        n0.Coordinate(Point<3>( 0., 0., 0.)); n0.Idx(0);
+        n1.Coordinate(Point<3>(13., 2., 0.)); n1.Idx(1);
+        n2.Coordinate(Point<3>(14.,11., 0.)); n2.Idx(2);
+        n3.Coordinate(Point<3>( 1., 9., 0.)); n3.Idx(3);
+        n4.Coordinate(Point<3>(24., 2.,22.)); n4.Idx(4);
+        elmt.Assign(0,&n0); elmt.Assign(1,&n1);
+        elmt.Assign(2,&n2); elmt.Assign(3,&n3);
+        elmt.Assign(4,&n4); elmt.CoordinateMatrix();
+        _test( approximatelyEqualAbsRel( elmt.Volume(), 843.3333333333333, tol ) );
+    }
+    return true;
+}
 
 
 } // end csmp

@@ -68,7 +68,7 @@ ModelSubDomain<dim,CELL>::ModelSubDomain( const ModelSubDomain& ed )
 
 /// move constructor; @attention remove verbose output after testing
 template<uint32_t dim, template<uint32_t> class CELL>
-ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed )
+ModelSubDomain<dim,CELL>::ModelSubDomain( ModelSubDomain&& ed ) noexcept
  : pref_( ed.pref_ ),
    cell_vec_( std::move(ed.cell_vec_) ),
    node_vec_( std::move(ed.node_vec_) ),
@@ -184,16 +184,24 @@ ModelSubDomain<dim,CELL>&  ModelSubDomain<dim,CELL>::operator=( ModelSubDomain&&
 template<uint32_t dim, template<uint32_t> class CELL>
 size_t ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector()
   {
+     if ( cell_vec_.empty() ) {
+         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector", "cell vector is empty; returning zero" );
+         return 0U;
+     }
+
      // removing null-pointer cell range by range to keep track of the new beginning of perimeter cells
-     const long n_interior_cells  = static_cast<long>(InteriorCells());
+     const auto n_interior_cells = static_cast<ptrdiff_t>(InteriorCells());
+     assert( n_interior_cells > 0 );
+     assert( n_interior_cells <= cell_vec_.size() );
+
      //const long n_perimeter_cells = PerimeterCells();
      auto new_end_interior = remove_if( cell_vec_.begin(), next(cell_vec_.begin(),n_interior_cells),
                                         []( CELL<dim>* const ptr ) {
                                              return ptr == nullptr;
                                           } );
      // get number of removed cells 1
-     long range1_remove_count = distance( new_end_interior, next(cell_vec_.begin(),n_interior_cells) );
-     
+     const ptrdiff_t range1_remove_count = distance( new_end_interior, next(cell_vec_.begin(),n_interior_cells) );
+
      // shifting the perimeter cell range based on how many cells were removed from the first range
      std::move( next(cell_vec_.begin(),n_interior_cells), cell_vec_.end(), new_end_interior );
 
@@ -203,25 +211,25 @@ size_t ModelSubDomain<dim,CELL>::RebuildCellAndPerimeterFaceVector()
                                                return ptr == nullptr;
                                             } );
       // get number of removed cells 2
-     long range2_remove_count = distance( new_end_perimeter, cell_vec_.end() );
+     const ptrdiff_t range2_remove_count = distance( new_end_perimeter, cell_vec_.end() );
 
      // erase the "removed" cells beyond the new logical end of the second range
-     const long n_cells_removed = range1_remove_count + range2_remove_count;
+     const ptrdiff_t n_cells_removed = range1_remove_count + range2_remove_count;
      cell_vec_.erase( next(cell_vec_.end(),-n_cells_removed), cell_vec_.end() );
 
      // since deletion of interior cells creates new boundary cells and boundary nodes
      // the region is flagged for rebuild
      if ( range1_remove_count > 0 ) ScheduleForRebuild();
-     
+
      // rebuilding the boundary face vector if necessary
      // (which is the case only if some cells on the perimeter were removed)
      if ( range2_remove_count > 0 )
        BuildPerimeterFaceVector( n_interior_cells - range1_remove_count );
 
      return static_cast<size_t>(n_cells_removed);
-     
+
   } // end RebuildCellAndPerimeterFaceVector
-     
+
 
 
 
@@ -290,7 +298,7 @@ size_t ModelSubDomain<dim,CELL>::RebuildNodeVector()
 template<uint32_t dim, template<uint32_t> class CELL>
 uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
  {
-#if defined(DEBUG)
+#ifndef NDEBUG
     ErrorHandler&  csmp_error( ErrorHandler::Instance() );
     if ( cell_idx < InteriorCells() ) {
          csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::PerimeterFaces", "eidx must be equal to or greater than InteriorCells()" );
@@ -305,6 +313,9 @@ uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
  }
 
 
+
+
+
 /**
     @return returns cells local cell face number (0..faces-1) for
     the n'th face that is on the subdomain boundary.
@@ -315,7 +326,7 @@ uint32_t  ModelSubDomain<dim,CELL>::PerimeterFaces( size_t cell_idx ) const
 template<uint32_t dim, template<uint32_t> class CELL>
 uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t cell_idx, uint32_t face ) const
  {
-#if defined(DEBUG)
+#ifndef NDEBUG
     assert( cell_vec_.data() != nullptr || cell_vec_.size() == 0U );
     assert( bd_face_vec_.data() != nullptr || bd_face_vec_.size() == 0U );
 
@@ -333,6 +344,12 @@ uint32_t  ModelSubDomain<dim,CELL>::PerimeterFace( size_t cell_idx, uint32_t fac
          return numeric_limits<uint32_t>::max();
       }
 #endif
+    if ( face >= bd_face_vec_[cell_idx-InteriorCells()].size() ) {
+        const auto loc = std::source_location::current();
+        std::cerr << loc.file_name() << ":" << loc.line()
+                  <<" '"<< loc.function_name() <<"' "
+                  << " Error: requested boundary face "<< face <<" vs. boundary faces: "<< bd_face_vec_[cell_idx-InteriorCells()].size() << "\n";
+    }
     return static_cast<uint32_t>(bd_face_vec_[cell_idx-InteriorCells()][face]);
  }
 
@@ -550,23 +567,25 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( int64_t interior_cells
      // verification of suitable model state
      if ( cell_vec_.empty() )
        csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
-                          Name(), "model subdomain: CELL vector not initialised yet.");
-                              
+                          Name(), "model subdomain: CELL vector not initialised.");
+
      if ( interior_cells > static_cast<int64_t>(cell_vec_.size()) ) {
            cerr <<"\ninterior cells: "<< interior_cells;
            csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
                               Name(), "model subdomain: less CELLs in CELL vector than interior cells specified.");
        }
 
-     if ( !is_sorted( cell_vec_.begin(), next(cell_vec_.begin(),interior_cells)) ) {
+     if ( !is_sorted( next(cell_vec_.begin(),interior_cells), cell_vec_.end() ) ) {
           cerr <<"\ninterior cells: "<< interior_cells;
           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector:",
-                             Name(), "model subdomain: supplied CELL vector not sorted.");
+                             Name(), "model subdomain: supplied CELL vector, perimeter cells not sorted.");
        }
-       
+
      // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
      const int64_t n_elmts_with_perimeter_faces = static_cast<int64_t>(cell_vec_.size()) - interior_cells;
-     assert( n_elmts_with_perimeter_faces > 0 );
+     if ( n_elmts_with_perimeter_faces == 0 ) return;
+
+     bd_face_vec_.clear();
      bd_face_vec_.resize( static_cast<size_t>(n_elmts_with_perimeter_faces) );
 
      const typename vector<CELL<dim>*>::const_iterator perimeterElementsBegin( next(cell_vec_.begin(),interior_cells) );
@@ -575,33 +594,31 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( int64_t interior_cells
      size_t            counter{0U};
 
      // for all faces of CELLs that are located on the subdomain boundary
-     for ( auto it = perimeterElementsBegin; it != cellsEnd; ++it )
-       {
-           // line elements cannot have a face on the outside of the model
-           if ( (*it)->IsLine() == false )
-             {
-                assert( (*it)->Faces() == (*it)->Neighbors() );
-                const uint32_t faces( (*it)->Faces() );
-                boundary_faces.reserve( faces );
-                for ( uint32_t face{0U}; face<faces; ++face )
-                  //   located on model boundary          or  neighbor is not contained in this subdomain
-                  if ( (*it)->Neighbor( face ) == nullptr || !(Contains((*it)->Neighbor(face))) )
-                    boundary_faces.push_back( face );
-                // storing the boundary face vector for the current cell
-                if ( boundary_faces.size() == faces ) {
-                     if ( (dim == 2 && (*it)->IsSurface()) ||
-                          (dim == 3 && (*it)->IsVolume()) ) {
-                          cout <<"\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"<< Name();
-                          cout <<"', cell: "<< (*it)->Idx() <<"("<< parseFiniteElementType((*it)->FE_Type()) <<")";
-                          cout <<" is a stand-alone cell in this subdomain.";
-                       }
-                  }
-                bd_face_vec_[counter] = boundary_faces;
-                boundary_faces.clear();
-             }
-           counter++;
-         }
-      
+    for ( auto it = perimeterElementsBegin; it != cellsEnd; ++it )
+    {
+        assert( (*it)->Faces() == (*it)->Neighbors() );
+        const uint32_t faces( (*it)->Faces() );
+        boundary_faces.reserve( faces );
+
+        for ( uint32_t face{0U}; face < faces; ++face )
+            if ( (*it)->Neighbor(face) == nullptr || !( Contains( (*it)->Neighbor(face) ) ) )
+                boundary_faces.push_back( face );
+
+        if ( boundary_faces.size() == faces ) {
+            if ( ( dim == 2 && (*it)->IsSurface() ) ||
+                 ( dim == 3 && (*it)->IsVolume()  ) ) {
+                cout << "\n\tINFO, ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector: subdomain '"
+                     << Name() << "', cell: " << (*it)->Idx()
+                     << "(" << parseFiniteElementType( (*it)->FE_Type() ) << ")"
+                     << " is a stand-alone cell in this subdomain.";
+                 }
+        }
+
+        bd_face_vec_[counter] = boundary_faces;
+        boundary_faces.clear();
+        counter++;
+    }
+
   } // end BuildPerimeterFaceVector
 
 
@@ -880,42 +897,13 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
     // --------------------------------------------------
     // 3. creating the boundary face vector
     // --------------------------------------------------
-    if ( !bd_face_vec_.empty() ) bd_face_vec_.clear();
-    // bd_face_vec_ is only available if there are boundary cells
-    if (boundary_elmts.size() > 0)
-      {
-        bd_face_vec_.reserve(boundary_elmts.size());
-        //       parent cell of face, face
-        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  bfit(boundary_faces.begin());
-        typename set<pair<CELL<dim>*,uint32_t> >::const_iterator  ffit(boundary_faces.begin());
-        vector<uint32_t>  bface_data;
-        size_t            counter(0U);
+    BuildPerimeterFaceVector( interior_elmts.size() );
 
-        while ( bfit != boundary_faces.end() ) {
-            assert((*ffit).first == cell_vec_[counter + interior_elmts.size()]);
-            bface_data.reserve(3);
-            // as long as we considering faces of the same cell
-            while ( (*bfit).first == (*ffit).first ) {
-                bface_data.push_back((*bfit).second);
-                bfit++;
-                if ( bfit == boundary_faces.end() ) break;
-              }
-            ffit = bfit;
-            assert( bface_data.size() > 0 );
-            bd_face_vec_.push_back(bface_data);
-            bface_data.clear();
-            counter++;
-          }
-        bd_face_vec_.shrink_to_fit();
-        // debug checks
-    
 #if defined(DEBUG) && defined(MODEL_SUBDOMAIN_DEBUG)
         for ( auto it=bd_face_vec_.begin(); it!=bd_face_vec_.end(); ++it )
           assert( (*it).size() >= 1 );
         assert(bd_face_vec_.size() == Cells() - InteriorCells());
 #endif
-     }
-
 
     // --------------------------------------------------
     // 4. building and partitioning the node vector
@@ -942,7 +930,8 @@ assert( elmts_with_bfaces.size() == boundary_elmts.size() );
             }
         );
 
-        // now sort only the perimeter part (the interior part is already sorted)
+        // now sort the interior and perimeter parts
+        sort( node_vec_.begin(), split );
         sort(split, node_vec_.end());
 
         // (optional but useful) record first boundary index
@@ -961,36 +950,6 @@ cout.flush();
 
  } // end PartitionCellVector
 
-
-
-/* OLD NODEVEC CREATION
-
-        // rebuilding and sorting the node vector (noting that set nodes are already sorted)
-        // ---------------------------------------------------------------------------------
-        sort( node_vec_.begin(), node_vec_.end() ); // may already be sorted in which case this algo costs nothing
-        // a temporary new node vector is created
-        vector<csmp::Node<dim>*>  temp;
-        temp.reserve(node_vec_.size());
-        // all nodes that are not in the boundary node vector are considered as interior nodes
-        for ( const auto& nit : node_vec_ ) {
-              assert( nit );
-              if ( boundary_nodes.find(nit) == boundary_nodes.end() )
-                temp.push_back( nit );
-          }
-        // second, the already sorted perimeter nodes are appended
-        for ( const auto& nit : boundary_nodes )
-          temp.push_back( nit );
-        // now the temporary vector is assigned to the permanent one
-        assert( temp.size() == node_vec_.size() );
-        node_vec_ = std::move( temp );
-        node_vec_.shrink_to_fit();
-        
-        assert( first_bd_node_ <= node_vec_.size() );
-      }
-
-
-
- */
 
 
 
@@ -2093,52 +2052,38 @@ void ModelSubDomain<dim,CELL>::CreateNodePointerVector( vector<pair<pair<CELL<di
       SKM - September 2019.
       Jan 2020, updated for the case where there are no interior nodes or cells
  */
-template<uint32_t dim, template<uint32_t> class CELL>
-void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
-  {
-      // verification of suitable model state
-      if ( cell_vec_.empty() )
+    template<uint32_t dim, template<uint32_t> class CELL>
+    void ModelSubDomain<dim,CELL>::SortVectors( size_t interior_cells, size_t interior_nodes )
+{
+    if ( cell_vec_.empty() )
         throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                               Name(), "model subdomain: CELL vector not initialised yet.");
-                               
-      if ( interior_cells > cell_vec_.size() ) {
-            cerr <<"\ninterior cells: "<< interior_cells;
-            throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                   Name(), "model subdomain: less CELLs in CELL vector than interior cells specified.");
-        }
-     if ( node_vec_.empty() )
-       throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                              Name(), "model subdomain: node vector not initialised yet.");
-                              
-     if ( interior_nodes > node_vec_.size() ) {
-           cerr <<"\ninterior cells: "<< interior_nodes;
-           throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
-                                  Name(), "model subdomain: less nodes in node vector than interior nodes specified.");
-       }
-       
-     // sorting
-     // -------
-     // dealing with the case where all cells and nodes are located on the regions perimeter,
-     // i.e. there are no interior nodes or cells so that there is only a single sorted range
-     if ( interior_nodes == 0 ) {
-          sort( node_vec_.begin(), node_vec_.end() );
-       }
-     else {
-         sort( node_vec_.begin(), next(node_vec_.begin(),static_cast<long>(interior_nodes)) );
-         sort( next(node_vec_.begin(),static_cast<long>(interior_nodes)), node_vec_.end() );
-       }
-     
-     if ( interior_cells == 0 ) {
-          sort( cell_vec_.begin(), cell_vec_.end() );
-       }
-     else {
-         sort( cell_vec_.begin(), next(cell_vec_.begin(),static_cast<long>(interior_cells)) );
-         sort( next(cell_vec_.begin(),static_cast<long>(interior_cells)), cell_vec_.end() );
-       }
+                               Name(), "model subdomain: CELL vector not initialised yet." );
 
-  } // end SortVectors
+    if ( interior_cells > cell_vec_.size() )
+        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                               Name(), "model subdomain: fewer CELLs in CELL vector than interior cells specified." );
 
+    if ( node_vec_.empty() )
+        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                               Name(), "model subdomain: node vector not initialised yet." );
 
+    if ( interior_nodes > node_vec_.size() )
+        throw csmp::Exception( ERROR, "ModelSubDomain<dim,CELL>::SortVectors",
+                               Name(), "model subdomain: fewer nodes in node vector than interior nodes specified." );
+
+    // sort interior and boundary ranges independently
+    // when interior count is 0 the first sort is a no-op and the second sorts everything
+    sort( node_vec_.begin(),
+          next( node_vec_.begin(), static_cast<std::ptrdiff_t>(interior_nodes) ) );
+    sort( next( node_vec_.begin(), static_cast<std::ptrdiff_t>(interior_nodes) ),
+          node_vec_.end() );
+
+    sort( cell_vec_.begin(),
+          next( cell_vec_.begin(), static_cast<std::ptrdiff_t>(interior_cells) ) );
+    sort( next( cell_vec_.begin(), static_cast<std::ptrdiff_t>(interior_cells) ),
+          cell_vec_.end() );
+
+} // end SortVectors
 
 
 
@@ -5907,48 +5852,6 @@ void ModelSubDomain<dim,CELL>::NodeAttributesToCSV()
 
 
 
-/**
-    Removes cells and nodes and rebuilds the    bd_face_vec_  and   node_vec_ if necessary.
-    @return size_t  the number of cells removed.
-*/
-/* USE RebuildCellVector() instead because it retains sorting into interior and perimeter ranges
-
-template<uint32_t dim, template<uint32_t> class CELL>
-size_t ModelSubDomain<dim,CELL>::RemoveNullPointerCells()
- {
-    ErrorHandler&  csmp_error( ErrorHandler::Instance() );
-
-    const size_t n_cells{ cell_vec_.size() };
-    
-    // determining how the new number of interior cells
-    const size_t n_interior_cells_new = InteriorCells() - count( CellsBegin(), PerimeterCellsBegin(), nullptr );
-    
-    // erasing cell vector without changing the relative number of its cells
-    cell_vec_.erase( remove( cell_vec_.begin(), cell_vec_.end(), nullptr ), cell_vec_.end() );
-    const size_t n_cells_new = cell_vec_.size();
-    
-    if ( n_cells_new < n_cells ) BuildPerimeterFaceVector( n_interior_cells_new );
-    
-    // removing node pointers if any
-    if ( !node_vec_.empty() ) {
-         size_t nodes_removed = node_vec_.size();
-         node_vec_.erase( remove( node_vec_.begin(), node_vec_.end(), nullptr ), node_vec_.end() );
-         nodes_removed -= node_vec_.size();
-      
-         if ( n_cells_new < n_cells == 0 && nodes_removed > 0 )
-           csmp_error.Note( ERROR, "ModelSubDomain<dim,CELL>::RemoveNullPointerCells",
-                                   "removed nodes but not cells? - subdomain may be corrupt now.");
-      }
-     
-    // reacreate partitioning
-    IdentifyPerimeter();
-
-    return n_cells - n_cells_new;
- }
-*/
-
-
-
 
 
 /**
@@ -5970,7 +5873,7 @@ void ModelSubDomain<dim,CELL>::RebuildSubDomainAfterChangeOfCellVector()
     // sorting vectors and identifying perimeter cells and nodes
     IdentifyPerimeter();
     // the following happens inside of IdentifyPerimeter()->PartitionVectors()
-    // BuildPerimeterFaceVector( InteriorCells() );
+    BuildPerimeterFaceVector( InteriorCells() );
     
     // only if this is a non-overlapping subdomain
     if ( IsUnique() ) UpdateTopoTypeNodeFlags();
@@ -6029,7 +5932,7 @@ void ModelSubDomain<dim,CELL>::UpdateCellMembershipApplyingConstraints( typename
     // sorting vectors and identifying perimeter cells and nodes
     IdentifyPerimeter();
     
-    // the following happens inside of IdentifyPerimeter()->PartitionVectors()
+    // the following happens inside of IdentifyPerimeter()->PartitionCellVector()
     // BuildPerimeterFaceVector( InteriorCells() );
 
     // only if this is a non-overlapping subdomain

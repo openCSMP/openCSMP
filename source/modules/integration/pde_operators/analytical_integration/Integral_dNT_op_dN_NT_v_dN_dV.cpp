@@ -61,30 +61,36 @@ void Integral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     assert( e.FE()->UsesLocalCoordinates() == false );
 
     // only if the property is an element property  something is done here
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT or
-         MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == REGION )
-      {
-         MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-         MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
-      
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              ScalarVariable  sc;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), sc );
-              for ( auto i{0U}; i<dim; i++ ) MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc();
-           }
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-              VectorVariable<dim>  vc;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-              for ( auto i{0U}; i<dim; i++ ) MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
-           }
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-              TensorVariable<dim>  ts;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-              for ( auto i{0U}; i<dim; i++ ) 
-                for ( auto j{0U}; j<dim; j++ ) MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
-           }
-      }
-      
+    const csmp::Index& key = MathOperatorLHS<dim,CELL>::MaterialOperandKey();
+
+    switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+        case REGION:
+        case ELEMENT:
+        case FACE:
+            switch ( MathOperatorLHS<dim,CELL>::MaterialOperandType() )
+            {
+                case SCALAR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+                    break;
+                case VECTOR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+                    break;
+                case TENSOR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default: // integration-point placed variable
+            const auto loc = std::source_location::current();
+            std::cerr << loc.file_name() << ":" << loc.line()
+                      << " [" << loc.function_name() << "]"
+                      << " Error: material operand placement not recognised\n";
+            break;
+    }
     e.Read( velo_key, VXYZ );
  }
 

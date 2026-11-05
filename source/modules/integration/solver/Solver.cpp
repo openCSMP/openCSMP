@@ -180,7 +180,7 @@ void  Solver::Solve( CompressedRowMatrix& A,
 
   // Delegate solution process (this is a purely virtual function)
 
-  // cout << "\nSolving Ax=b with GuessSidel\n\n"; 
+  // cout << "\nSolving Ax=b with GuessSeidel\n\n";
   SolveMatrixEquation( A, b, x, no_unknowns );
 
   if ( Verbose() ) {

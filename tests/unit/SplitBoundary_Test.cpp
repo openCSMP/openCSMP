@@ -353,17 +353,17 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     double area_outside =  s_ref.Area(OUTSIDE);
     double area_middle  =  s_ref.Area(MIDDLE);
 
-    _test(area_inside == area_outside);
-    _test(area_middle == area_inside);
-    _equal(area_inside, 2.12121, 0.0001); //actual area of crack not pulled apart should be 2.12121 for mesh InternalBoundary_Test & InternalBoundary_Test_quadratic
+    _test( approximatelyEqual(area_inside,area_outside,1.0e-6) );
+    _test( approximatelyEqual(area_middle,area_inside) );
+    _test( approximatelyEqual(area_inside, 2.12121, 1.0e-5) ); //actual area of crack not pulled apart should be 2.12121 for mesh InternalBoundary_Test & InternalBoundary_Test_quadratic
 
     double int_inside  = s_ref.SurfaceIntegral(model.Database(), "inside", INSIDE);
     double int_outside = s_ref.SurfaceIntegral(model.Database(), "outside", OUTSIDE);
     double int_middle  = s_ref.SurfaceIntegral(model.Database(), "middle", MIDDLE);
 
-    _equal(     area_inside , int_inside,  0.0001);
-    _equal( 2.0*area_outside, int_outside, 0.0001);
-    _equal(  3.0*area_middle, int_middle , 0.0001);
+    _test( approximatelyEqual(area_inside,int_inside) );
+    _test( approximatelyEqual(2.0*area_outside, int_outside) );
+    _test( approximatelyEqual(3.0*area_middle, int_middle) );
 
     for ( auto ifp : s_ref.CellVector() ){
       _test( ifp->UnitNormal(INSIDE)  == ifp->UnitNormal(MIDDLE)  );
@@ -381,7 +381,7 @@ bool SplitBoundary_Test::Test_Area_and_SurfaceIntegral(const char* mesh_file){
     double new_area_middle  =  s_ref.Area(MIDDLE);
     _test(area_inside > area_middle);
     _test(area_outside > area_middle);
-    _test(area_middle == new_area_middle);    //not changed area of middle element
+    _test( approximatelyEqual(area_middle,new_area_middle) );    //not changed area of middle element
 
     return true;
 }

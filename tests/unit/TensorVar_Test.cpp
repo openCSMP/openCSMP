@@ -787,16 +787,6 @@ void TensorVariable_Test::TestEigenMethods()
         return std::sqrt( r0*r0 + r1*r1 + r2*r2 );
     };
 
-    auto col2D = []( const TensorVariable<2U>& M, uint32_t j ) -> VectorVariable<2U>
-    {
-        VectorVariable<2U> v; v(0)=M(0,j); v(1)=M(1,j); return v;
-    };
-
-    auto col3D = []( const TensorVariable<3U>& M, uint32_t j ) -> VectorVariable<3U>
-    {
-        VectorVariable<3U> v; v(0)=M(0,j); v(1)=M(1,j); v(2)=M(2,j); return v;
-    };
-
     auto dot2D = []( const VectorVariable<2U>& a, const VectorVariable<2U>& b ) -> double
     { return a(0)*b(0) + a(1)*b(1); };
 
@@ -846,7 +836,8 @@ void TensorVariable_Test::TestEigenMethods()
         TensorVariable<2U> A; A(0,0)=5.; A(0,1)=0.; A(1,0)=0.; A(1,1)=2.;
         VectorVariable<2U> ev; TensorVariable<2U> evecs;
         _equal( A.EigenSymmetric(ev, evecs, true), true, 0.5 );
-        VectorVariable<2U> v0=col2D(evecs,0), v1=col2D(evecs,1);
+        VectorVariable<2U> v0 = evecs.Row(0);   // ✓ eigenvector 0 in row 0
+        VectorVariable<2U> v1 = evecs.Row(1);   // ✓ eigenvector 1 in row 1
         _equal( residual2D(A,v0,ev(0)), 0.0, fTolerance );
         _equal( residual2D(A,v1,ev(1)), 0.0, fTolerance );
         _equal( std::fabs(dot2D(v0,v1)), 0.0, fTolerance );
@@ -860,7 +851,8 @@ void TensorVariable_Test::TestEigenMethods()
         TensorVariable<2U> A; A(0,0)=3.; A(0,1)=1.; A(1,0)=1.; A(1,1)=3.;
         VectorVariable<2U> ev; TensorVariable<2U> evecs;
         _equal( A.EigenSymmetric(ev, evecs, true), true, 0.5 );
-        VectorVariable<2U> v0=col2D(evecs,0), v1=col2D(evecs,1);
+        VectorVariable<2U> v0 = evecs.Row(0);   // ✓ eigenvector 0 in row 0
+        VectorVariable<2U> v1 = evecs.Row(1);   // ✓ eigenvector 1 in row 1
         _equal( residual2D(A,v0,ev(0)), 0.0, fTolerance );
         _equal( residual2D(A,v1,ev(1)), 0.0, fTolerance );
         _equal( std::fabs(dot2D(v0,v1)), 0.0, fTolerance );
@@ -868,7 +860,6 @@ void TensorVariable_Test::TestEigenMethods()
         _equal( dot2D(v1,v1), 1.0, fTolerance );
         if ( verbose_ ) cout << "  Test 5 (symmetric off-diagonal 2D): passed" << endl;
     }
-
     if ( verbose_ ) cout << "\n--- 2D EigenWeaklyNonSymmetric ---" << endl;
 
     // Test 6: Weakly non-symmetric 2x2 — within tolerance 1e-3.
@@ -949,7 +940,9 @@ void TensorVariable_Test::TestEigenMethods()
         A(2,0)=0.; A(2,1)=0.; A(2,2)=1.;
         VectorVariable<3U> ev; TensorVariable<3U> evecs;
         _equal( A.EigenSymmetric(ev, evecs), true, 0.5 );
-        VectorVariable<3U> v0=col3D(evecs,0), v1=col3D(evecs,1), v2=col3D(evecs,2);
+        VectorVariable<3U> v0 = evecs.Row(0);   // ✓ eigenvector 0 in row 0
+        VectorVariable<3U> v1 = evecs.Row(1);   // ✓ eigenvector 1 in row 1
+        VectorVariable<3U> v2 = evecs.Row(2);   // ✓ eigenvector 2 in row 2
         _equal( residual3D(A,v0,ev(0)), 0.0, fTolerance );
         _equal( residual3D(A,v1,ev(1)), 0.0, fTolerance );
         _equal( residual3D(A,v2,ev(2)), 0.0, fTolerance );
@@ -970,7 +963,9 @@ void TensorVariable_Test::TestEigenMethods()
         A(2,0)=0.; A(2,1)=1.; A(2,2)=2.;
         VectorVariable<3U> ev; TensorVariable<3U> evecs;
         _equal( A.EigenSymmetric(ev, evecs), true, 0.5 );
-        VectorVariable<3U> v0=col3D(evecs,0), v1=col3D(evecs,1), v2=col3D(evecs,2);
+        VectorVariable<3U> v0 = evecs.Row(0);   // ✓ eigenvector 0 in row 0
+        VectorVariable<3U> v1 = evecs.Row(1);   // ✓ eigenvector 1 in row 1
+        VectorVariable<3U> v2 = evecs.Row(2);   // ✓ eigenvector 2 in row 2
         _equal( residual3D(A,v0,ev(0)), 0.0, fTolerance );
         _equal( residual3D(A,v1,ev(1)), 0.0, fTolerance );
         _equal( residual3D(A,v2,ev(2)), 0.0, fTolerance );
