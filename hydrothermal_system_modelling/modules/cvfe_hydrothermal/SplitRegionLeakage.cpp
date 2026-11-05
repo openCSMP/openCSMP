@@ -2232,6 +2232,7 @@ void SplitRegionLeakage<dim>::UpdateTransportVariables()
     }
 
 
+    // ── in node ─────
     if( in_node != out_node )
     {
         in_node->Store(ml_key, ml_in);
@@ -2269,6 +2270,8 @@ void SplitRegionLeakage<dim>::UpdateTransportVariables()
         
     }
 
+
+    // ── mid node ─────
     mid_node->Store(ml_key, ml_mid);
     mid_node->Store(mv_key, mv_mid);
     mid_node->Store(hCl_key, hCl_mid);
@@ -2276,40 +2279,68 @@ void SplitRegionLeakage<dim>::UpdateTransportVariables()
     mid_node->Store(xCl_key, xCl_mid);
     mid_node->Store(xCv_key, xCv_mid);
     mid_node->Store(TrCl_key, TrCl_mid);
-    if(with_lithium_) mid_node->Store(LiCl_key, LiCl_mid);
-    if(with_air_) { mid_node->Store(ma_key, ma_mid); mid_node->Store(hCa_key, hCa_mid); }
 
-    //if( in_node != out_node )
+    if (with_tracer_)
     {
-        out_node->Store(ml_key, ml_out);
-        out_node->Store(mv_key, mv_out);
-        out_node->Store(hCl_key, hCl_out);
-        out_node->Store(hCv_key, hCv_out);
-        out_node->Store(xCl_key, xCl_out);
-        out_node->Store(xCv_key, xCv_out);
-
-        if (with_tracer_)
-        {
-            mid_node->Store(TrCl_key, TrCl_mid);
-            mid_node->Store(TrCv_key, TrCv_mid);
-        }
-
-        if (with_lithium_)
-        {
-            mid_node->Store(LiCl_key, LiCl_mid);
-            mid_node->Store(LiCv_key, LiCv_mid);
-        }
-
-        if (with_gold_)
-        {
-            mid_node->Store(so2Cl_key, so2Cl_mid);
-            mid_node->Store(so2Cv_key, so2Cv_mid);
-            mid_node->Store(auhs0Cl_key, auhs0Cl_mid);
-            mid_node->Store(auhs0Cv_key, auhs0Cv_mid);
-        }
-
-        if(with_air_) { out_node->Store(ma_key, ma_out); out_node->Store(hCa_key, hCa_out); }
+        mid_node->Store(TrCl_key, TrCl_out);
+        mid_node->Store(TrCv_key, TrCv_mid);
     }
+
+    if (with_lithium_)
+    {
+        mid_node->Store(LiCl_key, LiCl_mid);
+        mid_node->Store(LiCv_key, LiCv_mid);
+    }
+
+    if (with_gold_)
+    {
+        mid_node->Store(so2Cl_key, so2Cl_mid);
+        mid_node->Store(so2Cv_key, so2Cv_mid);
+        mid_node->Store(auhs0Cl_key, auhs0Cl_mid);
+        mid_node->Store(auhs0Cv_key, auhs0Cv_mid);
+    }
+
+    if (with_air_)
+    {
+        mid_node->Store(ma_key, ma_mid);
+        mid_node->Store(hCa_key, hCa_mid);
+    }
+
+
+    // ── out node (also the periphery node when in_node == out_node) ─────
+    out_node->Store(ml_key, ml_out);
+    out_node->Store(mv_key, mv_out);
+    out_node->Store(hCl_key, hCl_out);
+    out_node->Store(hCv_key, hCv_out);
+    out_node->Store(xCl_key, xCl_out);
+    out_node->Store(xCv_key, xCv_out);
+
+    if (with_tracer_)
+    {
+        out_node->Store(TrCl_key, TrCl_out);
+        out_node->Store(TrCv_key, TrCv_out);
+    }
+
+    if (with_lithium_)
+    {
+        out_node->Store(LiCl_key, LiCl_out);
+        out_node->Store(LiCv_key, LiCv_out);
+    }
+
+    if (with_gold_)
+    {
+        out_node->Store(so2Cl_key, so2Cl_out);
+        out_node->Store(so2Cv_key, so2Cv_out);
+        out_node->Store(auhs0Cl_key, auhs0Cl_out);
+        out_node->Store(auhs0Cv_key, auhs0Cv_out);
+    }
+
+    if (with_air_)
+    {
+        out_node->Store(ma_key, ma_out);
+        out_node->Store(hCa_key, hCa_out);
+    }
+
 }
 
 template<uint32_t dim>
@@ -2420,8 +2451,8 @@ void SplitRegionLeakage<dim>::WithSpeciesTransport(Model<dim> &model,
     if (with_lithium)
     {
         with_lithium_= with_lithium;
-        LiCl_key     = model.Database().StorageKey("li content liquid");
-        LiCv_key     = model.Database().StorageKey("li content vapor");
+        LiCl_key     = model.Database().StorageKey("lithium content liquid");
+        LiCv_key     = model.Database().StorageKey("lithium content vapor");
     }
 }
 
