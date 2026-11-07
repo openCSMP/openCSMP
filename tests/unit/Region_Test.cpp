@@ -58,6 +58,10 @@ void Region_Test::run()
     const string varFileName( "CSMP-1phase-variables.txt" );
     // TODO: use CSMP native model from file here
     ANSYS_Model3D model( model_name, varFileName.data() );
+    if ( verbose_ ) {
+        model.RegionsOut();
+        model.BoundariesOut();
+    }
     _test( consistencyCheckNeighborVersusPerimeterFaces( model ) );
         
     InputDataManager<DIM>  model_configuration;
@@ -459,6 +463,8 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     // ansys model
     ANSYS_Model3D model1( model_name.c_str(), varFileName.c_str() );
     _test( consistencyCheckNeighborVersusPerimeterFaces( model1 ) );
+    model1.RegionsOut();
+    model1.BoundariesOut();
   
     // corner_points
     Point<3U> xyz_min, xyz_max;
@@ -469,7 +475,9 @@ bool Region_Test::TestBoundaryFaceFunctionality( const string& model_name )
     InputDataManager<DIM>  model_configuration;
     model_configuration.ConfigureFromFile( model1, model_name.c_str(),
                                            false, true, true, true, false  );
-  
+
+    // Note: here we are not  integrating the surface area of the Face objects on the boundary but
+    // the faces of the volumetric elements of the heterogeneous (non-unique) region "Model"
     const Region<3U>& model1_domain(model1.Region("Model"));
     double surface_area1 = model1_domain.SurfaceArea();
   
@@ -579,6 +587,63 @@ bool Region_Test::TestRegionFileInputOutput( Model<3U>& model, const char* regio
     1. the number of perimeter faces is not correct
     2. the ids of the perimeter faces are not correct
 */
+template<uint32_t dim>
+bool consistencyCheckNeighborVersusPerimeterFaces( const Model<dim>& model )
+{
+    size_t consistency_check_failures{0U};
+
+    const Region<dim>& model_domain( model.Region("Model") );
+
+    for ( size_t e{model_domain.InteriorCells()}; e < model_domain.Cells(); ++e )
+    {
+        // only higher-dimensional elements have faces on the model boundary
+        if ( model_domain.E(e)->IsLine() ) continue;
+
+        const size_t expected_perimeter_faces{ model_domain.PerimeterFaces(e) };
+        uint32_t     perimeter_faces{0U};
+
+        for ( uint32_t j{0U}; j < model_domain.E(e)->Neighbors(); ++j )
+        {
+            if ( model_domain.E(e)->Neighbor(j) == nullptr )
+            {
+                if ( perimeter_faces < expected_perimeter_faces )
+                {
+                    const uint32_t face = model_domain.PerimeterFace( e, perimeter_faces );
+                    if ( j != face ) {
+                        cerr << "\nConsistencyCheck: element " << e
+                             << ": nullptr neighbor at local face " << j
+                             << " but stored perimeter face id is " << face << ".\n";
+                        consistency_check_failures++;
+                    }
+                }
+                else {
+                    cerr << "\nConsistencyCheck: element " << e
+                         << " has more nullptr neighbors than stored perimeter faces"
+                         << " (expected " << expected_perimeter_faces << ").\n";
+                    consistency_check_failures++;
+                }
+                perimeter_faces++;
+            }
+        }
+
+        // check total count after the inner loop
+        if ( expected_perimeter_faces != perimeter_faces ) {
+            cerr << "\nConsistencyCheck: element " << e
+                 << ": expected " << expected_perimeter_faces
+                 << " perimeter faces but found " << perimeter_faces << ".\n";
+            consistency_check_failures++;
+        }
+    }
+
+    return ( consistency_check_failures == 0U );
+
+} // end consistencyCheckNeighborVersusPerimeterFaces
+
+template bool consistencyCheckNeighborVersusPerimeterFaces<3U>( const Model<3U>& );
+template bool consistencyCheckNeighborVersusPerimeterFaces<2U>( const Model<2U>& );
+
+
+/*
 bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
  {
     size_t consistency_check_failures(0U);
@@ -610,7 +675,6 @@ bool consistencyCheckNeighborVersusPerimeterFaces( const Model<3U>& model )
    
  } // end consistencyCheckNeighborVersusPerimeterFaces
 
-
-
+*/
 
 } // end csmp

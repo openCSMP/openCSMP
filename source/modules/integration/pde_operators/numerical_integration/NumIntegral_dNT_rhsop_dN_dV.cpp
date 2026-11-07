@@ -91,6 +91,8 @@ void NumIntegral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
     // 1. reading the test variable (e.g. fluid pressure) from nodes
     e.NodePropertyVector( MathOperatorRHS<dim,CELL>::TestOperandKey(), noperand );
 
+    const csmp::Index& key = MathOperatorRHS<dim,CELL>::MaterialOperandKey();
+
     // 2. reading the material operand into MTRL — same logic as MathOperatorLHS::GetOperands
     if ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT ||
          MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() == FACE    ||
@@ -99,25 +101,15 @@ void NumIntegral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
         MathOperatorRHS<dim,CELL>::MTRL.resize( 1U );
         switch ( MathOperatorRHS<dim,CELL>::MaterialOperandType() )
           {
-            case SCALAR:
-              MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal(
-                  dim, e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) );
-              break;
-            case VECTOR:
-              {
-                VectorVariable<dim> vc;
-                e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
-                MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc );
-              }
-              break;
-            case TENSOR:
-              {
-                TensorVariable<dim> ts;
-                e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
-                MathOperatorRHS<dim,CELL>::MTRL[0] = ts;
-              }
-              break;
-            default:
+          case SCALAR:
+               MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+            break;
+          case VECTOR:
+               MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+            break;
+          case TENSOR:
+               MathOperatorRHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+          default:
               throw csmp::Exception( ERROR,
                 "NumIntegral_dNT_rhsop_dN_dV::GetOperands",
                 "Unsupported MaterialOperandType for ELEMENT/FACE/REGION placement." );
@@ -140,18 +132,10 @@ void NumIntegral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
                           dim, e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) );
                       break;
                     case VECTOR:
-                      {
-                        VectorVariable<dim> vc;
-                        e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
-                        MathOperatorRHS<dim,CELL>::MTRL[i].AssignToDiagonal( vc );
-                      }
+                        MathOperatorRHS<dim,CELL>::MTRL[i].AssignToDiagonal( e.ReadVector( i, key ) );
                       break;
                     case TENSOR:
-                      {
-                        TensorVariable<dim> ts;
-                        e.Read( i, MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
-                        MathOperatorRHS<dim,CELL>::MTRL[i] = ts;
-                      }
+                        MathOperatorRHS<dim,CELL>::MTRL[i] = e.ReadTensor( i, key );
                       break;
                     default:
                       throw csmp::Exception( ERROR,

@@ -385,49 +385,6 @@ template void SplitBoundary<3U>::InputPropertyValue( const char*, const FlaggedA
 
 
 /**
-    Only accumulates the inside nodes as these will later be sorted by ModelSubDomain::PartitionCellVector, i.e.  IdentifyPerimeter
-*/
-/*
-template<uint32_t dim>
-void SplitBoundary<dim>::CreateNodePointerVector()
-{
-  if ( this->cell_vec_.empty() )
-    throw csmp::Exception( ERROR, "SplitBoundary<dim>::CreateNodePointerVector:",
-                           this->Name(), "interface vector is empty; nothing could be done." );
-
-  if ( !this->node_vec_.empty() ) this->node_vec_.clear();
-    this->node_vec_.reserve( this->cell_vec_.size() );
-
-  // creating the node index vector
-  for ( auto& it : this->cell_vec_ )
-    for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
-      this->node_vec_.push_back( it->N( i, INSIDE ) );
-
-   //  making the vector unique and trimming of excess memory
-   sort( this->node_vec_.begin(), this->node_vec_.end() );
-   this->node_vec_.erase( unique( this->node_vec_.begin(), this->node_vec_.end() ), this->node_vec_.end() );
-   this->node_vec_.shrink_to_fit();
-}
-*/
-
- /// returns a pointer to the node manifold associated with node of the split boundary; on the perimeter, a null pointer might be returned if the node is not a manifold
-/*
-template<uint32_t dim>
-const NodeManifold<dim>* const SplitBoundary<dim>::ManifoldNode( size_t inside_node_idx ) const
- {
-    return this->N( inside_node_idx )->Manifold();
- }
-    
-template<uint32_t dim>
-NodeManifold<dim>* const SplitBoundary<dim>::ManifoldNode( size_t inside_node_idx )
- {
-    return this->N( inside_node_idx )->Manifold();
- }
-*/
-
-
-
-/**
        Only those nodes that are manifolds.
 */
 template<uint32_t dim>
@@ -541,7 +498,7 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
      interior_nodes.reserve( outside_nodes.size() );
      // node that sorting is retained
      for ( const auto& nit : outside_nodes )
-       // either off: a) no manifold and inside model or (b) on the exterior
+       // either of: a) no manifold and inside model or (b) on the exterior
        if ( (!nit->IsManifold() && (nit->AtBoundary() == NOT || nit->AtBoundary() == INTERNAL)) ||
             (nit->AtBoundary() != NOT && nit->AtBoundary() != INTERNAL ) )
          perimeter_nodes.push_back( nit );
@@ -566,21 +523,28 @@ pair<vector<Node<dim>*>,size_t>  SplitBoundary<dim>::OutsideNodes() const
 template<uint32_t dim>
 size_t SplitBoundary<dim>::RenumberNodes() const noexcept
   {
-     // pair<vector<Node<dim>*>,"n interior nodes">
-     auto inside_node_ptrs  = this->InsideNodes();
-     auto outside_node_ptrs = this->OutsideNodes();
+      // pair<vector<Node<dim>*>,"n interior nodes">
+      auto inside_node_ptrs  = this->InsideNodes();
+      auto outside_node_ptrs = this->OutsideNodes();
      
-     vector<Node<dim>*> perimeter_nodes;
+       vector<Node<dim>*> perimeter_nodes;
 
-     // finding the shared perimeter nodes that must not be duplicated
-     set_intersection( inside_node_ptrs.first.begin(), inside_node_ptrs.first.end(),
-                       outside_node_ptrs.first.begin(), outside_node_ptrs.first.end(),  back_inserter(perimeter_nodes) );
-     
+      // finding the shared perimeter nodes that must not be duplicated
+      // set_intersection only on the known perimeter sub-ranges
+      const auto inside_perim_begin  = next( inside_node_ptrs.first.begin(),
+                                             static_cast<ptrdiff_t>(inside_node_ptrs.second)  );
+      const auto outside_perim_begin = next( outside_node_ptrs.first.begin(),
+                                             static_cast<ptrdiff_t>(outside_node_ptrs.second) );
+
+      set_intersection( inside_perim_begin,           inside_node_ptrs.first.end(),
+                        outside_perim_begin,           outside_node_ptrs.first.end(),
+                        back_inserter(perimeter_nodes) );
+
      // renumbering the interior of the inside
      size_t n_node{0};
      for ( auto nit=inside_node_ptrs.first.begin(); nit!=inside_node_ptrs.first.end(); ++nit ) (*nit)->Idx(n_node++);
      // interior nodes of the outside
-     const long perim_node1 = static_cast<long>(outside_node_ptrs.second);
+     const auto perim_node1 = outside_node_ptrs.second;
      for ( auto nit=outside_node_ptrs.first.begin(); nit!=next(outside_node_ptrs.first.begin(),perim_node1); ++nit )
        (*nit)->Idx(n_node++);
      // perimeter nodes of the outside but only if they were not already numbered

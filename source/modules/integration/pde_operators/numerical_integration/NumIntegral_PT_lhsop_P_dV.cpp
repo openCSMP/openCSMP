@@ -57,30 +57,43 @@ NumIntegral_PT_lhsop_P_dV<dim,CELL>::NumIntegral_PT_lhsop_P_dV( const PropertyDa
 
 template<uint32_t dim, template<uint32_t> class CELL>
 void NumIntegral_PT_lhsop_P_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
- {
-    // this integral is only for numerically integrated isoparametric finite elements
+{
     assert( e.FE()->Isoparametric() == true );
 
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
-      {
-         MathOperatorLHS<dim,CELL>::MTRL[0].Resize(dim,dim);
-         MathOperatorLHS<dim,CELL>::MTRL[0].Zero();
-      
-         // reading density but using the porosity variable temporarily
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), phi );
-              for ( uint32_t i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = phi();
-           }
-      }
-    else for ( auto i{0U}; i<e.FE()->IntegrationPoints(); i++ )
-           MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
-                                                                  i, MathOperatorLHS<dim,CELL>::MTRL[i] );
+    const csmp::Index& key = MathOperatorLHS<dim,CELL>::MaterialOperandKey();
 
-   // reading the porosity which must be an element property
-   e.Read( phi_key, phi );
-   
-} // end GetOperands()
+    switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+        case ELEMENT:
+            switch ( MathOperatorLHS<dim,CELL>::MaterialOperandType() )
+            {
+                case SCALAR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0]
+                        .AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+                    break;
+                case VECTOR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0]
+                        .AssignToDiagonal( e.ReadVector( key ) );
+                    break;
+                case TENSOR:
+                    MathOperatorLHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default:
+            for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
+                MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint(
+                    e, key, i, MathOperatorLHS<dim,CELL>::MTRL[i] );
+            break;
+    }
+
+    // read porosity as element-placed scalar
+    e.Read( phi_key, phi );
+
+} // end GetOperands
 
 
 

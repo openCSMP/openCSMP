@@ -33,7 +33,6 @@ class NumIntegral_dudn_rhsop_u_dS : public MathOperatorRHS<dim,InterFace> {
        lower-dimensional region, using it to compute   the transfer coefficient (=coupling coefficient) at the time level t + delta t.
     */
     void GetOperands( const InterFace<dim>& ) override final;
-    
     void ComputeContribution( const InterFace<dim>& ) override final;
     
     /// used by PDE_IntegratorUoM for assembly of a pre-eliminated solution matrix and RH vector (scalar versions, Luat Khoa Tran)

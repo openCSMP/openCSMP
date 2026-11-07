@@ -40,34 +40,36 @@ void Integral_dNT_rhsop_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
  {
     assert( e.UsesLocalCoordinates() == false );
 
-    MathOperatorRHS<dim,CELL>::MTRL.resize( 1U );
-    MathOperatorRHS<dim,CELL>::MTRL[0].Resize( dim, dim );
-    MathOperatorRHS<dim,CELL>::MTRL[0].Zero();
+    const csmp::Index& key = MathOperatorRHS<dim,CELL>::MaterialOperandKey();
 
-    switch ( MathOperatorRHS<dim,CELL>::MaterialOperandType() )
-      {
-        case SCALAR:
-          MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal(
-              dim, e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey() ) );
-          break;
-        case VECTOR:
-          {
-            VectorVariable<dim> vc;
-            e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), vc );
-            MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( vc );
-          }
-          break;
-        case TENSOR:
-          {
-            TensorVariable<dim> ts;
-            e.Read( MathOperatorRHS<dim,CELL>::MaterialOperandKey(), ts );
-            MathOperatorRHS<dim,CELL>::MTRL[0] = ts;
-          }
-          break;
-        default:
-          throw csmp::Exception( ERROR, "Integral_dNT_rhsop_dN_dV::GetOperands",
-                                 "Unsupported material operand type." );
-      }
+    switch ( MathOperatorRHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+      case REGION:
+      case ELEMENT:
+      case FACE:
+        switch ( MathOperatorRHS<dim,CELL>::MaterialOperandType() )
+        {
+          case SCALAR:
+            MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+            break;
+          case VECTOR:
+            MathOperatorRHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+            break;
+          case TENSOR:
+            MathOperatorRHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+            break;
+          default:
+            break;
+        }
+        break;
+
+      default: // integration-point placed variable
+        const auto loc = std::source_location::current();
+        std::cerr << loc.file_name() << ":" << loc.line()
+                  << " [" << loc.function_name() << "]"
+                  << " Error: material operand placement not recognised\n";
+        break;
+    }
 
     // read nodal test variable values
     e.NodePropertyVector( MathOperatorRHS<dim,CELL>::TestOperandKey(), u_ );

@@ -362,7 +362,8 @@ class VData {
     bool   CheckFix();
 
     /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
-    void   CreateConsistentLineElementOrientations2D();
+    void CreateConsistentLineElementOrientations2D();
+    void CreateConsistentLineElementOrientations2D_AI(); // TODO: test and replace 2D method that fails occassionally
     
     /// angle between line elements in degrees
     double AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );

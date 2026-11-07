@@ -3041,6 +3041,368 @@ size_t VData::RenumberElementsCounterClockwise2D()
  assert( bflag >= MULTIPLE );
 */
  
+/**
+   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a 2D domain.
+
+   @brief Ensures that line elements are aligned with the node-numbering of the faces of 2D surface elements
+   located at the model boundary whose nodes are numbered counter-clockwise.
+
+   The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the
+   line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
+
+   @attention this method expects that there already is connectivity information for line elements.
+   @attention if the line elements do not know their neighbors already, this method will not work.
+   @attention assumes node numbering in 'plist' follows the convention corner nodes first, then interior nodes.
+   @attention method assumes that all manifolds have been disambiguated before calling this method.
+   @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements):
+              nbor1 | [nd0]-line element-[nd1] | nbor0
+
+   @note Convention: pfverts[e][0] is the neighbour opposite nd0, i.e., on the nd1 side (right-hand neighbour).
+                     pfverts[e][1] is the neighbour opposite nd1, i.e., on the nd0 side (left-hand neighbour).
+
+   @note Algorithmic procedure:
+         1) Line elements are classified into chain endpoints (one missing neighbour) and boundary elements
+            (both nodes on BOX_BOUNDARY). Closed loops are detected and warned about.
+         2) Chains are traversed from their endpoints, flipping elements whenever successive elements
+            are not consistently oriented.
+         3) Boundary chains are aligned with the counter-clockwise face ordering of adjacent surface elements.
+            The flip is propagated through the entire chain.
+
+   @author SKM (original), AI corrections applied
+*/
+void VData::CreateConsistentLineElementOrientations2D_AI()
+{
+    // =========================================================================
+    // Precondition checks
+    // =========================================================================
+
+    if ( bflags.empty() )
+        throw csmp::Exception( ERROR,
+                               "VData::CreateConsistentLineElementOrientations2D_AI",
+                               "Method relies on correct flagging of boundary nodes. "
+                               "This is not present in VData." );
+
+    if ( pfverts.empty() ) {
+        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
+             << "'pfverts' is empty; nothing could be done.\n";
+        return;
+    }
+
+    // If this is already a full CSMP model it is assumed to comply with CSMP conventions
+    if ( Faces() > 0u || Interfaces() > 0u ) return;
+
+    assert( plist.size() == pfverts.size() );
+    assert( HybridElementTypeMesh() == true );
+
+    // =========================================================================
+    // 1. Classify line elements and collect surface-element boundary face pairs
+    // =========================================================================
+
+    // Chain endpoints: exactly one missing neighbour (regardless of node boundary flags)
+    set<size_t>  line_elmts;
+
+    // Elements with both nodes on the BOX_BOUNDARY — used for surface alignment in Stage 3
+    set<size_t>  boundary_line_elmts;
+
+    // All line element indices — used to detect unprocessed closed loops after Stage 2
+    set<size_t>  all_line_elmts;
+
+    // Surface-element boundary face node pairs in CCW order, for Stage 3 alignment
+    // pair<nd0, nd1> where nd0->nd1 is the CCW-oriented boundary edge
+    deque<pair<size_t,size_t>>  surf_elmt_face_nd_ids;
+
+    const vector<int8_t>::const_iterator  pelmt_end = PelmtEnd();
+    vector<int8_t>::const_iterator        eit       = PelmtBegin();
+    size_t                                elmt_idx{0U};
+
+    while ( eit != pelmt_end )
+    {
+        const CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( *eit );
+
+        if ( isLineElement( etype ) )
+        {
+            all_line_elmts.insert( elmt_idx );
+
+            const bool nd0_on_boundary = ( bflags[ plist[elmt_idx][0] ] < 0 );
+            const bool nd1_on_boundary = ( bflags[ plist[elmt_idx][1] ] < 0 );
+
+            // FIX 1: classify as chain endpoint if exactly one neighbour is missing,
+            // regardless of node boundary flags (original code required an interior node).
+            const bool missing_nbor0 = ( pfverts[elmt_idx][0] < 0 );
+            const bool missing_nbor1 = ( pfverts[elmt_idx][1] < 0 );
+
+            if ( missing_nbor0 != missing_nbor1 )
+                line_elmts.insert( elmt_idx );
+
+            // Boundary line elements: both corner nodes on the BOX_BOUNDARY
+            if ( nd0_on_boundary && nd1_on_boundary )
+                boundary_line_elmts.insert( elmt_idx );
+        }
+        else
+        {
+            // Surface element: collect CCW-oriented boundary face node pairs
+            if ( isTriangularElement( etype ) )
+            {
+                // Triangle face convention (CCW, face opposite node i):
+                // face 0: nd1 -> nd2
+                // face 1: nd2 -> nd0
+                // face 2: nd0 -> nd1
+                for ( auto i{0U}; i < 3U; ++i )
+                    if ( pfverts[elmt_idx][i] < 0 )
+                    {
+                        switch ( i ) {
+                            case 0: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][1], plist[elmt_idx][2] } ); break;
+                            case 1: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][2], plist[elmt_idx][0] } ); break;
+                            case 2: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][0], plist[elmt_idx][1] } ); break;
+                        }
+                    }
+            }
+            else if ( isQuadrilateralElement( etype ) )
+            {
+                // Quadrilateral face convention (CCW):
+                // face 0: nd0 -> nd1
+                // face 1: nd1 -> nd2
+                // face 2: nd2 -> nd3
+                // face 3: nd3 -> nd0
+                for ( auto i{0U}; i < 4U; ++i )
+                    if ( pfverts[elmt_idx][i] < 0 )
+                    {
+                        switch ( i ) {
+                            case 0: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][0], plist[elmt_idx][1] } ); break;
+                            case 1: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][1], plist[elmt_idx][2] } ); break;
+                            case 2: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][2], plist[elmt_idx][3] } ); break;
+                            case 3: surf_elmt_face_nd_ids.push_back(
+                                        { plist[elmt_idx][3], plist[elmt_idx][0] } ); break;
+                        }
+                    }
+            }
+            else
+            {
+                cerr << "\n\telement " << elmt_idx << ": type "
+                     << parseFiniteElementType( *eit ) << " cannot be processed.\n";
+                throw csmp::Exception( ERROR,
+                                       "VData::CreateConsistentLineElementOrientations2D_AI",
+                                       "element type not recognised" );
+            }
+        }
+
+        ++elmt_idx;
+        ++eit;
+
+    } // end classification loop
+
+    // =========================================================================
+    // 2. Traverse chains from endpoints, flipping elements for consistency
+    // =========================================================================
+
+    // Convention reminder:
+    //   pfverts[e][0] = neighbour on the nd1 side  (right-hand / forward neighbour)
+    //   pfverts[e][1] = neighbour on the nd0 side  (left-hand  / backward neighbour)
+    //
+    // For two consecutive elements A -> B to be consistently oriented:
+    //   pfverts[B][1] == A   (B's left-hand neighbour is A)
+    //
+    // For two consecutive elements B <- A to be consistently oriented:
+    //   pfverts[B][0] == A   (B's right-hand neighbour is A)
+
+    // root element index -> ordered sequence of element indices in the chain
+    map<size_t, deque<int64_t>>  polylines;
+    set<size_t>                  processed_elmts;
+
+    for ( const size_t start_idx : line_elmts )
+    {
+        // Skip if already incorporated into a previously traversed chain
+        if ( processed_elmts.count( start_idx ) ) continue;
+
+        // Isolated element (both neighbours missing) — store as a trivial chain
+        if ( pfverts[start_idx][0] < 0 && pfverts[start_idx][1] < 0 ) {
+            polylines.insert( { start_idx, { static_cast<int64_t>(start_idx) } } );
+            processed_elmts.insert( start_idx );
+            continue;
+        }
+
+        // Insert the starting element as the root of a new chain
+        auto chain_it = polylines.insert(
+            { start_idx, { static_cast<int64_t>(start_idx) } } );
+        assert( chain_it.second == true ); // must not be a duplicate root
+        processed_elmts.insert( start_idx );
+
+        elmt_idx = start_idx;
+
+        // ------------------------------------------------------------------
+        // Forward traversal: follow pfverts[e][0] (right-hand / nd1-side neighbour)
+        // Entry condition: pfverts[start][0] >= 0  AND  pfverts[start][1] < 0
+        // i.e., the start element has its missing neighbour on the nd0 side.
+        // ------------------------------------------------------------------
+        if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L )
+        {
+            while ( true )
+            {
+                const size_t next = static_cast<size_t>( pfverts[elmt_idx][0] );
+
+                // For consistency: next's left-hand neighbour must be elmt_idx.
+                // If it is next's right-hand neighbour instead, next is reversed.
+                const bool flip = ( pfverts[next][1] != static_cast<int64_t>(elmt_idx) );
+
+                if ( flip ) {
+                    swap( plist[next][0],   plist[next][1]   );
+                    swap( pfverts[next][0], pfverts[next][1] );
+                }
+
+                elmt_idx = next;
+                (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
+
+                auto inserted = processed_elmts.insert( elmt_idx );
+                assert( inserted.second == true ); // cycle guard
+
+                // Exit when the current element has no further forward neighbour
+                if ( pfverts[elmt_idx][0] < 0L ) break;
+            }
+            continue; // chain fully traversed; move to next start element
+        }
+
+        // ------------------------------------------------------------------
+        // Backward traversal: follow pfverts[e][1] (left-hand / nd0-side neighbour)
+        // Entry condition: pfverts[start][0] < 0  AND  pfverts[start][1] >= 0
+        // i.e., the start element has its missing neighbour on the nd1 side.
+        // ------------------------------------------------------------------
+        if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L )
+        {
+            while ( true )
+            {
+                const size_t next = static_cast<size_t>( pfverts[elmt_idx][1] );
+
+                // For consistency: next's right-hand neighbour must be elmt_idx.
+                const bool flip = ( pfverts[next][0] != static_cast<int64_t>(elmt_idx) );
+
+                if ( flip ) {
+                    swap( plist[next][0],   plist[next][1]   );
+                    swap( pfverts[next][0], pfverts[next][1] );
+                }
+
+                elmt_idx = next;
+                (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
+
+                auto inserted = processed_elmts.insert( elmt_idx );
+                assert( inserted.second == true ); // cycle guard
+
+                // Exit when the current element has no further backward neighbour
+                if ( pfverts[elmt_idx][1] < 0L ) break;
+            }
+        }
+
+    } // end chain traversal loop
+
+    // -------------------------------------------------------------------------
+    // Warn about closed loops (no endpoint — never entered line_elmts)
+    // -------------------------------------------------------------------------
+    {
+        set<size_t> unprocessed_line_elmts;
+        set_difference( all_line_elmts.begin(),   all_line_elmts.end(),
+                        processed_elmts.begin(),  processed_elmts.end(),
+                        inserter( unprocessed_line_elmts, unprocessed_line_elmts.begin() ) );
+
+        if ( !unprocessed_line_elmts.empty() ) {
+            cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
+                 << unprocessed_line_elmts.size()
+                 << " line element(s) were not processed — they likely form closed loop(s).\n"
+                 << "  Closed loops are not yet handled; their orientation is left unchanged.\n"
+                 << "  Unprocessed element indices:";
+            for ( const auto idx : unprocessed_line_elmts )
+                cerr << " " << idx;
+            cerr << "\n";
+        }
+    }
+
+    // Diagnostic output
+    if ( !polylines.empty() ) {
+        cout << "\n\nVData::CreateConsistentLineElementOrientations2D_AI: processed "
+             << polylines.size() << " polylines:\n";
+        for ( const auto& pl : polylines ) {
+            cout << "\t" << pl.first << ": ";
+            for ( const auto idx : pl.second ) cout << idx << " ";
+            cout << "\n";
+        }
+        cout << "\n";
+    }
+    else {
+        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
+             << "No polylines were built. Unable to process line element chains.\n"
+             << "\t\tLine elements processed: " << processed_elmts.size() << "\n";
+    }
+
+    // =========================================================================
+    // 3. Align boundary chains with CCW surface-element face ordering
+    // =========================================================================
+
+    // Sort the surface face pairs for binary_search
+    sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
+
+    for ( const size_t boundary_start : boundary_line_elmts )
+    {
+        // Check whether this boundary element is already correctly oriented
+        const pair<size_t,size_t> fwd_pair{ plist[boundary_start][0],
+                                            plist[boundary_start][1] };
+        const pair<size_t,size_t> rev_pair{ plist[boundary_start][1],
+                                            plist[boundary_start][0] };
+
+        if ( binary_search( surf_elmt_face_nd_ids.begin(),
+                            surf_elmt_face_nd_ids.end(), fwd_pair ) )
+        {
+            // Already correctly oriented — nothing to do
+            processed_elmts.insert( boundary_start );
+            continue;
+        }
+
+        if ( binary_search( surf_elmt_face_nd_ids.begin(),
+                            surf_elmt_face_nd_ids.end(), rev_pair ) )
+        {
+            // FIX 2: flip the boundary element AND propagate through its entire chain.
+
+            // Flip the boundary start element
+            swap( plist[boundary_start][0],   plist[boundary_start][1]   );
+            swap( pfverts[boundary_start][0], pfverts[boundary_start][1] );
+            processed_elmts.insert( boundary_start );
+
+            // Propagate the flip forward through the chain (follow pfverts[e][0])
+            size_t current = boundary_start;
+            while ( pfverts[current][0] >= 0L )
+            {
+                const size_t next = static_cast<size_t>( pfverts[current][0] );
+
+                // After flipping the boundary start, the chain direction is reversed.
+                // Each subsequent element must also be flipped to restore consistency.
+                swap( plist[next][0],   plist[next][1]   );
+                swap( pfverts[next][0], pfverts[next][1] );
+
+                processed_elmts.insert( next );
+                current = next;
+            }
+            continue;
+        }
+
+        // No matching surface face found — detached boundary line element
+        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
+             << "detected detached line element " << boundary_start
+             << " at border with nodes:\n\t\t"
+             << plist[boundary_start][0]
+             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
+                            bflags[ plist[boundary_start][0] ] ) ) << "), "
+             << plist[boundary_start][1]
+             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
+                            bflags[ plist[boundary_start][1] ] ) ) << ")"
+             << " — element has no higher-dimensional neighbour; "
+             << "its orientation was left untouched.\n";
+
+    } // end boundary alignment loop
+
+} // end CreateConsistentLineElementOrientations2D_AI
 
 
 

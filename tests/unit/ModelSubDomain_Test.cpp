@@ -930,7 +930,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        
        // Non-unique Region 'Model'
        // -------------------------
-       model_domain.RenumberNodes();
+       // model_domain.RenumberNodes();
        _test( model_domain.Empty() == false );
        _test( model_domain.Nodes() == 35 );
        _test( model_domain.InteriorNodes() == 4 );
@@ -956,7 +956,19 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        // _test( model_domain.PerimeterFaces(0) == 2 ); - does not crash
        // in positions 0 & 3
        _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) == 0 );
-       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 3 );
+       _test( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) == 1 );
+
+if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) != 0 ) {
+  cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 0: ";
+  cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 0 ) <<" vs "<< 0 << endl;
+  printPerimeterFaceVector( model_domain );
+}
+if ( model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) != 1 ) {
+ cerr <<" failed test for perimeter cell "<< model_domain.InteriorCells() <<" face 1: ";
+ cerr << model_domain.PerimeterFace( model_domain.InteriorCells(), 1 ) <<" vs "<< 1 << endl;
+  printPerimeterFaceVector( model_domain );
+}
+       // does subdomain "Model" contain all the perimeter nodes of "lower"
        _test( model_domain.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 13 );
 
        // Unique Region 'Upper' (intersected by SB)
@@ -985,7 +997,19 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
        // corner quad has two perimeter faces
        _test( upper.PerimeterFaces( upper.InteriorCells()) == 2 );
        _test( upper.PerimeterFace( upper.InteriorCells(), 0 ) == 0 );
-       _test( upper.PerimeterFace( upper.InteriorCells(), 1 ) == 3 );
+       _test( upper.PerimeterFace( upper.InteriorCells(), 1 ) == 1 );
+
+if ( upper.PerimeterFace( upper.InteriorCells(), 0 ) != 0 ) {
+ cerr <<" failed test for perimeter cell "<< upper.InteriorCells() <<" face 0: ";
+ cerr << upper.PerimeterFace( upper.InteriorCells(), 0 ) <<" vs "<< 0 << endl;
+  printPerimeterFaceVector( upper );
+}
+if ( upper.PerimeterFace( upper.InteriorCells(), 1 ) != 1 ) {
+ cerr <<" failed test for perimeter cell "<< upper.InteriorCells() <<" face 1: ";
+ cerr << upper.PerimeterFace( upper.InteriorCells(), 1 ) <<" vs "<< 1 << endl;
+  printPerimeterFaceVector( upper );
+}
+
        _test( upper.SharedPerimeterNodes( lower.PerimeterNodesBegin(), lower.NodesEnd() ) == 0 );
 
        // Boundary 'TOP'

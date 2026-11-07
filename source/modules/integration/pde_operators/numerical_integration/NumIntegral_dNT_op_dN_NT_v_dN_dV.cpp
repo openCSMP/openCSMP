@@ -71,33 +71,34 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::GetOperands( const CELL<dim>& e
 
     // 1. read diffusion Operand
     // -------------------------
-    if ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() == ELEMENT )
-      {
-         if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == SCALAR ) {
-              double sc = e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey() );
-              for ( uint32_t i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = sc;
-           }
-         else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == VECTOR ) {
-              VectorVariable<dim>  vc;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), vc );
-              for ( uint32_t i{0U}; i<dim; i++ ) 
-                MathOperatorLHS<dim,CELL>::MTRL[0](i,i) = vc[i];
-           }
-         else if ( MathOperatorLHS<dim,CELL>::MaterialOperandType() == TENSOR ) {
-              TensorVariable<dim>  ts;
-              e.Read( MathOperatorLHS<dim,CELL>::MaterialOperandKey(), ts );
-              for ( uint32_t i{0U}; i<dim; i++ ) 
-                for ( uint32_t j{0U}; j<dim; j++ ) 
-                  MathOperatorLHS<dim,CELL>::MTRL[0](i,j) = ts(i,j);
-           }
-      }
-    else { // or an integration point variable
-         for ( uint32_t i{0}; i<e.IntegrationPoints(); i++ )
-           MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint( e, MathOperatorLHS<dim,CELL>::MaterialOperandKey(),
-                                                                  i, MathOperatorLHS<dim,CELL>::MTRL[i] );
-      }
-   
+    const csmp::Index& key = MathOperatorLHS<dim,CELL>::MaterialOperandKey();
+
+    switch ( MathOperatorLHS<dim,CELL>::MaterialOperandPlacement() )
+    {
+        case ELEMENT:
+            switch ( MathOperatorLHS<dim,CELL>::MaterialOperandType() )
+            {
+                case SCALAR:
+                     MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonalAndZeroOffDiagonal( dim, e.Read( key ) );
+                    break;
+                case VECTOR:
+                     MathOperatorLHS<dim,CELL>::MTRL[0].AssignToDiagonal( e.ReadVector( key ) );
+                    break;
+                case TENSOR:
+                     MathOperatorLHS<dim,CELL>::MTRL[0] = e.ReadTensor( key );
+                    break;
+                default:
+                    break;
+            }
+            break;
+
+        default: // integration-point placed variable
+            for ( uint32_t i{0U}; i < e.IntegrationPoints(); ++i )
+                MathOperatorLHS<dim,CELL>::PropertyAtIntegrationPoint(
+                    e, key, i, MathOperatorLHS<dim,CELL>::MTRL[i] );
+            break;
+    }
+
     // 2. read element advection variable
     // -----------------------------------
     if ( adv_key.place == ELEMENT )
@@ -190,6 +191,7 @@ void NumIntegral_dNT_op_dN_NT_v_dN_dV<dim,CELL>::ComputeContribution( const CELL
         //
         // ----------------------------------------------------------------
         // build diagonal velocity matrix VIP = diag(v_x, v_y [, v_z])
+        VIP.Resize(dim,dim);
         VIP.Zero();
         if  ( adv_key.place == ELEMENT_INTEGRATION_POINT ||
               adv_key.place == FACE_INTEGRATION_POINT ) {

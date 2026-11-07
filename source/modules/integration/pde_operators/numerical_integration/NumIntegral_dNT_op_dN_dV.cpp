@@ -44,13 +44,6 @@ NumIntegral_dNT_op_dN_dV<dim,CELL>::NumIntegral_dNT_op_dN_dV( const PropertyData
 
 
 
-template<uint32_t dim, template<uint32_t> class CELL>
-NumIntegral_dNT_op_dN_dV<dim,CELL>::~NumIntegral_dNT_op_dN_dV()
- {
- }
-
-
-
 
 
 

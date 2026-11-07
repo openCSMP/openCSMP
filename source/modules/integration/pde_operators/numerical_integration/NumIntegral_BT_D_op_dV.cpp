@@ -58,7 +58,7 @@ void NumIntegral_BT_D_op_dV<dim,CELL>::GetOperands( const CELL<dim>& e )
 		     // reading Young's modulus (must be an element variables)
 		     E_[0U] = e.Read( E_key_ );
 		     // getting Poisson's ratio
-	       nu_[0U] = e.Read( nu_key_ );
+	         nu_[0U] = e.Read( nu_key_ );
       }
     else if ( E_key_.place == ELEMENT_INTEGRATION_POINT ) { // Integration Point
          E_.resize(e.IntegrationPoints());

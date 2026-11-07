@@ -28,7 +28,6 @@ class NumIntegral_dNT_v_dV : public MathOperatorRHS<dim,CELL> {
                           const char* test );                // e.g., streaming potential
     
     void GetOperands( const CELL<dim>& ) override final;
-
     void ComputeContribution( const CELL<dim>& ) override final;
   
   private:
