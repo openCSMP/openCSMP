@@ -1,5 +1,9 @@
-#ifndef OPERAND_TEST_H
-#define OPERAND_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_OPERAND_TEST_H
+#define CSMP_OPERAND_TEST_H
 
 #include "Test.h"
 
@@ -12,4 +16,4 @@ class Operand_Test : public Test {
 
 } // end csmp
 
-#endif // OPERAND_TEST_H
+#endif // CSMP_OPERAND_TEST_H

@@ -1,5 +1,9 @@
-#ifndef VTU_INTERFACE_TEST_H
-#define VTU_INTERFACE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_VTU_INTERFACE_TEST_H
+#define CSMP_VTU_INTERFACE_TEST_H
 
 #include "Test.h"
 
@@ -15,4 +19,4 @@ class VTU_Interface_Test : public Test
 
 } // csmp
 
-#endif // VTU_INTERFACE_TEST_H
+#endif // CSMP_VTU_INTERFACE_TEST_H

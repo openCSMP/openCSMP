@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "TwoPhaseModel_Test.h"
 
 #include "Model.h"
@@ -103,7 +107,7 @@ void TwoPhaseModel_Test::run()
 
     // write data
     twoPhaseModel_->Initialize( *(*it) ); // just in case
-    for( auto i{0};i<(*it)->Nodes();i++)
+    for( uint32_t i{0};i<(*it)->Nodes();i++)
     {
         twoPhaseModel_->InitializeForNode( *(*it), i );
         twoPhaseModel_->EffectiveSaturation();

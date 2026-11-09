@@ -1,11 +1,14 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_Model3D.h"
 #include "ModelSubDomain_Test.h" // for the use of CompareModelSubDomains
 #include "Boundary.h"
 #include "Region.h"
 #include "VTU_Interface.h"
-//#include "NodeCenteredFiniteVolumeTransport.h"
-#include "Timer.hpp"
+#include "Timer.h"
 
 using namespace std;
 

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef FINITE_VOLUME_POLICY_TEST_H
 #define FINITE_VOLUME_POLICY_TEST_H
 

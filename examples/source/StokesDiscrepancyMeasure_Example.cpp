@@ -14,260 +14,374 @@
 #include "VelocityAndVolumeFlux.h"
 #include "LinearSolver.h"
 #include "CSMP_highLevelUtilities.h"
-
-// Interrelations
 #include "ExtractVectorVariableLength.h"
-
-// outputting
 #include "VTK_Interface.h"
-
-// implicit scheme
 #include "InputDataManager.h"
 
 using namespace std;
 
-namespace csmp{
+namespace csmp {
 
 void StokesDiscrepancyMeasure_Example::Specifications()
 {
-  SetTitle( "Stokes discrepancy measure" );
-  SetDifficulty( 2 );
-  SetCategory( "Numerical Methods" );
-  AddAuthor( "SKM" );
-  AddDescription( "source in: StokesDiscrepancyMeasure_Example.cpp" );
-  AddDescription( "calculates the difference between taking the laplacian of the Darcy velocity when taking a parabolic scalar field as an operator and the Stokes flow approximation." );
-  AddRequirement( "one_sphere_0.45_tetra(csmp binary files, -configuration.txt), example25.txt(variable file)" );
-} 
+    SetTitle( "Stokes discrepancy measure" );
+    SetDifficulty( 2 );
+    SetCategory( "Numerical Methods" );
+    AddAuthor( "SKM" );
+    AddDescription( "source in: StokesDiscrepancyMeasure_Example.cpp" );
+    AddDescription( "Estimates the Taylor-series truncation error of the Darcy "
+                    "approximation relative to Stokes flow by computing a synthetic "
+                    "second-derivative (Hessian) term from the parabolic scalar field "
+                    "and the FEM pressure solution." );
+    AddRequirement( "one_sphere_0.45_tetra (CSMP binary files, -configuration.txt), "
+                    "example25.txt (variable file)" );
+}
 
+
+
+/**
+    @file StokesDiscrepancyMeasure_Example.cpp
+
+    @brief Estimates the Taylor-series truncation error arising from the
+           finite-element approximation of Stokes flow in pore space.
+
+    @section background Background
+
+    In pore-scale flow modelling, the Darcy velocity field can be approximated
+    by solving a Poisson equation with a parabolic (Poiseuille-like) scalar
+    field psi as the permeability operator.  The resulting velocity field
+    satisfies the Darcy equation exactly but deviates from the true Stokes
+    solution by a truncation error that depends on the second derivatives of
+    the pressure field.
+
+    This example quantifies that discrepancy by computing the dimensionless
+    error measure E defined in Lateef's thesis:
+
+    @code
+        E = || 2 (grad psi . nabla) grad p  +  psi grad(Laplacian p) ||
+            -------------------------------------------------------
+                            || grad p ||
+    @endcode
+
+    where:
+      - psi   is the parabolic function (solution of Laplacian psi = -1
+              with psi = 0 on pore walls), whose maximum value equals the
+              local pore radius squared / 8.
+      - p     is the fluid pressure (solution of div(psi grad p) = 0).
+      - The numerator is the synthetic second-derivative (Hessian) term
+              that represents the Taylor-series truncation error of the
+              Darcy approximation relative to the full Stokes operator.
+      - E = 0 everywhere would mean the Darcy approximation is exact.
+
+    @section algorithm Algorithm
+
+    1. Solve Laplacian(psi) = -1 with psi = 0 on pore walls to obtain
+       the parabolic function.
+    2. Compute grad(psi) and map psi to element centres.
+    3. Solve div(psi grad p) = 0 with pressure boundary conditions to
+       obtain the fluid pressure.
+    4. Compute the Hessian of p as grad(grad p) via two successive
+       gradient operations with cell-to-node extrapolation.
+    5. Assemble the truncation error vector:
+           term1 = 2 * Hessian(p) * grad(psi)
+           term2 = psi * grad(Laplacian(p))
+           E_vec = term1 + term2
+    6. Normalise by || grad p || to obtain the scalar measure E.
+
+    @section requirements Requirements
+
+    - one_sphere_0.45_tetra  (CSMP binary mesh files + -configuration.txt)
+    - example25.txt          (variable definition file)
+
+    @author S.K. Matthai
+*/
 void StokesDiscrepancyMeasure_Example::Run()
 {
-  // *****************************************************************************************
-  /*
-       Stokes_discrepancy_measure:  calculates the difference between taking the laplacian
-                                    of the Darcy velocity when taking a parabolic scalar
-                                    field as an operator and the Stokes flow approximation.
-  */
-  // *****************************************************************************************
-  
-  // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
-  //ostream &cout = *GetStream();
+    constexpr uint32_t dim{ 3U };
 
-  const size_t   dim(3U);
-  /*
-  const string   model_name("one_sphere_0.45_tetra");
-  ANSYS_Model3D  model( model_name.c_str(), "example25.txt");
-   */
+    // -----------------------------------------------------------------------
+    // Model setup
+    // -----------------------------------------------------------------------
+    string model_name( "one_sphere_0.45_tetra" );
+    cout << "\nPlease enter the name of the input model, "
+         << "or press ENTER to use the default 'one_sphere_0.45_tetra': \n";
+    cin.ignore();
+    string user_input;
+    getline( cin, user_input );
+    if ( !user_input.empty() ) model_name = user_input;
 
-  string model_name;
-  cout<< "\nPlease enter the name of input model, or press ENTER to use the default model one_sphere_0.45_tetra':"<<endl;
-  cin.ignore();
-  getline(cin, model_name);
-  if (model_name.length() == 0) model_name = "one_sphere_0.45_tetra";
+    const string file_name     = GetExampleFileName( __FILE__ );
+    const string variable_file = "example25.txt";
+    const string config_file   = model_name;
 
-  //find the name of current example source file
-  string file_name = GetExampleFileName(__FILE__);
-  string variable_file = "example25.txt";
-  string config_file = model_name;
-  //create of directory with current example name, go into this directory, and copy input files into it.
-  CreateWorkingDirectoryAndCopyInputModelFiles(file_name, model_name, variable_file, config_file);
-  //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
-  Model<3U>  model(model_name, variable_file);
+    CreateWorkingDirectoryAndCopyInputModelFiles( file_name, model_name,
+                                                  variable_file, config_file );
 
-  printModelDimensions( model, true );
+    Model<dim>  model( model_name, variable_file );
+    printModelDimensions( model, true );
 
-  InputDataManager<3U>  model_configuration;
+    InputDataManager<dim>  model_configuration;
+    model_configuration.ConfigureFromFile( model, model_name.c_str(),
+                                           false, true, true, true, false );
 
-  model_configuration.ConfigureFromFile( model, model_name.c_str(),
-                                         false, true, true, true, false );
+    VTK_Interface<dim>  vtk_output;
 
-  VTK_Interface<3U>  vtk_output;
+    const string  channel_region( "Model" );
+    Region<dim>&  gref( model.Region( channel_region.c_str() ) );
 
 
- // -----------------------------------------------------------------------
- // 1. Computing the steady-state parabolic function
- // -----------------------------------------------------------------------
-    PropertyHandle<dim>  src( model, "source term", SCALAR, ELEMENT ); src = 1.;
+    // -----------------------------------------------------------------------
+    // 1. Parabolic function psi: solve Laplacian(psi) = -1, psi = 0 on walls
+    //
+    //    The maximum value of psi equals the local pore radius squared / 8,
+    //    making it a proxy for the local hydraulic aperture.
+    // -----------------------------------------------------------------------
+    PropertyHandle<dim>  src( model, "source term",        SCALAR, ELEMENT ); src = 1.;
+    PropertyHandle<dim>  pbf( model, "parabolic function", SCALAR, NODE    );
+
     printRangeOfVariable( model, "source term" );
-    PropertyHandle<dim>  pbf( model, "parabolic function", SCALAR, NODE );
 
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings   settings;
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Settings settings;
     settings.Set_nxtyp(0);
     settings.Set_ncgtyp(5);
     settings.Set_ndefault(40);
-    SAMG_Solver solver(&settings);
+    SAMG_Solver                  solver( &settings );
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER   solver;
+#endif
     PDE_Integrator<dim,Element>  parabolic_profile( solver );
-    #else
-    CSMP_DEFAULT_LINEAR_SOLVER solver;
-    PDE_Integrator<dim,Element>  parabolic_profile(solver);
-    #endif
 
-    // the maximum computed 'parabolic function' value is equivalent to the pore radius of the corresponding pore space segment
-    // laplacian matrix [L] on the left-hand side
-    NumIntegral_dNT_dN_dV<dim>   laplacian( model.Database(), "parabolic function", "parabolic function" );
-    // source vector {q} on the right-hand side = 1
-    NumIntegral_NT_rhsop_N_dV<dim>  rhs( model.Database(), "source term", "parabolic function" );
+    NumIntegral_dNT_dN_dV<dim>      laplacian( model.Database(),
+                                               "parabolic function",
+                                               "parabolic function" );
+    NumIntegral_NT_rhsop_N_dV<dim>  rhs( model.Database(),
+                                         "source term",
+                                         "parabolic function" );
     parabolic_profile.Add( &laplacian );
     parabolic_profile.Add( &rhs );
 
-    // boundary conditions: we set value of parabolic function at walls of pore space to zero
-    // and fix this value by treating it as a Dirichlet boundary condition
-    const string  channel_region("Model");
-    Region<dim>&  gref(model.Region(channel_region.c_str()));
-    gref.InputPropertyValue( "parabolic function", makeScalar(DIRICH,0.), PERIMETER );
-    // we must now drop this Dirichlet boundary condition at inlet and outlet (i.e. FRONT and BACK of box-shaped model)
-    // this is tricky because we do not want to drop them at the boundary of the boundary, so we can't use
-    // the standard functions, but we must loop over the boundary nodes explicitly
-    for ( auto nit=gref.PerimeterNodesBegin(); nit!=gref.NodesEnd(); nit++ )
-      if ( (*nit)->AtBoundary() == FRONT  or  (*nit)->AtBoundary() == BACK )
-        (*nit)->Status( pbf.Key(), PLAIN );
-    // calculation
+    // Dirichlet: psi = 0 on pore walls (all perimeter nodes)
+    gref.InputPropertyValue( "parabolic function", makeScalar(DIRICH, 0.), PERIMETER );
+
+    // Release Dirichlet at inlet (FRONT) and outlet (BACK) so that psi
+    // is free to take non-zero values there — we cannot use the standard
+    // boundary functions here because we must not release the condition
+    // at the edges of those faces, only at the interior face nodes.
+    for ( auto nit = gref.PerimeterNodesBegin(); nit != gref.NodesEnd(); ++nit )
+        if ( (*nit)->AtBoundary() == FRONT || (*nit)->AtBoundary() == BACK )
+            (*nit)->Status( pbf.Key(), PLAIN );
+
     parabolic_profile.IntegrateOver( model, gref );
     printRangeOfVariable( model, channel_region.c_str(), "parabolic function" );
-
     vtk_output.OutputDataToVTK( model, "parabolic-function", "parabolic function", 1 );
 
 
- // -----------------------------------------------------------------------
- // 2. Computing the gradient of the parabolic function
- // -----------------------------------------------------------------------
-    // the 'parabolic function' divided by viscosity is now mapped to the variable "element parabolic function"
+    // -----------------------------------------------------------------------
+    // 2. Gradient of the parabolic function
+    //
+    //    psi is mapped to element barycentres for use as the permeability
+    //    operator in the pressure solve (step 3).
+    // -----------------------------------------------------------------------
     PropertyHandle<dim>  lapbc( model, "element parabolic function", SCALAR, ELEMENT );
-    ScalarVariable  sc;
-    for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
-         (*eit)->PropertyValueAtBaryCenter( pbf.Key(), sc );
-         (*eit)->Store( lapbc.Key(), (sc /= 1.) );
-      }
+
+    {
+        ScalarVariable sc;
+        for ( auto& eit : gref.CellVector() ) {
+            eit->PropertyValueAtBaryCenter( pbf.Key(), sc );
+            eit->Store( lapbc.Key(), sc );
+        }
+    }
     printRangeOfVariable( model, channel_region.c_str(), "element parabolic function" );
 
     PropertyHandle<dim>  grad( model, "grad parabolic function", VECTOR, ELEMENT );
-    model.CopyGradientOfProperty_A_To_B( "parabolic function", "grad parabolic function" );
+    model.CopyGradientOfProperty_A_To_B( "parabolic function",
+                                         "grad parabolic function" );
     printRangeOfVariable( model, channel_region.c_str(), "grad parabolic function" );
 
-    PropertyHandle<dim>  magn( model, "magnitude grad parabolic function", SCALAR, ELEMENT );
-    ExtractVectorVariableLength<dim>  grad_magnitude( model.Database(), "grad parabolic function", "magnitude grad parabolic function" );
+    PropertyHandle<dim>  magn( model, "magnitude grad parabolic function",
+                               SCALAR, ELEMENT );
+    ExtractVectorVariableLength<dim>  grad_magnitude( model.Database(),
+                                                      "grad parabolic function",
+                                                      "magnitude grad parabolic function" );
     gref.Apply( grad_magnitude );
-    printRangeOfVariable( model, channel_region.c_str(), "magnitude grad parabolic function" );
+    printRangeOfVariable( model, channel_region.c_str(),
+                          "magnitude grad parabolic function" );
 
 
- // -----------------------------------------------------------------------
- // 3. Computing the pressure in the pore space
- // -----------------------------------------------------------------------
-    #ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Solver  samg_solver;
-    PDE_Integrator<dim,Element>  steady_state_pressure(samg_solver);
-    #else
-    CSMP_DEFAULT_LINEAR_SOLVER  linear_solver;
-    PDE_Integrator<dim,Element>  steady_state_pressure(linear_solver);
-    #endif
+    // -----------------------------------------------------------------------
+    // 3. Fluid pressure: solve div(psi grad p) = 0
+    //
+    //    psi acts as the spatially varying permeability (Poiseuille weight).
+    // -----------------------------------------------------------------------
+#ifdef CSMP_WITH_SAMG_SOLVER
+    SAMG_Solver                  samg_solver;
+#else
+    CSMP_DEFAULT_LINEAR_SOLVER   linear_solver;
+#endif
 
-    NumIntegral_dNT_lhsop_dN_dV<dim>  flow_resistance( model.Database(), "element parabolic function", "fluid pressure", "fluid pressure" );
-    // source vector {q} on the right-hand side = 0
-    NumIntegral_NT_rhsop_N_dV<dim> fsrc( model.Database(), "fluid volume source", "fluid pressure" );
+#ifdef CSMP_WITH_SAMG_SOLVER
+    PDE_Integrator<dim,Element>  steady_state_pressure( samg_solver );
+#else
+    PDE_Integrator<dim,Element>  steady_state_pressure( linear_solver );
+#endif
+
+    NumIntegral_dNT_lhsop_dN_dV<dim>  flow_resistance( model.Database(),
+                                                        "element parabolic function",
+                                                        "fluid pressure",
+                                                        "fluid pressure" );
+    NumIntegral_NT_rhsop_N_dV<dim>    fsrc( model.Database(),
+                                            "fluid volume source",
+                                            "fluid pressure" );
     steady_state_pressure.Add( &flow_resistance );
     steady_state_pressure.Add( &fsrc );
 
-    model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN,0.) );
+    model.InputPropertyValue( "fluid volume source", makeScalar(PLAIN, 0.) );
     steady_state_pressure.IntegrateOver( model, gref );
     printRangeOfVariable( model, channel_region.c_str(), "fluid pressure" );
     vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
 
 
- // -----------------------------------------------------------------------
- // 4. Computing the hessian for the FEM solution of fluid pressure
- // -----------------------------------------------------------------------
-  model.CopyGradientOfProperty_A_To_B( "fluid pressure", "fluid pressure gradient" );
-  model.ExtrapolateCellToNodeProperty("fluid pressure gradient","nodal fluid pressure gradient");
-  model.CopyGradientOfProperty_A_To_B( "nodal fluid pressure gradient", "fluid pressure gradient2" );
-  model.ExtrapolateCellToNodeProperty("fluid pressure gradient2","nodal fluid pressure gradient2");
+    // -----------------------------------------------------------------------
+    // 4. Hessian of fluid pressure: H(p) = grad(grad p)
+    //
+    //    Two successive gradient operations with cell-to-node extrapolation
+    //    yield the second-derivative (Hessian) tensor at element centres.
+    //    This is the key quantity for the truncation error estimate.
+    // -----------------------------------------------------------------------
+    model.CopyGradientOfProperty_A_To_B( "fluid pressure",
+                                         "fluid pressure gradient" );
+    model.ExtrapolateCellToNodeProperty( "fluid pressure gradient",
+                                         "nodal fluid pressure gradient" );
+    model.CopyGradientOfProperty_A_To_B( "nodal fluid pressure gradient",
+                                         "fluid pressure gradient2" );
+    model.ExtrapolateCellToNodeProperty( "fluid pressure gradient2",
+                                         "nodal fluid pressure gradient2" );
 
-  vtk_output.OutputDataToVTK( model, "fluid-pressure-gradient", "fluid pressure gradient", 1 );
-  // the Hessian matrix
-  vtk_output.OutputDataToVTK( model, "hessian", "fluid pressure gradient2", 1 );
+    vtk_output.OutputDataToVTK( model, "fluid-pressure-gradient",
+                                "fluid pressure gradient", 1 );
+    vtk_output.OutputDataToVTK( model, "hessian",
+                                "fluid pressure gradient2", 1 );
 
 
-  // -----------------------------------------------------------------------
-  // 5. Computing the discrepancy between method and Stokes solution
-  //    (as in Lateef's thesis)
-  // -----------------------------------------------------------------------
-  /*
-       E     = (2*(grad psi div nabla) * grad p + psi * grad Laplacian p)   normalized by gradient of p
-                term1                           term2
+    // -----------------------------------------------------------------------
+    // 5. Taylor-series truncation error measure E
+    //
+    //    Following Lateef's thesis, the discrepancy between the Darcy
+    //    approximation and the full Stokes solution is:
+    //
+    //        E = || term1 + term2 || / || grad p ||
+    //
+    //    where:
+    //        term1 = 2 * H(p) * grad(psi)          [Hessian contracted with grad psi]
+    //        term2 = psi * grad(Laplacian(p))       [psi times gradient of pressure Laplacian]
+    //
+    //    E = 0 everywhere would indicate that the Darcy approximation is exact.
+    //    Large values of E identify regions where higher-order Stokes terms
+    //    are significant and the Darcy model introduces truncation error.
+    // -----------------------------------------------------------------------
 
-     NB: The result is a vector placed on the element but when the absolute value is taken
-         we have a scalar (functional) = to vector length.
-  */
-  // computing term1: by post-multiplying Hessian with gradient of psi function
-   PropertyHandle<dim>  hessian( model, "fluid pressure gradient2", TENSOR, ELEMENT );
-   PropertyHandle<dim>  term1( model, "term1", VECTOR, ELEMENT );
-   TensorVariable<dim>  ts;
-   VectorVariable<dim>  vc, vc2;
-   for ( auto eit=gref.CellsBegin(); eit!=gref.CellsEnd(); eit++ ) {
-        // read hessian
-        (*eit)->Read( hessian.Key(), ts );
-        (*eit)->Read( grad.Key(), vc );
-        vc2 = ts * vc*2.0;
-        //vc2 *= 2.
-        (*eit)->Store( term1.Key(), vc2 );
-     }
+    PropertyHandle<dim>  hessian( model, "fluid pressure gradient2", TENSOR, ELEMENT );
+    PropertyHandle<dim>  term1(   model, "term1",                    VECTOR, ELEMENT );
 
-  // computing term2: Laplacian of fluid pressure is found as sum of the diagonal terms of the Hessian (=its trace)
+    // --- term1 = 2 * H(p) * grad(psi) ---
+    {
+        TensorVariable<dim>  ts;
+        VectorVariable<dim>  vc;
+        for ( auto& eit : gref.CellVector() ) {
+            eit->Read( hessian.Key(), ts );
+            eit->Read( grad.Key(),    vc );
+            eit->Store( term1.Key(), ts * vc * 2.0 );
+        }
+    }
+
+    // --- Laplacian(p) = trace of H(p) ---
     PropertyHandle<dim>  lap_p( model, "laplacian of pressure", SCALAR, ELEMENT );
-    for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
-         // read Hessian from the nodes
-         (*nit)->Read( hessian.Key(), ts );
-         // add up the diagonal terms
-         sc = ts(0,0) + ts(1,1) + ts(2,2);
-         (*nit)->Store( lap_p.Key(), sc );
-      }
+    {
+        TensorVariable<dim>  ts;
+        ScalarVariable       sc;
+        for ( auto& eit : gref.CellVector() ) {
+            eit->Read( hessian.Key(), ts );
+            // Laplacian = sum of diagonal (trace of Hessian)
+            double trace = 0.;
+            for ( uint32_t i{0U}; i < dim; ++i ) trace += ts(i,i);
+            sc = makeScalar( PLAIN, trace );
+            eit->Store( lap_p.Key(), sc );
+        }
+    }
     printRangeOfVariable( model, channel_region.c_str(), "laplacian of pressure" );
-    vtk_output.OutputDataToVTK( model, "laplacian-pressure", "laplacian of pressure", 1 );
+    vtk_output.OutputDataToVTK( model, "laplacian-pressure",
+                                "laplacian of pressure", 1 );
 
+    // --- term2 = psi * grad(Laplacian(p)) ---
     PropertyHandle<dim>  nlap_pf( model, "nodal laplacian of pressure", SCALAR, NODE );
-    model.ExtrapolateCellToNodeProperty("laplacian of pressure", "nodal laplacian of pressure");
+    model.ExtrapolateCellToNodeProperty( "laplacian of pressure",
+                                         "nodal laplacian of pressure" );
 
-    PropertyHandle<dim>  term2( model, "gradient of laplacian of pressure", VECTOR, ELEMENT );
-    model.CopyGradientOfProperty_A_To_B( "nodal laplacian of pressure", "gradient of laplacian of pressure" );
-    printRangeOfVariable( model, channel_region.c_str(), "gradient of laplacian of pressure");
-    vtk_output.OutputDataToVTK( model, "grad-laplacian-pressure", "gradient of laplacian of pressure", 1 );
+    PropertyHandle<dim>  term2( model, "gradient of laplacian of pressure",
+                                VECTOR, ELEMENT );
+    model.CopyGradientOfProperty_A_To_B( "nodal laplacian of pressure",
+                                         "gradient of laplacian of pressure" );
+    printRangeOfVariable( model, channel_region.c_str(),
+                          "gradient of laplacian of pressure" );
+    vtk_output.OutputDataToVTK( model, "grad-laplacian-pressure",
+                                "gradient of laplacian of pressure", 1 );
 
-    for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
-         // read parabolic function psi
-         (*nit)->Read( lapbc.Key(), sc );
-         // read gradient of laplacian
-         (*nit)->Read( term2.Key(), vc );
-         // add up the diagonal terms
-         vc*= sc;
+    {
+        ScalarVariable       sc;
+        VectorVariable<dim>  vc;
+        for ( auto& eit : gref.CellVector() ) {
+            eit->Read( lapbc.Key(), sc );   // psi at element centre
+            eit->Read( term2.Key(), vc );   // grad(Laplacian(p))
+            vc *= sc;
+            // term2 now holds psi * grad(Laplacian(p)) — overwrites intermediate gradient
+            eit->Store( term2.Key(), vc );
+        }
+    }
 
-         (*nit)->Store( term2.Key(), vc );
-      }
-
-    // forming the numerator of E
+    // --- Numerator: term1 + term2 ---
     term1 += term2;
 
-    // obtain the final result that is collected into term1
-    PropertyHandle<dim>  gradp( model, "fluid pressure gradient", VECTOR, ELEMENT );
-    PropertyHandle<dim>  E_vec( model, "Stokes Discrepancy vector", VECTOR, ELEMENT );
-    PropertyHandle<dim>  E_mag( model, "Stokes Discrepancy Measure", SCALAR, ELEMENT );
+    // --- Normalise by || grad p || to obtain scalar measure E ---
+    PropertyHandle<dim>  gradp(  model, "fluid pressure gradient",   VECTOR, ELEMENT );
+    PropertyHandle<dim>  E_vec(  model, "Stokes Discrepancy vector", VECTOR, ELEMENT );
+    PropertyHandle<dim>  E_mag(  model, "Stokes Discrepancy Measure",SCALAR, ELEMENT );
 
-    ScalarVariable  em;
-    for ( auto nit=gref.CellsBegin(); nit!=gref.CellsEnd(); nit++ ) {
-         // take norm of grad p
-         (*nit)->Read( gradp.Key(), vc );
-         sc = vc.Length();
-         // take norm of term 1
-         (*nit)->Read( term1.Key(), vc );
-         (*nit)->Store( E_vec.Key(), vc );
-         em = vc.Length() / sc();
-         (*nit)->Store( E_mag.Key(), em );
-      }
+    {
+        ScalarVariable       sc, em;
+        VectorVariable<dim>  vc;
+        for ( auto& eit : gref.CellVector() ) {
+            eit->Read( gradp.Key(), vc );
+            const double grad_p_length = vc.Length();
 
-    printRangeOfVariable( model, channel_region.c_str(), "Stokes Discrepancy Measure" );
-    vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-vector", "Stokes Discrepancy vector", 1 );
-    vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-measure", "Stokes Discrepancy Measure", 1 );
+            eit->Read( term1.Key(), vc );
+            eit->Store( E_vec.Key(), vc );
 
-    filesystem::current_path("../../example_inputs/");
+            // Guard against division by zero at stagnation points
+            if ( grad_p_length > numeric_limits<double>::epsilon() )
+                em = makeScalar( PLAIN, vc.Length() / grad_p_length );
+            else
+                em = makeScalar( PLAIN, 0. );
+
+            eit->Store( E_mag.Key(), em );
+        }
+    }
+
+    printRangeOfVariable( model, channel_region.c_str(),
+                          "Stokes Discrepancy Measure" );
+    vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-vector",
+                                "Stokes Discrepancy vector", 1 );
+    vtk_output.OutputDataToVTK( model, "Stokes-discrepancy-measure",
+                                "Stokes Discrepancy Measure", 1 );
+
+    // Restore working directory
+    error_code ec;
+    filesystem::current_path( "../../example_inputs/", ec );
+    if ( ec )
+        cerr << "\nStokesDiscrepancyMeasure_Example: could not restore "
+             << "working directory: " << ec.message() << "\n";
 
 } // Run()
 
 } // csmp
+

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef LINEAR_ELASTICITY_D_TEST_CASE_H
 #define LINEAR_ELASTICITY_D_TEST_CASE_H
 

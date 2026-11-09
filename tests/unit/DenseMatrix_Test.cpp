@@ -1,5 +1,9 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 // unit test
-// Created by : Siroos and Georg
+// Created by : Siroos Azizmohammadi and Georg Seidl
 // Date of Modification: 21.11.2010
 
 #include "DenseMatrix_Test.h"

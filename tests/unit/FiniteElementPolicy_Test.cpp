@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "FiniteElementPolicy_Test.h"
 #include "vsetMakers.h"
 #include "Model.h"

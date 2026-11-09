@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include"SneddonCrack_VVCase.h"
 #include "SplitBoundaryInterface_Test.h"
 #include "GlobalVerbose.h"

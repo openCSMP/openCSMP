@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "SplitBoundaryInterface_Test.h"
 #include "Region.h"
 #include "Boundary.h"
@@ -350,9 +354,7 @@ void SplitBoundaryInterface_Test::Test_ConversionOfNormalFault( const string& mo
        printRangeOfVariable( model, "element variable", true );
        printRangeOfVariable( model, "nodal variable", true );
     }
-#ifdef CSMP_WITH_PETSC_SOLVER
-      PetscInitializeNoArguments();
-#endif
+
   //                                                diffusivity      diffusing variable  source
   SteadyStateDiffusor<DIM> static_pressure( model, "element vector", "nodal variable", "element variable" );
   static_pressure.ComputeSteadyState( model.Region("Model"), false );
@@ -477,9 +479,6 @@ void SplitBoundaryInterface_Test::Test_ConversionOfNormalFault( const string& mo
   // ========================================================================
   // TODO: write computation with Dirichlet conditions on perimeter nodes and source term to inflate regions
 
-#ifdef CSMP_WITH_PETSC_SOLVER
-    PetscFinalize();
-#endif
 
 } // end Test_ConversionOfNormalFault
 

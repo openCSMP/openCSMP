@@ -583,7 +583,8 @@ void  ModelSubDomain<dim,CELL>::BuildPerimeterFaceVector( int64_t interior_cells
 
      // (re)setting the CELL face vector; note: size must already be correct else Contains(eptr) function used below will fail
      const int64_t n_elmts_with_perimeter_faces = static_cast<int64_t>(cell_vec_.size()) - interior_cells;
-     assert( n_elmts_with_perimeter_faces > 0 );
+     if ( n_elmts_with_perimeter_faces == 0 ) return;
+
      bd_face_vec_.clear();
      bd_face_vec_.resize( static_cast<size_t>(n_elmts_with_perimeter_faces) );
 

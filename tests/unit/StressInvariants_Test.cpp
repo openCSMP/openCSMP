@@ -1,7 +1,6 @@
-/*
- *  StressInvariants_Test.cpp
- *  csmp_core
- */
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #include "StressInvariants_Test.h"
 #include "StressInvariants.h"

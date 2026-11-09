@@ -407,7 +407,7 @@ class VData {
 
 // RELATED FUNCTIONS
 
-/// TODO: fails: converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
+/// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
 void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
 
 /// returns the 3D bounding box of the element

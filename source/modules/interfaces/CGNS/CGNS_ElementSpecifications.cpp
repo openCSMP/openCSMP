@@ -5,7 +5,7 @@
 #include "CGNS_ElementSpecifications.h"
 
 /* cgnslib.h file must be located in directory specified by -I during compile: */
-#include "cgnslib.h"
+#include <cgnslib.h>
 
 #if CGNS_VERSION < 3100
 # define cgsize_t int

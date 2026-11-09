@@ -1,5 +1,9 @@
-#ifndef SPLIT_BOUNDARY_INTERFACE_TEST_H
-#define SPLIT_BOUNDARY_INTERFACE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_SPLIT_BOUNDARY_INTERFACE_TEST_H
+#define CSMP_SPLIT_BOUNDARY_INTERFACE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"

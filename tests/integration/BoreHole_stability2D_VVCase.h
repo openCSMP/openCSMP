@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef BOREHOLE_STABILITY2D_VVCase_H
 #define BOREHOLE_STABILITY2D_VVCase_H
 

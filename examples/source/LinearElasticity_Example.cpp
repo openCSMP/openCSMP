@@ -13,6 +13,7 @@
 // File I/O and Initialization
 #include "TRIANGLE_Interface.h"
 #include "VTK_Interface.h"
+#include "VTU_Interface.h"
 #include "FiniteElementManager.h"
 #include "InputDataManager.h"
 #include "Standard_IO_Handler.h"
@@ -26,7 +27,7 @@
 #include "ConstantFactor.h"
 
 #include "PDE_Integrator.h"
-#include "SteadyStateDiffusor.h"
+#include "EigenSolver.h"
 
 // PDE Operators
 #include "NumIntegral_BT_D_B_dV.h"
@@ -74,10 +75,7 @@ void LinearElasticity_Example::Specifications()
    If you would like to specify fluid pressure in the fracture (as computed from the
    boundary conditions) you need to include it in the computations.
 
-   @attention 2-dimensional example but code with DIM=3 should work also for a 3-dimensional model
-
-   Use Tcl/Tk ELASTICITY_GROUP_viewer.tcl as VTK visualisation script. Open it and turn entries
-   on and off to visualise different properties.
+   @attention 2-dimensional example but with DIM=3 code also works for a 3-dimensional model (use StressesAndStrains.h)
 
    *****************************************************************************************
 
@@ -124,6 +122,9 @@ void LinearElasticity_Example::Run()
     //reads model from CSMP's native binary files, but creating (additional) storage based on supplied variable file
     Model<2U>  model(model_name, variable_file);
 #endif
+    model.EstablishBoxBoundariesFromOrientation();
+    model.RegionsOut();
+    model.BoundariesOut();
     printModelDimensions( model, true );
 
     // assigns the element area to a distributed variable called 'area'
@@ -141,12 +142,11 @@ void LinearElasticity_Example::Run()
   // 3. Material properties, groups etc. & initial & essential conditions
   // ---------------------------------------------------------------------------------------
     Standard_IO_Handler  stdio;
-    bool  restricted_to_rock      =  stdio.RecordLogicalChoice("Would you like to restrict computation to group 'rock'");
-    bool  with_plane_stress       =  stdio.RecordLogicalChoice("Would you like to model 'plane stress'");
-    bool  with_boundary_stresses  =  stdio.RecordLogicalChoice("Would you like to model 'boundary stresses'");
-    bool  with_body_forces        =  stdio.RecordLogicalChoice("Would you like to model 'body forces'");
-    bool  with_pore_pressure(false);
-    if ( !restricted_to_rock ) with_pore_pressure = stdio.RecordLogicalChoice("Would you like to model 'pore pressure'");
+    bool  restricted_to_rock     = stdio.RecordLogicalChoice("Would you like to restrict computation to region 'rock'");
+    bool  with_plane_stress      = stdio.RecordLogicalChoice("Would you like to model 'plane stress'");
+    bool  with_boundary_stresses = stdio.RecordLogicalChoice("Would you like to model 'boundary stresses'");
+    bool  with_body_forces       = stdio.RecordLogicalChoice("Would you like to model 'body forces'");
+    bool  with_pore_pressure     = stdio.RecordLogicalChoice("Would you like to model 'pore pressure'");
     bool  with_volume_strains(false);
     if ( with_pore_pressure ) with_volume_strains =  stdio.RecordLogicalChoice("Would you like to model 'volume strains'");
 
@@ -164,35 +164,27 @@ void LinearElasticity_Example::Run()
   // ---------------------------------------------------------------------------------------
   // 5. Computing fluid pressure
   // ---------------------------------------------------------------------------------------
-  // interrelation demontrating the use of STL unary functions
-    if ( with_pore_pressure ) {
-         const double fluid_viscosity(1.0e-03);
-         ConstantFactor<2U,divides>  conductivity( model.Database(),
-                                                  "conductivity", "permeability",
-                                                   fluid_viscosity );
-         model.Apply( conductivity );
-         // input variable values
-         printRangeOfVariable( model, "conductivity" );
-         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
-         // fluid pressure computation
-         SteadyStatePressure( model );
-         vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
-      }
-
+  if ( with_pore_pressure ) {
+      // interrelation demontrating the use of STL unary functions
+      const double fluid_viscosity(1.0e-03);
+      ConstantFactor<2U,divides>  conductivity( model.Database(),
+                                               "conductivity", "permeability",
+                                                fluid_viscosity );
+      model.Apply( conductivity );
+      // input variable values
+      printRangeOfVariable( model, "conductivity" );
+      vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 0 );
+      // fluid pressure computation
+      PorePressure( model );
+      vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
+    }
 
   // ---------------------------------------------------------------------------------------
   // 4. Defining and computing linear elastic response
   // ---------------------------------------------------------------------------------------
-#ifdef CSMP_WITH_SAMG_SOLVER
-    SAMG_Settings settings;
-    settings.Set_napproach(2); // this is important because it sorts rhs vector [x1, y1, x2, y2, ..., xn, yn]
-                               // which is needed for deformation simulations
-    SAMG_Solver  solver(&settings);
+    // CSMP_DEFAULT_LINEAR_SOLVER  solver;// use for larger problems
+    EigenSolver solver;
     PDE_Integrator<2U,Element>  deformation( solver );
-#else
-    CSMP_DEFAULT_LINEAR_SOLVER  solver;
-    PDE_Integrator<2U,Element>  deformation( solver );
-#endif
 
     PT_op<2U>                  bforces( model.Database(), "force", "displacement" );
     NumIntegral_BT_D_B_dV<2U>  stiffness( model.Database(), "Young's modulus", "Poisson's ratio", "displacement", "displacement");
@@ -267,41 +259,16 @@ void LinearElasticity_Example::Run()
   // ---------------------------------------------------------------------------------------
   // 8. output of deformed mesh etc.
   // ---------------------------------------------------------------------------------------
+    VTU_Interface<2> vtu_output( model );
+    //                              scalar           vector         tensor   tensor   scalar        scalar     scalar      vector   vector   scalar
+    list<string> result_properties{"fluid pressure","displacement","strain","stress","mean stress","stress-y","stress-xy","sigma1","sigma2","dilatation"};
+
     // output of the region 'rock' only
     if ( restricted_to_rock ) {
-      vtk_output.OutputDataToVTK( model, "rock", "displacement", "displacement", 1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "strain",       "strain",       1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "stress",       "stress",       1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "mean-stress",  "mean stress",  1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "dilatation",   "dilatation",   1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "sigma1_",      "sigma1",       1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "sigma2_",      "sigma2",       1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "strain1_",     "strain1",      1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "strain2_",     "strain2",      1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "stress-y",     "stress-y",     1, true );
-      vtk_output.OutputDataToVTK( model, "rock", "stress-xy",    "stress-xy",    1, true );
+         vtu_output.OutputDataToVTU( (string(model.Name()) + "_QFEM_results").c_str(), result_properties, model.Region( "rock" ), 0 );
       }
     // output of the entire model
-    else
-      {
-      vtk_output.OutputDataToVTK( model, "displacement", "displacement", 1, true );
-      vtk_output.OutputDataToVTK( model, "strain",       "strain",       1, true );
-      vtk_output.OutputDataToVTK( model, "stress",       "stress",       1, true );
-      vtk_output.OutputDataToVTK( model, "mean-stress",  "mean stress",  1, true );
-      vtk_output.OutputDataToVTK( model, "dilatation",   "dilatation",   1, true );
-      vtk_output.OutputDataToVTK( model, "sigma1_",      "sigma1",       1, true );
-      vtk_output.OutputDataToVTK( model, "sigma2_",      "sigma2",       1, true );
-      vtk_output.OutputDataToVTK( model, "strain1_",     "strain1",      1, true );
-      vtk_output.OutputDataToVTK( model, "strain2_",     "strain2",      1, true );
-      vtk_output.OutputDataToVTK( model, "stress-y",     "stress-y",     1, true );
-      vtk_output.OutputDataToVTK( model, "stress-xy",    "stress-xy",    1, true );
-
-      // fluid pressure and Darcy velocity from post-processing
-        if ( with_pore_pressure ) {
-           vtk_output.OutputDataToVTK( model, "fluid-pressure", "fluid pressure", 1 );
-           vtk_output.OutputDataToVTK( model, "velocity",       "velocity", 1 );
-        }
-      }
+    else vtu_output.OutputDataToVTU( (string(model.Name()) + "_QFEM_results").c_str(), result_properties, model.Region( "Model" ), 0 );
 
     cout <<"\nmain: That's it..."<< endl;
 
@@ -319,29 +286,30 @@ void LinearElasticity_Example::Run()
    method computes the pore pressure in the region of interest.
    Subsequently, the Darcy velocity is computed in a post-processing step.
 */
-void LinearElasticity_Example::SteadyStatePressure( Model<2U>& model )
+void LinearElasticity_Example::PorePressure( Model<2U>& model )
  {
    // ESTABLISHING OUTPUTSTREAM FROM BASECLASS
    //ostream &cout = *GetStream();
    
-   SteadyStateDiffusor<2U,Element>  pressure( model, "conductivity", "fluid pressure", "fluid volume source" );
-
-   VelocityAndVolumeFlux<2U>  postpro( model, "conductivity", "porosity", "fluid pressure" );
-
-   pressure.AddPostProcess( &postpro );
+   EigenSolver                     solver;
+   PDE_Integrator<2U,Element>      pore_pressure(solver);
+   NumIntegral_dNT_lhsop_dN_dV<2U> conductance( model.Database(), "conductivity", "fluid pressure", "fluid pressure" );
+   NumIntegral_NT_rhsop_N_dV<2U>   source( model.Database(), "fluid volume source", "fluid pressure" );
+   VelocityAndVolumeFlux<2U>       postpro( model, "conductivity", "porosity", "fluid pressure" );
+   pore_pressure.Add( &conductance );
+   pore_pressure.Add( &source );
+   pore_pressure.AddPostProcess( &postpro );
    
-#if defined CSMP_WITH_SAMG_SOLVER && defined SAMG_MULTIPLE_INSTANCES
-   pressure.GetSolverSettings().SetSolverInstance(2);
-#endif
-   pressure.ComputeSteadyState( model.Region("Model") );
+   pore_pressure.IntegrateOver( model.Region("Model") );
 
    double  fmin, fmax;
    model.MinMaxOf( "velocity", fmin, fmax );
-   cout <<"\nsteadyStatePressure: computed 'Darcy velocity' range (min/max, m s-1): "<< fmin <<", "<< fmax << endl;
+   cout <<"\nPorePressure: computed 'Darcy velocity' range (min/max, m s-1): "<< fmin <<", "<< fmax << endl;
    model.MinMaxOf( "fluid pressure", fmin, fmax );
-   cout <<"\nsteadyStatePressure: computed 'fluid pressure' range (min/max, Pa): "<< fmin <<", "<< fmax << endl;
+   cout <<"\nPorePressure: computed 'fluid pressure' range (min/max, Pa): "<< fmin <<", "<< fmax << endl;
 
-} // end SteadyStatePressure
+} // end PorePressure
+
 
 
 

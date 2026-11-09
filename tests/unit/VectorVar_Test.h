@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSMP_VECTOR_VARIABLE_TEST_H
 #define CSMP_VECTOR_VARIABLE_TEST_H
 

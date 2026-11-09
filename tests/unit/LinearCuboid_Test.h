@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 /** 
 @class LinearCuboid_Test
 @author Hani Akbari (Jan. 2017)
@@ -16,8 +20,8 @@ TestSumShapesAtBaryCenter(const Element<3U>& )
 4- _equalTest(a,b,tol) returns false if |a-b| > tol.
 
 */
-#ifndef LINEARCUBOID_TEST_H
-#define LINEARCUBOID_TEST_H
+#ifndef CSMP_LINEAR_CUBOID_TEST_H
+#define CSMP_LINEAR_CUBOID_TEST_H
 
 #include "Test.h"
 #include "LinearCuboid.h"

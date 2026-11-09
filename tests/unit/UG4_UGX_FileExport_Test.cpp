@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "UG4_UGX_FileExport_Test.h"
 #include "UG4_UGX_FileExport.h"
 #include "compareFloats.h"

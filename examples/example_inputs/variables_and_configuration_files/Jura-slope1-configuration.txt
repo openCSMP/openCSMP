@@ -1,4 +1,4 @@
-‘Jura-slope1-configuration.txt' - vertical well (diameter 1.5m, 5x5x1m box)
+‘Jura-slope1-configuration.txt' - use LinearElasticity_Example-variables.txt
 
 # ---------------------------------------------------------------
 # 1. global rock & fluid properties as well as initial conditions
@@ -41,33 +41,39 @@ density				2.7e+3
 # 2. Assign properties and variable values to model subdomains = regions
 # ----------------------------------------------------------------------
 #Shale
-AMALTHEA_CLAY	complete	permeability			5.0E-15
-AMALTHEA_CLAY	complete	porosity				0.1
+AMALTHEA_CLAY	complete	permeability			5.0E-18
+AMALTHEA_CLAY	complete	porosity			0.15
+AMALTHEA_CLAY	complete	storativity			5.275e-10
 AMALTHEA_CLAY	complete	Poissons ratio			0.3
 AMALTHEA_CLAY	complete	Youngs modulus			25.0e9
 AMALTHEA_CLAY	complete	dry rock density		2500.0
 #Clay Rich Sandstone
-IRON_SANDSTONE	complete	permeability			5.0E-14
-IRON_SANDSTONE	complete	porosity				0.25
+IRON_SANDSTONE	complete	permeability			1.0E-15
+IRON_SANDSTONE	complete	porosity			0.1
+IRON_SANDSTONE	complete	storativity			9.5e-11
 IRON_SANDSTONE	complete	Poissons ratio			0.25
 IRON_SANDSTONE	complete	Youngs modulus			15.0e9
 IRON_SANDSTONE	complete	dry rock density		2300.0
 #Quartz Sandstone
-RHAET_SANDSTONE	complete	permeability			5.0E-13
-RHAET_SANDSTONE	complete	porosity				0.25
+RHAET_SANDSTONE	complete	permeability			1.0E-14
+RHAET_SANDSTONE	complete	porosity			0.2
+RHAET_SANDSTONE	complete	storativity			1.9e-10
 RHAET_SANDSTONE	complete	Poissons ratio			0.26
 RHAET_SANDSTONE	complete	Youngs modulus			20.0e9
 RHAET_SANDSTONE	complete	dry rock density		2100.0
-REEF_DOLOMITE	complete	permeability			5.0E-13
-REEF_DOLOMITE	complete	porosity				0.25
+# dolomite
+REEF_DOLOMITE	complete	permeability			1.0E-13
+REEF_DOLOMITE	complete	porosity			0.05
+REEF_DOLOMITE	complete	storativity			3.65e-11
 REEF_DOLOMITE	complete	Poissons ratio			0.26
 REEF_DOLOMITE	complete	Youngs modulus			20.0e9
 REEF_DOLOMITE	complete	dry rock density		2100.0
 REEF_DOLOMITE	complete	fluid density			600.0
 REEF_DOLOMITE	complete	fluid viscosity			0.547E-3
 # sliding layer
-OPALINUS_CLAY	complete	permeability			1.0E-16
-OPALINUS_CLAY	complete	porosity				0.09
+OPALINUS_CLAY	complete	permeability			1.0E-18
+OPALINUS_CLAY	complete	porosity			0.15
+OPALINUS_CLAY	complete	storativity			1.0e-8
 OPALINUS_CLAY	complete	Poissons ratio			0.35
 OPALINUS_CLAY	complete	Youngs modulus			10.0e9
 OPALINUS_CLAY	complete	dry rock density		2200.0

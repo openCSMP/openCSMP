@@ -1,5 +1,8 @@
-// unit test
-// Created by : Siroos
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// Created by : Siroos Azizmohammadi
 // Date of Modification: 02.11.2010
 
 #include "CubicSpline_Test.h"

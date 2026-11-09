@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "FiniteElement_TestData.h"
 #include "PL_Utilities.h"
 #include "GlobalVerbose.h"
