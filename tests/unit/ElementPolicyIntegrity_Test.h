@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  ElementPolicyIntegrity_Test.h
 //  CSMP_GitHub_UnitTests

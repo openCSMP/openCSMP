@@ -1,5 +1,9 @@
-#ifndef VARIABLES_TEST_H
-#define VARIABLES_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_VARIABLES_TEST_H
+#define CSMP_VARIABLES_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -32,4 +36,4 @@ class Variables_Test : public Test {
 
   } // csmp
 
-#endif /* VARIABLES_TEST_H */
+#endif /* CSMP_VARIABLES_TEST_H */

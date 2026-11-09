@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 //
 //  ModelSubDomain_Test.cpp
 //  CSMP_GitHub_UnitTests
@@ -1070,7 +1074,7 @@ void ModelSubDomain_Test::Test_SubDomainDiagnostics()
             printPerimeterFaceVector( model_domain );
           }
       }
-*?
+*/
 
 
 /**

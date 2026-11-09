@@ -1,5 +1,9 @@
-#ifndef REGION_TEST_H
-#define REGION_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_REGION_TEST_H
+#define CSMP_REGION_TEST_H
 
 #include "Test.h"
 #include "Model.h"

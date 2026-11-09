@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "Integral_var_NT_rhsop_N_dV_Test.h"
 #include "TRIANGLE_Interface.h"
 

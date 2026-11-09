@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  GenericFiniteVolumeTransport_Test.cpp
 //  CSMP_GitHub_UnitTests

@@ -1,15 +1,19 @@
-#ifndef PARALLEL_TESTCASE_H
-#define PARALLEL_TESTCASE_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_PARALLEL_TESTCASE_H
+#define CSMP_PARALLEL_TESTCASE_H
 
 #include "Test.h"
 #include "Region.h"
 
-namespace csmp{
+namespace csmp {
 
   template<uint32_t> class Model;
   template<uint32_t> class TwoPhaseModel;
 
-// TODO: run! - not clear what this test does other than start transport simulation
+// TODO: deprecate? - not clear what this test does other than start a transport simulation
   class Parallel_TestCase : public Test
     {
     public:

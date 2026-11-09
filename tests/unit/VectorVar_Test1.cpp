@@ -1,9 +1,11 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include"VectorVar_Test1.h"
 #include"ScalarVariable.h"
 #include"VectorVariable.h"
-#include<cmath>
-#include<vector>
-#include<iostream>
+
 using std::log;
 using std::log10;
 using std::sqrt;

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef GENERIC_SINGLETON_TEST_H
 #define GENERIC_SINGLETON_TEST_H
 
@@ -25,6 +29,9 @@ class TestSingleton : public GenericSingleton<TestSingleton>
   public:
     int i;
 };
+
+void accessSingletonGloballyWithinFile();
+void accessSingletonGloballyExternalFile();
 
 } // csmp
 

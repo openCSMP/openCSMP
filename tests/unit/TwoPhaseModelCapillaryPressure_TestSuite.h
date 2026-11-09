@@ -1,5 +1,9 @@
-#ifndef TWOPHASEMODEL_TESTS_H
-#define TWOPHASEMODEL_TESTS_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_TWO_PHASE_MODEL_TESTS_WITH_PC_H
+#define CSMP_TWO_PHASE_MODEL_TESTS_WITH_PC_H
 
 #include "Test.h"
 #include "TestSuite.h"
@@ -347,4 +351,4 @@ void TwoPhaseModel_TestSuite::run()
 
 } // csmp
 
-#endif // TWOPHASEMODEL_TESTS_H
+#endif // TWO_PHASE_MODEL_TESTS_WITH_PC_H

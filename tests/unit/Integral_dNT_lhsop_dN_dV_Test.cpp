@@ -1,4 +1,7 @@
-// Integral_dNT_lhsop_dN_dV_Test.cpp
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "Integral_dNT_lhsop_dN_dV_Test.h"
 
 #include "Integral_dNT_op_dN_dV.h"

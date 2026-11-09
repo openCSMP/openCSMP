@@ -1,5 +1,9 @@
-#ifndef CUBICSPLINE_TEST_H
-#define CUBICSPLINE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CUBIC_SPLINE_TEST_H
+#define CUBIC_SPLINE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"

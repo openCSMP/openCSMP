@@ -1,4 +1,6 @@
-// PropertyHandle_MathTest.cpp
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #include "PropertyHandle_MathTest.h"
 #include "ANSYS_Model3D.h"

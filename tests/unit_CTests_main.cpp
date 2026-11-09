@@ -250,7 +250,7 @@ int main( int argc, char* argv[] )
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
 // TODO: put your new or refactored test here!
-// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
+refactored.addTest( new VSet_Test1() );
 
         // actually running the test
         refactored.run();
