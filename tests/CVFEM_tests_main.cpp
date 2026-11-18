@@ -20,6 +20,7 @@
 #include "CVFEM_2D_VVCase.h"
 #include "CVFEM_HydrostaticColumn_Test.h"
 #include "CVFEM_SquareCavityConvection_Test.h"
+#include "CVFEM_ConvectionOnset_Test.h"
 
 #include <stdexcept>
 #include <typeinfo>
@@ -61,6 +62,11 @@ const std::vector<std::string> ALL_TEST_FILES_2D = {
     "test-206a",
     "test-206b",
     "test-206c",
+    "test-207a",
+    "test-207b",
+    "test-207c",
+    "test-207d",
+    "test-207e",
 };
 
 
@@ -86,6 +92,11 @@ Test* makeAdditionalTest2D(const std::string& name, const std::string& benchmark
     if ( name == "test-206a" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 2.65 );
     if ( name == "test-206b" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 3.81 );
     if ( name == "test-206c" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 4.52 );
+    // growth or decay rate of the first convective mode vs linear stability theory (Horton-Rogers-Lapwood), facet-mean density
+    if ( name == "test-207a" || name == "test-207b" || name == "test-207c" || name == "test-207d" )
+        return new CVFEM_ConvectionOnset_Test( mesh, config, true );
+    // below onset, a finite (10 %) perturbation must also decay (energy stability), facet-mean density
+    if ( name == "test-207e" ) return new CVFEM_ConvectionOnset_Test( mesh, config, true, true );
     return nullptr;
 }
 
@@ -206,7 +217,7 @@ int main( int argc, char* argv[] )
     }
     if ( run2D )
     {
-        std::cerr << "\nEnter the tests to run, comma-separated (test-201a, test-201b, test-202a, test-202b, test-203a, test-203b, test-205a, test-205b, test-205c, test-205d, test-206a, test-206b, test-206c),"
+        std::cerr << "\nEnter the tests to run, comma-separated (test-201a, test-201b, test-202a, test-202b, test-203a, test-203b, test-205a, test-205b, test-205c, test-205d, test-206a, test-206b, test-206c, test-207a, test-207b, test-207c, test-207d, test-207e),"
                      "\n(tests from test-205 on always run to the end, independent of QUICK/EXTENDED),"
                      "\nor type 'all' to run every test in the selected suite(s): ";
 
