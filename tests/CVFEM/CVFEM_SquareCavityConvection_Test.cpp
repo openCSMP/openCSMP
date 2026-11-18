@@ -234,30 +234,43 @@ double CVFEM_SquareCavityConvection_Test::TopNusseltNumber() const
 }
 
 
-double CVFEM_SquareCavityConvection_Test::RayleighNumber() const
+double CVFEM_SquareCavityConvection_Test::RayleighNumber()
 {
+  // S. Scott, 2026-11-18: drho is the thermal density contrast at constant pressure (before: the top-to-base
+  // difference, which includes the hydrostatic compression of the water and does not drive flow)
+  constexpr double increment{0.1};   // [K]
+  const Index temperature_key(property_database_->StorageKey("temperature"));
   const Index density_key(property_database_->StorageKey("density liquid"));
   const Index viscosity_key(property_database_->StorageKey("viscosity liquid"));
   const Index heat_capacity_key(property_database_->StorageKey("fluid heat capacity"));
   const Index permeability_key(property_database_->StorageKey("permeability"));
   const Index conductivity_key(property_database_->StorageKey("thermal conductivity"));
   const Region<2U>& region(model_->Region("Model"));
-  double density_top{0.};
-  double density_base{0.};
-  double rows_top{0.};
-  double rows_base{0.};
+  std::vector<double> density_before;
   double viscosity{0.};
   double density{0.};
   double heat_capacity{0.};
   double nodes{0.};
   for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it) {
-    if (std::fabs((*node_it)->y() - y_top_) < 1.e-6) { density_top += (*node_it)->Read(density_key); rows_top += 1.; }
-    if (std::fabs((*node_it)->y() - y_base_) < 1.e-6) { density_base += (*node_it)->Read(density_key); rows_base += 1.; }
+    density_before.push_back((*node_it)->Read(density_key));
     viscosity += (*node_it)->Read(viscosity_key);
     density += (*node_it)->Read(density_key);
     heat_capacity += (*node_it)->Read(heat_capacity_key);
     nodes += 1.;
+    ScalarVariable temperature;
+    (*node_it)->Read(temperature_key, temperature);
+    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() + increment));
   }
+  cvfem_phx_->InitialFluidPropertiesFromPTX();
+  double density_derivative{0.};   // -d rho / d T at constant pressure, node mean [kg m-3 K-1]
+  std::size_t n{0U};
+  for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it, ++n) {
+    density_derivative += (density_before[n] - (*node_it)->Read(density_key)) / increment / nodes;
+    ScalarVariable temperature;
+    (*node_it)->Read(temperature_key, temperature);
+    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() - increment));
+  }
+  cvfem_phx_->InitialFluidPropertiesFromPTX();
   double permeability{0.};
   double conductivity{0.};
   double cells{0.};
@@ -267,8 +280,8 @@ double CVFEM_SquareCavityConvection_Test::RayleighNumber() const
     cells += 1.;
   }
   const double kappa{(conductivity / cells) / ((density / nodes) * (heat_capacity / nodes))};
-  return (density_top / rows_top - density_base / rows_base) * gravity_ * (y_top_ - y_base_) * (permeability / cells)
-         / ((viscosity / nodes) * kappa);
+  return density_derivative * (temperature_base_ - temperature_top_) * gravity_ * (y_top_ - y_base_)
+         * (permeability / cells) / ((viscosity / nodes) * kappa);
 }
 
 
@@ -287,6 +300,7 @@ void CVFEM_SquareCavityConvection_Test::run()
   cvfem_phx_->Adjust_CFL_Criterion(model_->Read(property_database_->StorageKey("cfl scaling")), true);
   cvfem_phx_->SetLargestTimeStep(largest_time_step);
   InitializeHydrostaticPressure();
+  const double rayleigh{RayleighNumber()};   // conductive initial state
   cvfem_phx_->PrepareTransientCalculations();
   cvfem_phx_->ChangeTimeStepTo(largest_time_step / 10.);
 
@@ -320,7 +334,6 @@ void CVFEM_SquareCavityConvection_Test::run()
       break;
   }
 
-  const double rayleigh{RayleighNumber()};
   const double nusselt_final{nusselt.empty() ? 0. : nusselt.back()};
   const double change{nusselt.size() > 5U ? std::fabs(nusselt.back() - nusselt[nusselt.size() - 6U]) / nusselt.back()
                                           : 1.};

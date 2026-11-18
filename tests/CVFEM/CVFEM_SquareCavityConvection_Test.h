@@ -35,8 +35,9 @@
  *  and is not Boussinesq, so the temperatures matter. They are chosen to stay close to the Boussinesq limit:
  *  140-150 C at 5 MPa, where the viscosity varies by +-3.6 % across the cell and the density nearly linearly
  *  (rho_top - rho_base = 9.07 kg m-3); at 10-20 C the viscosity would vary by ~30 %. The permeability of each case
- *  is set for the target Ra from IAPWS water at 145 C and 5 MPa and scaled by 1.056 so that the Ra realised by the
- *  model (whose density contrast includes the hydrostatic pressure difference) is the target; the test reports it.
+ *  is set for the target Ra from IAPWS water at 145 C and 5 MPa. In Ra, rho_top - rho_base is the THERMAL density
+ *  contrast at constant pressure, as in the Boussinesq problem: the hydrostatic compression of the water with depth
+ *  does not drive flow. The test computes it from the model's own equation of state and reports Ra.
  *  Rock heat capacity is small (100 J kg-1 K-1): steady Nu does not depend on it, and a small value shortens the
  *  transient. The test calls AddFluidContributionToHeatCapacity(true), as the CVFEM examples do; the equilibration
  *  (NaClH2OPropertiesVisitorPHX) credits the fluid's share of the conducted heat as well as the rock's.
@@ -92,8 +93,9 @@ class CVFEM_SquareCavityConvection_Test : public Test {
     double MaxDifference(const std::string& first, const std::string& second) const;
     /// Horizontally averaged Nusselt number at the top: second-order one-sided gradient over the top three rows.
     double TopNusseltNumber() const;
-    /// Rayleigh number (rho_top - rho_base) g H k / (mu kappa) from the model's current properties.
-    double RayleighNumber() const;
+    /// Rayleigh number drho g H k / (mu kappa) from the model's properties, drho the thermal density contrast at
+    /// constant pressure (temperature raised by 0.1 K and restored; the fluid properties are recomputed both times).
+    double RayleighNumber();
 
     std::string mesh_name_;
     std::string config_name_;

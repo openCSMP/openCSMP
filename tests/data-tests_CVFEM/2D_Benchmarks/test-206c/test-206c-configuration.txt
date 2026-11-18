@@ -5,14 +5,14 @@ SQUARE CAVITY THERMAL CONVECTION, Ra = 300 (CVFEM_SquareCavityConvection_Test; G
 # Geiger et al. solved the Boussinesq problem (linear rho(T), constant mu; no temperatures given). openCSMP uses real
 # water, so 140-150 C at 5 MPa is chosen to stay close to that limit (mu varies +-3.6 %); see CVFEM_SquareCavityConvection_Test.h.
 # Closed square 100 m x 100 m, base 150 C, top 140 C, pressure fixed at one top corner node by the test (closed top).
-# Permeability from Ra = (rho_top - rho_base) g H k / (mu kappa), kappa = lambda / (rho c_p)_water, with IAPWS water at
-# 145 C and 5 MPa (drho 9.07 kg m-3, mu 1.906e-4 Pa s, kappa 5.06e-7 m2 s-1), then scaled by 1.056 so that the Ra realised
-# by the model (whose drho includes the hydrostatic pressure difference, 8.56 kg m-3) is the target; the test reports it.
+# Permeability from Ra = drho g H k / (mu kappa), kappa = lambda / (rho c_p)_water, with IAPWS water at 145 C and 5 MPa:
+# drho = 9.07 kg m-3 is the THERMAL density contrast at constant pressure (the hydrostatic compression with depth does
+# not drive flow), mu 1.906e-4 Pa s, kappa 5.06e-7 m2 s-1. The test computes Ra from the model's own properties.
 fluid pressure			5.e6				# [Pa] at the anchor node; hydrostatic elsewhere
 temperature			145.				# [C] replaced by the conductive profile
-permeability			3.4286e-12			# [m2]
-vertical permeability		3.4286e-12			# [m2]
-horizontal permeability		3.4286e-12			# [m2]
+permeability			3.2518e-12			# [m2]
+vertical permeability		3.2518e-12			# [m2]
+horizontal permeability		3.2518e-12			# [m2]
 porosity			0.1				# [-]
 nodal porosity			0.1				# [-]
 salinity			0.				# [wt%] pure water
