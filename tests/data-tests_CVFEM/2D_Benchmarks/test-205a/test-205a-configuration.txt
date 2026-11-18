@@ -1,0 +1,42 @@
+HYDROSTATIC WATER COLUMN WITH A CONDUCTIVE TEMPERATURE GRADIENT (CVFEM_HydrostaticColumn_Test)
+
+# (block2) default property values
+# Exact solution: no flow. Rayleigh number k rho g alpha dT H (rho c)_w / (mu lambda) ~ 3, far below the onset of
+# convection (4 pi^2, Horton and Rogers 1945, Lapwood 1948). The test sets the linear conductive temperature
+# profile between the top and base values and the hydrostatic pressure before the first time step.
+fluid pressure			101325.				# [Pa] initial guess; replaced by the hydrostatic initialisation
+temperature			10.				# [C] replaced by the linear conductive profile
+permeability			1.e-15				# [m2]
+vertical permeability		1.e-15				# [m2]
+horizontal permeability		1.e-15				# [m2]
+porosity			0.1				# [-]
+nodal porosity			0.1				# [-]
+salinity			0.				# [wt%] pure water
+thermal conductivity		2.				# [W m-1 K-1]
+nodal heat capacity rock	1000.				# [J kg-1 K-1] passed to the CVFEM scheme by the test
+density rock			2700.				# [kg m-3]
+nodal density rock		2700.				# [kg m-3]
+lithostatic pressure		101325.				# [Pa]
+nodal compressibility rock	1.e-15				# [Pa-1]
+gravity flag			1.
+thickness			1.				# [m] 2D model
+no standard output		1
+cfl scaling			0.1				# pore-velocity CFL criterion
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+# top: fixed temperature and pressure; base: fixed temperature; side walls no-flow and insulated
+TOP	DIRICH	fluid pressure		101325.	101325.
+TOP	DIRICH	lithostatic pressure	101325.	101325.
+TOP	DIRICH	temperature		10.	10.
+BOTTOM	DIRICH	temperature		110.	110.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+duration	100.
+time increment	1.
+output time	100.

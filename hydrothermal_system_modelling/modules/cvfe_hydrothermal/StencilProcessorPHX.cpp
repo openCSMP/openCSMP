@@ -15,6 +15,7 @@ namespace csmp {
 /** custom destructor */
 template<uint32_t dim>
 StencilProcessorPHX<dim>::StencilProcessorPHX( )
+    : facet_mean_gravity_density_(false)
 {
     std::vector<double> g;
     g.resize(dim,0.0);
@@ -23,6 +24,14 @@ StencilProcessorPHX<dim>::StencilProcessorPHX( )
     VectorVariable<dim> gvv( g );
     gravity_ = gvv;
 } // end StencilProcessorPHX
+
+
+/** Facet-mean density in the gravity term (S. Scott, 2026-11-17), see UpwindControlVisitor::UseFacetMeanGravityDensity. */
+template<uint32_t dim>
+void StencilProcessorPHX<dim>::UseFacetMeanGravityDensity( bool on )
+{
+    facet_mean_gravity_density_ = on;
+}
 
 
 /** default destructor */
@@ -53,10 +62,19 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
         grav_ = param.FacetNormalProjection(i,gravity_);
         e.FV()->FacetEdgeNodes( i, inside_node_, outside_node_ );
 
+        // Gravity density: the facet mean of the two nodes when both hold the phase, exactly as
+        // UpwindControlVisitor::DetermineUpwindNodes chooses the donor, when UseFacetMeanGravityDensity(true)
+        // (S. Scott, 2026-11-17); the
+        // donor's own density otherwise. The carried property (rhs) stays the donor's.
+        e.N(inside_node_)->Read( rho_key, density_ );
+        const double rho_i{density_()};
+        e.N(outside_node_)->Read( rho_key, density_ );
+        const double rho_o{density_()};
+        const bool facet_mean{facet_mean_gravity_density_ && rho_i > 0. && rho_o > 0.};
+
         if ( upwind(inside_node_,outside_node_) == 1 )
         {
-            e.N(inside_node_)->Read( rho_key, density_ );
-            g_component_ = grav_ * density_() * perm_();
+            g_component_ = grav_ * ( facet_mean ? 0.5 * ( rho_i + rho_o ) : rho_i ) * perm_();
             vel_ =  param.FacetNormalVelocity(i) + g_component_;
 
             if ( vel_ < 0.0 ) vel_ = 0.0;
@@ -65,8 +83,7 @@ void StencilProcessorPHX<dim>::DetermineFluxOutWithGravity( const FV_Parameter& 
         }
         else if ( upwind(inside_node_,outside_node_) == 2 )
         {
-            e.N(outside_node_)->Read( rho_key, density_ );
-            g_component_ = grav_ * density_() * perm_();
+            g_component_ = grav_ * ( facet_mean ? 0.5 * ( rho_i + rho_o ) : rho_o ) * perm_();
             vel_ =  param.FacetNormalVelocity(i) + g_component_;
 
             if ( vel_ > 0.0 ) vel_ = 0.0;

@@ -1,0 +1,7 @@
+pure water single-phase convection
+Closed square heated from below, Ra = 300, facet-mean density in the gravity term
+Table II in Geiger et al., 2006 (Transport in Porous Media 63); Caltagirone 1975
+
+square 100 m x 100 m, base 150 degC, top 140 degC, 5 MPa, closed top
+steady Nusselt number at the top vs 4.52 (Caltagirone 1975), limit 5 %
+CVFEM_SquareCavityConvection_Test

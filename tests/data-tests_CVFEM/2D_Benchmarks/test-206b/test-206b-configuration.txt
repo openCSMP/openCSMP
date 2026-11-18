@@ -1,0 +1,44 @@
+SQUARE CAVITY THERMAL CONVECTION, Ra = 200 (CVFEM_SquareCavityConvection_Test; Geiger et al. 2006, Table II)
+
+# (block2) default property values
+# Benchmark of Geiger, Driesner, Heinrich & Matthai (2006), Transport in Porous Media 63, 435-461, sec. 3.2.2 / Table II.
+# Geiger et al. solved the Boussinesq problem (linear rho(T), constant mu; no temperatures given). openCSMP uses real
+# water, so 140-150 C at 5 MPa is chosen to stay close to that limit (mu varies +-3.6 %); see CVFEM_SquareCavityConvection_Test.h.
+# Closed square 100 m x 100 m, base 150 C, top 140 C, pressure fixed at one top corner node by the test (closed top).
+# Permeability from Ra = (rho_top - rho_base) g H k / (mu kappa), kappa = lambda / (rho c_p)_water, with IAPWS water at
+# 145 C and 5 MPa (drho 9.07 kg m-3, mu 1.906e-4 Pa s, kappa 5.06e-7 m2 s-1), then scaled by 1.056 so that the Ra realised
+# by the model (whose drho includes the hydrostatic pressure difference, 8.56 kg m-3) is the target; the test reports it.
+fluid pressure			5.e6				# [Pa] at the anchor node; hydrostatic elsewhere
+temperature			145.				# [C] replaced by the conductive profile
+permeability			2.2859e-12			# [m2]
+vertical permeability		2.2859e-12			# [m2]
+horizontal permeability		2.2859e-12			# [m2]
+porosity			0.1				# [-]
+nodal porosity			0.1				# [-]
+salinity			0.				# [wt%] pure water
+thermal conductivity		2.				# [W m-1 K-1]
+nodal heat capacity rock	100.				# [J kg-1 K-1] small to shorten the run; steady Nu does not depend on it
+density rock			2700.				# [kg m-3]
+nodal density rock		2700.				# [kg m-3]
+lithostatic pressure		5.e6				# [Pa]
+nodal compressibility rock	1.e-15				# [Pa-1]
+gravity flag			1.
+thickness			1.				# [m] 2D model
+no standard output		1
+cfl scaling			0.5				# pore-velocity CFL criterion
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+# fixed temperature at the top and base; all sides impermeable; side walls insulated
+TOP	DIRICH	temperature		140.	140.
+BOTTOM	DIRICH	temperature		150.	150.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+duration	100.
+time increment	1.
+output time	250.

@@ -54,6 +54,9 @@ class StencilProcessorPHX {
 public:
     StencilProcessorPHX( );
 
+    /// Facet-mean density in the gravity term (see UpwindControlVisitor::UseFacetMeanGravityDensity); default off.
+    void UseFacetMeanGravityDensity( bool on );
+
     void DetermineFluxOutWithGravity( const FV_Parameter& param,
                                      const Element<dim>& e,
                                      DenseMatrix<DM_MIN>& upwind, //matrix indicating pre-defined upwind nodes
@@ -109,6 +112,7 @@ public:
 private:
 
     VectorVariable<dim> gravity_;
+    bool                facet_mean_gravity_density_;   // see UseFacetMeanGravityDensity()
 
     size_t            eidx_;
     mutable uint32_t  inside_node_, outside_node_;

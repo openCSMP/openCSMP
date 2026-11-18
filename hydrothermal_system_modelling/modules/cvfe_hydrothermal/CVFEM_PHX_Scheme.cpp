@@ -1568,6 +1568,17 @@ void CVFEM_PHX_Scheme<dim>::
         add_fluid_contribution_to_heat_capacity);
 }
 
+// S. Scott, 2026-11-17: one setting for the donor choice and pressure-equation gravity term (UpwindControlVisitor,
+// read by CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV) and the transport fluxes of every phase (StencilProcessorPHX)
+template <uint32_t dim>
+void CVFEM_PHX_Scheme<dim>::UseFacetMeanGravityDensity(bool on)
+{
+    upwind_control.UseFacetMeanGravityDensity(on);
+    fv_transport_liquid.UseFacetMeanGravityDensity(on);
+    fv_transport_vapor.UseFacetMeanGravityDensity(on);
+    fv_transport_air.UseFacetMeanGravityDensity(on);
+}
+
 // BenoitLC add
 template <uint32_t dim>
 void CVFEM_PHX_Scheme<dim>::
