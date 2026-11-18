@@ -104,6 +104,12 @@ private:
     //!time variables
     double dt, max_time, vtu_dt;
     size_t timestep, output_counter;
+    //! S. Scott, 2026-11-18: tests 105a-c compare with the error-function solution of heat conduction from the heated
+    //! LEFT end instead of benchmark data, and always run to the end; 105b/c put the fluid in the conduction heat capacity
+    bool conduction_erfc_test_;
+    bool fluid_heat_capacity_;
+    //! largest deviation of the temperature from T_right + (T_left - T_right) erfc(x / (2 sqrt(kappa t))) [K]
+    double ConductionErfcDeviation() const;
 
     int CalculateMassConductivity();
     int CalculateMassGravityTerm();
