@@ -33,7 +33,10 @@ CVFEM_1D_VVCase::CVFEM_1D_VVCase(const char* config_file, const uint32_t test_ty
     : vars_name_("PhysicalVariables.txt"),
     config_file_name_(config_file),
     test_type(test_type),
-    builder()
+    builder(),
+    conduction_erfc_test_(std::string(config_file).find("test-105") != std::string::npos),
+    fluid_heat_capacity_(std::string(config_file).find("test-105b") != std::string::npos
+                         || std::string(config_file).find("test-105c") != std::string::npos)
 {
     std::cout << "configuration file: " << config_file_name_ << std::endl;
     // cin.get();
@@ -139,6 +142,12 @@ CVFEM_1D_VVCase::CVFEM_1D_VVCase(const char* config_file, const uint32_t test_ty
                                                                  solver_kind,       // well Newton Jacobian
                                                                  well_configs);
     CVFEM_PHX->SetLargestTimeStep(largest_time_step);
+
+    //! S. Scott, 2026-11-18: rock heat capacity from the configuration file (the scheme's Rock object otherwise uses its
+    //! default, 880 J kg-1 K-1, which is the value of tests 101-104); tests 105b/c also put the fluid in the conduction
+    //! heat capacity
+    CVFEM_PHX->SetRockHeatCapacity( model->Region("Model").NodeVector().front()->Read( pd_ref->StorageKey("nodal heat capacity rock") ) );
+    CVFEM_PHX->AddFluidContributionToHeatCapacity( fluid_heat_capacity_ );
 
     //! create new permeability visitor and assign permeability tensor
     permeability_visitor = new PermeabilityVisitor<dim>(*model);
@@ -274,6 +283,46 @@ void CVFEM_1D_VVCase::InitializeAllNaNsToZero()
 }
 
 
+/** S. Scott, 2026-11-18: largest deviation of the nodal temperature from the error-function solution for a suddenly
+    heated end, T(x, t) = T_right + (T_left - T_right) erfc( x / (2 sqrt(kappa t)) ) with x the distance from the LEFT end
+    and kappa = lambda / ((1 - phi) rho_r c_r + phi rho_w c_w) from the model's properties (Carslaw & Jaeger 1959). Valid
+    while the warming has not reached the RIGHT end (tests 105a-c stop when 2 sqrt(kappa t) is a fifth of the length). */
+double CVFEM_1D_VVCase::ConductionErfcDeviation() const
+{
+    const double model_time( ModelTime::Instance().modelTime );
+    const Index t_key( pd_ref->StorageKey("temperature") );
+    const Index phi_key( pd_ref->StorageKey("nodal porosity") );
+    const Index rho_r_key( pd_ref->StorageKey("nodal density rock") );
+    const Index cp_r_key( pd_ref->StorageKey("nodal heat capacity rock") );
+    const Index rho_w_key( pd_ref->StorageKey("density liquid") );
+    const Index cp_w_key( pd_ref->StorageKey("fluid heat capacity") );
+    const Index lambda_key( pd_ref->StorageKey("thermal conductivity") );
+    double t_left(0.), t_right(0.), x_left(0.), heat_capacity(0.), nodes(0.), conductivity(0.), cells(0.);
+    for ( auto it = model->Region("Model").NodesBegin(); it != model->Region("Model").NodesEnd(); ++it )
+    {
+        if ((*it)->AtBoundary() == CNR1) { t_left = (*it)->Read(t_key); x_left = (*it)->y(); }
+        if ((*it)->AtBoundary() == CNR2) t_right = (*it)->Read(t_key);
+        const double phi( (*it)->Read(phi_key) );
+        heat_capacity += (1. - phi) * (*it)->Read(rho_r_key) * (*it)->Read(cp_r_key)
+                         + phi * (*it)->Read(rho_w_key) * (*it)->Read(cp_w_key);
+        nodes += 1.;
+    }
+    for ( auto eit = model->Region("Model").CellsBegin(); eit != model->Region("Model").CellsEnd(); ++eit )
+    {
+        conductivity += (*eit)->Read(lambda_key);
+        cells += 1.;
+    }
+    const double kappa( (conductivity / cells) / (heat_capacity / nodes) );
+    double deviation(0.);
+    for ( auto it = model->Region("Model").NodesBegin(); it != model->Region("Model").NodesEnd(); ++it )
+    {
+        const double x( std::fabs((*it)->y() - x_left) );
+        const double exact( t_right + (t_left - t_right) * std::erfc( x / (2. * std::sqrt(kappa * model_time)) ) );
+        deviation = std::max( deviation, std::fabs((*it)->Read(t_key) - exact) );
+    }
+    return deviation;
+}
+
 void CVFEM_1D_VVCase::PrintProgressToScreen()
 {
     double& model_time  = ModelTime::Instance().modelTime;
@@ -343,6 +392,13 @@ void CVFEM_1D_VVCase::run()
 
     ///////////////////////////////////////////////////////
     //! setup time variables
+    //! S. Scott, 2026-11-18: prepare the transient calculation as CVFEM_2D_VVCase does (previous-step quantities), first
+    //! time step a tenth of the largest; only for tests 105a-c, so that tests 101-104 are unchanged
+    if (conduction_erfc_test_)
+    {
+        CVFEM_PHX->PrepareTransientCalculations();
+        CVFEM_PHX->ChangeTimeStepTo(run_settings.TimeIncrement() / 10.);
+    }
     vtu_dt = run_settings.NearestOutputTime(0.0);
     max_time = run_settings.Duration();
     timestep = 0;
@@ -415,7 +471,7 @@ void CVFEM_1D_VVCase::run()
 
 
             // Exit while loop in case only initialisation and first iteration are tested
-            if (test_type==0)
+            if (test_type==0 && !conduction_erfc_test_)   // S. Scott, 2026-11-18: tests 105a-c always run to the end
                 break;
         }
 
@@ -424,6 +480,23 @@ void CVFEM_1D_VVCase::run()
     //! save final model state
     // model->OutputToBinaryFile(( string(config_file_name_) + "_Final_Properties" ).c_str());
     std::cout << "Finished Running CVFEM_1D_VVCase " << std::endl;
+
+    //! S. Scott, 2026-11-18: tests 105a-c, heat conduction from the heated LEFT end against the error-function solution
+    if (conduction_erfc_test_)
+    {
+        double t_left(0.), t_right(0.);
+        const Index t_key( pd_ref->StorageKey("temperature") );
+        for ( auto it = model->Region("Model").NodesBegin(); it != model->Region("Model").NodesEnd(); ++it )
+        {
+            if ((*it)->AtBoundary() == CNR1) t_left  = (*it)->Read(t_key);
+            if ((*it)->AtBoundary() == CNR2) t_right = (*it)->Read(t_key);
+        }
+        const double deviation( ConductionErfcDeviation() );
+        const double limit( 0.01 * std::fabs(t_left - t_right) );   // 1 % of the temperature step
+        std::cerr << "\nCVFEM_1D_VVCase::run: " << config_file_name_ << ": largest deviation from the error-function solution "
+                  << deviation << " K (limit " << limit << " K) after " << model_time / year << " years" << std::endl;
+        do_test( deviation < limit, "Heat conduction from the heated end matches the error-function solution", __FILE__, __LINE__ );
+    }
 
     //! Compare final state with benchmark simulations
     /*
