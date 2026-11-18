@@ -1,4 +1,8 @@
-// NumIntegral_dNT_op_dN_NT_v_dN_dV_Test.cpp
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// tests NumIntegral_dNT_op_dN_NT_v_dN_dV
 #include "NumIntegral_dNT_op_dN_NT_v_dN_dV_Test.h"
 #include "TRIANGLE_Interface.h"
 #include "Exception.h"

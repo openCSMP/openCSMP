@@ -1,5 +1,9 @@
-#ifndef LOCAL_VARIABLE_STORAGE_TEST_H
-#define LOCAL_VARIABLE_STORAGE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_LOCAL_VARIABLE_STORAGE_TEST_H
+#define CSMP_LOCAL_VARIABLE_STORAGE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"

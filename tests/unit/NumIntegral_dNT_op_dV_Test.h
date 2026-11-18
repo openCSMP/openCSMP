@@ -1,4 +1,8 @@
-// NumIntegral_dNT_op_dV_Test.h
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// tests NumIntegral_dNT_op_dV
 #ifndef CSMP_NUMINTEGRAL_DNT_OP_DV_TEST
 #define CSMP_NUMINTEGRAL_DNT_OP_DV_TEST
 

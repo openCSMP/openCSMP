@@ -82,7 +82,7 @@ template<uint32_t dim>
 void CVFEM_geothermal_cooling_magma_chamber_example<dim>::Specifications() {
     SetTitle("Magmatic heat-driven hydrothermal convection");
     SetDifficulty(0);
-    SetCategory("CVFEM Examples");
+    SetCategory("Hydrothermal Systems (CVFEM)");
     AddAuthor("JK");
     AddDescription("source file in: /examples/example_inputs/CVFEM_examples");
 }

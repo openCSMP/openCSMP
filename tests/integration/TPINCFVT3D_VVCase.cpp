@@ -1,4 +1,9 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "TPINCFVT3D_VVCase.h"
+
 #include "ANSYS_Model3D.h"
 #include "Boundary.h"
 #include "LinearSolver.h"
@@ -13,9 +18,7 @@
 #include "FourarLenormand.h"
 #include "LinearTwoPhaseModel.h"
 #include "VTU_Interface.h"
-#include "Timer.hpp"
-
-#include <fstream>
+#include "Timer.h"
 
 
 using namespace std;

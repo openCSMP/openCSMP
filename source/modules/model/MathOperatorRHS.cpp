@@ -26,8 +26,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -51,8 +50,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -78,8 +76,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(false),
       application_cycles_(1),
       application_cycle_(0),
-      time_multiply_(false),
-      time_divide_(false)
+      time_multiply_(false)
   {
   }
 
@@ -103,8 +100,7 @@ template<uint32_t dim, template<uint32_t> class CELL>
       lump_matrices_(mo.lump_matrices_),
       application_cycles_(mo.application_cycles_),
       application_cycle_(mo.application_cycle_),
-      time_multiply_(mo.time_multiply_),
-      time_divide_(mo.time_divide_)
+      time_multiply_(mo.time_multiply_)
   {
   }
 
@@ -130,7 +126,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
       application_cycles_ = mo.application_cycles_;
       application_cycle_ = mo.application_cycle_;
       time_multiply_ = mo.time_multiply_;
-      time_divide_ = mo.time_divide_;
       factor_ = mo.factor_;
     }
     return *this;
@@ -503,14 +498,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
 
 
 template<uint32_t dim, template<uint32_t> class CELL>
-  void MathOperatorRHS<dim,CELL>::DivideByTimeIncrement(bool divide) noexcept
-  {
-    time_divide_ = divide;
-  }
-
-
-
-template<uint32_t dim, template<uint32_t> class CELL>
   bool MathOperatorRHS<dim,CELL>::Add() const noexcept
   {
     return add_accumulate_;
@@ -592,12 +579,6 @@ template<uint32_t dim, template<uint32_t> class CELL>
   }
 
 
-
-template<uint32_t dim, template<uint32_t> class CELL>
-  bool MathOperatorRHS<dim,CELL>::DivideByTimeIncrement() const noexcept
-  {
-    return time_divide_;
-  }
 
 
   /// ===================================  Main Computational Procedure Functions ========================================================================

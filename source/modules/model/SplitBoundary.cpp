@@ -163,6 +163,10 @@ SplitBoundary<dim>::SplitBoundary( std::string splitboundaryname,
   // ---------------------------------------------------------------------------------------------------
   this->IdentifyPerimeter();
   this->cell_vec_.shrink_to_fit();
+  
+  // 4. building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
+  // ------------------------------------------------------------------------------------------------------
+  this->BuildPerimeterFaceVector( this->InteriorCells() );
 
   // initialise TopoType information
   this->UpdateTopoTypeNodeFlags();
@@ -399,7 +403,7 @@ vector<NodeManifold<dim>*> SplitBoundary<dim>::NodeManifolds() const
     
     // creating the node index vector
     for ( auto& it : this->cell_vec_ )
-      for ( auto i{0U}; i<it->FE()->Nodes(); i++ )
+      for ( uint32_t i{0U}; i<it->FE()->Nodes(); i++ )
         if ( it->N(i)->IsManifold() )
           manifold_vec.push_back( it->N(i)->Manifold() );
     
@@ -619,9 +623,13 @@ size_t SplitBoundary<dim>::AccumulateByNumber( MeshManager<dim>& mesh,
        this->cell_vec_.push_back( ifptr );
     }
     
-  // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
+   // NB: a SplitBoundary only has a cell vector, but not a node-pointer vector
   this->IdentifyPerimeter();
+  this->cell_vec_.shrink_to_fit();
   
+  // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
+  this->BuildPerimeterFaceVector( this->InteriorCells() );
+
   return this->cell_vec_.size();
 
 } // end AccumulateByNumber
@@ -671,6 +679,10 @@ bool SplitBoundary<dim>::CreateFrom( const typename vector<InterFace<dim>*>::con
     // distinguishing interior from perimeter cells
   this->IdentifyPerimeter();
   this->cell_vec_.shrink_to_fit();
+
+  // building the vector of vectors of those faces of the interfaces that lie on the subdomain perimeter
+  // ---------------------------------------------------------------------------------------------------
+  this->BuildPerimeterFaceVector( static_cast<long>( this->InteriorCells()) );
 
   return true;
 }

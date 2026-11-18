@@ -1,13 +1,14 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  IsoparametricQuadraticTetrahedron_Test.h
-//  
 //
 //  Created by Stephan Matthai on 7/14/14.
 //
-//
 
-#ifndef IsoparametricQuadraticTetrahedron_Test_h
-#define IsoparametricQuadraticTetrahedron_Test_h
+#ifndef CSMP_QUADRATIC_TETRAHEDRON_TEST_H
+#define CSMP_QUADRATIC_TETRAHEDRON_TEST_H
 
 #include "Test.h"
 #include "FiniteElement.h"
@@ -54,4 +55,4 @@ class IsoparametricQuadraticTetrahedron_Test : public Test {
 } // end csmp
 
 
-#endif /* defined(IsoparametricQuadraticTetrahedron_Test_h) */
+#endif /* defined(CSMP_QUADRATIC_TETRAHEDRON_TEST_H) */

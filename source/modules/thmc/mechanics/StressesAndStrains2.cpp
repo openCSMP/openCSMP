@@ -32,14 +32,12 @@ name 				type 		placement
 strain				tensor		cpoint
 'strain1' 			vector		cpoint	(principal strain axes)
 'strain2'			vector		cpoint
-('strain3')			vector		cpoint
 'dilatation'		scalar		cpoint
 'principal strain' 	vector		cpoint	(magnitudes of elongation in the principal directions)
 'stress'			tensor		cpoint
 'sigma1'  			vector		cpoint	(principal stress axes)
 'sigma2'			vector		cpoint
-('sigma3')			vector		cpoint
-'mean stress'  		scalar 		cpoint	(= (sigma1 + sigma2 +sigma3 / 3)
+'mean stress'  		scalar 		cpoint	(= (sigma1 + sigma2 / 2)
 'principal stress'  vector		cpoint	(magnitudes of the principal stresses)
  @endcode
 
@@ -322,9 +320,9 @@ void StressesAndStrains<2U>::GetOperands( const Element<2U>& e )
          // its displacements
          DISPL_.Resize( e.Nodes()*2U, 1 );
          k = 0; avg = 0.;
-         for ( auto i{0U}; i<e.Nodes(); i++ ) {
-              for ( int j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
-              avg         += NVAR[i];
+         for ( uint32_t i{0U}; i<e.Nodes(); i++ ) {
+              for ( uint32_t j=0; j<2U; j++ ) DISPL_(k++,0) = NVAR[i](j);
+              avg += NVAR[i];
            }
          avg /= static_cast<double>(e.Nodes());
 
@@ -521,11 +519,11 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
  {
     // if a single stage computation is desired, excluding extrapolations to the nodes
     if ( stress_key_.place == ELEMENT_INTEGRATION_POINT )
-      for ( auto i{0U}; i<e.IntegrationPoints(); i++ )
+      for ( uint32_t i{0U}; i<e.IntegrationPoints(); i++ )
         {
             // 1. assigning the strain & stress values
             // ---------------------------------------
-            convertTo( IPSTRAIN_, i, ts_ );
+            convertStrainTo( IPSTRAIN_, i, ts_ );
             e.Store( i, strain_key_, ts_ ); // O.K.
             convertTo( IPSTRESS_, i, ts_ );
             e.Store( i, stress_key_, ts_ ); // O.K.
@@ -537,7 +535,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  // principal stresses (normalises only the Eigenvectors)
                  // ------------------
                  const bool bnormalise(true);
-                 ts_.Eigen( evals_, evecs_, bnormalise );
+                 ts_.EigenSymmetric( evals_, evecs_, bnormalise );
                  
                  e.Store( i, sigma1_key_, evecs_.Row(0) );
                  e.Store( i, sigma2_key_, evecs_.Row(1) );
@@ -546,12 +544,24 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  e.Store( i, pstress_key_, evals_ );
 
                  // mean stress = arithmetic average of stress Eigenvalues
-                 e.Store( i, means_key_, ScalarVariable(PLAIN,valueAverage(evals_)) );
-                 
+                 double sigma1 = evals_[0];
+                 double sigma2 = evals_[1];
+                 double sigma3 = 0.0;
+
+                 if ( plane_strain_ ) {
+                    // need Poisson's ratio at this point — retrieve from pratio_
+                    double nu = (MathOperatorLHS<2U>::BasicOperandPlacement() == ELEMENT)
+                                ? e.Read( MathOperatorLHS<2U>::BasicOperandKey() )
+                                : e.Read( i, MathOperatorLHS<2U>::BasicOperandKey() );
+                    sigma3 = nu * (sigma1 + sigma2);
+                 }
+                 double mean_stress = (sigma1 + sigma2 + sigma3) / 3.0;
+                 e.Store( i, means_key_, ScalarVariable(PLAIN, mean_stress) );
+
                  // principal strains
                  // -----------------
-                 convertTo( IPSTRAIN_, i, ts_ );
-                 ts_.Eigen( evals_, evecs_, bnormalise );
+                 convertStrainTo( IPSTRAIN_, i, ts_ );
+                 ts_.EigenSymmetric( evals_, evecs_, bnormalise );
                  e.Store( i, strain1_key_, evecs_.Row(0) );
                  e.Store( i, strain2_key_, evecs_.Row(1) ); // O.K.
                  
@@ -560,7 +570,22 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                  e.Store( i, pstrain_key_, evals_ ); // O.K.
                                     
                  // dilatation = sum of absolute principal strains i.e. Eigenvalues * -1 (since compression is positive)
-                 e.Store( i, dilat_key_, ScalarVariable(PLAIN, -(evals_[0]+evals_[1]) ) );
+                 double eps1 = evals_[0];
+                 double eps2 = evals_[1];
+                 double eps3 = 0.0;
+
+                 if ( !plane_strain_ ) {
+                      // plane stress — out-of-plane strain from Poisson contraction
+                      double nu = (MathOperatorLHS<2U>::BasicOperandPlacement() == ELEMENT)
+                                  ? e.Read( MathOperatorLHS<2U>::BasicOperandKey() )
+                                  : e.Read( i, MathOperatorLHS<2U>::BasicOperandKey() );
+                      double E  = (MathOperatorLHS<2U>::MaterialOperandPlacement() == ELEMENT)
+                                  ? e.Read( MathOperatorLHS<2U>::MaterialOperandKey() )
+                                  : e.Read( i, MathOperatorLHS<2U>::MaterialOperandKey() );
+                      // sigma components needed here
+                      eps3 = (nu / E) * (sigma1 + sigma2 ); // from stress evals
+                 }
+                 e.Store( i, dilat_key_, ScalarVariable(PLAIN, -(eps1 + eps2 + eps3)) );
              }
          }
 
@@ -574,7 +599,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
              {
                 // 1. assigning the strain & stress values
                 // ---------------------------------------
-                convertColumnTo( STRAIN_, i, ts_ );
+                convertStrainColumnTo( STRAIN_, i, ts_ );
                 e.N(i)->Store( strain_key_, ts_ );
                 convertColumnTo( STRESS_, i, ts_ );
                 e.N(i)->Store( stress_key_, ts_ );
@@ -585,7 +610,7 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                   {
                      // principal stresses
                      // ------------------
-                     ts_.Eigen( evals_, evecs_, true );
+                     ts_.EigenSymmetric( evals_, evecs_, true );
                     
                      e.N(i)->Store( sigma1_key_, evecs_.Row(0) );
                      e.N(i)->Store( sigma2_key_, evecs_.Row(1) );
@@ -594,13 +619,20 @@ void StressesAndStrains<2U>::WriteOperands( Element<2U>& e )
                      e.N(i)->Store( pstress_key_, evals_ );
 
                      // mean stress = arithmetic average of stress Eigenvalues
-                     e.N(i)->Store( means_key_, ScalarVariable(PLAIN,valueAverage(evals_)) );
+                     double s1 = evals_[0];
+                     double s2 = evals_[1];
+                     double nu = (MathOperatorLHS<2U>::BasicOperandPlacement() == ELEMENT)
+                                 ? e.Read(MathOperatorLHS<2U>::BasicOperandKey())
+                                 : e.N(i)->Read(MathOperatorLHS<2U>::BasicOperandKey() );  // i is node index here — needs care
+                     double s3 = plane_strain_ ? nu * (s1 + s2) : 0.;
+                     double mean_stress = (s1 + s2 + s3) / 3.0;
+                     e.N(i)->Store( means_key_, makeScalar(PLAIN, mean_stress) );
 
                      // principal strains
                      // -----------------
                      // getting the strain back
-                     convertColumnTo( STRAIN_, i, ts_ );
-                     ts_.Eigen( evals_, evecs_, true );
+                     convertStrainColumnTo( STRAIN_, i, ts_ );
+                     ts_.EigenSymmetric( evals_, evecs_, true );
                     
                      e.N(i)->Store( strain1_key_, evecs_.Row(0) );
                      e.N(i)->Store( strain2_key_, evecs_.Row(1) ); // O.K.

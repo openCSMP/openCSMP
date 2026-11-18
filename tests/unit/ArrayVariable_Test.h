@@ -1,4 +1,6 @@
-// ArrayVariable_Test.h
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef ARRAY_VARIABLE_TEST_H
 #define ARRAY_VARIABLE_TEST_H

@@ -40,7 +40,7 @@ void PolicyBased_Example::Specifications()
   {
     SetTitle( "Policy-based class design" );
     SetDifficulty( 2 );
-    SetCategory( "C++" );
+    SetCategory( "Programming in C++" );
     AddAuthor( "P. Lang" );
     AddDescription( "source in: PolicyBased_Example.cpp" );
     AddDescription( "brief overview of the concept" );

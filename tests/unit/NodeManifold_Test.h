@@ -1,5 +1,9 @@
-#ifndef NODE_MANIFOLD_TEST_H
-#define NODE_MANIFOLD_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_NODE_MANIFOLD_TEST_H
+#define CSMP_NODE_MANIFOLD_TEST_H
 
 #include "Test.h"
 
@@ -18,4 +22,4 @@ class NodeManifold_Test : public Test {
 
 } // csmp
 
-#endif // NODE_MANIFOLD_TEST_H
+#endif // CSMP_NODE_MANIFOLD_TEST_H

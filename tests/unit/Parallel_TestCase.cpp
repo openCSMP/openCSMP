@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "Parallel_TestCase.h"
 #include "ANSYS_Model3D.h"
 #include "VTU_Interface.h"
@@ -180,14 +184,14 @@ namespace csmp
 
       csmp::Region<3>&  mref( model.Region( "Model" ) );
 
-      const vector<Element<3U>*>::const_iterator elementsEnd = mref.CellsEnd();
-      for ( vector<Element<3U>*>::const_iterator it = mref.CellsBegin(); it != elementsEnd; ++it )
+      const auto elementsEnd = mref.CellsEnd();
+      for ( auto it = mref.CellsBegin(); it != elementsEnd; ++it )
         {
           // computing the total velocity: vt = -k (lt grad p )
           const double mob_t = (*it)->Read( totalMobilityKey );
           velo = 0.;
           (*it)->dN_AtBaryCenter( DERIV, 1U );
-          for ( auto i = 0; i < (*it)->Nodes(); ++i )
+          for ( uint32_t i = 0; i < (*it)->Nodes(); ++i )
             {
               double pf = (*it)->N(i)->Read( fluidPresssureKey );
               velo(0)  += pf  * -DERIV(0,i) * mob_t;

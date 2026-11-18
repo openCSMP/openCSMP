@@ -1,5 +1,9 @@
-#ifndef Matrix_Test_H
-#define Matrix_Test_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_MATRIX_TEST_H
+#define CSMP_MATRIX_TEST_H
 
 #include "Test.h"
 #include "Matrix.h"

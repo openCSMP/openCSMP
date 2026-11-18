@@ -1,5 +1,9 @@
-#ifndef RELATIVE_PERMEABILITY_MODEL_TEST_H
-#define RELATIVE_PERMEABILITY_MODEL_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_RELATIVE_PERMEABILITY_MODEL_TEST_H
+#define CSMP_RELATIVE_PERMEABILITY_MODEL_TEST_H
 
 #include "Test.h"
 #include "TwoPhaseModel.h"

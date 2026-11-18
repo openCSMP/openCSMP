@@ -275,7 +275,7 @@ void LineElementMesher<dim>::UniformMesh( VSet<dim>& vset,
    //1.1 VSet - assigning point x-coordinates
    for ( size_t i{0UL}; i<n_vertices; i++ ) {
        // X-coordinate is assigned
-       vset.P( 0U, i, dx * i );
+       vset.P( 0U, i, dx * static_cast<double>(i) );
        // other coordinates are set to zero
        for( uint32_t dimension=1U; dimension<dim; dimension++ )
            vset.P( dimension, i, 0. );
@@ -338,7 +338,7 @@ void LineElementMesher<dim>
                }
              const size_t elements( element_length.size() );
              delta_x /= static_cast<double>( elements );
-             for( auto i = 0; i<elements; i++ )
+             for( size_t i = 0; i<elements; i++ )
                 element_length[ i ] += delta_x;
              break;
           }
@@ -376,8 +376,7 @@ void LineElementMesher<dim>
     //1.1 VSet - assigning point x-coordinates
     size_t  n(0U);
     x = 0.;
-    for ( vector<double>::const_iterator
-          it=element_length.begin(); it!=element_length.end(); it++ )
+    for ( auto it=element_length.begin(); it!=element_length.end(); it++ )
       {
          vset.P( 0U, n, x );
          for( uint32_t dimension=1U; dimension<dim; dimension++ )

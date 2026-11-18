@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  JaggedArray3D_Comparison_Test.cpp
 //  Open CSMP++

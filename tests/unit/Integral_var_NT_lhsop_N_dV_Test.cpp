@@ -1,4 +1,8 @@
-// Integral_var_NT_lhsop_N_dV_Test.cpp
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// tests: Integral_var_NT_lhsop_N_dV_Test.cpp
 #include "Integral_var_NT_lhsop_N_dV_Test.h"
 #include "Integral_var_NT_lhsop_N_dV.h"
 #include "TRIANGLE_Interface.h"

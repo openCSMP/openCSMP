@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "MathOperatorRHS_Test.h"
 #include "NumIntegral_NT_rhsop_N_dV.h"
 #include "NumIntegral_SetRHS_to_One.h"

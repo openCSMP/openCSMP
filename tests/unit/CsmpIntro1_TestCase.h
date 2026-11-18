@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSMP_INTRO_1_TEST_CASE_H
 #define CSMP_INTRO_1_TEST_CASE_H
 

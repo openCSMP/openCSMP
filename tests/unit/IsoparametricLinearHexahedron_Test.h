@@ -1,11 +1,14 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  IsoparametricLinearHexahedron_Test.h
 //
 //  Created by Hossein Agheshlui on 30/09/2015.
 //
 
-#ifndef CSMP_ISOPARAMETRICLINEARHEXAHEDRON_TEST_H
-#define CSMP_ISOPARAMETRICLINEARHEXAHEDRON_TEST_H
+#ifndef CSMP_ISOPARAMETRIC_LINEAR_HEXAHEDRON_TEST_H
+#define CSMP_ISOPARAMETRIC_LINEAR_HEXAHEDRON_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -42,4 +45,4 @@ class IsoparametricLinearHexahedron_Test : public Test {
 
 } // end csmp
 
-#endif /* defined(CSMP_ISOPARAMETRICLINEARHEXAHEDRON_TEST_H) */
+#endif /* defined(CSMP_ISOPARAMETRIC_LINEAR_HEXAHEDRON_TEST_H) */

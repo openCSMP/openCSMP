@@ -1,5 +1,9 @@
-#ifndef NODE_TEST_H
-#define NODE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_NODE_TEST_H
+#define CSMP_NODE_TEST_H
 
 #include "Test.h"
 
@@ -13,4 +17,4 @@ public:
 
 } // csmp
 
-#endif // NODE_TEST_H
+#endif // CSMP_NODE_TEST_H

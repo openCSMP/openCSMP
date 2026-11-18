@@ -1,5 +1,9 @@
-#ifndef PROPERTY_DATABASE_TEST_H
-#define PROPERTY_DATABASE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_PROPERTY_DATABASE_TEST_H
+#define CSMP_PROPERTY_DATABASE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -40,4 +44,4 @@ namespace csmp
     };
 }
 
-#endif // PROPERTYDATABASE_TEST_H
+#endif // CSMP_PROPERTY_DATABASE_TEST_H

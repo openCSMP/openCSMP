@@ -1,6 +1,10 @@
-// NumIntegral_NT_rhsop_N_dV_Test.h
-#ifndef CSMP_NUMINTEGRAL_NT_RHSOP_N_DV_TEST
-#define CSMP_NUMINTEGRAL_NT_RHSOP_N_DV_TEST
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// tests NumIntegral_NT_rhsop_N_dV
+#ifndef CSMP_NUMINTEGRAL_NT_RHSOP_N_DV_TEST_H
+#define CSMP_NUMINTEGRAL_NT_RHSOP_N_DV_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"

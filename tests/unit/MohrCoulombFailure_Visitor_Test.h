@@ -1,7 +1,6 @@
-/*
- *  MohrCoulombFailure_Visitor_Test.h
- *  csmp_core
- */
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef CSMP_MOHR_COULOMB_FAILURE_VISITOR_TEST_H
 #define CSMP_MOHR_COULOMB_FAILURE_VISITOR_TEST_H

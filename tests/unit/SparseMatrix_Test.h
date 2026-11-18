@@ -1,5 +1,9 @@
-#ifndef SPARSE_MATRIX_TEST_H
-#define SPARSE_MATRIX_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_SPARSE_MATRIX_TEST_H
+#define CSMP_SPARSE_MATRIX_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"

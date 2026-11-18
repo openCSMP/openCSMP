@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef ANSYS_SPLIT_BOUNDARY_MATCH_TEST_H
 #define ANSYS_SPLIT_BOUNDARY_MATCH_TEST_H
 

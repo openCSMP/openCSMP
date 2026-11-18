@@ -1,5 +1,9 @@
-#ifndef FACE_TEST_H
-#define FACE_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_FACE_TEST_H
+#define CSMP_FACE_TEST_H
 
 #include "CSMP_definitions.h"
 #include "Test.h"
@@ -22,4 +26,4 @@ namespace csmp{
 
 } // csmp
 
-#endif // FACE_TEST_H
+#endif // CSMP_FACE_TEST_H

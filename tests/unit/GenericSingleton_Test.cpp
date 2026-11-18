@@ -1,11 +1,12 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "GenericSingleton_Test.h"
 
 using namespace std;
 
-namespace csmp{
-
-  void accessSingletonGloballyWithinFile();
-  void accessSingletonGloballyExternalFile();
+namespace csmp {
 
 void GenericSingleton_Test::run()
 {

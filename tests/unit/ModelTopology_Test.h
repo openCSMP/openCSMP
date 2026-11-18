@@ -1,5 +1,9 @@
-#ifndef MODEL_TOPOLOGY_TEST_H
-#define MODEL_TOPOLOGY_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_MODEL_TOPOLOGY_TEST_H
+#define CSMP_MODEL_TOPOLOGY_TEST_H
 
 #include "Test.h"
 #include "ModelTopology.h"
@@ -17,4 +21,4 @@ public:
 
 } // csmp
 
-#endif // MODELTOPOLOGY_TEST_H
+#endif // CSMP_MODELTOPOLOGY_TEST_H

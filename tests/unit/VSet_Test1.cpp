@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "VSet_Test1.h"
 #include "VSet.h"
 #include "vsetMakers.h"
