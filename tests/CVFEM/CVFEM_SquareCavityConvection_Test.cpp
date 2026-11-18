@@ -30,6 +30,7 @@ CVFEM_SquareCavityConvection_Test::CVFEM_SquareCavityConvection_Test(const std::
     vars_name_("PhysicalVariables.txt"),   // created by the ModelBuilder
     facet_mean_gravity_density_(facet_mean_gravity_density),
     reference_nusselt_(reference_nusselt),
+    steps_(0U),
     nusselt_tolerance_(0.05),
     steady_tolerance_(2.e-3),
     temperature_base_(0.),
@@ -234,43 +235,54 @@ double CVFEM_SquareCavityConvection_Test::TopNusseltNumber() const
 }
 
 
+double CVFEM_SquareCavityConvection_Test::ThermalDensityDerivative()
+{
+  constexpr double increment{0.1};   // [K]
+  const Index temperature_key(property_database_->StorageKey("temperature"));
+  const Index density_key(property_database_->StorageKey("density liquid"));
+  const Region<2U>& region(model_->Region("Model"));
+  std::vector<double> density_before;
+  for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it) {
+    density_before.push_back((*node_it)->Read(density_key));
+    ScalarVariable temperature;
+    (*node_it)->Read(temperature_key, temperature);
+    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() + increment));
+  }
+  cvfem_phx_->InitialFluidPropertiesFromPTX();
+  double sum{0.};
+  std::size_t n{0U};
+  for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it, ++n) {
+    sum += (density_before[n] - (*node_it)->Read(density_key)) / increment;
+    ScalarVariable temperature;
+    (*node_it)->Read(temperature_key, temperature);
+    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() - increment));
+  }
+  cvfem_phx_->InitialFluidPropertiesFromPTX();
+  return sum / static_cast<double>(n);
+}
+
+
 double CVFEM_SquareCavityConvection_Test::RayleighNumber()
 {
   // S. Scott, 2026-11-18: drho is the thermal density contrast at constant pressure (before: the top-to-base
   // difference, which includes the hydrostatic compression of the water and does not drive flow)
-  constexpr double increment{0.1};   // [K]
-  const Index temperature_key(property_database_->StorageKey("temperature"));
+  const double density_derivative{ThermalDensityDerivative()};
   const Index density_key(property_database_->StorageKey("density liquid"));
   const Index viscosity_key(property_database_->StorageKey("viscosity liquid"));
   const Index heat_capacity_key(property_database_->StorageKey("fluid heat capacity"));
   const Index permeability_key(property_database_->StorageKey("permeability"));
   const Index conductivity_key(property_database_->StorageKey("thermal conductivity"));
   const Region<2U>& region(model_->Region("Model"));
-  std::vector<double> density_before;
   double viscosity{0.};
   double density{0.};
   double heat_capacity{0.};
   double nodes{0.};
   for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it) {
-    density_before.push_back((*node_it)->Read(density_key));
     viscosity += (*node_it)->Read(viscosity_key);
     density += (*node_it)->Read(density_key);
     heat_capacity += (*node_it)->Read(heat_capacity_key);
     nodes += 1.;
-    ScalarVariable temperature;
-    (*node_it)->Read(temperature_key, temperature);
-    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() + increment));
   }
-  cvfem_phx_->InitialFluidPropertiesFromPTX();
-  double density_derivative{0.};   // -d rho / d T at constant pressure, node mean [kg m-3 K-1]
-  std::size_t n{0U};
-  for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it, ++n) {
-    density_derivative += (density_before[n] - (*node_it)->Read(density_key)) / increment / nodes;
-    ScalarVariable temperature;
-    (*node_it)->Read(temperature_key, temperature);
-    (*node_it)->Store(temperature_key, ScalarVariable(temperature.Flag(), temperature() - increment));
-  }
-  cvfem_phx_->InitialFluidPropertiesFromPTX();
   double permeability{0.};
   double conductivity{0.};
   double cells{0.};
@@ -285,25 +297,26 @@ double CVFEM_SquareCavityConvection_Test::RayleighNumber()
 }
 
 
-void CVFEM_SquareCavityConvection_Test::run()
+void CVFEM_SquareCavityConvection_Test::InitializeConductiveState(double largest_time_step)
 {
-  CreateModel();
-
-  double& model_time(ModelTime::Instance().modelTime);
-  model_time = 0.;
-  const double max_time{run_settings_.Duration() * year_};
-  const double largest_time_step{run_settings_.TimeIncrement() * year_};
-
   InitializeTemperature();
   AnchorPressureAtOneNode();
   InitializeAllNaNsToZero();
   cvfem_phx_->Adjust_CFL_Criterion(model_->Read(property_database_->StorageKey("cfl scaling")), true);
   cvfem_phx_->SetLargestTimeStep(largest_time_step);
   InitializeHydrostaticPressure();
-  const double rayleigh{RayleighNumber()};   // conductive initial state
+}
+
+
+void CVFEM_SquareCavityConvection_Test::StartTransient(double largest_time_step)
+{
   cvfem_phx_->PrepareTransientCalculations();
   cvfem_phx_->ChangeTimeStepTo(largest_time_step / 10.);
+}
 
+
+std::vector<double> CVFEM_SquareCavityConvection_Test::AdvanceAndRecordNusselt(double max_time)
+{
   // fields at every checkpoint, for inspection: <config base name>_Model_(REGION)_<checkpoint>.vtu in the working directory
   VTU_Interface<2U> vtu(*model_);
   vtu.OmitZeroInFileName(false);
@@ -312,37 +325,66 @@ void CVFEM_SquareCavityConvection_Test::run()
   const std::string output_name{config_name_.substr(config_name_.find_last_of('/') + 1U)};
   vtu.OutputDataToVTU(output_name.c_str(), output_variables, model_->Region("Model"), 0);
 
-  // Nusselt number at 50 checkpoints; steady if it changed by less than steady_tolerance_ over the last 5
+  // Nusselt number at 50 checkpoints
   constexpr uint32_t checkpoints{50U};
   std::vector<double> nusselt;
   double next_checkpoint{max_time / checkpoints};
-  uint64_t steps{0U};
+  double& model_time(ModelTime::Instance().modelTime);
+  steps_ = 0U;
   while (model_time < max_time) {
     const double dt{cvfem_phx_->Apply()};
     model_time += dt;
     model_->InputPropertyValue("dt", ScalarVariable(PLAIN, dt));
-    ++steps;
+    ++steps_;
     if (model_time >= next_checkpoint) {
       nusselt.push_back(TopNusseltNumber());
       vtu.OutputDataToVTU(output_name.c_str(), output_variables, model_->Region("Model"),
                           static_cast<long>(nusselt.size()));
-      std::cerr << "CVFEM_SquareCavityConvection_Test::run: " << model_time / year_ << " yr, step " << steps
+      std::cerr << "CVFEM_SquareCavityConvection_Test::run: " << model_time / year_ << " yr, step " << steps_
                 << ", Nu " << nusselt.back() << std::endl;
       next_checkpoint += max_time / checkpoints;
     }
     if (dt < 1.)
       break;
   }
+  return nusselt;
+}
 
-  const double nusselt_final{nusselt.empty() ? 0. : nusselt.back()};
-  const double change{nusselt.size() > 5U ? std::fabs(nusselt.back() - nusselt[nusselt.size() - 6U]) / nusselt.back()
-                                          : 1.};
+
+double CVFEM_SquareCavityConvection_Test::RelativeChangeOverLastTenth(const std::vector<double>& nusselt) const
+{
+  // the last 5 of 50 checkpoints; 1 (not steady) if there are too few
+  return nusselt.size() > 5U ? std::fabs(nusselt.back() - nusselt[nusselt.size() - 6U]) / nusselt.back() : 1.;
+}
+
+
+void CVFEM_SquareCavityConvection_Test::ReportResults(double rayleigh, double nusselt, double change) const
+{
   std::cerr << "CVFEM_SquareCavityConvection_Test::run: " << config_name_ << " (facet-mean gravity density "
-            << (facet_mean_gravity_density_ ? "on" : "off") << "): " << steps << " steps to "
-            << model_time / year_ << " yr, Ra " << rayleigh << ", Nu " << nusselt_final << " (reference "
-            << reference_nusselt_ << ", deviation " << (nusselt_final - reference_nusselt_) / reference_nusselt_
+            << (facet_mean_gravity_density_ ? "on" : "off") << "): " << steps_ << " steps to "
+            << ModelTime::Instance().modelTime / year_ << " yr, Ra " << rayleigh << ", Nu " << nusselt << " (reference "
+            << reference_nusselt_ << ", deviation " << (nusselt - reference_nusselt_) / reference_nusselt_
             << ", limit " << nusselt_tolerance_ << "), relative change over the last 10 % of the run " << change
             << std::endl;
+}
+
+
+void CVFEM_SquareCavityConvection_Test::run()
+{
+  CreateModel();
+  double& model_time(ModelTime::Instance().modelTime);
+  model_time = 0.;
+  const double max_time{run_settings_.Duration() * year_};
+  const double largest_time_step{run_settings_.TimeIncrement() * year_};
+
+  InitializeConductiveState(largest_time_step);
+  const double rayleigh{RayleighNumber()};   // conductive initial state
+  StartTransient(largest_time_step);
+  const std::vector<double> nusselt{AdvanceAndRecordNusselt(max_time)};
+  const double nusselt_final{nusselt.empty() ? 0. : nusselt.back()};
+  const double change{RelativeChangeOverLastTenth(nusselt)};
+  ReportResults(rayleigh, nusselt_final, change);
+
   do_test(model_time >= max_time, "Square cavity: ran the configured duration", __FILE__, __LINE__);
   do_test(change < steady_tolerance_, "Square cavity: Nusselt number steady", __FILE__, __LINE__);
   do_test(std::fabs(nusselt_final - reference_nusselt_) < nusselt_tolerance_ * reference_nusselt_,

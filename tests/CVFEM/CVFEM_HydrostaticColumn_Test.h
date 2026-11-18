@@ -69,11 +69,18 @@ class CVFEM_HydrostaticColumn_Test : public Test {
     std::array<double, 2> MaxTransportSpeed(double run_time) const;
     /// Column buoyancy velocity scale k g (rho_max - rho_min) / mu_min from the current nodal state.
     double BuoyancyVelocityScale() const;
+    /// Conductive temperature and hydrostatic pressure at rest; prepares the transient (first step a tenth of the largest).
+    void InitializeRestingColumn(double largest_time_step);
+    /// Steps to max_time; returns the largest stored element liquid speed over the run (counts steps_).
+    double AdvanceAndTrackStoredVelocity(double max_time);
+    /// Writes the transported-mass speeds, the stored-velocity maximum and the limit.
+    void ReportResults(double velocity_scale, const std::array<double, 2>& transport_speed, double max_stored_speed) const;
 
     std::string mesh_name_;
     std::string config_name_;
     std::string vars_name_;
     bool facet_mean_gravity_density_;
+    uint64_t steps_;
     double max_velocity_fraction_;
     std::array<double, 2> location_of_max_speed_;
 

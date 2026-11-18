@@ -24,6 +24,7 @@ CVFEM_HydrostaticColumn_Test::CVFEM_HydrostaticColumn_Test(const std::string& me
     config_name_(config_name),
     vars_name_("PhysicalVariables.txt"),   // created by the ModelBuilder
     facet_mean_gravity_density_(facet_mean_gravity_density),
+    steps_(0U),
     max_velocity_fraction_(1.e-3),
     location_of_max_speed_{0., 0.},
     model_(nullptr),
@@ -233,15 +234,8 @@ double CVFEM_HydrostaticColumn_Test::BuoyancyVelocityScale() const
 }
 
 
-void CVFEM_HydrostaticColumn_Test::run()
+void CVFEM_HydrostaticColumn_Test::InitializeRestingColumn(double largest_time_step)
 {
-  CreateModel();
-
-  double& model_time(ModelTime::Instance().modelTime);
-  model_time = 0.;
-  const double max_time{run_settings_.Duration() * year_};
-  const double largest_time_step{run_settings_.TimeIncrement() * year_};
-
   InitializeConductiveTemperature();
   InitializeAllNaNsToZero();
   cvfem_phx_->Adjust_CFL_Criterion(model_->Read(property_database_->StorageKey("cfl scaling")), true);
@@ -249,34 +243,60 @@ void CVFEM_HydrostaticColumn_Test::run()
   InitializeHydrostaticPressure();
   cvfem_phx_->PrepareTransientCalculations();
   cvfem_phx_->ChangeTimeStepTo(largest_time_step / 10.);
+}
 
-  const double velocity_scale{BuoyancyVelocityScale()};
+
+double CVFEM_HydrostaticColumn_Test::AdvanceAndTrackStoredVelocity(double max_time)
+{
+  double& model_time(ModelTime::Instance().modelTime);
   double max_speed{0.};
-  uint64_t steps{0U};
+  steps_ = 0U;
   while (model_time < max_time) {
     const double dt{cvfem_phx_->Apply()};
     model_time += dt;
     model_->InputPropertyValue("dt", ScalarVariable(PLAIN, dt));
-    ++steps;
+    ++steps_;
     const double speed{MaxLiquidSpeed()};
     max_speed = std::max(max_speed, speed);
-    if (steps <= 5U || steps % 50U == 0U)
-      std::cerr << "CVFEM_HydrostaticColumn_Test::run: step " << steps << ", " << model_time / year_
+    if (steps_ <= 5U || steps_ % 50U == 0U)
+      std::cerr << "CVFEM_HydrostaticColumn_Test::run: step " << steps_ << ", " << model_time / year_
                 << " yr, max liquid Darcy speed " << speed << " m/s at (" << location_of_max_speed_[0] << ", "
                 << location_of_max_speed_[1] << ")" << std::endl;
     if (dt < 1.)
       break;
   }
+  return max_speed;
+}
 
-  const std::array<double, 2> transport_speed{MaxTransportSpeed(model_time)};
+
+void CVFEM_HydrostaticColumn_Test::ReportResults(double velocity_scale, const std::array<double, 2>& transport_speed,
+                                                 double max_stored_speed) const
+{
   std::cerr << "CVFEM_HydrostaticColumn_Test::run: " << mesh_name_ << " (facet-mean gravity density "
-            << (facet_mean_gravity_density_ ? "on" : "off") << "): " << steps << " steps to "
-            << model_time / year_ << " yr, buoyancy velocity scale " << velocity_scale << " m/s" << std::endl
+            << (facet_mean_gravity_density_ ? "on" : "off") << "): " << steps_ << " steps to "
+            << ModelTime::Instance().modelTime / year_ << " yr, buoyancy velocity scale " << velocity_scale << " m/s"
+            << std::endl
             << "  transported mass as mean Darcy speed: interior nodes " << transport_speed[0] << " m/s (ratio "
             << transport_speed[0] / velocity_scale << ", limit " << max_velocity_fraction_ << "), Dirichlet nodes "
             << transport_speed[1] << " m/s (ratio " << transport_speed[1] / velocity_scale << ")" << std::endl
-            << "  stored element 'velocity liquid' (information only): max " << max_speed << " m/s (ratio "
-            << max_speed / velocity_scale << ")" << std::endl;
+            << "  stored element 'velocity liquid' (information only): max " << max_stored_speed << " m/s (ratio "
+            << max_stored_speed / velocity_scale << ")" << std::endl;
+}
+
+
+void CVFEM_HydrostaticColumn_Test::run()
+{
+  CreateModel();
+  double& model_time(ModelTime::Instance().modelTime);
+  model_time = 0.;
+  const double max_time{run_settings_.Duration() * year_};
+
+  InitializeRestingColumn(run_settings_.TimeIncrement() * year_);
+  const double velocity_scale{BuoyancyVelocityScale()};
+  const double max_stored_speed{AdvanceAndTrackStoredVelocity(max_time)};
+  const std::array<double, 2> transport_speed{MaxTransportSpeed(model_time)};
+  ReportResults(velocity_scale, transport_speed, max_stored_speed);
+
   do_test(model_time >= max_time, "Hydrostatic column: ran the configured duration", __FILE__, __LINE__);
   do_test(transport_speed[0] < max_velocity_fraction_ * velocity_scale,
           "Hydrostatic column: mass transported between interior control volumes below the limit fraction of the "

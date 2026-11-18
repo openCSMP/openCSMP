@@ -64,6 +64,7 @@
 
 #include <memory>
 #include <string>
+#include <vector>
 
 namespace csmp {
 
@@ -93,15 +94,29 @@ class CVFEM_SquareCavityConvection_Test : public Test {
     double MaxDifference(const std::string& first, const std::string& second) const;
     /// Horizontally averaged Nusselt number at the top: second-order one-sided gradient over the top three rows.
     double TopNusseltNumber() const;
+    /// Mean of -d rho / d T at constant pressure over the nodes (temperature raised by 0.1 K and restored; the fluid
+    /// properties are recomputed both times).
+    double ThermalDensityDerivative();
     /// Rayleigh number drho g H k / (mu kappa) from the model's properties, drho the thermal density contrast at
-    /// constant pressure (temperature raised by 0.1 K and restored; the fluid properties are recomputed both times).
+    /// constant pressure.
     double RayleighNumber();
+    /// Perturbed conductive temperature, pressure anchor, hydrostatic pressure.
+    void InitializeConductiveState(double largest_time_step);
+    /// Prepares the transient; first time step a tenth of the largest.
+    void StartTransient(double largest_time_step);
+    /// Steps to max_time; returns the top Nusselt number at 50 checkpoints and writes the fields there (counts steps_).
+    std::vector<double> AdvanceAndRecordNusselt(double max_time);
+    /// Relative change of the Nusselt number over the last 10 % of the run (last 5 of 50 checkpoints).
+    double RelativeChangeOverLastTenth(const std::vector<double>& nusselt) const;
+    /// Writes Ra, Nu, the reference value and the steadiness measure.
+    void ReportResults(double rayleigh, double nusselt, double change) const;
 
     std::string mesh_name_;
     std::string config_name_;
     std::string vars_name_;
     bool facet_mean_gravity_density_;
     double reference_nusselt_;
+    uint64_t steps_;
     double nusselt_tolerance_;
     double steady_tolerance_;
     double temperature_base_;
