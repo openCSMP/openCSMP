@@ -457,6 +457,13 @@ void ExplicitFiniteVolumeTransportPHX<dim>::WithGravityComponent( )
     with_gravity = true;
 }
 
+// S. Scott, 2026-11-17: passed to the stencil processor that computes the transport fluxes
+template<uint32_t dim>
+void ExplicitFiniteVolumeTransportPHX<dim>::UseFacetMeanGravityDensity( bool on )
+{
+    stencilPHX.UseFacetMeanGravityDensity(on);
+}
+
 // (GetUpwindMatrix removed: it copied a DenseMatrix per element per property
 //  per assembly — Cells x Nprops copies per stage. Callers now bind a reference
 //  to the visitor's matrix directly, zero copies. Drop the declaration and the

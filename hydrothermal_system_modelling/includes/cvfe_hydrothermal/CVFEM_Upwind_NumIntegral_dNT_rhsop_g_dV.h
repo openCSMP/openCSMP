@@ -93,6 +93,7 @@ class CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV : public CVFEM_MathOperatorRHS<dim
     
     Operand<dim> upwind_;
     std::vector<ScalarVariable> upwind_var_, upwind_var_multiplier;
+    std::vector<ScalarVariable> rho_nodes_;   // gravity density per node (facet-mean gravity term; S. Scott, 2026-11-17)
      
 };
 

@@ -108,6 +108,15 @@ public:
     void ZeroVelocityOnFlip( bool on );
     void SetVerbose(bool verbose);
     void Gravity( bool with_gravity );
+    /** Density in the gravity (buoyancy) term on each facet (S. Scott, 2026-11-17). Off (default): each candidate
+        donor node's own density, as in Weis et al. (2014). On: the mean of the two nodes' densities whenever both
+        hold the phase (donor's own density otherwise); mobilities and transported quantities stay upwinded. The
+        same density is then used in the donor choice, the pressure-equation gravity term
+        (CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV, which reads this setting) and the transport fluxes
+        (StencilProcessorPHX, set through ExplicitFiniteVolumeTransportPHX). Set through
+        CVFEM_PHX_Scheme::UseFacetMeanGravityDensity. */
+    void UseFacetMeanGravityDensity( bool on );
+    bool FacetMeanGravityDensity() const;
     /** Enable the velocity/CFL computation AND select the TRANSPORT donor map.
 
         There are two donor maps, identically shaped, because the pressure and
@@ -219,6 +228,7 @@ private:
     uint32_t xyz;
     uint32_t inside_node_, outside_node_;
 
+    bool facet_mean_gravity_density_;   // see UseFacetMeanGravityDensity()
     bool zero_velocity_on_flip_;   // legacy flip check — see ZeroVelocityOnFlip()
     DonorMap donor_map_target_;    // Pressure -> Upwinder (D0); Transport -> UpwinderTransport (D1)
     bool verbose, grav, with_velocity, facet_cfl;

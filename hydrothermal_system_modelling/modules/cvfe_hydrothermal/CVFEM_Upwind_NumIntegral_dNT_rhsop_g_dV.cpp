@@ -69,6 +69,7 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim,CELL>::GetOperands( const CELL<
     MathOperatorRHS<dim,CELL>::GetOperands(e);
 
     e.NodePropertyVector(upwind_.Key(), upwind_var_);
+    e.NodePropertyVector(rho_key, rho_nodes_);          // gravity density per node (S. Scott, 2026-11-17)
 }
 
 
@@ -79,6 +80,7 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim,CELL>::GetOperandsCVFEM( const 
 
     e.NodePropertyVector(upwind_.Key(), upwind_var_);
     e.NodePropertyVector(upwind_var_key, upwind_var_multiplier);
+    e.NodePropertyVector(rho_key, rho_nodes_);          // gravity density per node (S. Scott, 2026-11-17)
 
     for (auto i{0U}; i < upwind_var_multiplier.size(); i++)
         upwind_var_[i]() *= upwind_var_multiplier[i]();
@@ -114,8 +116,18 @@ void CVFEM_Upwind_NumIntegral_dNT_rhsop_g_dV<dim,CELL>::ComputeContribution( con
         normal_component = finite_volume.GetFacetNormalComponent( e.Idx(), i, xyz );
         grav = gravity * normal_component;
         contribution = area*MathOperatorRHS<dim,CELL>::MTRL[0](0,0);
-        if (upwind(inside_node_, outside_node_) == 1) contribution *= upwind_var_[inside_node_]();
-        else if (upwind(inside_node_, outside_node_) == 2) contribution *= upwind_var_[outside_node_]();
+        // upwind_var_ is the donor's "mass mobility density" = (rho kr/mu) * rho. Keep the donor's
+        // mobility but take the GRAVITY density from the facet mean when both nodes hold the
+        // phase -- the same density UpwindControlVisitor and StencilProcessorPHX now use, so the
+        // pressure solve and the transport fluxes stay consistent; only when
+        // UpwindControlVisitor::UseFacetMeanGravityDensity(true) (S. Scott, 2026-11-17).
+        const double rho_i{rho_nodes_[inside_node_]()};
+        const double rho_o{rho_nodes_[outside_node_]()};
+        const bool facet_mean{UpwindVisitor.FacetMeanGravityDensity() && rho_i > 0. && rho_o > 0.};
+        if (upwind(inside_node_, outside_node_) == 1)
+            contribution *= upwind_var_[inside_node_]()  * ( facet_mean ? 0.5 * ( rho_i + rho_o ) / rho_i : 1.0 );
+        else if (upwind(inside_node_, outside_node_) == 2)
+            contribution *= upwind_var_[outside_node_]() * ( facet_mean ? 0.5 * ( rho_i + rho_o ) / rho_o : 1.0 );
         else contribution = 0.0;
         contribution *= grav;
         MathOperatorRHS<dim,CELL>::RHS[inside_node_]  -= contribution;

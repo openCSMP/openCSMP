@@ -96,6 +96,9 @@ public:
     //Benoit add
     void WithRockLiquidusSolidus                (bool with_rock_liquidus_solidus = false);
     void AddFluidContributionToHeatCapacity     (bool add_fluid_contribution_to_heat_capacity);
+    /// Facet-mean density in the gravity term instead of the donor node's (default off; S. Scott, 2026-11-17).
+    /// See UpwindControlVisitor::UseFacetMeanGravityDensity.
+    void UseFacetMeanGravityDensity             (bool on);
     void AttemptToSurviveFluidPropertiesError   (bool attempt_to_survive_fluid_properties_error_);
     void SetRockHeatCapacity                    (double mini_cp);
     void SetRockCrystallizationCurve            (double nu_coefficient,

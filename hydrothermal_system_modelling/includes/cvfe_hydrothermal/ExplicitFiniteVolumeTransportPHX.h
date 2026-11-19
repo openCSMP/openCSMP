@@ -67,6 +67,8 @@ public:
 
     void  AddAdvectionVariable( const char* new_lhs, const char* new_rhs); // Adding further variables for finite volume calculations
     void WithGravityComponent( ); // activate gravity component
+    /// Facet-mean density in the gravity term of the transport fluxes (see UpwindControlVisitor::UseFacetMeanGravityDensity).
+    void UseFacetMeanGravityDensity( bool on );
     void  SetMaximumTimeStep( const double& new_max_time_step ); // manually set the maximum time step size
 
     // the remaining function are used by TwoPhaseTransportPHX

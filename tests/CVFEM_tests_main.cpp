@@ -18,6 +18,8 @@
 
 #include "CVFEM_1D_VVCase.h"
 #include "CVFEM_2D_VVCase.h"
+#include "CVFEM_HydrostaticColumn_Test.h"
+#include "CVFEM_SquareCavityConvection_Test.h"
 
 #include <stdexcept>
 #include <typeinfo>
@@ -52,6 +54,13 @@ const std::vector<std::string> ALL_TEST_FILES_2D = {
     "test-202b",
     "test-203a",
     "test-203b",
+    "test-205a",
+    "test-205b",
+    "test-205c",
+    "test-205d",
+    "test-206a",
+    "test-206b",
+    "test-206c",
 };
 
 
@@ -61,6 +70,23 @@ std::string getTestDataPath_1D(const std::string& benchmarkDir, const std::strin
 
 std::string getTestDataPath_2D(const std::string& benchmarkDir, const std::string& filename) {
     return benchmarkDir + "/2D_Benchmarks/" + filename + "/" + filename;
+}
+
+// S. Scott, 2026-11-18: the 2D tests from test-205 on have their own test classes and meshes
+// (2D_Benchmarks/test-20x/test-20x...); returns nullptr for the benchmark-comparison cases (CVFEM_2D_VVCase).
+Test* makeAdditionalTest2D(const std::string& name, const std::string& benchmarkDir, const std::string& config) {
+    const std::string group = name.substr(0, 8);   // e.g. "test-205"
+    const std::string mesh = benchmarkDir + "/2D_Benchmarks/" + group + "/" + group;
+    // hydrostatic column with a conductive temperature gradient (exact solution: no flow), donor / facet-mean density
+    if ( name == "test-205a" ) return new CVFEM_HydrostaticColumn_Test( mesh + "-structured", config, false );
+    if ( name == "test-205b" ) return new CVFEM_HydrostaticColumn_Test( mesh + "-structured", config, true );
+    if ( name == "test-205c" ) return new CVFEM_HydrostaticColumn_Test( mesh + "-unstructured", config, false );
+    if ( name == "test-205d" ) return new CVFEM_HydrostaticColumn_Test( mesh + "-unstructured", config, true );
+    // closed-square convection vs Geiger et al. (2006) Table II (Caltagirone 1975), facet-mean density
+    if ( name == "test-206a" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 2.65 );
+    if ( name == "test-206b" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 3.81 );
+    if ( name == "test-206c" ) return new CVFEM_SquareCavityConvection_Test( mesh, config, true, 4.52 );
+    return nullptr;
 }
 
 std::string getMeshPath2D(const std::string& benchmarkDir) {
@@ -180,7 +206,8 @@ int main( int argc, char* argv[] )
     }
     if ( run2D )
     {
-        std::cerr << "\nEnter the tests to run, comma-separated (test-201a, test-201b, test-202a, test-202b, test-203a, test-203b),"
+        std::cerr << "\nEnter the tests to run, comma-separated (test-201a, test-201b, test-202a, test-202b, test-203a, test-203b, test-205a, test-205b, test-205c, test-205d, test-206a, test-206b, test-206c),"
+                     "\n(tests from test-205 on always run to the end, independent of QUICK/EXTENDED),"
                      "\nor type 'all' to run every test in the selected suite(s): ";
 
         std::string testSelectionInput;
@@ -237,6 +264,12 @@ int main( int argc, char* argv[] )
             for ( const std::string& filename : configFiles2D )
             {
                 configPaths2D.push_back( getTestDataPath_2D(benchmarkDir, filename) );
+                Test* additional = makeAdditionalTest2D( filename, benchmarkDir, configPaths2D.back() );
+                if ( additional != nullptr )
+                {
+                    suite2D.addTest( filename.c_str(), additional );
+                    continue;
+                }
                 // argv[0] is conventionally the program name (unused here); argv[1] = mesh, argv[2] = config file
                 const char* argv2D[] = { "CVFEM_2D_VVCase", meshPath2D.c_str(), configPaths2D.back().c_str() };
                 suite2D.addTest( filename.c_str(),

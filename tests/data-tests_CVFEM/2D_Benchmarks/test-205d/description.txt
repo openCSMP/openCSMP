@@ -1,0 +1,6 @@
+pure water single-phase, hydrostatic
+Conductive temperature gradient, unstructured mesh, facet-mean density in the gravity term
+CVFEM_HydrostaticColumn_Test
+
+column 500 m x 1000 m, top 10 degC / 1 bar, base 110 degC, k 1e-15 m2 (Ra ~3, exact solution: no flow)
+transported mass between interior control volumes < 1e-3 of k g (rho_max - rho_min) / mu
