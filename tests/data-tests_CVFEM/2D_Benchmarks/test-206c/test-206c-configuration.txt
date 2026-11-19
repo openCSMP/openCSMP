@@ -39,6 +39,6 @@ BOTTOM	DIRICH	temperature		150.	150.
 # (block6) csmp::Boundary properties
 
 # (block7) run settings [years]
-duration	100.
+duration	40.					# [yr] steady from ~20-25 yr (206a-c); twice that
 time increment	1.
 output time	250.
