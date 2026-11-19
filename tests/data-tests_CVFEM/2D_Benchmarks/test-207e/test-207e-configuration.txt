@@ -1,0 +1,44 @@
+CONVECTION ONSET, FINITE PERTURBATION, Ra = 30 (CVFEM_ConvectionOnset_Test; energy stability: any perturbation decays below Ra_c)
+
+# (block2) default property values
+# Closed box 200 m x 100 m (L = 2 H), base 150 C, top 140 C, pressure fixed at one top corner node by the test (closed top).
+# As test-207b, but the mode starts at 10 % of dT (1 K, both signs). Below Ra_c = 4 pi^2 a perturbation of any size must
+# decay (energy stability coincides with linear stability here); the test requires a decay by at least 5 by |sigma| tau = 3.
+# Permeability from Ra = rho beta_T dT g H k / (mu kappa), kappa = lambda / (rho c_p)_water, with IAPWS water at 145 C and
+# 5 MPa (thermal density contrast at constant pressure 9.07 kg m-3, mu 1.906e-4 Pa s, kappa 5.06e-7 m2 s-1); the test
+# computes Ra from the model's own properties and reports it. Same material as the square-cavity tests (test-206).
+fluid pressure			5.e6				# [Pa] at the anchor node; hydrostatic elsewhere
+temperature			145.				# [C] replaced by the conductive profile and the mode
+permeability			3.2522e-13			# [m2]
+vertical permeability		3.2522e-13			# [m2]
+horizontal permeability		3.2522e-13			# [m2]
+porosity			0.1				# [-]
+nodal porosity			0.1				# [-]
+salinity			0.				# [wt%] pure water
+thermal conductivity		2.				# [W m-1 K-1]
+nodal heat capacity rock	100.				# [J kg-1 K-1] small: shortens the thermal time unit (about 100 yr)
+density rock			2700.				# [kg m-3]
+nodal density rock		2700.				# [kg m-3]
+lithostatic pressure		5.e6				# [Pa]
+nodal compressibility rock	1.e-15				# [Pa-1]
+gravity flag			1.
+thickness			1.				# [m] 2D model
+no standard output		1
+cfl scaling			0.5				# pore-velocity CFL criterion
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+# fixed temperature at the top and base; all sides impermeable; side walls insulated
+TOP	DIRICH	temperature		140.	140.
+BOTTOM	DIRICH	temperature		150.	150.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+# upper bounds: the test runs until |sigma| tau = 3 and caps the time step at |sigma| dtau = 0.005
+duration	200.
+time increment	1.
+output time	250.

@@ -1,0 +1,43 @@
+NEAR-CRITICAL WATER COLUMN (CVFEM_HydrostaticColumn_Test), structured mesh, 100 m x 200 m, 25 MPa, 420 C top, 360 C base
+
+# (block2) default property values
+# Exact solution: no flow. Hot (light) fluid above cold (dense) fluid is stable at any Rayleigh number. The column
+# crosses the pseudo-critical temperature of water at 25 MPa (~385 C): the density falls from 590 to 134 kg m-3,
+# much of it within 10 K, and the equation of state labels the low-density part vapour (a label boundary, not
+# a phase transition). The test sets the linear conductive temperature profile and the hydrostatic pressure.
+fluid pressure			25.e6				# [Pa] initial guess; replaced by the hydrostatic initialisation
+temperature			390.				# [C] replaced by the linear conductive profile
+permeability			1.e-15				# [m2]
+vertical permeability		1.e-15				# [m2]
+horizontal permeability		1.e-15				# [m2]
+porosity			0.1				# [-]
+nodal porosity			0.1				# [-]
+salinity			0.				# [wt%] pure water
+thermal conductivity		2.				# [W m-1 K-1]
+nodal heat capacity rock	1000.				# [J kg-1 K-1] passed to the CVFEM scheme by the test
+density rock			2700.				# [kg m-3]
+nodal density rock		2700.				# [kg m-3]
+lithostatic pressure		25.e6				# [Pa]
+nodal compressibility rock	1.e-15				# [Pa-1]
+gravity flag			1.
+thickness			1.				# [m] 2D model
+no standard output		1
+cfl scaling			0.1				# pore-velocity CFL criterion
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+# top: fixed temperature and pressure; base: fixed temperature; side walls no-flow and insulated
+TOP	DIRICH	fluid pressure		25.e6	25.e6
+TOP	DIRICH	lithostatic pressure	25.e6	25.e6
+TOP	DIRICH	temperature		420.	420.
+BOTTOM	DIRICH	temperature		360.	360.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+duration	100.
+time increment	1.
+output time	100.

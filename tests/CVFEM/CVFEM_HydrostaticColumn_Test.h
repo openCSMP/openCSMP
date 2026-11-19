@@ -14,8 +14,18 @@
  *  Lapwood 1948), so the exact solution is no flow at all times. Any Darcy velocity is discretisation error of the
  *  buoyancy term. The test runs the configured duration and requires the mass transported between interior control
  *  volumes (the transport scheme's "fluid flux integral", as a mean Darcy speed) to stay below max_velocity_fraction_
- *  times the column buoyancy velocity scale k g (rho_max - rho_min) / mu_min. The stored element "velocity liquid"
- *  (a visualisation quantity) and the transport at Dirichlet nodes are reported for information.
+ *  times the column buoyancy velocity scale k g (rho_max - rho_min) / mu_min, with the bulk fluid density ("fluid
+ *  density") and the smallest viscosity of the phases present. The stored element "velocity liquid" (a
+ *  visualisation quantity), the transport at Dirichlet nodes and the fluid states of the nodes are reported for
+ *  information.
+ *
+ *  Near-critical case (test-205g/h): a column at 25 MPa, 420 C at the top and 360 C at the base, i.e. stably
+ *  stratified at any Rayleigh number, across the pseudo-critical temperature (~385 C), where the density falls from
+ *  590 to 134 kg m-3, much of it within 10 K. The equation of state classifies the low-density part of this single
+ *  supercritical fluid as vapour ("fluid state" V) and the rest as single-phase fluid (F, carried in the liquid
+ *  phase), so the column carries a label boundary that is not a phase transition. Run with the facet-mean density
+ *  only: with the donor density the spurious velocities are 85-120 times larger and the run takes 17-42 times more
+ *  time steps (minutes instead of seconds).
  *
  *  Initialisation follows tests/CVFEM/CVFEM_2D_VVCase.
  *  @date 17.11.2026

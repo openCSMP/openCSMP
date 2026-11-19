@@ -1,0 +1,44 @@
+CONVECTION ONSET, Ra = 100 (CVFEM_ConvectionOnset_Test; Horton-Rogers-Lapwood linear stability, Weatherill et al. 2004)
+
+# (block2) default property values
+# Closed box 200 m x 100 m (L = 2 H), base 150 C, top 140 C, pressure fixed at one top corner node by the test (closed top).
+# Initial state: conductive profile plus or minus the mode A0 cos(pi x / H) sin(pi z / H) (two runs); its amplitude grows or
+# decays as exp(sigma tau), sigma = Ra / 2 - 2 pi^2, tau = lambda t / (C_bulk H^2) (see CVFEM_ConvectionOnset_Test.h).
+# Permeability from Ra = rho beta_T dT g H k / (mu kappa), kappa = lambda / (rho c_p)_water, with IAPWS water at 145 C and
+# 5 MPa (thermal density contrast at constant pressure 9.07 kg m-3, mu 1.906e-4 Pa s, kappa 5.06e-7 m2 s-1); the test
+# computes Ra from the model's own properties and reports it. Same material as the square-cavity tests (test-206).
+fluid pressure			5.e6				# [Pa] at the anchor node; hydrostatic elsewhere
+temperature			145.				# [C] replaced by the conductive profile and the mode
+permeability			1.0841e-12			# [m2]
+vertical permeability		1.0841e-12			# [m2]
+horizontal permeability		1.0841e-12			# [m2]
+porosity			0.1				# [-]
+nodal porosity			0.1				# [-]
+salinity			0.				# [wt%] pure water
+thermal conductivity		2.				# [W m-1 K-1]
+nodal heat capacity rock	100.				# [J kg-1 K-1] small: shortens the thermal time unit (about 100 yr)
+density rock			2700.				# [kg m-3]
+nodal density rock		2700.				# [kg m-3]
+lithostatic pressure		5.e6				# [Pa]
+nodal compressibility rock	1.e-15				# [Pa-1]
+gravity flag			1.
+thickness			1.				# [m] 2D model
+no standard output		1
+cfl scaling			0.5				# pore-velocity CFL criterion
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+# fixed temperature at the top and base; all sides impermeable; side walls insulated
+TOP	DIRICH	temperature		140.	140.
+BOTTOM	DIRICH	temperature		150.	150.
+
+# (block5) essential conditions for regions
+
+# (block6) csmp::Boundary properties
+
+# (block7) run settings [years]
+# upper bounds: the test runs until |sigma| tau = 3 and caps the time step at |sigma| dtau = 0.005
+duration	200.
+time increment	1.
+output time	250.
