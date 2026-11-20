@@ -1,0 +1,47 @@
+# (block1) region name from parameter range
+
+# (block2) default property values
+# test-107: solidification of a dike (Turcotte & Schubert, Geodynamics, sec. 4.19; S. Scott, 2026-11-20): rock melt at
+# its liquidus T_m = 850 C within 1005 m of the insulated LEFT end (the dike centre; CVFEM_1D_VVCase sets this initial
+# temperature), country rock at T_0 = 50 C beyond, the RIGHT end held at T_0. Melting interval, latent heat, pressure
+# and porosity as test-106. Front travel after 400 years: ~105 m with latent heat (constant contact temperature
+# 564 C), ~540 m without (contact 450 C).
+fluid pressure			150000000.
+temperature			50.
+permeability			1.e-15
+vertical permeability		1.e-15
+horizontal permeability		1.e-15
+porosity			0.001
+nodal porosity			0.001
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	1000.
+total heat capacity		2700000.
+nodal heat capacity		2700000.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		150000000.
+nodal compressibility rock	1.e-15
+gravity flag			0.
+thickness			1.
+liquidus temperature		850.
+solidus temperature		849.
+latent heat of fusion		400000.
+crystallization curve exponent	1.
+heat capacity melt		1000.
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+RIGHT	DIRICH	fluid pressure	150000000.	150000000.
+LEFT	DIRICH	fluid pressure	150000000.	150000000.
+RIGHT	DIRICH	temperature	50.		50.
+
+# (block5) regional property conditions
+
+# (block6) boundary conditions for arbitrary-shaped model
+
+# (block 7) run settings 400 years, 1-year time steps as test 105
+duration	12614400000.
+time increment	31536000.
+output time	12614400000.
