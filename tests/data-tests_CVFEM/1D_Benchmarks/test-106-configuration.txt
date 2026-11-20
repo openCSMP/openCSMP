@@ -1,0 +1,50 @@
+# (block1) region name from parameter range
+
+# (block2) default property values
+# test-106: the Stefan problem (Turcotte & Schubert, Geodynamics, sec. 4.18; S. Scott, 2026-11-20): rock melt at its
+# liquidus T_m = 850 C, the LEFT end held at T_0 = 50 C from t = 0. Set-up of test-105b (conduction from the LEFT end,
+# no flow: equal pressures at both ends, no gravity; conduction heat capacity rock + fluid). Narrow melting interval
+# (solidus 849 C, liquidus 850 C), latent heat 4e5 J kg-1, melt heat capacity = rock heat capacity (1000 J kg-1 K-1).
+# 150 MPa keeps the pore water single-phase over 50-850 C; porosity 0.001 keeps the fluid's share of the heat budget,
+# and the heat carried by the thermal-contraction flow, near 0.1 %. Front after 400 years: ~155 m with latent heat,
+# ~440 m without.
+fluid pressure			150000000.
+temperature			850.
+permeability			1.e-15
+vertical permeability		1.e-15
+horizontal permeability		1.e-15
+porosity			0.001
+nodal porosity			0.001
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	1000.
+total heat capacity		2700000.
+nodal heat capacity		2700000.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		150000000.
+nodal compressibility rock	1.e-15
+gravity flag			0.
+thickness			1.
+liquidus temperature		850.
+solidus temperature		849.
+latent heat of fusion		400000.
+crystallization curve exponent	1.
+heat capacity melt		1000.
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+RIGHT	DIRICH	fluid pressure	150000000.	150000000.
+LEFT	DIRICH	fluid pressure	150000000.	150000000.
+LEFT	DIRICH	temperature	50.		50.
+RIGHT	DIRICH	temperature	850.		850.
+
+# (block5) regional property conditions
+
+# (block6) boundary conditions for arbitrary-shaped model
+
+# (block 7) run settings 400 years, 1-year time steps as test 105
+duration	12614400000.
+time increment	31536000.
+output time	12614400000.
