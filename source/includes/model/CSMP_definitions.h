@@ -29,6 +29,7 @@ Backward compatibility with C
 #include <cstdlib>
 #include <cstddef>
 #include <cstdarg>
+#include <cstdint>
 #include <cctype>
 #include <cstring>
 #include <ctime>

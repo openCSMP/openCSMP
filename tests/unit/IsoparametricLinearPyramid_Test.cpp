@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-//  IsoparametricLinearPyramid_Test.cpp
 //  Open CSMP++
 //
 //  Created by Stephan Matthai on 15/10/2024.

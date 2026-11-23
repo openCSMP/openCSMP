@@ -3,11 +3,11 @@
 //  openCSMP_github
 //
 //  Created by Stephan Matthai on 28/10/2026.
-//  Copyright © 2026 Stephan Matthai. All rights reserved.
 //
 
 #include "exampleHelpers.h"
 
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <iostream>

@@ -1,8 +1,11 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 /*
  *  ModelSubDomain.cpp
  *
  *  Created by Stephan Matthai on 7/18/10.
- *  Copyright 2010 SKM. All rights reserved.
  *
  */
 #include <type_traits>

@@ -2,7 +2,6 @@
 //
 // SPDX-License-Identifier: LGPL-3.0-only
 //
-//  FiniteElementManager_Test.cpp
 //  Open CSMP++
 //
 //  Created by Stephan Matthai on 29/6/2024.
