@@ -1,6 +1,6 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
-//  exampleHelpers.h
-//  openCSMP_github
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  Created by Stephan Matthai on 28/10/2026.
 //
