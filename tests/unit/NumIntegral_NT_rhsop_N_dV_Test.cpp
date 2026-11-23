@@ -1,16 +1,13 @@
 // SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
 // SPDX-License-Identifier: LGPL-3.0-only
-
 //
 //  NumIntegral_NT_rhsop_N_dV_Test.cpp
-//  Open CSMP++SAMG
+//  CSMP++
 //
 //  Created by Stephan Matthai on 6/7/2026.
-//  Copyright © 2026 Stephan Matthai. All rights reserved.
 //
 
-// NumIntegral_NT_rhsop_N_dV_Test.cpp
 #include "NumIntegral_NT_rhsop_N_dV_Test.h"
 #include "TRIANGLE_Interface.h"
 #include "meshManagementUtilities.h"

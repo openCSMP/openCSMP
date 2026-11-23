@@ -36,4 +36,4 @@ std::string dbl_str( double v, int prec = 4 );
 
 std::string sci_str( double v, int prec = 3 );
 
-} // anonymous namespace
+} // csmp

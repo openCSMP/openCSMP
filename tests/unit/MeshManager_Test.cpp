@@ -1,16 +1,13 @@
 // SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
 // SPDX-License-Identifier: LGPL-3.0-only
-
 //
 //  MeshManager_Test.cpp
 //  CSMP_GitHub_UnitTests-Intel
 //
 //  Created by Stephan Matthai on 23/08/2018.
-//  Copyright © 2018 Stephan Matthai. All rights reserved.
 //
 
-#include <ranges>
 #include "CSMP_definitions.h"
 #include "MeshManager_Test.h"
 #include "meshManagementUtilities.h"

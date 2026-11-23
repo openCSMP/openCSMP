@@ -104,4 +104,4 @@ std::string sci_str( double v, int prec )
 }
 
 
-} // anonymous namespace
+} // csmp

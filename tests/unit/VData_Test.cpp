@@ -6,7 +6,6 @@
 //  CSMP_unit_tests
 //
 //  Created by Stephan Matthai on 26/1/2022.
-//  Copyright © 2022 Stephan Matthai. All rights reserved.
 //
 
 #include "VData_Test.h"
