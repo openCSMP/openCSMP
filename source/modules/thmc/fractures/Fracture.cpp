@@ -17,8 +17,10 @@
 #endif
 
 
-//need to provide and link GSL library if you want to use this functionality
-#define gsl_sf_hyperg_2F1(X,Y,Z,C) NAN;
+// Fracture<dim>::AnalyticalPressure() needs the Gauss hypergeometric function of the GNU Scientific Library
+// (GSL) for its viscosity-dominated regime. GSL is not a dependency of openCSMP: that regime throws a
+// csmp::Exception, see the explanation there. To enable it, link GSL and include:
+//#include <gsl/gsl_sf_hyperg.h>
 
 
 namespace csmp {
@@ -1103,7 +1105,6 @@ double Fracture<dim>::AnalyticalPressure(double t, double x)
 
     // Convenient constants
     const double Ep  = ym_ / (1.0 - nu_*nu_);
-    const double mup = 12.0 * mu_;
     const double Kp  = 4.0 * std::sqrt(2.0/M_PI) * Kc_;
     const double xi  = x / AnalyticalLength(t);
 
@@ -1115,36 +1116,55 @@ double Fracture<dim>::AnalyticalPressure(double t, double x)
     // -----------------------------------------------------------------------
     if ( Mv > M_dominant || Kt < K_small )
     {
-        const double p_star = std::pow( Ep*Ep * mup / t, 1.0/3.0 );
+        // NOT AVAILABLE: this regime needs the Gauss hypergeometric function 2F1(a,b;c;z), which
+        // neither the C++ standard library nor openCSMP provides. The implementation below was
+        // written against the GNU Scientific Library (gsl_sf_hyperg_2F1 from <gsl/gsl_sf_hyperg.h>),
+        // but GSL is not a dependency of openCSMP. Until now a placeholder macro replaced the GSL
+        // function by NAN, so that this branch silently returned NaN. It now throws instead.
+        //
+        // To enable it: make GSL available to the build (macOS: brew install gsl, Linux:
+        // sudo apt install libgsl-dev; add it to CMakeLists.txt), include <gsl/gsl_sf_hyperg.h>
+        // in this file, remove the throw and activate the code in the comment below. Note that
+        // gsl_sf_hyperg_2F1 requires |z| < 1, i.e., here |xi| < 1 (not at the fracture tip).
+        // Alternatively, provide an own implementation of 2F1 for the parameters used here.
+        throw csmp::Exception(ERROR,
+            "Fracture<dim>::AnalyticalPressure(double, double)",
+            "The viscosity-dominated regime is not available: it requires the Gauss hypergeometric "
+            "function 2F1 (e.g. gsl_sf_hyperg_2F1 of the GNU Scientific Library), which openCSMP is "
+            "not built with. See the comment in Fracture.cpp at this location.");
 
-        constexpr double b01 = 0.475449, b02 = -0.061178, b03 =  0.066322;
-        constexpr double b11 = 0.170654, b12 =  0.017132, b13 = -0.039015,
-                         b14 = -0.045476;
-        // TODO: unused? - constexpr double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
-
-        const double xi2 = xi * xi;
-
-        // TODO: this code issues warnings because without library, we do not know the return type of the macros 'gsl_sf_hyperg(,,,)' etc.
-        const double PI_0 =
-              b01 * gsl_sf_hyperg_2F1(-1.0/6.0, 1.0, 0.5,  xi2)
-            + b02 * gsl_sf_hyperg_2F1(-7.0/6.0, 1.0, 0.5,  xi2)
-            + b03 * (2.0 - M_PI * std::fabs(xi));
-
-        const double PI_1 =
-              b11 * gsl_sf_hyperg_2F1( c11,      1.0, 0.5,  xi2)
-            + b12 * xi2 * gsl_sf_hyperg_2F1( c12, 1.0, 0.5, xi2)
-            + b13 * gsl_sf_hyperg_2F1( c13,      2.0, 1.5,  xi2)
-            + b14 * (2.0 - M_PI * std::fabs(xi));
-
-        const double epsi_K = 0.1076 * std::pow(Kt, 3.16796);
-
-        // Verify correction is small relative to leading term
-        if ( PI_0 <= epsi_K * PI_1 )
-            throw csmp::Exception(ERROR,
-                "Fracture<dim>::AnalyticalPressure()",
-                "Toughness correction exceeds leading term — outside valid range.");
-
-        return p_star * (PI_0 + epsi_K * PI_1);
+        // ---- disabled implementation (requires gsl_sf_hyperg_2F1) ----
+        // const double mup    = 12.0 * mu_;
+        // const double p_star = std::pow( Ep*Ep * mup / t, 1.0/3.0 );
+        //
+        // constexpr double b01 = 0.475449, b02 = -0.061178, b03 =  0.066322;
+        // constexpr double b11 = 0.170654, b12 =  0.017132, b13 = -0.039015,
+        //                  b14 = -0.045476;
+        // constexpr double c11 = 0.36133,  c12 = -1.63867,  c13 = -0.638673;
+        //
+        // const double xi2 = xi * xi;
+        //
+        // const double PI_0 =
+        //       b01 * gsl_sf_hyperg_2F1(-1.0/6.0, 1.0, 0.5,  xi2)
+        //     + b02 * gsl_sf_hyperg_2F1(-7.0/6.0, 1.0, 0.5,  xi2)
+        //     + b03 * (2.0 - M_PI * std::fabs(xi));
+        //
+        // const double PI_1 =
+        //       b11 * gsl_sf_hyperg_2F1( c11,      1.0, 0.5,  xi2)
+        //     + b12 * xi2 * gsl_sf_hyperg_2F1( c12, 1.0, 0.5, xi2)
+        //     + b13 * gsl_sf_hyperg_2F1( c13,      2.0, 1.5,  xi2)
+        //     + b14 * (2.0 - M_PI * std::fabs(xi));
+        //
+        // const double epsi_K = 0.1076 * std::pow(Kt, 3.16796);
+        //
+        // // Verify correction is small relative to leading term
+        // if ( PI_0 <= epsi_K * PI_1 )
+        //     throw csmp::Exception(ERROR,
+        //         "Fracture<dim>::AnalyticalPressure()",
+        //         "Toughness correction exceeds leading term — outside valid range.");
+        //
+        // return p_star * (PI_0 + epsi_K * PI_1);
+        // ---- end of disabled implementation ----
     }
 
     // -----------------------------------------------------------------------

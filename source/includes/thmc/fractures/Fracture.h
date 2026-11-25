@@ -122,6 +122,7 @@ public:
 
     void                              ConfigureAnalyticalParametersAndSolutions(double constant_flux, double viscosity, double critSIF, double youngs_modulus, double poisson_ratio, bool plane_strain = true);
     double                            AnalyticalAperture(double t, double x = 0.0);
+    /// @attention throws a csmp::Exception in the viscosity-dominated regime, which requires the hypergeometric function of GSL (see Fracture.cpp)
     double                            AnalyticalPressure(double t, double x = 0.0);
     double                            AnalyticalLength(double t);
     double                            DimensionlessToughness();
