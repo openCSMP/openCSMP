@@ -228,9 +228,6 @@ private:
     double volume_factor_LHS = 0.;
     double volume_factor_RHS = 0.;
 
-    double hrock_prev      = 0.;
-    double hrock_curr      = 0.;
-
     static constexpr double kelvin = 273.15;
 
     // ── Residual saturations ──────────────────────────────────────────────HARDCODED HERE, COULD BE MOVED TO SETTER FUNCTION

@@ -569,20 +569,17 @@ void NaClH2OPropertiesVisitorPHX<dim>::CalculateAbsoluteVariables( Node<dim>* n 
     }
 
 
-    // Rock enthalpy change (accounts for optional crystallisation curve / latent heat)
-    if(with_rock_liquidus_solidus)
-    {
-        hrock_prev = rock.Enthalpy(tp(), tl(), ts());
-        hrock_curr = rock.Enthalpy(t(),  tl(), ts());
-    }
-    else
-    {
-        hrock_prev = rock.Enthalpy(tp());
-        hrock_curr = rock.Enthalpy(t());
-    }
-
     // Conductive enthalpy increments (air diffusion not yet implemented)
-    dh_rock_diff_  = (1.0 - phi()) * rr() * (hrock_curr - hrock_prev);
+    // S. Scott, 2026-11-20: the rock share of the heat that the conduction step moved into this node. That step used
+    // the rock's sensible heat capacity at the start-of-step temperature tp (no latent heat), so the same value is
+    // used here. Latent heat of a liquidus/solidus is not added here. It is part of the rock enthalpy (Rock::Enthalpy,
+    // sensible part + h_fusion x melt fraction) that the equilibration (H2ONaClThermalEquilibrator) uses to find T from
+    // H_current_, and that is where the arriving heat is split between changing T and melting or crystallising.
+    // Before, this line added hr(t) - hr(tp) with that latent heat included, so H_current_ already matched the
+    // conduction temperature t, the equilibration returned T = t, and latent heat never buffered T (tests 106-108).
+    const double cp_rock_sensible = with_rock_liquidus_solidus ? rock.HeatCapacity(tp(), tl(), ts())
+                                                               : rock.HeatCapacity(tp());
+    dh_rock_diff_  = (1.0 - phi()) * rr() * cp_rock_sensible * (t() - tp());
     // S. Scott, 2026-11-17: when the conduction step used the fluid heat capacity as well
     // (AddFluidContributionToHeatCapacity(true): ncp = rock + phi rho_bulk cpf), credit the fluid share of the conducted
     // heat too. Crediting the rock share only lost a fraction fluid/(rock + fluid) of the conducted heat every step

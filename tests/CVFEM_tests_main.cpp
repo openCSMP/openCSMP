@@ -45,6 +45,9 @@ const std::vector<std::string> ALL_TEST_FILES_1D = {
     "test-105a",
     "test-105b",
     "test-105c",
+    "test-106",
+    "test-107",
+    "test-108",
 };
 
 const std::vector<std::string> ALL_TEST_FILES_2D = {
@@ -190,8 +193,8 @@ int main( int argc, char* argv[] )
     std::vector<std::string> requestedTests_1D, requestedTests_2D;
     if ( run1D )
     {
-        std::cerr << "\nEnter the tests to run, comma-separated (test-101, test-101-wg, test-102, test-102-wg, test-103, test-103-wg, test-104, test-104-wg, test-105a, test-105b, test-105c),"
-                     "\n(test-105a-c compare with an analytical solution and always run to the end, independent of QUICK/EXTENDED),"
+        std::cerr << "\nEnter the tests to run, comma-separated (test-101, test-101-wg, test-102, test-102-wg, test-103, test-103-wg, test-104, test-104-wg, test-105a, test-105b, test-105c, test-106, test-107, test-108),"
+                     "\n(test-105a-c and test-106 to test-108 compare with an analytical or reference solution and always run to the end, independent of QUICK/EXTENDED),"
                      "\nor type 'all' to run every test in the selected suite(s): ";
 
         std::string testSelectionInput;
