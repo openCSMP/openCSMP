@@ -64,6 +64,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <ostream>
 #include <random>
 #include <set>
+#include <span>
 #include <sstream>
 #include <stdexcept>
 #include <string>

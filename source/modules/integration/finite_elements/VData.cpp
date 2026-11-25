@@ -2757,338 +2757,75 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
  
  
- /**
-   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a2D domain.
-   This method accomplishes this.
-   
-   @brief To ensure that the normals pointing out of a lower (1D) dimensional elements located at the model boundary,
-   and that they all point in the same direction for internal boundaries, the nodes of such elements must be locally ordered consistently;
-   meaning these line elements are aligned with the node-numbering of the faces of 2D surface elements located at the
-   model boundary whose nodes are numbered counter clockwise.
-   
-   The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements,
-   which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
-   
-   @attention this method expects that there already is connectivity information for line elements
-   
-   @attention if the line elements do not know their neighbors already, this method will not work!
-   
-   @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
-   
-   @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
-   =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which must stored in pfverts.
-   
-   @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements)
-   
-   @note algorithmic procedure: 1) chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
-   2) these are then traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the chains of
-   line elements are flipped if their direction is not matched with that of the faces of the surface elements at the model boundary.
-   4) line element chains inside of the model are kept in whichever, yet consistent orientation.
-   
-  @author SKM
-  @date 3/22020
-  @test 2/10/21
-  
-  */
- void VData::CreateConsistentLineElementOrientations2D()
-   {
-      if ( bflags.empty() ) {
-            throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D",
-                                  "Method relies on correct flagging of boundary nodes. This is not present in VData.");
-        }
-      if ( pfverts.empty() ) {
-            cerr <<"\nVData::CreateConsistentLineElementOrientations2D: 'pfverts' is empty; nothing could be done.\n";
-            return;
-         }
-      // if this is already a full fledged CSMP model it is assumed to comply with the CSMP conventions
-      if ( Faces() > 0u || Interfaces() > 0u ) return;
-      
-      assert( plist.size() == pfverts.size() );
-       
-      // assuming that the mesh consists of surface and line elements
-      assert( HybridElementTypeMesh()==true ); 
-       
-      // 1. Finding line elements and edges of surface elements located at the model boundary
-      // ------------------------------------------------------------------------------------
-      set<size_t>  line_elmts, boundary_line_elmts;
-      // recording the corner-node ids of the surface elements for later searching
-      // face-nd-id key, boundary face node ids in correct sequence
-      deque<pair<size_t,size_t> > surf_elmt_face_nd_ids;
-
-      const vector<int8_t>::const_iterator  end = PelmtEnd();
-      vector<int8_t>::const_iterator        eit = PelmtBegin();
-      size_t                                elmt_idx{0U};
-
-       while( eit != end ) {
-            CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
-            // only recording line elements that are located at the beginning or end of a polyline = line element chain
-            if ( isLineElement( etype ) ) {
-                  // line elements with a single neighbor at the beginning or end of polyline
-                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) ||
-                        (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
-                    // but only, if that neighbor is located on the inside of the model
-                    if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] == NOT || bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] == NOT ) {
-                         line_elmts.insert( elmt_idx );
-                      }
-                  // line elements on the model boundary
-                 if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] < 0 && bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] < 0 ) {
-                       boundary_line_elmts.insert( elmt_idx );
-                    }
-              }
-            // if this is a surface element  
-            else {
-                 // looping over the faces (edges), finding those at the boundary
-                 // and storing their nodes in correct order for later comparisons
-                 if ( isTriangularElement( etype ) ) {
-                      const size_t faces{3};
-                      for ( auto i{0U}; i < faces; ++i )
-                        if ( pfverts[elmt_idx][i] < 0 )
-                          {
-                             if ( i == 0 ) { // face 0
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
-                               }
-                             else if ( i == 1 ) { // face 1
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][0] ) );
-                               }
-                             else { // face 2
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
-                               }
-                          }
-                   }
-                 // quadrilaterals
-                 else if ( isQuadrilateralElement( etype ) ) {
-                      const size_t faces{4};
-                      for ( auto i{0U}; i < faces; ++i )
-                        if ( pfverts[elmt_idx][i] < 0 )
-                          {
-                             if ( i == 0 ) { // face 0
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
-                               }
-                             else if ( i == 1 ) { // face 1
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
-                               }
-                             else if ( i == 2 ) { // face 2
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][3] ) );
-                               }
-                             else { // face 3
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) );
-                               }
-                         }
-                   } 
-                 else {
-                      cerr <<"\n\telement "<< elmt_idx <<": type "<< parseFiniteElementType(*eit) <<" cannot be processed.\n";
-                      throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D", "element type not recognised");
-                   }
-              }
-            elmt_idx++;
-            eit++;
-         }
-         
-      // 2. following potential line element chains from beginning to end, re-orientating elements as necessary
-      //    and recording individual polylines
-      // ------------------------------------------------------------------------------------------------------
-      // (after the potential re-orientation of surface elements by ModelTopology) line element orientations might be inconsistent with surface ones)
-      // root-elmt & numbers of interconnected line elements in discovered chain
-      map<int64_t,deque<int64_t> > polylines;
-      set<size_t>                  processed_elmts;
-      
-      // looping over the line elements that are missing one neighbor, starting at the beginning or end of a chain
-      for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
-        {
-           // getting index of element and skipping elements that have already been processed
-           elmt_idx = static_cast<size_t>(*it);
-           if ( processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
-
-           // isolated line elements (no neighbors) are skipped as well
-           if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) {
-                polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
-                processed_elmts.insert( elmt_idx );
-                continue;
-             }
-
-         // storing the element as the first in a new line element sequence
-          auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
-          // making sure that the element was indeed inserted (else it is a duplicate)
-          assert( chain_it.second == true );
-          processed_elmts.insert( elmt_idx );
-          
-          // traversing the line element chain until running out of neighbors
-          // ----------------------------------------------------------------
-          // NB: like for other simplex elements, the line element neighbor is located opposite to the node with the same number.
-          //     nbor1 | [nd0]-line element0-[nd1] | nbor0
-          
-          // -----------------------
-          // forward chain traversal
-          // -----------------------
-          // (the neighbor element first node will is shared with the zeroth node of the following line element)
-          if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L ) {
-              bool end_of_polyline(false);
-              while ( end_of_polyline == false )
-                {
-                   // if this next element's first neighbor is element 'elmt_idx', everything is fine and no flip is required
-                   const size_t first_nbor = static_cast<size_t>(pfverts[elmt_idx][0]); // since we are sure that pfverts entry is positive
-                   bool flip = ( pfverts[ first_nbor ][1] == static_cast<int64_t>(elmt_idx) ) ? false : true;
-                   // else we flip this element's nodes and neighbors
-                   if ( flip == true ) {
-                        swap( plist[ first_nbor ][0],  plist[ first_nbor ][1] );
-                        swap( pfverts[ first_nbor ][0], pfverts[ first_nbor ][1] );
-                     }
-                   // we move to the next element
-                   elmt_idx = first_nbor;
-                   // then we store this element in the polyline
-                   (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
-                   // and record it as processed
-                   auto inserted = processed_elmts.insert( elmt_idx );
-                   // checking that we are not visiting a previously visited element again
-                   assert( inserted.second == true );
-                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][0] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
-                     end_of_polyline = true;
-                }
-               continue;
-            }
-          // -------------------------------
-          // backward chain traversal
-          // -------------------------------
-          if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L ) {
-              bool beginning_of_polyline(false);
-              while ( beginning_of_polyline == false )
-                {
-                   // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
-                   const size_t second_nbor = static_cast<size_t>(pfverts[elmt_idx][1]);
-                   bool flip = ( pfverts[ second_nbor ][0] == static_cast<int64_t>(elmt_idx) ) ? false : true;
-                   // and, if necessary, we flip its nodes and neighbors.
-                   if ( flip == true ) {
-                        swap( plist[ second_nbor ][0],  plist[ second_nbor ][1] );
-                        swap( pfverts[ second_nbor ][0], pfverts[ second_nbor ][1] );
-                     }
-                   // we move to this next element
-                   elmt_idx = second_nbor;
-                   // then we store this element in the polyline.
-                   (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
-                   auto inserted = processed_elmts.insert( elmt_idx );
-                   assert( inserted.second == true );
-                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][1] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
-                     beginning_of_polyline = true;
-                }
-            }
-       } // for line_elements
-       
-      // NOTE: since every chain has a beginning and an end, it would normally be stored twice, but:
-      //       - of the interior chains, only the ones starting with the lower element number are kept
-      //       - for the ones surrounding the model the one consistent with the counter-clockwise numbering of the higher-dim. ele is stored
-      //       - the only line elements left now, are those forming part of loops, these must be consistent in their orientation with
-      //         the faces of the elements that they surround.
-      if ( !polylines.empty() ) {
-          cout <<"\n\nVData::CreateConsistentLineElementOrientations2D: processed "<< polylines.size() <<" polylines with the line elements:"<< endl;
-          for ( auto it : polylines ) {
-               cout <<"\t"<< it.first <<": ";
-               for ( auto idx : it.second ) cout << idx <<" ";
-               cout << endl;
-            }
-          cout << endl;
-        }
-      else {
-           cerr <<"\nVData::CreateConsistentLineElementOrientations2D: WARNING: No changes were made. Unable to process line element chains. ";
-           cerr <<"\n\n\t\t"<<"line elements processed: "<< processed_elmts.size() << endl;
-        }
-      
-      // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
-      // --------------------------------------------------------------------------------------------------------------------------------
-      // using: //  face-nd-ids, elmt, face   to verify that elements are indeed oriented correctly
-      //
-      // getting the surface element deque ready for binary_search
-      //    deque<pair<size_t,size_t> >
-      sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
-      
-      // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( auto it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
-        {
-           // searching for the corresponding face of a higher dimensional element
-           // --------------------------------------------------------------------
-           // if a surface element face with same node numbering is found the line element is already correctly oriented
-           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) ) {
-                continue;
-             }
-           // if the face has the opposite orientation, the line elements in the polyline must be flipped
-           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][1], plist[*it][0]) ) ) {
-                swap( plist[*it][0], plist[*it][1] );     // swapping nodes
-                swap( pfverts[*it][0], pfverts[*it][1] ); // swapping neighbors
-                continue;
-             }
-           // this is a line element with no surface element next to it?
-           cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
-           cerr << plist[*it][0] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][0])])) <<"), ";
-           cerr << plist[*it][1] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][1])])) <<"), ";
-           cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
-           
-        } // end boundary_line_elmts
-              
-  } // end CreateConsistentLineElementOrientations2D
-
-
-
- // checking the node flagging for the case that the line elements are Faces or InterFaces
- /*
- int bflag{MULTIPLE}, no_nbor{0};
- if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
- else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
- // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
- if ( bflag >= 0 ) {
-      cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
-      cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
-      cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
-      cerr <<" should be equivalent to boundary flag of the adjacent node: ";
-      cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
-   }
- assert( bflag >= MULTIPLE );
-*/
- 
 /**
-   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a 2D domain.
+   Line elements must be oriented in a consistent way for internal 1D regions and along the exterior
+   and hole boundaries of a 2D domain. This method accomplishes this.
 
-   @brief Ensures that line elements are aligned with the node-numbering of the faces of 2D surface elements
-   located at the model boundary whose nodes are numbered counter-clockwise.
+   @brief Makes chains and closed loops of line elements head-to-tail consistent and aligns those that lie
+   on a boundary of the surface mesh with the node numbering of the faces of the adjacent
+   (counter-clockwise numbered) surface elements.
 
    The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the
-   line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
+   line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line Element). For an aligned
+   boundary line element this normal therefore points out of the surface mesh.
 
-   @attention this method expects that there already is connectivity information for line elements.
-   @attention if the line elements do not know their neighbors already, this method will not work.
+   @attention this method expects that there already is connectivity information for line elements;
+              if the line elements do not know their neighbors already, this method will not work.
    @attention assumes node numbering in 'plist' follows the convention corner nodes first, then interior nodes.
-   @attention method assumes that all manifolds have been disambiguated before calling this method.
+   @attention method assumes that all manifolds (connections of more than 2 line elements at a node) have
+              been disambiguated before, so that each end of a line element has at most one neighbor.
    @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements):
               nbor1 | [nd0]-line element-[nd1] | nbor0
 
-   @note Convention: pfverts[e][0] is the neighbour opposite nd0, i.e., on the nd1 side (right-hand neighbour).
-                     pfverts[e][1] is the neighbour opposite nd1, i.e., on the nd0 side (left-hand neighbour).
+   @note Convention: pfverts[e][0] is the neighbour opposite nd0, i.e., on the nd1 side (forward neighbour).
+                     pfverts[e][1] is the neighbour opposite nd1, i.e., on the nd0 side (backward neighbour).
 
    @note Algorithmic procedure:
-         1) Line elements are classified into chain endpoints (one missing neighbour) and boundary elements
-            (both nodes on BOX_BOUNDARY). Closed loops are detected and warned about.
-         2) Chains are traversed from their endpoints, flipping elements whenever successive elements
-            are not consistently oriented.
-         3) Boundary chains are aligned with the counter-clockwise face ordering of adjacent surface elements.
-            The flip is propagated through the entire chain.
+         1) Line elements are classified into chain endpoints (exactly one missing neighbour),
+            isolated elements (both neighbours missing) and members of closed loops (both present).
+            The faces of surface elements without a neighbour (exterior and hole boundaries) are
+            collected as node pairs in their counter-clockwise order.
+         2a) Open chains are traversed from an endpoint, flipping elements whenever successive
+             elements are not consistently oriented.
+         2b) Closed loops are traversed from an arbitrary seed element in the same way.
+         3) Every polyline (chain or loop) is compared, element by element, with the boundary faces
+            collected in 1). If its boundary elements are reversed, the whole polyline is flipped, so
+            that the head-to-tail order of 2) is retained. Polylines without any element on a boundary
+            keep the orientation they obtained in 2).
 
-   @author SKM (original), AI corrections applied
+   @note The boundary flags of the nodes are not used for the alignment in 3): what counts is whether a line
+         element coincides with a surface-element face that has no neighbour. Holes are therefore treated
+         like the exterior boundary, irrespective of whether their nodes are flagged INTERNAL or IRREGULAR,
+         and a line element that merely connects two boundary nodes across the mesh is not mistaken for
+         a boundary element.
+
+   @attention A polyline that follows boundaries in both senses (for instance along the bottom, through the
+              interior and then along the top of the model in the same direction) cannot be head-to-tail
+              consistent and aligned at the same time. Because there is only one correct sense along a
+              boundary, its boundary elements are aligned individually and a warning is issued; the
+              head-to-tail order is then interrupted where the sense changes.
+
+   @throws csmp::Exception if the neighbour connectivity of the line elements in 'pfverts' is not reciprocal.
+
+   @author SKM (original 3/2020), revised 11/2026
 */
-void VData::CreateConsistentLineElementOrientations2D_AI()
+void VData::CreateConsistentLineElementOrientations2D()
 {
+    const char* const fn = "VData::CreateConsistentLineElementOrientations2D";
+    const char* const broken_connectivity =
+        "the neighbour connectivity of the line elements stored in 'pfverts' is inconsistent";
+
     // =========================================================================
     // Precondition checks
     // =========================================================================
 
     if ( bflags.empty() )
-        throw csmp::Exception( ERROR,
-                               "VData::CreateConsistentLineElementOrientations2D_AI",
+        throw csmp::Exception( ERROR, fn,
                                "Method relies on correct flagging of boundary nodes. "
                                "This is not present in VData." );
 
     if ( pfverts.empty() ) {
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
-             << "'pfverts' is empty; nothing could be done.\n";
+        cerr << "\n" << fn << ": 'pfverts' is empty; nothing could be done.\n";
         return;
     }
 
@@ -3102,13 +2839,13 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     // 1. Classify line elements and collect surface-element boundary face pairs
     // =========================================================================
 
-    // Chain endpoints: exactly one missing neighbour (regardless of node boundary flags)
-    set<size_t>  line_elmts;
+    // Open-chain endpoints: exactly one missing neighbour
+    set<size_t>  endpoint_line_elmts;
 
-    // Elements with both nodes on the BOX_BOUNDARY — used for surface alignment in Stage 3
-    set<size_t>  boundary_line_elmts;
+    // Isolated line elements: both neighbours missing (single disconnected segment)
+    set<size_t>  isolated_line_elmts;
 
-    // All line element indices — used to detect unprocessed closed loops after Stage 2
+    // All line element indices -- used to seed closed-loop traversal in Stage 2b
     set<size_t>  all_line_elmts;
 
     // Surface-element boundary face node pairs in CCW order, for Stage 3 alignment
@@ -3127,20 +2864,33 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
         {
             all_line_elmts.insert( elmt_idx );
 
-            const bool nd0_on_boundary = ( bflags[ plist[elmt_idx][0] ] < 0 );
-            const bool nd1_on_boundary = ( bflags[ plist[elmt_idx][1] ] < 0 );
-
-            // FIX 1: classify as chain endpoint if exactly one neighbour is missing,
-            // regardless of node boundary flags (original code required an interior node).
             const bool missing_nbor0 = ( pfverts[elmt_idx][0] < 0 );
             const bool missing_nbor1 = ( pfverts[elmt_idx][1] < 0 );
 
-            if ( missing_nbor0 != missing_nbor1 )
-                line_elmts.insert( elmt_idx );
+            // -----------------------------------------------------------------
+            // Consistency check of the entries for missing neighbours:
+            // pfverts[e][0] is opposite nd0, so the node at that end is nd1 (plist[e][1]);
+            // pfverts[e][1] is opposite nd1, so the node at that end is nd0 (plist[e][0]).
+            // A chain may end at a node on a boundary, in which case the entry is a
+            // boundary flag, or at a node inside of the model (flag NOT), for which
+            // EstablishElementConnectivity2D() stores INTERNAL. Anything else is reported.
+            // -----------------------------------------------------------------
+            for ( uint32_t side{0U}; side < 2U; ++side )
+            {
+                if ( pfverts[elmt_idx][side] >= 0 ) continue;
+                const int8_t node_flag = bflags[ plist[elmt_idx][1U-side] ];
+                if ( node_flag >= 0 && pfverts[elmt_idx][side] != static_cast<int64_t>( INTERNAL ) )
+                    cerr << "\n" << fn << ": 'pfvert[" << elmt_idx << "][" << side << "]' = "
+                         << parseBoundary( static_cast<BOX_BOUNDARY>( pfverts[elmt_idx][side] ) )
+                         << " (" << pfverts[elmt_idx][side] << ") marks a missing neighbour at a node "
+                         << "that is not located on a boundary; expected INTERNAL." << endl;
+            }
 
-            // Boundary line elements: both corner nodes on the BOX_BOUNDARY
-            if ( nd0_on_boundary && nd1_on_boundary )
-                boundary_line_elmts.insert( elmt_idx );
+            if ( missing_nbor0 && missing_nbor1 )
+                isolated_line_elmts.insert( elmt_idx );   // no neighbours at all
+            else if ( missing_nbor0 != missing_nbor1 )
+                endpoint_line_elmts.insert( elmt_idx );   // open-chain endpoint
+            // else: both neighbours present -> interior of a chain or part of a closed loop
         }
         else
         {
@@ -3191,7 +2941,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 cerr << "\n\telement " << elmt_idx << ": type "
                      << parseFiniteElementType( *eit ) << " cannot be processed.\n";
                 throw csmp::Exception( ERROR,
-                                       "VData::CreateConsistentLineElementOrientations2D_AI",
+                                       "VData::CreateConsistentLineElementOrientations2D",
                                        "element type not recognised" );
             }
         }
@@ -3202,7 +2952,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     } // end classification loop
 
     // =========================================================================
-    // 2. Traverse chains from endpoints, flipping elements for consistency
+    // 2a. Traverse open chains from endpoints, flipping elements for consistency
     // =========================================================================
 
     // Convention reminder:
@@ -3215,21 +2965,35 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     // For two consecutive elements B <- A to be consistently oriented:
     //   pfverts[B][0] == A   (B's right-hand neighbour is A)
 
-    // root element index -> ordered sequence of element indices in the chain
+    // root element index -> ordered sequence of element indices in the chain / loop
     map<size_t, deque<int64_t>>  polylines;
     set<size_t>                  processed_elmts;
 
-    for ( const size_t start_idx : line_elmts )
+    // Neighbour links must be reciprocal; otherwise the traversals below would
+    // re-orient elements wrongly or, in a release build, never terminate.
+    auto requireBackLink = [&]( size_t to, size_t from ) {
+        if ( to >= pfverts.size() || pfverts[to].size() < 2U ||
+             ( pfverts[to][0] != static_cast<int64_t>(from) &&
+               pfverts[to][1] != static_cast<int64_t>(from) ) )
+            throw csmp::Exception( ERROR, fn, broken_connectivity );
+    };
+
+    // ------------------------------------------------------------------
+    // Isolated stubs — store as trivial single-element chains
+    // ------------------------------------------------------------------
+    for ( const size_t stub_idx : isolated_line_elmts )
+    {
+        polylines.insert( { stub_idx, { static_cast<int64_t>(stub_idx) } } );
+        processed_elmts.insert( stub_idx );
+    }
+
+    // ------------------------------------------------------------------
+    // Open chains — traverse from each endpoint
+    // ------------------------------------------------------------------
+    for ( const size_t start_idx : endpoint_line_elmts )
     {
         // Skip if already incorporated into a previously traversed chain
         if ( processed_elmts.count( start_idx ) ) continue;
-
-        // Isolated element (both neighbours missing) — store as a trivial chain
-        if ( pfverts[start_idx][0] < 0 && pfverts[start_idx][1] < 0 ) {
-            polylines.insert( { start_idx, { static_cast<int64_t>(start_idx) } } );
-            processed_elmts.insert( start_idx );
-            continue;
-        }
 
         // Insert the starting element as the root of a new chain
         auto chain_it = polylines.insert(
@@ -3239,19 +3003,16 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
         elmt_idx = start_idx;
 
-        // ------------------------------------------------------------------
         // Forward traversal: follow pfverts[e][0] (right-hand / nd1-side neighbour)
         // Entry condition: pfverts[start][0] >= 0  AND  pfverts[start][1] < 0
-        // i.e., the start element has its missing neighbour on the nd0 side.
-        // ------------------------------------------------------------------
         if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L )
         {
             while ( true )
             {
                 const size_t next = static_cast<size_t>( pfverts[elmt_idx][0] );
+                requireBackLink( next, elmt_idx );
 
                 // For consistency: next's left-hand neighbour must be elmt_idx.
-                // If it is next's right-hand neighbour instead, next is reversed.
                 const bool flip = ( pfverts[next][1] != static_cast<int64_t>(elmt_idx) );
 
                 if ( flip ) {
@@ -3263,24 +3024,21 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
 
                 auto inserted = processed_elmts.insert( elmt_idx );
-                assert( inserted.second == true ); // cycle guard
+                if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // cycle guard
 
-                // Exit when the current element has no further forward neighbour
                 if ( pfverts[elmt_idx][0] < 0L ) break;
             }
-            continue; // chain fully traversed; move to next start element
+            continue;
         }
 
-        // ------------------------------------------------------------------
         // Backward traversal: follow pfverts[e][1] (left-hand / nd0-side neighbour)
         // Entry condition: pfverts[start][0] < 0  AND  pfverts[start][1] >= 0
-        // i.e., the start element has its missing neighbour on the nd1 side.
-        // ------------------------------------------------------------------
         if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L )
         {
             while ( true )
             {
                 const size_t next = static_cast<size_t>( pfverts[elmt_idx][1] );
+                requireBackLink( next, elmt_idx );
 
                 // For consistency: next's right-hand neighbour must be elmt_idx.
                 const bool flip = ( pfverts[next][0] != static_cast<int64_t>(elmt_idx) );
@@ -3294,31 +3052,87 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
 
                 auto inserted = processed_elmts.insert( elmt_idx );
-                assert( inserted.second == true ); // cycle guard
+                if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // cycle guard
 
-                // Exit when the current element has no further backward neighbour
                 if ( pfverts[elmt_idx][1] < 0L ) break;
             }
         }
 
-    } // end chain traversal loop
+    } // end open-chain traversal loop
+
+    // =========================================================================
+    // 2b. Traverse closed loops — seed from any unprocessed line element
+    // =========================================================================
+    //
+    // A closed loop has no endpoint: every element has both neighbours present.
+    // We pick an arbitrary seed, traverse forward via pfverts[e][0] until we
+    // return to the seed, flipping elements for internal consistency as we go.
+    // The loop is stored as a polyline whose first and last entries are the same
+    // seed element index (to signal closure).
+    // =========================================================================
+
+    for ( const size_t seed_idx : all_line_elmts )
+    {
+        if ( processed_elmts.count( seed_idx ) ) continue;
+
+        // Seed must have both neighbours present (otherwise it would have been
+        // classified as an endpoint or stub and handled above)
+        if ( pfverts[seed_idx][0] < 0L || pfverts[seed_idx][1] < 0L )
+            throw csmp::Exception( ERROR, fn, broken_connectivity );
+
+        auto chain_it = polylines.insert(
+            { seed_idx, { static_cast<int64_t>(seed_idx) } } );
+        assert( chain_it.second == true );
+        processed_elmts.insert( seed_idx );
+
+        elmt_idx = seed_idx;
+
+        while ( true )
+        {
+            const size_t next = static_cast<size_t>( pfverts[elmt_idx][0] );
+            requireBackLink( next, elmt_idx );
+
+            // Closed-loop termination: we have returned to the seed
+            if ( next == seed_idx ) {
+                // Append seed index again to mark loop closure
+                (*chain_it.first).second.push_back( static_cast<int64_t>(seed_idx) );
+                break;
+            }
+
+            // For consistency: next's left-hand neighbour must be elmt_idx.
+            const bool flip = ( pfverts[next][1] != static_cast<int64_t>(elmt_idx) );
+
+            if ( flip ) {
+                swap( plist[next][0],   plist[next][1]   );
+                swap( pfverts[next][0], pfverts[next][1] );
+            }
+
+            elmt_idx = next;
+            (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
+
+            auto inserted = processed_elmts.insert( elmt_idx );
+            if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // never revisit before reaching seed
+
+        } // end closed-loop traversal
+
+    } // end closed-loop seeding loop
 
     // -------------------------------------------------------------------------
-    // Warn about closed loops (no endpoint — never entered line_elmts)
+    // Sanity check: every line element must now be processed
     // -------------------------------------------------------------------------
     {
-        set<size_t> unprocessed_line_elmts;
-        set_difference( all_line_elmts.begin(),   all_line_elmts.end(),
-                        processed_elmts.begin(),  processed_elmts.end(),
-                        inserter( unprocessed_line_elmts, unprocessed_line_elmts.begin() ) );
+        set<size_t> still_unprocessed;
+        set_difference( all_line_elmts.begin(),  all_line_elmts.end(),
+                        processed_elmts.begin(), processed_elmts.end(),
+                        inserter( still_unprocessed, still_unprocessed.begin() ) );
 
-        if ( !unprocessed_line_elmts.empty() ) {
-            cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
-                 << unprocessed_line_elmts.size()
-                 << " line element(s) were not processed — they likely form closed loop(s).\n"
-                 << "  Closed loops are not yet handled; their orientation is left unchanged.\n"
+        if ( !still_unprocessed.empty() ) {
+            cerr << "\nVData::CreateConsistentLineElementOrientations2D: ERROR: "
+                 << still_unprocessed.size()
+                 << " line element(s) remain unprocessed after Stages 2a and 2b.\n"
+                 << "  This indicates a connectivity error in 'pfverts'.\n"
                  << "  Unprocessed element indices:";
-            for ( const auto idx : unprocessed_line_elmts )
+            for ( const auto idx : still_unprocessed )
                 cerr << " " << idx;
             cerr << "\n";
         }
@@ -3326,92 +3140,91 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
     // Diagnostic output
     if ( !polylines.empty() ) {
-        cout << "\n\nVData::CreateConsistentLineElementOrientations2D_AI: processed "
+        cout << "\n\nVData::CreateConsistentLineElementOrientations2D: processed "
              << polylines.size() << " polylines:\n";
         for ( const auto& pl : polylines ) {
-            cout << "\t" << pl.first << ": ";
+            const bool is_loop = ( pl.second.size() > 1 &&
+                                   pl.second.front() == pl.second.back() );
+            cout << "\t[" << ( is_loop ? "loop" : "chain" ) << "] root "
+                 << pl.first << ": ";
             for ( const auto idx : pl.second ) cout << idx << " ";
             cout << "\n";
         }
         cout << "\n";
     }
     else {
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
+        cerr << "\nVData::CreateConsistentLineElementOrientations2D: WARNING: "
              << "No polylines were built. Unable to process line element chains.\n"
              << "\t\tLine elements processed: " << processed_elmts.size() << "\n";
     }
 
     // =========================================================================
-    // 3. Align boundary chains with CCW surface-element face ordering
+    // 3. Align polylines with the CCW face-node numbering of the surface elements
+    // =========================================================================
+    //
+    // A line element takes part in the alignment if it coincides with a face of a
+    // surface element that has no neighbour, i.e., with an edge of the exterior
+    // boundary or of a hole. All elements of a polyline are examined, so that the
+    // result does not depend on the order in which they are stored.
     // =========================================================================
 
     // Sort the surface face pairs for binary_search
     sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
 
-    for ( const size_t boundary_start : boundary_line_elmts )
+    // Helper: flip a single line element (nodes and neighbour entries)
+    auto flipLineElement = [&]( size_t eidx ) {
+        swap( plist[eidx][0],   plist[eidx][1]   );
+        swap( pfverts[eidx][0], pfverts[eidx][1] );
+    };
+
+    auto isBoundaryFace = [&]( size_t nd0, size_t nd1 ) -> bool {
+        return binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(),
+                              make_pair( nd0, nd1 ) );
+    };
+
+    for ( const auto& pl : polylines )
     {
-        // Check whether this boundary element is already correctly oriented
-        const pair<size_t,size_t> fwd_pair{ plist[boundary_start][0],
-                                            plist[boundary_start][1] };
-        const pair<size_t,size_t> rev_pair{ plist[boundary_start][1],
-                                            plist[boundary_start][0] };
+        // for a closed loop the seed is stored twice (first and last entry)
+        const set<size_t> members( pl.second.begin(), pl.second.end() );
 
-        if ( binary_search( surf_elmt_face_nd_ids.begin(),
-                            surf_elmt_face_nd_ids.end(), fwd_pair ) )
+        // elements whose node order matches / is opposite to that of a boundary face
+        vector<size_t> aligned, reversed;
+        for ( const size_t eidx : members )
         {
-            // Already correctly oriented — nothing to do
-            processed_elmts.insert( boundary_start );
+            if      ( isBoundaryFace( plist[eidx][0], plist[eidx][1] ) ) aligned.push_back( eidx );
+            else if ( isBoundaryFace( plist[eidx][1], plist[eidx][0] ) ) reversed.push_back( eidx );
+        }
+
+        // nothing to do: polyline inside of the model, or already aligned
+        if ( reversed.empty() ) continue;
+
+        if ( aligned.empty() )
+        {
+            // the whole polyline runs against the boundary faces: flipping every
+            // element reverses it while retaining the head-to-tail order
+            for ( const size_t eidx : members ) flipLineElement( eidx );
             continue;
         }
 
-        if ( binary_search( surf_elmt_face_nd_ids.begin(),
-                            surf_elmt_face_nd_ids.end(), rev_pair ) )
-        {
-            // FIX 2: flip the boundary element AND propagate through its entire chain.
+        // The polyline follows boundaries in both senses. There is only one correct
+        // sense along a boundary, so the reversed boundary elements are flipped
+        // individually; the head-to-tail order is interrupted where the sense changes.
+        for ( const size_t eidx : reversed ) flipLineElement( eidx );
 
-            // Flip the boundary start element
-            swap( plist[boundary_start][0],   plist[boundary_start][1]   );
-            swap( pfverts[boundary_start][0], pfverts[boundary_start][1] );
-            processed_elmts.insert( boundary_start );
-
-            // Propagate the flip forward through the chain (follow pfverts[e][0])
-            size_t current = boundary_start;
-            while ( pfverts[current][0] >= 0L )
-            {
-                const size_t next = static_cast<size_t>( pfverts[current][0] );
-
-                // After flipping the boundary start, the chain direction is reversed.
-                // Each subsequent element must also be flipped to restore consistency.
-                swap( plist[next][0],   plist[next][1]   );
-                swap( pfverts[next][0], pfverts[next][1] );
-
-                processed_elmts.insert( next );
-                current = next;
-            }
-            continue;
-        }
-
-        // No matching surface face found — detached boundary line element
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
-             << "detected detached line element " << boundary_start
-             << " at border with nodes:\n\t\t"
-             << plist[boundary_start][0]
-             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
-                            bflags[ plist[boundary_start][0] ] ) ) << "), "
-             << plist[boundary_start][1]
-             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
-                            bflags[ plist[boundary_start][1] ] ) ) << ")"
-             << " — element has no higher-dimensional neighbour; "
-             << "its orientation was left untouched.\n";
+        cerr << "\n" << fn << ": WARNING: the line-element polyline with root " << pl.first
+             << " follows the boundaries of the surface mesh in both senses ("
+             << aligned.size() << " elements aligned, " << reversed.size() << " reversed)."
+             << " Its boundary elements were aligned individually; neighbour-to-neighbour"
+             << " traversal of this polyline is not head-to-tail consistent.\n";
 
     } // end boundary alignment loop
 
-} // end CreateConsistentLineElementOrientations2D_AI
+} // end CreateConsistentLineElementOrientations2D
 
 
 
  
- /// finds angle between 2 line elements determined by their number in the plist                                            
+ /// finds angle (0..180 degrees) between the node0->node1 direction vectors of 2 line elements determined by their number in the plist
  double VData::AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 )
   {
      assert( elmt1 < pelmt.size() );
@@ -3430,9 +3243,10 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
      const double cos_theta = (v1x*v2x + v1y*v2y) / (sqrt(v1x*v1x+v1y*v1y) * sqrt(v2x*v2x+v2y*v2y));
      assert( !isnan(cos_theta) );
      
-     // special cases 45o and 135o where cos_theta = 1
-     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
-     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
+     // special cases: parallel (0 degrees) and anti-parallel (180 degrees) line elements, where
+     // round-off can push |cos_theta| marginally above 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 0.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 180.;
 
      // else 'acos' will return NaN
      assert( cos_theta <  1. );
@@ -3445,7 +3259,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
 
 
- /// finds angle between 2 line elements determined by their number in the plist
+ /// finds angle (0..180 degrees) between the node0->node1 direction vectors of 2 line elements determined by their number in the plist
  double VData::AngleBetweenLineElements3D( size_t elmt1, size_t elmt2 )
   {
      assert( elmt1 < pelmt.size() );
@@ -3465,9 +3279,10 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
      double cos_theta = (v1x*v2x + v1y*v2y + v1z*v2z) / (sqrt(v1x*v1x+v1y*v1y+v1z*v1z) * sqrt(v2x*v2x+v2y*v2y+v2z*v2z));
      assert( !isnan(cos_theta) );
      
-     // special cases 45o and 135o where cos_theta = 1
-     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
-     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
+     // special cases: parallel (0 degrees) and anti-parallel (180 degrees) line elements, where
+     // round-off can push |cos_theta| marginally above 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 0.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 180.;
 
      // else 'acos' will return NaN
      assert( cos_theta <  1. );
@@ -3475,7 +3290,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
      return radiansToDegrees( acos(cos_theta) );
      
-  } // end AngleBetweenLineElements2D
+  } // end AngleBetweenLineElements3D
 
  
  
@@ -3525,6 +3340,8 @@ double VData::AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 )
    
    The connectivity of line elements is established as well. Where there are line element manifolds, those of the line elements that are sharing a node
    are connected which are most closely aligned.
+   Line elements, both end nodes of which have BOX_BOUNDARY flags other than NOT or INTERNAL, are connected
+   with one another first.
    
    All line elements around the perimeter of a model are connected with one another.
    
@@ -3542,7 +3359,7 @@ double VData::AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 )
   
 */
 void  VData::EstablishElementConnectivity2D()
- {
+{
    ErrorHandler& csmp_error( ErrorHandler::Instance() );
    
    if ( !pfverts.empty() ) {
@@ -3647,7 +3464,7 @@ void  VData::EstablishElementConnectivity2D()
         // 2. reconnecting surface type elements
         // -------------------------------------
         // where there is no neighbor an attempt is made to assign a face to a particular boundary,
-        // based on its alignment with boundary normal
+        // based on its alignment with the boundary normal
         size_t node0(NULL_IDX), node1(NULL_IDX);
         for ( auto it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
              // there should be no more than 2 entries per face
@@ -3675,39 +3492,40 @@ void  VData::EstablishElementConnectivity2D()
                        else if ( face==3 ) { node0=3; node1=0; }
                     }
                   // creating face unit normal
-                  const double dx = px[ plist[static_cast<size_t>(elmt_idx)][node1] ] - px[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dx=x2-x1 
-                  const double dy = py[ plist[static_cast<size_t>(elmt_idx)][node1] ] - py[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dy=y2-y1, 
+                  // the face runs from node0 to node1; the outward normal for a CCW element
+                  // is obtained by rotating the tangent (dx,dy) by 90 degrees clockwise: (dy, -dx)
+                  const double dx = px[ plist[static_cast<size_t>(elmt_idx)][node1] ]
+                                  - px[ plist[static_cast<size_t>(elmt_idx)][node0] ];
+                  const double dy = py[ plist[static_cast<size_t>(elmt_idx)][node1] ]
+                                  - py[ plist[static_cast<size_t>(elmt_idx)][node0] ];
                   const double length = sqrt( dx*dx + dy*dy );
-                  // normals are (-dy, dx)=clockwise and (dy, -dx)=counter-clockwise (USED HERE)
+                  assert( length > 0. );
+                  // outward unit normal for a CCW-numbered element: rotate tangent 90 degrees clockwise
                   const double unrml[2U] = { dy/length, -dx/length };
-                  // determining BOX_BOUNDARY
-// TODO: does not work yet
-                  BOX_BOUNDARY boundary(IRREGULAR);
-                  bool boundary_found{false};
-                  // bottom (within +/-20o of side-boundary normal (dot-product >=0.94)
-                  double dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * -1.;
-                  if ( dotproduct >= 0.94 ) {
-                       boundary       = BOTTOM;
-                       boundary_found = true;
-                    }
-                  // right
-                  else dotproduct = unrml[0U] * 1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 && !boundary_found ) {
-                       boundary       = RIGHT;
-                       boundary_found = true;
-                    }
-                  // top
-                  else dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * 1.;
-                  if ( dotproduct >= 0.94 && !boundary_found ) {
-                       boundary       = TOP;
-                       boundary_found = true;
-                    }
-                  // left
-                  else dotproduct = unrml[0U] * -1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 && !boundary_found )
-                    boundary = LEFT;
+
+                  // Determine BOX_BOUNDARY by comparing the face outward normal against
+                  // the six axis-aligned boundary normals.  A dot-product >= 0.94 means
+                  // the face normal is within approximately 20 degrees of that boundary.
+                  // Each direction is tested independently so that the correct boundary
+                  // is always found regardless of the outcome of the other tests.
+                  // Faces that do not align with any axis-aligned boundary within the
+                  // tolerance are left as IRREGULAR.
+                  BOX_BOUNDARY boundary( IRREGULAR );
+
+                  // bottom: outward normal points in -Y direction → (0, -1)
+                  if ( unrml[1U] * -1. >= 0.94 )
+                       boundary = BOTTOM;
+                  // right: outward normal points in +X direction → (1, 0)
+                  else if ( unrml[0U] * 1. >= 0.94 )
+                       boundary = RIGHT;
+                  // top: outward normal points in +Y direction → (0, 1)
+                  else if ( unrml[1U] * 1. >= 0.94 )
+                       boundary = TOP;
+                  // left: outward normal points in -X direction → (-1, 0)
+                  else if ( unrml[0U] * -1. >= 0.94 )
+                       boundary = LEFT;
                   // all other cases remain IRREGULAR
-                  
+
                   // assigning boundary to the face without neighbor
                   pfverts[static_cast<size_t>(elmt_idx)][face] = boundary;
                }
@@ -3748,7 +3566,6 @@ void  VData::EstablishElementConnectivity2D()
         
         // 3. reconnecting line elements
         // -----------------------------
-        // map<size_t,set<size_t> >  line_elmt_that_contain_node;
         if ( HybridElementTypeMesh() )
           for ( const auto& it : line_elmt_that_share_node )
             {
@@ -3789,7 +3606,7 @@ void  VData::EstablishElementConnectivity2D()
                 else { // n_connections > 1 )
                      // finding the pair of most closely aligned line elements starting at node
                      // establish element combinations
-                     vector<size_t>          joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
+                     vector<size_t>          joint_line_elmts( it.second.begin(), it.second.end() );
                      const size_t            n_elmts_to_combine(2U);
                      deque<vector<size_t> >  combinations;
                      if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
@@ -3806,15 +3623,33 @@ void  VData::EstablishElementConnectivity2D()
                           assert (!isnan(acute_angle) );
                           inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
                        }
-                     // sorting the angles to find the edges that are closest to a straight continuation
-                     // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                     // Line elements, both end nodes of which have BOX_BOUNDARY flags other than NOT or INTERNAL,
+                     // follow the model boundary. They are connected with one another before any other
+                     // combination is considered, so that a fracture which meets the boundary at an acute
+                     // angle (for instance in a corner of the model) cannot interrupt the chain of line
+                     // elements that surrounds the model.
+                     auto onBoxBoundary = [&]( size_t elmt ) -> bool {
+                          const int8_t flag0 = bflags[ plist[elmt][0] ];
+                          const int8_t flag1 = bflags[ plist[elmt][1] ];
+                          return flag0 != NOT && flag0 != INTERNAL && flag1 != NOT && flag1 != INTERNAL;
+                       };
+                     auto connectsBoxBoundaryElements = [&]( size_t combination ) -> bool {
+                          return onBoxBoundary( combinations[combination][0] ) && onBoxBoundary( combinations[combination][1] );
+                       };
+                     // sorting: first the combinations of two box-boundary line elements, then all others; within
+                     // each group by angle, to find the edges that are closest to a straight continuation
+                     // (equal angles are ordered by combination number to obtain a reproducible result)
                      sort( inter_element_angles.begin(), inter_element_angles.end(),
-                           [](const pair<double,size_t>& a, const pair<double,size_t>& b) -> bool { return a.first < b.first; } );
+                           [&](const pair<double,size_t>& a, const pair<double,size_t>& b) -> bool {
+                               const bool a_on_boundary = connectsBoxBoundaryElements( a.second );
+                               const bool b_on_boundary = connectsBoxBoundaryElements( b.second );
+                               if ( a_on_boundary != b_on_boundary ) return a_on_boundary;
+                               if ( a.first != b.first ) return a.first < b.first;
+                               return a.second < b.second;
+                           } );
                       // for any 2 edges unique connections are made until there are no more elements to connect
                       set<size_t> assigned_elements;
                       for ( auto& aet : inter_element_angles ) {
-                           // connecting the pair of line elements
-                           // ------------------------------------
                            const size_t elmt1 = combinations[aet.second][0];
                            const size_t elmt2 = combinations[aet.second][1];
                            // only if both elements in the combination have not been assigned already
@@ -3843,7 +3678,7 @@ void  VData::EstablishElementConnectivity2D()
                                   break;
                                }
                            assert ( unassigned_elmt != numeric_limits<size_t>::max() );
-                           // finding the correct side of the line element and assigning the vertex bflag to irt
+                           // finding the correct side of the line element and assigning the vertex bflag to it
                            if   ( it.first == plist[unassigned_elmt][1] ) {
                                  pfverts[unassigned_elmt][0] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
                               }
@@ -3855,7 +3690,7 @@ void  VData::EstablishElementConnectivity2D()
                               
             } // processing the line element neighbors
 
-     } // if plist empty
+     } // if plist not empty
 
    assert( !pfverts.empty() );
 
@@ -3863,12 +3698,12 @@ void  VData::EstablishElementConnectivity2D()
    //    This method eliminates such elements by node swapping
    if ( triangle_with_all_nodes_on_boundary ) SwitchCornerTriangles2D();
 
-   // 5. reorienting line-element chains (done in other method)
+   // 5. reorienting line-element chains
    if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
    
    cout << "\n"<<"EstablishElementConnectivity2D: Established neighbor connectivity of "<< pfverts.size() <<" cells successfully.\n"<< endl;
 
- } // end EstablishElementConnectivity2D
+} // end EstablishElementConnectivity2D
 
 
 
@@ -3882,6 +3717,10 @@ void  VData::EstablishElementConnectivity2D()
     Reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts.'
     
     @return the number of replaced triangles;
+    
+    @throws csmp::Exception if a line element is co-located with the face shared by a corner triangle and its neighbor,
+    because the switch would remove the surface-element edge that this line element is located on. Corner triangles
+    processed before the offending one remain reconnected.
 */
 size_t VData::SwitchCornerTriangles2D()
 {
@@ -3911,6 +3750,18 @@ size_t VData::SwitchCornerTriangles2D()
     }
 
     const size_t n_elements{ pfverts.size() };
+
+    // -----------------------------------------------------------------------
+    // Edges occupied by line elements (corner nodes, lower node index first).
+    // Switching removes the edge shared by a corner triangle and its neighbor;
+    // a line element co-located with that edge would be left without a
+    // surface-element edge to sit on, so such a switch must not be performed.
+    // -----------------------------------------------------------------------
+    set<pair<size_t,size_t>>  line_elmt_edges;
+    if ( hybrid )
+        for ( size_t e{0}; e < n_elements; ++e )
+            if ( isLineElement( parseFiniteElementTypeEnum( pelmt[e] ) ) )
+                line_elmt_edges.insert( minmax( plist[e][0], plist[e][1] ) );
 
     for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
     {
@@ -3986,6 +3837,16 @@ size_t VData::SwitchCornerTriangles2D()
 
         auto face_it = fnids.find( face_nds );
         if ( face_it == fnids.end() ) continue;
+
+        // ------------------------------------------------------------------
+        // The shared face must not be co-located with a line element
+        // ------------------------------------------------------------------
+        if ( line_elmt_edges.count( minmax( face_nds.first, face_nds.second ) ) > 0 )
+            throw csmp::Exception( ERROR, "VData::SwitchCornerTriangles2D",
+                                   "corner triangle " + to_string( elmt_idx ) + " and its neighbor "
+                                   + to_string( nbor_idx ) + " cannot be reconnected because a line element"
+                                   " is co-located with the face they share (nodes "
+                                   + to_string( face_nds.first ) + ", " + to_string( face_nds.second ) + ")" );
 
         // ------------------------------------------------------------------
         // Reconnect the two triangles

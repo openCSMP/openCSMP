@@ -758,12 +758,12 @@ ModelTopology create_MeshPatchWithLineElements_VSet( VSet<2U>& vset )
     // element number
     PropertyData elmt_nums( ELEMENT, SCALAR, 2U );
     elmt_nums.Reserve( vset.Elements() );
-    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "element number", elmt_nums );
     // node number
     PropertyData node_nums( NODE, SCALAR, 2U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "node number", node_nums );
     // element variable (tetra=3. quadrilateral-4.)
     PropertyData elmt_vars( ELEMENT, SCALAR, 2U );

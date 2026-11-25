@@ -254,7 +254,8 @@ int main( int argc, char* argv[] )
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
 // TODO: put your new or refactored test here!
-refactored.addTest( new VSet_Test1() );
+//refactored.addTest( new VSet_Test1() );
+refactored.addTest( new VData_Test() );
 
         // actually running the test
         refactored.run();

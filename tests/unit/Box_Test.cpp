@@ -1326,7 +1326,7 @@ bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "node number", node_nums );
 
     // renaming the boundaries according to a box-shaped model
@@ -1358,7 +1358,7 @@ bool Box_Test::TestBoundaryVersusBOX_BOUNDARY_Flagging()
       size_t n_face{0u};
       for ( auto fit=model.Mesh().FacesBegin(); fit!=model.Mesh().FacesEnd(); ++fit, ++n_face ) {
            // scalar (face number)
-           (*fit).Store( face_key, makeScalar(ANY,n_face) );
+           (*fit).Store( face_key, makeScalar(ANY,static_cast<double>(n_face)) );
            // vector (unit normal)
            auto unrml = (*fit).UnitNormal();
            VectorVariable<3> vc;
@@ -1495,7 +1495,7 @@ bool Box_Test::TestBoundaryFlagRecreation()
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
     node_nums.Reserve( vset.Vertices() );
-    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "node number", node_nums );
 
     // building model (usin constructor that does not attempt to recreate boundary flags)

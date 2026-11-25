@@ -415,12 +415,12 @@ bool ModelSubDomain_Test::Test_EstablishNeighborConnectivity()
     // adding 'node number' as a variable
     PropertyData node_nums( NODE, SCALAR, 3U );
     node_nums.Reserve( vset.Vertices() );
-    for ( auto i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+    for ( size_t i = 0U; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "node number", node_nums );
     // adding 'element number' as a variable
     PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
     node_nums.Reserve( vset.Elements() );
-    for ( auto i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+    for ( size_t i = 0U; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
     vset.AddData( "element number", elmt_nums );
 
     Model<3U> model( vset, varFileName.c_str() );
