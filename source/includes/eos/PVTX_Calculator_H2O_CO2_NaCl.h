@@ -1,4 +1,3 @@
-// Copyright © 2019 CSMP Originators Group, Stephan Matthai. All rights reserved.
 // SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
 // SPDX-License-Identifier: LGPL-3.0-only
