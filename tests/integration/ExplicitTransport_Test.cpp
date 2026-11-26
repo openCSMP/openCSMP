@@ -1,15 +1,16 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
-//  ExplicitTransport_Test.cpp
-//  CSMP_API_examples
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  Created by Stephan Matthai on 2/09/2015.
 //
+
+#include "ExplicitTransport_Test.h"
 
 #include "Model.h"
 #include "Boundary.h"
 //#include "SplitBoundary.h"
 #include "vsetMakers.h"
-#include "ExplicitTransport_Test.h"
 #include "VTK_Interface.h"
 #include "Index.h"
 #include "ANSYS_Model3D.h"

@@ -22,10 +22,8 @@ class NumIntegral_dNT_op_dN_dV final : public MathOperatorLHS<dim,CELL> {
                               
     void ComputeContribution( const CELL<dim>& ) override;
   
-    NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override {
-        return new NumIntegral_dNT_op_dN_dV<dim,CELL>(*this);
-    }
-
+    NumIntegral_dNT_op_dN_dV<dim,CELL>* clone() const override { return new NumIntegral_dNT_op_dN_dV<dim,CELL>(*this); }
+    
   protected:
     DenseMatrix<DM_MIN>  B_, BT_;
 };

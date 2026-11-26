@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 // Disable wingdi.h
 #define NOGDI
 
@@ -7,12 +11,12 @@
 #include "TestSuite.h"
 
 // --- fundamentals ---
+#include "binaryReadWrite_Test.h"
 #include "ArrayVariable_Test.h"
 #include "FlaggedArrayVariable_Test.h"
 #include "Colony_Test.h"
 #include "ColorPalette_Test.h"
 #include "ConvexPolygon_Test.h"
-#include "GenericSingleton_Test.h"
 #include "ScalarVar_Test.h"
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
@@ -47,6 +51,7 @@
 #include "Boundary_Test.h"
 #include "Box_Test.h"
 #include "CopyReplaceVisitor_Test.h"
+#include "CsmpIntro1_TestCase.h"
 #include "Element_Test.h"
 #include "ElementPolicyIntegrity_Test.h"
 #include "Face_Test.h"
@@ -66,6 +71,7 @@
 #include "NodeManifold_Test.h"
 #include "NodeManifoldManager_Test.h"
 #include "Parameter_Test.h"
+#include "parentElementStorageOptions_Test.h"
 #include "Point_Test.h"
 #include "PointPropertyToCellMapper2D_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
@@ -79,9 +85,12 @@
 
 // --- finite elements ---
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test2.h"
+#include "IsoparametricLinearPrism_Test.h"
+#include "IsoparametricQuadraticPrism_Test.h"
+#include "createUniqueCombinations_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
-#include "IsoparametricLinearPyramid_Test.h" // TODO: run with more relaxed tolerances
+#include "IsoparametricLinearPyramid_Test.h"
+#include "IsoparametricQuadraticPyramid_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
 #include "IsoparametricLinearTriangle.h"
 #include "IsoparametricQuadraticTetrahedron_Test.h"
@@ -98,6 +107,7 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "CommandLineParser_Test.h"
+#include "createUniqueCombinations_Test.h"
 #include "FEM_Data_Test.h"
 #include "InputDataManager_Test.h"
 #include "ModelTopology_Test.h"
@@ -174,29 +184,6 @@
 #include "BoreHole_stability_VerticalWell3D_VVCase.h"
 
 
-/**
-    Finds the directory where the test data are stored
-
-    Usage: Inside your test:
-    
-        @code
-    void testSomething() {
-        std::string meshPath = getTestDataPath("IsoparametricLinearTetrahedron1P.txt");
-        // Open file using meshPath...
-    }
-       @endcode
-*/
-std::string getTestDataPath(const std::string& filename) {
-    const char* dataRoot = std::getenv("CSMP_DATA_ROOT");
-    if (dataRoot == nullptr) {
-        // Fallback or other directory for when you run tests manually in Xcode without CTest
-        return "./fallback_data/" + filename;
-      }
-    return std::string(dataRoot) + "/" + filename;
-}
-
-
-
 using namespace std;
 using namespace csmp;
 
@@ -271,16 +258,10 @@ int main( int argc, char* argv[] )
         cout <<"\n0. Refactored and new code functionality: running tests..."<< endl;
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
-// refactored.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") ); // OK, but fails to converge with PETSc
+// TODO: put your new or refactored test here!
+refactored.addTest( new MeshManagementUtilities_Test() );
 
- //         refactored.addTest( new PDE_Integrator_Computation_Test() ); // TODO: works with EigenSolver, but PETSc solver fails to convergence in given # of iterations
-
-//        refactored.addTest( new PDE_Integrator_Transient_Test() ); // fixed: SKM 18/11/26
-//        refactored.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") ); // fixed: SKM 18/11/26
-//        refactored.addTest( new ModelSubDomain_Test() ); // fixed: SKM 18/11/26
-//        refactored.addTest( new Region_Test() );  // fixed: SKM 18/11/26
-
-        // actually running the test
+       // actually running the test
         refactored.run();
         long nFail = refactored.report();
         total_failures += nFail;
@@ -311,8 +292,8 @@ int main( int argc, char* argv[] )
       // Auxiliaries
       basic.addTest( new Colony_Test() );
       basic.addTest( new IsnanIsinf_Test() );
-      basic.addTest( new GenericSingleton_Test() );
       basic.addTest( new ColorPalette_Test() );
+      basic.addTest( new ConvexPolygon_Test() );
       
       // Data storage tests
       basic.addTest( new LocalVariableStorage_Test() );
@@ -351,10 +332,12 @@ int main( int argc, char* argv[] )
       basic.addTest( new geometricCalculations_Test() );
       
       basic.addTest( new FiniteVolumeStencil_Test(verbose));
+      basic.addTest( new FV_Parameter_Test() );
       // also compares speed of mapping facet areas and normals versus computing them
       basic.addTest( new FiniteVolumePolicy_Test());
       
       // interfaces / containers
+      basic.addTest( new binaryReadWrite_Test() );
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new Parameter_Test() );
       basic.addTest( new VData_Test() );
@@ -395,6 +378,12 @@ int main( int argc, char* argv[] )
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      interdependent1.addTest( new IsoparametricLinearPyramid_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPyramid_Test() );
+      interdependent1.addTest( new IsoparametricLinearPrism_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPrism_Test() );
+      interdependent1.addTest( new createUniqueCombinations_Test() );
+
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
       interdependent1.addTest( new ElementPolicyIntegrity_Test() );
@@ -453,6 +442,7 @@ int main( int argc, char* argv[] )
       // creating the test suite
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
+      interdependent2.addTest( new CsmpIntro1_TestCase(false /* verbose */) );
       interdependent2.addTest( new ModelSubDomain_Test() );
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
@@ -540,7 +530,7 @@ int main( int argc, char* argv[] )
       // computations
       composite.addTest( new PDE_Integrator_Test() );
       composite.addTest( new PDE_Integrator_Transient_Test() );
-      //composite.addTest( new PDE_Integrator_Computation_Test() ); TODO: PETSc solver fails to convergence in given # of iterations
+      composite.addTest( new PDE_Integrator_Computation_Test() ); // TODO: use PETSc instead of Eigen
       composite.addTest( new ExplicitTransport_Test("BOX40x3x10m","ExplicitTransport_Test-variables.txt") );
       composite.addTest( new BoreHole_stability_VerticalWell3D_VVCase("box_with_hole2") );
 
@@ -559,7 +549,6 @@ int main( int argc, char* argv[] )
       
       // speed tests (run only in the optimised RELEASE version of the code)
 #ifdef NDEBUG
-/* NOT ESSENTIAL
       composite.addTest( new VariableStorageSpeed_Test() );
       composite.addTest( new AccumulationSpeedProfiling_Test() );
       composite.addTest( new VariableBenchmarking_Test() );
@@ -568,7 +557,7 @@ int main( int argc, char* argv[] )
       composite.addTest( new JaggedArray3D_Comparison_Test() );
       composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
       composite.addTest( new VariableStorageSpeed_Test() );
-*/
+      composite.addTest( new parentElementStorageOptions_Test() );
 #endif
 
       // running unit tests and reporting errors

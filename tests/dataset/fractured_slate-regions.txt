@@ -1,0 +1,6 @@
+gunther_a-regions.txt
+no properties
+MATRIX
+SET2
+SET1
+WELL_FRACTURE

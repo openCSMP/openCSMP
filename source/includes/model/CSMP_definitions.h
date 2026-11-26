@@ -29,6 +29,7 @@ Backward compatibility with C
 #include <cstdlib>
 #include <cstddef>
 #include <cstdarg>
+#include <cstdint>
 #include <cctype>
 #include <cstring>
 #include <ctime>
@@ -63,6 +64,7 @@ C++ ANSI Standard Compliance / Standard Template Library (STL)
 #include <ostream>
 #include <random>
 #include <set>
+#include <span>
 #include <sstream>
 #include <stdexcept>
 #include <string>

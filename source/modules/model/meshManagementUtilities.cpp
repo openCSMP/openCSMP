@@ -187,6 +187,8 @@ size_t detectDuplicateCells( typename vector<CELL<dim>*>::const_iterator first,
                if ( first_issue ) cout <<"\n"<<"detectDuplicateCells: cell "<< cell_counter <<"=nullptr";
                else cout <<" cell "<< cell_counter <<"=nullptr "<< endl;
                first_issue = false;
+               first++;        // without this increment, a nullptr entry stalled the loop forever
+               cell_counter++;
                continue;
            }
          // creating cell keys from their node pointers
@@ -2350,14 +2352,13 @@ void backupNeighborConnectivity( typename std::vector<CELL<dim>*>::const_iterato
  {
     nbor_pointers.clear();
     nbor_pointers.reserve( static_cast<size_t>(distance(first,last)) );
-    assert( nbor_pointers.capacity() > 1 );
     
     while ( first != last ) {
          const size_t n_nbors{ (*first)->Neighbors() };
+         // positional copy: entry i holds neighbor i (or nullptr), so that the backup can be compared and restored
          vector<CELL<dim>*>  nbors( n_nbors, nullptr );
          for ( auto i{0U}; i<n_nbors; ++i )
-           if ( (*first)->Neighbor(i) != nullptr )
-             nbors.push_back( (*first)->Neighbor(i) );
+           nbors[i] = (*first)->Neighbor(i);
          nbor_pointers.emplace_back( nbors );
          first++;
       }
@@ -2873,6 +2874,7 @@ bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* cons
     if constexpr ( dim == 2 )
       if ( !elmt1->IsSurface() || !elmt2->IsSurface() ) {
            cerr <<"\ninterPenetrating<2>: only works for equidimensional (surface) elements.\n";
+           return false;
         }
 
     if constexpr ( dim == 1 ) {
@@ -2896,7 +2898,7 @@ bool interPenetrating( const Element<dim>* const elmt1, const Element<dim>* cons
     bctr = elmt2->BaryCenter();
     elmt1->N_AtGlobalPoint( elmt1->FE()->NRST, bctr.Coordinates() );
     is_contained = true;
-    for ( const auto& ni : elmt2->FE()->NRST )
+    for ( const auto& ni : elmt1->FE()->NRST ) // was elmt2: wrong values whenever the two elements differ in type
       if ( ni < 0. ) {
           is_contained = false;
           break;

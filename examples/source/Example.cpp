@@ -103,14 +103,18 @@ string Example::GetExampleFileName(const char* path)
 /**
    Creates new directory "example_outputs/" side by side with the working directory "example_inputs", moving any file writing by the current example into there.
 
-   @attention This function expects that the directory that contains the executable is    open-csmp/examples/example_inputs/
+   @attention This function expects that the current working directory is the directory  example_inputs/  of the examples workspace,
+   which is located outside of the repository. ExamplesMain.cpp makes it the working directory when the program starts
+   (see selectExamplesWorkspace() there: option --workspace, environment variable CSMP_EXAMPLES_DIR, or the default workspace).
 
-   Context: to run the examples, you need to create a new directory somewhere outside of your repository and copy the example_inputs/  directory from the repository in there,
-   including its subdirectories. Then set this example_inputs/  directory as your working directory (XCode:  Product -> Scheme -> Edit Scheme -> custom working directory in the Options tab)
+   Context: to run the examples, create the workspace with the build target 'setup_examples' (cmake --build build --target setup_examples),
+   or copy the example_inputs/  directory from the repository, including its subdirectories, to a new directory outside of your repository.
+   In an IDE you can alternatively set this example_inputs/  directory as your working directory
+   (XCode:  Product -> Scheme -> Edit Scheme -> custom working directory in the Options tab)
 
    When you create a CSMP native binary, it gets  placed into the directory  example_inputs/csmp_native_format_models/
    Then, when you run any of the examples, CSMP will create a new directory  example_outputs/
-   in your new directory side-by-side with example_inputs/ and this is where you will find the results of your computations.
+   in your workspace side-by-side with example_inputs/ and this is where you will find the results of your computations.
    All this is done by this method.
 */
 void Example::CreateWorkingDirectoryAndCopyInputModelFiles( const string& example_name, const string& model_name,

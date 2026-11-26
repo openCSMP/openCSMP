@@ -1,5 +1,8 @@
-// unit test
-// Created by : Ali
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+// Created by : Ali Tabatabei
 // Date of Modification: 25.10.2010
 // Passed All Tests? --> ( )
 

@@ -122,7 +122,6 @@ class MathOperatorRHS {
     uint32_t      ApplicationCycles()           const noexcept;
     [[nodiscard]] double MultiplyBy()           const noexcept;
     bool          MultiplyWithTimeIncrement()   const noexcept;
-    bool          DivideByTimeIncrement()       const noexcept;
 
     /// Set Flags and Properties
     void          AddAccumulate() noexcept;
@@ -187,8 +186,6 @@ class MathOperatorRHS {
 
     /// time-dependent multipliers
     bool        time_multiply_;
-    bool        time_divide_;
-
 };
 
 /// expands element dof vec in var1_comp0, var1_comp2... form

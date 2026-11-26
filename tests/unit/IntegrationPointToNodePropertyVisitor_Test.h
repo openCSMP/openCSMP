@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
 #define CSMP_INTEGRATION_POINT_TO_NODE_PROPERTY_VISITOR_TEST_H
 

@@ -1,9 +1,11 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  CSMP_VariableBenchmarking_Test.cpp
 //  CSMP_GitHub_UnitTests
 //
 //  Created by Stephan Matthai on 1/02/2017.
-//  Copyright © 2017 Stephan Matthai. All rights reserved.
 //
 //  Revised: tests fit-for-purposeness of all CSMP variable types
 //  for production use on large meshes (1M nodes).

@@ -1,4 +1,7 @@
-// NumIntegral_NT_lhsop_N_dV_Test.cpp
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "NumIntegral_NT_lhsop_N_dV_Test.h"
 #include "TRIANGLE_Interface.h"
 #include "Exception.h"

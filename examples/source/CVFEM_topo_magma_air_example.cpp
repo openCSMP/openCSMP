@@ -57,7 +57,7 @@ void CVFEM_topo_magma_air_example::Specifications()
 {
     SetTitle("CVFEM 2D with topography, optionally with magma chamber and air phase");
     SetDifficulty(0);
-    SetCategory("CVFEM Examples");
+    SetCategory("Hydrothermal Systems (CVFEM)");
     AddAuthor("BLC");
     AddDescription("source file in: CVFEM_topo_magma_air_example");
 }

@@ -1,4 +1,3 @@
-// Copyright © 2019 Stephan Matthai. All rights reserved.
 // SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
 // SPDX-License-Identifier: LGPL-3.0-only
@@ -10,46 +9,65 @@
 
 using namespace std;
 
-/* DEVELOPMENT LOG - reverse chronological order
-
-4/1/2018 SKM
-============
-
-
-
-
-
-
-4/1/2018 Thomas Driesner
-========================
-
-Die erste volle beta-Version ist jetzt im bitbucket. Sazu einige Anmerkungen:
- 
-- Ich habe darauf verzichtet, die eos public member zu machen.
-Da die immer wieder spezielle Werte von mnacl etc. braucht halte ich es fuer sinnvoler, dass in meiner Klasse zu kapseln.
-Statt dessen kannst Du die Variablen jetzt direkt ueber  das interface bekommen, siehe header file.
-ACTION: Das heisst, dass Du in Deinem PVTX_Calculator einfach phasestate_.X_h2o() aufrufen kannst, z.B.
- 
-- Das Ding ist nur krude getestet, fuer mehr fehlt mir jetzt die Zeit.
-ATTENTION: Fuer den salty aq_carb Fall gibt es Unstimmigkeiten auf der vierten Stelle der mole fractions,
-die ich mir nicht erklaeren kann, aber mehr kann ich momentan nicht bieten.
-
-- Ich nehme mal an, dass Dein transport schemes selber weiss, wann ein- oder zwei-phasiger Zustand vorliegt?
-ACTION: discern single- from 2-phase case
-
-- In Deiner Funktion EstablishMassBalanceEtc: dort gibt es die total_mass. Diese braucht meine PhaseStateFinder als constructor Argument.
-  Es muss zu jedem Zeitpunkt sichergestellt sein, dass darin auch die flash_.massHalite() inbegriffen ist!
-ACTION: add solid salt as well
-
-- Weitere Konstruktorargumente sind die bulk mass fractions der drei Komponenten - die muessten also ausserhalb ausgerechnet werden.
-  Alternativ koennten wir das anpassen
- 
-ATTENTION special case: what if all porosity gets clogged by halite
- 
-Ich hoffe, dass es ansonsten halbwegs selbsterklaerend und bug-arm ist, aber das wissen wir wohl erst morgen. Bin ab vielleicht 8 oder 9 im home office.
-
-*/
-
+/** DEVELOPMENT LOG
+ *
+ * @author Thomas Driesner
+ * @date 4 January 2018
+ *
+ * The first full beta version is now on Bitbucket. A few notes:
+ *
+ * @section design Design Decision: EOS Members Are Not Public
+ *
+ * I decided against making the equation-of-state (EOS) members public.
+ * Because they repeatedly require specific values such as `mNaCl`, it makes
+ * more sense to encapsulate that logic within this class. Instead, the
+ * variables are now accessible directly through the interface — see the
+ * header file.
+ *
+ * @attention In your PVTX_Calculator, you can now simply call
+ * phasestate_.X_h2o() (and similar accessors) directly.
+ *
+ * @section testing Testing Status
+ *
+ * The implementation has only been tested in a rudimentary fashion due to
+ * time constraints.
+ *
+ * @attention For the saline aqueous–carbonic (salty aq_carb) case, there
+ * are discrepancies at the fourth decimal place of the mole fractions that
+ * are not yet explained. This is the best available for now.
+ *
+ * @section phase Phase State Awareness
+ *
+ * It is assumed that the transport scheme already knows when a single-phase
+ * versus two-phase state is present.
+ *
+ * @todo Ensure the code correctly distinguishes between single-phase and
+ * two-phase cases.
+ *
+ * @section massbalance Mass Balance: Halite Must Be Included
+ *
+ * In EstablishMassBalanceEtc(), a total_mass value is computed. This value
+ * is required by PhaseStateFinder as a constructor argument. It is critical
+ * that flash_.massHalite() (the mass of solid/crystalline salt) is always
+ * included in that total mass at every point in time.
+ *
+ * @todo Add solid salt to the total mass calculation.
+ *
+ * @section bulkfractions Bulk Mass Fractions as Constructor Arguments
+ *
+ * The bulk mass fractions of all three components are also required as
+ * constructor arguments to PhaseStateFinder, meaning they must be computed
+ * externally before construction. This could potentially be refactored
+ * if needed.
+ *
+ * @section haliteclog: Special Case: Complete Pore Clogging by Halite
+ *
+ * @attention The edge case where all porosity becomes clogged by halite
+ * precipitation has not yet been handled and must be addressed.
+ *
+ * @note The remainder of the implementation is intended to be reasonably
+ * self-explanatory. Bug reports expected imminently.
+ */
 
 namespace csmp {
 

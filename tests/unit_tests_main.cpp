@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 // Disable wingdi.h
 #define NOGDI
 
@@ -13,7 +17,6 @@
 #include "ColorPalette_Test.h"
 #include "ConvexPolygon_Test.h"
 #include "FlaggedArrayVariable_Test.h"
-#include "GenericSingleton_Test.h"
 #include "ScalarVar_Test.h"
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
@@ -81,7 +84,9 @@
 
 // --- finite elements ---
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test2.h"                      // misc. tests
+#include "IsoparametricLinearPrism_Test.h"
+#include "IsoparametricQuadraticPrism_Test.h"
+#include "createUniqueCombinations_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
 #include "IsoparametricLinearPyramid_Test.h"
 #include "IsoparametricLinearTetrahedron.h"
@@ -245,7 +250,6 @@ int main()
       // Auxiliaries
       basic.addTest( new Colony_Test() );
       basic.addTest( new IsnanIsinf_Test() );
-      basic.addTest( new GenericSingleton_Test() );
       basic.addTest( new ColorPalette_Test() );
       
       // Data storage tests
@@ -331,6 +335,9 @@ int main()
       interdependent1.addTest( new LinearCuboid_Test(verbose) );
       // volume conservation of distorted hexahedra - fails for certain deformation modes, highlighting limitations of this elements
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
+      interdependent1.addTest( new IsoparametricLinearPrism_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPrism_Test() );
+      interdependent1.addTest( new createUniqueCombinations_Test() );
       // interdependent1.addTest(new IsoparametricLinearPyramid_Test(verbose)); // TODO: pyramid produces correct output but test is broken
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
@@ -389,6 +396,7 @@ int main()
       interdependent2.addTest( new INDEXandVariables_Test() );
       interdependent2.addTest( new ModelTopology_Test() ); 
       interdependent2.addTest( new MeshManager_Test() );
+      interdependent2.addTest( new MeshManagementUtilities_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );
       interdependent2.addTest( new NodeFunctions_Test() );

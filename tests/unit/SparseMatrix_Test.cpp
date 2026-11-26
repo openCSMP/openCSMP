@@ -1,6 +1,6 @@
-// unit test
-// Created by : Siroos, Georg and Alina
-// Date of Modification: 21.11.2010
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #include "SparseMatrix_Test.h"
 #include "DenseMatrix.h"

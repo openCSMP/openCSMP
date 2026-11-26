@@ -32,7 +32,7 @@ class MohrCoulombFailure : public Interrelation<dim> {
     ///  average of the magnitude of the principal stress
     double    MeanStress( const TensorVariable<dim>& );
     
-    /// computes the shear-stress related stress invariant,  returning into second argument; method difference between sigma1 and sigma3
+    /// computes the shear-stress related stress invariant,  returning into second argument; method returns difference between sigma1 and sigma3
     double    DeviatoricStress( const TensorVariable<dim>&, double& t_stress_invariant );
     
     /// computes stress state invariance theta (Smith & Griffith, 2014, p. 236

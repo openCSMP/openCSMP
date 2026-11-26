@@ -1,5 +1,10 @@
-#ifndef POINT_TEST_H
-#define POINT_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_POINT_TEST_H
+#define CSMP_POINT_TEST_H
+
 /*
  *  Point_Test.h
  *  Created by Stephan Matthai on 10/26/10.

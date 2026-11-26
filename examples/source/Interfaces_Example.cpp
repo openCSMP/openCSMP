@@ -86,7 +86,7 @@ void Interfaces_Example::Run()
       if(!is_directory("input_meshes")) {
         string message("\nInterfaces_Example::Run(): 'input_meshes/' directory is missing from your current working directory: '");
         message += (current_path()).string();
-        message += "'\n\nPlease ensure that working directory is set correctly to  new 'example_inputs/' directory \n\t (refer to open-csmp/examples/README.txt)\n";
+        message += "'\n\nPlease start the examples with  --workspace <directory that contains example_inputs/>  or set the working directory to that 'example_inputs/' directory \n\t (refer to openCSMP/examples/README.md)\n";
         throw std::runtime_error(message);
       } else current_path("input_meshes");
     }

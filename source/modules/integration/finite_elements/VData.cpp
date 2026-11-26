@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "VData.h"
 #include "Box.h"
 #include "FiniteElement.h"
@@ -2753,338 +2757,75 @@ size_t VData::RenumberElementsCounterClockwise2D()
  
  
  
- /**
-   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a2D domain.
-   This method accomplishes this.
-   
-   @brief To ensure that the normals pointing out of a lower (1D) dimensional elements located at the model boundary,
-   and that they all point in the same direction for internal boundaries, the nodes of such elements must be locally ordered consistently;
-   meaning these line elements are aligned with the node-numbering of the faces of 2D surface elements located at the
-   model boundary whose nodes are numbered counter clockwise.
-   
-   The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the line elements,
-   which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
-   
-   @attention this method expects that there already is connectivity information for line elements
-   
-   @attention if the line elements do not know their neighbors already, this method will not work!
-   
-   @attention assumes node numbering in 'plist' follows the convention corner nodes first, then Interior nodes.
-   
-   @attention method assumes that all manifolds (connections of more than 2 line elements at a node have been removed
-   =disambiguated before. Thus it relies on a valid neighbor connectivity of the line elements, which must stored in pfverts.
-   
-   @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements)
-   
-   @note algorithmic procedure: 1) chains of connected line elements are found and stored in a map, using their "root" nodes as keys.
-   2) these are then traversed, flipping nodes whenever successive elements are not aligned. 3) at the model boundaries,  the chains of
-   line elements are flipped if their direction is not matched with that of the faces of the surface elements at the model boundary.
-   4) line element chains inside of the model are kept in whichever, yet consistent orientation.
-   
-  @author SKM
-  @date 3/22020
-  @test 2/10/21
-  
-  */
- void VData::CreateConsistentLineElementOrientations2D()
-   {
-      if ( bflags.empty() ) {
-            throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D",
-                                  "Method relies on correct flagging of boundary nodes. This is not present in VData.");
-        }
-      if ( pfverts.empty() ) {
-            cerr <<"\nVData::CreateConsistentLineElementOrientations2D: 'pfverts' is empty; nothing could be done.\n";
-            return;
-         }
-      // if this is already a full fledged CSMP model it is assumed to comply with the CSMP conventions
-      if ( Faces() > 0u || Interfaces() > 0u ) return;
-      
-      assert( plist.size() == pfverts.size() );
-       
-      // assuming that the mesh consists of surface and line elements
-      assert( HybridElementTypeMesh()==true ); 
-       
-      // 1. Finding line elements and edges of surface elements located at the model boundary
-      // ------------------------------------------------------------------------------------
-      set<size_t>  line_elmts, boundary_line_elmts;
-      // recording the corner-node ids of the surface elements for later searching
-      // face-nd-id key, boundary face node ids in correct sequence
-      deque<pair<size_t,size_t> > surf_elmt_face_nd_ids;
-
-      const vector<int8_t>::const_iterator  end = PelmtEnd();
-      vector<int8_t>::const_iterator        eit = PelmtBegin();
-      size_t                                elmt_idx{0U};
-
-       while( eit != end ) {
-            CSMP_FEM_TYPE etype = parseFiniteElementTypeEnum( (*eit) );
-            // only recording line elements that are located at the beginning or end of a polyline = line element chain
-            if ( isLineElement( etype ) ) {
-                  // line elements with a single neighbor at the beginning or end of polyline
-                  if ( ((pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] >= 0) ||
-                        (pfverts[elmt_idx][0] >= 0 && pfverts[elmt_idx][1] < 0)) )
-                    // but only, if that neighbor is located on the inside of the model
-                    if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] == NOT || bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] == NOT ) {
-                         line_elmts.insert( elmt_idx );
-                      }
-                  // line elements on the model boundary
-                 if ( bflags[ static_cast<size_t>(plist[elmt_idx][0]) ] < 0 && bflags[ static_cast<size_t>(plist[elmt_idx][1]) ] < 0 ) {
-                       boundary_line_elmts.insert( elmt_idx );
-                    }
-              }
-            // if this is a surface element  
-            else {
-                 // looping over the faces (edges), finding those at the boundary
-                 // and storing their nodes in correct order for later comparisons
-                 if ( isTriangularElement( etype ) ) {
-                      const size_t faces{3};
-                      for ( auto i{0U}; i < faces; ++i )
-                        if ( pfverts[elmt_idx][i] < 0 )
-                          {
-                             if ( i == 0 ) { // face 0
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
-                               }
-                             else if ( i == 1 ) { // face 1
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][0] ) );
-                               }
-                             else { // face 2
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
-                               }
-                          }
-                   }
-                 // quadrilaterals
-                 else if ( isQuadrilateralElement( etype ) ) {
-                      const size_t faces{4};
-                      for ( auto i{0U}; i < faces; ++i )
-                        if ( pfverts[elmt_idx][i] < 0 )
-                          {
-                             if ( i == 0 ) { // face 0
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][0], plist[elmt_idx][1] ) );
-                               }
-                             else if ( i == 1 ) { // face 1
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][1], plist[elmt_idx][2] ) );
-                               }
-                             else if ( i == 2 ) { // face 2
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][2], plist[elmt_idx][3] ) );
-                               }
-                             else { // face 3
-                                  surf_elmt_face_nd_ids.push_back( make_pair( plist[elmt_idx][3], plist[elmt_idx][0] ) );
-                               }
-                         }
-                   } 
-                 else {
-                      cerr <<"\n\telement "<< elmt_idx <<": type "<< parseFiniteElementType(*eit) <<" cannot be processed.\n";
-                      throw csmp::Exception( ERROR, "VData::CreateConsistentLineElementOrientations2D", "element type not recognised");
-                   }
-              }
-            elmt_idx++;
-            eit++;
-         }
-         
-      // 2. following potential line element chains from beginning to end, re-orientating elements as necessary
-      //    and recording individual polylines
-      // ------------------------------------------------------------------------------------------------------
-      // (after the potential re-orientation of surface elements by ModelTopology) line element orientations might be inconsistent with surface ones)
-      // root-elmt & numbers of interconnected line elements in discovered chain
-      map<int64_t,deque<int64_t> > polylines;
-      set<size_t>                  processed_elmts;
-      
-      // looping over the line elements that are missing one neighbor, starting at the beginning or end of a chain
-      for ( auto it=line_elmts.begin(); it!= line_elmts.end(); ++it )
-        {
-           // getting index of element and skipping elements that have already been processed
-           elmt_idx = static_cast<size_t>(*it);
-           if ( processed_elmts.find(elmt_idx) != processed_elmts.end() ) continue;
-
-           // isolated line elements (no neighbors) are skipped as well
-           if ( pfverts[elmt_idx][0] < 0 && pfverts[elmt_idx][1] < 0 ) {
-                polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
-                processed_elmts.insert( elmt_idx );
-                continue;
-             }
-
-         // storing the element as the first in a new line element sequence
-          auto chain_it=polylines.insert( make_pair( elmt_idx, deque<int64_t>{static_cast<int64_t>(elmt_idx)} ) );
-          // making sure that the element was indeed inserted (else it is a duplicate)
-          assert( chain_it.second == true );
-          processed_elmts.insert( elmt_idx );
-          
-          // traversing the line element chain until running out of neighbors
-          // ----------------------------------------------------------------
-          // NB: like for other simplex elements, the line element neighbor is located opposite to the node with the same number.
-          //     nbor1 | [nd0]-line element0-[nd1] | nbor0
-          
-          // -----------------------
-          // forward chain traversal
-          // -----------------------
-          // (the neighbor element first node will is shared with the zeroth node of the following line element)
-          if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L ) {
-              bool end_of_polyline(false);
-              while ( end_of_polyline == false )
-                {
-                   // if this next element's first neighbor is element 'elmt_idx', everything is fine and no flip is required
-                   const size_t first_nbor = static_cast<size_t>(pfverts[elmt_idx][0]); // since we are sure that pfverts entry is positive
-                   bool flip = ( pfverts[ first_nbor ][1] == static_cast<int64_t>(elmt_idx) ) ? false : true;
-                   // else we flip this element's nodes and neighbors
-                   if ( flip == true ) {
-                        swap( plist[ first_nbor ][0],  plist[ first_nbor ][1] );
-                        swap( pfverts[ first_nbor ][0], pfverts[ first_nbor ][1] );
-                     }
-                   // we move to the next element
-                   elmt_idx = first_nbor;
-                   // then we store this element in the polyline
-                   (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
-                   // and record it as processed
-                   auto inserted = processed_elmts.insert( elmt_idx );
-                   // checking that we are not visiting a previously visited element again
-                   assert( inserted.second == true );
-                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][0] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
-                     end_of_polyline = true;
-                }
-               continue;
-            }
-          // -------------------------------
-          // backward chain traversal
-          // -------------------------------
-          if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L ) {
-              bool beginning_of_polyline(false);
-              while ( beginning_of_polyline == false )
-                {
-                   // if the next neighbor's first neighbor element is element 'elmt_idx', everything is fine and no flip is required,
-                   const size_t second_nbor = static_cast<size_t>(pfverts[elmt_idx][1]);
-                   bool flip = ( pfverts[ second_nbor ][0] == static_cast<int64_t>(elmt_idx) ) ? false : true;
-                   // and, if necessary, we flip its nodes and neighbors.
-                   if ( flip == true ) {
-                        swap( plist[ second_nbor ][0],  plist[ second_nbor ][1] );
-                        swap( pfverts[ second_nbor ][0], pfverts[ second_nbor ][1] );
-                     }
-                   // we move to this next element
-                   elmt_idx = second_nbor;
-                   // then we store this element in the polyline.
-                   (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
-                   auto inserted = processed_elmts.insert( elmt_idx );
-                   assert( inserted.second == true );
-                   // exit condition (if the far node of line element is on the BOX_BOUNDARY)
-                   if ( pfverts[elmt_idx][1] < 0L ) // TODO: do we need this extra condition?  || bflags[ plist[elmt_idx][0] ] < 0 )
-                     beginning_of_polyline = true;
-                }
-            }
-       } // for line_elements
-       
-      // NOTE: since every chain has a beginning and an end, it would normally be stored twice, but:
-      //       - of the interior chains, only the ones starting with the lower element number are kept
-      //       - for the ones surrounding the model the one consistent with the counter-clockwise numbering of the higher-dim. ele is stored
-      //       - the only line elements left now, are those forming part of loops, these must be consistent in their orientation with
-      //         the faces of the elements that they surround.
-      if ( !polylines.empty() ) {
-          cout <<"\n\nVData::CreateConsistentLineElementOrientations2D: processed "<< polylines.size() <<" polylines with the line elements:"<< endl;
-          for ( auto it : polylines ) {
-               cout <<"\t"<< it.first <<": ";
-               for ( auto idx : it.second ) cout << idx <<" ";
-               cout << endl;
-            }
-          cout << endl;
-        }
-      else {
-           cerr <<"\nVData::CreateConsistentLineElementOrientations2D: WARNING: No changes were made. Unable to process line element chains. ";
-           cerr <<"\n\n\t\t"<<"line elements processed: "<< processed_elmts.size() << endl;
-        }
-      
-      // 3. Reordering chains that are located on the model boundary to make them consistent with the counter-clockwise element numbering
-      // --------------------------------------------------------------------------------------------------------------------------------
-      // using: //  face-nd-ids, elmt, face   to verify that elements are indeed oriented correctly
-      //
-      // getting the surface element deque ready for binary_search
-      //    deque<pair<size_t,size_t> >
-      sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
-      
-      // looping over the line elements that are missing one neighbor, i.e., are at the beginning of a chain
-      for ( auto it=boundary_line_elmts.begin(); it!= boundary_line_elmts.end(); ++it )
-        {
-           // searching for the corresponding face of a higher dimensional element
-           // --------------------------------------------------------------------
-           // if a surface element face with same node numbering is found the line element is already correctly oriented
-           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][0], plist[*it][1]) ) ) {
-                continue;
-             }
-           // if the face has the opposite orientation, the line elements in the polyline must be flipped
-           if ( binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(), make_pair( plist[*it][1], plist[*it][0]) ) ) {
-                swap( plist[*it][0], plist[*it][1] );     // swapping nodes
-                swap( pfverts[*it][0], pfverts[*it][1] ); // swapping neighbors
-                continue;
-             }
-           // this is a line element with no surface element next to it?
-           cerr <<"\nVData::CreateConsistentLineElementOrientations: detected detached line element "<< *it <<" at border with the nodes:\n\t\t";
-           cerr << plist[*it][0] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][0])])) <<"), ";
-           cerr << plist[*it][1] <<"("<< parseBoundary(static_cast<BOX_BOUNDARY>(bflags[ static_cast<size_t>(plist[*it][1])])) <<"), ";
-           cerr <<" element has no higher-dimensional neighbor; its orientation was left untouched.\n";
-           
-        } // end boundary_line_elmts
-              
-  } // end CreateConsistentLineElementOrientations2D
-
-
-
- // checking the node flagging for the case that the line elements are Faces or InterFaces
- /*
- int bflag{MULTIPLE}, no_nbor{0};
- if      ( pfverts[elmt_idx][0] < 0 ) { bflag = bflags[ plist[elmt_idx][1] ]; no_nbor = 0; }
- else if ( pfverts[elmt_idx][1] < 0 ) { bflag = bflags[ plist[elmt_idx][0] ]; no_nbor = 1; }
- // the element's neighbor-free side must be at an internal or external boundary (bflag<0), else
- if ( bflag >= 0 ) {
-      cerr <<"\nVData::CreateConsistentLineElementOrientations2D: ";
-      cerr <<"'pfvert["<< elmt_idx <<"]["<< no_nbor <<"]' entry for missing neighbour element "<< no_nbor;
-      cerr <<": "<< parseBoundary( static_cast<BOX_BOUNDARY>(pfverts[elmt_idx][no_nbor]) ) <<" ("<< pfverts[elmt_idx][no_nbor] <<")";
-      cerr <<" should be equivalent to boundary flag of the adjacent node: ";
-      cerr << parseBoundary( static_cast<BOX_BOUNDARY>(bflag) ) <<" ("<< bflag <<")"<< endl;
-   }
- assert( bflag >= MULTIPLE );
-*/
- 
 /**
-   Line elements must be oriented in a consistent way for internal 1D regions or along the boundaries of a 2D domain.
+   Line elements must be oriented in a consistent way for internal 1D regions and along the exterior
+   and hole boundaries of a 2D domain. This method accomplishes this.
 
-   @brief Ensures that line elements are aligned with the node-numbering of the faces of 2D surface elements
-   located at the model boundary whose nodes are numbered counter-clockwise.
+   @brief Makes chains and closed loops of line elements head-to-tail consistent and aligns those that lie
+   on a boundary of the surface mesh with the node numbering of the faces of the adjacent
+   (counter-clockwise numbered) surface elements.
 
    The normals of the line elements are found by 90-degrees clockwise rotation of the tangent vector of the
-   line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line Element).
+   line elements, which points from node 0 to node 1 (in a Linear or Quadratic Line Element). For an aligned
+   boundary line element this normal therefore points out of the surface mesh.
 
-   @attention this method expects that there already is connectivity information for line elements.
-   @attention if the line elements do not know their neighbors already, this method will not work.
+   @attention this method expects that there already is connectivity information for line elements;
+              if the line elements do not know their neighbors already, this method will not work.
    @attention assumes node numbering in 'plist' follows the convention corner nodes first, then interior nodes.
-   @attention method assumes that all manifolds have been disambiguated before calling this method.
+   @attention method assumes that all manifolds (connections of more than 2 line elements at a node) have
+              been disambiguated before, so that each end of a line element has at most one neighbor.
    @attention the neighbors of line elements are situated opposite to its corner nodes (like for other simplex elements):
               nbor1 | [nd0]-line element-[nd1] | nbor0
 
-   @note Convention: pfverts[e][0] is the neighbour opposite nd0, i.e., on the nd1 side (right-hand neighbour).
-                     pfverts[e][1] is the neighbour opposite nd1, i.e., on the nd0 side (left-hand neighbour).
+   @note Convention: pfverts[e][0] is the neighbour opposite nd0, i.e., on the nd1 side (forward neighbour).
+                     pfverts[e][1] is the neighbour opposite nd1, i.e., on the nd0 side (backward neighbour).
 
    @note Algorithmic procedure:
-         1) Line elements are classified into chain endpoints (one missing neighbour) and boundary elements
-            (both nodes on BOX_BOUNDARY). Closed loops are detected and warned about.
-         2) Chains are traversed from their endpoints, flipping elements whenever successive elements
-            are not consistently oriented.
-         3) Boundary chains are aligned with the counter-clockwise face ordering of adjacent surface elements.
-            The flip is propagated through the entire chain.
+         1) Line elements are classified into chain endpoints (exactly one missing neighbour),
+            isolated elements (both neighbours missing) and members of closed loops (both present).
+            The faces of surface elements without a neighbour (exterior and hole boundaries) are
+            collected as node pairs in their counter-clockwise order.
+         2a) Open chains are traversed from an endpoint, flipping elements whenever successive
+             elements are not consistently oriented.
+         2b) Closed loops are traversed from an arbitrary seed element in the same way.
+         3) Every polyline (chain or loop) is compared, element by element, with the boundary faces
+            collected in 1). If its boundary elements are reversed, the whole polyline is flipped, so
+            that the head-to-tail order of 2) is retained. Polylines without any element on a boundary
+            keep the orientation they obtained in 2).
 
-   @author SKM (original), AI corrections applied
+   @note The boundary flags of the nodes are not used for the alignment in 3): what counts is whether a line
+         element coincides with a surface-element face that has no neighbour. Holes are therefore treated
+         like the exterior boundary, irrespective of whether their nodes are flagged INTERNAL or IRREGULAR,
+         and a line element that merely connects two boundary nodes across the mesh is not mistaken for
+         a boundary element.
+
+   @attention A polyline that follows boundaries in both senses (for instance along the bottom, through the
+              interior and then along the top of the model in the same direction) cannot be head-to-tail
+              consistent and aligned at the same time. Because there is only one correct sense along a
+              boundary, its boundary elements are aligned individually and a warning is issued; the
+              head-to-tail order is then interrupted where the sense changes.
+
+   @throws csmp::Exception if the neighbour connectivity of the line elements in 'pfverts' is not reciprocal.
+
+   @author SKM (original 3/2020), revised 11/2026
 */
-void VData::CreateConsistentLineElementOrientations2D_AI()
+void VData::CreateConsistentLineElementOrientations2D()
 {
+    const char* const fn = "VData::CreateConsistentLineElementOrientations2D";
+    const char* const broken_connectivity =
+        "the neighbour connectivity of the line elements stored in 'pfverts' is inconsistent";
+
     // =========================================================================
     // Precondition checks
     // =========================================================================
 
     if ( bflags.empty() )
-        throw csmp::Exception( ERROR,
-                               "VData::CreateConsistentLineElementOrientations2D_AI",
+        throw csmp::Exception( ERROR, fn,
                                "Method relies on correct flagging of boundary nodes. "
                                "This is not present in VData." );
 
     if ( pfverts.empty() ) {
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
-             << "'pfverts' is empty; nothing could be done.\n";
+        cerr << "\n" << fn << ": 'pfverts' is empty; nothing could be done.\n";
         return;
     }
 
@@ -3098,13 +2839,13 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     // 1. Classify line elements and collect surface-element boundary face pairs
     // =========================================================================
 
-    // Chain endpoints: exactly one missing neighbour (regardless of node boundary flags)
-    set<size_t>  line_elmts;
+    // Open-chain endpoints: exactly one missing neighbour
+    set<size_t>  endpoint_line_elmts;
 
-    // Elements with both nodes on the BOX_BOUNDARY — used for surface alignment in Stage 3
-    set<size_t>  boundary_line_elmts;
+    // Isolated line elements: both neighbours missing (single disconnected segment)
+    set<size_t>  isolated_line_elmts;
 
-    // All line element indices — used to detect unprocessed closed loops after Stage 2
+    // All line element indices -- used to seed closed-loop traversal in Stage 2b
     set<size_t>  all_line_elmts;
 
     // Surface-element boundary face node pairs in CCW order, for Stage 3 alignment
@@ -3123,20 +2864,33 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
         {
             all_line_elmts.insert( elmt_idx );
 
-            const bool nd0_on_boundary = ( bflags[ plist[elmt_idx][0] ] < 0 );
-            const bool nd1_on_boundary = ( bflags[ plist[elmt_idx][1] ] < 0 );
-
-            // FIX 1: classify as chain endpoint if exactly one neighbour is missing,
-            // regardless of node boundary flags (original code required an interior node).
             const bool missing_nbor0 = ( pfverts[elmt_idx][0] < 0 );
             const bool missing_nbor1 = ( pfverts[elmt_idx][1] < 0 );
 
-            if ( missing_nbor0 != missing_nbor1 )
-                line_elmts.insert( elmt_idx );
+            // -----------------------------------------------------------------
+            // Consistency check of the entries for missing neighbours:
+            // pfverts[e][0] is opposite nd0, so the node at that end is nd1 (plist[e][1]);
+            // pfverts[e][1] is opposite nd1, so the node at that end is nd0 (plist[e][0]).
+            // A chain may end at a node on a boundary, in which case the entry is a
+            // boundary flag, or at a node inside of the model (flag NOT), for which
+            // EstablishElementConnectivity2D() stores INTERNAL. Anything else is reported.
+            // -----------------------------------------------------------------
+            for ( uint32_t side{0U}; side < 2U; ++side )
+            {
+                if ( pfverts[elmt_idx][side] >= 0 ) continue;
+                const int8_t node_flag = bflags[ plist[elmt_idx][1U-side] ];
+                if ( node_flag >= 0 && pfverts[elmt_idx][side] != static_cast<int64_t>( INTERNAL ) )
+                    cerr << "\n" << fn << ": 'pfvert[" << elmt_idx << "][" << side << "]' = "
+                         << parseBoundary( static_cast<BOX_BOUNDARY>( pfverts[elmt_idx][side] ) )
+                         << " (" << pfverts[elmt_idx][side] << ") marks a missing neighbour at a node "
+                         << "that is not located on a boundary; expected INTERNAL." << endl;
+            }
 
-            // Boundary line elements: both corner nodes on the BOX_BOUNDARY
-            if ( nd0_on_boundary && nd1_on_boundary )
-                boundary_line_elmts.insert( elmt_idx );
+            if ( missing_nbor0 && missing_nbor1 )
+                isolated_line_elmts.insert( elmt_idx );   // no neighbours at all
+            else if ( missing_nbor0 != missing_nbor1 )
+                endpoint_line_elmts.insert( elmt_idx );   // open-chain endpoint
+            // else: both neighbours present -> interior of a chain or part of a closed loop
         }
         else
         {
@@ -3187,7 +2941,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 cerr << "\n\telement " << elmt_idx << ": type "
                      << parseFiniteElementType( *eit ) << " cannot be processed.\n";
                 throw csmp::Exception( ERROR,
-                                       "VData::CreateConsistentLineElementOrientations2D_AI",
+                                       "VData::CreateConsistentLineElementOrientations2D",
                                        "element type not recognised" );
             }
         }
@@ -3198,7 +2952,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     } // end classification loop
 
     // =========================================================================
-    // 2. Traverse chains from endpoints, flipping elements for consistency
+    // 2a. Traverse open chains from endpoints, flipping elements for consistency
     // =========================================================================
 
     // Convention reminder:
@@ -3211,21 +2965,35 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
     // For two consecutive elements B <- A to be consistently oriented:
     //   pfverts[B][0] == A   (B's right-hand neighbour is A)
 
-    // root element index -> ordered sequence of element indices in the chain
+    // root element index -> ordered sequence of element indices in the chain / loop
     map<size_t, deque<int64_t>>  polylines;
     set<size_t>                  processed_elmts;
 
-    for ( const size_t start_idx : line_elmts )
+    // Neighbour links must be reciprocal; otherwise the traversals below would
+    // re-orient elements wrongly or, in a release build, never terminate.
+    auto requireBackLink = [&]( size_t to, size_t from ) {
+        if ( to >= pfverts.size() || pfverts[to].size() < 2U ||
+             ( pfverts[to][0] != static_cast<int64_t>(from) &&
+               pfverts[to][1] != static_cast<int64_t>(from) ) )
+            throw csmp::Exception( ERROR, fn, broken_connectivity );
+    };
+
+    // ------------------------------------------------------------------
+    // Isolated stubs — store as trivial single-element chains
+    // ------------------------------------------------------------------
+    for ( const size_t stub_idx : isolated_line_elmts )
+    {
+        polylines.insert( { stub_idx, { static_cast<int64_t>(stub_idx) } } );
+        processed_elmts.insert( stub_idx );
+    }
+
+    // ------------------------------------------------------------------
+    // Open chains — traverse from each endpoint
+    // ------------------------------------------------------------------
+    for ( const size_t start_idx : endpoint_line_elmts )
     {
         // Skip if already incorporated into a previously traversed chain
         if ( processed_elmts.count( start_idx ) ) continue;
-
-        // Isolated element (both neighbours missing) — store as a trivial chain
-        if ( pfverts[start_idx][0] < 0 && pfverts[start_idx][1] < 0 ) {
-            polylines.insert( { start_idx, { static_cast<int64_t>(start_idx) } } );
-            processed_elmts.insert( start_idx );
-            continue;
-        }
 
         // Insert the starting element as the root of a new chain
         auto chain_it = polylines.insert(
@@ -3235,19 +3003,16 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
         elmt_idx = start_idx;
 
-        // ------------------------------------------------------------------
         // Forward traversal: follow pfverts[e][0] (right-hand / nd1-side neighbour)
         // Entry condition: pfverts[start][0] >= 0  AND  pfverts[start][1] < 0
-        // i.e., the start element has its missing neighbour on the nd0 side.
-        // ------------------------------------------------------------------
         if ( pfverts[elmt_idx][0] >= 0L && pfverts[elmt_idx][1] < 0L )
         {
             while ( true )
             {
                 const size_t next = static_cast<size_t>( pfverts[elmt_idx][0] );
+                requireBackLink( next, elmt_idx );
 
                 // For consistency: next's left-hand neighbour must be elmt_idx.
-                // If it is next's right-hand neighbour instead, next is reversed.
                 const bool flip = ( pfverts[next][1] != static_cast<int64_t>(elmt_idx) );
 
                 if ( flip ) {
@@ -3259,24 +3024,21 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
 
                 auto inserted = processed_elmts.insert( elmt_idx );
-                assert( inserted.second == true ); // cycle guard
+                if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // cycle guard
 
-                // Exit when the current element has no further forward neighbour
                 if ( pfverts[elmt_idx][0] < 0L ) break;
             }
-            continue; // chain fully traversed; move to next start element
+            continue;
         }
 
-        // ------------------------------------------------------------------
         // Backward traversal: follow pfverts[e][1] (left-hand / nd0-side neighbour)
         // Entry condition: pfverts[start][0] < 0  AND  pfverts[start][1] >= 0
-        // i.e., the start element has its missing neighbour on the nd1 side.
-        // ------------------------------------------------------------------
         if ( pfverts[elmt_idx][0] < 0L && pfverts[elmt_idx][1] >= 0L )
         {
             while ( true )
             {
                 const size_t next = static_cast<size_t>( pfverts[elmt_idx][1] );
+                requireBackLink( next, elmt_idx );
 
                 // For consistency: next's right-hand neighbour must be elmt_idx.
                 const bool flip = ( pfverts[next][0] != static_cast<int64_t>(elmt_idx) );
@@ -3290,31 +3052,87 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
                 (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
 
                 auto inserted = processed_elmts.insert( elmt_idx );
-                assert( inserted.second == true ); // cycle guard
+                if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // cycle guard
 
-                // Exit when the current element has no further backward neighbour
                 if ( pfverts[elmt_idx][1] < 0L ) break;
             }
         }
 
-    } // end chain traversal loop
+    } // end open-chain traversal loop
+
+    // =========================================================================
+    // 2b. Traverse closed loops — seed from any unprocessed line element
+    // =========================================================================
+    //
+    // A closed loop has no endpoint: every element has both neighbours present.
+    // We pick an arbitrary seed, traverse forward via pfverts[e][0] until we
+    // return to the seed, flipping elements for internal consistency as we go.
+    // The loop is stored as a polyline whose first and last entries are the same
+    // seed element index (to signal closure).
+    // =========================================================================
+
+    for ( const size_t seed_idx : all_line_elmts )
+    {
+        if ( processed_elmts.count( seed_idx ) ) continue;
+
+        // Seed must have both neighbours present (otherwise it would have been
+        // classified as an endpoint or stub and handled above)
+        if ( pfverts[seed_idx][0] < 0L || pfverts[seed_idx][1] < 0L )
+            throw csmp::Exception( ERROR, fn, broken_connectivity );
+
+        auto chain_it = polylines.insert(
+            { seed_idx, { static_cast<int64_t>(seed_idx) } } );
+        assert( chain_it.second == true );
+        processed_elmts.insert( seed_idx );
+
+        elmt_idx = seed_idx;
+
+        while ( true )
+        {
+            const size_t next = static_cast<size_t>( pfverts[elmt_idx][0] );
+            requireBackLink( next, elmt_idx );
+
+            // Closed-loop termination: we have returned to the seed
+            if ( next == seed_idx ) {
+                // Append seed index again to mark loop closure
+                (*chain_it.first).second.push_back( static_cast<int64_t>(seed_idx) );
+                break;
+            }
+
+            // For consistency: next's left-hand neighbour must be elmt_idx.
+            const bool flip = ( pfverts[next][1] != static_cast<int64_t>(elmt_idx) );
+
+            if ( flip ) {
+                swap( plist[next][0],   plist[next][1]   );
+                swap( pfverts[next][0], pfverts[next][1] );
+            }
+
+            elmt_idx = next;
+            (*chain_it.first).second.push_back( static_cast<int64_t>(elmt_idx) );
+
+            auto inserted = processed_elmts.insert( elmt_idx );
+            if ( !inserted.second ) throw csmp::Exception( ERROR, fn, broken_connectivity ); // never revisit before reaching seed
+
+        } // end closed-loop traversal
+
+    } // end closed-loop seeding loop
 
     // -------------------------------------------------------------------------
-    // Warn about closed loops (no endpoint — never entered line_elmts)
+    // Sanity check: every line element must now be processed
     // -------------------------------------------------------------------------
     {
-        set<size_t> unprocessed_line_elmts;
-        set_difference( all_line_elmts.begin(),   all_line_elmts.end(),
-                        processed_elmts.begin(),  processed_elmts.end(),
-                        inserter( unprocessed_line_elmts, unprocessed_line_elmts.begin() ) );
+        set<size_t> still_unprocessed;
+        set_difference( all_line_elmts.begin(),  all_line_elmts.end(),
+                        processed_elmts.begin(), processed_elmts.end(),
+                        inserter( still_unprocessed, still_unprocessed.begin() ) );
 
-        if ( !unprocessed_line_elmts.empty() ) {
-            cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
-                 << unprocessed_line_elmts.size()
-                 << " line element(s) were not processed — they likely form closed loop(s).\n"
-                 << "  Closed loops are not yet handled; their orientation is left unchanged.\n"
+        if ( !still_unprocessed.empty() ) {
+            cerr << "\nVData::CreateConsistentLineElementOrientations2D: ERROR: "
+                 << still_unprocessed.size()
+                 << " line element(s) remain unprocessed after Stages 2a and 2b.\n"
+                 << "  This indicates a connectivity error in 'pfverts'.\n"
                  << "  Unprocessed element indices:";
-            for ( const auto idx : unprocessed_line_elmts )
+            for ( const auto idx : still_unprocessed )
                 cerr << " " << idx;
             cerr << "\n";
         }
@@ -3322,92 +3140,91 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
     // Diagnostic output
     if ( !polylines.empty() ) {
-        cout << "\n\nVData::CreateConsistentLineElementOrientations2D_AI: processed "
+        cout << "\n\nVData::CreateConsistentLineElementOrientations2D: processed "
              << polylines.size() << " polylines:\n";
         for ( const auto& pl : polylines ) {
-            cout << "\t" << pl.first << ": ";
+            const bool is_loop = ( pl.second.size() > 1 &&
+                                   pl.second.front() == pl.second.back() );
+            cout << "\t[" << ( is_loop ? "loop" : "chain" ) << "] root "
+                 << pl.first << ": ";
             for ( const auto idx : pl.second ) cout << idx << " ";
             cout << "\n";
         }
         cout << "\n";
     }
     else {
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: WARNING: "
+        cerr << "\nVData::CreateConsistentLineElementOrientations2D: WARNING: "
              << "No polylines were built. Unable to process line element chains.\n"
              << "\t\tLine elements processed: " << processed_elmts.size() << "\n";
     }
 
     // =========================================================================
-    // 3. Align boundary chains with CCW surface-element face ordering
+    // 3. Align polylines with the CCW face-node numbering of the surface elements
+    // =========================================================================
+    //
+    // A line element takes part in the alignment if it coincides with a face of a
+    // surface element that has no neighbour, i.e., with an edge of the exterior
+    // boundary or of a hole. All elements of a polyline are examined, so that the
+    // result does not depend on the order in which they are stored.
     // =========================================================================
 
     // Sort the surface face pairs for binary_search
     sort( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end() );
 
-    for ( const size_t boundary_start : boundary_line_elmts )
+    // Helper: flip a single line element (nodes and neighbour entries)
+    auto flipLineElement = [&]( size_t eidx ) {
+        swap( plist[eidx][0],   plist[eidx][1]   );
+        swap( pfverts[eidx][0], pfverts[eidx][1] );
+    };
+
+    auto isBoundaryFace = [&]( size_t nd0, size_t nd1 ) -> bool {
+        return binary_search( surf_elmt_face_nd_ids.begin(), surf_elmt_face_nd_ids.end(),
+                              make_pair( nd0, nd1 ) );
+    };
+
+    for ( const auto& pl : polylines )
     {
-        // Check whether this boundary element is already correctly oriented
-        const pair<size_t,size_t> fwd_pair{ plist[boundary_start][0],
-                                            plist[boundary_start][1] };
-        const pair<size_t,size_t> rev_pair{ plist[boundary_start][1],
-                                            plist[boundary_start][0] };
+        // for a closed loop the seed is stored twice (first and last entry)
+        const set<size_t> members( pl.second.begin(), pl.second.end() );
 
-        if ( binary_search( surf_elmt_face_nd_ids.begin(),
-                            surf_elmt_face_nd_ids.end(), fwd_pair ) )
+        // elements whose node order matches / is opposite to that of a boundary face
+        vector<size_t> aligned, reversed;
+        for ( const size_t eidx : members )
         {
-            // Already correctly oriented — nothing to do
-            processed_elmts.insert( boundary_start );
+            if      ( isBoundaryFace( plist[eidx][0], plist[eidx][1] ) ) aligned.push_back( eidx );
+            else if ( isBoundaryFace( plist[eidx][1], plist[eidx][0] ) ) reversed.push_back( eidx );
+        }
+
+        // nothing to do: polyline inside of the model, or already aligned
+        if ( reversed.empty() ) continue;
+
+        if ( aligned.empty() )
+        {
+            // the whole polyline runs against the boundary faces: flipping every
+            // element reverses it while retaining the head-to-tail order
+            for ( const size_t eidx : members ) flipLineElement( eidx );
             continue;
         }
 
-        if ( binary_search( surf_elmt_face_nd_ids.begin(),
-                            surf_elmt_face_nd_ids.end(), rev_pair ) )
-        {
-            // FIX 2: flip the boundary element AND propagate through its entire chain.
+        // The polyline follows boundaries in both senses. There is only one correct
+        // sense along a boundary, so the reversed boundary elements are flipped
+        // individually; the head-to-tail order is interrupted where the sense changes.
+        for ( const size_t eidx : reversed ) flipLineElement( eidx );
 
-            // Flip the boundary start element
-            swap( plist[boundary_start][0],   plist[boundary_start][1]   );
-            swap( pfverts[boundary_start][0], pfverts[boundary_start][1] );
-            processed_elmts.insert( boundary_start );
-
-            // Propagate the flip forward through the chain (follow pfverts[e][0])
-            size_t current = boundary_start;
-            while ( pfverts[current][0] >= 0L )
-            {
-                const size_t next = static_cast<size_t>( pfverts[current][0] );
-
-                // After flipping the boundary start, the chain direction is reversed.
-                // Each subsequent element must also be flipped to restore consistency.
-                swap( plist[next][0],   plist[next][1]   );
-                swap( pfverts[next][0], pfverts[next][1] );
-
-                processed_elmts.insert( next );
-                current = next;
-            }
-            continue;
-        }
-
-        // No matching surface face found — detached boundary line element
-        cerr << "\nVData::CreateConsistentLineElementOrientations2D_AI: "
-             << "detected detached line element " << boundary_start
-             << " at border with nodes:\n\t\t"
-             << plist[boundary_start][0]
-             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
-                            bflags[ plist[boundary_start][0] ] ) ) << "), "
-             << plist[boundary_start][1]
-             << " (" << parseBoundary( static_cast<BOX_BOUNDARY>(
-                            bflags[ plist[boundary_start][1] ] ) ) << ")"
-             << " — element has no higher-dimensional neighbour; "
-             << "its orientation was left untouched.\n";
+        cerr << "\n" << fn << ": WARNING: the line-element polyline with root " << pl.first
+             << " follows the boundaries of the surface mesh in both senses ("
+             << aligned.size() << " elements aligned, " << reversed.size() << " reversed)."
+             << " Its boundary elements were aligned individually; neighbour-to-neighbour"
+             << " traversal of this polyline is not head-to-tail consistent.\n";
 
     } // end boundary alignment loop
 
-} // end CreateConsistentLineElementOrientations2D_AI
+} // end CreateConsistentLineElementOrientations2D
 
 
 
  
- /// finds angle between 2 line elements determined by their number in the plist                                            
+ /// finds angle (0..180 degrees) between the node0->node1 direction vectors of 2 line elements determined by their number in the plist
  double VData::AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 )
   {
      assert( elmt1 < pelmt.size() );
@@ -3426,9 +3243,10 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
      const double cos_theta = (v1x*v2x + v1y*v2y) / (sqrt(v1x*v1x+v1y*v1y) * sqrt(v2x*v2x+v2y*v2y));
      assert( !isnan(cos_theta) );
      
-     // special cases 45o and 135o where cos_theta = 1
-     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
-     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
+     // special cases: parallel (0 degrees) and anti-parallel (180 degrees) line elements, where
+     // round-off can push |cos_theta| marginally above 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 0.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 180.;
 
      // else 'acos' will return NaN
      assert( cos_theta <  1. );
@@ -3441,7 +3259,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
 
 
- /// finds angle between 2 line elements determined by their number in the plist
+ /// finds angle (0..180 degrees) between the node0->node1 direction vectors of 2 line elements determined by their number in the plist
  double VData::AngleBetweenLineElements3D( size_t elmt1, size_t elmt2 )
   {
      assert( elmt1 < pelmt.size() );
@@ -3461,9 +3279,10 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
      double cos_theta = (v1x*v2x + v1y*v2y + v1z*v2z) / (sqrt(v1x*v1x+v1y*v1y+v1z*v1z) * sqrt(v2x*v2x+v2y*v2y+v2z*v2z));
      assert( !isnan(cos_theta) );
      
-     // special cases 45o and 135o where cos_theta = 1
-     if ( approximatelyEqual(cos_theta, 1.) ) return 45.;
-     if ( approximatelyEqual(cos_theta,-1.) ) return 135.;
+     // special cases: parallel (0 degrees) and anti-parallel (180 degrees) line elements, where
+     // round-off can push |cos_theta| marginally above 1
+     if ( approximatelyEqual(cos_theta, 1.) ) return 0.;
+     if ( approximatelyEqual(cos_theta,-1.) ) return 180.;
 
      // else 'acos' will return NaN
      assert( cos_theta <  1. );
@@ -3471,7 +3290,7 @@ void VData::CreateConsistentLineElementOrientations2D_AI()
 
      return radiansToDegrees( acos(cos_theta) );
      
-  } // end AngleBetweenLineElements2D
+  } // end AngleBetweenLineElements3D
 
  
  
@@ -3521,6 +3340,8 @@ double VData::AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 )
    
    The connectivity of line elements is established as well. Where there are line element manifolds, those of the line elements that are sharing a node
    are connected which are most closely aligned.
+   Line elements, both end nodes of which have BOX_BOUNDARY flags other than NOT or INTERNAL, are connected
+   with one another first.
    
    All line elements around the perimeter of a model are connected with one another.
    
@@ -3538,7 +3359,7 @@ double VData::AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 )
   
 */
 void  VData::EstablishElementConnectivity2D()
- {
+{
    ErrorHandler& csmp_error( ErrorHandler::Instance() );
    
    if ( !pfverts.empty() ) {
@@ -3643,7 +3464,7 @@ void  VData::EstablishElementConnectivity2D()
         // 2. reconnecting surface type elements
         // -------------------------------------
         // where there is no neighbor an attempt is made to assign a face to a particular boundary,
-        // based on its alignment with boundary normal
+        // based on its alignment with the boundary normal
         size_t node0(NULL_IDX), node1(NULL_IDX);
         for ( auto it=surf_elmt_nbors.begin(); it!=surf_elmt_nbors.end(); ++it ) {
              // there should be no more than 2 entries per face
@@ -3671,39 +3492,40 @@ void  VData::EstablishElementConnectivity2D()
                        else if ( face==3 ) { node0=3; node1=0; }
                     }
                   // creating face unit normal
-                  const double dx = px[ plist[static_cast<size_t>(elmt_idx)][node1] ] - px[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dx=x2-x1 
-                  const double dy = py[ plist[static_cast<size_t>(elmt_idx)][node1] ] - py[ plist[static_cast<size_t>(elmt_idx)][node0] ]; // dy=y2-y1, 
+                  // the face runs from node0 to node1; the outward normal for a CCW element
+                  // is obtained by rotating the tangent (dx,dy) by 90 degrees clockwise: (dy, -dx)
+                  const double dx = px[ plist[static_cast<size_t>(elmt_idx)][node1] ]
+                                  - px[ plist[static_cast<size_t>(elmt_idx)][node0] ];
+                  const double dy = py[ plist[static_cast<size_t>(elmt_idx)][node1] ]
+                                  - py[ plist[static_cast<size_t>(elmt_idx)][node0] ];
                   const double length = sqrt( dx*dx + dy*dy );
-                  // normals are (-dy, dx)=clockwise and (dy, -dx)=counter-clockwise (USED HERE)
+                  assert( length > 0. );
+                  // outward unit normal for a CCW-numbered element: rotate tangent 90 degrees clockwise
                   const double unrml[2U] = { dy/length, -dx/length };
-                  // determining BOX_BOUNDARY
-// TODO: does not work yet
-                  BOX_BOUNDARY boundary(IRREGULAR);
-                  bool boundary_found{false};
-                  // bottom (within +/-20o of side-boundary normal (dot-product >=0.94)
-                  double dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * -1.;
-                  if ( dotproduct >= 0.94 ) {
-                       boundary       = BOTTOM;
-                       boundary_found = true;
-                    }
-                  // right
-                  else dotproduct = unrml[0U] * 1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 && !boundary_found ) {
-                       boundary       = RIGHT;
-                       boundary_found = true;
-                    }
-                  // top
-                  else dotproduct = /* unrml[0U] * 0. + */ unrml[1U] * 1.;
-                  if ( dotproduct >= 0.94 && !boundary_found ) {
-                       boundary       = TOP;
-                       boundary_found = true;
-                    }
-                  // left
-                  else dotproduct = unrml[0U] * -1. /* + unrml[1U] * 0. */;
-                  if ( dotproduct >= 0.94 && !boundary_found )
-                    boundary = LEFT;
+
+                  // Determine BOX_BOUNDARY by comparing the face outward normal against
+                  // the six axis-aligned boundary normals.  A dot-product >= 0.94 means
+                  // the face normal is within approximately 20 degrees of that boundary.
+                  // Each direction is tested independently so that the correct boundary
+                  // is always found regardless of the outcome of the other tests.
+                  // Faces that do not align with any axis-aligned boundary within the
+                  // tolerance are left as IRREGULAR.
+                  BOX_BOUNDARY boundary( IRREGULAR );
+
+                  // bottom: outward normal points in -Y direction → (0, -1)
+                  if ( unrml[1U] * -1. >= 0.94 )
+                       boundary = BOTTOM;
+                  // right: outward normal points in +X direction → (1, 0)
+                  else if ( unrml[0U] * 1. >= 0.94 )
+                       boundary = RIGHT;
+                  // top: outward normal points in +Y direction → (0, 1)
+                  else if ( unrml[1U] * 1. >= 0.94 )
+                       boundary = TOP;
+                  // left: outward normal points in -X direction → (-1, 0)
+                  else if ( unrml[0U] * -1. >= 0.94 )
+                       boundary = LEFT;
                   // all other cases remain IRREGULAR
-                  
+
                   // assigning boundary to the face without neighbor
                   pfverts[static_cast<size_t>(elmt_idx)][face] = boundary;
                }
@@ -3744,7 +3566,6 @@ void  VData::EstablishElementConnectivity2D()
         
         // 3. reconnecting line elements
         // -----------------------------
-        // map<size_t,set<size_t> >  line_elmt_that_contain_node;
         if ( HybridElementTypeMesh() )
           for ( const auto& it : line_elmt_that_share_node )
             {
@@ -3785,7 +3606,7 @@ void  VData::EstablishElementConnectivity2D()
                 else { // n_connections > 1 )
                      // finding the pair of most closely aligned line elements starting at node
                      // establish element combinations
-                     vector<size_t>          joint_line_elmts( it.second.begin(), it.second.end() ); // actual element ids
+                     vector<size_t>          joint_line_elmts( it.second.begin(), it.second.end() );
                      const size_t            n_elmts_to_combine(2U);
                      deque<vector<size_t> >  combinations;
                      if ( createUniqueCombinations( joint_line_elmts, n_elmts_to_combine, combinations ) == 0 )
@@ -3802,15 +3623,33 @@ void  VData::EstablishElementConnectivity2D()
                           assert (!isnan(acute_angle) );
                           inter_element_angles.push_back( make_pair( acute_angle, n_combi++ ) );
                        }
-                     // sorting the angles to find the edges that are closest to a straight continuation
-                     // (= smallest angles for aligned, edges and closest to 180o for ones greater that 90o)
+                     // Line elements, both end nodes of which have BOX_BOUNDARY flags other than NOT or INTERNAL,
+                     // follow the model boundary. They are connected with one another before any other
+                     // combination is considered, so that a fracture which meets the boundary at an acute
+                     // angle (for instance in a corner of the model) cannot interrupt the chain of line
+                     // elements that surrounds the model.
+                     auto onBoxBoundary = [&]( size_t elmt ) -> bool {
+                          const int8_t flag0 = bflags[ plist[elmt][0] ];
+                          const int8_t flag1 = bflags[ plist[elmt][1] ];
+                          return flag0 != NOT && flag0 != INTERNAL && flag1 != NOT && flag1 != INTERNAL;
+                       };
+                     auto connectsBoxBoundaryElements = [&]( size_t combination ) -> bool {
+                          return onBoxBoundary( combinations[combination][0] ) && onBoxBoundary( combinations[combination][1] );
+                       };
+                     // sorting: first the combinations of two box-boundary line elements, then all others; within
+                     // each group by angle, to find the edges that are closest to a straight continuation
+                     // (equal angles are ordered by combination number to obtain a reproducible result)
                      sort( inter_element_angles.begin(), inter_element_angles.end(),
-                           [](const pair<double,size_t>& a, const pair<double,size_t>& b) -> bool { return a.first < b.first; } );
+                           [&](const pair<double,size_t>& a, const pair<double,size_t>& b) -> bool {
+                               const bool a_on_boundary = connectsBoxBoundaryElements( a.second );
+                               const bool b_on_boundary = connectsBoxBoundaryElements( b.second );
+                               if ( a_on_boundary != b_on_boundary ) return a_on_boundary;
+                               if ( a.first != b.first ) return a.first < b.first;
+                               return a.second < b.second;
+                           } );
                       // for any 2 edges unique connections are made until there are no more elements to connect
                       set<size_t> assigned_elements;
                       for ( auto& aet : inter_element_angles ) {
-                           // connecting the pair of line elements
-                           // ------------------------------------
                            const size_t elmt1 = combinations[aet.second][0];
                            const size_t elmt2 = combinations[aet.second][1];
                            // only if both elements in the combination have not been assigned already
@@ -3839,7 +3678,7 @@ void  VData::EstablishElementConnectivity2D()
                                   break;
                                }
                            assert ( unassigned_elmt != numeric_limits<size_t>::max() );
-                           // finding the correct side of the line element and assigning the vertex bflag to irt
+                           // finding the correct side of the line element and assigning the vertex bflag to it
                            if   ( it.first == plist[unassigned_elmt][1] ) {
                                  pfverts[unassigned_elmt][0] = ( bflags[it.first] < 0 ) ? bflags[it.first] : INTERNAL;
                               }
@@ -3851,7 +3690,7 @@ void  VData::EstablishElementConnectivity2D()
                               
             } // processing the line element neighbors
 
-     } // if plist empty
+     } // if plist not empty
 
    assert( !pfverts.empty() );
 
@@ -3859,12 +3698,12 @@ void  VData::EstablishElementConnectivity2D()
    //    This method eliminates such elements by node swapping
    if ( triangle_with_all_nodes_on_boundary ) SwitchCornerTriangles2D();
 
-   // 5. reorienting line-element chains (done in other method)
+   // 5. reorienting line-element chains
    if ( HybridElementTypeMesh() ) CreateConsistentLineElementOrientations2D();
    
    cout << "\n"<<"EstablishElementConnectivity2D: Established neighbor connectivity of "<< pfverts.size() <<" cells successfully.\n"<< endl;
 
- } // end EstablishElementConnectivity2D
+} // end EstablishElementConnectivity2D
 
 
 
@@ -3878,99 +3717,195 @@ void  VData::EstablishElementConnectivity2D()
     Reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts.'
     
     @return the number of replaced triangles;
+    
+    @throws csmp::Exception if a line element is co-located with the face shared by a corner triangle and its neighbor,
+    because the switch would remove the surface-element edge that this line element is located on. Corner triangles
+    processed before the offending one remain reconnected.
 */
 size_t VData::SwitchCornerTriangles2D()
- {
- /* commented out because code seems OK because the nodes and their numbering will not be affected
-    if ( HybridElementTypeMesh() ) {
-         cout <<"\n\n"<<"VData::SwitchCornerTriangles2D: WARNING: while mesh contains corner-spanning triangles ";
-         cout <<" this method cannot be applied because it cannot simultaneously fix the adjacent line elements yet that are contained in the VSet.\n";
-         cout <<" Please improve method. or fix corner elements in meshing tool."<< endl;
-         return 0U;
-      }
-*/
+{
     size_t switched_triangles{0};
-    
+
     if ( pfverts.empty() || pfverts.size() != plist.size() ) {
-         cerr <<"\nVData::SwitchCornerTriangles2D: method needs valid 'pfverts' (neighbor connectivity) for its operation. ";
-         cerr <<" no modifications made.\n";
-         return 0U;
-      }
-      
-    const size_t n_elements{pfverts.size()};
-    for ( size_t elmt_idx{0ul}; elmt_idx < n_elements; ++elmt_idx )
-      {
-         if ( isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) ) ) {
-              // count valid neighbors
-              auto nbors = count_if( pfverts[elmt_idx].begin(), pfverts[elmt_idx].end(),
-                                     []( int64_t  nbor )->bool { return (nbor >= 0) ? true : false; } );
-              assert( nbors != 0 );
-              if ( nbors == 1 ) {
-                   // finding the only valid neigbor and its shared face
-                   pair<size_t,size_t> face_nds;
-                   size_t              cnr_nd(SIZE_MAX);
-                   int64_t             nb_idx(numeric_limits<int64_t>::max());
-                   for ( auto i{0U}; i<3; ++i ) {
-                        if ( pfverts[elmt_idx][i] >= 0 ) {
-                             nb_idx = pfverts[elmt_idx][i];
-                             switch ( i ) {
-                                 case 0: face_nds = make_pair( plist[elmt_idx][1],plist[elmt_idx][2] ); cnr_nd=0; break;
-                                 case 1: face_nds = make_pair( plist[elmt_idx][2],plist[elmt_idx][0] ); cnr_nd=1; break;
-                                 case 2: face_nds = make_pair( plist[elmt_idx][0],plist[elmt_idx][1] ); cnr_nd=2;
-                               }
-                             break;
-                          }
-                     }
-                   size_t nbor_idx = static_cast<size_t>(nb_idx);
-                   assert( isTriangularElement( parseFiniteElementTypeEnum( pelmt[nbor_idx] ) ) );
-                   //           face nodes, other node, but order in pair flipped so that opposite face can be matched
-                   map<pair<size_t,size_t>,size_t> fnids{ {{plist[nbor_idx][2],plist[nbor_idx][1]},0},
-                                                          {{plist[nbor_idx][0],plist[nbor_idx][2]},1},
-                                                          {{plist[nbor_idx][1],plist[nbor_idx][0]},2} };
-                   // searching reversed nodes in map
-                   auto face_it = fnids.find( face_nds );
-                   if ( face_it != fnids.end() ) {
-                        // reassigning nodes to new elements (first nodes are taken as those on the far sides (not shared ones))
-                        array<size_t,3> elmt1_nds{ plist[elmt_idx][0], plist[elmt_idx][1], plist[elmt_idx][2] };
-                        array<size_t,3> elmt2_nds{ plist[nbor_idx][0], plist[nbor_idx][1], plist[nbor_idx][2] };
-                        // rotating these vectors such that the unshared nodes become the corner nodes
-                        rotate( begin(elmt1_nds), begin(elmt1_nds) + cnr_nd, end(elmt1_nds) );
-                        rotate( begin(elmt2_nds), begin(elmt2_nds) + (*face_it).second, end(elmt2_nds) );
-                        // new element 1
-                        plist[elmt_idx][0] = elmt1_nds[0];
-                        plist[elmt_idx][1] = elmt1_nds[1];
-                        plist[elmt_idx][2] = elmt2_nds[0];
-                        // new element 2 (nb_idx)
-                        plist[nbor_idx][0] = elmt2_nds[0];
-                        plist[nbor_idx][1] = elmt2_nds[1];
-                        plist[nbor_idx][2] = elmt1_nds[0];
-                        // reassigning neighbors
-                        // old neighbors
-                        array<int64_t, 3> elmt1_nbors{ pfverts[elmt_idx][0], pfverts[elmt_idx][1], pfverts[elmt_idx][2] };
-                        array<int64_t, 3> elmt2_nbors{ pfverts[nbor_idx][0], pfverts[nbor_idx][1], pfverts[nbor_idx][2] };
-                        // rotating these vectors such that the unshared nodes become the corner nodes
-                        rotate( elmt1_nbors.begin(), elmt1_nbors.begin() + cnr_nd, elmt1_nbors.end() );
-                        rotate( elmt2_nbors.begin(), elmt2_nbors.begin() + (*face_it).second, elmt2_nbors.end() );
-                        // neighbors of new element 1
-                        pfverts[elmt_idx][0] = elmt2_nbors[1];
-                        pfverts[elmt_idx][1] = nb_idx;
-                        pfverts[elmt_idx][2] = elmt1_nbors[2];
-                        // new element 2
-                        pfverts[nbor_idx][0] = elmt1_nbors[1];
-                        pfverts[nbor_idx][1] = static_cast<int64_t>(elmt_idx);
-                        pfverts[nbor_idx][2] = elmt2_nbors[2];
-                        // TODO: check: these new elements should only have a single boundary face left
-                        switched_triangles += 2U;
-                     }
+        cerr << "\nVData::SwitchCornerTriangles2D: method needs valid "
+             << "'pfverts' (neighbor connectivity) for its operation. "
+             << " no modifications made.\n";
+        return 0U;
+    }
+
+    // -----------------------------------------------------------------------
+    // Determine element type handling:
+    //   - Single-type mesh: pelmt has ONE entry for all elements
+    //   - Hybrid mesh:      pelmt has one entry PER element
+    // This mirrors the pattern used in RenumberElementsCounterClockwise2D().
+    // -----------------------------------------------------------------------
+    const bool hybrid = HybridElementTypeMesh();
+
+    // For single-type meshes, determine the type once outside the loop
+    CSMP_FEM_TYPE global_etype = UNKNOWN;
+    bool          global_is_triangle = false;
+    if ( !hybrid ) {
+        global_etype       = parseFiniteElementTypeEnum( ElementType(0) );
+        global_is_triangle = isTriangularElement( global_etype );
+    }
+
+    const size_t n_elements{ pfverts.size() };
+
+    // -----------------------------------------------------------------------
+    // Edges occupied by line elements (corner nodes, lower node index first).
+    // Switching removes the edge shared by a corner triangle and its neighbor;
+    // a line element co-located with that edge would be left without a
+    // surface-element edge to sit on, so such a switch must not be performed.
+    // -----------------------------------------------------------------------
+    set<pair<size_t,size_t>>  line_elmt_edges;
+    if ( hybrid )
+        for ( size_t e{0}; e < n_elements; ++e )
+            if ( isLineElement( parseFiniteElementTypeEnum( pelmt[e] ) ) )
+                line_elmt_edges.insert( minmax( plist[e][0], plist[e][1] ) );
+
+    for ( size_t elmt_idx{0}; elmt_idx < n_elements; ++elmt_idx )
+    {
+        // ------------------------------------------------------------------
+        // Determine whether this element is a triangle.
+        // For hybrid meshes, look up the per-element type.
+        // For single-type meshes, use the pre-computed global type.
+        // ------------------------------------------------------------------
+        const bool is_triangle = hybrid
+            ? isTriangularElement( parseFiniteElementTypeEnum( pelmt[elmt_idx] ) )
+            : global_is_triangle;
+
+        if ( !is_triangle ) continue;
+
+        // Count valid (non-boundary) neighbors
+        const auto nbors = count_if(
+            pfverts[elmt_idx].begin(), pfverts[elmt_idx].end(),
+            []( int64_t nbor ) -> bool { return nbor >= 0; } );
+
+        assert( nbors != 0 );
+        if ( nbors != 1 ) continue;  // only process corner triangles
+
+        // ------------------------------------------------------------------
+        // Find the single valid neighbor and the shared face
+        // ------------------------------------------------------------------
+        pair<size_t,size_t>  face_nds;
+        size_t               cnr_nd{ SIZE_MAX };
+        int64_t              nb_idx{ numeric_limits<int64_t>::max() };
+
+        for ( auto i{0U}; i < 3U; ++i ) {
+            if ( pfverts[elmt_idx][i] >= 0 ) {
+                nb_idx = pfverts[elmt_idx][i];
+                switch ( i ) {
+                    case 0:
+                        face_nds = { plist[elmt_idx][1], plist[elmt_idx][2] };
+                        cnr_nd = 0;
+                        break;
+                    case 1:
+                        face_nds = { plist[elmt_idx][2], plist[elmt_idx][0] };
+                        cnr_nd = 1;
+                        break;
+                    case 2:
+                        face_nds = { plist[elmt_idx][0], plist[elmt_idx][1] };
+                        cnr_nd = 2;
+                        break;
                 }
-           }
-      }
-      
+                break;
+            }
+        }
+
+        const size_t nbor_idx = static_cast<size_t>( nb_idx );
+
+        // ------------------------------------------------------------------
+        // Verify the neighbor is also a triangle
+        // (same hybrid/single-type logic applies)
+        // ------------------------------------------------------------------
+        const bool nbor_is_triangle = hybrid
+            ? isTriangularElement( parseFiniteElementTypeEnum( pelmt[nbor_idx] ) )
+            : global_is_triangle;
+
+        assert( nbor_is_triangle );
+        if ( !nbor_is_triangle ) continue;
+
+        // ------------------------------------------------------------------
+        // Build face-node map for the neighbor
+        // (nodes in reversed order so the shared face can be matched)
+        // ------------------------------------------------------------------
+        map<pair<size_t,size_t>, size_t> fnids{
+            { { plist[nbor_idx][2], plist[nbor_idx][1] }, 0 },
+            { { plist[nbor_idx][0], plist[nbor_idx][2] }, 1 },
+            { { plist[nbor_idx][1], plist[nbor_idx][0] }, 2 }
+        };
+
+        auto face_it = fnids.find( face_nds );
+        if ( face_it == fnids.end() ) continue;
+
+        // ------------------------------------------------------------------
+        // The shared face must not be co-located with a line element
+        // ------------------------------------------------------------------
+        if ( line_elmt_edges.count( minmax( face_nds.first, face_nds.second ) ) > 0 )
+            throw csmp::Exception( ERROR, "VData::SwitchCornerTriangles2D",
+                                   "corner triangle " + to_string( elmt_idx ) + " and its neighbor "
+                                   + to_string( nbor_idx ) + " cannot be reconnected because a line element"
+                                   " is co-located with the face they share (nodes "
+                                   + to_string( face_nds.first ) + ", " + to_string( face_nds.second ) + ")" );
+
+        // ------------------------------------------------------------------
+        // Reconnect the two triangles
+        // ------------------------------------------------------------------
+        array<size_t,3>  elmt1_nds{ plist[elmt_idx][0],
+                                    plist[elmt_idx][1],
+                                    plist[elmt_idx][2] };
+        array<size_t,3>  elmt2_nds{ plist[nbor_idx][0],
+                                    plist[nbor_idx][1],
+                                    plist[nbor_idx][2] };
+
+        // Rotate so that the unshared (corner) node is first
+        rotate( begin(elmt1_nds), begin(elmt1_nds) + cnr_nd,       end(elmt1_nds) );
+        rotate( begin(elmt2_nds), begin(elmt2_nds) + face_it->second, end(elmt2_nds) );
+
+        // New element 1
+        plist[elmt_idx][0] = elmt1_nds[0];
+        plist[elmt_idx][1] = elmt1_nds[1];
+        plist[elmt_idx][2] = elmt2_nds[0];
+
+        // New element 2
+        plist[nbor_idx][0] = elmt2_nds[0];
+        plist[nbor_idx][1] = elmt2_nds[1];
+        plist[nbor_idx][2] = elmt1_nds[0];
+
+        // ------------------------------------------------------------------
+        // Reconnect neighbors
+        // ------------------------------------------------------------------
+        array<int64_t,3>  elmt1_nbors{ pfverts[elmt_idx][0],
+                                       pfverts[elmt_idx][1],
+                                       pfverts[elmt_idx][2] };
+        array<int64_t,3>  elmt2_nbors{ pfverts[nbor_idx][0],
+                                       pfverts[nbor_idx][1],
+                                       pfverts[nbor_idx][2] };
+
+        rotate( elmt1_nbors.begin(), elmt1_nbors.begin() + cnr_nd,         elmt1_nbors.end() );
+        rotate( elmt2_nbors.begin(), elmt2_nbors.begin() + face_it->second, elmt2_nbors.end() );
+
+        // Neighbors of new element 1
+        pfverts[elmt_idx][0] = elmt2_nbors[1];
+        pfverts[elmt_idx][1] = nb_idx;
+        pfverts[elmt_idx][2] = elmt1_nbors[2];
+
+        // Neighbors of new element 2
+        pfverts[nbor_idx][0] = elmt1_nbors[1];
+        pfverts[nbor_idx][1] = static_cast<int64_t>( elmt_idx );
+        pfverts[nbor_idx][2] = elmt2_nbors[2];
+
+        switched_triangles += 2U;
+
+    } // end for all elements
+
     if ( switched_triangles > 0 )
-      cout <<"\n\nVData::SwitchCornerTriangles2D: reconnected: "<< switched_triangles <<" triangular elements."<< endl;
+        cout << "\n\nVData::SwitchCornerTriangles2D: reconnected: "
+             << switched_triangles << " triangular elements.\n";
+
     return switched_triangles;
- 
- } // end SwitchCornerTriangles2D
+
+} // end SwitchCornerTriangles2D
 
 
 
@@ -4673,58 +4608,85 @@ void VData::EstablishElementConnectivity3D()
 
 
 /**
-   Replaces corner-spanning tetrahedra (all nodes at the model boundary) and their interior neighbors
-   with  3 tedrahedra each to establish the necessary degrees of freedom to assign boundary conditions.
-   
-   @return the number of new tetrahedra created.
-   
-   @attention method requires an intact neighbor connectivity. Run EstablishElementConnectivity3D before.
+    Replaces corner-spanning tetrahedra (all nodes at the model boundary)
+    and their interior neighbors with 3 tetrahedra each, establishing the
+    necessary degrees of freedom to assign boundary conditions.
+
+    @return the number of new tetrahedra created.
+
+    @attention Requires intact neighbor connectivity.
+               Run EstablishElementConnectivity3D() before calling this method.
 */
 size_t VData::RemeshCornerSpanningTetrahedra()
- {
+{
+    // -----------------------------------------------------------------------
+    // The loop bound is captured BEFORE the loop because splitCornerTetrahedron
+    // adds one new element per call. New elements are not corner-spanning by
+    // construction and must not be processed in this pass.
+    // -----------------------------------------------------------------------
+    const size_t n_elements_before = Elements();
 
-throw csmp::Exception( ERROR, "VData::RemeshCornerSpanningTetrahedra",
-                      "SKM: gave up trying to get this to work, given that there are so many special cases; fix problem when creating the mesh");
- 
-     // Remeshing tetrahedra that span a corner of the model
-     // ----------------------------------------------------------
-     // replacing the corner and inner elements with 3 new tetrahedra
-     const size_t n_elements{pelmt.size()};
-     
-     // if this a tetrahedral only mesh no checks have to be performed
-     if ( !HybridElementTypeMesh() && isTetrahedral( parseFiniteElementTypeEnum(ElementType(0)) ) )
-       {
-          for ( size_t i{0U}; i<n_elements; ++i ) {
-               long n_neighbors{0}, neighbor(UNSPECIFIED);
-               for ( size_t j{0}; j<PfvertsSize(i); ++j )
-                 if ( Pfvert(i,j) >= 0 ) {
-                      neighbor=Pfvert(i,j);
-                      n_neighbors++;
-                   }
-               // if the tetrahedron has only one neighbor, it and its nbor need to be replaced
-               if ( n_neighbors == 1 )
-                 splitCornerTetrahedron( *this, i, neighbor );
-            }
-       }
-     else { // for hybrid element type meshes the element type needs to be checked
-          for ( size_t i{0U}; i<n_elements; ++i ) {
-               long n_neighbors{0}, neighbor(UNSPECIFIED);
-               for ( size_t j{0}; j<PfvertsSize(i); ++j )
-                 if ( Pfvert(i,j) >= 0 ) {
-                      neighbor=Pfvert(i,j);
-                      n_neighbors++;
-                   }
-               // if the element has only one neighbor and is a tetrahedron, it and its nbor need to be replaced
-               if ( n_neighbors == 1 &&
-                    isTetrahedral( parseFiniteElementTypeEnum(ElementType(i)) ) ) {
-                    splitCornerTetrahedron( *this, i, neighbor );
-                 }
-            }
-       }
-       
-    return Elements() - n_elements;
+    // -----------------------------------------------------------------------
+    // Determine element type access pattern:
+    //   - Single-type mesh: pelmt has ONE entry -- use ElementType(0) for all
+    //   - Hybrid mesh:      pelmt has one entry per element
+    // -----------------------------------------------------------------------
+    const bool hybrid = HybridElementTypeMesh();
 
- } // end RemeshCornerSpanningTetrahedra
+    // For single-type meshes, check once that the mesh is tetrahedral.
+    // If it is not, there are no corner-spanning tetrahedra to process.
+    if ( !hybrid ) {
+        if ( !isTetrahedral( parseFiniteElementTypeEnum( ElementType(0) ) ) )
+            return 0U;
+    }
+
+    for ( size_t i{0U}; i < n_elements_before; ++i )
+    {
+        // ------------------------------------------------------------------
+        // Check element type for hybrid meshes.
+        // For single-type meshes we already verified above that all elements
+        // are tetrahedra, so no per-element check is needed.
+        // ------------------------------------------------------------------
+        if ( hybrid &&
+             !isTetrahedral( parseFiniteElementTypeEnum( ElementType(i) ) ) )
+            continue;
+
+        // ------------------------------------------------------------------
+        // Count valid (non-boundary) neighbors and record the single neighbor
+        // ------------------------------------------------------------------
+        size_t   n_neighbors{ 0U };
+        int64_t  neighbor{ -1 };
+
+        for ( uint32_t j{0U}; j < PfvertsSize(i); ++j ) {
+            if ( Pfvert(i,j) >= 0 ) {
+                neighbor = Pfvert(i,j);
+                ++n_neighbors;
+            }
+        }
+
+        // ------------------------------------------------------------------
+        // A corner-spanning tetrahedron has exactly ONE neighbor.
+        // Guard against the impossible case where n_neighbors==1 but
+        // neighbor was never set.
+        // ------------------------------------------------------------------
+        if ( n_neighbors != 1 ) continue;
+
+        assert( neighbor >= 0 );
+        assert( static_cast<size_t>(neighbor) < Elements() );
+
+        splitCornerTetrahedron( *this, i, static_cast<size_t>(neighbor) );
+    }
+
+    const size_t n_new = Elements() - n_elements_before;
+
+    if ( n_new > 0 )
+        cout << "\nVData::RemeshCornerSpanningTetrahedra: created "
+             << n_new << " new tetrahedra from "
+             << (n_new) << " corner-spanning pairs.\n";
+
+    return n_new;
+
+} // end RemeshCornerSpanningTetrahedra
 
 
 
@@ -5147,199 +5109,327 @@ void VData::InitialiseNodeTopologyIdentifiers()
 
 
 
-/**
-Assuming the following numbering:
-
-First tetra
-0 1 2 3 - ony one neighbor = nbr
-
-Second tetra
-0 4 1 2 -  4 neigbors (inside of model)
-
-The new elements are formed
-1)  0 1 4 3 -   neighbors:  2  3  old-tet1-nbor 1   old-tet1-nbor 4
-2)  1 2 4 3 -   neighbors:  3  1  old-tet1-nbor 0   old-tet2-nbor 0
-3)  0 4 2 3 -   neighbors:  2  old-tet1-nbor 1   1   old-tet2-nbor 3
-
-The corresponding neighbor elements are.
-
-The operations will increase the number of elements by 1 for each corner processed
-because 2 elements are replaced by 3.
-
-@attention method returns without doing anything when all the nodes of the 2 tets are at the model boundary
-because, in that case, the connecting line between the corner and the extreme node of the inside tetrahedron will not go hrough the tetrahedra.
-As a consequence, degenerate tetrahedra would be produced by the splitting operation.
-
-@revision 2, SKM 27/1/2022
-
-@todo does not work yet; too many potential configurations of the neighbor element have to be handled
-
-@todo does not repair any surface elements that are covering the faces of the tetrahedra and would need to be adjusted
-
-*/
-// TODO: does not work correctly yet
 void splitCornerTetrahedron( VData& vdata, size_t cnr, size_t nbr )
- {
+{
     assert( cnr < vdata.Elements() );
     assert( nbr < vdata.Elements() );
-    
-    // getting the volume of the corner element for reference
-    array<double,3>  bbox = boundingBox( vdata, cnr );
-    const double cnr_vol = bbox[0] * bbox[1] * bbox[2];
+    assert( vdata.PlistSize(cnr) == 4 );
+    assert( vdata.PlistSize(nbr) == 4 );
 
-    // 1. Establishing the order of the 4 nodes that will be reconnected
-    // -----------------------------------------------------------------
-    const size_t n_nodes{ vdata.PlistSize(cnr) };
-    size_t       n_cnr(SIZE_MAX);
-    assert( n_nodes == 4 ); // tetrahedra only
-    for ( uint32_t i{0u}; i<n_nodes; ++i )
-      if ( vdata.Pfvert(cnr,i) >= 0 ) { // corner element has only one neighbor; all are opposite to nodes
-           n_cnr = i;
-           break;
+    // -----------------------------------------------------------------------
+    // 1. Establish node numbering
+    //
+    // Corner tetrahedron (cnr): has exactly ONE neighbor.
+    //   The face opposite to n_cnr is the shared face with nbr.
+    //   Nodes n0, n1, n2 are on the shared face.
+    //   n_cnr is the isolated corner node.
+    //
+    // Neighbor tetrahedron (nbr): has 4 neighbors (interior element).
+    //   Shares face [n0, n1, n2] with cnr.
+    //   Has one extra node n4 not in cnr.
+    // -----------------------------------------------------------------------
+
+    // Find the corner node of cnr (the node opposite the only neighbor face)
+    constexpr auto SMAX = numeric_limits<uint32_t>::max();
+    uint32_t local_cnr{ SMAX };
+    for ( uint32_t i{0U}; i < 4U; ++i )
+        if ( vdata.Pfvert(cnr,i) >= 0 ) { local_cnr = i; break; }
+    assert( local_cnr != SMAX );
+
+    // The three shared face nodes (local indices in cnr)
+    const uint32_t lf0 = (local_cnr+1) % 4;
+    const uint32_t lf1 = (local_cnr+2) % 4;
+    const uint32_t lf2 = (local_cnr+3) % 4;
+
+    // Global node indices
+    const size_t n0    = vdata.Plist(cnr, lf0);
+    const size_t n1    = vdata.Plist(cnr, lf1);
+    const size_t n2    = vdata.Plist(cnr, lf2);
+    const size_t n_cnr = vdata.Plist(cnr, local_cnr);
+
+    // Find n4: the node in nbr not shared with cnr
+    uint32_t local_n4{ SMAX };
+    for ( uint32_t i{0U}; i < 4U; ++i )
+        if ( vdata.Plist(nbr,i) != n0 &&
+             vdata.Plist(nbr,i) != n1 &&
+             vdata.Plist(nbr,i) != n2 &&
+             vdata.Plist(nbr,i) != n_cnr ) {
+            local_n4 = i;
+            break;
         }
-    // getting the remaining nodes, numbered in ascending order (assuming that cnr node is 3)
-    size_t n0 = ( n_cnr+1 > 3 ) ? 0 : n_cnr+1;
-    size_t n1 = ( n0   +1 > 3 ) ? 0 : n0+1;
-    size_t n2 = ( n1   +1 > 3 ) ? 0 : n1+1;
-    // remembering the neighbors of the original elements
-    const int64_t e1n0(vdata.Pfvert(cnr,n0)), e1n1(vdata.Pfvert(cnr,n1)), e1n2(vdata.Pfvert(cnr,n2)), e1n3(vdata.Pfvert(cnr,n_cnr));
-    // converting local node numbers to global node numbers
-    n0    = vdata.Plist(cnr,n0);
-    n1    = vdata.Plist(cnr,n1);
-    n2    = vdata.Plist(cnr,n2);
-    n_cnr = vdata.Plist(cnr,n_cnr);
-    // establishing extra node of opposite tetrahedron 'nbor' (more robust to rely on node numbers only)
-    size_t n4{SIZE_MAX};
-    for ( uint32_t i{0U}; i<n_nodes; ++i )
-      if ( vdata.Plist(nbr,i) != n0 &&
-           vdata.Plist(nbr,i) != n1 &&
-           vdata.Plist(nbr,i) != n2 &&
-           vdata.Plist(nbr,i) != n_cnr ) {
-           n4 = i;
-           break;
-        }
-    const int64_t e2n3(vdata.Pfvert(nbr,n4) );
-    n4 = vdata.Plist(nbr,n4);
-    // determining the nodes of the original neighbor element
-    //if ( vdata.Plist(nbr,0) == n0
-    // remembering the neighbors of the original elements
-    //const long e2n0(vdata.Pfvert(nbr,)), e2n1(vdata.Pfvert(nbr,), e2n2(vdata.Pfvert(nbr,), e2n3(vdata.Pfvert(nbr,n4);
+    assert( local_n4 != SMAX );
+    const size_t n4 = vdata.Plist(nbr, local_n4);
 
+    // -----------------------------------------------------------------------
+    // 2. Record ALL original neighbors of both elements BEFORE modification
+    //
+    // For cnr: neighbors opposite each local node
+    //   opp_cnr[i] = neighbor opposite local node i of cnr
+    // For nbr: neighbors opposite each local node
+    //   opp_nbr[i] = neighbor opposite local node i of nbr
+    // -----------------------------------------------------------------------
+    array<int64_t,4>  opp_cnr, opp_nbr;
+    for ( uint32_t i{0U}; i < 4U; ++i ) {
+        opp_cnr[i] = vdata.Pfvert(cnr, i);
+        opp_nbr[i] = vdata.Pfvert(nbr, i);
+    }
 
-    // 2. dealing with some of the special cases where node 4 also is on the outside of the model
-    // ------------------------------------------------------------------------------------------
-    // if the node of the nbr element that is not shared with 'cnr' also is on the model boundary, the tetra is split into two
-    // no new elements have to be created
+    // Neighbors of cnr opposite each GLOBAL node:
+    // opp_cnr[local_cnr] = the one neighbor of cnr (= nbr)
+    // opp_cnr[lf0] = neighbor of cnr opposite n0 (boundary or -ve)
+    // opp_cnr[lf1] = neighbor of cnr opposite n1 (boundary or -ve)
+    // opp_cnr[lf2] = neighbor of cnr opposite n2 (boundary or -ve)
+    const int64_t cnr_opp_n0    = opp_cnr[lf0];
+    const int64_t cnr_opp_n1    = opp_cnr[lf1];
+    const int64_t cnr_opp_n2    = opp_cnr[lf2];
+    // cnr_opp_ncnr = nbr (the only neighbor of cnr)
+
+    // Neighbors of nbr: find which local index of nbr is opposite each global node
+    // We need: nbr_opp_n0, nbr_opp_n1, nbr_opp_n2, nbr_opp_n4
+    // The face of nbr opposite global node X is the face NOT containing X.
+    auto find_local_opposite = [&]( size_t global_node, size_t elmt ) -> size_t {
+        for ( uint32_t i{0U}; i < 4U; ++i )
+            if ( vdata.Plist(elmt,i) == global_node ) return i;
+        assert(false);
+        return SMAX;
+    };
+
+    const int64_t nbr_opp_n0 = opp_nbr[ find_local_opposite(n0, nbr) ];
+    const int64_t nbr_opp_n1 = opp_nbr[ find_local_opposite(n1, nbr) ];
+    const int64_t nbr_opp_n2 = opp_nbr[ find_local_opposite(n2, nbr) ];
+    const int64_t nbr_opp_n4 = opp_nbr[ local_n4 ];
+
+    // -----------------------------------------------------------------------
+    // 3. Special case: n4 is also on the model boundary
+    //    Split into 2 tetrahedra instead of 3
+    // -----------------------------------------------------------------------
     if ( vdata.BFlag(n4) < 0 ) {
-// debugging
-elementToVTK( vdata, cnr, "a_corner_tetrahedron" );
-elementToVTK( vdata, nbr, "a_interior_tetrahedron" );
-         // new first element (using storage of former corner element)
-         // TODO: depedendent on the case, one of the two following options will work, which one?
-         // TODO: perhaps this can be resolved if one establishes first which of the 5 nodes lie in the same plane (make this node 1)
-         // works on bottom corner case
-         vdata.Plist( cnr, 0, n0 ); // <-
-         vdata.Plist( cnr, 1, n1 );
-         vdata.Plist( cnr, 2, n4 );
-         vdata.Plist( cnr, 3, n_cnr );
-         bbox = boundingBox( vdata, cnr );
-         // works on top corner case
-         // here we check whether the first attempt lead to degenerate element with no volume
-         if ( bbox[0]*bbox[1]*bbox[2] < cnr_vol* 1.0e-3 ) {
-              vdata.Plist( cnr, 0, n2 ); // <-
-              vdata.Plist( cnr, 1, n_cnr );
-              vdata.Plist( cnr, 2, n4 );
-              vdata.Plist( cnr, 3, n0 );
-           }
-         // neighbors - TODO: may be in this order we are overwriting some neighbors by accident
-         vdata.Pfvert( cnr, 0, nbr );
-         vdata.Pfvert( cnr, 1, IRREGULAR_OUTSIDE );
-         vdata.Pfvert( cnr, 2, vdata.Pfvert( nbr, 2 ) );
-         vdata.Pfvert( cnr, 3, IRREGULAR_OUTSIDE ); // TODO?
-         // always OK: new second element (using storage of former inside element)
-         vdata.Plist( nbr, 0, n1 );
-         vdata.Plist( nbr, 1, n4 );
-         vdata.Plist( nbr, 2, n_cnr );
-         vdata.Plist( nbr, 3, n2 );
-         // neighbors
-         vdata.Pfvert( nbr, 0, IRREGULAR_OUTSIDE );
-         vdata.Pfvert( nbr, 1, cnr );
-         vdata.Pfvert( nbr, 2, vdata.Pfvert( nbr, 0 ) );
-         vdata.Pfvert( nbr, 3, vdata.Pfvert( cnr, 0 ) );
-// debugging
-elementToVTK( vdata, cnr, "b_corner_tetrahedron" );
-elementToVTK( vdata, nbr, "b_interior_tetrahedron" );
-         return;
-      }
+        // New element 1 (reuse cnr storage): [n0, n1, n4, n_cnr]
+        // New element 2 (reuse nbr storage): [n1, n2, n4, n_cnr]
+        //
+        // Face-opposite-node for new element 1 [n0, n1, n4, n_cnr]:
+        //   opp n0:    nbr (shares face [n1, n4, n_cnr])
+        //   opp n1:    boundary (cnr_opp_n1 -- was boundary in cnr)
+        //   opp n4:    cnr_opp_n0 (shares face [n0, n1, n_cnr] -- was opp n0 in cnr)
+        //   opp n_cnr: nbr_opp_n0 (shares face [n1, n4, ...])
+        //
+        // Face-opposite-node for new element 2 [n1, n2, n4, n_cnr]:
+        //   opp n1:    nbr_opp_n1 (shares face [n2, n4, n_cnr])
+        //   opp n2:    cnr (shares face [n1, n4, n_cnr])
+        //   opp n4:    cnr_opp_n2
+        //   opp n_cnr: nbr_opp_n2
 
+        // New element 1: [n0, n1, n4, n_cnr]
+        vdata.Plist( cnr, 0, n0    );
+        vdata.Plist( cnr, 1, n1    );
+        vdata.Plist( cnr, 2, n4    );
+        vdata.Plist( cnr, 3, n_cnr );
+        vdata.Pfvert( cnr, 0, static_cast<int64_t>(nbr) );  // opp n0
+        vdata.Pfvert( cnr, 1, cnr_opp_n1 );                 // opp n1 (boundary)
+        vdata.Pfvert( cnr, 2, cnr_opp_n0 );                 // opp n4
+        vdata.Pfvert( cnr, 3, nbr_opp_n0 );                 // opp n_cnr
 
-    // 2. creation of 3 tetrahedra from the corner and inner ones
-    // ----------------------------------------------------------
-    // 2.1 creating space for one new element (the other 2 will be reused)
-    // -------------------------------------------------------------------
-    // (and assuming that there are no Faces or InterFaces,
-    //  or lower-dimensional elements covering the sides of the tetrahedra)
-    assert( vdata.Faces() == 0 );
+        // New element 2: [n1, n2, n4, n_cnr]
+        vdata.Plist( nbr, 0, n1    );
+        vdata.Plist( nbr, 1, n2    );
+        vdata.Plist( nbr, 2, n4    );
+        vdata.Plist( nbr, 3, n_cnr );
+        vdata.Pfvert( nbr, 0, nbr_opp_n1 );                 // opp n1
+        vdata.Pfvert( nbr, 1, static_cast<int64_t>(cnr) );  // opp n2
+        vdata.Pfvert( nbr, 2, cnr_opp_n2 );                 // opp n4
+        vdata.Pfvert( nbr, 3, nbr_opp_n2 );                 // opp n_cnr
+
+        cout << "\nsplitCornerTetrahedron (2-tet case): replaced corner "
+             << cnr << " and neighbor " << nbr << "\n";
+        return;
+    }
+
+    // -----------------------------------------------------------------------
+    // 4. General case: split into 3 tetrahedra
+    //
+    // Three new tetrahedra:
+    //   T1 (new slot):  [n0, n1, n4, n_cnr]
+    //   T2 (reuse cnr): [n1, n2, n4, n_cnr]
+    //   T3 (reuse nbr): [n0, n4, n2, n_cnr]
+    //
+    // Face-opposite-node relationships:
+    //
+    //   T1 [n0, n1, n4, n_cnr]:
+    //     opp n0:    T2  (shares face [n1, n4, n_cnr])
+    //     opp n1:    T3  (shares face [n0, n4, n_cnr])
+    //     opp n4:    cnr_opp_n2  (face [n0, n1, n_cnr] was opp n2 in cnr)
+    //     opp n_cnr: nbr_opp_n2  (face [n0, n1, n4] was opp n2 in nbr)
+    //
+    //   T2 [n1, n2, n4, n_cnr]:
+    //     opp n1:    T3  (shares face [n2, n4, n_cnr])
+    //     opp n2:    T1  (shares face [n1, n4, n_cnr])
+    //     opp n4:    cnr_opp_n0  (face [n1, n2, n_cnr] was opp n0 in cnr)
+    //     opp n_cnr: nbr_opp_n0  (face [n1, n2, n4] was opp n0 in nbr)
+    //
+    //   T3 [n0, n4, n2, n_cnr]:
+    //     opp n0:    T2  (shares face [n4, n2, n_cnr])  -- wait, T2 opp n2 = T1
+    //     ...
+    //
+    // NOTE: The face-neighbor assignments below are derived by checking
+    // which face of each new tetrahedron is shared with which other element.
+    // -----------------------------------------------------------------------
+
+    // Allocate space for one new element
+    assert( vdata.Faces()      == 0 );
     assert( vdata.Interfaces() == 0 );
-    const size_t n_elements_new{ vdata.Elements() + 1 };
+    const size_t n_new = vdata.Elements();  // index of new element
+    const size_t n_elements_new = n_new + 1;
+
     if ( vdata.HybridElementTypeMesh() ) {
-         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(cnr)) ) );
-         assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(nbr)) ) );
-         vdata.ResizeElementTypes( n_elements_new );
-         vdata.ElementType( n_elements_new-1U, vdata.ElementType( cnr ) );
-      }
-    else assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(0)) ) );
-    
-    vdata.ResizePlist( n_elements_new, 4 ); // nodes of tetrahedron
-    vdata.ResizePfverts( n_elements_new, 4 ); // nbors of tetrahedron
-    
-    // 2.2. assignment of nodes (see Pain et al., 2001)
-    // ------------------------------------------------
-    // 4 nodes involved
-    // first new element
-    vdata.Plist( n_elements_new-1U, 0, n0 ); // 0
-    vdata.Plist( n_elements_new-1U, 1, n1 ); // 1
-    vdata.Plist( n_elements_new-1U, 2, n4 ); // 4 (belongs to inside nbor tetra)
-    vdata.Plist( n_elements_new-1U, 3, n_cnr ); // 3
-    // new second element (using storage of former corner element)
-    vdata.Plist( cnr, 0, n1 );
-    vdata.Plist( cnr, 1, n2 );
-    vdata.Plist( cnr, 2, n4 );
+        assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(cnr)) ) );
+        assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(nbr)) ) );
+        vdata.ResizeElementTypes( n_elements_new );
+        vdata.ElementType( n_new, vdata.ElementType(cnr) );
+    }
+    else {
+        assert( isTetrahedral( parseFiniteElementTypeEnum(vdata.ElementType(0)) ) );
+    }
+
+    vdata.ResizePlist(   n_elements_new, 4 );
+    vdata.ResizePfverts( n_elements_new, 4 );
+
+    const int64_t T1 = static_cast<int64_t>(n_new);
+    const int64_t T2 = static_cast<int64_t>(cnr);
+    const int64_t T3 = static_cast<int64_t>(nbr);
+
+    // -----------------------------------------------------------------------
+    // 4.1 Assign nodes
+    // -----------------------------------------------------------------------
+
+    // T1 (new slot): [n0, n1, n4, n_cnr]
+    vdata.Plist( n_new, 0, n0    );
+    vdata.Plist( n_new, 1, n1    );
+    vdata.Plist( n_new, 2, n4    );
+    vdata.Plist( n_new, 3, n_cnr );
+
+    // T2 (reuse cnr): [n1, n2, n4, n_cnr]
+    vdata.Plist( cnr, 0, n1    );
+    vdata.Plist( cnr, 1, n2    );
+    vdata.Plist( cnr, 2, n4    );
     vdata.Plist( cnr, 3, n_cnr );
-    // new third element (using storage of former inside element)
-    vdata.Plist( nbr, 0, n0 );
-    vdata.Plist( nbr, 1, n4 );
-    vdata.Plist( nbr, 2, n2 );
+
+    // T3 (reuse nbr): [n0, n4, n2, n_cnr]
+    vdata.Plist( nbr, 0, n0    );
+    vdata.Plist( nbr, 1, n4    );
+    vdata.Plist( nbr, 2, n2    );
     vdata.Plist( nbr, 3, n_cnr );
 
-    // 3. assignment of neigbors
-    // -------------------------
-    const int64_t new1(n_elements_new-1), new2(cnr), new3(nbr),
-                  old1n0(vdata.Pfvert(cnr,0)), old1n1(vdata.Pfvert(cnr,1)),
-                  old2n0(vdata.Pfvert(nbr,0)), old2n1(vdata.Pfvert(nbr,1)), old2n3(vdata.Pfvert(nbr,3));
-               
-    // new element first
-    vdata.Pfvert( new1, 0, new2 );
-    vdata.Pfvert( new1, 1, new3 );
-    vdata.Pfvert( new1, 2, old1n1 ); // not sure
-    vdata.Pfvert( new1, 3, old2n3 ); // not sure
+    // -----------------------------------------------------------------------
+    // 4.2 Assign neighbors
+    //
+    // For each new tetrahedron T = [a, b, c, d]:
+    //   pfverts[T][0] = neighbor sharing face [b,c,d]  (opposite a)
+    //   pfverts[T][1] = neighbor sharing face [a,c,d]  (opposite b)
+    //   pfverts[T][2] = neighbor sharing face [a,b,d]  (opposite c)
+    //   pfverts[T][3] = neighbor sharing face [a,b,c]  (opposite d)
+    //
+    // T1 = [n0, n1, n4, n_cnr]:
+    //   opp n0    = T2  (T2=[n1,n2,n4,n_cnr] shares face [n1,n4,n_cnr])
+    //   opp n1    = T3  (T3=[n0,n4,n2,n_cnr] shares face [n0,n4,n_cnr])
+    //   opp n4    = cnr_opp_n2  (original cnr face [n0,n1,n_cnr] opp n2)
+    //   opp n_cnr = nbr_opp_n2  (original nbr face [n0,n1,n4] opp n2)
+    //
+    // T2 = [n1, n2, n4, n_cnr]:
+    //   opp n1    = T3  (T3=[n0,n4,n2,n_cnr] shares face [n2,n4,n_cnr])
+    //   opp n2    = T1  (T1=[n0,n1,n4,n_cnr] shares face [n1,n4,n_cnr])
+    //   opp n4    = cnr_opp_n0  (original cnr face [n1,n2,n_cnr] opp n0)
+    //   opp n_cnr = nbr_opp_n0  (original nbr face [n1,n2,n4] opp n0)
+    //
+    // T3 = [n0, n4, n2, n_cnr]:
+    //   opp n0    = T2  (T2=[n1,n2,n4,n_cnr] shares face [n4,n2,n_cnr])
+    //   opp n4    = T1  (T1=[n0,n1,n4,n_cnr] shares face [n0,n4,n_cnr] -- wait)
+    //
+    // Let me re-derive T3 carefully:
+    // T3 = [n0, n4, n2, n_cnr]
+    //   face opp n0    = [n4, n2, n_cnr]  -- shared with T2=[n1,n2,n4,n_cnr]? 
+    //                                         T2 face opp n1 = [n2,n4,n_cnr] ✓ (same nodes)
+    //   face opp n4    = [n0, n2, n_cnr]  -- shared with cnr_opp_n1 (original cnr face opp n1)
+    //   face opp n2    = [n0, n4, n_cnr]  -- shared with T1=[n0,n1,n4,n_cnr]?
+    //                                         T1 face opp n1 = [n0,n4,n_cnr] ✓
+    //   face opp n_cnr = [n0, n4, n2]     -- shared with nbr_opp_n1 (original nbr face opp n1)
+    // -----------------------------------------------------------------------
 
-    // second element neighbors
-    vdata.Pfvert( cnr, 0, new3 );
-    vdata.Pfvert( cnr, 1, new1 );
-    vdata.Pfvert( cnr, 2, old1n0 ); // not sure
-    vdata.Pfvert( cnr, 3, old2n0 ); // not sure
+    // T1 neighbors
+    vdata.Pfvert( n_new, 0, T2          );   // opp n0
+    vdata.Pfvert( n_new, 1, T3          );   // opp n1
+    vdata.Pfvert( n_new, 2, cnr_opp_n2  );   // opp n4
+    vdata.Pfvert( n_new, 3, nbr_opp_n2  );   // opp n_cnr
 
-    // third element neighbors
-    vdata.Pfvert( nbr, 0, new2 );
-    vdata.Pfvert( nbr, 1, old1n1 ); // not sure
-    vdata.Pfvert( nbr, 2, new1 );
-    vdata.Pfvert( nbr, 3, old2n1 ); // not sure
-    
-    cout <<"\nsplitCornerTetrahedron: replaced corner "<< cnr;
-    cout <<" and its neighbor "<< nbr <<", adding the new tetrahedron "<< new1;
+    // T2 neighbors
+    vdata.Pfvert( cnr,   0, T3          );   // opp n1
+    vdata.Pfvert( cnr,   1, T1          );   // opp n2
+    vdata.Pfvert( cnr,   2, cnr_opp_n0  );   // opp n4
+    vdata.Pfvert( cnr,   3, nbr_opp_n0  );   // opp n_cnr
 
- } // end splitCornerTetrahedron
+    // T3 neighbors
+    vdata.Pfvert( nbr,   0, T2          );   // opp n0
+    vdata.Pfvert( nbr,   1, cnr_opp_n1  );   // opp n4
+    vdata.Pfvert( nbr,   2, T1          );   // opp n2
+    vdata.Pfvert( nbr,   3, nbr_opp_n1  );   // opp n_cnr
+
+    // -----------------------------------------------------------------------
+    // 5. Update external neighbors that pointed to cnr or nbr
+    //    to point to the correct new element
+    //
+    // Any element that was a neighbor of cnr or nbr must now point to
+    // whichever of T1, T2, T3 shares the same face with it.
+    //
+    // cnr_opp_n0 pointed to cnr (face [n1,n2,n_cnr]) -- now T2 owns this face
+    // cnr_opp_n1 pointed to cnr (face [n0,n2,n_cnr]) -- now T3 owns this face
+    // cnr_opp_n2 pointed to cnr (face [n0,n1,n_cnr]) -- now T1 owns this face
+    // nbr_opp_n0 pointed to nbr (face [n1,n2,n4])    -- now T2 owns this face
+    // nbr_opp_n1 pointed to nbr (face [n0,n2,n4])    -- now T3 owns this face
+    // nbr_opp_n2 pointed to nbr (face [n0,n1,n4])    -- now T1 owns this face
+    // nbr_opp_n4 pointed to nbr (face [n0,n1,n2])    -- cnr is gone; this face
+    //            no longer exists (it was the shared face between cnr and nbr)
+    // -----------------------------------------------------------------------
+
+    auto update_external_neighbor = [&]( int64_t ext_elmt,
+                                         size_t  old_elmt,
+                                         int64_t new_elmt )
+    {
+        if ( ext_elmt < 0 ) return;  // boundary -- no update needed
+        const size_t ext = static_cast<size_t>(ext_elmt);
+        for ( uint32_t i{0U}; i < 4U; ++i )
+            if ( vdata.Pfvert(ext,i) == static_cast<int64_t>(old_elmt) ) {
+                vdata.Pfvert( ext, i, new_elmt );
+                return;
+            }
+        // If we reach here, the external element did not point back to old_elmt.
+        // This can happen if the mesh has inconsistent connectivity.
+        cerr << "\nsplitCornerTetrahedron: WARNING: external element "
+             << ext << " did not point back to " << old_elmt << "\n";
+    };
+
+    update_external_neighbor( cnr_opp_n0, cnr, T2 );
+    update_external_neighbor( cnr_opp_n1, cnr, T3 );
+    update_external_neighbor( cnr_opp_n2, cnr, T1 );
+    update_external_neighbor( nbr_opp_n0, nbr, T2 );
+    update_external_neighbor( nbr_opp_n1, nbr, T3 );
+    update_external_neighbor( nbr_opp_n2, nbr, T1 );
+    // nbr_opp_n4 pointed to the shared face [n0,n1,n2] which no longer exists
+    // as a face between two elements -- it is now interior to the 3-tet cluster.
+    // The element that was nbr_opp_n4 (if any) pointed to nbr for the face
+    // [n0,n1,n2]. After the split, this face is split into three faces:
+    // [n0,n1,n4], [n1,n2,n4], [n0,n2,n4] -- none of which is the original face.
+    // This means nbr_opp_n4 cannot be updated simply; it requires a more
+    // complex remeshing of the adjacent element. For now, flag this as a warning.
+    if ( nbr_opp_n4 >= 0 )
+        cerr << "\nsplitCornerTetrahedron: WARNING: element " << nbr_opp_n4
+             << " shared face [n0,n1,n2] with nbr. This face no longer exists "
+             << "after the split. The mesh connectivity may be inconsistent "
+             << "at this location.\n";
+
+    cout << "\nsplitCornerTetrahedron: replaced corner " << cnr
+         << " and neighbor " << nbr
+         << ", adding new tetrahedron " << n_new << "\n";
+
+} // end splitCornerTetrahedron
 
 
 
@@ -5558,132 +5648,154 @@ struct EdgeKey {
  *
  */
 vector<size_t>  refineSimplexMesh( VData& mesh )
- {
+{
     if ( mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
-     throw std::logic_error( "refineSimplexMesh(VData&): requires input mesh to be LFEM" );
- 
-    size_t old_node_count = mesh.Vertices();
-    size_t old_elmt_count = mesh.Elements();
-    
+        throw std::logic_error( "refineSimplexMesh(VData&): requires input mesh to be LFEM" );
+
+    const size_t old_node_count = mesh.Vertices();
+    const size_t old_elmt_count = mesh.Elements();
+
+    // -----------------------------------------------------------------------
+    // Determine element type access pattern.
+    // Single-type mesh: pelmt has ONE entry -- read ElementType(0) for all.
+    // Hybrid mesh:      pelmt has one entry per element -- read ElementType(eid).
+    // -----------------------------------------------------------------------
+    const bool hybrid = mesh.HybridElementTypeMesh();
+
+    // For single-type meshes, read the type once here.
+    // For hybrid meshes, it is read per element inside the loop.
+    const int8_t global_type = hybrid ? 0 : mesh.ElementType(0);
+
     // 1. Identify all unique edges and map them to a new node ID
     std::map<EdgeKey, size_t> edge_to_midside;
-    
-    for (size_t eid = 0; eid < old_elmt_count; ++eid) {
-        uint32_t npe = mesh.PlistSize(eid);
-        // We only refine simplex elements: 2 (line), 3 (tri), 4 (tet)
-        for (uint32_t i = 0; i < npe; ++i) {
-            for (uint32_t j = i + 1; j < npe; ++j) {
-                EdgeKey edge(mesh.Plist(eid, i), mesh.Plist(eid, j));
-                if (edge_to_midside.find(edge) == edge_to_midside.end()) {
-                    size_t new_id = old_node_count + edge_to_midside.size();
-                    edge_to_midside[edge] = new_id;
-                }
+
+    for ( size_t eid = 0; eid < old_elmt_count; ++eid ) {
+        const uint32_t npe = mesh.PlistSize(eid);
+        for ( uint32_t i = 0; i < npe; ++i )
+            for ( uint32_t j = i + 1; j < npe; ++j ) {
+                EdgeKey edge( mesh.Plist(eid,i), mesh.Plist(eid,j) );
+                if ( edge_to_midside.find(edge) == edge_to_midside.end() )
+                    edge_to_midside[edge] = old_node_count + edge_to_midside.size();
             }
-        }
     }
 
     // 2. Create coordinates for new midside nodes
-    size_t total_nodes = old_node_count + edge_to_midside.size();
-    mesh.ResizeNodes(total_nodes);
-    
-    for (auto const& [edge, mid_id] : edge_to_midside) {
-        mesh.Px(mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5);
-        mesh.Py(mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5);
-        mesh.Pz(mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5);
-        
-        // Inherit Boundary Flags if both parents are on the same boundary
-        int8_t b1 = mesh.BFlag(edge.n1);
-        int8_t b2 = mesh.BFlag(edge.n2);
+    const size_t total_nodes = old_node_count + edge_to_midside.size();
+    mesh.ResizeNodes( total_nodes );
+
+    for ( const auto& [edge, mid_id] : edge_to_midside ) {
+        mesh.Px( mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5 );
+        mesh.Py( mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5 );
+        mesh.Pz( mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5 );
+
+        const int8_t b1 = mesh.BFlag(edge.n1);
+        const int8_t b2 = mesh.BFlag(edge.n2);
         if ( b1 < 0 || b2 < 0 )
-          mesh.BFlag( mid_id, whichBoundary( intToBOX_BOUNDARY(b1), intToBOX_BOUNDARY(b2) ) );
+            mesh.BFlag( mid_id,
+                        whichBoundary( intToBOX_BOUNDARY(b1),
+                                       intToBOX_BOUNDARY(b2) ) );
     }
 
     // 3. Build new element connectivity
-    // We store new elements in a temporary container then update the mesh
     struct NewElement {
-        int8_t type;
+        int8_t         type;
         vector<size_t> nodes;
     };
-    vector<NewElement> new_elements; new_elements.reserve( mesh.Cells() * 2 );
-    vector<size_t>     parent_map; // the idx of the elementfrom which the new elements
-    parent_map.reserve( mesh.Cells() * 2 );
+    vector<NewElement>  new_elements;
+    vector<size_t>      parent_map;
+    new_elements.reserve( old_elmt_count * 4 );
+    parent_map.reserve(   old_elmt_count * 4 );
 
-    auto get_mid = [&](size_t a, size_t b) {
-        return edge_to_midside[EdgeKey(a, b)];
+    auto get_mid = [&]( size_t a, size_t b ) {
+        return edge_to_midside[ EdgeKey(a,b) ];
     };
 
-    for (size_t eid = 0; eid < old_elmt_count; ++eid) {
-        int8_t type = mesh.ElementType(eid);
-        uint32_t npe = mesh.PlistSize(eid);
+    for ( size_t eid = 0; eid < old_elmt_count; ++eid )
+    {
+        // ------------------------------------------------------------------
+        // Read element type correctly for both single-type and hybrid meshes
+        // ------------------------------------------------------------------
+        const int8_t   type = hybrid ? mesh.ElementType(eid) : global_type;
+        const uint32_t npe  = mesh.PlistSize(eid);
 
-        if (npe == 2) { // Line -> 2 Lines
-            size_t n0 = mesh.Plist(eid, 0);
-            size_t n1 = mesh.Plist(eid, 1);
-            size_t m01 = get_mid(n0, n1);
-            new_elements.push_back({type, {n0, m01}});
-            new_elements.push_back({type, {m01, n1}});
-            for ( uint32_t i{0}; i<2; ++i ) parent_map.push_back( eid );
+        if ( npe == 2 ) // Line -> 2 Lines
+        {
+            const size_t n0  = mesh.Plist(eid,0);
+            const size_t n1  = mesh.Plist(eid,1);
+            const size_t m01 = get_mid(n0,n1);
+            new_elements.push_back({type, {n0,  m01}});
+            new_elements.push_back({type, {m01, n1 }});
+            for ( uint32_t i{0}; i<2; ++i ) parent_map.push_back(eid);
         }
-        else if (npe == 3) { // Triangle -> 4 Triangles
-            size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2);
-            size_t m01 = get_mid(n0, n1), m12 = get_mid(n1, n2), m20 = get_mid(n2, n0);
-            // from 3 corner nodes
-            new_elements.push_back({type, {n0, m01, m20}});
-            new_elements.push_back({type, {n1, m12, m01}});
-            new_elements.push_back({type, {n2, m20, m12}});
-            new_elements.push_back({type, {m01, m12, m20}}); // Central
-            for ( uint32_t i{0}; i<4; ++i ) parent_map.push_back( eid );
+        else if ( npe == 3 ) // Triangle -> 4 Triangles
+        {
+            const size_t n0  = mesh.Plist(eid,0);
+            const size_t n1  = mesh.Plist(eid,1);
+            const size_t n2  = mesh.Plist(eid,2);
+            const size_t m01 = get_mid(n0,n1);
+            const size_t m12 = get_mid(n1,n2);
+            const size_t m20 = get_mid(n2,n0);
+            new_elements.push_back({type, {n0,  m01, m20}});  // corner n0
+            new_elements.push_back({type, {n1,  m12, m01}});  // corner n1
+            new_elements.push_back({type, {n2,  m20, m12}});  // corner n2
+            new_elements.push_back({type, {m01, m12, m20}});  // central
+            for ( uint32_t i{0}; i<4; ++i ) parent_map.push_back(eid);
         }
-        else if (npe == 4) { // Tetrahedra -> 8 Tetrahedra
-            size_t n0 = mesh.Plist(eid, 0), n1 = mesh.Plist(eid, 1), n2 = mesh.Plist(eid, 2), n3 = mesh.Plist(eid, 3);
-            size_t m01 = get_mid(n0, n1), m12 = get_mid(n1, n2), m02 = get_mid(n0, n2), m03 = get_mid(n0, n3),
-                   m13 = get_mid(n1, n3), m23 = get_mid(n2, n3);
-                   
-            // --- 4 CORNER TETRAHEDRA --- checked: OK
-            // Rule: (Base CCW, Apex)
-            new_elements.push_back({type, {n0,  m01, m02, m03}}); // Corner at n0
-            new_elements.push_back({type, {m01, n1,  m12, m13}}); // Corner at n1
-            new_elements.push_back({type, {m02, m12, n2,  m23}}); // Corner at n2
-            new_elements.push_back({type, {m03, m13, m23, n3 }}); // Corner at n3
+        else if ( npe == 4 ) // Tetrahedron -> 8 Tetrahedra
+        {
+            const size_t n0  = mesh.Plist(eid,0);
+            const size_t n1  = mesh.Plist(eid,1);
+            const size_t n2  = mesh.Plist(eid,2);
+            const size_t n3  = mesh.Plist(eid,3);
+            const size_t m01 = get_mid(n0,n1);
+            const size_t m12 = get_mid(n1,n2);
+            const size_t m02 = get_mid(n0,n2);
+            const size_t m03 = get_mid(n0,n3);
+            const size_t m13 = get_mid(n1,n3);
+            const size_t m23 = get_mid(n2,n3);
 
-            // --- 4 INTERIOR TETRAHEDRA ---
-            // We split the interior octahedron into 4 tets using the diagonal spine: m01 -> m23
-            // We must ensure the volume (V = (v1-v0) dot ((v2-v0) x (v3-v0))) is positive for all.
-
-            // Tet 5: Base (m01, m12, m02), Apex m23
-            // m01-m12-m02 is the mid-plane triangle. Looking from m23, this is CCW.
+            // 4 corner tetrahedra
+            new_elements.push_back({type, {n0,  m01, m02, m03}});
+            new_elements.push_back({type, {m01, n1,  m12, m13}});
+            new_elements.push_back({type, {m02, m12, n2,  m23}});
+            new_elements.push_back({type, {m03, m13, m23, n3 }});
+            // 4 interior tetrahedra (octahedron split along m01-m23 diagonal)
             new_elements.push_back({type, {m01, m12, m02, m23}});
-
-            // Tet 6: Base (m01, m02, m03), Apex m23
             new_elements.push_back({type, {m01, m02, m03, m23}});
-
-            // Tet 7: Base (m01, m03, m13), Apex m23
             new_elements.push_back({type, {m01, m03, m13, m23}});
-
-            // Tet 8: Base (m01, m13, m12), Apex m23
             new_elements.push_back({type, {m01, m13, m12, m23}});
-
-            for ( uint32_t i{0}; i<8; ++i ) parent_map.push_back( eid );
+            for ( uint32_t i{0}; i<8; ++i ) parent_map.push_back(eid);
         }
+        // Elements with npe not in {2,3,4} are not simplex -- skip silently
     }
 
-    // 4. Update the VData object with the new refined lists
-    mesh.ResizePlist(new_elements.size());
-    mesh.ResizeElementTypes(new_elements.size());
-    
-    for (size_t i = 0; i < new_elements.size(); ++i) {
-        mesh.ElementType(i, new_elements[i].type);
-        mesh.ResizeElementNodes(i, static_cast<uint32_t>(new_elements[i].nodes.size()) );
-        for (uint32_t n = 0; n < new_elements[i].nodes.size(); ++n) {
-            mesh.Plist(i, n, new_elements[i].nodes[n]);
-        }
+    // 4. Update the VData object with the new refined element lists
+    mesh.ResizePlist(   new_elements.size() );
+    mesh.ResizeElementTypes( new_elements.size() );
+
+    for ( size_t i = 0; i < new_elements.size(); ++i )
+    {
+        // ------------------------------------------------------------------
+        // Write element type correctly for both single-type and hybrid meshes.
+        // For single-type meshes, only index 0 is valid in pelmt.
+        // ------------------------------------------------------------------
+        if ( !hybrid )
+            mesh.ElementType( 0, new_elements[i].type );  // single-type: write once
+        else
+            mesh.ElementType( i, new_elements[i].type );  // hybrid: write per element
+
+        mesh.ResizeElementNodes( i,
+            static_cast<uint32_t>(new_elements[i].nodes.size()) );
+
+        for ( uint32_t n = 0; n < new_elements[i].nodes.size(); ++n )
+            mesh.Plist( i, n, new_elements[i].nodes[n] );
     }
 
-    // Since connectivity (pfverts) is now invalid, we clear it
+    // Neighbor connectivity is now invalid -- clear it
     mesh.RemovePfverts();
-    
+
     return parent_map;
-    
+
 } // end refineSimplexMesh
 
 
@@ -5699,107 +5811,178 @@ vector<size_t>  refineSimplexMesh( VData& mesh )
  * - Line (2->3 nodes): [0, 1, m01]
  * - Triangle (3->6 nodes): [0, 1, 2, m01, m12, m20]
  * - Tetrahedron (4->10 nodes): [0, 1, 2, 3, m01, m12, m20, m03, m13, m23]
+ *
+ * TODO: debug! - gives different results from VSetConverter::ConvertLinearToQuadratic..() which has been independently verified
  */
 void convertLinearToQuadraticSimplexElementMesh( VData& mesh )
- {
+{
     if ( mesh.OrderOfFiniteElementInterpolationFunctions() != 1 )
-     throw std::logic_error( "convertLinearToQuadraticSimplexElementMesh(VData&): requires input mesh to be LFEM" );
+        throw std::logic_error(
+            "convertLinearToQuadraticSimplexElementMesh: requires LFEM input" );
 
-    size_t old_node_count = mesh.Vertices();
-    size_t elmt_count = mesh.Elements();
-    const bool isoparametric = mesh.IsoparametricElementMesh();
-    
-    // 1. Identify unique edges and assign new node IDs
-    std::map<EdgeKey, size_t> edge_to_midside;
-    
-    // We iterate through elements to find all edges requiring a midside node
-    for (size_t eid = 0; eid < elmt_count; ++eid) {
-        uint32_t npe = mesh.PlistSize(eid);
-        // Standard simplex edges: all pairs of the first 'npe' vertices
-        for (uint32_t i = 0; i < npe; ++i) {
-            for (uint32_t j = i + 1; j < npe; ++j) {
-                EdgeKey edge(mesh.Plist(eid, i), mesh.Plist(eid, j));
-                if (edge_to_midside.find(edge) == edge_to_midside.end()) {
-                    size_t new_id = old_node_count + edge_to_midside.size();
-                    edge_to_midside[edge] = new_id;
-                }
-            }
+    const size_t old_node_count = mesh.Vertices();
+    const size_t elmt_count     = mesh.Elements();
+    const bool   isoparametric  = mesh.IsoparametricElementMesh();
+
+    // -----------------------------------------------------------------------
+    // 1. Identify unique edges in traversal order and assign midside node IDs.
+    //
+    // IMPORTANT: edges must be traversed in a consistent order so that the
+    // midside node numbering matches the reference implementation.
+    // We traverse edges in the order they appear in the plist:
+    //   Triangle: edges (0,1), (1,2), (2,0)
+    // This ensures midside nodes are numbered in the same order as the
+    // reference convertLinearToQuadraticPolyElementTypeMesh().
+    // -----------------------------------------------------------------------
+    std::map<EdgeKey, size_t>  edge_to_midside;
+
+    for ( size_t eid = 0; eid < elmt_count; ++eid )
+    {
+        const uint32_t npe = mesh.PlistSize(eid);
+
+        if ( npe == 2 ) {
+            // Line: one edge (0,1)
+            auto try_add = [&]( size_t a, size_t b ) {
+                EdgeKey e(a,b);
+                if ( edge_to_midside.find(e) == edge_to_midside.end() )
+                    edge_to_midside[e] = old_node_count + edge_to_midside.size();
+            };
+            try_add( mesh.Plist(eid,0), mesh.Plist(eid,1) );
+        }
+        else if ( npe == 3 ) {
+            // Triangle: edges in order (0,1), (1,2), (2,0)
+            auto try_add = [&]( size_t a, size_t b ) {
+                EdgeKey e(a,b);
+                if ( edge_to_midside.find(e) == edge_to_midside.end() )
+                    edge_to_midside[e] = old_node_count + edge_to_midside.size();
+            };
+            try_add( mesh.Plist(eid,0), mesh.Plist(eid,1) );
+            try_add( mesh.Plist(eid,1), mesh.Plist(eid,2) );
+            try_add( mesh.Plist(eid,2), mesh.Plist(eid,0) );
+        }
+        else if ( npe == 4 ) {
+            // Tetrahedron: edges in order (0,1),(1,2),(2,0),(0,3),(1,3),(2,3)
+            auto try_add = [&]( size_t a, size_t b ) {
+                EdgeKey e(a,b);
+                if ( edge_to_midside.find(e) == edge_to_midside.end() )
+                    edge_to_midside[e] = old_node_count + edge_to_midside.size();
+            };
+            try_add( mesh.Plist(eid,0), mesh.Plist(eid,1) );
+            try_add( mesh.Plist(eid,1), mesh.Plist(eid,2) );
+            try_add( mesh.Plist(eid,2), mesh.Plist(eid,0) );
+            try_add( mesh.Plist(eid,0), mesh.Plist(eid,3) );
+            try_add( mesh.Plist(eid,1), mesh.Plist(eid,3) );
+            try_add( mesh.Plist(eid,2), mesh.Plist(eid,3) );
         }
     }
 
-    // 2. Expand Node storage and calculate coordinates
-    size_t total_nodes = old_node_count + edge_to_midside.size();
-    mesh.ResizeNodes(total_nodes);
-    
-    for (auto const& [edge, mid_id] : edge_to_midside) {
-        mesh.Px(mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5);
-        mesh.Py(mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5);
-        mesh.Pz(mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5);
-        
-        // Inherit boundary flags
-        int8_t b1 = mesh.BFlag(edge.n1);
-        int8_t b2 = mesh.BFlag(edge.n2);
-        if (b1 < 0 && b1 == b2) {
-            mesh.BFlag(mid_id, b1);
+    // -----------------------------------------------------------------------
+    // 2. Expand node storage and compute midside coordinates + boundary flags
+    // -----------------------------------------------------------------------
+    const size_t total_nodes = old_node_count + edge_to_midside.size();
+    mesh.ResizeNodes( total_nodes );
+
+    for ( const auto& [edge, mid_id] : edge_to_midside )
+    {
+        mesh.Px( mid_id, (mesh.Px(edge.n1) + mesh.Px(edge.n2)) * 0.5 );
+        mesh.Py( mid_id, (mesh.Py(edge.n1) + mesh.Py(edge.n2)) * 0.5 );
+        mesh.Pz( mid_id, (mesh.Pz(edge.n1) + mesh.Pz(edge.n2)) * 0.5 );
+
+        // Inherit boundary flag:
+        //   - both on same boundary: inherit that boundary
+        //   - endpoints on different boundaries (corner edge): use whichBoundary()
+        //   - one or both interior (flag >= 0): midside is interior (NOT)
+        const int8_t b1 = mesh.BFlag(edge.n1);
+        const int8_t b2 = mesh.BFlag(edge.n2);
+        if ( b1 < 0 || b2 < 0 ) {
+            // At least one endpoint is on a boundary
+            mesh.BFlag( mid_id,
+                        whichBoundary( intToBOX_BOUNDARY(b1),
+                                       intToBOX_BOUNDARY(b2) ) );
         }
+        // else: both interior -- midside stays NOT (default)
     }
 
-    // 3. Update element connectivity (plist) to include midside nodes
-    // Using your requested order: 
-    // Tri: 0-1 (3), 1-2 (4), 2-0 (5)
-    // Tet: 0-1 (4), 1-2 (5), 2-0 (6), 0-3 (7), 1-3 (8), 2-3 (9)
-    auto get_mid = [&](size_t a, size_t b) {
-        return edge_to_midside[EdgeKey(a, b)];
+    // -----------------------------------------------------------------------
+    // 3. Safe midside lookup -- asserts if edge not found
+    // -----------------------------------------------------------------------
+    auto get_mid = [&]( size_t a, size_t b ) -> size_t {
+        auto it = edge_to_midside.find( EdgeKey(a,b) );
+        if ( it == edge_to_midside.end() ) {
+            cerr << "\nconvertLinearToQuadraticSimplexElementMesh: "
+                 << "midside node not found for edge ("
+                 << a << ", " << b << ")\n";
+            assert(false);
+            return 0;
+        }
+        return it->second;
     };
 
-    for (size_t eid = 0; eid < elmt_count; ++eid) {
-        uint32_t npe_linear = mesh.PlistSize(eid);
-        
-        if (npe_linear == 2) { // Line -> Quadratic Line (3 nodes)
-            size_t n0 = mesh.Plist(eid, 0);
-            size_t n1 = mesh.Plist(eid, 1);
+    // -----------------------------------------------------------------------
+    // 4. Update element connectivity -- append midside nodes in standard order
+    //    Triangle: [n0,n1,n2, m01,m12,m20]
+    //    Tet:      [n0,n1,n2,n3, m01,m12,m20,m03,m13,m23]
+    // -----------------------------------------------------------------------
+    for ( size_t eid = 0; eid < elmt_count; ++eid )
+    {
+        const uint32_t npe = mesh.PlistSize(eid);
+
+        if ( npe == 2 )
+        {
+            const size_t n0 = mesh.Plist(eid,0);
+            const size_t n1 = mesh.Plist(eid,1);
             mesh.ResizeElementNodes(eid, 3);
-            mesh.Plist(eid, 2, get_mid(n0, n1));
+            mesh.Plist(eid, 2, get_mid(n0,n1));
         }
-        else if (npe_linear == 3) { // Triangle -> Quadratic Triangle (6 nodes)
-            size_t n0 = mesh.Plist(eid, 0);
-            size_t n1 = mesh.Plist(eid, 1);
-            size_t n2 = mesh.Plist(eid, 2);
-            
+        else if ( npe == 3 )
+        {
+            // Read corner nodes BEFORE resizing (resize may invalidate)
+            const size_t n0 = mesh.Plist(eid,0);
+            const size_t n1 = mesh.Plist(eid,1);
+            const size_t n2 = mesh.Plist(eid,2);
             mesh.ResizeElementNodes(eid, 6);
-            mesh.Plist(eid, 3, get_mid(n0, n1)); // Edge 0-1
-            mesh.Plist(eid, 4, get_mid(n1, n2)); // Edge 1-2
-            mesh.Plist(eid, 5, get_mid(n2, n0)); // Edge 2-0
+            mesh.Plist(eid, 3, get_mid(n0,n1));  // between 0 and 1
+            mesh.Plist(eid, 4, get_mid(n1,n2));  // between 1 and 2
+            mesh.Plist(eid, 5, get_mid(n2,n0));  // between 2 and 0
         }
-        else if (npe_linear == 4) { // Tetrahedra -> Quadratic Tet (10 nodes)
-            size_t n0 = mesh.Plist(eid, 0);
-            size_t n1 = mesh.Plist(eid, 1);
-            size_t n2 = mesh.Plist(eid, 2);
-            size_t n3 = mesh.Plist(eid, 3);
-            
+        else if ( npe == 4 )
+        {
+            const size_t n0 = mesh.Plist(eid,0);
+            const size_t n1 = mesh.Plist(eid,1);
+            const size_t n2 = mesh.Plist(eid,2);
+            const size_t n3 = mesh.Plist(eid,3);
             mesh.ResizeElementNodes(eid, 10);
-            mesh.Plist(eid, 4, get_mid(n0, n1)); // Edge 0-1
-            mesh.Plist(eid, 5, get_mid(n1, n2)); // Edge 1-2
-            mesh.Plist(eid, 6, get_mid(n2, n0)); // Edge 2-0
-            mesh.Plist(eid, 7, get_mid(n0, n3)); // Edge 0-3
-            mesh.Plist(eid, 8, get_mid(n1, n3)); // Edge 1-3
-            mesh.Plist(eid, 9, get_mid(n2, n3)); // Edge 2-3
+            mesh.Plist(eid,  4, get_mid(n0,n1));
+            mesh.Plist(eid,  5, get_mid(n1,n2));
+            mesh.Plist(eid,  6, get_mid(n2,n0));
+            mesh.Plist(eid,  7, get_mid(n0,n3));
+            mesh.Plist(eid,  8, get_mid(n1,n3));
+            mesh.Plist(eid,  9, get_mid(n2,n3));
         }
     }
-    
-    // Update linear -> quadratic FEM types
-    if ( mesh.ElementTypes() == 1 ) {
-         const auto qetype = getQuadraticType( isoparametric, mesh.ElementType(0) );
-         mesh.SingleElementType( qetype );
-      }
-    else { // poly-type mesh
-        size_t counter{ 0 };
-         for ( auto et=mesh.PelmtBegin(); et!=mesh.PelmtEnd(); ++et ) {
-              mesh.ElementType( counter, getQuadraticType( isoparametric, (*et) ) );
-              counter++;
-           }
-      }
-      
+
+    // -----------------------------------------------------------------------
+    // 5. Update element types: linear -> quadratic
+    //    Use SingleElementType() for single-type meshes to match reference.
+    // -----------------------------------------------------------------------
+    if ( mesh.ElementTypes() == 1 )
+    {
+        // Single-type mesh: use SingleElementType() to keep pelmt size = 1
+        const auto qetype = getQuadraticType( isoparametric,
+                                              mesh.ElementType(0) );
+        mesh.SingleElementType( qetype );
+    }
+    else
+    {
+        // Hybrid mesh: update each element type individually
+        size_t counter{0};
+        for ( auto et = mesh.PelmtBegin(); et != mesh.PelmtEnd(); ++et ) {
+            mesh.ElementType( counter,
+                              getQuadraticType(isoparametric, *et) );
+            ++counter;
+        }
+    }
+
 } // end convertLinearToQuadraticSimplexElementMesh
 
 

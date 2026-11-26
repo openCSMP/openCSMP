@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSMP_VDATA_TEST_H
 #define CSMP_VDATA_TEST_H
 
@@ -38,6 +42,13 @@ class VData_Test : public Test {
        inside of EstablishElementConnectivity2D()
     */
     void Test_CreateConsistentLineElementOrientations2D();
+
+    /**
+       corner cases of the line-element orientation (closed loops, chains along the exterior boundary and around holes,
+       chains leaving and re-joining the boundary), of the pairing of line elements where fractures cross,
+       and of the reconnection of corner triangles in the presence of line elements
+    */
+    void Test_LineElementOrientationCornerCases();
     
     void Test_RecreateConnectivityOfTriangularMesh();
 

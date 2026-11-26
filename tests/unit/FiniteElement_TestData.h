@@ -1,5 +1,9 @@
-#ifndef FINITE_ELEMENT_TESTDATA_H
-#define FINITE_ELEMENT_TESTDATA_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef FINITE_ELEMENT_TEST_DATA_H
+#define FINITE_ELEMENT_TEST_DATA_H
 
 #include "CSMP_definitions.h"
 #include "FiniteElement.h"

@@ -361,18 +361,17 @@ class VData {
     /// remove any gaps in the numbering of nodes and elements
     bool   CheckFix();
 
-    /// aligns potential line elements in a 2D mesh, those at boundary are given the same orientation as the surface-element boundary faces
+    /// makes chains and loops of line elements in a 2D mesh head-to-tail consistent; those on exterior or hole boundaries are given the same orientation as the surface-element boundary faces
     void CreateConsistentLineElementOrientations2D();
-    void CreateConsistentLineElementOrientations2D_AI(); // TODO: test and replace 2D method that fails occassionally
     
-    /// angle between line elements in degrees
+    /// angle (0..180 degrees) between the node0->node1 direction vectors of two line elements
     double AngleBetweenLineElements2D( size_t elmt1, size_t elmt2 );
     double AngleBetweenLineElements3D( size_t elmt1, size_t elmt2 );
     
     /// computes the unit normals to the surfaces and then returns the angle between them
     double AngleBetweenSurfaceElements3D( size_t elmt1, size_t elmt2 );
     
-    /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; @note needs valid 'pfverts'
+    /// reconnects triangular elements with 3 nodes on the model boundary by switching nodes with their only neighbor; throws if a line element is co-located with the shared face; @note needs valid 'pfverts'
     size_t SwitchCornerTriangles2D();
     
     /// implementation of the BREP node topology flagging method
@@ -407,7 +406,7 @@ class VData {
 
 // RELATED FUNCTIONS
 
-/// TODO: fails: converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
+/// converts corner tetrahedron and its neighbor into 3 tetrahedral cells, each with a face on the sides of the box
 void splitCornerTetrahedron( VData&, size_t cnr, size_t only_neighbor );
 
 /// returns the 3D bounding box of the element

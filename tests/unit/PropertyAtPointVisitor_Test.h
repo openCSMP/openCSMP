@@ -1,5 +1,9 @@
-#ifndef PROPERTY_AT_POINT_VISITOR_TEST_H
-#define PROPERTY_AT_POINT_VISITOR_TEST_H
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef CSMP_PROPERTY_AT_POINT_VISITOR_TEST_H
+#define CSMP_PROPERTY_AT_POINT_VISITOR_TEST_H
 
 #include "Test.h"
 #include "PropertyAtPointVisitor.h"

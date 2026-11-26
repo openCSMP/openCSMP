@@ -16,7 +16,7 @@ public:
   virtual void Run();
   virtual void Specifications();
 private:
-  void SteadyStatePressure( Model<2U>& );
+  void PorePressure( Model<2U>& );
   void PrintModelProperties( const Model<2U>& );
 };
 

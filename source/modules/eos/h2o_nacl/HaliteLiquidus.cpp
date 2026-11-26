@@ -35,11 +35,7 @@ namespace csmp
   }
 
 
-  /** destructor
-   */
-  HaliteLiquidus::~HaliteLiquidus()
-  {
-  }
+
 
 
   /** Value of mass fraction of dissolved NaCl in halite-saturated brine
@@ -50,6 +46,15 @@ namespace csmp
     CheckState(); 
     return XNaCl2Massfraction( molefraction_nacl_ );
   }
+
+
+// SKM insertion of missing method
+  double HaliteLiquidus::MoleFractionNaCl()
+  {
+    CheckState(); 
+    return MolefractionNaCl( myt_ );
+  }
+
 
 
   /** Update internal variables for current temperature and pressure
@@ -68,9 +73,9 @@ namespace csmp
 
   /** Equation 8 of Driesner and Heinrich (2007)
    */
-  double HaliteLiquidus::MolefractionNaCl( const double& myt_ )
+  double HaliteLiquidus::MolefractionNaCl( const double& myt )
   {
-    return e0_+myt_ * ( e1_+myt_ * ( e2_+myt_ * ( e3_+myt_ * ( e4_+e5_*myt_ ) ) ) );
+    return e0_+myt * ( e1_+myt * ( e2_+myt * ( e3_+myt * ( e4_+e5_*myt ) ) ) );
   }
 
 

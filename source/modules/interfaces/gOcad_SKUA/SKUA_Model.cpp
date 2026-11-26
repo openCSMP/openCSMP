@@ -94,14 +94,14 @@ void SKUA_Model::Initialize( const char* mesh_file_set,
         // element numbers
         PropertyData elmt_nums( ELEMENT, SCALAR, 3U );
         elmt_nums.Reserve( vset.Elements() );
-        for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, i ) );
+        for ( size_t i{0U}; i<vset.Elements(); ++i ) pushBack( elmt_nums, makeScalar( ANY, static_cast<double>(i) ) );
         vset.AddData( "element number", elmt_nums );
       }
     if ( Database().IsDefined( "node number" ) ) {
         // node numbers
         PropertyData node_nums( NODE, SCALAR, 3U );
         node_nums.Reserve( vset.Vertices() );
-        for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, i ) );
+        for ( size_t i{0U}; i<vset.Vertices(); ++i ) pushBack( node_nums, makeScalar( ANY, static_cast<double>(i) ) );
         vset.AddData( "node number", node_nums );
       }
 

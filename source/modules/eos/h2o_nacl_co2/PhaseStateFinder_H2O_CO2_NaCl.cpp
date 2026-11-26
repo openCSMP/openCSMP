@@ -10,13 +10,12 @@
 
 // #define PHASESTATEFINDER_H2O_CO2_NACL_DEBUG
 
-#include <limits>
-
-// SKM FIX - for using EOS as in library
 namespace csmp {
 
-PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl( const double& t, const double& p, const double& total_mass,
-                                                              const double& massfraction_h2o, const double& massfraction_co2,
+PhaseStateFinder_H2O_CO2_NaCl::PhaseStateFinder_H2O_CO2_NaCl( const double& t, const double& p,
+                                                              const double& total_mass,
+                                                              const double& massfraction_h2o,
+                                                              const double& massfraction_co2,
                                                               const double& massfraction_nacl ) :
     t(t),
     p(p),

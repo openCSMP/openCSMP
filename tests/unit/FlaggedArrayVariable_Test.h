@@ -1,4 +1,6 @@
-// FlaggedArrayVariable_Test.h
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 
 #ifndef FLAGGED_ARRAY_VARIABLE_TEST_H
 #define FLAGGED_ARRAY_VARIABLE_TEST_H

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef DYNAMIC_ARRAY_TEST_H
 #define DYNAMIC_ARRAY_TEST_H
 

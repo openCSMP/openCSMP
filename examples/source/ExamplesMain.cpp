@@ -14,26 +14,128 @@
 #include "ExampleSuiteMainWindow.h"
 #endif
 
+#include <cstdlib>
+#include <filesystem>
+#include <iostream>
+#include <string>
+
 using namespace csmp;
 using namespace std;
 
 
-#ifdef COMMAND_LINE_EXAMPLES
-int main( int argc, char* argv[] )
-#else
-int main()
-#endif
+namespace {
+
+/// replaces a leading '~' by the user's home directory (the shell does not do this for environment variables)
+filesystem::path expandHome( const string& directory )
  {
+    if ( !directory.empty() && directory[0] == '~' && ( directory.size() == 1U || directory[1] == '/' ) ) {
+         const char* home = getenv( "HOME" );
+         if ( home != nullptr ) return filesystem::path( string(home) + directory.substr(1) );
+      }
+    return filesystem::path( directory );
+ }
+
+/**
+    Makes the 'example_inputs/' directory of the examples workspace the current working directory.
+
+    The examples read their inputs relative to this directory and write their results to
+    'example_outputs/<example name>/' next to it. The workspace is, in this order:
+
+      1. the directory given with the command-line option  --workspace <dir>  (or --workspace=<dir>),
+      2. the directory in the environment variable CSMP_EXAMPLES_DIR,
+      3. the parent of the current working directory, if the latter is named 'example_inputs'
+         (this is the setup in which an IDE has been given this working directory),
+      4. the directory chosen when openCSMP was configured with CMake (CSMP_EXAMPLES_WORKSPACE;
+         default: ~/openCSMP/examples).
+
+    @return false if the workspace does not contain an 'example_inputs/' directory
+*/
+bool selectExamplesWorkspace( int argc, char* argv[] )
+ {
+    string workspace, chosen_by;
+
+    for ( int i=1; i<argc; ++i ) {
+         const string argument( argv[i] );
+         if ( argument == "--workspace" && i+1 < argc ) {
+              workspace = argv[i+1];
+              chosen_by = "command-line option --workspace";
+            }
+         else if ( argument.rfind( "--workspace=", 0 ) == 0 ) {
+              workspace = argument.substr( string("--workspace=").size() );
+              chosen_by = "command-line option --workspace";
+            }
+       }
+    if ( workspace.empty() ) {
+         const char* from_environment = getenv( "CSMP_EXAMPLES_DIR" );
+         if ( from_environment != nullptr && string(from_environment).size() > 0U ) {
+              workspace = from_environment;
+              chosen_by = "environment variable CSMP_EXAMPLES_DIR";
+           }
+      }
+    if ( workspace.empty() && filesystem::current_path().filename() == "example_inputs" ) {
+         workspace = filesystem::current_path().parent_path().string();
+         chosen_by = "current working directory";
+      }
+#ifdef CSMP_EXAMPLES_WORKSPACE_DEFAULT
+    if ( workspace.empty() ) {
+         workspace = CSMP_EXAMPLES_WORKSPACE_DEFAULT;
+         chosen_by = "default set when openCSMP was configured";
+      }
+#endif
+
+    error_code error;
+    const filesystem::path workspace_path = filesystem::absolute( expandHome( workspace ), error );
+    const filesystem::path inputs         = workspace_path / "example_inputs";
+
+    if ( workspace.empty() || !filesystem::is_directory( inputs, error ) ) {
+         cout <<"\nopenCSMP examples: no example inputs found in the examples workspace\n"
+              <<"   workspace: "<< ( workspace.empty() ? string("(none)") : workspace_path.string() );
+         if ( !chosen_by.empty() ) cout <<"   ("<< chosen_by <<")";
+         cout <<"\n   expected:  "<< inputs.string() <<"\n\n"
+              <<"Create the workspace from your openCSMP build directory with\n\n"
+              <<"   cmake --build . --target setup_examples\n\n"
+              <<"or copy the directory 'examples/example_inputs' of the repository to a place outside\n"
+              <<"of the repository and start the examples with\n\n"
+              <<"   openCSMP-examples --workspace <directory that contains example_inputs>\n"<< endl;
+         return false;
+      }
+
+    filesystem::current_path( inputs );
+    cout <<"\nopenCSMP examples workspace ("<< chosen_by <<")\n"
+         <<"   inputs are read from:   "<< inputs.string() <<"\n"
+         <<"   results are written to: "<< ( workspace_path / "example_outputs" / "<example name>" ).string() <<"\n"<< endl;
+    return true;
+ }
+
+} // anonymous namespace
+
+
+int main( int argc, char* argv[] )
+ {
+    // the examples run in a workspace outside of the repository, see selectExamplesWorkspace()
+    if ( !selectExamplesWorkspace( argc, argv ) ) return 1;
+
     try {
      // if PETSc is chosen as the default linear solver
 #ifdef CSMP_WITH_PETSC_SOLVER
       PetscInitializeNoArguments();
 #endif
       // instantiating suite
-      ExampleSuite examplesSuite( "Open-CSMP++ EXAMPLES", &cout );
+      ExampleSuite examplesSuite( "CSMP++ EXAMPLES", &cout );
 
-      // write your own
-      examplesSuite.RegisterExample( new Experimental_Example() );
+      // CSMP FOR BEGINNERS
+            examplesSuite.RegisterExample( new CplusplusInCSMP_Example() );
+            examplesSuite.RegisterExample( new BuildingACSMPModel_Example );
+            examplesSuite.RegisterExample( new CSMP_PhysicalVariables_Example() );
+            examplesSuite.RegisterExample( new SteadyStateHeatConduction_Example() );
+            examplesSuite.RegisterExample( new InputDataManager_Example() );
+            examplesSuite.RegisterExample( new AtmosphericPressureDiffusion_Example() );
+            examplesSuite.RegisterExample( new MeshConvergence_Example() );
+      /*
+            examplesSuite.RegisterExample( new CSMP_Variables_Example() );
+            examplesSuite.RegisterExample( new CSMP_Model_Example() );
+            examplesSuite.RegisterExample( new ModelSubdomainTypes_Example() );
+      */
 
       // this is where your examples go (they will be ordered alphabetically when listed)
   
@@ -113,6 +215,8 @@ int main()
             examplesSuite.RegisterExample( new Tutorial3_Example() );
             examplesSuite.RegisterExample( new Tutorial4_Example() );
             
+      // WRITE YOUR OWN EXAMPLES
+            examplesSuite.RegisterExample( new Experimental_Example() );
 
             // calling the suite either as stdIO or GUI
 #ifndef EXAMPLE_SUITE_WITH_GUI

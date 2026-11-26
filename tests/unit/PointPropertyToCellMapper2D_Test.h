@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef POINT_PROPERTY_TO_CELL_MAPPER_2D_TEST_H
 #define POINT_PROPERTY_TO_CELL_MAPPER_2D_TEST_H
 

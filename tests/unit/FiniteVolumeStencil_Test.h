@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSP_FINITE_VOLUME_STENCIL_TEST_H
 #define CSP_FINITE_VOLUME_STENCIL_TEST_H
 

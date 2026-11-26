@@ -1,9 +1,11 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  vsetMakers_Test.cpp
-//  Open CSMP++SAMG
+//  CSMP++
 //
-//  Created by Stephan Matthai on 29/5/2024.
-//  Copyright © 2024 The University of Melbourne. All rights reserved.
+//  Created by A. Paluszny, revised by Stephan Matthai on 29/5/2024 and later.
 //
 
 #include "vsetMakers_Test.h"

@@ -193,7 +193,7 @@ public:
 
 private:
 
-    double VolumeOfTetra( uint32_t verticeIndex1, uint32_t verticeIndex2, uint32_t verticeIndex3, uint32_t verticeIndex4 );
+//    double VolumeOfTetra( uint32_t verticeIndex1, uint32_t verticeIndex2, uint32_t verticeIndex3, uint32_t verticeIndex4 );
 
     // -----------------------------------------------------------------------
     // Coordinate mapping

@@ -1,4 +1,3 @@
-// Copyright © 2019 CSMP Originators Group, Stephan Matthai. All rights reserved.
 // SPDX-FileCopyrightText: © 2026 The openCSMP project
 //
 // SPDX-License-Identifier: LGPL-3.0-only
@@ -33,6 +32,9 @@ SYSTEM_STATE  elementState( PHASES_CONTINUOUS_ACROSS_ELEMENT );
 
 
 /**
+   @brief Flash calculation for the system H2O - CO2 - NaCl in the temperature range from 12 - 100oC.
+   For a given mass balance, this calculator establishes which phases co-exist, see Shao et al. (2021, Computational Geoscience, doi: 10.1007/s10596-020-10006-1).
+   
    @note uses 2 fitted functions to establish relations between aqueous and carbonic phase as function of salinity.
  
    @todo lookup tables not considered yet.

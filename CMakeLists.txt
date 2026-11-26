@@ -7,25 +7,29 @@ cmake_minimum_required(VERSION 3.29)
 # SPDX-FileCopyrightText: © 2026 The openCSMP project
 # SPDX-License-Identifier: LGPL-3.0-only
 #
-#  Prerequisites:
+#  Prerequisites (see README.md for the install commands per platform):
 #    - C++23 capable compiler (g++ 13.3 or later, Clang, Intel, NVC++)
-#    - MPI
-#    - git
+#    - CMake 3.29 or later, git, pkg-config
+#    - MPI; PETSc, libjpeg and CGNS for the default configuration
+#    - Eigen, plf_colony and RapidXML are downloaded at configure time
+#      (an installed Eigen is used if one is found)
 #    - On Mac OSX with SAMG: you need Rosetta (Intel x86_64)
 #                            Enter Rosetta shell first
 #                            arch -x86_64 /bin/zsh
 #  Usage:
 #    cd openCSMP
-#    mkdir build
-#    cd build
-#    cmake .. -DCMAKE_BUILD_TYPE=Release -DSAMG_ENABLE=ON
-#    make -j$(nproc)
+#    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+#    cmake --build build --parallel
 #
-#    cmake .. -G Ninja -DCMAKE_BUILD_TYPE=Release -DSAMG_ENABLE=ON
-#    cmake --build .
+#    with Ninja:   cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
+#    with SAMG:    add -DSAMG_ENABLE=ON -DSAMG_ROOT=/path/to/samg
 #
-#  Safe commits (pre-push hook runs tests automatically):
-#    .git/hooks/pre-push
+#  Running the examples (outside of the repository):
+#    cmake --build build --target setup_examples     # copies the inputs to CSMP_EXAMPLES_WORKSPACE
+#    build/openCSMP-examples                         # reads from / writes to that workspace
+#
+#  Tests:
+#    ctest --test-dir build --output-on-failure
 # ===============================================================================================
 
 
@@ -38,6 +42,7 @@ option(BUILD_SHARED_LIBS      "Build shared libraries (OFF = static)"           
 option(CSMP_WITH_IMAGE_OUTPUT "Enable image output support via libjpeg"            ON )
 option(SAMG_ENABLE            "Enable Fraunhofer SAMG algebraic multigrid solver"  OFF)
 option(CSMP_WITH_PETSC_SOLVER "Enable PETSc solver"                                ON )
+option(OPENNURBS_ENABLE       "Enable OpenNURBS NURBS geometry kernel"             OFF)
 option(BUILD_CVFEM_TESTS      "Enable building CVFEM verification & validation tests" OFF)
 
 
@@ -81,21 +86,11 @@ endif()
 
 
 # -----------------------------------------------------------------------
-# External support libraries root — defined once to avoid path typos.
-# Every dependency-discovery step that needs it (CGNS, SAMG) relies on
-# this being set before any find_* or FetchContent call.
+# No directory outside of the repository is required. Open-source
+# dependencies are either found on the system or downloaded into the
+# build tree; only the commercial SAMG binaries need a location, which
+# is given with -DSAMG_ROOT=... (see the SAMG section below).
 # -----------------------------------------------------------------------
-# Resolve to an absolute path immediately — relative paths are fragile
-get_filename_component(CSMP_EXTERNAL_LIBS
-        "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs"
-        ABSOLUTE
-)
-set(CSMP_EXTERNAL_LIBS "${CSMP_EXTERNAL_LIBS}"
-        CACHE PATH "Path to external support libraries" FORCE)
-message(STATUS "External support libs root (absolute): ${CSMP_EXTERNAL_LIBS}")
-message(STATUS "  -> SAMG expected at:     ${CSMP_EXTERNAL_LIBS}/samg/linux")
-message(STATUS "  -> CGNS expected at:     ${CSMP_EXTERNAL_LIBS}/cgns")
-message(STATUS "  -> RapidXML expected at: ${CSMP_EXTERNAL_LIBS}/rapidxml")
 
 
 # ===============================================================================================
@@ -109,46 +104,53 @@ include(FetchContent)
 FetchContent_Declare(
         plf_colony
         GIT_REPOSITORY https://github.com/mattreecebentley/plf_colony.git
-        GIT_TAG        master
-        GIT_SHALLOW    TRUE
-        EXCLUDE_FROM_ALL TRUE
+        # pinned to a known-good commit for reproducible builds (was: master)
+        GIT_TAG        b027591ab6280a131450a0b33e92e42676fc7219
+        EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(plf_colony)
 message(STATUS "plf_colony source: ${plf_colony_SOURCE_DIR}")
 
 
 # 2. Eigen (header-only, essential)
-#    Linear algebra library. Tests and docs are disabled to keep build times short.
+#    Linear algebra library. An installed Eigen is used if one is found:
+#      macOS:  brew install eigen           (located via `brew --prefix eigen`)
+#      Linux:  sudo apt install libeigen3-dev
+#    Otherwise Eigen 3.4.0 is downloaded at configure time (all platforms).
+#    Use -DCSMP_FETCH_EIGEN=ON to force the download.
+#    Result: CSMP_EIGEN_INCLUDE_DIR, the directory that contains Eigen/Dense.
 # ------------------------------------------------------------------------------------------------
-if(APPLE)
-    # -----------------------------------------------------------------------
-    # macOS — Eigen via Homebrew.
-    # Homebrew Eigen does not ship CMake config files so we use the
-    # include path directly rather than find_package.
-    # -----------------------------------------------------------------------
-    execute_process(
-            COMMAND brew --prefix eigen
-            OUTPUT_VARIABLE HOMEBREW_EIGEN_PREFIX
-            OUTPUT_STRIP_TRAILING_WHITESPACE
-            ERROR_QUIET
-    )
+option(CSMP_FETCH_EIGEN "Download Eigen even if an installed copy is available" OFF)
 
-    if(HOMEBREW_EIGEN_PREFIX)
-        set(EIGEN_INCLUDE_DIR "${HOMEBREW_EIGEN_PREFIX}/include/eigen3")
-        if(EXISTS "${EIGEN_INCLUDE_DIR}/Eigen/Dense")
-            message(STATUS "Eigen found via Homebrew: ${EIGEN_INCLUDE_DIR}")
-        else()
-            message(FATAL_ERROR
-                    "Eigen headers not found at ${EIGEN_INCLUDE_DIR}\n"
-                    "Install with: brew install eigen")
-        endif()
-    else()
-        message(FATAL_ERROR
-                "Homebrew not found — cannot locate Eigen\n"
-                "Install Homebrew and then: brew install eigen")
-    endif()
-
+if(CSMP_FETCH_EIGEN)
+    unset(CSMP_EIGEN_INCLUDE_DIR CACHE)
 else()
+    set(_csmp_eigen_hints "")
+    if(APPLE)
+        # Homebrew: /opt/homebrew (arm64) or /usr/local (x86_64 / Rosetta)
+        execute_process(
+                COMMAND brew --prefix eigen
+                OUTPUT_VARIABLE HOMEBREW_EIGEN_PREFIX
+                OUTPUT_STRIP_TRAILING_WHITESPACE
+                ERROR_QUIET
+        )
+        if(HOMEBREW_EIGEN_PREFIX)
+            list(APPEND _csmp_eigen_hints "${HOMEBREW_EIGEN_PREFIX}/include")
+        endif()
+    endif()
+    find_path(CSMP_EIGEN_INCLUDE_DIR
+            NAMES Eigen/Dense
+            HINTS ${_csmp_eigen_hints}
+            PATH_SUFFIXES eigen3
+            DOC   "Directory that contains Eigen/Dense"
+    )
+    unset(_csmp_eigen_hints)
+endif()
+
+if(CSMP_EIGEN_INCLUDE_DIR)
+    message(STATUS "Eigen found (installed): ${CSMP_EIGEN_INCLUDE_DIR}")
+else()
+    message(STATUS "Eigen not found on this system — downloading Eigen 3.4.0")
 
     set(EIGEN_BUILD_TESTING OFF CACHE BOOL "" FORCE)
     set(EIGEN_BUILD_DOC     OFF CACHE BOOL "" FORCE)
@@ -163,21 +165,24 @@ else()
             GIT_REPOSITORY https://gitlab.com/libeigen/eigen.git
             GIT_TAG        3.4.0
             GIT_SHALLOW    TRUE
-            EXCLUDE_FROM_ALL TRUE
+            EXCLUDE_FROM_ALL
     )
     FetchContent_MakeAvailable(eigen)
-    message(STATUS "Eigen source: ${eigen_SOURCE_DIR}")
-
-    if(TARGET Eigen3::Eigen)
-        message(STATUS "Eigen3::Eigen target found")
-    else()
-        message(WARNING "Eigen3::Eigen CMake target not found — will fall back to manual include path")
-    endif()
 
     # Restore BUILD_TESTING for openCSMP's own tests
     set(BUILD_TESTING ${_saved_build_testing})
     unset(_saved_build_testing)
 
+    # not cached: the download is re-evaluated (cheaply) at every configure
+    set(CSMP_EIGEN_INCLUDE_DIR "${eigen_SOURCE_DIR}")
+    message(STATUS "Eigen downloaded: ${CSMP_EIGEN_INCLUDE_DIR}")
+endif()
+
+if(NOT EXISTS "${CSMP_EIGEN_INCLUDE_DIR}/Eigen/Dense")
+    message(FATAL_ERROR
+            "Eigen headers not found at ${CSMP_EIGEN_INCLUDE_DIR}\n"
+            "Install Eigen (macOS: brew install eigen, Linux: sudo apt install libeigen3-dev)\n"
+            "or configure with -DCSMP_FETCH_EIGEN=ON")
 endif() # Eigen
 
 
@@ -208,14 +213,25 @@ if(APPLE)
                 OUTPUT_STRIP_TRAILING_WHITESPACE
                 ERROR_QUIET
         )
-        set(MPI_CXX_COMPILER     "${HOMEBREW_MPI_PREFIX}/bin/mpicxx" )
-        set(MPI_C_COMPILER       "${HOMEBREW_MPI_PREFIX}/bin/mpicc"  )
-        set(MPI_Fortran_COMPILER "${HOMEBREW_MPI_PREFIX}/bin/mpifort")
-        message(STATUS "Using arm64 MPI: ${HOMEBREW_MPI_PREFIX}")
+        if(HOMEBREW_MPI_PREFIX AND EXISTS "${HOMEBREW_MPI_PREFIX}/bin/mpicxx")
+            set(MPI_CXX_COMPILER     "${HOMEBREW_MPI_PREFIX}/bin/mpicxx" )
+            set(MPI_C_COMPILER       "${HOMEBREW_MPI_PREFIX}/bin/mpicc"  )
+            set(MPI_Fortran_COMPILER "${HOMEBREW_MPI_PREFIX}/bin/mpifort")
+            message(STATUS "Using arm64 MPI: ${HOMEBREW_MPI_PREFIX}")
+        else()
+            # no Homebrew Open MPI: let find_package(MPI) search the standard locations
+            message(STATUS "Homebrew Open MPI not found (brew install open-mpi) — searching for another MPI")
+        endif()
     endif()
 endif()
 
-find_package(MPI REQUIRED)
+find_package(MPI QUIET)
+if(NOT MPI_CXX_FOUND)
+    message(FATAL_ERROR
+            "MPI (C++) not found.\n"
+            "  macOS:  brew install open-mpi\n"
+            "  Linux:  sudo apt install libopenmpi-dev openmpi-bin")
+endif()
 message(STATUS "MPI found: ${MPI_CXX_LIBRARIES}")
 
 
@@ -277,12 +293,18 @@ if(CSMP_WITH_IMAGE_OUTPUT)
                 OUTPUT_STRIP_TRAILING_WHITESPACE
                 ERROR_QUIET
         )
-        set(JPEG_INCLUDE_DIRS "${HOMEBREW_JPEG_PREFIX}/include")
-        set(JPEG_LIBRARIES    "${HOMEBREW_JPEG_PREFIX}/lib/libjpeg.dylib")
-        if(NOT EXISTS "${JPEG_INCLUDE_DIRS}/jpeglib.h")
-            message(FATAL_ERROR
-                    "JPEG headers not found at ${JPEG_INCLUDE_DIRS}\n"
-                    "Install with: brew install jpeg")
+        if(HOMEBREW_JPEG_PREFIX AND EXISTS "${HOMEBREW_JPEG_PREFIX}/include/jpeglib.h")
+            set(JPEG_INCLUDE_DIRS "${HOMEBREW_JPEG_PREFIX}/include")
+            set(JPEG_LIBRARIES    "${HOMEBREW_JPEG_PREFIX}/lib/libjpeg.dylib")
+        else()
+            # e.g. jpeg-turbo, MacPorts or conda: let CMake search
+            find_package(JPEG QUIET)
+            if(NOT JPEG_FOUND)
+                message(FATAL_ERROR
+                        "libjpeg not found.\n"
+                        "Install with: brew install jpeg\n"
+                        "or configure with -DCSMP_WITH_IMAGE_OUTPUT=OFF")
+            endif()
         endif()
         message(STATUS "JPEG arm64: ${JPEG_INCLUDE_DIRS}")
 
@@ -316,25 +338,49 @@ endif()
 # 7. CGNS — CFD General Notation System
 #    Linux:  sudo apt install libcgns-dev
 #    macOS:  brew install cgns
-#    Fallback: headers from external_support_libs/cgns (no linking)
+#    Fallback: header bundled with openCSMP (no linking)
 #
 #   Discovery order:
 #     7.1 find_package  (CMake config files)
 #     7.2 pkg-config
 #     7.3 Homebrew manual search (macOS)
 #     7.4 Direct system search   (covers apt-installed libcgns-dev)
-#     7.5 Fallback header-only   (external_support_libs)
+#     7.5 Fallback header-only   (source/includes/interfaces/CGNS)
 # -----------------------------------------------------------------------
 set(CGNS_FOUND_USABLE FALSE)
 
-# 7.1 Try find_package first
+# 7.1 Try find_package first.
+#     The CGNS config package defines only imported targets (CGNS::cgns_shared,
+#     CGNS::cgns_static) and no CGNS_LIBRARIES / CGNS_INCLUDE_DIRS. Its targets
+#     also name an "hdf5-shared" dependency that the package does not load, so
+#     linking the target directly can fail. Take the shared library path and
+#     include directory from the target instead; libcgns itself records its
+#     HDF5 dependency. Without a usable shared target, fall through to 7.2+.
 find_package(CGNS QUIET)
-if(CGNS_FOUND)
-    message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
-    set(CGNS_FOUND_USABLE TRUE)
+if(CGNS_FOUND AND TARGET CGNS::cgns_shared)
+    get_target_property(_cgns_configs CGNS::cgns_shared IMPORTED_CONFIGURATIONS)
+    set(_cgns_lib "")
+    foreach(_cfg IN LISTS _cgns_configs)
+        get_target_property(_cgns_lib CGNS::cgns_shared IMPORTED_LOCATION_${_cfg})
+        if(_cgns_lib)
+            break()
+        endif()
+    endforeach()
+    if(NOT _cgns_lib)
+        get_target_property(_cgns_lib CGNS::cgns_shared IMPORTED_LOCATION)
+    endif()
+    get_target_property(_cgns_inc CGNS::cgns_shared INTERFACE_INCLUDE_DIRECTORIES)
+    if(_cgns_lib AND _cgns_inc)
+        list(REMOVE_DUPLICATES _cgns_inc)
+        set(CGNS_LIBRARIES    "${_cgns_lib}")
+        set(CGNS_INCLUDE_DIRS "${_cgns_inc}")
+        message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
+        set(CGNS_FOUND_USABLE TRUE)
+    endif()
+endif()
 
-    # 7.2 Try pkg-config
-elseif(PKG_CONFIG_FOUND)
+# 7.2 Try pkg-config
+if(NOT CGNS_FOUND_USABLE AND PKG_CONFIG_FOUND)
     pkg_check_modules(CGNS QUIET cgns)
     if(CGNS_FOUND)
         message(STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}")
@@ -370,14 +416,15 @@ if(NOT CGNS_FOUND_USABLE)
     endif()
 endif()
 
-# 7.5 Fallback — use headers from external_support_libs (no linking)
+# 7.5 Fallback — use the cgnslib.h bundled with openCSMP (no linking)
 if(NOT CGNS_FOUND_USABLE)
     message(WARNING
-            "CGNS not found via package manager — "
-            "falling back to external_support_libs headers (no linking).\n"
+            "CGNS library not found — using the bundled header only.\n"
+            "openCSMP itself will build, but executables that use the CGNS interface\n"
+            "will fail to link with undefined cg_* symbols. To avoid this install CGNS:\n"
             "  macOS:  brew install cgns\n"
             "  Linux:  sudo apt install libcgns-dev")
-    set(CGNS_INCLUDE_DIRS "${CSMP_EXTERNAL_LIBS}/cgns")
+    set(CGNS_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/source/includes/interfaces/CGNS")
     set(CGNS_LIBRARIES    "")
 endif()
 
@@ -396,7 +443,8 @@ endif()
 FetchContent_Declare(
         rapidxml
         GIT_REPOSITORY https://github.com/discord/rapidxml.git
-        GIT_TAG        master
+        # pinned to a known-good commit for reproducible builds (was: master)
+        GIT_TAG        2ae4b2888165a393dfb6382168825fddf00c27b9
         EXCLUDE_FROM_ALL
 )
 FetchContent_MakeAvailable(rapidxml)
@@ -405,32 +453,45 @@ message(STATUS ">>> rapidxml.hpp exists = ${rapidxml_SOURCE_DIR}/rapidxml.hpp")
 
 
 # 9. OpenNURBS (McNeel & Associates — NURBS geometry kernel)
-#    Cloned automatically into external_support_libs/opennurbs if not present.
+#    Cloned automatically into <build>/_deps/opennurbs-src if not present.
 #    A CMakeLists.txt wrapper is generated automatically.
 #
 #    System prerequisites:
 #      Linux:  sudo apt install zlib1g-dev
 #      macOS:  brew install zlib  (usually already present via Xcode)
 # ------------------------------------------------------------------------------------------------
-option(OPENNURBS_ENABLE "Enable OpenNURBS NURBS geometry kernel" OFF)
+#    Use -DOPENNURBS_ROOT=/path/to/opennurbs to use an existing checkout instead.
+set(OPENNURBS_ROOT "" CACHE PATH "Existing OpenNURBS checkout (empty: clone into the build tree)")
+set(OPENNURBS_GIT_BRANCH "8.x" CACHE STRING "Branch of https://github.com/mcneel/opennurbs to clone")
 
-set(OPENNURBS_SOURCE_DIR "${CSMP_EXTERNAL_LIBS}/opennurbs")
+get_filename_component(_csmp_former_opennurbs_dir
+        "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs/opennurbs" ABSOLUTE)
+if(OPENNURBS_ROOT)
+    set(OPENNURBS_SOURCE_DIR "${OPENNURBS_ROOT}")
+elseif(OPENNURBS_ENABLE AND EXISTS "${_csmp_former_opennurbs_dir}/.git")
+    # backward compatibility: checkout next to the repository, as used previously
+    set(OPENNURBS_SOURCE_DIR "${_csmp_former_opennurbs_dir}")
+    message(STATUS "OPENNURBS_ROOT not set — using the former default location: ${OPENNURBS_SOURCE_DIR}")
+else()
+    set(OPENNURBS_SOURCE_DIR "${CMAKE_BINARY_DIR}/_deps/opennurbs-src")
+endif()
+unset(_csmp_former_opennurbs_dir)
 set(OPENNURBS_AVAILABLE  FALSE)
 
 if(OPENNURBS_ENABLE)
-    # Step 1 — Create external_support_libs/ if it does not exist
-    if(NOT EXISTS "${CSMP_EXTERNAL_LIBS}")
-        message(STATUS "Creating external support libs directory: ${CSMP_EXTERNAL_LIBS}")
-        file(MAKE_DIRECTORY "${CSMP_EXTERNAL_LIBS}")
-    endif()
+    # Step 1 — Make sure the parent directory in the build tree exists
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/_deps")
 
     # Step 2 — Clone OpenNURBS if not already present
-    if(NOT EXISTS "${OPENNURBS_SOURCE_DIR}/.git")
+    if(OPENNURBS_ROOT AND NOT EXISTS "${OPENNURBS_SOURCE_DIR}")
+        message(FATAL_ERROR "OPENNURBS_ROOT does not exist: ${OPENNURBS_ROOT}")
+    endif()
+    if(NOT OPENNURBS_ROOT AND NOT EXISTS "${OPENNURBS_SOURCE_DIR}/.git")
         message(STATUS "Cloning OpenNURBS into ${OPENNURBS_SOURCE_DIR} ...")
         execute_process(
                 COMMAND git clone
                 --depth 1
-                --branch main
+                --branch ${OPENNURBS_GIT_BRANCH}
                 https://github.com/mcneel/opennurbs.git
                 "${OPENNURBS_SOURCE_DIR}"
                 RESULT_VARIABLE _opennurbs_clone_result
@@ -495,24 +556,25 @@ target_link_libraries(opennurbs PUBLIC ZLIB::ZLIB)
             "${CMAKE_BINARY_DIR}/opennurbs"
     )
 
-    if(NOT TARGET opennurbs)
-        message(FATAL_ERROR ...)
+	if(NOT TARGET opennurbs)
+		message(FATAL_ERROR
+				"OpenNURBS target was not created by add_subdirectory.\n"
+				"Check the generated CMakeLists.txt at: ${OPENNURBS_SOURCE_DIR}/CMakeLists.txt")
+	endif()
+
+    # macOS framework dependencies — inside the guard where the target exists
+    if(APPLE)
+        target_link_libraries(opennurbs PUBLIC
+                "-framework CoreFoundation"
+                "-framework Foundation"
+        )
     endif()
 
     set(OPENNURBS_AVAILABLE TRUE)
     message(STATUS "OpenNURBS available: ${OPENNURBS_SOURCE_DIR}")
 
 else()
-    message(STATUS "OpenNURBS disabled ...")
-endif()
-
-
-# macOS framework dependencies required by OpenNURBS  ← THIS IS OUTSIDE
-if(APPLE)
-    target_link_libraries(opennurbs PUBLIC          ← FAILS when OPENNURBS_ENABLE=OFF
-            "-framework CoreFoundation"
-            "-framework Foundation"
-    )
+    message(STATUS "OpenNURBS disabled")
 endif()
 
 
@@ -702,21 +764,11 @@ target_include_directories(openCSMP PUBLIC
         ${rapidxml_SOURCE_DIR}
 )
 
-# Eigen — linking differs between macOS (direct Homebrew path) and Linux (FetchContent)
-if(APPLE)
-    target_include_directories(openCSMP PUBLIC
-            $<BUILD_INTERFACE:${EIGEN_INCLUDE_DIR}>
-    )
-    message(STATUS "Eigen include path: ${EIGEN_INCLUDE_DIR}")
-elseif(TARGET Eigen3::Eigen)
-    target_link_libraries(openCSMP PUBLIC Eigen3::Eigen)
-    message(STATUS "Eigen3::Eigen target found ✓")
-else()
-    # FetchContent fallback — no CMake target exported
-    target_include_directories(openCSMP PUBLIC
-            $<BUILD_INTERFACE:${eigen_SOURCE_DIR}>
-    )
-endif()
+# Eigen — header-only; installed or downloaded, see dependency section 2
+target_include_directories(openCSMP PUBLIC
+        $<BUILD_INTERFACE:${CSMP_EIGEN_INCLUDE_DIR}>
+)
+message(STATUS "Eigen include path: ${CSMP_EIGEN_INCLUDE_DIR}")
 
 # IAPS H2O EOS (optional)
 if(TARGET iaps_h2o_eos)
@@ -757,39 +809,61 @@ endif()
 # SAMG Solver (commercial — Fraunhofer/SCAPOS)
 #
 #   Algebraic multigrid solver for systems of equations.
-#   Requires prebuilt binaries in: ../external_support_libs/samg/
+#   Requires the licensed, prebuilt binaries. Tell CMake where they are with
+#     -DSAMG_ROOT=/path/to/samg
+#   where that directory contains linux/ and/or macosx/ with the libraries
+#   (and the SAMG headers). For backward compatibility the former location
+#   ../external_support_libs/samg is still used if SAMG_ROOT is not given.
 #
 #   Two modes:
-#     SAMG_LEGACY=ON  (default) — original SAMG integration with SAMG_MULTIPLE_INSTANCES
-#     SAMG_LEGACY=OFF           — modern SAMG integration, single instance
+#     SAMG_LEGACY=OFF (default) — modern SAMG integration, single instance
+#     SAMG_LEGACY=ON            — original SAMG integration with SAMG_MULTIPLE_INSTANCES
 #
 #   Toggle with:
-#     cmake -DSAMG_ENABLE=ON ..
-#     cmake -DSAMG_ENABLE=ON -DSAMG_LEGACY=OFF ..
+#     cmake -DSAMG_ENABLE=ON -DSAMG_ROOT=/path/to/samg ..
+#     cmake -DSAMG_ENABLE=ON -DSAMG_ROOT=/path/to/samg -DSAMG_LEGACY=ON ..
 # ===============================================================================================
 option(SAMG_LEGACY "Use legacy SAMG integration (SAMG_MULTIPLE_INSTANCES)" OFF)
+set(SAMG_ROOT "" CACHE PATH "Directory with the licensed SAMG binaries (contains linux/ and/or macosx/)")
 
 if(SAMG_ENABLE)
     message(STATUS "Enabling SAMG Solver...")
 
+    # Where are the SAMG binaries?
+    if(NOT SAMG_ROOT)
+        get_filename_component(_csmp_former_samg_dir
+                "${CMAKE_CURRENT_SOURCE_DIR}/../external_support_libs/samg" ABSOLUTE)
+        if(EXISTS "${_csmp_former_samg_dir}")
+            set(SAMG_ROOT "${_csmp_former_samg_dir}")
+            message(STATUS "SAMG_ROOT not set — using the former default location: ${SAMG_ROOT}")
+        endif()
+        unset(_csmp_former_samg_dir)
+    endif()
+    message(STATUS "SAMG root: ${SAMG_ROOT}")
+
     # Locate prebuilt libraries — no point proceeding without them
     set(SAMG_INTERFACE_REQUIRED FALSE)
     if(APPLE)
-        set(SAMG_LIB_PATH "${CSMP_EXTERNAL_LIBS}/samg/macosx")
+        set(SAMG_LIB_PATH "${SAMG_ROOT}/macosx")
         set(SAMG_LIB      "${SAMG_LIB_PATH}/libamg_mult.dylib")
         set(OMP_LIB       "${SAMG_LIB_PATH}/libiomp5.dylib")
+        # these are fixed paths, not search results: make sure the files are there
+        if(NOT EXISTS "${SAMG_LIB}" OR NOT EXISTS "${OMP_LIB}")
+            set(SAMG_LIB "")
+            set(OMP_LIB  "")
+        endif()
     elseif(SAMG_LEGACY)
         find_library(SAMG_LIB NAMES amg_mult
-                HINTS "${CSMP_EXTERNAL_LIBS}/samg/linux")
+                HINTS "${SAMG_ROOT}/linux")
         find_library(OMP_LIB NAMES iomp5
-                HINTS "${CSMP_EXTERNAL_LIBS}/samg/linux")
+                HINTS "${SAMG_ROOT}/linux")
     else()
         find_library(SAMG_LIB NAMES samg
-                HINTS "${CSMP_EXTERNAL_LIBS}/samg/linux")
+                HINTS "${SAMG_ROOT}/linux")
         find_library(SAMG_INTERFACE_LIB NAMES samg_interface
-                HINTS "${CSMP_EXTERNAL_LIBS}/samg/linux")
+                HINTS "${SAMG_ROOT}/linux")
         find_library(OMP_LIB NAMES iomp5
-                HINTS "${CSMP_EXTERNAL_LIBS}/samg/linux")
+                HINTS "${SAMG_ROOT}/linux")
         set(SAMG_INTERFACE_REQUIRED TRUE)
     endif()
 
@@ -821,21 +895,29 @@ if(SAMG_ENABLE)
         if(SAMG_SRC)
             target_sources(openCSMP PRIVATE ${SAMG_SRC})
             target_include_directories(openCSMP PUBLIC
-                    ${CSMP_EXTERNAL_LIBS}/samg
+                    ${SAMG_ROOT}
                     ${CMAKE_CURRENT_SOURCE_DIR}/source/modules/integration/solver/SAMG_profiles
             )
         else()
             message(WARNING "SAMG enabled but no SAMG source files found")
         endif()
 
-        # SAMG_INTERFACE_LIB is empty/unset on APPLE — CMake ignores the empty expansion
-        target_link_libraries(openCSMP PUBLIC ${SAMG_LIB} ${SAMG_INTERFACE_LIB} ${OMP_LIB})
-        message(STATUS "SAMG library:           ${SAMG_LIB}")
+        # SAMG_INTERFACE_LIB is unset or NOTFOUND where no interface library
+        # is needed (APPLE, legacy libamg_mult) — only link it when found
+        set(_samg_link_libs ${SAMG_LIB})
+        if(SAMG_INTERFACE_LIB)
+            list(APPEND _samg_link_libs ${SAMG_INTERFACE_LIB})
+        endif()
+        list(APPEND _samg_link_libs ${OMP_LIB})
+        target_link_libraries(openCSMP PUBLIC ${_samg_link_libs})
+	message(STATUS "SAMG library:           ${SAMG_LIB}")
         message(STATUS "SAMG interface library: ${SAMG_INTERFACE_LIB}")
         message(STATUS "OpenMP library:         ${OMP_LIB}")
 
     else()
-        message(WARNING "SAMG requested but libraries not found — disabling SAMG support")
+        message(WARNING "SAMG requested but its libraries were not found under SAMG_ROOT "
+                "('${SAMG_ROOT}') — disabling SAMG support.\n"
+                "Configure with -DSAMG_ROOT=/path/to/samg (the directory that contains linux/ or macosx/)")
         set(SAMG_ENABLE OFF)
     endif()
 endif()
@@ -934,10 +1016,50 @@ if(CSMP_WITH_IMAGE_OUTPUT)
 endif()
 
 # Eigen include path for consumer targets
-if(APPLE)
-    list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${EIGEN_INCLUDE_DIR})
+list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${CSMP_EIGEN_INCLUDE_DIR})
+
+
+# ===============================================================================================
+# Examples Workspace
+#
+#   The examples are run in a workspace directory OUTSIDE of the repository and of the build
+#   tree, so that simulation output is neither committed by accident nor lost when the build
+#   directory is deleted:
+#
+#     <workspace>/example_inputs/                  inputs, copied from examples/example_inputs
+#     <workspace>/example_outputs/<example name>/  results, e.g. for visualisation with ParaView
+#
+#   Create / update it with (never overwrites files that already exist there):
+#     cmake --build <build dir> --target setup_examples
+#
+#   Default location: ~/openCSMP/examples; change with -DCSMP_EXAMPLES_WORKSPACE=/some/dir
+#   At run time the executable uses, in this order: the option --workspace <dir>, the
+#   environment variable CSMP_EXAMPLES_DIR, the current directory if it is an
+#   example_inputs/ directory, and finally the location configured here.
+# ===============================================================================================
+if(DEFINED ENV{HOME})
+    file(TO_CMAKE_PATH "$ENV{HOME}" _csmp_home)
+elseif(DEFINED ENV{USERPROFILE})
+    file(TO_CMAKE_PATH "$ENV{USERPROFILE}" _csmp_home)
 else()
-    list(APPEND CSMP_CONSUMER_INCLUDE_DIRS ${eigen_SOURCE_DIR})
+    set(_csmp_home "${CMAKE_BINARY_DIR}")
+endif()
+set(CSMP_EXAMPLES_WORKSPACE "${_csmp_home}/openCSMP/examples"
+        CACHE PATH "Directory outside of the repository in which the examples are run")
+unset(_csmp_home)
+message(STATUS "Examples workspace: ${CSMP_EXAMPLES_WORKSPACE}")
+
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs")
+    add_custom_target(setup_examples
+            COMMAND ${CMAKE_COMMAND}
+            "-DCSMP_EXAMPLE_INPUTS=${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs"
+            "-DCSMP_EXAMPLES_WORKSPACE=${CSMP_EXAMPLES_WORKSPACE}"
+            "-DCSMP_REPOSITORY=${CMAKE_CURRENT_SOURCE_DIR}"
+            -P "${CMAKE_CURRENT_SOURCE_DIR}/cmake/CsmpSetupExamples.cmake"
+            COMMENT "Setting up the examples workspace in ${CSMP_EXAMPLES_WORKSPACE}"
+            VERBATIM
+            USES_TERMINAL
+    )
 endif()
 
 
@@ -981,6 +1103,11 @@ if(BUILD_EXAMPLES)
 
         # Links against the core library (inherits all its PUBLIC dependencies)
         target_link_libraries(openCSMP-examples PRIVATE openCSMP)
+
+        # Default examples workspace, see "Examples Workspace" below
+        target_compile_definitions(openCSMP-examples PRIVATE
+                CSMP_EXAMPLES_WORKSPACE_DEFAULT="${CSMP_EXAMPLES_WORKSPACE}"
+        )
     else()
         message(STATUS "No example sources found — skipping openCSMP-examples")
     endif()
@@ -1088,10 +1215,15 @@ add_test(NAME Suite_Composite       COMMAND openCSMP-tests --suite composite)
 add_test(NAME Suite_Refactoring     COMMAND openCSMP-tests --suite refactored)
 
 set(_test_environment
-"DYLD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/macosx"
-"LD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/linux"
 "CSMP_DATA_ROOT=${CMAKE_CURRENT_SOURCE_DIR}/tests/dataset"
 )
+if(SAMG_ENABLE)
+    # the SAMG shared libraries must be found at run time
+    list(APPEND _test_environment
+        "DYLD_LIBRARY_PATH=${SAMG_ROOT}/macosx"
+        "LD_LIBRARY_PATH=${SAMG_ROOT}/linux"
+    )
+endif()
 
 set_tests_properties(
 Suite_Fundamentals
@@ -1210,10 +1342,14 @@ if(BUILD_CVFEM_TESTS)
             COMMAND CVFEM_tests_main --suite cvfem_2d)
 
     set(_cvfem_environment
-            "DYLD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/macosx"
-            "LD_LIBRARY_PATH=${CSMP_EXTERNAL_LIBS}/samg/linux"
             "CSMP_DATA_ROOT=${CMAKE_CURRENT_SOURCE_DIR}/tests/data-tests_CVFEM"
     )
+    if(SAMG_ENABLE)
+        list(APPEND _cvfem_environment
+                "DYLD_LIBRARY_PATH=${SAMG_ROOT}/macosx"
+                "LD_LIBRARY_PATH=${SAMG_ROOT}/linux"
+        )
+    endif()
 
     set_tests_properties(
             CVFEM_1D_VVCase
@@ -1254,19 +1390,11 @@ endif()
 
 # Public headers
 install(DIRECTORY source/includes/      DESTINATION include/openCSMP)
-install(DIRECTORY source/non-GIT-files/ DESTINATION include/openCSMP/non-GIT-files)
+install(DIRECTORY non-GIT-files/        DESTINATION include/openCSMP/non-GIT-files)
 
-# Example inputs (copied to build tree at build time, installed separately)
+# Example inputs — installed with the executables; to run the examples, copy them into a
+# workspace with the 'setup_examples' target (see "Examples Workspace" above)
 if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs")
-    if(TARGET openCSMP-examples)
-        add_custom_command(TARGET openCSMP-examples POST_BUILD
-                COMMAND ${CMAKE_COMMAND} -E copy_directory
-                "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs"
-                "${CMAKE_BINARY_DIR}/example_inputs"
-                COMMENT "Copying example_inputs to build directory"
-                VERBATIM
-        )
-    endif()
     install(DIRECTORY examples/example_inputs/
             DESTINATION example_inputs
             PATTERN ".DS_Store" EXCLUDE
@@ -1276,7 +1404,7 @@ if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/examples/example_inputs")
 endif()
 
 # Continuous integration fixtures
-if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/../continuous_integration_testing")
+if(EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/continuous_integration_testing")
     install(DIRECTORY continuous_integration_testing/
             DESTINATION continuous_integration_testing
     )
@@ -1292,9 +1420,14 @@ message(STATUS "------------------------------------------------------------")
 message(STATUS "  C++ standard:       ${CMAKE_CXX_STANDARD}")
 message(STATUS "  Build type:         ${CMAKE_BUILD_TYPE}")
 message(STATUS "  SAMG solver:        ${SAMG_ENABLE}")
+if(SAMG_ENABLE)
+    message(STATUS "  SAMG root:          ${SAMG_ROOT}")
+endif()
 message(STATUS "  PETSc solver:       ${CSMP_WITH_PETSC_SOLVER}")
 message(STATUS "  Image output:       ${CSMP_WITH_IMAGE_OUTPUT}")
+message(STATUS "  Eigen:              ${CSMP_EIGEN_INCLUDE_DIR}")
 message(STATUS "  Build examples:     ${BUILD_EXAMPLES}")
+message(STATUS "  Examples workspace: ${CSMP_EXAMPLES_WORKSPACE}")
 message(STATUS "  Build tests:        ${BUILD_TESTING}")
 message(STATUS "  Build CVFEM tests:  ${BUILD_CVFEM_TESTS}")
 message(STATUS "  LTO/IPO:            ${IPO_SUPPORTED}")

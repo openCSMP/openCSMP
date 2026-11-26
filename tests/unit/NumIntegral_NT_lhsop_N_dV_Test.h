@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef CSMP_NUMINTEGRAL_NT_LHSOP_N_DV_TEST
 #define CSMP_NUMINTEGRAL_NT_LHSOP_N_DV_TEST
 

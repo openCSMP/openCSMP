@@ -1,5 +1,9 @@
-#ifndef CommandLineParser_Test_h__
-#define CommandLineParser_Test_h__
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
+#ifndef COMMAND_LINE_PARSER_TEST_H
+#define COMMAND_LINE_PARSER_TEST_H
 
 #include <cstdlib>
 #include <sstream>

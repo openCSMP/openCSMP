@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #ifndef LINEAR_ELASTIC_FRACTURE_APERTURE_2D_VVCASE_H
 #define LINEAR_ELASTIC_FRACTURE_APERTURE_2D_VVCASE_H
 

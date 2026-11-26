@@ -1,12 +1,16 @@
 
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "PropertyDatabase_Test.h"
 
 //CSMP Header Files
 #include "PropertyDatabase.h"
 #include "PropertyHandle.h"
 
-#include <iostream>
 using namespace std;
+
 namespace csmp
 {
 PropertyDatabase_Test::PropertyDatabase_Test()

@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "ANSYS_Model2D_Test.h"
 #include "Region.h"
 #include "Boundary.h"

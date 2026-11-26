@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
 //
 //  ExplicitTransport_Test.h
 //  CSMP_API_examples
@@ -14,6 +17,7 @@
 namespace csmp {
 
 template<uint32_t> class Model;
+template<uint32_t> class Element;
 
 /**
      Testing programme

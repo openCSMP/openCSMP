@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: © 2026 The openCSMP project
+//
+// SPDX-License-Identifier: LGPL-3.0-only
+
 #include "NodeManifoldManager_Test.h"
 #include "ANSYS_Model2D.h"
 #include "ANSYS_Model3D.h"
@@ -74,7 +78,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
   size_t region_id(1);
   for ( auto it = modelIN->UniqueRegionsBegin(); it != modelIN->UniqueRegionsEnd(); it++ ) {
       auto rg_name = (*it).first;
-      modelIN->Region(rg_name).InputPropertyValue("region ID", makeScalar(PLAIN, region_id));
+      modelIN->Region(rg_name).InputPropertyValue("region ID", makeScalar(PLAIN, static_cast<double>(region_id)));
       cout<<"region ID = "<<region_id<<" assign to unique region: "<<rg_name<<endl;
       region_id ++;
   }   
@@ -160,7 +164,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
       if(x==min_x && y==min_y) {
         cout<<"after split, left bottom node found, id = "<<nd1->Idx()<<", parent elements = "<<nd1->Parents()<<", node neighbors = "<<nd1->Neighbors()<<endl;
         cout<<"nd position = "<<nd1->Coordinate()<<endl;
-        for(auto e(0);e<nd1->Parents();e++){
+        for( uint32_t e(0);e<nd1->Parents();e++){
           cout<<"  parent element id = "<<nd1->Parent(e)->Idx()<<", position = "<<nd1->Parent(e)->BaryCenter()<<endl;
           if(nd1==left_bt_nd) //old node
               nd1->Parent(e)->Store(key_element, makeScalar(PLAIN, 1));
@@ -168,7 +172,7 @@ void NodeManifoldManager_Test::Test_nodemanifolds_created_from_splitboundaries_b
           else //new node
               nd1->Parent(e)->Store(key_element, makeScalar(PLAIN, 2));
         }
-        for(auto n(0);n<nd1->Neighbors();n++){
+        for( uint32_t n(0);n<nd1->Neighbors();n++){
           cout<<"  neighbor node id = "<<nd1->Neighbor(n)->Idx()<<", position = "<<nd1->Neighbor(n)->Coordinate()<<endl;
         }
         size_t parent_regions(0);
