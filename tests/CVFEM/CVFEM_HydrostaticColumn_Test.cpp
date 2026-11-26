@@ -11,6 +11,7 @@
 #include "CVFEM_HydrostaticColumn_Test.h"
 
 #include <algorithm>
+#include <array>
 #include <cmath>
 #include <iostream>
 #include <limits>
@@ -25,7 +26,7 @@ CVFEM_HydrostaticColumn_Test::CVFEM_HydrostaticColumn_Test(const std::string& me
     vars_name_("PhysicalVariables.txt"),   // created by the ModelBuilder
     facet_mean_gravity_density_(facet_mean_gravity_density),
     steps_(0U),
-    max_velocity_fraction_(1.e-3),
+    max_velocity_fraction_(1.e-2),   // round-off noise reaches ~2e-3 (README); a faulty gravity term gives ~0.1
     location_of_max_speed_{0., 0.},
     model_(nullptr),
     property_database_(nullptr),
@@ -189,7 +190,7 @@ double CVFEM_HydrostaticColumn_Test::MaxLiquidSpeed()
 std::array<double, 2> CVFEM_HydrostaticColumn_Test::MaxTransportSpeed(double run_time) const
 {
   const Index flux_integral_key(property_database_->StorageKey("fluid flux integral"));
-  const Index density_key(property_database_->StorageKey("density liquid"));
+  const Index density_key(property_database_->StorageKey("fluid density"));
   const Index bulk_volume_key(property_database_->StorageKey("bulk volume"));
   const Index thickness_key(property_database_->StorageKey("thickness"));
   const Index temperature_key(property_database_->StorageKey("temperature"));
@@ -215,8 +216,11 @@ std::array<double, 2> CVFEM_HydrostaticColumn_Test::MaxTransportSpeed(double run
 
 double CVFEM_HydrostaticColumn_Test::BuoyancyVelocityScale() const
 {
-  const Index density_key(property_database_->StorageKey("density liquid"));
-  const Index viscosity_key(property_database_->StorageKey("viscosity liquid"));
+  // bulk fluid density and the smallest viscosity of the phases present: near the critical point the equation of
+  // state labels low-density supercritical fluid as vapour
+  const Index density_key(property_database_->StorageKey("fluid density"));
+  const Index viscosity_liquid_key(property_database_->StorageKey("viscosity liquid"));
+  const Index viscosity_vapor_key(property_database_->StorageKey("viscosity vapor"));
   const Index permeability_key(property_database_->StorageKey("permeability"));
   const Region<2U>& region(model_->Region("Model"));
   double density_min{std::numeric_limits<double>::max()};
@@ -226,7 +230,9 @@ double CVFEM_HydrostaticColumn_Test::BuoyancyVelocityScale() const
   for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it) {
     density_min = std::min(density_min, (*node_it)->Read(density_key));
     density_max = std::max(density_max, (*node_it)->Read(density_key));
-    viscosity_min = std::min(viscosity_min, (*node_it)->Read(viscosity_key));
+    for (const Index& key : {viscosity_liquid_key, viscosity_vapor_key})
+      if ((*node_it)->Read(key) > 0.)
+        viscosity_min = std::min(viscosity_min, (*node_it)->Read(key));
   }
   for (auto element_it = region.CellsBegin(); element_it != region.CellsEnd(); ++element_it)
     permeability_max = std::max(permeability_max, (*element_it)->Read(permeability_key));
@@ -281,6 +287,19 @@ void CVFEM_HydrostaticColumn_Test::ReportResults(double velocity_scale, const st
             << transport_speed[1] << " m/s (ratio " << transport_speed[1] / velocity_scale << ")" << std::endl
             << "  stored element 'velocity liquid' (information only): max " << max_stored_speed << " m/s (ratio "
             << max_stored_speed / velocity_scale << ")" << std::endl;
+  // fluid state of the nodes as classified by the equation of state (States.h); near the critical point the
+  // low-density part of a single supercritical fluid is classified V, the rest F
+  constexpr std::array<const char*, 11> state_names{"none", "L", "V", "F", "VL", "VH", "LH", "VLH", "H", "M", "HM"};
+  const Index state_key(property_database_->StorageKey("fluid state"));
+  std::map<int, size_t> states;
+  const Region<2U>& region(model_->Region("Model"));
+  for (auto node_it = region.NodesBegin(); node_it != region.NodesEnd(); ++node_it)
+    ++states[static_cast<int>(std::lround((*node_it)->Read(state_key)))];
+  std::cerr << "  fluid states (information only):";
+  for (const auto& [state, count] : states)
+    std::cerr << " " << (state >= 0 && state < static_cast<int>(state_names.size()) ? state_names[state] : "?") << " "
+              << count;
+  std::cerr << std::endl;
 }
 
 

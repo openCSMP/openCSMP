@@ -1,0 +1,3 @@
+pure water, supercritical (25 MPa), hydrostatic, stably stratified
+Near-critical column (420 C top, 360 C base), structured mesh, facet-mean density in the gravity term
+CVFEM_HydrostaticColumn_Test

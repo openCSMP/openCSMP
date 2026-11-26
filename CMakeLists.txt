@@ -1149,6 +1149,7 @@ if(BUILD_CVFEM_TESTS)
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/CVFEM/CVFEM_2D_VVCase.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/CVFEM/CVFEM_HydrostaticColumn_Test.cpp
             ${CMAKE_CURRENT_SOURCE_DIR}/tests/CVFEM/CVFEM_SquareCavityConvection_Test.cpp
+            ${CMAKE_CURRENT_SOURCE_DIR}/tests/CVFEM/CVFEM_ConvectionOnset_Test.cpp
             ${CVFEM_HSS_LIB_SOURCES}
     )
 
