@@ -460,6 +460,10 @@ vector<string> splitString( string str, char delimiter )
       @param combinations will store the uniqe combinations that were found
       
       @attention combinations is not equal to permutations.
+      @attention the input vector is sorted and stripped of repeated values; the combinations are appended to 'combinations'.
+
+      @return the number of combinations stored in 'combinations' (including those it already contained), or 0
+      if the input is empty or contains fewer distinct values than 'samples'
       
       @author SKM (modified from example on stackoverflow)
       @date 4/10/2021
@@ -471,13 +475,14 @@ size_t createUniqueCombinations( vector<intType>& sequence, uint32_t samples,
  {
     // checking the input
     if ( sequence.empty() ) return 0U;
-    if ( samples > sequence.size() ) {
-        cerr <<"\ncreateUniqueCombinations: can't combine more numbers than are in the input vector.\n";
-        return 0U;
-      }
     sort( sequence.begin(), sequence.end() );
     sequence.erase( unique( sequence.begin(), sequence.end() ), sequence.end() );
     const size_t N{sequence.size()};
+    // to be checked after repeated numbers have been removed: {7,7,7} contains only one number to combine
+    if ( samples > N ) {
+        cerr <<"\ncreateUniqueCombinations: can't combine more numbers than there are distinct numbers in the input vector.\n";
+        return 0U;
+      }
     
     // generating combinations by selectively sampling sequence using 011.. pattern in bitmap
     string bitmask(samples, 1); // generating leading 1's

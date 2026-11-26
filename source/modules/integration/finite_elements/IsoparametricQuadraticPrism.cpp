@@ -370,7 +370,8 @@ IsoparametricQuadraticPrism::GenerateIntegrationPoints(
     const uint32_t numberOfTriaIntegrationPoints=3; // order 2
     const uint32_t numberOfDimensionsInPlane=2;
     DenseMatrix<DM_MIN> IPTRIA(numberOfTriaIntegrationPoints,numberOfDimensionsInPlane);
-    const double constA=0.577350269189626, constT1=0.66666666666667, constT2=0.16666666666667;
+    // 2-point Gauss rule along t: +-1/sqrt(3); 3-point rule on the triangle: area coordinates 2/3 and 1/6, weights 1/6
+    const double constA=1.0/std::sqrt(3.0), constT1=2.0/3.0, constT2=1.0/6.0;
 
     IPTRIA(0,0)=constT1; IPTRIA(0,1)=constT2;
     IPTRIA(1,0)=constT2; IPTRIA(1,1)=constT1;
@@ -1579,9 +1580,11 @@ double
 IsoparametricQuadraticPrism::dN_AtBarycenter( DenseMatrix<DM_MIN>& B )
  {
 
-    dNr( 0.0, 0.0, 0.0, DNR );
-    dNs( 0.0, 0.0, 0.0, DNS );
-    dNt( 0.0, 0.0, 0.0, DNT );
+    // barycentre of the prism in local coordinates: centroid of the triangle (1/3,1/3), mid-height (t=0)
+    const double OneThird = 1.0/3.0;
+    dNr( OneThird, OneThird, 0.0, DNR );
+    dNs( OneThird, OneThird, 0.0, DNS );
+    dNt( OneThird, OneThird, 0.0, DNT );
 
     // compute Jacobian matrix, its determinant and inversex
     Jacobian( DNR, DNS, DNT );
@@ -1608,7 +1611,8 @@ IsoparametricQuadraticPrism::N_AtBaryCenter( std::vector<double>& N )
  {
     N.resize(npe);
 
-    Nrst(0.0,0.0,0.0, N);
+    // barycentre of the prism in local coordinates: centroid of the triangle (1/3,1/3), mid-height (t=0)
+    Nrst( 1.0/3.0, 1.0/3.0, 0.0, N );
  }
 
  /**

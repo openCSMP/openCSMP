@@ -885,7 +885,7 @@ void create_Disconnected2D_VSet(VSet<2U>& vset)
     static const deque<vector<int64_t>> pfverts = {
         {1, INTERNAL, TOP, LEFT},        // Quad 0: to quad 1, internal, top, left
         {BOTTOM, INTERNAL, 0, LEFT},     // Quad 1: bottom, internal, quad 0, left
-        {5, RIGHT, 2},                   // Tri 1: to tri 4, right, top
+        {5, RIGHT, 4},                   // Tri 1 (element 2): element 5, right, element 4 (was 2, i.e. its own neighbor)
         {RIGHT, TOP, 4},                 // Tri 2: to tri 4, right, top
         {2, 3, INTERNAL},                // Tri 3: right, top, tri 4
         {BOTTOM, RIGHT, 2}               // Tri 4: bottom, right, tri 3

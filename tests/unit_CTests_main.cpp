@@ -11,12 +11,12 @@
 #include "TestSuite.h"
 
 // --- fundamentals ---
+#include "binaryReadWrite_Test.h"
 #include "ArrayVariable_Test.h"
 #include "FlaggedArrayVariable_Test.h"
 #include "Colony_Test.h"
 #include "ColorPalette_Test.h"
 #include "ConvexPolygon_Test.h"
-#include "GenericSingleton_Test.h"
 #include "ScalarVar_Test.h"
 #include "TensorVar_Test.h"
 #include "TensorVar_Test1.h"
@@ -51,6 +51,7 @@
 #include "Boundary_Test.h"
 #include "Box_Test.h"
 #include "CopyReplaceVisitor_Test.h"
+#include "CsmpIntro1_TestCase.h"
 #include "Element_Test.h"
 #include "ElementPolicyIntegrity_Test.h"
 #include "Face_Test.h"
@@ -70,6 +71,7 @@
 #include "NodeManifold_Test.h"
 #include "NodeManifoldManager_Test.h"
 #include "Parameter_Test.h"
+#include "parentElementStorageOptions_Test.h"
 #include "Point_Test.h"
 #include "PointPropertyToCellMapper2D_Test.h"
 #include "PropertyAtPointVisitor_Test.h"
@@ -83,7 +85,9 @@
 
 // --- finite elements ---
 #include "FiniteElement_Test.h"
-#include "FiniteElement_Test2.h"
+#include "IsoparametricLinearPrism_Test.h"
+#include "IsoparametricQuadraticPrism_Test.h"
+#include "createUniqueCombinations_Test.h"
 #include "IsoparametricLinearHexahedron_Test.h"
 #include "IsoparametricLinearPyramid_Test.h"
 #include "IsoparametricQuadraticPyramid_Test.h"
@@ -103,6 +107,7 @@
 #include "ANSYS_Model3D_Test.h"
 #include "ANSYS_SplitBoundaryMatch_Test.h"
 #include "CommandLineParser_Test.h"
+#include "createUniqueCombinations_Test.h"
 #include "FEM_Data_Test.h"
 #include "InputDataManager_Test.h"
 #include "ModelTopology_Test.h"
@@ -254,10 +259,9 @@ int main( int argc, char* argv[] )
         TestSuite refactored("CSMP-refactored code unit-test suite", &cout );
 
 // TODO: put your new or refactored test here!
-//refactored.addTest( new VSet_Test1() );
-refactored.addTest( new VData_Test() );
+refactored.addTest( new MeshManagementUtilities_Test() );
 
-        // actually running the test
+       // actually running the test
         refactored.run();
         long nFail = refactored.report();
         total_failures += nFail;
@@ -288,8 +292,8 @@ refactored.addTest( new VData_Test() );
       // Auxiliaries
       basic.addTest( new Colony_Test() );
       basic.addTest( new IsnanIsinf_Test() );
-      basic.addTest( new GenericSingleton_Test() );
       basic.addTest( new ColorPalette_Test() );
+      basic.addTest( new ConvexPolygon_Test() );
       
       // Data storage tests
       basic.addTest( new LocalVariableStorage_Test() );
@@ -328,10 +332,12 @@ refactored.addTest( new VData_Test() );
       basic.addTest( new geometricCalculations_Test() );
       
       basic.addTest( new FiniteVolumeStencil_Test(verbose));
+      basic.addTest( new FV_Parameter_Test() );
       // also compares speed of mapping facet areas and normals versus computing them
       basic.addTest( new FiniteVolumePolicy_Test());
       
       // interfaces / containers
+      basic.addTest( new binaryReadWrite_Test() );
       basic.addTest( new FEM_Data_Test());
       basic.addTest( new Parameter_Test() );
       basic.addTest( new VData_Test() );
@@ -374,6 +380,10 @@ refactored.addTest( new VData_Test() );
       interdependent1.addTest(new IsoparametricLinearHexahedron_Test(verbose));
       interdependent1.addTest( new IsoparametricLinearPyramid_Test() );
       interdependent1.addTest( new IsoparametricQuadraticPyramid_Test() );
+      interdependent1.addTest( new IsoparametricLinearPrism_Test() );
+      interdependent1.addTest( new IsoparametricQuadraticPrism_Test() );
+      interdependent1.addTest( new createUniqueCombinations_Test() );
+
       // finite element policy
       interdependent1.addTest( new FiniteElementPolicy_Test() ); // needs refactor, no ANSYS model required
       interdependent1.addTest( new ElementPolicyIntegrity_Test() );
@@ -432,6 +442,7 @@ refactored.addTest( new VData_Test() );
       // creating the test suite
       cout <<"\n"<<"3. Model-related interdependent functionality: running tests..."<< endl;
       TestSuite interdependent2("CSMP-interdependent2-unit test suite", &cout );
+      interdependent2.addTest( new CsmpIntro1_TestCase(false /* verbose */) );
       interdependent2.addTest( new ModelSubDomain_Test() );
       interdependent2.addTest( new MeshManager_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
@@ -538,7 +549,6 @@ refactored.addTest( new VData_Test() );
       
       // speed tests (run only in the optimised RELEASE version of the code)
 #ifdef NDEBUG
-/* NOT ESSENTIAL
       composite.addTest( new VariableStorageSpeed_Test() );
       composite.addTest( new AccumulationSpeedProfiling_Test() );
       composite.addTest( new VariableBenchmarking_Test() );
@@ -547,7 +557,7 @@ refactored.addTest( new VData_Test() );
       composite.addTest( new JaggedArray3D_Comparison_Test() );
       composite.addTest( new PropertyStorageSpeed_Test( &cout ) );
       composite.addTest( new VariableStorageSpeed_Test() );
-*/
+      composite.addTest( new parentElementStorageOptions_Test() );
 #endif
 
       // running unit tests and reporting errors
