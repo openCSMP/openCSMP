@@ -26,7 +26,6 @@ void ExampleSuite::Run()
   Initialize();
   WriteExamplesFile();
   SuiteHeader();
-  cout << "\n\t"<<"Make sure to launch 'open-csmp-examples' from within the 'example-inputs/' directory!"<<"\n\n";
   cout.flush();
   UIMenu();
 }
@@ -280,7 +279,10 @@ int ExampleSuite::ChoiceWithinRange( long min, long max ) const
   int choice;
   bool valid( true );
   do{
-      cin >> input;
+      // end of input (Ctrl-D, closed or exhausted stdin): treat as quit
+      // instead of re-prompting forever
+      if( !(cin >> input) )
+          return -1;
       if( input == std::string("q") || input == std::string("Q") )
       {
           choice = -1;

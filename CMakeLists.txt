@@ -349,14 +349,38 @@ endif()
 # -----------------------------------------------------------------------
 set(CGNS_FOUND_USABLE FALSE)
 
-# 7.1 Try find_package first
+# 7.1 Try find_package first.
+#     The CGNS config package defines only imported targets (CGNS::cgns_shared,
+#     CGNS::cgns_static) and no CGNS_LIBRARIES / CGNS_INCLUDE_DIRS. Its targets
+#     also name an "hdf5-shared" dependency that the package does not load, so
+#     linking the target directly can fail. Take the shared library path and
+#     include directory from the target instead; libcgns itself records its
+#     HDF5 dependency. Without a usable shared target, fall through to 7.2+.
 find_package(CGNS QUIET)
-if(CGNS_FOUND)
-    message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
-    set(CGNS_FOUND_USABLE TRUE)
+if(CGNS_FOUND AND TARGET CGNS::cgns_shared)
+    get_target_property(_cgns_configs CGNS::cgns_shared IMPORTED_CONFIGURATIONS)
+    set(_cgns_lib "")
+    foreach(_cfg IN LISTS _cgns_configs)
+        get_target_property(_cgns_lib CGNS::cgns_shared IMPORTED_LOCATION_${_cfg})
+        if(_cgns_lib)
+            break()
+        endif()
+    endforeach()
+    if(NOT _cgns_lib)
+        get_target_property(_cgns_lib CGNS::cgns_shared IMPORTED_LOCATION)
+    endif()
+    get_target_property(_cgns_inc CGNS::cgns_shared INTERFACE_INCLUDE_DIRECTORIES)
+    if(_cgns_lib AND _cgns_inc)
+        list(REMOVE_DUPLICATES _cgns_inc)
+        set(CGNS_LIBRARIES    "${_cgns_lib}")
+        set(CGNS_INCLUDE_DIRS "${_cgns_inc}")
+        message(STATUS "CGNS found via find_package: ${CGNS_LIBRARIES}")
+        set(CGNS_FOUND_USABLE TRUE)
+    endif()
+endif()
 
-    # 7.2 Try pkg-config
-elseif(PKG_CONFIG_FOUND)
+# 7.2 Try pkg-config
+if(NOT CGNS_FOUND_USABLE AND PKG_CONFIG_FOUND)
     pkg_check_modules(CGNS QUIET cgns)
     if(CGNS_FOUND)
         message(STATUS "CGNS found via pkg-config: ${CGNS_LIBRARIES}")
