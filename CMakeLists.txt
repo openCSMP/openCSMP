@@ -902,9 +902,15 @@ if(SAMG_ENABLE)
             message(WARNING "SAMG enabled but no SAMG source files found")
         endif()
 
-        # SAMG_INTERFACE_LIB is empty/unset on APPLE — CMake ignores the empty expansion
-        target_link_libraries(openCSMP PUBLIC ${SAMG_LIB} ${SAMG_INTERFACE_LIB} ${OMP_LIB})
-        message(STATUS "SAMG library:           ${SAMG_LIB}")
+        # SAMG_INTERFACE_LIB is unset or NOTFOUND where no interface library
+        # is needed (APPLE, legacy libamg_mult) — only link it when found
+        set(_samg_link_libs ${SAMG_LIB})
+        if(SAMG_INTERFACE_LIB)
+            list(APPEND _samg_link_libs ${SAMG_INTERFACE_LIB})
+        endif()
+        list(APPEND _samg_link_libs ${OMP_LIB})
+        target_link_libraries(openCSMP PUBLIC ${_samg_link_libs})
+	message(STATUS "SAMG library:           ${SAMG_LIB}")
         message(STATUS "SAMG interface library: ${SAMG_INTERFACE_LIB}")
         message(STATUS "OpenMP library:         ${OMP_LIB}")
 
