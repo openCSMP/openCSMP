@@ -396,7 +396,7 @@ void CVFEM_fault_well_lithium_example::Run() {
 
     CVFEM_PHX->IncludeWellCalculations(with_well);
 
-    CVFEM_PHX->ActivateSplitRegionCoupling(false, 1.);
+    CVFEM_PHX->ActivateSplitRegionCoupling(false, 1., false, false, with_lithium, false, false);
 
     if (with_lithium) {
         CVFEM_PHX->AddAdvectionVariable("lithium content fluid", "lithium content liquid", "liquid lithium mobility", "lithium content vapor", "vapor lithium mobility");
@@ -614,8 +614,8 @@ void CVFEM_fault_well_lithium_example::Run() {
     CVFEM_PHX->ChangeTimeStepTo(initial_time_step);
 
     cerr<<endl<<"OutputToVTU initial";
-    OutputToVTU( model, output_name+"_initial", output_variables, 0);
-    OutputToVTU_wells(model, output_name+"_initial", output_variables_well, 0);
+    OutputToVTU( model, output_name, output_variables, 0);
+    OutputToVTU_wells(model, output_name, output_variables_well, 0);
 
     if (no_std_output) {
         freopen("/dev/null", "w", stdout);
@@ -826,12 +826,14 @@ void CVFEM_fault_well_lithium_example::SetPorosity(Model<MODEL_DIM> &model) cons
 // Write the requested properties over the whole model to a VTU file.
 void CVFEM_fault_well_lithium_example::OutputToVTU(Model<MODEL_DIM> &model, const string &model_name, const list<string> &props, size_t timestep) const {
     static VTU_Interface<MODEL_DIM> vtu(model);
+    vtu.OmitZeroInFileName(false);
     vtu.OutputDataToVTU((model_name).c_str(), props, model.Region("Model"), timestep);
 }
 
 // Write the requested properties over each well region to VTU files.
 void CVFEM_fault_well_lithium_example::OutputToVTU_wells(Model<MODEL_DIM> &model, const string &model_name, const list<string> &props, size_t timestep) const {
     static VTU_Interface<MODEL_DIM> vtu(model);
+    vtu.OmitZeroInFileName(false);
     for (auto &well_name : wells_list) {
         vtu.OutputDataToVTU((model_name).c_str(), props, model.Region(well_name), timestep);
     }

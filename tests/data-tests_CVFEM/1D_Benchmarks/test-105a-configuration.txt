@@ -1,0 +1,42 @@
+# (block1) region name from parameter range
+
+# (block2) default property values
+# test-105a: heat conduction from a suddenly heated end (no flow: equal pressures at both ends, no gravity), compared
+# with the error-function solution T = 140 + 10 erfc(x / (2 sqrt(kappa t))) when 2 sqrt(kappa t) ~ 400 m (S. Scott,
+# 2026-11-18). Rock heat capacity 1000 J kg-1 K-1; conduction heat capacity: rock only (set by CVFEM_1D_VVCase).
+fluid pressure			5000000.
+temperature			140.
+permeability			1.e-15
+vertical permeability		1.e-15
+horizontal permeability		1.e-15
+porosity			0.1
+nodal porosity			0.1
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	1000.
+total heat capacity		2827000.
+nodal heat capacity		2827000.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		5000000.
+nodal compressibility rock	1.e-15
+gravity flag			0.
+thickness			1.
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+RIGHT	DIRICH	fluid pressure	5000000.	5000000.
+LEFT	DIRICH	fluid pressure	5000000.	5000000.
+LEFT	DIRICH	temperature	150.		150.
+RIGHT	DIRICH	temperature	140.		140.
+
+# (block5) regional property conditions
+
+# (block6) boundary conditions for arbitrary-shaped model
+
+# (block 7) run settings 1793 years, 1-year time steps as tests 101-104 (with 10-year steps the semi-implicit pressure
+# update becomes unstable in this case)
+duration	56540000000.
+time increment	31536000.
+output time	56540000000.

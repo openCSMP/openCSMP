@@ -540,6 +540,9 @@ void NaClH2OPropertiesVisitorPHX<dim>::ReadAllVariables( Node<dim>* n )
     n->Read( sl_key,   slp  );
     n->Read( sv_key,   svp  );
     n->Read( rho_bulk_key, rho_bulk );
+    // S. Scott, 2026-11-17: fluid heat capacity of the previous equilibration, needed to credit the fluid share of the
+    // conducted heat below (the member cpf otherwise still holds the value of the previously visited node)
+    if (add_fluid_contribution_to_heat_capacity) n->Read( cpf_key, cpf );
     n->Read( mul_key, mulp );
     n->Read( muv_key, muvp );
     n->Read( xl_key,  xlp  );
@@ -566,21 +569,26 @@ void NaClH2OPropertiesVisitorPHX<dim>::CalculateAbsoluteVariables( Node<dim>* n 
     }
 
 
-    // Rock enthalpy change (accounts for optional crystallisation curve / latent heat)
-    if(with_rock_liquidus_solidus)
-    {
-        hrock_prev = rock.Enthalpy(tp(), tl(), ts());
-        hrock_curr = rock.Enthalpy(t(),  tl(), ts());
-    }
-    else
-    {
-        hrock_prev = rock.Enthalpy(tp());
-        hrock_curr = rock.Enthalpy(t());
-    }
-
-    // Conductive enthalpy increments (fluid and air diffusion not yet implemented)
-    dh_rock_diff_  = (1.0 - phi()) * rr() * (hrock_curr - hrock_prev);
-    dh_fluid_diff_ = 0.;
+    // Conductive enthalpy increments (air diffusion not yet implemented)
+    // S. Scott, 2026-11-20: the rock share of the heat that the conduction step moved into this node. That step used
+    // the rock's sensible heat capacity at the start-of-step temperature tp (no latent heat), so the same value is
+    // used here. Latent heat of a liquidus/solidus is not added here. It is part of the rock enthalpy (Rock::Enthalpy,
+    // sensible part + h_fusion x melt fraction) that the equilibration (H2ONaClThermalEquilibrator) uses to find T from
+    // H_current_, and that is where the arriving heat is split between changing T and melting or crystallising.
+    // Before, this line added hr(t) - hr(tp) with that latent heat included, so H_current_ already matched the
+    // conduction temperature t, the equilibration returned T = t, and latent heat never buffered T (tests 106-108).
+    const double cp_rock_sensible = with_rock_liquidus_solidus ? rock.HeatCapacity(tp(), tl(), ts())
+                                                               : rock.HeatCapacity(tp());
+    dh_rock_diff_  = (1.0 - phi()) * rr() * cp_rock_sensible * (t() - tp());
+    // S. Scott, 2026-11-17: when the conduction step used the fluid heat capacity as well
+    // (AddFluidContributionToHeatCapacity(true): ncp = rock + phi rho_bulk cpf), credit the fluid share of the conducted
+    // heat too. Crediting the rock share only lost a fraction fluid/(rock + fluid) of the conducted heat every step
+    // (measured conduction 0.86 x analytic; none at all with zero rock heat capacity).
+    // t - tp is the change made by the conduction step only: tp is copied from the temperature at the start of the step
+    // (AdvanceTransientVariables), the transport step moves mass and enthalpy between control volumes without writing
+    // the temperature, and the conduction solve then starts from that unchanged field. Advected heat enters separately,
+    // through dhCl_ / dhCv_ below, so it is not counted twice.
+    dh_fluid_diff_ = add_fluid_contribution_to_heat_capacity ? phi() * rho_bulk() * cpf() * (t() - tp()) : 0.;
     if(with_air) dh_air_diff_ = 0.;
 
     // Advective enthalpy increments

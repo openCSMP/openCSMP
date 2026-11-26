@@ -1,0 +1,50 @@
+# (block1) region name from parameter range
+
+# (block2) default property values
+# test-108: cooling of rock melt from one end over a wide melting interval (S. Scott, 2026-11-20). Set-up of test-106
+# (test-105b with the LEFT end cooled, no flow, 150 MPa, porosity 0.001), with a basalt-like crystallisation curve:
+# melt fraction ((T - T_s) / (T_l - T_s))^2.28, latent heat 4.2e5 J kg-1. Basalt (solidus 950 C, liquidus 1250 C)
+# lies above the 1000 C limit of the fluid property tables, so the interval is shifted to solidus 690 C, liquidus 990 C
+# (same 300 K width); initial and RIGHT-end temperature 990 C, LEFT end 50 C. Checked: energy balance (stored energy
+# incl. latent heat against heat conducted out) and temperatures against an enthalpy-method reference computed in
+# the test.
+fluid pressure			150000000.
+temperature			990.
+permeability			1.e-15
+vertical permeability		1.e-15
+horizontal permeability		1.e-15
+porosity			0.001
+nodal porosity			0.001
+salinity			0.
+thermal conductivity		2.
+nodal heat capacity rock	1000.
+total heat capacity		2700000.
+nodal heat capacity		2700000.
+density rock			2700.
+nodal density rock		2700.
+lithostatic pressure		150000000.
+nodal compressibility rock	1.e-15
+gravity flag			0.
+thickness			1.
+liquidus temperature		990.
+solidus temperature		690.
+latent heat of fusion		420000.
+crystallization curve exponent	2.28
+heat capacity melt		1000.
+
+# (block3) regional property values
+
+# (block4) boundary conditions for box-shaped model
+RIGHT	DIRICH	fluid pressure	150000000.	150000000.
+LEFT	DIRICH	fluid pressure	150000000.	150000000.
+LEFT	DIRICH	temperature	50.		50.
+RIGHT	DIRICH	temperature	990.		990.
+
+# (block5) regional property conditions
+
+# (block6) boundary conditions for arbitrary-shaped model
+
+# (block 7) run settings 400 years, 1-year time steps as test 105
+duration	12614400000.
+time increment	31536000.
+output time	12614400000.

@@ -32,6 +32,7 @@ UpwindControlVisitor<dim>::UpwindControlVisitor( Model<dim>& model,
     gravity(-9.80665),
     pot_crit(1.e-20),
     xyz(dim),
+    facet_mean_gravity_density_(false),
     zero_velocity_on_flip_(false),
     donor_map_target_(Pressure),
     verbose(false),
@@ -304,6 +305,18 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
             double rho_in  = rho[p][inside_node_]();
             double rho_out = rho[p][outside_node_]();
 
+            // Density in the GRAVITY term: one facet value, the mean of the two nodes, whenever
+            // both hold the phase and UseFacetMeanGravityDensity(true) (S. Scott, 2026-11-17). With each side's own density, a column whose
+            // density falls with depth (any geotherm) gives BOTH one-sided velocities below the
+            // admissible sign -- the light lower node pushes up, the dense upper node pushes
+            // down -- so a hydrostatic facet always carried ~k*g*(rho_out-rho_in)/2 one way or
+            // the other and element rows locked into alternating up/down stripes. With a common
+            // density the two one-sided velocities coincide and a hydrostatic facet carries ~0.
+            // Where one side lacks the phase, each side keeps its own density (unchanged).
+            const bool   facet_mean{facet_mean_gravity_density_ && rho_in > 0. && rho_out > 0.};
+            const double rho_g_in{facet_mean ? 0.5 * ( rho_in + rho_out ) : rho_in};
+            const double rho_g_out{facet_mean ? 0.5 * ( rho_in + rho_out ) : rho_out};
+
             double relperm_visc_in  = relperm_visc[p][inside_node_]();
             double relperm_visc_out = relperm_visc[p][outside_node_]();
 
@@ -336,14 +349,13 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
 
             velocity_inside = velocity_outside = velocity;
 
-            // ── Gravity / buoyancy term, added per side with that side's density ──
-            // (each side uses its own nodal density, so the two directions can differ)
+            // ── Gravity / buoyancy term (facet density rho_g_*, see above) ──
             if ( grav )
             {
                 normal_component  = fv_transport_vapor.GetFacetNormalComponent( e.Idx(), i, xyz-1 );
                 g                 = gravity * normal_component;
-                velocity_inside  += k() * rho_in  * g;
-                velocity_outside += k() * rho_out * g;
+                velocity_inside  += k() * rho_g_in  * g;
+                velocity_outside += k() * rho_g_out * g;
             }
 
             if (verbose && p==0) cerr << " {Init} v_in: " << velocity_inside << ", v_out: " << velocity_outside;
@@ -425,7 +437,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
                 }
 
                 abs_velocity = abs(velocity);
-                density  += rho_in * abs_velocity;
+                density  += rho_g_in * abs_velocity;   // gravity density of the stored velocity
                 mobility += relperm_visc_in * abs_velocity;
                 norm     += abs_velocity;
                 sat       = S[p][inside_node_]();
@@ -475,7 +487,7 @@ void UpwindControlVisitor<dim>::DetermineUpwindNodes( Element<dim>& e )
                 }
 
                 abs_velocity = abs(velocity);
-                density  += rho_out * abs_velocity;
+                density  += rho_g_out * abs_velocity;  // gravity density of the stored velocity
                 mobility += relperm_visc_out * abs_velocity;
                 norm     += abs_velocity;
                 sat       = S[p][outside_node_]();
@@ -742,6 +754,20 @@ template<uint32_t dim>
 void UpwindControlVisitor<dim>::Gravity(bool with_gravity)
 {
     grav = with_gravity;
+}
+
+
+template<uint32_t dim>
+void UpwindControlVisitor<dim>::UseFacetMeanGravityDensity( bool on )
+{
+    facet_mean_gravity_density_ = on;
+}
+
+
+template<uint32_t dim>
+bool UpwindControlVisitor<dim>::FacetMeanGravityDensity() const
+{
+    return facet_mean_gravity_density_;
 }
 
 /** activate velocity + CFL calculations, and target the transport map (D1).
