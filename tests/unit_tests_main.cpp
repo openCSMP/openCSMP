@@ -396,6 +396,7 @@ int main()
       interdependent2.addTest( new INDEXandVariables_Test() );
       interdependent2.addTest( new ModelTopology_Test() ); 
       interdependent2.addTest( new MeshManager_Test() );
+      interdependent2.addTest( new MeshManagementUtilities_Test() );
       interdependent2.addTest( new ModelBasics_Test() );
       interdependent2.addTest( new VSet_Test2() );
       interdependent2.addTest( new NodeFunctions_Test() );
