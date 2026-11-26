@@ -26,7 +26,7 @@ CVFEM_HydrostaticColumn_Test::CVFEM_HydrostaticColumn_Test(const std::string& me
     vars_name_("PhysicalVariables.txt"),   // created by the ModelBuilder
     facet_mean_gravity_density_(facet_mean_gravity_density),
     steps_(0U),
-    max_velocity_fraction_(1.e-3),
+    max_velocity_fraction_(1.e-2),   // round-off noise reaches ~2e-3 (README); a faulty gravity term gives ~0.1
     location_of_max_speed_{0., 0.},
     model_(nullptr),
     property_database_(nullptr),
